@@ -1,0 +1,225 @@
+const Modal = require('./Library/Modal');
+const Event = require('./Library/Event');
+const Toast = require('./Library/Toast');
+
+/**
+ * Handles all events from the client.
+ * 
+ * @class Events
+ */
+class Events
+{
+    /**
+     * Defines all the currently supported client events.
+     * 
+     * @memberof Events
+     */
+    defineEvents() {
+        let onInitDOM = new Event('INIT_DOM')
+        let onInstall = new Event('INSTALL')
+        let onSetConfiguration = new Event('SET_CONFIGURATION')
+        let onInstallerRedirect = new Event('INSTALLER_REDIRECT')
+        let onInstallComponent = new Event('INSTALL_COMPONENT')
+        let onPlay = new Event('PLAY')
+        let onFullInstall = new Event('FULL_INSTALL')
+        let onFullInstallConfirm = new Event('FULL_INSTALL_CONFIRM')
+        let onChangeGamePath = new Event('CHANGE_GAME_PATH')
+        let onCheckUpdates = new Event('CHECK_UPDATES')
+        let onInstallUpdate = new Event('INSTALL_UPDATE')
+        let onPlayVolcanic = new Event('PLAY_VOLCANIC')
+        let onSocketMessage = new  Event('SOCKET_MESSAGE')
+
+        onInitDOM.onFire(this.onInitDOM.bind(this));
+        onSetConfiguration.onFire(this.onSetConfiguration.bind(this));
+        onInstallerRedirect.onFire(this.onInstallerRedirect.bind(this));
+        onInstallComponent.onFire(this.onInstallComponent.bind(this));
+        onInstall.onFire(this.onInstall.bind(this));
+        onPlay.onFire(this.onPlay.bind(this));
+        onFullInstall.onFire(this.onFullInstall.bind(this));
+        onFullInstallConfirm.onFire(this.onFullInstallConfirm.bind(this));
+        onChangeGamePath.onFire(this.onChangeGamePath.bind(this));
+        onCheckUpdates.onFire(this.onCheckUpdates.bind(this));
+        onInstallUpdate.onFire(this.onInstallUpdate.bind(this));
+        onPlayVolcanic.onFire(this.onPlayVolcanic.bind(this));
+        onSocketMessage.onFire(this.onSocketMessage.bind(this));
+    }
+
+    /**
+     * Fires when the DOM is initialized.
+     * 
+     * @memberof Events
+     */
+    onInitDOM() {
+        this.View.setTheme(
+            this.conf.Launcher.Theme
+        );
+
+        this.View.restoreConfiguration(
+            this.conf
+        );
+
+        //this.checkLauncherUpdates(true);
+
+        this.Window.focus()
+    }
+
+    /**
+     * Fires when the client receives a Socket.io request.
+     * 
+     * @param {any} e Error (if any)
+     * @param {any} Response The actual response.
+     * @memberof Events
+     */
+    onSocketMessage(e, Response) {
+        if(this.conf.Launcher.DesktopNotifications === '1')
+            Modal.sendNotification('FreeSO Announcement', Response[0], Response[1]);
+    }
+
+    /**
+     * When the user wants to install a Component.
+     * 
+     * @param {any} e Error (if any)
+     * @param {any} Component The Component to be installed.
+     * @memberof Events
+     */
+    onInstall(e, Component) {
+        this.fireInstallModal(Component);
+    }
+
+    /**
+     * When the configuration settings are altered.
+     * 
+     * @param {*} e Error (if any)
+     * @param {*} v 2D Array with key and value.
+     */
+    onSetConfiguration(e, v) {
+        this.setConfiguration(v);
+    }
+
+    /**
+     * When the user needs to be redirected.
+     * 
+     * @param {any} e Error (if any)
+     * @param {any} yes The user clicked yes in the dialog.
+     * @memberof Events
+     */
+    onInstallerRedirect(e, yes) {
+        if (yes) {
+            this.View.changePage('installer')
+        }
+    }
+
+    /**
+     * When the user wants to install a single Component.
+     * 
+     * @param {any} e Error (if any)
+     * @param {any} yes The user clicked yes in the dialog.
+     * @param {any} Component The Component to be installed.
+     * @param {any} options 
+     * @memberof Events
+     */
+    onInstallComponent(e, yes, Component, options) {
+        if(yes) {
+            this.install(Component, options);
+        }
+    }
+
+    /**
+     * When the user clicks the play button.
+     * 
+     * @param {any} e Error (if any)
+     * @param {any} useVolcanic Use Volcanic or not.
+     * @memberof Events
+     */
+    onPlay(e, useVolcanic) {
+        this.play(useVolcanic);
+    }
+
+    /**
+     * When the user wants to launch Volcanic.
+     * 
+     * @param {*} e Error (if any)
+     * @param {*} yes The user clicked yes in the dialog.
+     */
+    onPlayVolcanic(e, yes) {
+        if(yes) {
+            this.launchGame(true)
+        }
+    }
+
+    /**
+     * When the user requests a launcher update check.
+     * 
+     * @returns 
+     * @memberof Events
+     */
+    onCheckUpdates() {
+        if(this.ActiveTasks.length > 0) {
+            return Modal.showAlreadyInstalling()
+        }
+        this.checkLauncherUpdates()
+    }
+
+    /**
+     * Update dialog callback.
+     * 
+     * @param {any} e Error (if any)
+     * @param {any} yes The user said yes.
+     * @memberof Events
+     */
+    onInstallUpdate(e, yes) {
+        if(yes) {
+            this.installLauncherUpdate()
+        }
+    }
+
+    /**
+     * When the user clicks the Full Install button.
+     * 
+     * @memberof Events
+     */
+    onFullInstall() {
+        if (this.ActiveTasks.length === 0) {
+            if (this.hasInternet)
+                Modal.showFullInstall();
+            else
+                Modal.showNoInternetFullInstall()
+        } else {
+            Modal.showAlreadyInstalling()
+        }
+    }
+
+    /**
+     * Full install dialog callback.
+     * 
+     * @param {any} e Error (if any)
+     * @param {any} yes The user said yes.
+     * @memberof Events
+     */
+    onFullInstallConfirm(e, yes) {
+        if (yes) {
+            this.addActiveTask('FULL');
+            this.runFullInstaller()
+        }
+    }
+
+    /**
+     * When the user changes the game path.
+     * 
+     * @param {any} e Error (if any)
+     * @param {any} yes The user said yes.
+     * @param {any} options ??
+     * @memberof Events
+     */
+    onChangeGamePath(e, yes, options) {
+        options = JSON.parse(options);
+
+        if(yes) {
+            this.changeGamePath(options)
+        } else {
+            this.removeActiveTask(options.component)
+        }
+    }
+}
+
+module.exports = Events;

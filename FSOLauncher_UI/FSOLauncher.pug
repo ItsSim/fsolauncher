@@ -1,0 +1,262 @@
+doctype html
+html
+    head
+        meta(charset='utf-8')
+        meta(http-equiv='X-UA-Compatible', content='IE=edge')
+        link(rel='stylesheet', href='./FSOLauncher_Styles/animate.css')
+        link(rel='stylesheet', href='./FSOLauncher_Styles/reset.css')
+        link(rel='stylesheet', href='./FSOLauncher.css')
+        link(rel='stylesheet', href='./FSOLauncher_Styles/responsive.css')
+        link(rel='stylesheet', href='./FSOLauncher_Styles/font-awesome.min.css')
+        link(rel='stylesheet', href='./FSOLauncher_Styles/material-icons.css')
+        link(rel='stylesheet', href='./FSOLauncher_Styles/FSOLauncher_Themes/turbo.css')
+        link(rel='stylesheet', href='./FSOLauncher_Styles/FSOLauncher_Themes/dark.css')
+    body(rmstr=READ_MORE, rss=RSS_URL)
+        #launcher.not-installed
+            .hint.arrow-left(hint-page='home', style='top:210px;left:255px')
+                h1 #{TOOLTIP_TITLE_1}
+                span #{TOOLTIP_DESCR_1}
+            #debug
+                #no-internet-notice
+                    i.material-icons(style='margin-top:-5px') 
+                    |  #{INTERNET_TOASTT}
+                //<button onclick="localStorage.clear()">Clear Local Storage</button>
+            #overlay
+            ul#sidebar
+                // class="animated slideInLeft"
+                li#logo
+                    // class="animated slideInDown"
+                    div
+                button.launch #{PLAY}
+                //<div id="ponline">20 people playing</div>
+                li.active(page-trigger='home')
+                    i.material-icons.left home
+                    |  #{HOME}
+                li(page-trigger='installer')
+                    i.material-icons.left view_list
+                    |  #{INSTALLER}
+                li(page-trigger='downloads')
+                    i.material-icons.left play_for_work
+                    |  #{DOWNLOADS}
+                li(page-trigger='settings')
+                    i.material-icons.left settings
+                    |  #{SETTINGS}
+                li(page-trigger='notifications')
+                    i.material-icons.left notifications_none
+                    |  NOTIFICATIONS
+
+                //li(page-trigger='help')
+                    i.material-icons.left help_outline
+                    |  HELP
+                // <li page-trigger="repair"><i class="material-icons left">build</i> REPAIR</li>
+
+                div.bottom
+                    li(page-trigger='about')
+                        i.material-icons.left info_outline
+                        |  #{ABOUT}
+
+            #content
+                //
+                  <div id="exit">
+                  &times;
+                  </div>
+                #home-page.page(style='display:none')
+                    h1.jumbotron
+                        #social-icons
+                            //
+                              <i class="fa fa-wordpress" aria-hidden="true"></i>
+                              <i class="fa fa-twitter" aria-hidden="true"></i>
+                              <i class="fa fa-facebook" aria-hidden="true"></i>
+                        span #{HOME}
+                        small #{HOME_DESCR}
+                    .page-content(style='position:relative')
+                        #rss-loading(style='font-size:20px;margin-top:20px;display:block;text-align:center')
+                            i.fa.fa-hourglass-half.fa-spin(style='margin-bottom:15px')
+                            br
+                            |  #{RETICULATING}
+                        #rss
+                            .alt-content
+                                i.material-icons 
+                                br
+                                | #{INTERNET_REQ}
+                            #rss-root
+                        #did-you-know(style='display:none')
+                            //a.twitter-timeline(style='text-decoration:none;' data-height='520', data-theme='light', data-chrome='noheader nofooter transparent noborders', href=TW_URL) Couldn't load Twitter feed
+                            a.twitter-timeline(style='text-decoration:none;' data-height='500', data-theme='light', href=TW_URL) @FreeSOGame on Twitter
+                            script#tw(src='https://platform.twitter.com/widgets.js', charset='utf-8')
+                #installer-page.page(style='/**background-image:url(city.jpg); **/display:none')
+                    .hint.arrow-top(hint-page='installer', style='top:0px;right:60px')
+                        h1 #{TOOLTIP_TITLE_2}
+                        span #{TOOLTIP_DESCR_2}
+                    h1.jumbotron
+                        button#full-install-button.turbo-transparent(style='margin-top:-10px;float:right')
+                            i.material-icons.left(style='margin-top:-2px') get_app
+                            |  #{FULL_INSTALL_BTN}
+                        span #{INSTALLER}
+                        small #{INSTALLER_DESCR}
+                    .page-content
+                        #full-install(style='padding:30px')
+                            #tip
+                                <i class="material-icons">info_outline</i>
+                                h1 #{DYK}
+                                span#tip-text(style='text-align:left') #{TIP1}
+                            .bottom
+                                h1#full-install-title Downloading FreeSO...
+                                p#full-install-text1 Please wait while we install FreeSO for the first time.
+                                .loading
+                                    #full-install-progress.progress
+                                p#full-install-text2.small Reticulating splines... 20% @ 1MB/s
+                        #downloads
+                            div
+                                .item(install='FSO', style='background:url(FSOLauncher_Images/banner.jpg) #fff; background-position:center center; background-size:80%;background-repeat:no-repeat;')
+                                    //.hint.arrow-left(hint-page='installer', style='top:130px;right:25px')
+                                        h1 ALREADY HAVE FreeSO?
+                                        span
+                                            | Click here and choose your installation path. It will detect if it's installed there.
+                                    .tick.installed
+                                        i.material-icons done
+                                    .tag
+                                        h1 #{INSTALLER_FSO_TITLE}
+                                        span #{INSTALLER_FSO_DESCR}
+                            div
+                                .item(install='TSO', style='background:url(FSOLauncher_Images/tsologo.png) #fff; background-position:center center;background-size:80%;background-repeat:no-repeat;')
+                                    .tick.installed
+                                        i.material-icons done
+                                    .tag
+                                        h1 #{INSTALLER_TSO_TITLE}
+                                        span #{INSTALLER_TSO_DESCR}
+                            div
+                                .item(install='OpenAL', style='background:url(FSOLauncher_Images/openal.png) #fff; background-position:center center; background-size:80%;background-repeat:no-repeat;')
+                                    .tick.installed
+                                        i.material-icons done
+                                    .tag
+                                        h1 #{INSTALLER_OAL_TITLE}
+                                        span #{INSTALLER_OAL_DESCR}
+                            div
+                                .item(install='NET', style='background:url(FSOLauncher_Images/netframework.png) #fff; background-position:center center; background-size:80%;background-repeat:no-repeat;')
+                                    .tick.installed
+                                        i.material-icons done
+                                    .tag
+                                        h1 #{INSTALLER_NET_TITLE}
+                                        span #{INSTALLER_NET_DESCR}
+                #settings-page.page(style='display:none')
+                    h1.jumbotron
+                        span #{SETTINGS}
+                        small #{SETTINGS_DESCR}
+                    .page-content
+                        .form
+                            h1 #{SETTINGS_LAUNCHER_H1}
+                            div
+                                span #{SETTINGS_DN}
+                                select(option-id='Launcher.DesktopNotifications')
+                                    option(value='1') #{SETTINGS_ENABLED}
+                                    option(value='0') #{SETTINGS_DISABLED}
+                                small #{SETTINGS_DN_HINT}
+                            div
+                                span #{SETTINGS_THEME}
+                                select(option-id='Launcher.Theme')
+                                    option(value='open_beta') #{SETTINGS_DEFAULT}
+                                    option(value='turbo') Neon
+                                    //<option value="dark">Onyx</option>
+                                small #{SETTINGS_THEME_HINT}
+                            div
+                                span #{AFTER_X}
+                                select(option-id='Launcher.Persistence')
+                                    option(value='1') #{STAY_TRAY}
+                                    option(value='0') #{EXIT_LAUNCHER}
+                                small #{AFTER_X_HINT}
+                        .form
+                            h1 #{SETTINGS_GAME_H1}
+                            div
+                                span #{SETTINGS_GM}
+                                select(option-id='Game.GraphicsMode')
+                                    option(value='ogl') OpenGL
+                                    option(value='dx') DirectX
+                                    option(value='sw') Software
+                                small
+                                    | #{SETTINGS_GM_HINT}
+                            div
+                                span #{TD_MODE}
+                                select(option-id='Game.3DMode')
+                                    option(value='0') #{SETTINGS_DISABLED}
+                                    option(value='1') #{SETTINGS_ENABLED}
+                                small
+                                    | #{TD_MODE_HINT}
+                            div
+                                span #{SETTINGS_LANG}
+                                select(option-id='Game.Language')
+                                    option(value='en') English
+                                    option(value='es') Español
+                                    option(value='pt') Português
+                                    option(value='it') Italiano
+                                small #{SETTINGS_LANG_HINT}
+                            div
+                                span #{SETTINGS_TTS}
+                                select(option-id='Game.TTS')
+                                    option(value='0') #{SETTINGS_DISABLED}
+                                    option(value='1') #{SETTINGS_ENABLED}
+                                small
+                                    | #{SETTINGS_TTS_HINT}
+                #help-page.page(style='display:none')
+                    h1.jumbotron
+                        span HELP
+                        small Oh no! What do I do?
+                    .page-content
+                        p Coming soon...
+                #downloads-page.page(style='display:none')
+                    h1.jumbotron
+                        span #{DOWNLOADS}
+                        small #{DOWNLOADS_DESCR}
+                    .page-content
+                        .alt-content
+                            i.material-icons 
+                            br
+                            span(style='color:rgba(0,0,0,0.4)') #{DOWNLOADS_EMPTY}
+                            //br
+                            //img(src='FSOLauncher_Images/fame.png')
+                #notifications-page.page(style='display:none')
+                    h1.jumbotron
+                        span NOTIFICATIONS
+                        small Keep up with past FreeSO desktop notifications
+                    .page-content
+                        .alt-content
+                            i.material-icons 
+                            br
+                            span(style='color:rgba(0,0,0,0.4)') No notifications received yet
+                #about-page.page(style='display:none')
+                    h1.jumbotron
+                        span #{ABOUT}
+                        small #{ABOUT_DESCR}
+                    .page-content
+                        .FAQ(style='max-width:600px')
+                            block faq
+                                strong #{ABOUT_LAUNCHER_VERSION}
+                                p FreeSO Launcher #{LVERSION}
+                                button#update-check(style='margin-bottom:20px')
+                                    i.material-icons.left update
+                                    |  #{ABOUT_CHECK}
+                                .alt-content-small(style='margin-bottom:20px; color:#C0392B')
+                                    i.material-icons(style='float:left;margin-right:10px;margin-top:-3px') 
+                                    |  #{ABOUT_INTERNET}
+                            br
+                            block faq
+                                strong #{ABOUT_FAQ_1_H1}
+                                p
+                                    | #{ABOUT_FAQ_1_TEXT}
+                            block faq
+                                strong #{ABOUT_FAQ_2_H1}
+                                p
+                                    | #{ABOUT_FAQ_2_TEXT}
+                            block faq
+                                strong #{ABOUT_FAQ_3_H1}
+                                p #{ABOUT_FAQ_3_TEXT}
+
+                            block faq
+                                strong #{ABOUT_FAQ_4_H1}
+                                p #{ABOUT_FAQ_4_TEXT}
+
+                            block faq
+                                strong #{ABOUT_FAQ_5_H1}
+                                p !{ABOUT_FAQ_5_TEXT}.
+        script(src='socket.io.js')
+        script(src='client.js')

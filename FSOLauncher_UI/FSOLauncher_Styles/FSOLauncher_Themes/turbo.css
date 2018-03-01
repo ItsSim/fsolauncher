@@ -1,0 +1,82 @@
+.turbo {}
+
+.turbo #logo:after 
+{
+    content: 'NEON';
+}
+
+.turbo button, .turbo .button 
+{
+    background: linear-gradient(45deg, #3bade3 0%, #576fe6 25%, #9844b7 51%, #ff357f 100%);
+    transition: background-position 1s!important;
+    background-size: 150%!important;
+}
+
+.turbo button:hover, .turbo .button:hover {
+    background-position: 99%!important;
+}
+
+.turbo #logo 
+{
+    background-image: url(../../FSOLauncher_Images/logo_turbo.png)!important;
+}
+
+.turbo #launcher #sidebar li.active , .turbo #launcher #sidebar li:not(#logo):hover 
+{
+    color:#725DD2;
+    border-right-color:#D33C97;
+
+}
+
+.turbo .hint
+{
+    background-color:#9D43B3
+}
+
+.turbo .hint.arrow-left:before
+{
+    border-right-color:#9D43B3
+}
+
+.turbo .hint.arrow-top:before
+{
+    border-bottom-color:#9D43B3
+}
+
+.turbo .hint.arrow-top:after
+{
+    border-bottom-color:#9D43B3;    
+}
+
+.turbo .hint.arrow-left:after 
+{
+    border-right-color:#9D43B3;
+}
+
+.turbo #rss .rss-entry h1, .turbo #settings-page .form h1, .turbo #downloads > div .tag h1, .turbo .modal h1
+{
+    background: linear-gradient(45deg, #3bade3 0%, #576fe6 25%, #9844b7 51%, #ff357f 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.turbo #settings-page .form h1 
+{
+    
+}
+
+.turbo h1.jumbotron 
+{
+    background: linear-gradient(45deg, #3bade3 0%, #576fe6 25%, #9844b7 51%, #ff357f 100%)!important;
+}
+
+.turbo button.turbo-transparent, .turbo .button.turbo-transparent
+{
+    background:#40A0E3;
+    transition: background 0.4s!important;
+}
+
+.turbo button.turbo-transparent:hover, .turbo .button.turbo-transparent:hover {
+    background:  #7abceb;
+}
+
