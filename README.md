@@ -32,5 +32,7 @@ The folder needs to be named **FreeSO** in order for the launcher to pick up pre
 3. Run `npm run build` in the folder where package.json is to build Electron binaries
 4. Run `npm run buildasar` in the folder where package.json is to build the launcher 
 5. Copy the app.asar file and the app.asar.unpacked folder to the resources folder of the Electron binaries
-6. Run fsolauncher.exe
+6. Run electron.exe
+
+**Make sure to run it as an administrator!**
 
