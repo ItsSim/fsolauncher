@@ -26,3 +26,11 @@ The folder needs to be named **FreeSO** in order for the launcher to pick up pre
 # Problems
 * If your The Sims Online download fails continuosly at different .cabs, it is most likely due to a bad internet connection. You can use the original The Sims Online installer which seems to retry multiple times after failing, which means it may take more time to install, but it might work for you. [Click here to download the original The Sims Online installer](http://largedownloads.ea.com/pub/misc/tso/Setup%20The%20Sims%20Online.exe).
 
+# How to build
+1. Install Node.js
+2. Install Electron 1.7.9 using NPM (`npm i -g electron@1.7.3`)
+3. Run `npm run build` in the folder where package.json is to build Electron binaries
+4. Run `npm run buildasar` in the folder where package.json is to build the launcher 
+5. Copy the app.asar file and the app.asar.unpacked folder to the resources folder of the Electron binaries
+6. Run fsolauncher.exe
+
