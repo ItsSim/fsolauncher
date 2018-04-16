@@ -1,7 +1,7 @@
 {
   "name": "fsolauncher",
-  "version": "1.3.3",
-  "description": "Install, play and configure FreeSO easily",
+  "version": "1.3.4",
+  "description": "Install, play, and configure FreeSO easily",
   "main": "main.js",
   "scripts": {
     "start": "electron .",

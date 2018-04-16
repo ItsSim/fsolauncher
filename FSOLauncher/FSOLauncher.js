@@ -27,6 +27,9 @@ class FSOLauncher extends Events {
         this.isUpdating = false
         this.hasInternet = false
         this.updateLocation = false
+        this.remeshInfo = {}
+        this.remeshInfo.location = false
+        this.remeshInfo.version = false;
 
         this.Window.on('minimize', () => {
             if (!this.minimizeReminder) {
@@ -45,7 +48,6 @@ class FSOLauncher extends Events {
         this.checkUpdatesRecursive()
         this.updateTipRecursive()
         this.updateNetRequiredUIRecursive(true)
-        this.updateNetRequiredUI(true)
         this.updateInstalledPrograms()
         this.defineEvents()
     }
@@ -215,6 +217,9 @@ class FSOLauncher extends Events {
             case 'NET':
                 return '.NET Framework';
                 break;
+            case 'RMS':
+                return 'Remesh Package';
+                break;
         }
     }
 
@@ -262,21 +267,14 @@ class FSOLauncher extends Events {
         }
     }
 
-    /**
-     * Returns the launcher's update endpoint response.
-     * 
-     * @returns 
-     * @memberof FSOLauncher
-     */
-    getLauncherData() {
+    getRemeshData() {
         return new Promise(async (resolve, reject) => {
             const http = require('http')
-            const os = require('os')
 
             let options = {}
 
-            options.host = 'freeso.cf'
-            options.path = '/FSOLauncher.php?getVersion&os=' + os.release() + '&version=' + global.version /*+ '&fso=' + (this.isInstalled.FSO ? this.isInstalled.FSO.replace('') : 'no')*/
+            options.host = '5.189.177.216'
+            options.path = '/RemeshInfo.php'
 
             const request = http.request(options, res => {
                 let data = ''
@@ -288,10 +286,11 @@ class FSOLauncher extends Events {
                 res.on('end', () => {
                     try {
                         let j = JSON.parse(data)
-                        this.updateLocation = j.Location
+                        this.remeshInfo.location = j.Location
+                        this.remeshInfo.version = j.Version
                         resolve(j)
                     } catch (e) {
-                        reject('Not JSON')
+                        reject(e)
                     }
                 })
             });
@@ -306,6 +305,61 @@ class FSOLauncher extends Events {
 
             request.end()
         })
+    }
+
+    /**
+     * Returns the launcher's update endpoint response.
+     * 
+     * @returns 
+     * @memberof FSOLauncher
+     */
+    getLauncherData() {
+        return new Promise(async (resolve, reject) => {
+            const http = require('http')
+            const os = require('os')
+
+            let options = {}
+
+            options.host = '5.189.177.216'
+            options.path = '/FSOLauncher.php?os=' + os.release() + '&version=' + global.version
+
+            const request = http.request(options, res => {
+                let data = ''
+
+                res.on('data', chunk => {
+                    data += chunk
+                })
+
+                res.on('end', () => {
+                    try {
+                        let j = JSON.parse(data)
+                        this.updateLocation = j.Location
+                        resolve(j)
+                    } catch (e) {
+                        reject(e)
+                    }
+                })
+            });
+
+            request.setTimeout(30000, () => {
+                reject('Timed out')
+            })
+
+            request.on('error', e => {
+                reject(e)
+            })
+
+            request.end()
+        })
+    }
+
+
+    async checkRemeshInfo() {
+        let data = await this.getRemeshData()
+
+        if(this.remeshInfo.version!=null) {
+            this.View.setRemeshInfo(this.remeshInfo.version)
+        }
     }
 
     /**
@@ -415,7 +469,7 @@ class FSOLauncher extends Events {
      * @returns 
      * @memberof FSOLauncher
      */
-    fireInstallModal(Component) {
+    async fireInstallModal(Component) {
         let missing = [];
 
         let prettyName = this.getPrettyName(Component);
@@ -433,9 +487,14 @@ class FSOLauncher extends Events {
                 if (!this.isInstalled['NET'])
                     missing.push(this.getPrettyName('NET'));
                 break;
+
+            case 'RMS':
+                if(!this.isInstalled['FSO'])
+                    missing.push(this.getPrettyName('FSO'));
+                break;
         }
 
-        if ((Component === 'TSO' || Component === 'FSO') && !this.hasInternet) {
+        if ((Component === 'TSO' || Component === 'FSO' || Component === 'RMS') && !this.hasInternet) {
             return Modal.showNoInternet()
         }
 
@@ -446,6 +505,18 @@ class FSOLauncher extends Events {
         if (missing.length > 0) {
             Modal.showRequirementsNotMet(missing)
         } else {
+            if(Component=='RMS') {
+                if(this.remeshInfo.version==null) {
+                    let data = await this.getRemeshData()
+                    if(this.remeshInfo.version==null) {
+                        return Modal.showNoRemesh()
+                    } else {
+                        return Modal.showFirstInstall(prettyName, Component)
+                    }
+                }
+                return Modal.showFirstInstall(prettyName, Component)
+            }
+            
             if (this.isInstalled[Component] === false) {
                 Modal.showFirstInstall(prettyName, Component)
             } else {
@@ -470,18 +541,36 @@ class FSOLauncher extends Events {
         }
 
         let InstallerInstance;
+        let Installer;
 
         this.addActiveTask(Component);
+        
         switch (Component) {
+            case 'RMS':
+                Installer = require('./Library/Installers/RemeshesInstaller')
+
+                InstallerInstance = new Installer((this.isInstalled.FSO + "\\Content\\MeshReplace"), this)
+
+                this.View.changePage('downloads')
+
+                return new Promise(async (resolve, reject) => {
+                    try {
+                        await InstallerInstance.install()
+                        resolve()
+                    } catch (e) {
+                        reject(e)
+                    }      
+                })
+                break;
             case 'TSO':
             case 'FSO':
-                let Installer = require('./Library/Installers/' + Component + 'Installer')
+                Installer = require('./Library/Installers/' + Component + 'Installer')
 
                 return new Promise(async (resolve, reject) => {
                     if (!options.override) {
                         const Toast = new ToastComponent(global.locale.TOAST_WAITING, this.View)
 
-                        let folder = await Modal.showChooseDirectory(this.getPrettyName(Component))
+                        let folder = await Modal.showChooseDirectory(this.getPrettyName(Component), this.Window)
 
                         Toast.destroy()
 
@@ -574,6 +663,7 @@ class FSOLauncher extends Events {
     checkUpdatesRecursive() {
         setTimeout(() => {
             this.checkLauncherUpdates(true)
+            this.checkRemeshInfo()
             this.checkUpdatesRecursive()
         }, 60000)
     }
@@ -617,8 +707,6 @@ class FSOLauncher extends Events {
 
                     try {
                         let data = await this.getFSOConfig()
-
-                        console.log(data)
 
                         data.CurrentLang = this.getLangString(this.getLangCode(language))[0]
 

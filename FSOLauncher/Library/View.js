@@ -186,6 +186,12 @@ class View {
 		} catch (e) {}
 	}
 
+	setRemeshInfo(v) {
+		try {
+			this.Window.webContents.send('REMESH_INFO', v)
+		} catch(e) {}
+	}
+
 	/**
 	 * Sets the current installation tip.
 	 * 

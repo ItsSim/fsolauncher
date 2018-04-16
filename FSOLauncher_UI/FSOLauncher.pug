@@ -13,7 +13,7 @@ html
         link(rel='stylesheet', href='./FSOLauncher_Styles/FSOLauncher_Themes/dark.css')
     body(rmstr=READ_MORE, rss=RSS_URL)
         #launcher.not-installed
-            .hint.arrow-left(hint-page='home', style='top:210px;left:255px')
+            .hint.arrow-left(hint-page='home', style='top:215px;left:255px')
                 h1 #{TOOLTIP_TITLE_1}
                 span #{TOOLTIP_DESCR_1}
             #debug
@@ -85,9 +85,9 @@ html
                             a.twitter-timeline(style='text-decoration:none;' data-height='500', data-theme='light', href=TW_URL) @FreeSOGame on Twitter
                             script#tw(src='https://platform.twitter.com/widgets.js', charset='utf-8')
                 #installer-page.page(style='/**background-image:url(city.jpg); **/display:none')
-                    .hint.arrow-top(hint-page='installer', style='top:0px;right:60px')
-                        h1 #{TOOLTIP_TITLE_2}
-                        span #{TOOLTIP_DESCR_2}
+                    .hint.arrow-left(hint-page='installer', style='top:110px;left:375px')
+                        h1 3D Remesh Package!
+                        span After you've installed FreeSO, download this remesh package to make 3D Mode even better.
                     h1.jumbotron
                         button#full-install-button.turbo-transparent(style='margin-top:-10px;float:right')
                             i.material-icons.left(style='margin-top:-2px') get_app
@@ -107,6 +107,17 @@ html
                                     #full-install-progress.progress
                                 p#full-install-text2.small Reticulating splines... 20% @ 1MB/s
                         #downloads
+                            .hint.arrow-top(hint-page='installer', style='top:0px;right:60px')
+                                h1 #{TOOLTIP_TITLE_2}
+                                span #{TOOLTIP_DESCR_2}
+                            div.block
+                                .item(install='RMS', style='background:url(FSOLauncher_Images/render2.png) #fff; background-position:center center; background-size:50%;background-repeat:no-repeat;')
+                                    .new(style='display:none') <i style="vertical-align:middle;" class="material-icons">new_releases</i> NEW
+                                    .tag
+                                        h1 Remesh Package
+                                        span Improved 3D visual quality for FreeSO 
+                                        br
+                                        small(id='remeshinfo', style='font-size:14px;color:rgba(0,0,0,0.5);margin-top:5px;display:block;overflow:hidden') <i style="vertica-align:middle;float:left;margin-right:5px" class="material-icons">access_time</i> <span style="line-height:25px">Unknown</span>
                             div
                                 .item(install='FSO', style='background:url(FSOLauncher_Images/banner.jpg) #fff; background-position:center center; background-size:80%;background-repeat:no-repeat;')
                                     //.hint.arrow-left(hint-page='installer', style='top:130px;right:25px')
@@ -118,6 +129,7 @@ html
                                     .tag
                                         h1 #{INSTALLER_FSO_TITLE}
                                         span #{INSTALLER_FSO_DESCR}
+
                             div
                                 .item(install='TSO', style='background:url(FSOLauncher_Images/tsologo.png) #fff; background-position:center center;background-size:80%;background-repeat:no-repeat;')
                                     .tick.installed
@@ -155,7 +167,7 @@ html
                             div
                                 span #{SETTINGS_THEME}
                                 select(option-id='Launcher.Theme')
-                                    option(value='open_beta') #{SETTINGS_DEFAULT}
+                                    option(value='open_beta') Open Beta
                                     option(value='turbo') Neon
                                     //<option value="dark">Onyx</option>
                                 small #{SETTINGS_THEME_HINT}
@@ -187,17 +199,19 @@ html
                                 select(option-id='Game.Language')
                                     option(value='en') English
                                     option(value='es') Español
-                                    option(value='pt') Português
+                                    //option(value='pt') Português
                                     option(value='it') Italiano
                                 small #{SETTINGS_LANG_HINT}
-                            div
+                            //div.notice(style='border-radius:6px;font-size:14px;')
+                                span(style='color:#fff') More languages coming soon...
+                            //div
                                 span #{SETTINGS_TTS}
                                 select(option-id='Game.TTS')
                                     option(value='0') #{SETTINGS_DISABLED}
                                     option(value='1') #{SETTINGS_ENABLED}
                                 small
                                     | #{SETTINGS_TTS_HINT}
-                #help-page.page(style='display:none')
+                //#help-page.page(style='display:none')
                     h1.jumbotron
                         span HELP
                         small Oh no! What do I do?
@@ -216,19 +230,19 @@ html
                             //img(src='FSOLauncher_Images/fame.png')
                 #notifications-page.page(style='display:none')
                     h1.jumbotron
-                        span NOTIFICATIONS
-                        small Keep up with past FreeSO desktop notifications
+                        span #{NOTIFICATIONS}
+                        small #{NOTIFICATIONS_DESC}
                     .page-content
                         .alt-content
                             i.material-icons 
                             br
-                            span(style='color:rgba(0,0,0,0.4)') No notifications received yet
+                            span(style='color:rgba(0,0,0,0.4)') #{NOTIFICATIONS_NONE}
                 #about-page.page(style='display:none')
                     h1.jumbotron
                         span #{ABOUT}
                         small #{ABOUT_DESCR}
                     .page-content
-                        .FAQ(style='max-width:600px')
+                        .FAQ(style='max-width:600px;float:left')
                             block faq
                                 strong #{ABOUT_LAUNCHER_VERSION}
                                 p FreeSO Launcher #{LVERSION}

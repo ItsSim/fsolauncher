@@ -20,7 +20,7 @@ let FSOLauncher = require('./FSOLauncher/FSOLauncher')
 process.title = 'FreeSO Launcher Beta'
 
 // Launcher version
-global.version = '1.3.3'
+global.version = '1.4.1'
 
 let Window = null
 let tray = null
@@ -55,7 +55,7 @@ function PreCheckConfiguration() {
 	} catch (e) {
 		let defaultConfiguration = {
 			Launcher: {
-				Theme: 'open_beta',
+				Theme: 'turbo',
 				DesktopNotifications: '1',
 				Persistence: '1'
 			},
@@ -88,7 +88,7 @@ function CreateWindow() {
 	options['height'] = height
 	options['show'] = false
 	options['resizable'] = false
-	options['title'] = 'FreeSO Launcher'
+	options['title'] = 'FreeSO Launcher ' + global.version
 	options['icon'] = 'beta.ico'
 
 	Window = new BrowserWindow(options)

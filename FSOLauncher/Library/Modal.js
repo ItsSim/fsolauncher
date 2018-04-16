@@ -188,12 +188,12 @@ class Modal {
      * @returns 
      * @memberof Modal
      */
-    static showChooseDirectory(ComponentName) {
+    static showChooseDirectory(ComponentName, Window) {
         return new Promise((resolve, reject) => {
             require('fs').stat('C:\\Program Files', (err, stats) => {
                 let defaultPath = (!err && stats.isDirectory()) ? 'C:\\Program Files' : null;
 
-                require('electron').dialog.showOpenDialog({
+                require('electron').dialog.showOpenDialog(Window, {
                     properties: ['openDirectory'],
                     title: global.locale.MODAL_INSTALL + ' ' + ComponentName,
                     defaultPath: defaultPath,
@@ -355,6 +355,14 @@ class Modal {
         )
     }
 
+    static showNoRemesh() {
+        Modal.View.sendModal(
+            "Remesh Pack Unavailable",
+            "Couldn't get the remesh package info from the internet. Try again later.",
+            global.locale.MODAL_OK
+        )
+    }
+
     /**
      * Sends a notification.
      * 
@@ -366,14 +374,13 @@ class Modal {
      */
     static sendNotification(title, message, url) {
         const notify = require('electron-notify')
-
         const path = require('path')
 
         notify.setConfig({
             appIcon: path.join(__dirname, 'beta.ico'),
             displayTime: 6000,
             height: 100,
-            borderRadius: 0,
+            borderRadius: 6,
             defaultStyleContainer: {
                 backgroundColor: 'rgba(30, 30, 30, 0.8)',
                 overflow: 'hidden',

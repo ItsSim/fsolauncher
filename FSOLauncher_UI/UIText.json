@@ -58,11 +58,11 @@
 
     "MODAL_INSTALL": "Install",
     "MODAL_INSTALL_DESCR_1": "This will install the",
-    "MODAL_INSTALL_DESCR_2": "dependency on your computer in order to run FreeSO.",
+    "MODAL_INSTALL_DESCR_2": "component on your computer. Are you sure you want to install it?",
 
     "MODAL_INSTALL_FOLDER": "Install in this folder",
 
-    "MODAL_REINSTALL": "Re-install?",
+    "MODAL_REINSTALL": "Again?",
     "MODAL_CONTINUE": "Continue",
 
     "MODAL_NEGATIVE": "Uh oh!",
@@ -118,7 +118,7 @@
     "TOOLTIP_DESCR_2": "Install everything if it is your first time playing FreeSO.",
     "FULL_INSTALL_BTN": "COMPLETE INSTALLATION",
 
-    "INSTALLER_DESCR": "Install FreeSO game files",
+    "INSTALLER_DESCR": "Click on an item to install it",
     "INSTALLER_FSO_TITLE": "FreeSO Game",
     "INSTALLER_FSO_DESCR": "Free Simulator Online",
     "INSTALLER_TSO_TITLE": "The Sims Online",
@@ -145,7 +145,7 @@
     "SETTINGS_GM": "Graphics Mode",
     "SETTINGS_GM_HINT": "If your computer has low specifications, DirectX will help. If not, always use OpenGL.",
     "SETTINGS_LANG": "In-game language",
-    "SETTINGS_LANG_HINT": "Choose the language for your game. Be careful if your game is modded.",
+    "SETTINGS_LANG_HINT": "Choose the language for your game. More languages available soon.",
     "SETTINGS_TTS": "Text To Speech",
     "SETTINGS_TTS_HINT": "Enable TTS to listen to all the text typed in game read back to you in your system's default TTS voice.",
 
@@ -249,7 +249,7 @@
     "AFTER_X_HINT": "The launcher can stay in the icon tray to make sure you don't miss any important live notifications.",
 
     "TD_MODE": "3D Mode",
-    "TD_MODE_HINT": "Enable (early) 3D Mode. Disabling this feature will take the game back to 2D.",
+    "TD_MODE_HINT": "Enable 3D Mode. Disabling this feature will take the game back to 2D.",
 
     "ABOUT_FAQ_4_H1": "How do I launch Developer Mode?",
     "ABOUT_FAQ_4_TEXT": "Right-click the Play button.",
@@ -266,7 +266,10 @@
     "MODAL_FAILED_LAUNCH_DESC": "FreeSO.exe is missing and we could not auto-recover it. This might be due to a failed update. Find ways to contact support in the About tab.",
 
     "MODAL_GAME_AUTORECOVERED": "Game Auto-Recovered",
-    "MODAL_GAME_AUTORECOVERED_DESC": "FreeSO.exe was not present (most likely due to a failed update) and has been restored. You might need to update again!"
+    "MODAL_GAME_AUTORECOVERED_DESC": "FreeSO.exe was not present (most likely due to a failed update) and has been restored. You might need to update again!",
+    "NOTIFICATIONS": "Notifications",
+    "NOTIFICATIONS_DESC": "Keep up with past FreeSO desktop notifications",
+    "NOTIFICATIONS_NONE": "No notifications received yet"
   },
 
   "es": {
@@ -274,9 +277,9 @@
     "TOOLTIP_DESCR_1": "¿Es tu primera vez por aquí? Usa el instalador para descargar el juego.",
 
     "INTERNET_TOASTT": "Sin acceso a Internet",
-    "RSS_URL": "http://freeso.es/feed/",
-    "TW_URL": "https://twitter.com/FreeSOESP",
-    "WEB_URL": "http://freeso.es",
+    "RSS_URL": "http://freeso.org/feed/",
+    "TW_URL": "https://twitter.com/FreeSOGame",
+    "WEB_URL": "http://freeso.org",
 
     "PLAY": "JUGAR",
     "HOME": "INICIO",
@@ -415,7 +418,7 @@
     "SETTINGS_GM": "Modo de gráficos",
     "SETTINGS_GM_HINT": "Si tu ordenador es de bajas especificaciones, DirectX ayudará. Si no, siempre usa OpenGL.",
     "SETTINGS_LANG": "Idioma del juego",
-    "SETTINGS_LANG_HINT": "Elige el idioma para el juego. Ten cuidado si tu juego tiene Mods.",
+    "SETTINGS_LANG_HINT": "Elige el idioma para el juego. Pronto habrán más idiomas disponibles.",
     "SETTINGS_TTS": "Texto a Voz",
     "SETTINGS_TTS_HINT": "Activa el TTS para escuchar todas las lineas de Chat en el idioma del sistema.",
 
@@ -519,7 +522,7 @@
     "AFTER_X_HINT": "El lanzador puede quedarse abierto en la bandeja de iconos para asegurarnos de que recibas notificaciones importantes.",
 
     "TD_MODE": "Modo 3D",
-    "TD_MODE_HINT": "Activa el modo 3D en tempranas fases de desarrollo. Al desactivar esta característica el juego se verá en 2D.",
+    "TD_MODE_HINT": "Activa el modo 3D. Al desactivar esta característica el juego se verá en 2D.",
 
     "ABOUT_FAQ_4_H1": "¿Cómo ejecuto el Modo Desarrollador?",
     "ABOUT_FAQ_4_TEXT": "Haz clic derecho en el botón de Jugar.",
@@ -538,6 +541,9 @@
     "MODAL_GAME_AUTORECOVERED": "Recuperación automática",
     "MODAL_GAME_AUTORECOVERED_DESC": "FreeSO.exe no estaba presente (puede que por una actualización fallida) y ha sido restaurado. ¡Puede que necesites actualizar de nuevo!"
 
+    ,"NOTIFICATIONS": "Notificaciones",
+    "NOTIFICATIONS_DESC": "Obtén las últimas notificaciones de FreeSO",
+    "NOTIFICATIONS_NONE": "No se han recibido notificaciones"
   },
 
   "it": {
@@ -808,6 +814,8 @@
 
     "MODAL_GAME_AUTORECOVERED": "Gioco ripristinato",
     "MODAL_GAME_AUTORECOVERED_DESC": "L'eseguibile FreeSO.exe non era presente ed è stato ripristinato automaticamente. Potresti aver bisogno di aggiornare di nuovo!"
-
+,    "NOTIFICATIONS": "Notifications",
+    "NOTIFICATIONS_DESC": "Keep up with past FreeSO desktop notifications",
+    "NOTIFICATIONS_NONE": "No notifications received yet"
   }
 }

@@ -27,7 +27,8 @@ class Events
         let onCheckUpdates = new Event('CHECK_UPDATES')
         let onInstallUpdate = new Event('INSTALL_UPDATE')
         let onPlayVolcanic = new Event('PLAY_VOLCANIC')
-        let onSocketMessage = new  Event('SOCKET_MESSAGE')
+        let onSocketMessage = new Event('SOCKET_MESSAGE')
+        let onConsoleLog = new Event ('CONSOLE_LOG')
 
         onInitDOM.onFire(this.onInitDOM.bind(this));
         onSetConfiguration.onFire(this.onSetConfiguration.bind(this));
@@ -42,6 +43,7 @@ class Events
         onInstallUpdate.onFire(this.onInstallUpdate.bind(this));
         onPlayVolcanic.onFire(this.onPlayVolcanic.bind(this));
         onSocketMessage.onFire(this.onSocketMessage.bind(this));
+        onConsoleLog.onFire(this.onConsoleLog.bind(this))
     }
 
     /**
@@ -58,6 +60,10 @@ class Events
             this.conf
         );
 
+        this.checkRemeshInfo()
+
+        this.updateNetRequiredUI(true)
+
         //this.checkLauncherUpdates(true);
 
         this.Window.focus()
@@ -71,8 +77,9 @@ class Events
      * @memberof Events
      */
     onSocketMessage(e, Response) {
-        if(this.conf.Launcher.DesktopNotifications === '1')
+        if(this.conf.Launcher.DesktopNotifications === '1') {
             Modal.sendNotification('FreeSO Announcement', Response[0], Response[1]);
+        }   
     }
 
     /**
@@ -122,6 +129,10 @@ class Events
         if(yes) {
             this.install(Component, options);
         }
+    }
+
+    onConsoleLog(e, v) {
+        console.log(v)
     }
 
     /**

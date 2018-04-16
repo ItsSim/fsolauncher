@@ -5,6 +5,10 @@
     {
         width: 50%!important;
     }
+
+    #downloads > div.block {
+        width:100%!important;
+    }
 }
 
 @media only screen and (min-width: 875px)

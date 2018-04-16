@@ -1,0 +1,10 @@
+﻿1 ^Tienes cero cartas en este mazo de juegos.^
+2 ^Borrar carta^
+3 ^¿Quieres guardar los cambios?^
+4 ^Editar carta^
+5 ^Error: Ya has guardado el máximo número de cartas individuales.^
+6 ^Error del servidor. La carta no ha podido ser eliminada.^
+7 ^¡Uf! Esta ronda ha acabado en empate^
+8 ^Robar carta^
+9 ^¡Vaya! El juego ha acabado en un punto muerto.^
+10 ^Punto muerto^

@@ -1,0 +1,35 @@
+﻿1 ^Transacciones del dueño^
+2 ^¿Qué te gustaría hacer?^
+3 ^Cobrar^
+4 ^Depositar^
+5 ^Simoleones^
+6 ^Este objeto está aprovisionado con: $%d^
+7 ^Este objeto no puede tener más de: $%d^
+8 ^Para que los usuarios puedan usar este objeto, debe haber un mínimo de: $%d^
+9 ^¿Cuánto te gustaría cobrar?^
+10 ^¿Cuánto te gustaría depositar?^
+11 ^Minimo^
+12 ^Máximo^
+13 ^Apuesta min^
+14 ^Apuesta max^
+15 ^Editar ^
+16 ^Las mesas de ruleta deben poder cubrir 35 veces cada apuesta para 4 usuarios simultaneos, y al menos 140 veces la apuesta máxima.^
+17 ^Por ejemplo: si tu apuesta máxima es $100, debes tener al menos $14000 en este objeto.^
+18 ^Los pagos del Blackjack son 3:2 o una vez y media cada apuesta. Las mesas deben poder cubrir hasta 4 blackjacks por ronda.^
+19 ^Debes aprovisionar al menos 6 veces la apuesta máxima.^
+20 ^(Nota: Las apuestas mínimas no pueden ser menos de $%d)^
+21 ^(Nota: Las apuestas máximas no pueden ser mayores a $%d)^
+22 ^¿Qué te gustaría establecer como tu ^
+23 ^Error de transacción^
+24 ^¡No es un número válido!^
+25 ^¡No puedes cobrar más que el balance de la máquina!^
+26 ^No tienes suficientes simoleones para depositar: $%d^
+27 ^No puedes depositar tantos simoleones porque la máquina solo puede contener: $%d^
+28 ^La apuesta mínima no puede ser menor a $%d.^
+29 ^La apuesta máxima no puede ser menor a la apuesta mínima.^
+30 ^La apuesta máxima no puede ser mayor a $%d.^
+31 ^La apuesta mínima no puede ser mayor a la apuesta máxima.^
+32 ^No hay suficiente dinero en la máquina para cubrir esa apuesta.^
+33 ^Debe almacenar AL MENOS 140 veces la cantidad máxima de la apuesta.^
+34 ^Ha ocurrido un error desconocido.^
+35 ^Dinero en el objeto^

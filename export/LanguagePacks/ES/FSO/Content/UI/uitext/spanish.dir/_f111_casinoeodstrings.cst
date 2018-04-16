@@ -1,0 +1,35 @@
+﻿1 ^Ruleta^
+2 ^Blackjack^
+3 ^- Mesa^
+4 ^¡%s ha quebrado!^
+5 ^¡%s tiene blackjack!^
+6 ^%s se planta en %d.^
+7 ^%s no tiene blackjack.^
+8 ^Seguro^
+9 ^¡Asegurado!^
+10 ^Error^
+11 ^¿Te gustaría asegurar?^
+12 ^El seguro cuesta la mitad de tu apuesta, que es $%d.^
+13 ^Si compras el seguro y el repartidor tiene blackjack, recibirás el total de la cantidad apostada.^
+14 ^Has comprado un seguro para $%d.^
+15 ^Error de apuestas^
+16 ^¡Este mensaje de error nunca debería aparecer. Por favor, informa de esto y lo que hiciste para obtenerlo!^
+17 ^Aún no es tu turno.^
+18 ^No puedes pedir carta con esta mano.^
+19 ^No puedes doblar con esta mano.^
+20 ^No puedes dividir con esta mano.^
+21 ^Tu apuesta debe ser de, al menos, $%d.^
+22 ^Tu apuesta no puede ser superior a $%d.^
+23 ^No tienes suficiente dinero para hacer la apuesta.^
+24 ^No tienes suficiente dinero como para doblar la apuesta.^
+25 ^No tienes suficiente dinero para dividir la apuesta.^
+26 ^Puedes observar esta ronda, pero deberás apostar y jugar en la siguiente.^
+27 ^Has sido retirado de la mesa por inactividad.^
+28 ^La mesa ha cerrado por un balance insuficiente. ¿Quizás es hora de avisar al dueño?^
+29 ^Pagos de "La X marca el lugar"^
+30 ^Pagos de "'Bote' de Suertudo LLC"^
+31 ^No vuelvas hasta que tengas más Simoleones.^
+32 ^No puedes poner ni una ficha más.^
+33 ^$%d de fichas estarían por encima de la apuesta máxima permitida.^
+34 ^Eso estaría por encima del límite de apuestas.^
+35 ^Ha ocurrido un error desconocido. Tu última apuesta no ha sido aceptada.^

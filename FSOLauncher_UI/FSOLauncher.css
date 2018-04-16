@@ -572,6 +572,27 @@ button.blue:hover,
     background-size: 90%!important;
 }
 
+#downloads>div.block>.item:hover {
+    background-size: 60%!important;
+}
+
+#downloads>div>.item>.new {
+    float:left;
+    color:#fff;
+    margin-top:20px;
+    margin-left:20px;
+    border-radius:99px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    background:#e21801;
+    font-weight:bold;
+    font-size:16px;
+    text-transform:uppercase;
+    padding:10px;
+    padding-left:15px;
+    padding-right:15px;
+    text-align:center;
+}
+
 ::-webkit-scrollbar {
     width: 5px;
     padding: 3px

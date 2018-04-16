@@ -1,3 +1,5 @@
+
+
 var Socket = io('http://5.189.177.216:1221');
 
 Socket.on('receive global message', function(data) {
@@ -15,6 +17,44 @@ var Electron = require("electron"),
         this.changePage("home");
         this.loadRss()
     };
+
+FSOLauncher.prototype.ago = function (date) {
+    var seconds = Math.floor((new Date() - date) / 1000);
+    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    if (seconds < 5){
+        return "just now";
+    }else if (seconds < 60){
+        return seconds + " seconds ago";
+    }
+    else if (seconds < 3600) {
+        minutes = Math.floor(seconds/60)
+        if(minutes > 1)
+            return minutes + " minutes ago";
+        else
+            return "1 minute ago";
+    }
+    else if (seconds < 86400) {
+        hours = Math.floor(seconds/3600)
+        if(hours > 1)
+            return hours + " hours ago";
+        else
+            return "1 hour ago";
+    }
+    //2 days and no more
+    else if (seconds < 172800) {
+        days = Math.floor(seconds/86400)
+        if(days > 1)
+            return days + " days ago";
+        else
+            return "1 day ago";
+    }
+    else{
+
+        //return new Date(time).toLocaleDateString();
+        return date.getDate().toString() + " " + months[date.getMonth()] + ", " + date.getFullYear();
+    }
+};
+
 FSOLauncher.prototype.fireEvent = function (a, b) {
     ipcRenderer.send(a, b)
 };
@@ -257,6 +297,27 @@ FSOLauncher.registerServerEvent("HAS_INTERNET", function () {
         FSOLauncher.loadRss();
     }
 });
+FSOLauncher.registerServerEvent("REMESH_INFO", function(a, v) {
+    if(v) {
+        let i = parseInt(v);
+        let f = FSOLauncher.ago(new Date(i*1000));
+
+        let seconds = Math.floor((new Date() - (new Date(i*1000))) / 1000);
+
+        if (seconds < 172800) {
+            if(Math.floor(seconds/86400)<=1) {
+                document.querySelector('.new').style.display = 'block';
+            } else {
+                document.querySelector('.new').style.display = 'none';
+            }
+        } else {
+            document.querySelector('.new').style.display = 'none'; 
+        }
+
+        document.querySelector('#remeshinfo').style.display = 'block';
+        document.querySelector('#remeshinfo').innerHTML = '<i style="vertica-align:middle;float:left;margin-right:5px" class="material-icons">access_time</i> <span style="line-height:25px">' + f + '</span>'      
+    }
+});
 FSOLauncher.registerServerEvent("NO_INTERNET", function () {
     document.body.className += " no-internet"
 });
@@ -318,5 +379,6 @@ FSOLauncher.registerUIEventAll("[install]", "click", function (a, b) {
     var c = a.currentTarget.getAttribute("install");
     FSOLauncher.fireEvent("INSTALL", c)
 });
+
 
 
