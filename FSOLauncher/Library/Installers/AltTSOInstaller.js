@@ -93,7 +93,7 @@ class AltTSOInstaller {
     this.createProgressItem("Patching The Sims Online, please wait...", 100);
     return new Promise((resolve, reject) => {
       let child = require("child_process").exec(
-        'TSOVersionPatcherF.exe --generate 1239toNI.tsop "' + this.path + '"',
+        'TSOVersionPatcherF.exe 1239toNI.tsop "' + this.path + '"',
         {
           cwd: "bin/TSOVersionPatcherF",
         }
