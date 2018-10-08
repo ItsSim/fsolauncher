@@ -72,6 +72,7 @@ class UpdateInstaller {
   end() {
     // run and close
     this.createProgressItem("Download finished. Setup will start...", 100);
+    this.FSOLauncher.View.stopProgressItem("FSOUpdateProgressItem" + this.id);
 
     setTimeout(() => {
       global.willQuit = true;
@@ -97,6 +98,7 @@ class UpdateInstaller {
         '">here</a>.',
       100
     );
+    this.FSOLauncher.View.stopProgressItem("FSOUpdateProgressItem" + this.id);
     Modal.showFailedUpdateDownload();
     return Promise.reject(ErrorMessage);
   }

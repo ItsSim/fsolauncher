@@ -2,10 +2,11 @@ const Modal = require("../Modal");
 
 /**
  * Installs The Sims Online.
+ * Using the FTP archive.org solution.
  *
  * @class TSOInstaller
  */
-class TSOInstaller {
+class WebArchiveFTPInstaller {
   constructor(path, FSOLauncher) {
     this.FSOLauncher = FSOLauncher;
     this.id = Math.floor(Date.now() / 1000);
@@ -20,7 +21,8 @@ class TSOInstaller {
       // Total number of cabinets.
       max: 1114,
       // Cabinet parts format.
-      origin: "http://largedownloads.ea.com/pub/misc/tso/Data%.cab",
+      origin:
+        "http://web.archive.org/web/20151201095253if_/ftp://largedownloads.ea.com/pub/misc/tso/Data%.cab",
       // Where to temporarily save the cabs.
       destination: "temp/TSOCabArchives/",
     });
@@ -36,7 +38,7 @@ class TSOInstaller {
   createProgressItem(Message, Percentage, Extraction) {
     this.FSOLauncher.View.addProgressItem(
       "TSOProgressItem" + this.id,
-      "The Sims Online",
+      "The Sims Online (Archive.org FTP)",
       "Installing in " + this.path,
       Message,
       Percentage,
@@ -166,28 +168,25 @@ class TSOInstaller {
    */
   updateDownloadProgress() {
     setTimeout(() => {
-      let p = this.dl.getProgress(),
-        d = this.dl.getFinished().length;
+      let d = this.dl.getFinished().length;
 
-      if (p.percentage < 100) {
-        if (!this.haltProgress) {
-          this.createProgressItem(
-            global.locale.DL_CLIENT_FILES +
-              " " +
-              d +
-              " " +
-              global.locale.X_FILES_OUT_OF_X +
-              " 1114 (" +
-              p.mbDownloaded +
-              " MB, " +
-              p.percentage +
-              "%)",
-            p.percentage
-          );
+      //if (p.percentage < 100) {
+      if (!this.haltProgress) {
+        this.createProgressItem(
+          global.locale.DL_CLIENT_FILES +
+            " " +
+            d +
+            " " +
+            global.locale.X_FILES_OUT_OF_X +
+            " 1114 (" +
+            ((d / 1114) * 100).toFixed(0) +
+            "%)",
+          (d / 1114) * 100
+        );
 
-          this.updateDownloadProgress();
-        }
+        this.updateDownloadProgress();
       }
+      //}
     }, 1000);
   }
   /**
@@ -239,4 +238,4 @@ class TSOInstaller {
   }
 }
 
-module.exports = TSOInstaller;
+module.exports = WebArchiveFTPInstaller;

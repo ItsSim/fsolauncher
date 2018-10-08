@@ -48,6 +48,7 @@ class RemeshesInstaller {
   error(ErrorMessage) {
     this.haltProgress = true;
     this.createProgressItem(global.locale.FSO_FAILED_INSTALLATION, 100);
+    this.FSOLauncher.View.stopProgressItem("FSOProgressItem" + this.id);
     this.FSOLauncher.removeActiveTask("RMS");
     Modal.showFailedInstall("Remesh Package", ErrorMessage);
     return Promise.reject(ErrorMessage);
@@ -55,6 +56,7 @@ class RemeshesInstaller {
 
   end() {
     this.createProgressItem(global.locale.INSTALLATION_FINISHED, 100);
+    this.FSOLauncher.View.stopProgressItem("FSOProgressItem" + this.id);
     this.FSOLauncher.updateInstalledPrograms();
     this.FSOLauncher.removeActiveTask("RMS");
     Modal.showInstalled("Remesh Package");

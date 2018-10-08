@@ -123,6 +123,7 @@ class FSOInstaller {
    */
   end() {
     this.createProgressItem(global.locale.INSTALLATION_FINISHED, 100);
+    this.FSOLauncher.View.stopProgressItem("FSOProgressItem" + this.id);
     this.FSOLauncher.updateInstalledPrograms();
     this.FSOLauncher.removeActiveTask("FSO");
     Modal.showInstalled("FreeSO");
@@ -138,6 +139,7 @@ class FSOInstaller {
   error(ErrorMessage) {
     this.haltProgress = true;
     this.createProgressItem(global.locale.FSO_FAILED_INSTALLATION, 100);
+    this.FSOLauncher.View.stopProgressItem("FSOProgressItem" + this.id);
     this.FSOLauncher.removeActiveTask("FSO");
     Modal.showFailedInstall("FreeSO", ErrorMessage);
     return Promise.reject(ErrorMessage);

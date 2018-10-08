@@ -548,13 +548,14 @@ class FSOLauncher extends Events {
    * @returns
    * @memberof FSOLauncher
    */
-  install(Component, options) {
-    if (!options) {
-      options = {};
-      options.fullInstall = false;
-      options.override = false;
+  install(
+    Component,
+    options = {
+      fullInstall: false,
+      override: false,
+      tsoInstaller: "FilePlanetInstaller",
     }
-
+  ) {
     let InstallerInstance;
     let Installer;
 
@@ -583,7 +584,10 @@ class FSOLauncher extends Events {
       case "TSO":
       case "FSO":
         if (Component == "TSO") {
-          Installer = require("./Library/Installers/AltTSOInstaller");
+          if (!options.tsoInstaller) {
+            options.tsoInstaller = "FilePlanetInstaller";
+          }
+          Installer = require("./Library/Installers/" + options.tsoInstaller);
         } else {
           Installer = require("./Library/Installers/FSOInstaller");
         }

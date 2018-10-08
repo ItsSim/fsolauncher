@@ -112,7 +112,7 @@ html
                                 span #{TOOLTIP_DESCR_2}
                             div.block
                                 .item(install='RMS', style='background:url(FSOLauncher_Images/render2.png) #fff; background-position:center center; background-size:50%;background-repeat:no-repeat;')
-                                    .new(style='display:none') <i style="vertical-align:middle;" class="material-icons">new_releases</i> NEW
+                                    .new(style='top:50px;height:50px;left:30px;padding:6px;padding-left:8px;padding-right:8px;border-radius:8px;font-size:14px;display:none;position:absolute;') <i style="vertical-align:middle;" class="material-icons">new_releases</i> RECENTLY&nbsp;UPDATED
                                     .tag
                                         h1 Remesh Package
                                         span Improved 3D visual quality for FreeSO 
@@ -134,9 +134,10 @@ html
                                 .item(install='TSO', style='background:url(FSOLauncher_Images/tsologo.png) #fff; background-position:center center;background-size:80%;background-repeat:no-repeat;')
                                     .tick.installed
                                         i.material-icons done
-                                    .tag
+                                    .tag(style='z-index:1')
                                         h1 #{INSTALLER_TSO_TITLE}
                                         span #{INSTALLER_TSO_DESCR}
+                                    <a onClick="FSOLauncher.fireEvent('FTP_TSO');event.stopPropagation();" style="top:103px; text-transform:uppercase;height:45px;z-index:0;left:50px;text-align:center;border-radius:8px;position:absolute;display:block;box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);padding:6px;padding-left:8px;padding-right:10px;background-color: #43A900;color:#fff;font-size:14px;"><i class="material-icons" style="font-size:20px;margin-right:10px;vertical-align:middle">get_app</i>Alternative Download</a>
                             div
                                 .item(install='OpenAL', style='background:url(FSOLauncher_Images/openal.png) #fff; background-position:center center; background-size:80%;background-repeat:no-repeat;')
                                     .tick.installed

@@ -49,7 +49,7 @@
     "MODAL_INSTALLATION_DESCR": "This will install OpenAL, .NET Framework, The Sims Online and FreeSO in this order.",
 
     "MODAL_START": "Start installation",
-    "MODAL_USE_IT":" Yes, use it",
+    "MODAL_USE_IT": " Yes, use it",
 
     "MODAL_LATER": "Later",
 
@@ -62,14 +62,14 @@
 
     "MODAL_INSTALL_FOLDER": "Install in this folder",
 
-    "MODAL_REINSTALL": "Again?",
+    "MODAL_REINSTALL": "Reinstall?",
     "MODAL_CONTINUE": "Continue",
 
     "MODAL_NEGATIVE": "Uh oh!",
     "MODAL_NEED_FSOTSO": "You need FreeSO and The Sims Online installed to use this feature. Changes were not saved.",
 
     "MODAL_NEED_FSOTSO_PLAY": "You need FreeSO and The Sims Online installed to launch the game.",
-    "MODAL_GOTO_INSTALLER":"Go to installer",
+    "MODAL_GOTO_INSTALLER": "Go to installer",
 
     "MODAL_CLOSED_FREESO": "Closed FreeSO",
     "MODAL_CLOSED": "Closed",
@@ -192,7 +192,7 @@
     "FSO_FAILED_INSTALLATION": "Failed to install FreeSO. Try again later.",
     "TSO_FAILED_INSTALLATION": "Failed to install The Sims Online. Please try again later.",
 
-    "FSO_NETWORK_ERROR": "There was a problem downloading the distribution files. Please ensure a stable internet connection and try again.",
+    "FSO_NETWORK_ERROR": "There was a problem downloading the required files due to a network error. Please try again later.",
     "EXTRACTING": "Extracting",
     "EXTRACTING_CLIENT_FILES": "Extracting client files...",
     "EXTRACTING_FAILED": "Extraction failed with error code",
@@ -257,17 +257,16 @@
     "ABOUT_FAQ_5_H1": "Need help?",
     "ABOUT_FAQ_5_TEXT": "DM us on <a href='https://twitter.com/FreeSOGame' target='_blank'>Twitter</a> or join <a href='https://discord.gg/xveESFj' target='_blank'>Discord</a>",
 
-
     "MODAL_START_VOLCANIC": "Start Volcanic?",
     "MODAL_START_VOLCANIC_DESC": "By right clicking the Play button FSO.IDE will start. Only use this if you are a developer.",
     "MODAL_START_VOLCANIC_OK": "Start Volcanic",
 
     "MODAL_FAILED_LAUNCH": "Failed to launch",
-    "MODAL_FAILED_LAUNCH_DESC": "FreeSO.exe is missing and we could not auto-recover it. This might be due to a failed update. Find ways to contact support in the About tab.",
+    "MODAL_FAILED_LAUNCH_DESC": "FreeSO.exe is somehow missing from the FreeSO folder. This might be due to antivirus software. Please reinstall FreeSO.",
 
     "MODAL_GAME_AUTORECOVERED": "Game Auto-Recovered",
-    "MODAL_GAME_AUTORECOVERED_DESC": "FreeSO.exe was not present (most likely due to a failed update) and has been restored. You might need to update again!",
-    "NOTIFICATIONS": "Notifications",
+    "MODAL_GAME_AUTORECOVERED_DESC": "FreeSO.exe was not present and has been restored. You might need to update again!",
+    "NOTIFICATIONS": "NOTIFICATIONS",
     "NOTIFICATIONS_DESC": "Keep up with past FreeSO desktop notifications",
     "NOTIFICATIONS_NONE": "No notifications received yet"
   },
@@ -322,7 +321,7 @@
     "MODAL_INSTALLATION_DESCR": "Esto instalará OpenAL, .NET Framework, Los Sims Online y FreeSO, en este orden.",
 
     "MODAL_START": "Comenzar instalación",
-    "MODAL_USE_IT":" Si, usarlo",
+    "MODAL_USE_IT": " Si, usarlo",
 
     "MODAL_LATER": "Más tarde",
 
@@ -342,7 +341,7 @@
     "MODAL_NEED_FSOTSO": "Debes tener FreeSO y Los Sims Online para cambiar esta característica. No se guardarán los cambios.",
 
     "MODAL_NEED_FSOTSO_PLAY": "Debes tener FreeSO y Los Sims Online para jugar.",
-    "MODAL_GOTO_INSTALLER":"Ir al instalador",
+    "MODAL_GOTO_INSTALLER": "Ir al instalador",
 
     "MODAL_CLOSED_FREESO": "FreeSO cerrado",
     "MODAL_CLOSED": "Cerrando",
@@ -530,7 +529,6 @@
     "ABOUT_FAQ_5_H1": "¿Necesitas ayuda?",
     "ABOUT_FAQ_5_TEXT": "Envíanos un DM en <a href='https://twitter.com/FreeSOESP' target='_blank'>Twitter</a> o únete al <a href='https://discord.gg/cs27KfE' target='_blank'>Discord</a>",
 
-
     "MODAL_START_VOLCANIC": "¿Iniciar Volcanic?",
     "MODAL_START_VOLCANIC_DESC": "Al hacer clic derecho en el botón de Jugar se iniciará FSO.IDE. Usa este modo solo si eres desarrollador.",
     "MODAL_START_VOLCANIC_OK": "Iniciar Volcanic",
@@ -539,9 +537,9 @@
     "MODAL_FAILED_LAUNCH_DESC": "FreeSO.exe parece no estar en el sistema y no hemos podido recuperarlo. Encuentra ayuda en la seccion de Acerca de.",
 
     "MODAL_GAME_AUTORECOVERED": "Recuperación automática",
-    "MODAL_GAME_AUTORECOVERED_DESC": "FreeSO.exe no estaba presente (puede que por una actualización fallida) y ha sido restaurado. ¡Puede que necesites actualizar de nuevo!"
+    "MODAL_GAME_AUTORECOVERED_DESC": "FreeSO.exe no estaba presente (puede que por una actualización fallida) y ha sido restaurado. ¡Puede que necesites actualizar de nuevo!",
 
-    ,"NOTIFICATIONS": "Notificaciones",
+    "NOTIFICATIONS": "Notificaciones",
     "NOTIFICATIONS_DESC": "Obtén las últimas notificaciones de FreeSO",
     "NOTIFICATIONS_NONE": "No se han recibido notificaciones"
   },
@@ -596,7 +594,7 @@
     "MODAL_INSTALLATION_DESCR": "Saranno installati OpenAL, .NET Framework, The Sims Online e FreeSO in questo ordine.",
 
     "MODAL_START": "Installa",
-    "MODAL_USE_IT":" Si, usalo.",
+    "MODAL_USE_IT": " Si, usalo.",
 
     "MODAL_LATER": "Più tardi.",
 
@@ -616,7 +614,7 @@
     "MODAL_NEED_FSOTSO": "Sono necessario The Sims Online e FreeSO installati per questa funzione, cambiamenti non salvati.",
 
     "MODAL_NEED_FSOTSO_PLAY": "Sono necessari The Sims Online e FreeSO per poter giocare.",
-    "MODAL_GOTO_INSTALLER":"Vai a installazione",
+    "MODAL_GOTO_INSTALLER": "Vai a installazione",
 
     "MODAL_CLOSED_FREESO": "FreeSO Chiuso",
     "MODAL_CLOSED": "Chiuse",
@@ -804,7 +802,6 @@
     "ABOUT_FAQ_5_H1": "Bisogno di aiuto?",
     "ABOUT_FAQ_5_TEXT": "Mandaci un messaggio su <a href='https://twitter.com/FreeSOGame' target='_blank'>Twitter</a> oppure unisciti al nostro <a href='https://discord.gg/xveESFj' target='_blank'>Discord</a>",
 
-
     "MODAL_START_VOLCANIC": "Avviare Volcanic?",
     "MODAL_START_VOLCANIC_DESC": "Cliccando con il tasto destro si attiva la modalità di sviluppo con FreeSO IDE. Usalo se sai cosa stai facendo.",
     "MODAL_START_VOLCANIC_OK": "Usa Volcanic",
@@ -813,8 +810,8 @@
     "MODAL_FAILED_LAUNCH_DESC": "L'eseguibile FreeSO.exe non è nella sua collocazione. Questo può essere stato causato da un probelma con un aggiornamento, visita il supporto per maggiorni informazioni.",
 
     "MODAL_GAME_AUTORECOVERED": "Gioco ripristinato",
-    "MODAL_GAME_AUTORECOVERED_DESC": "L'eseguibile FreeSO.exe non era presente ed è stato ripristinato automaticamente. Potresti aver bisogno di aggiornare di nuovo!"
-,    "NOTIFICATIONS": "Notifications",
+    "MODAL_GAME_AUTORECOVERED_DESC": "L'eseguibile FreeSO.exe non era presente ed è stato ripristinato automaticamente. Potresti aver bisogno di aggiornare di nuovo!",
+    "NOTIFICATIONS": "Notifications",
     "NOTIFICATIONS_DESC": "Keep up with past FreeSO desktop notifications",
     "NOTIFICATIONS_NONE": "No notifications received yet"
   }
