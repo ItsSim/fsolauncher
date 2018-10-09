@@ -77,6 +77,7 @@ class WebArchiveFTPInstaller {
    * @memberof TSOInstaller
    */
   step2() {
+    this.haltProgress = true;
     return this.setupDir(this.path);
   }
   /**
