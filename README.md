@@ -32,7 +32,5 @@ Please note that **COMPLETE INSTALLATION** overrides any installations that may 
 5. Replace the `app.asar` file and the `app.asar.unpacked` folder in the resources folder of your current launcher installation (C:\Program Files (x86)\FreeSO Launcher\resources or wherever it may be) with your newly generated ones.
 6. Run the launcher executable.
 
-**Make sure to run it as an administrator!**
-
-PRs are welcome to improve the launcher!
+**PRs are welcome to improve the launcher!**
 
