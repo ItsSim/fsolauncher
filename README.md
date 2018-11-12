@@ -26,11 +26,12 @@ Please note that **COMPLETE INSTALLATION** overrides any installations that may 
 
 # How to build your code
 1. Install node.js.
-2. Clone this repository.
-3. Install Node dependencies by running `npm i` in the root source folder.
-4. Run `npm run buildasar` in the root source folder to generate a compressed launcher asar package with your code. This will generate an `app.asar` file and an `app.asar.unpacked` folder. You can change the path where these are created in the `package.json` file.
-5. Replace the `app.asar` file and the `app.asar.unpacked` folder in the resources folder of your current launcher installation (C:\Program Files (x86)\FreeSO Launcher\resources or wherever it may be) with your newly generated ones.
-6. Run the launcher executable.
+2. Install the asar library globally: `npm i -g asar`.
+3. Clone this repository.
+4. Install launcher npm dependencies by running `npm i` in the root source folder.
+5. Run `npm run buildasar` in the root source folder to generate a compressed launcher asar package with your code. This will generate an `app.asar` file and an `app.asar.unpacked` folder. You can change the path where these are created in the `package.json` file.
+6. Replace the `app.asar` file and the `app.asar.unpacked` folder in the resources folder of your current launcher installation (C:\Program Files (x86)\FreeSO Launcher\resources or wherever it may be) with your newly generated ones.
+7. Run the launcher executable.
 
 **PRs are welcome to improve the launcher!**
 
