@@ -68,7 +68,7 @@ class DownloadWorker extends EventEmitter {
             : this.totalSize;
 
         file.on("finish", () => {
-          console.log("file finished writing...");
+          //console.log("file finished writing...");
           file.close(() => {
             if (response.headers["content-md5"]) {
               return require("md5-file")(
@@ -89,7 +89,7 @@ class DownloadWorker extends EventEmitter {
                     this.options.destination + ".tmp",
                     this.options.destination,
                     () => {
-                      console.log("file renamed...ok");
+                      //console.log("file renamed...ok");
                       this.setStatus("FINISHED");
                       this.emit("end");
                     }
@@ -118,91 +118,6 @@ class DownloadWorker extends EventEmitter {
         this.downloadedSize += chunk.length;
       })
       .pipe(file);
-
-    /*request.setTimeout(30000, () => {
-      file.close(() => {
-        fs.unlink(this.options.destination + ".tmp", () => {
-          this.setStatus("FAILED");
-
-          return this.emit("error", "Timeout!");
-        });
-      });
-    });*/
-
-    /*
-    let request = require("http")
-      .get(this.options.origin, response => {
-        this.setStatus("IN_PROGRESS");
-
-        this.totalSize =
-          this.totalSize === 0
-            ? parseInt(response.headers["content-length"])
-            : this.totalSize;
-
-        console.log(response.headers);
-        console.log(response.rawHeaders);
-
-        response.pipe(file);
-
-        response.on("data", chunk => {
-          this.downloadedSize += chunk.length;
-        });
-
-        file.on("finish", () => {
-          file.close(() => {
-            if (response.headers["content-md5"]) {
-              return require("md5-file")(
-                this.options.destination + ".tmp",
-                (err, hash) => {
-                  let b = new Buffer(hash),
-                    s = b.toString("base64");
-
-                  if (err) {
-                    return this.fail("File missing?");
-                  }
-
-                  if (s !== response.headers["content-md5"]) {
-                    return this.fail("File was corrupted. Try again later.");
-                  }
-
-                  fs.rename(
-                    this.options.destination + ".tmp",
-                    this.options.destination,
-                    () => {
-                      this.setStatus("FINISHED");
-                      this.emit("end");
-                    }
-                  );
-                }
-              );
-            }
-
-            fs.rename(
-              this.options.destination + ".tmp",
-              this.options.destination,
-              () => {
-                this.setStatus("FINISHED");
-                this.emit("end");
-              }
-            );
-          });
-        });
-      })
-      .on("error", err => {
-        file.close(() => {
-          this.fail(err.message);
-        });
-      });
-
-    request.setTimeout(30000, () => {
-      file.close(() => {
-        fs.unlink(this.options.destination + ".tmp", () => {
-          this.setStatus("FAILED");
-
-          return this.emit("error", "Timeout!");
-        });
-      });
-    });*/
   }
 
   /**
@@ -229,7 +144,7 @@ class DownloadWorker extends EventEmitter {
    * @memberof DownloadWorker
    */
   fail(message) {
-    console.log(message);
+    //console.log(message);
     fs.unlink(this.options.destination + ".tmp", () => {
       if (this.retries < this.options.retries) {
         setTimeout(() => {

@@ -234,9 +234,11 @@ div.page > h1.jumbotron {
 }
 
 div.page > h1.jumbotron span {
-  padding-right: 10px;
+  /*padding-right: 10px;
   border-right: 1px solid rgba(255, 255, 255, 0.4);
-  margin-right: 10px;
+  margin-right: 10px;*/
+  display: block;
+  margin-top: -10px;
 }
 
 div.page > h1.jumbotron small {
@@ -390,13 +392,13 @@ div.page p {
 
 @-webkit-keyframes animate-stripes {
   100% {
-    background-position: -100px 0px;
+    background-position: 100px 0px;
   }
 }
 
 @keyframes animate-stripes {
   100% {
-    background-position: -100px 0px;
+    background-position: 100px 0px;
   }
 }
 
@@ -406,8 +408,8 @@ div.page p {
 }
 
 .download.stopped .loading .progress {
-    background-image:none;
-    background:#2D8AC4;
+  background-image: none;
+  background: #2d8ac4;
 }
 
 .loading .progress {
@@ -641,7 +643,7 @@ button.blue:hover,
   width: 300px;
   /*border-top-right-radius:6px;
     border-bottom-right-radius:6px*/
-  border-radius: 6px;
+  border-radius: 8px;
   transition: box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
@@ -680,7 +682,7 @@ select {
   font-size: inherit;
   color: inherit;
   border: 0;
-  border-radius: 6px;
+  border-radius: 8px;
   background-image: -webkit-linear-gradient(#fafafa, #f4f4f4 40%, #e5e5e5);
   background-position: 97% center;
   background-repeat: no-repeat;
@@ -1106,7 +1108,6 @@ a {
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   background: #ffffff;
   display: block;
-  border-radius: 6px;
 }
 
 #notifications-page div.notification h1 {

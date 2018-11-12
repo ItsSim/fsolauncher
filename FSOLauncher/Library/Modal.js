@@ -406,51 +406,126 @@ class Modal {
    * @memberof Modal
    */
   static sendNotification(title, message, url) {
-    const notify = require("electron-notify");
+    const {
+      setGlobalStyles,
+      createNotification,
+    } = require("electron-custom-notifications");
+
     const path = require("path");
+    const fs = require("fs");
 
-    notify.setConfig({
-      appIcon: path.join(__dirname, "beta.ico"),
-      displayTime: 6000,
-      height: 100,
-      borderRadius: 6,
-      defaultStyleContainer: {
-        backgroundColor: "rgba(30, 30, 30, 0.8)",
-        overflow: "hidden",
-        padding: 15,
-        border: "0px",
-        fontFamily: "Helvetica",
-        fontSize: 12,
-        position: "relative",
-        lineHeight: "15px",
-        color: "#FFFFFF",
+    fs.readFile(
+      path.join(__dirname, "../../", "beta.ico"),
+      {
+        encoding: "base64",
       },
-      defaultStyleText: {
-        margin: 0,
-        overflow: "hidden",
-        cursor: "pointer",
-        color: "#FFFFFF",
-      },
-      defaultStyleClose: {
-        position: "absolute",
-        top: 6,
-        right: 15,
-        fontSize: 11,
-        color: "#FFF",
-      },
-    });
+      (err, logo) => {
+        if (err) return;
 
-    let options = {};
-    options.title = title;
-    options.text = message;
+        fs.readFile(
+          path.join(
+            __dirname,
+            "../../FSOLauncher_UI/FSOLauncher_Fonts",
+            "hinted-Munged-embOpitJmj.ttf"
+          ),
+          {
+            encoding: "base64",
+          },
+          (err, munged) => {
+            if (err) return;
 
-    Modal.View.sendSound("notification");
+            fs.readFile(
+              path.join(
+                __dirname,
+                "../../FSOLauncher_UI/FSOLauncher_Fonts",
+                "FredokaOne-Regular.ttf"
+              ),
+              {
+                encoding: "base64",
+              },
+              (err, fredokaOne) => {
+                if (err) return;
 
-    if (url) {
-      options.url = url;
-    }
+                setGlobalStyles(`
+                @font-face {
+                  font-family: 'Munged';
+                  src: url(data:font/truetype;charset=utf-8;base64,${munged}) format('truetype');
+                  font-weight: normal;
+                  font-style: normal;
+                }
+                @font-face {
+                  font-family: 'Fredoka One';
+                  src: url(data:font/truetype;charset=utf-8;base64,${fredokaOne}) format('truetype');
+                  font-weight: normal;
+                  font-style: normal;
+                }
+                notification {
+                  -webkit-user-select: none;
+                  cursor:pointer;
+                  overflow:hidden;
+                  display:block;
+                  padding:20px;
+                  background-image: -webkit-linear-gradient(#fafafa, #f4f4f4 40%, #e5e5e5);
+                  border-radius:12px;
+                  margin:10px;
+                  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+                  display:flex;
+                }
+                notification h1 {
+                  font-family:'Fredoka One';
+                  margin-bottom:5px;
+                  color:#2d8ac4;
+                }
+                notification p {
+                  font-family:'Munged';
+                  font-size:12px;
+                  line-height:18px;
+                  color:rgba(0,0,0,0.6);
+                }
+                notification #logo {
+                  background-image:url("data:image/png;base64,${logo}");
+                  background-size:100%;
+                  background-position:center center;
+                  background-repeat:no-repeat;
+                  width:70px;
+                  height:60px;
+                  margin-right:10px;
+                  flex:0.2;
+                }
+                notification #content {
+                  flex:0.8;
+                }
+                `);
 
-    notify.notify(options);
+                const notification = createNotification({
+                  template: `
+                  <notification id="%id%" class="animated fadeIn faster">
+                    <div id="logo"></div>
+                    <div id="content">
+                      <h1>${title}</h1>
+                      <p>${message}</p>
+                    </div>
+                  </notification> 
+                  `,
+                  timeout: 10000,
+                });
+
+                notification.on("display", () => {
+                  Modal.View.sendSound("notification");
+                });
+
+                notification.on("click", () => {
+                  if (url) {
+                    require("electron").shell.openExternal(url);
+                  }
+                  notification.close();
+                });
+              }
+            );
+          }
+        );
+      }
+    );
   }
 
   /**

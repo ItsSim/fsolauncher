@@ -77,7 +77,7 @@ class FSOLauncher extends Events {
         resolve();
       } catch (e) {
         Toast.destroy();
-        console.log("Error grabbing the registry", err);
+        //console.log("Error grabbing the registry", err);
         reject(err);
       }
     });

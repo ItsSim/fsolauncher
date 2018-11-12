@@ -66,18 +66,18 @@ class FilePlanetInstaller {
    * @memberof FSOInstaller
    */
   step1() {
-    console.log("step1");
+    //console.log("step1");
     return this.download();
   }
 
   step2() {
-    console.log("step2");
+    //console.log("step2");
     return this.setupDir(this.path);
   }
 
   step3() {
     // extract zip
-    console.log("step3");
+    //console.log("step3");
     return this.extractZip();
   }
 
@@ -89,7 +89,7 @@ class FilePlanetInstaller {
 
   step5() {
     // patch
-    console.log("step5");
+    //console.log("step5");
     this.createProgressItem("Patching The Sims Online, please wait...", 100);
     return new Promise((resolve, reject) => {
       let child = require("child_process").exec(
@@ -115,7 +115,7 @@ class FilePlanetInstaller {
 
   step6() {
     // registry
-    console.log("step6");
+    //console.log("step6");
     return require("../Registry").createMaxisEntry(this.path);
   }
 
@@ -141,7 +141,7 @@ class FilePlanetInstaller {
   }
 
   extractZip() {
-    const unzipStream = require("unzip2").Extract({
+    const unzipStream = require("node-unzip-2").Extract({
       path: "temp/TSOCabArchives",
     });
 
@@ -160,7 +160,7 @@ class FilePlanetInstaller {
         });
 
       unzipStream.on("error", err => {
-        this.cleanup();
+        //this.cleanup();
         return reject(err);
       });
 
@@ -271,7 +271,7 @@ class FilePlanetInstaller {
    * @memberof TSOInstaller
    */
   updateDownloadProgress() {
-    console.log("updateDownloadProgress");
+    //console.log("updateDownloadProgress");
     // Archive.org does not provide Content-Length
     setTimeout(() => {
       let p = this.dl.getProgress();

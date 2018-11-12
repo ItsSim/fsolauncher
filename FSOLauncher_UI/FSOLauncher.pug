@@ -11,6 +11,7 @@ html
         link(rel='stylesheet', href='./FSOLauncher_Styles/material-icons.css')
         link(rel='stylesheet', href='./FSOLauncher_Styles/FSOLauncher_Themes/turbo.css')
         link(rel='stylesheet', href='./FSOLauncher_Styles/FSOLauncher_Themes/dark.css')
+        link(rel='stylesheet', href='./FSOLauncher_Styles/FSOLauncher_Themes/halloween.css')
     body(rmstr=READ_MORE, rss=RSS_URL)
         #launcher.not-installed
             .hint.arrow-left(hint-page='home', style='top:215px;left:255px')
@@ -81,8 +82,8 @@ html
                                 | #{INTERNET_REQ}
                             #rss-root
                         #did-you-know(style='display:none')
-                            //a.twitter-timeline(style='text-decoration:none;' data-height='520', data-theme='light', data-chrome='noheader nofooter transparent noborders', href=TW_URL) Couldn't load Twitter feed
                             a.twitter-timeline(style='text-decoration:none;' data-height='500', data-theme='light', href=TW_URL) @FreeSOGame on Twitter
+                            //a.twitter-timeline.light(style='text-decoration:none;' data-height='500', data-theme='light', data-chrome='transparent', href=TW_URL) @FreeSOGame on Twitter
                             script#tw(src='https://platform.twitter.com/widgets.js', charset='utf-8')
                 #installer-page.page(style='/**background-image:url(city.jpg); **/display:none')
                     .hint.arrow-left(hint-page='installer', style='top:110px;left:375px')
@@ -111,7 +112,7 @@ html
                                 h1 #{TOOLTIP_TITLE_2}
                                 span #{TOOLTIP_DESCR_2}
                             div.block
-                                .item(install='RMS', style='background:url(FSOLauncher_Images/render2.png) #fff; background-position:center center; background-size:50%;background-repeat:no-repeat;')
+                                .item(install='RMS', style='border-top:0;background-image:url(FSOLauncher_Images/render2.png); background-color:#fff; background-position:center center; background-size:50%;background-repeat:no-repeat;')
                                     .new(style='top:50px;height:50px;left:30px;padding:6px;padding-left:8px;padding-right:8px;border-radius:8px;font-size:14px;display:none;position:absolute;') <i style="vertical-align:middle;" class="material-icons">new_releases</i> RECENTLY&nbsp;UPDATED
                                     .tag
                                         h1 Remesh Package
@@ -168,6 +169,7 @@ html
                             div
                                 span #{SETTINGS_THEME}
                                 select(option-id='Launcher.Theme')
+                                    //option(value='halloween') Halloween
                                     option(value='open_beta') Open Beta
                                     option(value='turbo') Neon
                                     //<option value="dark">Onyx</option>

@@ -100,6 +100,10 @@ class CompleteInstaller {
       global.locale.INS_PLAY_CLICK,
       100
     );
+    Modal.sendNotification(
+      "FreeSO Launcher",
+      "FreeSO has finished installing and is ready to go!"
+    );
     setTimeout(() => {
       this.FSOLauncher.View.fullInstallProgressItem();
     }, 5000);

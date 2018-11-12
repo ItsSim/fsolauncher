@@ -5,7 +5,10 @@ const fs = require("fs");
 const ini = require("ini");
 const UIText = require("./FSOLauncher_UI/UIText.json");
 
-//require('electron-reload')(__dirname);
+/*require("electron-reload")(__dirname, {
+  electron:
+    "C:\\Users\\dbhdane\\AppData\\Roaming\\npm\\node_modules\\electron\\dist",
+});*/
 
 let FSOLauncher = require("./FSOLauncher/FSOLauncher");
 
@@ -13,7 +16,7 @@ let FSOLauncher = require("./FSOLauncher/FSOLauncher");
 process.title = "FreeSO Launcher Beta";
 
 // Launcher version
-global.version = "1.4.2";
+global.version = "1.5.0";
 
 let Window = null;
 let tray = null;
@@ -29,7 +32,7 @@ global.locale.LVERSION = global.version;
 
 require("electron-pug")(
   {
-    pretty: true,
+    pretty: false,
   },
   global.locale
 );
@@ -48,7 +51,7 @@ function PreCheckConfiguration() {
   } catch (e) {
     let defaultConfiguration = {
       Launcher: {
-        Theme: "turbo",
+        Theme: "open_beta",
         DesktopNotifications: "1",
         Persistence: "1",
       },
@@ -91,7 +94,7 @@ function CreateWindow() {
   Window = new BrowserWindow(options);
 
   Window.setMenu(null);
-  //Window.openDevTools({mode:'detach'})
+  //Window.openDevTools({ mode: "detach" });
   Window.loadURL("file://" + __dirname + "/FSOLauncher_UI/FSOLauncher.pug");
 
   FSOLauncher = new FSOLauncher(Window, conf);
@@ -109,9 +112,9 @@ function CreateWindow() {
     {
       label: global.locale.TRAY_LABEL_2,
       click: () => {
-        const notify = require("electron-notify");
+        //const notify = require("electron-notify");
         global.willQuit = true;
-        notify.closeAll();
+        //notify.closeAll();
         Window.close();
       },
     },
@@ -139,8 +142,8 @@ function CreateWindow() {
       e.preventDefault();
       Window.minimize();
     } else {
-      const notify = require("electron-notify");
-      notify.closeAll();
+      //const notify = require("electron-notify");
+      //notify.closeAll();
     }
   });
 

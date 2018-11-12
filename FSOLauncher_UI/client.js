@@ -71,7 +71,20 @@ FSOLauncher.prototype.registerServerEvent = function(a, b) {
   ipcRenderer.on(a, b);
 };
 FSOLauncher.prototype.setTheme = function(a) {
-  document.querySelector("body").className = a;
+  var date = new Date();
+  var m = date.getMonth();
+  var d = date.getDate();
+  if ((m == 9 && (d >= 30 && d <= 31)) || (m == 10 && d == 1)) {
+    document.querySelector("body").className = "halloween";
+    /*document
+      .querySelector(".twitter-timeline")
+      .setAttribute("data-theme", "dark");*/
+  } else {
+    document.querySelector("body").className = a;
+    /*document
+      .querySelector(".twitter-timeline")
+      .setAttribute("data-theme", "light");*/
+  }
 };
 FSOLauncher.prototype.removeToast = function(id) {
   var el = document.getElementById(id);
@@ -467,7 +480,7 @@ FSOLauncher.registerUIEvent("#update-check", "click", function() {
 FSOLauncher.registerUIEventAll("[option-id]", "change", function(a, b) {
   var c = a.currentTarget.getAttribute("option-id"),
     e = a.currentTarget.value;
-  "Launcher.Theme" === c && (document.body.className = e);
+  "Launcher.Theme" === c && FSOLauncher.setTheme(e);
   c = c.split(".");
   FSOLauncher.fireEvent("SET_CONFIGURATION", [c[0], c[1], e]);
 });
@@ -480,3 +493,17 @@ FSOLauncher.registerUIEventAll("[install]", "click", function(a, b) {
   var c = a.currentTarget.getAttribute("install");
   FSOLauncher.fireEvent("INSTALL", c);
 });
+
+/*FSOLauncher.createNotification(
+  "FreeSO Announcement",
+  "Just a test",
+  "http://google.com"
+);
+
+FSOLauncher.createOrModifyProgressItem(
+  "test",
+  "FreeSO Client",
+  "http://freeso.org",
+  "Installing client files...",
+  50
+);*/

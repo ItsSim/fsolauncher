@@ -182,11 +182,11 @@ class Download extends EventEmitter {
    */
   addListeners(DownloadWorker) {
     DownloadWorker.on("start", () => {
-      console.log("Downloading", DownloadWorker.options.origin);
+      //console.log("Downloading", DownloadWorker.options.origin);
     });
 
     DownloadWorker.on("end", () => {
-      console.log("Finished", DownloadWorker.options.origin);
+      //console.log("Finished", DownloadWorker.options.origin);
 
       if (DownloadWorker.options.multiPartId) {
         this.emit("multiPartEnd", DownloadWorker.options.multiPartId);
@@ -207,7 +207,7 @@ class Download extends EventEmitter {
     });
 
     DownloadWorker.on("error", message => {
-      console.log("Error with", DownloadWorker.options.origin, message);
+      //console.log("Error with", DownloadWorker.options.origin, message);
 
       let failed = this.getFailed();
       let finished = this.getFinished();

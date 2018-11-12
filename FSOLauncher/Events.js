@@ -77,7 +77,6 @@ class Events {
     this.updateNetRequiredUI(true);
 
     //this.checkLauncherUpdates(true);
-
     this.Window.focus();
   }
 

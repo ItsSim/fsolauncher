@@ -173,7 +173,7 @@ class FSOInstaller {
    * @memberof FSOInstaller
    */
   extract() {
-    const unzipStream = require("unzip2").Extract({
+    const unzipStream = require("node-unzip-2").Extract({
       path: this.path,
     });
 
@@ -191,7 +191,7 @@ class FSOInstaller {
         });
 
       unzipStream.on("error", err => {
-        this.cleanup();
+        //this.cleanup();
         return reject(err);
       });
 

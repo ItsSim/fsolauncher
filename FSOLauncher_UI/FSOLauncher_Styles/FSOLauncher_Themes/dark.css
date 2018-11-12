@@ -1,104 +1,110 @@
-.dark #logo:after 
-{
-    content: 'ONYX';
+.dark #logo:after {
+  content: "ONYX";
 }
 
 .dark #sidebar {
-	background:#303030!important;
-	color:#fff!important;
+  background: #303030 !important;
+  color: #fff !important;
 }
 
 .dark h1.jumbotron {
-	background:#273238!important;
-	color:#fff!important;
+  background: #273238 !important;
+  color: #fff !important;
 }
 
 .dark #content {
-	background:#424242!important;
-	color:#fff!important;
+  background: #424242 !important;
+  color: #fff !important;
 }
 
-.dark button, .dark .button {
-	background:#7DC6BF!important;
-	color:rgba(0,0,0,0.7);
+.dark button,
+.dark .button {
+  background: #7dc6bf !important;
+  color: rgba(0, 0, 0, 0.7);
 }
 
 .dark .rss-entry > h1 {
-	color:#7DC6BF!important;
+  color: #7dc6bf !important;
 }
 
 .dark .rss-entry > span {
-	color:#7DC6BF!important;
+  color: #7dc6bf !important;
 }
 
-.dark #sidebar li.active, .dark #sidebar li:not(#logo):hover
-{
-    border-right:4px solid #7DC6BF!important;
-    background-color:rgba(0,0,0,0.05);
-    color:#7DC6BF!important;
-    cursor:pointer;
-    padding-left:30px;
+.dark #sidebar li.active,
+.dark #sidebar li:not(#logo):hover {
+  border-right: 4px solid #7dc6bf !important;
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #7dc6bf !important;
+  cursor: pointer;
+  padding-left: 30px;
 }
 
-.dark input, .dark select {
-	border-color:#273238!important;
-	font-weight:bold;
-	color:#273238;
-	background:#7DC6BF;
+.dark input,
+.dark select {
+  border-color: #273238 !important;
+  font-weight: bold;
+  color: #273238;
+  background: #7dc6bf;
 }
 
 .dark select {
-	background:url(../../FSOLauncher_Images/15xvbd5.png), #7DC6BF;
-    background-position:97% center;
-    background-repeat:no-repeat;
+  background: url(../../FSOLauncher_Images/15xvbd5.png), #7dc6bf;
+  background-position: 97% center;
+  background-repeat: no-repeat;
 }
 
 .dark #settings-page .form h1 {
-	color:#7DC6BF!important;
+  color: #7dc6bf !important;
 }
 
 .dark #settings-page .form div small {
-	color:rgba(255,255,255,0.5);
+  color: rgba(255, 255, 255, 0.5);
 }
 
-.dark #rss  .rss-entry h1, .dark #settings-page .form h1, .dark #downloads > div .tag h1, .dark #downloads > div .tag, .dark .modal h1 {
-	color:#7DC6BF!important;
+.dark #rss .rss-entry h1,
+.dark #settings-page .form h1,
+.dark #downloads > div .tag h1,
+.dark #downloads > div .tag,
+.dark .modal h1 {
+  color: #7dc6bf !important;
 }
 
 .dark #downloads > div > .item {
-	background-color:#7DC6BF;
+  background-color: #7dc6bf;
 }
 
 .dark #downloads > div {
 }
 
 .dark .modal {
-	background:#424242
+  background: #424242;
 }
-.dark .modal p, .dark .modal div span {
-	color:rgba(255,255,255,0.5);
+.dark .modal p,
+.dark .modal div span {
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .dark #downloads > div .tag {
-	background:#303030;
+  background: #303030;
 }
 
 .dark #downloads > div.installed > div.item > div.tick.installed {
-	background-color:#7DC6BF;
+  background-color: #7dc6bf;
 }
 
 .dark #downloads-page div.download {
-	background:#424242;
+  background: #424242;
 }
 
 .dark #downloads-page div.download h1 {
-	color:#7DC6BF;
+  color: #7dc6bf;
 }
 
 .dark #downloads-page div.download span {
-	color:rgba(255,255,255,0.5);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .dark #downloads-page div.download .loading .progress {
-	background-color:#7DC6BF;
+  background-color: #7dc6bf;
 }
