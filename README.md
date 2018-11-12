@@ -9,30 +9,30 @@ By clicking the **COMPLETE INSTALLATION** button in the **INSTALLER** tab you ca
 
 If you already have some of the dependencies installed, you can install the ones you don't have by clicking them separately in the installer tab. 
 
-# Using a previous FreeSO installation
-If you have already installed FreeSO before, you can reuse your installation by installing it in the same directory. If the game files are already present, the launcher will not perform a reinstallation. It will choose your previous installation as the primary one.
+# Using a previous FreeSO/TSO installation
+If you have already installed FreeSO or The Sims Online before, you can reuse your installation by installing it in the same directory. If the game files are already present, the launcher will not perform a reinstallation. It will set your previous installation as the primary one.
 
-For example, if you already have FreeSO installed in C:/Program Files/FreeSO, then install FreeSO from the launcher choosing the **Program Files** directory. 
+For example, if you already have FreeSO installed in C:/Program Files/FreeSO, then install FreeSO from the launcher choosing the **Program Files** directory. For The Sims Online, this would be C:/Program Files/The Sims Online.
 
-The folder needs to be named **FreeSO** in order for the launcher to pick up previous installations.
+The folder needs to be named **FreeSO** or **The Sims Online** in order for the launcher to pick up previous installations.
+
+Please note that **COMPLETE INSTALLATION** overrides any installations that may already be present on your computer. To use a previous installation, you should use the solo installers from the installer tab.
 
 # Extra features
 * You can right click the Play button to run FreeSO along with the Volcanic IDE.
 * You can change your game language in settings.
 * You can change your game mode (3D or 2D).
 * You can change the graphics mode (DirectX, OpenGL or Software).
-* You can turn on Text-To-Speech for the game.
 
-# Problems
-* If your The Sims Online download fails continuosly at different .cabs, it is most likely due to a bad internet connection. You can use the original The Sims Online installer which seems to retry multiple times after failing, which means it may take more time to install, but it might work for you. [Click here to download the original The Sims Online installer](http://largedownloads.ea.com/pub/misc/tso/Setup%20The%20Sims%20Online.exe).
-
-# How to build
-1. Install Node.js
-2. Install Electron 1.7.9 using NPM (`npm i -g electron@1.7.9`)
-3. Run `npm run build` in the folder where package.json is to build Electron binaries
-4. Run `npm run buildasar` in the folder where package.json is to build the launcher 
-5. Copy the app.asar file and the app.asar.unpacked folder to the resources folder of the Electron binaries
-6. Run electron.exe
+# How to build your code
+1. Install node.js.
+2. Clone this repository.
+3. Install Node dependencies by running `npm i` in the root source folder.
+4. Run `npm run buildasar` in the root source folder to generate a compressed launcher asar package with your code. This will generate an `app.asar` file and an `app.asar.unpacked` folder. You can change the path where these are created in the `package.json` file.
+5. Replace the `app.asar` file and the `app.asar.unpacked` folder in the resources folder of your current launcher installation (C:\Program Files (x86)\FreeSO Launcher\resources or wherever it may be) with your newly generated ones.
+6. Run the launcher executable.
 
 **Make sure to run it as an administrator!**
+
+PRs are welcome to improve the launcher!
 
