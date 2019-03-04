@@ -16,7 +16,7 @@ let FSOLauncher = require("./FSOLauncher/FSOLauncher");
 process.title = "FreeSO Launcher Beta";
 
 // Launcher version
-global.version = "1.5.1";
+global.version = "1.5.3";
 
 let Window = null;
 let tray = null;

@@ -98,6 +98,8 @@ class HttpDownload extends EventEmitter {
 	}
 
 	retry() {
+		this.request.abort()
+		this.fileStream.end()
 		this.retries++
 		this.run()
 	}

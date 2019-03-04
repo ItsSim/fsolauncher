@@ -69,8 +69,8 @@ class UpdateInstaller {
 
     setTimeout(() => {
       global.willQuit = true;
-      const notify = require("electron-notify");
-      notify.closeAll();
+      // const notify = require("electron-notify");
+      // notify.closeAll();
       this.FSOLauncher.Window.close();
     }, 3000);
 
