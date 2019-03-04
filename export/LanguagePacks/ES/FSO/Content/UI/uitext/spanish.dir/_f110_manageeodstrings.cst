@@ -33,3 +33,13 @@
 33 ^Debe almacenar AL MENOS 140 veces la cantidad máxima de la apuesta.^
 34 ^Ha ocurrido un error desconocido.^
 35 ^Dinero en el objeto^
+36 ^Min Apuesta Ante^
+37 ^Max Apuesta Ante^
+38 ^Max Apuesta Lat.^
+39 ^Apuesta lateral^
+40 ^(Nota: Las apuestas de Holdem casino no pueden ser mayores a $%d)^
+41 ^Debe acumular al menos 84 veces la apuesta máxima ante y 104 veces la apuesta lateral máxima.^
+42 ^Las mesas de Holdem Casino deben cubrir el pago de hasta cuatro jugadores, cada uno de los cuales tiene una apuesta inicial y una apuesta lateral.^
+43 ^Si bien la probabilidad es muy baja, esto podría significar pagar una Escalera Real, Escalera de Color, Póquer y un Color en la misma mano, por lo tanto:^
+44 ^La apuesta lateral no puede ser superior a $%d.^
+45 ^La apuesta lateral no puede ser inferior a $0.^

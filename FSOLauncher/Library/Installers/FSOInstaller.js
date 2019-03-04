@@ -1,4 +1,14 @@
 const Modal = require("../Modal");
+const HttpDownload = require("../http-download");
+
+const DOWNLOAD_URL_SERVO =
+  'http://servo.freeso.org' +
+  '/guestAuth' +
+  '/repository' +
+  '/download' +
+  '/FreeSO_TsoClient' +
+  '/.lastSuccessful' +
+  '/client-<>.zip'
 
 /**
  * Installs FreeSO.
@@ -18,15 +28,7 @@ class FSOInstaller {
     this.path = path;
     this.haltProgress = false;
 
-    this.dl = new (require("../Download"))();
-    this.dl.add({
-      alias: "artifacts.zip",
-      // Grabbing from servo.freeso.org. Since the client auto-updates itself, this is
-      // the preferred option, since it also isn't the full size (only about 15MB opposed to the full 60MB).
-      origin:
-        "http://servo.freeso.org/guestAuth/repository/download/FreeSO_TsoClient/.lastSuccessful/client-<>.zip",
-      destination: "temp/",
-    });
+    this.dl = new HttpDownload( DOWNLOAD_URL_SERVO, 'temp/artifacts.zip' )
   }
   /**
    * Create/Update the download progress item.
@@ -57,9 +59,7 @@ class FSOInstaller {
         .then(() => this.step2())
         .then(() => this.step3())
         .then(() => this.step4())
-        /*
-            Don't want the user to auto-nuke themselves.
-            .then(() => this.step5())*/
+        //.then(() => this.step5())
         .then(() => this.end())
         .catch(ErrorMessage => this.error(ErrorMessage))
     );
@@ -153,9 +153,10 @@ class FSOInstaller {
    */
   download() {
     return new Promise((resolve, reject) => {
-      this.dl.start();
-      this.dl.on("end", stats => {
-        if (stats) {
+      this.dl.run();
+      this.dl.on("error",()=>{});
+      this.dl.on("end", fileName => {
+        if (this.dl.failed) {
           this.cleanup();
           return reject(global.locale.FSO_NETWORK_ERROR);
         }
@@ -275,21 +276,22 @@ class FSOInstaller {
   updateDownloadProgress() {
     setTimeout(() => {
       let p = this.dl.getProgress();
+      let mb = this.dl.getProgressMB();
+      let size = this.dl.getSizeMB();
 
-      if (p.percentage < 100) {
+      if (p < 100) {
         if (!this.haltProgress) {
           this.createProgressItem(
             global.locale.DL_CLIENT_FILES +
               " " +
-              p.mbDownloaded +
+              mb +
               " MB " +
               global.locale.X_OUT_OF_X +
-              " " +
-              p.mbTotal +
+              " " + size +
               " MB (" +
-              p.percentage +
+              p +
               "%)",
-            p.percentage
+            p
           );
         }
 

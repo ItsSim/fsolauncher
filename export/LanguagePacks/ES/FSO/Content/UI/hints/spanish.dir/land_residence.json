@@ -1,0 +1,8 @@
+{
+    "guid": "c0926279-b6af-458e-b730-951683152edf", 
+    "trigger": "land:residence",
+    "title": "Allanamiento de morada",
+    "category": "Tipos de propiedades",
+    "image": "hint_residence.png",
+    "body": "¡Estás allanando una propiedad que no es tuya! :scream:\nEn realidad, no, este es una propiedad de residencia, esencialmente el hogar de un jugador, pero lo han abierto para que puedas unirte. Este tipo de propiedad suele ser más personal que otros: generalmente verá grupos de amigos pasando el rato y jugando. Este tipo de propiedad actualmente no ofrece mucho aparte de eso, aunque esto podría cambiar en el futuro. \n\nNecesidades: [s][color=#FFA64D]Normales[/color][/s], Especialidad: [s]Camas del amor, Jacuzzi Corazín, estar donde está el corazón.[/s]"
+}

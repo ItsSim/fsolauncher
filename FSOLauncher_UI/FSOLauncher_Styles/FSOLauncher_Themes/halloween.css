@@ -1,0 +1,181 @@
+.halloween {
+}
+
+.halloween #logo:after {
+  content: "HALLOWEEN";
+}
+
+.halloween button,
+.halloween .button {
+  background-color: #ff691f;
+  color: #15202b;
+}
+
+.halloween button:hover,
+.halloween .button:hover {
+}
+
+.halloween #logo {
+  /*background-image: url(../../FSOLauncher_Images/logo_turbo.png) !important;*/
+}
+
+.halloween #launcher #sidebar li.active,
+.halloween #launcher #sidebar li:not(#logo):hover {
+  color: #ff691f;
+  border-right-color: #ff691f;
+}
+
+.halloween .hint {
+  background-color: #ff691f;
+}
+
+.halloween .hint.arrow-left:before {
+  border-right-color: #ff691f;
+}
+
+.halloween .hint.arrow-top:before {
+  border-bottom-color: #ff691f;
+}
+
+.halloween .loading .progress {
+  background-image: -webkit-linear-gradient(
+      -45deg,
+      transparent 33%,
+      rgba(255, 255, 255, 0.3) 33%,
+      rgba(255, 255, 255, 0.3) 66%,
+      transparent 66%
+    ),
+    -webkit-linear-gradient(top, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)),
+    -webkit-linear-gradient(left, #ff691f, #ff691f);
+}
+
+.halloween .hint.arrow-top:after {
+  border-bottom-color: #ff691f;
+}
+
+.halloween .hint.arrow-left:after {
+  border-right-color: #ff691f;
+}
+
+.halloween #rss .rss-entry h1,
+.halloween #settings-page .form h1,
+.halloween #downloads > div .tag h1,
+.halloween .modal h1 {
+  color: #ff691f;
+}
+
+.halloween #settings-page .form h1 {
+  border-color: #ff691f !important;
+}
+
+.halloween .download {
+  background: rgba(0, 0, 0, 0.3) !important;
+  color: #fff !important;
+}
+
+.halloween .download h1 {
+  color: #ff691f !important;
+}
+
+.halloween .download .loading {
+  background: rgba(255, 255, 255, 0.2) !important;
+}
+
+.halloween .download span {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.halloween .jumbotron span {
+  color: #ff691f !important;
+}
+
+.halloween input,
+.halloween select {
+  border-color: transparent !important;
+  font-weight: bold;
+  color: #15202b !important;
+  background: url(../../FSOLauncher_Images/15xvbd5.png), #ff691f;
+  background-position: 97% center;
+  background-repeat: no-repeat;
+}
+
+.halloween #settings-page .form div small {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.halloween .item[install="FSO"] {
+  background-image: url(../../FSOLauncher_Images/freeso-logo.png) !important;
+}
+
+.halloween #did-you-know {
+  background: #10171e !important;
+}
+
+.halloween .modal {
+  background: #15202b !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.halloween .tag {
+  background: #15202b !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+.halloween #settings-page .form h1 {
+}
+
+.halloween #sidebar {
+  background: #10171e !important;
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+.halloween #content,
+.halloween #launcher {
+  background: #10171e !important;
+}
+.halloween .item {
+  color: #fff !important;
+  border-color: rgba(0, 0, 0, 0.5) !important;
+  background-color: #10171e !important;
+}
+.halloween h1.jumbotron {
+  background: #15202b !important;
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.halloween button.halloween-transparent,
+.halloween .button.halloween-transparent {
+  background: #ff691f;
+}
+
+.halloween button.halloween-transparent:hover,
+.halloween .button.halloween-transparent:hover {
+  background: #ff691f;
+}
+
+.halloween ::-webkit-scrollbar {
+  width: 5px;
+  padding: 3px;
+}
+
+.halloween ::-webkit-scrollbar-thumb {
+  background: #ff691f;
+}
+
+.halloween ::-webkit-scrollbar-thumb:active {
+  background: #080b0f;
+}
+
+.halloween ::-webkit-scrollbar-track {
+  background: #15202b;
+}
+
+.halloween .notification {
+  background: rgba(0, 0, 0, 0.3) !important;
+}
+
+.halloween .notification h1,
+.halloween .notification i {
+  color: #ff691f !important;
+}
+.halloween .notification p {
+  color: rgba(255, 255, 255, 0.75) !important;
+}

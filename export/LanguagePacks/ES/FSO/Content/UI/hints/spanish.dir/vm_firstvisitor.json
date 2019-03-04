@@ -1,0 +1,8 @@
+{
+    "guid": "c3ed0062-af55-412b-a3ac-af5c4eb49498", 
+    "trigger": "vm:firstvisitor",
+    "title": "Visitantes",
+    "category": "Básico",
+    "image": "@hint_moneyfilter.bmp",
+    "body": "Estupendo. Aquí tienes a tu primer visitante. ¿Sabes que te pagarán por la cantidad de tiempo que pasen en tu propiedad? Cada noche, la cantidad de tiempo que las personas pasan en tu propiedad se calcula, y si está por encima de un cierto punto de referencia, conseguirás un pago diario: cuanto más tiempo, más bonificación. Si tienes inquilinos, ¡cada uno recibirá la cantidad total del bono de visitante! Las propiedades con la mayor cantidad de visitantes también aparecerán en las 'Listas Top 100' en Gizmo, para que pueda esforzarse por ser el mejor."
+}

@@ -1,4 +1,5 @@
 const Modal = require("../Modal");
+const HttpDownload = require("../http-download");
 
 class RemeshesInstaller {
   constructor(path, FSOLauncher) {
@@ -7,12 +8,7 @@ class RemeshesInstaller {
     this.path = path;
     this.haltProgress = false;
 
-    this.dl = new (require("../Download"))();
-    this.dl.add({
-      alias: "remeshes.zip",
-      origin: FSOLauncher.remeshInfo.location,
-      destination: "temp/",
-    });
+    this.dl = new HttpDownload( FSOLauncher.remeshInfo.location, 'temp/remeshes.zip' )
   }
 
   createProgressItem(Message, Percentage) {
@@ -64,9 +60,10 @@ class RemeshesInstaller {
 
   download() {
     return new Promise((resolve, reject) => {
-      this.dl.start();
-      this.dl.on("end", stats => {
-        if (stats) {
+      this.dl.run();
+      this.dl.on('error', () => {});
+      this.dl.on("end", fileName => {
+        if (this.dl.failed) {
           this.cleanup();
           return reject(global.locale.FSO_NETWORK_ERROR);
         }
@@ -85,21 +82,23 @@ class RemeshesInstaller {
   updateDownloadProgress() {
     setTimeout(() => {
       let p = this.dl.getProgress();
+      let mb = this.dl.getProgressMB();
+      let size = this.dl.getSizeMB();
 
-      if (p.percentage < 100) {
+      if (p < 100) {
         if (!this.haltProgress) {
           this.createProgressItem(
             global.locale.DL_CLIENT_FILES +
               " " +
-              p.mbDownloaded +
+              mb +
               " MB " +
               global.locale.X_OUT_OF_X +
               " " +
-              p.mbTotal +
+              size +
               " MB (" +
-              p.percentage +
+              p +
               "%)",
-            p.percentage
+            p
           );
         }
 

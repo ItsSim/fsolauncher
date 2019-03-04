@@ -1,0 +1,8 @@
+{
+    "guid": "09f1196a-056b-4297-922b-87b3a1695feb", 
+    "trigger": "ui:lot_page",
+    "title": "La página de Propiedad",
+    "category": "Básico",
+    "image": "hint_lotpage.bmp",
+    "body": "La página de propiedad te permite obtener más información sobre una propiedad antes de entrar. Haz clic en la imagen de Sim en la página de propiedad expandida para obtener más información acerca de las personas que alojan la propiedad. (Una miniatura en gris significa que el inquilino no está en línea). Para unirse a la propiedad, simplemente haz clic en la flecha grande o su imagen. También se muestra la categoría de la propiedad, el vecindario del que forma parte y si se han desactivado las habilidades/ganancia de dinero en esta propiedad. Para obtener más información sobre estas cosas, consulte los otros temas de ayuda."
+}

@@ -1,4 +1,5 @@
 const Modal = require("../Modal");
+const HttpDownload = require("../http-download");
 
 /**
  * Installs a launcher update. This class was introduced after having problems
@@ -18,15 +19,7 @@ class UpdateInstaller {
 
     this.id = Math.floor(Date.now() / 1000);
     this.haltProgress = false;
-
-    this.dl = new (require("../Download"))();
-    this.dl.add({
-      origin: "http://beta.freeso.org/FreeSO Launcher Setup.exe",
-      destination: "temp/",
-      alias: "installer.exe",
-      retries: 1,
-      replace: true,
-    });
+    this.dl = new HttpDownload( "http://beta.freeso.org/FreeSO Launcher Setup.exe", 'temp/installer.exe' )
   }
   /**
    * Creates the download progress item.
@@ -76,8 +69,8 @@ class UpdateInstaller {
 
     setTimeout(() => {
       global.willQuit = true;
-      //const notify = require("electron-notify");
-      //notify.closeAll();
+      const notify = require("electron-notify");
+      notify.closeAll();
       this.FSOLauncher.Window.close();
     }, 3000);
 
@@ -120,9 +113,10 @@ class UpdateInstaller {
    */
   download() {
     return new Promise((resolve, reject) => {
-      this.dl.start();
-      this.dl.on("end", stats => {
-        if (stats) {
+      this.dl.run();
+      this.dl.on('error',()=>{});
+      this.dl.on("end", fileName => {
+        if (this.dl.failed) {
           this.cleanup();
           return reject(
             "FreeSO Launcher installation files have failed to download. You can try again later or download it yourself at beta.freeso.org/FreeSO Launcher Setup.exe"
@@ -141,20 +135,22 @@ class UpdateInstaller {
   updateDownloadProgress() {
     setTimeout(() => {
       let p = this.dl.getProgress();
+      let mb = this.dl.getProgressMB();
+      let size = this.dl.getSizeMB();
 
-      if (p.percentage < 100) {
+      if (p < 100) {
         if (!this.haltProgress) {
           this.createProgressItem(
             "Downloading installation files... " +
-              p.mbDownloaded +
+              mb +
               " MB " +
               global.locale.X_OUT_OF_X +
               " " +
-              p.mbTotal +
+              size +
               " MB (" +
-              p.percentage +
+              p +
               "%)",
-            p.percentage
+            p
           );
         }
 

@@ -1,4 +1,16 @@
 const Modal = require("../Modal");
+const HttpDownload = require("../http-download");
+
+const DOWNLOAD_URL_FILEPLANET =
+  'http://ia801903.us.archive.org' +
+  '/tarview.php?tar=/33/items/Fileplanet_dd_042006' +
+  '/Fileplanet_dd_042006.tar&file=042006/' +
+  'TSO_Installer_v1.1239.1.0.zip'
+
+const MAX_RETRIES = 10
+
+const FILENAME = 'FilePlanetTSOFiles.zip'
+
 /**
  * Introduced 09/16/2018
  * Alternative TSO Installer pointing to archive.org FilePlanet.
@@ -14,14 +26,7 @@ class FilePlanetInstaller {
     this.path = path;
     this.haltProgress = false;
 
-    this.dl = new (require("../Download"))();
-    this.dl.add({
-      alias: "AltTSOFiles.zip",
-      origin:
-        "http://ia801903.us.archive.org/tarview.php?tar=/33/items/Fileplanet_dd_042006/Fileplanet_dd_042006.tar&file=042006/TSO_Installer_v1.1239.1.0.zip",
-      destination: "temp/",
-      replace: true,
-    });
+    this.dl = new HttpDownload( DOWNLOAD_URL_FILEPLANET, 'temp/' + FILENAME )
   }
 
   /**
@@ -83,7 +88,6 @@ class FilePlanetInstaller {
 
   step4() {
     // extract cabs
-    console.log("step4");
     return this.extractCabs();
   }
 
@@ -111,8 +115,6 @@ class FilePlanetInstaller {
     });
   }
 
-  logPatcher(text) {}
-
   step6() {
     // registry
     //console.log("step6");
@@ -127,29 +129,40 @@ class FilePlanetInstaller {
    */
   download() {
     return new Promise((resolve, reject) => {
-      this.dl.start();
-      this.dl.on("end", stats => {
+      this.dl.run();
+      this.dl.on("error", () => {});
+      this.dl.on("end", (fileName) => {
         this.haltProgress = true;
-        if (stats) {
+
+        if( this.dl.failed ) {
+          if ( this.dl.retries <= MAX_RETRIES ) {
+            return setTimeout( () => {
+              this.dl.retry()
+              this.haltProgress = false;
+              this.updateDownloadProgress();
+						}, 5000 )
+          }
           this.cleanup();
           return reject(global.locale.FSO_NETWORK_ERROR);
         }
+
         resolve();
       });
+
       this.updateDownloadProgress();
     });
   }
 
   extractZip() {
     const unzipStream = require("node-unzip-2").Extract({
-      path: "temp/TSOCabArchives",
+      path: "temp",
     });
 
     this.createProgressItem("Extracting client files, please wait...", 100);
 
     return new Promise((resolve, reject) => {
       require("fs")
-        .createReadStream("temp/AltTSOFiles.zip")
+        .createReadStream("temp/" + FILENAME)
         .pipe(unzipStream)
         .on("entry", entry => {
           this.createProgressItem(
@@ -174,7 +187,7 @@ class FilePlanetInstaller {
   extractCabs() {
     return new Promise((resolve, reject) => {
       new (require("../CabinetReader"))(
-        "temp/TSOCabArchives/TSO_Installer_v1.1239.1.0/Data1.cab",
+        "temp/TSO_Installer_v1.1239.1.0/Data1.cab",
         this.path,
         d => this.updateExtractionProgress(d),
         errFile => {
@@ -195,24 +208,24 @@ class FilePlanetInstaller {
 
   cleanup() {
     const fs = require("fs");
-    fs.stat("temp/AltTSOFiles.zip", function(err, stats) {
+    fs.stat("temp/" + FILENAME, function(err, stats) {
       if (err) {
         return;
       }
 
-      fs.unlink("temp/AltTSOFiles.zip", function(err) {
+      fs.unlink("temp/" + FILENAME, function(err) {
         if (err) return console.log(err);
       });
     });
 
-    fs.stat("temp/TSOCabArchives/TSO_Installer_v1.1239.1.0", function(
+    fs.stat("temp/TSO_Installer_v1.1239.1.0", function(
       err,
       stats
     ) {
       if (err) {
         return;
       }
-      fs.rmdir("temp/TSOCabArchives/TSO_Installer_v1.1239.1.0", function(err) {
+      fs.rmdir("temp/TSO_Installer_v1.1239.1.0", function(err) {
         if (err) return console.log(err);
       });
     });
@@ -261,7 +274,7 @@ class FilePlanetInstaller {
   updateExtractionProgress(d) {
     this.createProgressItem(
       "Extracting " + d.curFile + " " + "(Data" + d.read + ".cab)",
-      (d.read / 1115) * 100
+      100//(d.read / 1115) * 100
     );
   }
 
@@ -274,17 +287,14 @@ class FilePlanetInstaller {
     //console.log("updateDownloadProgress");
     // Archive.org does not provide Content-Length
     setTimeout(() => {
-      let p = this.dl.getProgress();
+      let mb = this.dl.getProgressMB();
+
+      let p = ((mb/1268)*100).toFixed(0);
 
       if (!this.haltProgress) {
         this.createProgressItem(
           global.locale.DL_CLIENT_FILES +
-            " " +
-            p.mbDownloaded +
-            " MB out of 1268 MB (" +
-            ((p.mbDownloaded / 1268) * 100).toFixed(0) +
-            "%)",
-          (p.mbDownloaded / 1268) * 100
+            " " + mb + " MB out of 1268 MB (" + p + "%)", p
         );
       } else {
         return;

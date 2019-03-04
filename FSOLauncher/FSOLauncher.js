@@ -584,10 +584,7 @@ class FSOLauncher extends Events {
       case "TSO":
       case "FSO":
         if (Component == "TSO") {
-          if (!options.tsoInstaller) {
-            options.tsoInstaller = "FilePlanetInstaller";
-          }
-          Installer = require("./Library/Installers/" + options.tsoInstaller);
+          Installer = require("./Library/Installers/FilePlanetInstaller");
         } else {
           Installer = require("./Library/Installers/FSOInstaller");
         }
