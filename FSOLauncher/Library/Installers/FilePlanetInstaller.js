@@ -2,10 +2,7 @@ const Modal = require("../Modal");
 const HttpDownload = require("../http-download");
 
 const DOWNLOAD_URL_FILEPLANET =
-  'http://ia801903.us.archive.org' +
-  '/tarview.php?tar=/33/items/Fileplanet_dd_042006' +
-  '/Fileplanet_dd_042006.tar&file=042006/' +
-  'TSO_Installer_v1.1239.1.0.zip'
+  'http://archive.org/download/Fileplanet_dd_042006/Fileplanet_dd_042006.tar/042006/TSO_Installer_v1.1239.1.0.zip'
 
 const MAX_RETRIES = 10
 

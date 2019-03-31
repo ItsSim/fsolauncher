@@ -5,11 +5,6 @@ const fs = require("fs");
 const ini = require("ini");
 const UIText = require("./FSOLauncher_UI/UIText.json");
 
-/*require("electron-reload")(__dirname, {
-  electron:
-    "C:\\Users\\dbhdane\\AppData\\Roaming\\npm\\node_modules\\electron\\dist",
-});*/
-
 let FSOLauncher = require("./FSOLauncher/FSOLauncher");
 
 // Launcher title
