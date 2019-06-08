@@ -499,11 +499,11 @@ FSOLauncher.registerUIEventAll("[install]", "click", function(a, b) {
   FSOLauncher.fireEvent("INSTALL", c);
 });
 
-FSOLauncher.createNotification(
+/*FSOLauncher.createNotification(
   "FreeSO Announcement",
   "Just a test",
   "http://google.com"
-);
+);*/
 
 /*FSOLauncher.createOrModifyProgressItem(
   "test",
