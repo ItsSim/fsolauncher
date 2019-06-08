@@ -7,46 +7,47 @@ const Toast = require("./Library/Toast");
  *
  * @class Events
  */
-class Events {
+class EventHandlers {
   /**
    * Defines all the currently supported client events.
    *
    * @memberof Events
    */
   defineEvents() {
-    let onInitDOM = new Event("INIT_DOM");
-    let onInstall = new Event("INSTALL");
-    let onSetConfiguration = new Event("SET_CONFIGURATION");
-    let onInstallerRedirect = new Event("INSTALLER_REDIRECT");
-    let onInstallComponent = new Event("INSTALL_COMPONENT");
-    let onPlay = new Event("PLAY");
-    let onFullInstall = new Event("FULL_INSTALL");
+    
+    let onInitDOM            = new Event("INIT_DOM");
+    let onInstall            = new Event("INSTALL");
+    let onSetConfiguration   = new Event("SET_CONFIGURATION");
+    let onInstallerRedirect  = new Event("INSTALLER_REDIRECT");
+    let onInstallComponent   = new Event("INSTALL_COMPONENT");
+    let onPlay               = new Event("PLAY");
+    let onFullInstall        = new Event("FULL_INSTALL");
     let onFullInstallConfirm = new Event("FULL_INSTALL_CONFIRM");
-    let onChangeGamePath = new Event("CHANGE_GAME_PATH");
-    let onCheckUpdates = new Event("CHECK_UPDATES");
-    let onInstallUpdate = new Event("INSTALL_UPDATE");
-    let onPlayVolcanic = new Event("PLAY_VOLCANIC");
-    let onSocketMessage = new Event("SOCKET_MESSAGE");
-    let onConsoleLog = new Event("CONSOLE_LOG");
-    let onFTPTSO = new Event("FTP_TSO");
-    let onFTPTSOResponse = new Event("FTP_TSOResponse");
+    let onChangeGamePath     = new Event("CHANGE_GAME_PATH");
+    let onCheckUpdates       = new Event("CHECK_UPDATES");
+    let onInstallUpdate      = new Event("INSTALL_UPDATE");
+    let onPlayVolcanic       = new Event("PLAY_VOLCANIC");
+    let onSocketMessage      = new Event("SOCKET_MESSAGE");
+    let onConsoleLog         = new Event("CONSOLE_LOG");
+    let onFTPTSO             = new Event("FTP_TSO");
+    let onFTPTSOResponse     = new Event("FTP_TSOResponse");
 
-    onInitDOM.onFire(this.onInitDOM.bind(this));
-    onSetConfiguration.onFire(this.onSetConfiguration.bind(this));
-    onInstallerRedirect.onFire(this.onInstallerRedirect.bind(this));
-    onInstallComponent.onFire(this.onInstallComponent.bind(this));
-    onInstall.onFire(this.onInstall.bind(this));
-    onPlay.onFire(this.onPlay.bind(this));
-    onFullInstall.onFire(this.onFullInstall.bind(this));
+    onInitDOM           .onFire(this.onInitDOM.bind(this));
+    onSetConfiguration  .onFire(this.onSetConfiguration.bind(this));
+    onInstallerRedirect .onFire(this.onInstallerRedirect.bind(this));
+    onInstallComponent  .onFire(this.onInstallComponent.bind(this));
+    onInstall           .onFire(this.onInstall.bind(this));
+    onPlay              .onFire(this.onPlay.bind(this));
+    onFullInstall       .onFire(this.onFullInstall.bind(this));
     onFullInstallConfirm.onFire(this.onFullInstallConfirm.bind(this));
-    onChangeGamePath.onFire(this.onChangeGamePath.bind(this));
-    onCheckUpdates.onFire(this.onCheckUpdates.bind(this));
-    onInstallUpdate.onFire(this.onInstallUpdate.bind(this));
-    onPlayVolcanic.onFire(this.onPlayVolcanic.bind(this));
-    onSocketMessage.onFire(this.onSocketMessage.bind(this));
-    onConsoleLog.onFire(this.onConsoleLog.bind(this));
-    onFTPTSO.onFire(this.onFTPTSO.bind(this));
-    onFTPTSOResponse.onFire(this.onFTPTSOResponse.bind(this));
+    onChangeGamePath    .onFire(this.onChangeGamePath.bind(this));
+    onCheckUpdates      .onFire(this.onCheckUpdates.bind(this));
+    onInstallUpdate     .onFire(this.onInstallUpdate.bind(this));
+    onPlayVolcanic      .onFire(this.onPlayVolcanic.bind(this));
+    onSocketMessage     .onFire(this.onSocketMessage.bind(this));
+    onConsoleLog        .onFire(this.onConsoleLog.bind(this));
+    onFTPTSO            .onFire(this.onFTPTSO.bind(this));
+    onFTPTSOResponse    .onFire(this.onFTPTSOResponse.bind(this));
   }
 
   onFTPTSO() {
@@ -242,4 +243,4 @@ class Events {
   }
 }
 
-module.exports = Events;
+module.exports = EventHandlers;

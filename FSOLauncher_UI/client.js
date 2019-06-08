@@ -1,8 +1,8 @@
-var Socket = io("http://5.189.177.216:1221");
+var Socket = io("http://" + global.webService + ":" + global.sockEndpoint);
 
 Socket.on("receive global message", function(data) {
   FSOLauncher.fireEvent("SOCKET_MESSAGE", [data.Message, data.Url]);
-  FSOLauncher.createNotification("FreeSO Announcement", data.Message, data.Url);
+  //FSOLauncher.createNotification("FreeSO Announcement", data.Message, data.Url);
 });
 
 var hasAlreadyLoaded = false;
@@ -422,6 +422,9 @@ FSOLauncher.registerServerEvent("SET_TIP", function(a, b) {
 FSOLauncher.registerServerEvent("TOAST", function(a, t, c) {
   FSOLauncher.toast(t, c);
 });
+FSOLauncher.registerServerEvent("NOTIFLOG", function(a, t, l, c) {
+  FSOLauncher.createNotification(t, l, c);
+});
 FSOLauncher.registerServerEvent("REMOVE_TOAST", function(a, t) {
   FSOLauncher.removeToast(t);
 });
@@ -443,6 +446,7 @@ FSOLauncher.registerServerEvent("STOP_PROGRESS_ITEM", function(a, b) {
 });
 FSOLauncher.registerServerEvent("PLAY_SOUND", function(a, b) {
   var audio = new Audio("./FSOLauncher_Sounds/" + b + ".wav");
+  audio.volume = 0.1;
   audio.play();
 });
 FSOLauncher.registerServerEvent("CREATE_PROGRESS_ITEM", function(
@@ -484,9 +488,10 @@ FSOLauncher.registerUIEventAll("[option-id]", "change", function(a, b) {
   c = c.split(".");
   FSOLauncher.fireEvent("SET_CONFIGURATION", [c[0], c[1], e]);
 });
+var audioPageTrigger = new Audio("./FSOLauncher_Sounds/click2.m4a");
+audioPageTrigger.volume = 0.1;
 FSOLauncher.registerUIEventAll("[page-trigger]", "click", function(a, b) {
-  var audio = new Audio("./FSOLauncher_Sounds/click.wav");
-  audio.play();
+  audioPageTrigger.play();
   FSOLauncher.changePage(a.currentTarget.getAttribute("page-trigger"));
 });
 FSOLauncher.registerUIEventAll("[install]", "click", function(a, b) {
@@ -494,13 +499,13 @@ FSOLauncher.registerUIEventAll("[install]", "click", function(a, b) {
   FSOLauncher.fireEvent("INSTALL", c);
 });
 
-/*FSOLauncher.createNotification(
+FSOLauncher.createNotification(
   "FreeSO Announcement",
   "Just a test",
   "http://google.com"
 );
 
-FSOLauncher.createOrModifyProgressItem(
+/*FSOLauncher.createOrModifyProgressItem(
   "test",
   "FreeSO Client",
   "http://freeso.org",

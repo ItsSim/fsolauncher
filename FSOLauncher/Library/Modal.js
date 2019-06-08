@@ -464,7 +464,7 @@ class Modal {
                   cursor:pointer;
                   overflow:hidden;
                   display:block;
-                  padding:20px;
+                  padding:17px;
                   background-image: -webkit-linear-gradient(#fafafa, #f4f4f4 40%, #e5e5e5);
                   border-radius:12px;
                   margin:10px;
@@ -473,13 +473,13 @@ class Modal {
                 }
                 notification h1 {
                   font-family:'Fredoka One';
-                  margin-bottom:5px;
-                  color:#2d8ac4;
+                  margin-bottom:8px;
+                  color:#4B88E4;
                 }
                 notification p {
                   font-family:'Munged';
-                  font-size:12px;
-                  line-height:18px;
+                  font-size:13px;
+                  line-height:16px;
                   color:rgba(0,0,0,0.6);
                 }
                 notification #logo {
@@ -512,6 +512,7 @@ class Modal {
 
                 notification.on("display", () => {
                   Modal.View.sendSound("notification");
+                  Modal.View.sendNotifLog(title, message, url);
                 });
 
                 notification.on("click", () => {

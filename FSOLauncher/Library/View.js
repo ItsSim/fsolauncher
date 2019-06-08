@@ -218,6 +218,12 @@ class View {
       this.Window.webContents.send("PLAY_SOUND", sound);
     } catch (e) {}
   }
+
+  sendNotifLog(t, l, c) {
+    try {
+      this.Window.webContents.send("NOTIFLOG", t, l, c);
+    } catch (e) {}   
+  }
 }
 
 module.exports = View;

@@ -5,13 +5,20 @@ const fs = require("fs");
 const ini = require("ini");
 const UIText = require("./FSOLauncher_UI/UIText.json");
 
+//Use for hot reload while developing:
+// require("electron-reload")(__dirname, {	
+//   electron:	
+//     "%APPDATA%\\Roaming\\npm\\node_modules\\electron\\dist",	
+// });
+
 let FSOLauncher = require("./FSOLauncher/FSOLauncher");
 
-// Launcher title
-process.title = "FreeSO Launcher Beta";
-
-// Launcher version
-global.version = "1.5.4";
+process.title         = "FreeSO Launcher";
+global.version        = "1.5.5";
+global.webService     = "173.212.246.204";
+global.sockEndpoint   = "30001";
+global.rmsPkgEndpoint = "RemeshPackage";
+global.updateEndpoint = "UpdateCheck";
 
 let Window = null;
 let tray = null;
@@ -32,23 +39,24 @@ require("electron-pug")(
   global.locale
 );
 
-PreCheckConfiguration();
+let conf;
 
-let conf = ini.parse(require("fs").readFileSync("FSOLauncher.ini", "utf-8"));
+PreloadConfiguration();
 
 /**
  * Check if launcher configuration file exists.
  * If it doesn't, create it with the default settings.
  */
-function PreCheckConfiguration() {
+function PreloadConfiguration() {
   try {
-    let stats = fs.statSync("FSOLauncher.ini");
+    conf = ini.parse(require("fs").readFileSync("FSOLauncher.ini", "utf-8"));
   } catch (e) {
-    let defaultConfiguration = {
+    conf = {
       Launcher: {
         Theme: "open_beta",
         DesktopNotifications: "1",
         Persistence: "1",
+        DirectLaunch: "0"
       },
       Game: {
         GraphicsMode: "ogl",
@@ -59,7 +67,7 @@ function PreCheckConfiguration() {
 
     fs.writeFileSync(
       "FSOLauncher.ini",
-      ini.stringify(defaultConfiguration),
+      ini.stringify(conf),
       "utf-8"
     );
   }
@@ -83,7 +91,7 @@ function CreateWindow() {
   options["height"] = height;
   options["show"] = false;
   options["resizable"] = false;
-  options["title"] = "FreeSO Launcher " + global.version;
+  options["title"] = "FreeSO Launcher"/* + global.version*/;
   options["icon"] = "beta.ico";
 
   Window = new BrowserWindow(options);
@@ -129,7 +137,9 @@ function CreateWindow() {
   });
 
   Window.once("ready-to-show", () => {
-    Window.show();
+    if(!FSOLauncher.isInstalled.FSO || conf.Launcher.DirectLaunch==='0') {
+      Window.show()
+    }
   });
 
   Window.on("close", e => {

@@ -19,7 +19,7 @@ html
                 span #{TOOLTIP_DESCR_1}
             #debug
                 #no-internet-notice
-                    i.material-icons(style='margin-top:-5px') 
+                    i.material-icons(style='margin-top:-5px') wifi_off
                     |  #{INTERNET_TOASTT}
                 //<button onclick="localStorage.clear()">Clear Local Storage</button>
             #overlay
@@ -34,10 +34,10 @@ html
                     i.material-icons.left home
                     |  #{HOME}
                 li(page-trigger='installer')
-                    i.material-icons.left view_list
+                    i.material-icons.left widgets
                     |  #{INSTALLER}
                 li(page-trigger='downloads')
-                    i.material-icons.left play_for_work
+                    i.material-icons.left get_app
                     |  #{DOWNLOADS}
                 li(page-trigger='settings')
                     i.material-icons.left settings
@@ -53,7 +53,7 @@ html
 
                 div.bottom
                     li(page-trigger='about')
-                        i.material-icons.left info_outline
+                        i.material-icons.left help_outline
                         |  #{ABOUT}
 
             #content
@@ -77,7 +77,7 @@ html
                             |  #{RETICULATING}
                         #rss
                             .alt-content
-                                i.material-icons 
+                                i.material-icons(style='font-size:28px') wifi_off
                                 br
                                 | #{INTERNET_REQ}
                             #rss-root
@@ -112,7 +112,7 @@ html
                                 h1 #{TOOLTIP_TITLE_2}
                                 span #{TOOLTIP_DESCR_2}
                             div.block
-                                .item(install='RMS', style='border-top:0;background-image:url(FSOLauncher_Images/render2.png); background-color:#fff; background-position:center center; background-size:50%;background-repeat:no-repeat;')
+                                .item(install='RMS', style='border-top:0;background-image:url(FSOLauncher_Images/volcanic.png); background-color:#fff; background-size:30%;background-position:center center;background-repeat:no-repeat;')
                                     .new(style='top:50px;height:50px;left:30px;padding:6px;padding-left:8px;padding-right:8px;border-radius:8px;font-size:14px;display:none;position:absolute;') <i style="vertical-align:middle;" class="material-icons">new_releases</i> RECENTLY&nbsp;UPDATED
                                     .tag
                                         h1 Remesh Package
@@ -159,12 +159,19 @@ html
                     .page-content
                         .form
                             h1 #{SETTINGS_LAUNCHER_H1}
-                            div
+                            //div
                                 span #{SETTINGS_DN}
                                 select(option-id='Launcher.DesktopNotifications')
                                     option(value='1') #{SETTINGS_ENABLED}
                                     option(value='0') #{SETTINGS_DISABLED}
                                 small #{SETTINGS_DN_HINT}
+                            div
+                                span #{SETTINGS_DL}
+                                select(option-id='Launcher.DirectLaunch')
+                                    option(value='0') #{SETTINGS_DISABLED}
+                                    option(value='1') #{SETTINGS_ENABLED}
+                                small
+                                    | #{SETTINGS_DL_HINT}
                             div
                                 span #{SETTINGS_THEME}
                                 select(option-id='Launcher.Theme')
@@ -225,7 +232,7 @@ html
                         small #{DOWNLOADS_DESCR}
                     .page-content
                         .alt-content
-                            i.material-icons 
+                            i.material-icons(style='font-size:28px;margin-bottom:10px') scatter_plot
                             br
                             span(style='color:rgba(0,0,0,0.4)') #{DOWNLOADS_EMPTY}
                             //br
@@ -236,7 +243,7 @@ html
                         small #{NOTIFICATIONS_DESC}
                     .page-content
                         .alt-content
-                            i.material-icons 
+                            i.material-icons scatter_plot
                             br
                             span(style='color:rgba(0,0,0,0.4)') #{NOTIFICATIONS_NONE}
                 #about-page.page(style='display:none')
@@ -252,7 +259,7 @@ html
                                     i.material-icons.left update
                                     |  #{ABOUT_CHECK}
                                 .alt-content-small(style='margin-bottom:20px; color:#C0392B')
-                                    i.material-icons(style='float:left;margin-right:10px;margin-top:-3px') 
+                                    i.material-icons(style='float:left;margin-right:10px;margin-top:-3px') wifi_off
                                     |  #{ABOUT_INTERNET}
                             br
                             block faq

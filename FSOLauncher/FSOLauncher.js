@@ -1,5 +1,5 @@
 const Modal = require("./Library/Modal");
-const Events = require("./Events");
+const EventHandlers = require("./EventHandlers");
 const View = require("./Library/View");
 const ToastComponent = require("./Library/Toast");
 
@@ -9,7 +9,7 @@ const ToastComponent = require("./Library/Toast");
  * @class FSOLauncher
  * @extends {Events}
  */
-class FSOLauncher extends Events {
+class FSOLauncher extends EventHandlers {
   /**
    * Creates an instance of FSOLauncher.
    * @param {any} Window
@@ -51,7 +51,11 @@ class FSOLauncher extends Events {
     this.checkUpdatesRecursive();
     this.updateTipRecursive();
     this.updateNetRequiredUIRecursive(true);
-    this.updateInstalledPrograms();
+    this.updateInstalledPrograms().then(() => {
+      if(this.conf.Launcher.DirectLaunch === '1' && this.isInstalled.FSO) {
+        this.onPlay()
+      }
+    });
     this.defineEvents();
   }
 
@@ -277,8 +281,8 @@ class FSOLauncher extends Events {
 
       let options = {};
 
-      options.host = "5.189.177.216";
-      options.path = "/RemeshInfo.php";
+      options.host = global.webService;
+      options.path = "/" + global.rmsPkgEndpoint;
 
       const request = http.request(options, res => {
         let data = "";
@@ -324,9 +328,9 @@ class FSOLauncher extends Events {
 
       let options = {};
 
-      options.host = "5.189.177.216";
+      options.host = global.webService;
       options.path =
-        "/FSOLauncher.php?os=" + os.release() + "&version=" + global.version;
+        "/" + global.updateEndpoint + "?os=" + os.release() + "&version=" + global.version;
 
       const request = http.request(options, res => {
         let data = "";

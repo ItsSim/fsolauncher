@@ -221,7 +221,7 @@ div.page > h1.jumbotron {
   font-size: 22px;
   padding: 40px;
   color: #fff;
-  background: #2d8ac4;
+  background: #4B88E4;
   /*font-weight:700;*/
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   /*text-shadow: 0px 3px 0px rgba(0,0,0,0.075);*/
@@ -231,6 +231,8 @@ div.page > h1.jumbotron {
   top: 0;
   z-index: 9;
   height: 100px;
+  border-bottom-left-radius:12px;
+  border-bottom-right-radius:12px;
 }
 
 div.page > h1.jumbotron span {
@@ -328,9 +330,9 @@ div.page p {
 
 #launcher #sidebar li.active,
 #launcher #sidebar li:not(#logo):hover {
-  border-right: 4px solid #2d8ac4;
+  border-right: 4px solid #4B88E4;
   background-color: rgba(0, 0, 0, 0.05);
-  color: #2d8ac4;
+  color: #4B88E4;
   cursor: pointer;
   padding-left: 30px;
 }
@@ -409,7 +411,7 @@ div.page p {
 
 .download.stopped .loading .progress {
   background-image: none;
-  background: #2d8ac4;
+  background: #4B88E4;
 }
 
 .loading .progress {
@@ -417,7 +419,7 @@ div.page p {
   float: left;
   width: 0%;
   height: 5px;
-  /*background:#2D8AC4;*/
+  /*background:#4B88E4;*/
   overflow: hidden;
   background-image: -webkit-linear-gradient(
       -45deg,
@@ -427,7 +429,7 @@ div.page p {
       transparent 66%
     ),
     -webkit-linear-gradient(top, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)),
-    -webkit-linear-gradient(left, #2d8ac4, #2d8ac4);
+    -webkit-linear-gradient(left, #4B88E4, #4B88E4);
   border-radius: 999px;
   background-size: 35px 20px, 100% 100%, 100% 100%;
   -webkit-animation: animate-stripes 5s linear infinite;
@@ -519,7 +521,7 @@ button.launch,
 
 button.blue,
 .button.blue {
-  background-color: #2d8ac4;
+  background-color: #4B88E4;
 }
 
 button.blue:hover,
@@ -591,7 +593,7 @@ button.blue:hover,
 }
 
 #downloads > div.block > .item:hover {
-  background-size: 60% !important;
+  background-size: 35% !important;
 }
 
 #downloads > div > .item > .new {
@@ -650,7 +652,7 @@ button.blue:hover,
 #downloads > div .tag h1 {
   /*font-weight:700;*/
   font-size: 20px;
-  color: #2d8ac4;
+  color: #4B88E4;
   margin-bottom: 10px;
   transition: color 0.2s;
   /*text-shadow: 0px 3px 0px rgba(0,0,0,0.075);*/
@@ -709,11 +711,11 @@ select {
 
 #settings-page .form h1 {
   padding: 10px;
-  color: #2d8ac4;
+  color: #4B88E4;
   letter-spacing: 1px;
   text-transform: uppercase;
   /*font-weight:700;*/
-  /*color:#2D8AC4;*/
+  /*color:#4B88E4;*/
   margin-bottom: 20px;
   padding-left: 0;
   font-size: 16px;
@@ -782,7 +784,7 @@ select {
 #rss .rss-entry > h1 {
   font-size: 25px;
   margin-bottom: 20px;
-  color: #2d8ac4;
+  color: #4B88E4;
   line-height: 30px;
   text-align: center;
   /*font-weight:700;*/
@@ -958,7 +960,7 @@ select {
 .modal h1 {
   font-size: 24px;
   /*font-weight:bold;*/
-  color: #2d8ac4;
+  color: #4B88E4;
   /*text-transform: uppercase;*/
   margin-bottom: 20px;
   /*text-shadow: 0px 3px 0px rgba(0,0,0,0.075);*/
@@ -1111,15 +1113,17 @@ a {
 }
 
 #notifications-page div.notification h1 {
-  font-size: 16px;
+  font-size: 17px;
   margin-bottom: -10px;
-  font-family: "Munged";
+  font-family: "Fredoka One";
+  color:rgba(0,0,0,0.5);
 }
 
 #notifications-page div.notification i {
   float: left;
   display: inline-block;
-  margin-right: -130px;
+  margin-left:-27px;
+  display:none;
   height: 100px;
   margin-top: -5px;
 }
