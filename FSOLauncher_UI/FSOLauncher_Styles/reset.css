@@ -143,16 +143,14 @@ html {
 
 @font-face {
     font-family: 'Munged';
-    src: url('../FSOLauncher_Fonts/hinted-Munged-embOpitJmj.eot');
-    src: url('../FSOLauncher_Fonts/hinted-Munged-embOpitJmj.eot?#iefix') format('embedded-opentype'), url('../FSOLauncher_Fonts/hinted-Munged-embOpitJmj.woff2') format('woff2'), url('../FSOLauncher_Fonts/hinted-Munged-embOpitJmj.woff') format('woff'), url('../FSOLauncher_Fonts/hinted-Munged-embOpitJmj.ttf') format('truetype'), url('../FSOLauncher_Fonts/hinted-Munged-embOpitJmj.svg#Munged-embOpitJmj') format('svg');
+    src: url('../FSOLauncher_Fonts/hinted-Munged-embOpitJmj.ttf') format('truetype');
     font-weight: bold;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Munged';
-    src: url('../FSOLauncher_Fonts/hinted-Munged-otVXWjH6W8.eot');
-    src: url('../FSOLauncher_Fonts/hinted-Munged-otVXWjH6W8.eot?#iefix') format('embedded-opentype'), url('../FSOLauncher_Fonts/hinted-Munged-otVXWjH6W8.woff2') format('woff2'), url('../FSOLauncher_Fonts/hinted-Munged-otVXWjH6W8.woff') format('woff'), url('../FSOLauncher_Fonts/hinted-Munged-otVXWjH6W8.ttf') format('truetype'), url('../FSOLauncher_Fonts/hinted-Munged-otVXWjH6W8.svg#Munged-otVXWjH6W8') format('svg');
+    src: url('../FSOLauncher_Fonts/hinted-Munged-otVXWjH6W8.ttf') format('truetype');
     font-weight: 500;
     font-style: normal;
 }
