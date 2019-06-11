@@ -1,4 +1,6 @@
-var Socket = io("http://" + global.webService + ":" + global.sockEndpoint);
+var remote = require('electron').remote; 
+
+var Socket = io("http://" + remote.getGlobal('webService') + ":" + remote.getGlobal('sockEndpoint'));
 
 Socket.on("receive global message", function(data) {
   FSOLauncher.fireEvent("SOCKET_MESSAGE", [data.Message, data.Url]);
