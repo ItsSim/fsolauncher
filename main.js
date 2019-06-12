@@ -157,15 +157,15 @@ app.on("activate", () => {
   null === Window && CreateWindow();
 });
 
-const gotTheLock = app.requestSingleInstanceLock()
+const gotTheLock = app.requestSingleInstanceLock();
 
 if (!gotTheLock) {
-  app.quit()
+  app.quit();
 } else {
   app.on('second-instance', (event, commandLine, workingDirectory) => {
     if (Window) {
-      if (Window.isMinimized()) Window.restore()
-      Window.focus()
+      Window.show();
+      Window.focus();
     }
-  })
+  });
 }
