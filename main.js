@@ -4,24 +4,24 @@ const oslocale = require("os-locale");
 const fs = require("fs");
 const ini = require("ini");
 const UIText = require("./FSOLauncher_UI/UIText.json");
+const FSOLauncher = require("./FSOLauncher/FSOLauncher");
 
-//Use for hot reload while developing:
+// Use for hot reload while developing:
 // require("electron-reload")(__dirname, {	
 //   electron:	
 //     "%APPDATA%\\Roaming\\npm\\node_modules\\electron\\dist",	
 // });
 
-let FSOLauncher = require("./FSOLauncher/FSOLauncher");
-
-process.title         = "FreeSO Launcher";
-global.version        = "1.5.5";
-global.webService     = "173.212.246.204";
-global.sockEndpoint   = "30001";
+process.title = "FreeSO Launcher";
+global.version = "1.5.5";
+global.webService = "173.212.246.204";
+global.sockEndpoint = "30001";
 global.rmsPkgEndpoint = "RemeshPackage";
 global.updateEndpoint = "UpdateCheck";
 
 let Window = null;
 let tray = null;
+let launcher;
 let options = {};
 
 global.willQuit = false;
@@ -29,70 +29,60 @@ global.willQuit = false;
 let code = oslocale.sync().substring(0, 2);
 
 global.locale = UIText.hasOwnProperty(code) ? UIText[code] : UIText["en"];
-
 global.locale.LVERSION = global.version;
 
-require("electron-pug")(
-  {
-    pretty: false,
-  },
-  global.locale
-);
+require("electron-pug")({ pretty: false, }, global.locale);
 
 let conf;
 
-PreloadConfiguration();
+try {
+  // Check if launcher configuration exists.
+  conf = ini.parse(require("fs").readFileSync("FSOLauncher.ini", "utf-8"));
+} catch (e) {
+  // Else create the configuration with default values.
+  conf = {
+    Launcher: {
+      Theme: "open_beta",
+      DesktopNotifications: "1",
+      Persistence: "1",
+      DirectLaunch: "0"
+    },
+    Game: {
+      GraphicsMode: "ogl",
+      Language: "en",
+      TTS: "0",
+    },
+  };
 
-/**
- * Check if launcher configuration file exists.
- * If it doesn't, create it with the default settings.
- */
-function PreloadConfiguration() {
-  try {
-    conf = ini.parse(require("fs").readFileSync("FSOLauncher.ini", "utf-8"));
-  } catch (e) {
-    conf = {
-      Launcher: {
-        Theme: "open_beta",
-        DesktopNotifications: "1",
-        Persistence: "1",
-        DirectLaunch: "0"
-      },
-      Game: {
-        GraphicsMode: "ogl",
-        Language: "en",
-        TTS: "0",
-      },
-    };
-
-    fs.writeFileSync(
-      "FSOLauncher.ini",
-      ini.stringify(conf),
-      "utf-8"
-    );
-  }
+  fs.writeFileSync(
+    "FSOLauncher.ini",
+    ini.stringify(conf),
+    "utf-8"
+  );
 }
-/**
- * Creates a new Electron BrowserWindow.
- */
+
 function CreateWindow() {
   tray = new Tray("beta.ico");
 
   let width = 1100;
   let height = 675;
 
-  options["minWidth"] = width;
-  options["minHeight"] = height;
-  options["maxWidth"] = width;
-  options["maxHeight"] = height;
-  options["center"] = true;
-  options["maximizable"] = false;
-  options["width"] = width;
-  options["height"] = height;
-  options["show"] = false;
-  options["resizable"] = false;
-  options["title"] = "FreeSO Launcher"/* + global.version*/;
-  options["icon"] = "beta.ico";
+  options.minWidth = width;
+  options.minHeight = height;
+  options.maxWidth = width;
+  options.maxHeight = height;
+  options.center = true;
+  options.maximizable = false;
+  options.width = width;
+  options.height = height;
+  options.show = false;
+  options.resizable = false;
+  options.title = "FreeSO Launcher"/* + global.version*/;
+  options.icon = "beta.ico";
+  options.webPreferences = {
+    nodeIntegration: true
+  }; // Since we're not displaying untrusted content 
+     // (all links are opened in a real browser window), we can enable this.
 
   Window = new BrowserWindow(options);
 
@@ -100,13 +90,13 @@ function CreateWindow() {
   //Window.openDevTools({ mode: "detach" });
   Window.loadURL("file://" + __dirname + "/FSOLauncher_UI/FSOLauncher.pug");
 
-  FSOLauncher = new FSOLauncher(Window, conf);
+  launcher = new FSOLauncher(Window, conf);
 
   const trayTemplate = [
     {
       label: global.locale.TRAY_LABEL_1,
       click: () => {
-        FSOLauncher.onPlay();
+        launcher.onPlay();
       },
     },
     {
@@ -115,9 +105,7 @@ function CreateWindow() {
     {
       label: global.locale.TRAY_LABEL_2,
       click: () => {
-        //const notify = require("electron-notify");
         global.willQuit = true;
-        //notify.closeAll();
         Window.close();
       },
     },
@@ -137,18 +125,15 @@ function CreateWindow() {
   });
 
   Window.once("ready-to-show", () => {
-    if(!FSOLauncher.isInstalled.FSO || conf.Launcher.DirectLaunch==='0') {
+    if(!launcher.isInstalled.FSO || conf.Launcher.DirectLaunch==='0') {
       Window.show()
     }
   });
 
   Window.on("close", e => {
-    if (!global.willQuit && FSOLauncher.conf.Launcher.Persistence === "1") {
+    if (!global.willQuit && launcher.conf.Launcher.Persistence === "1") {
       e.preventDefault();
       Window.minimize();
-    } else {
-      //const notify = require("electron-notify");
-      //notify.closeAll();
     }
   });
 
@@ -172,8 +157,15 @@ app.on("activate", () => {
   null === Window && CreateWindow();
 });
 
-let shouldQuit = app.makeSingleInstance((a, b) => {
-  Window && (Window.show(), Window.focus());
-});
+const gotTheLock = app.requestSingleInstanceLock()
 
-shouldQuit && app.quit();
+if (!gotTheLock) {
+  app.quit()
+} else {
+  app.on('second-instance', (event, commandLine, workingDirectory) => {
+    if (Window) {
+      if (Window.isMinimized()) Window.restore()
+      Window.focus()
+    }
+  })
+}
