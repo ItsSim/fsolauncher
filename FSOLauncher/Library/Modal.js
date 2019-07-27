@@ -6,11 +6,11 @@
 class Modal {
   static showFTPTSO() {
     Modal.View.sendModal(
-      "Try alternative download?",
-      "This will try and download The Sims Online from an alternative source. This is useful if the primary download is not working for you.",
-      "Continue",
-      "Cancel",
-      "FTP_TSOResponse"
+      'Try alternative download?',
+      'This will try and download The Sims Online from an alternative source. This is useful if the primary download is not working for you.',
+      'Continue',
+      'Cancel',
+      'FTP_TSOResponse'
     );
   }
   /**
@@ -25,9 +25,9 @@ class Modal {
     Modal.View.sendModal(
       global.locale.MODAL_NOT_AVAILABLE,
       global.locale.MODAL_NOT_AVAILABLE_DESCR_1 +
-        " <strong>" +
-        Missing.join(", ") +
-        "</strong> " +
+        ' <strong>' +
+        Missing.join(', ') +
+        '</strong> ' +
         global.locale.MODAL_NOT_AVAILABLE_DESCR_2,
       global.locale.MODAL_OK2
     );
@@ -44,13 +44,13 @@ class Modal {
     Modal.View.sendModal(
       global.locale.MODAL_INSTALLATION,
       global.locale.MODAL_INSTALL_DESCR_1 +
-        " <strong>" +
+        ' <strong>' +
         ComponentName +
-        "</strong> " +
+        '</strong> ' +
         global.locale.MODAL_INSTALL_DESCR_2,
       global.locale.MODAL_INSTALL,
       global.locale.MODAL_CANCEL,
-      "INSTALL_COMPONENT",
+      'INSTALL_COMPONENT',
       ComponentID
     );
   }
@@ -66,12 +66,12 @@ class Modal {
     Modal.View.sendModal(
       global.locale.MODAL_REINSTALL,
       global.locale.MODAL_REINSTALL_DESCR_X +
-        " <strong>" +
+        ' <strong>' +
         ComponentName +
-        "</strong>?",
+        '</strong>?',
       global.locale.MODAL_CONTINUE,
       global.locale.MODAL_CANCEL,
-      "INSTALL_COMPONENT",
+      'INSTALL_COMPONENT',
       ComponentID
     );
   }
@@ -112,7 +112,7 @@ class Modal {
   static showInstalled(ComponentName) {
     Modal.View.sendModal(
       global.locale.MODAL_INS_COMPLETE,
-      ComponentName + " " + global.locale.MODAL_INS_COMPLETE_DESCR,
+      ComponentName + ' ' + global.locale.MODAL_INS_COMPLETE_DESCR,
       global.locale.MODAL_OK2
     );
   }
@@ -128,9 +128,9 @@ class Modal {
     Modal.View.sendModal(
       global.locale.MODAL_INS_FAILED,
       ComponentName +
-        " " +
+        ' ' +
         global.locale.MODAL_INS_FAILED_DESCR_1 +
-        " " +
+        ' ' +
         ErrorMessage,
       global.locale.MODAL_OK2
     );
@@ -161,7 +161,7 @@ class Modal {
       global.locale.MODAL_INSTALLATION_DESCR,
       global.locale.MODAL_START,
       global.locale.MODAL_CANCEL,
-      "FULL_INSTALL_CONFIRM"
+      'FULL_INSTALL_CONFIRM'
     );
   }
   /**
@@ -177,19 +177,19 @@ class Modal {
   static showAlreadyInstalled(ComponentName, ComponentID, path) {
     const options = {
       component: ComponentID,
-      override: path,
+      override: path
     };
 
     Modal.View.sendModal(
       global.locale.MODAL_NOT_AVAILABLE2,
       global.locale.MODAL_DETECTED_THAT_1 +
-        " <strong>" +
+        ' <strong>' +
         ComponentName +
-        "</strong> " +
+        '</strong> ' +
         global.locale.MODAL_DETECTED_THAT_2,
       global.locale.MODAL_USE_IT,
       global.locale.MODAL_CANCEL,
-      "CHANGE_GAME_PATH",
+      'CHANGE_GAME_PATH',
       JSON.stringify(options)
     );
   }
@@ -216,17 +216,17 @@ class Modal {
    */
   static showChooseDirectory(ComponentName, Window) {
     return new Promise((resolve, reject) => {
-      require("fs").stat("C:\\Program Files", (err, stats) => {
+      require('fs').stat('C:\\Program Files', (err, stats) => {
         let defaultPath =
-          !err && stats.isDirectory() ? "C:\\Program Files" : null;
+          !err && stats.isDirectory() ? 'C:\\Program Files' : null;
 
-        require("electron").dialog.showOpenDialog(
+        require('electron').dialog.showOpenDialog(
           Window,
           {
-            properties: ["openDirectory"],
-            title: global.locale.MODAL_INSTALL + " " + ComponentName,
+            properties: ['openDirectory'],
+            title: global.locale.MODAL_INSTALL + ' ' + ComponentName,
             defaultPath: defaultPath,
-            buttonLabel: global.locale.MODAL_INSTALL_FOLDER,
+            buttonLabel: global.locale.MODAL_INSTALL_FOLDER
           },
           folder => {
             resolve(folder);
@@ -278,7 +278,7 @@ class Modal {
       global.locale.MODAL_NEED_FSOTSO_PLAY,
       global.locale.MODAL_GOTO_INSTALLER,
       global.locale.MODAL_CANCEL,
-      "INSTALLER_REDIRECT"
+      'INSTALLER_REDIRECT'
     );
   }
 
@@ -292,7 +292,7 @@ class Modal {
   static showKilled(c) {
     Modal.View.sendModalNoFocus(
       global.locale.MODAL_CLOSED_FREESO,
-      global.locale.MODAL_CLOSED + " " + c + " " + global.locale.MODAL_CLOSED_2,
+      global.locale.MODAL_CLOSED + ' ' + c + ' ' + global.locale.MODAL_CLOSED_2,
       global.locale.MODAL_OK2
     );
   }
@@ -347,10 +347,10 @@ class Modal {
    */
   static showCHTTSComplete(value) {
     Modal.View.sendModal(
-      value === "1"
+      value === '1'
         ? global.locale.MODAL_SUCCESS
         : global.locale.MODAL_TTS_DISABLED,
-      value === "1"
+      value === '1'
         ? global.locale.MODAL_TTS_ENABLED_TEXT
         : global.locale.MODAL_TTS_DISABLED_TEXT,
       global.locale.MODAL_OK
@@ -390,7 +390,7 @@ class Modal {
 
   static showNoRemesh() {
     Modal.View.sendModal(
-      "Remesh Pack Unavailable",
+      'Remesh Pack Unavailable',
       "Couldn't get the remesh package info from the internet. Try again later.",
       global.locale.MODAL_OK
     );
@@ -408,16 +408,16 @@ class Modal {
   static sendNotification(title, message, url) {
     const {
       setGlobalStyles,
-      createNotification,
-    } = require("electron-custom-notifications");
+      createNotification
+    } = require('electron-custom-notifications');
 
-    const path = require("path");
-    const fs = require("fs");
+    const path = require('path');
+    const fs = require('fs');
 
     fs.readFile(
-      path.join(__dirname, "../../", "beta.ico"),
+      path.join(__dirname, '../../', 'beta.ico'),
       {
-        encoding: "base64",
+        encoding: 'base64'
       },
       (err, logo) => {
         if (err) return;
@@ -425,11 +425,11 @@ class Modal {
         fs.readFile(
           path.join(
             __dirname,
-            "../../FSOLauncher_UI/FSOLauncher_Fonts",
-            "hinted-Munged-embOpitJmj.ttf"
+            '../../FSOLauncher_UI/FSOLauncher_Fonts',
+            'hinted-Munged-embOpitJmj.ttf'
           ),
           {
-            encoding: "base64",
+            encoding: 'base64'
           },
           (err, munged) => {
             if (err) return;
@@ -437,11 +437,11 @@ class Modal {
             fs.readFile(
               path.join(
                 __dirname,
-                "../../FSOLauncher_UI/FSOLauncher_Fonts",
-                "FredokaOne-Regular.ttf"
+                '../../FSOLauncher_UI/FSOLauncher_Fonts',
+                'FredokaOne-Regular.ttf'
               ),
               {
-                encoding: "base64",
+                encoding: 'base64'
               },
               (err, fredokaOne) => {
                 if (err) return;
@@ -507,17 +507,17 @@ class Modal {
                     </div>
                   </notification> 
                   `,
-                  timeout: 10000,
+                  timeout: 10000
                 });
 
-                notification.on("display", () => {
-                  Modal.View.sendSound("notification");
+                notification.on('display', () => {
+                  Modal.View.sendSound('notification');
                   Modal.View.sendNotifLog(title, message, url);
                 });
 
-                notification.on("click", () => {
+                notification.on('click', () => {
                   if (url) {
-                    require("electron").shell.openExternal(url);
+                    require('electron').shell.openExternal(url);
                   }
                   notification.close();
                 });
@@ -573,7 +573,7 @@ class Modal {
         global.locale.MODAL_INSTALL_UPDATE_DESCR_2,
       global.locale.MODAL_UPDATE,
       global.locale.MODAL_LATER,
-      "INSTALL_UPDATE"
+      'INSTALL_UPDATE'
     );
   }
 
@@ -631,7 +631,7 @@ class Modal {
       global.locale.MODAL_START_VOLCANIC_DESC,
       global.locale.MODAL_START_VOLCANIC_OK,
       global.locale.MODAL_CANCEL,
-      "PLAY_VOLCANIC"
+      'PLAY_VOLCANIC'
     );
   }
 
@@ -666,14 +666,14 @@ class Modal {
 
   static showSoftwareModeEnabled() {
     Modal.View.sendModal(
-      "Software Mode",
-      "Please note that Software Mode is notably slower than graphics accelerated modes like OpenGL and DirectX. Because of this, 3D Mode will be disabled while on Software Mode.",
+      'Software Mode',
+      'Please note that Software Mode is notably slower than graphics accelerated modes like OpenGL and DirectX. Because of this, 3D Mode will be disabled while on Software Mode.',
       global.locale.MODAL_OK
     );
   }
 
   static showGenericError(error) {
-    Modal.View.sendModal("An error occurred", error, global.locale.MODAL_OK);
+    Modal.View.sendModal('An error occurred', error, global.locale.MODAL_OK);
   }
 }
 

@@ -1,5 +1,5 @@
-const Modal = require("../Modal");
-const HttpDownload = require("../http-download");
+const Modal = require('../Modal');
+const HttpDownload = require('../http-download');
 
 const DOWNLOAD_URL_SERVO =
   'http://servo.freeso.org' +
@@ -8,7 +8,7 @@ const DOWNLOAD_URL_SERVO =
   '/download' +
   '/FreeSO_TsoClient' +
   '/.lastSuccessful' +
-  '/client-<>.zip'
+  '/client-<>.zip';
 
 /**
  * Installs FreeSO.
@@ -28,7 +28,7 @@ class FSOInstaller {
     this.path = path;
     this.haltProgress = false;
 
-    this.dl = new HttpDownload( DOWNLOAD_URL_SERVO, 'temp/artifacts.zip' )
+    this.dl = new HttpDownload(DOWNLOAD_URL_SERVO, 'temp/artifacts.zip');
   }
   /**
    * Create/Update the download progress item.
@@ -39,9 +39,9 @@ class FSOInstaller {
    */
   createProgressItem(Message, Percentage) {
     this.FSOLauncher.View.addProgressItem(
-      "FSOProgressItem" + this.id,
-      "FreeSO Client",
-      "Installing in " + this.path,
+      'FSOProgressItem' + this.id,
+      'FreeSO Client',
+      'Installing in ' + this.path,
       Message,
       Percentage
     );
@@ -102,7 +102,7 @@ class FSOInstaller {
    * @memberof FSOInstaller
    */
   step4() {
-    return require("../Registry").createFreeSOEntry(this.path);
+    return require('../Registry').createFreeSOEntry(this.path);
   }
 
   /**
@@ -123,10 +123,10 @@ class FSOInstaller {
    */
   end() {
     this.createProgressItem(global.locale.INSTALLATION_FINISHED, 100);
-    this.FSOLauncher.View.stopProgressItem("FSOProgressItem" + this.id);
+    this.FSOLauncher.View.stopProgressItem('FSOProgressItem' + this.id);
     this.FSOLauncher.updateInstalledPrograms();
-    this.FSOLauncher.removeActiveTask("FSO");
-    Modal.showInstalled("FreeSO");
+    this.FSOLauncher.removeActiveTask('FSO');
+    Modal.showInstalled('FreeSO');
   }
 
   /**
@@ -139,9 +139,9 @@ class FSOInstaller {
   error(ErrorMessage) {
     this.haltProgress = true;
     this.createProgressItem(global.locale.FSO_FAILED_INSTALLATION, 100);
-    this.FSOLauncher.View.stopProgressItem("FSOProgressItem" + this.id);
-    this.FSOLauncher.removeActiveTask("FSO");
-    Modal.showFailedInstall("FreeSO", ErrorMessage);
+    this.FSOLauncher.View.stopProgressItem('FSOProgressItem' + this.id);
+    this.FSOLauncher.removeActiveTask('FSO');
+    Modal.showFailedInstall('FreeSO', ErrorMessage);
     return Promise.reject(ErrorMessage);
   }
 
@@ -154,8 +154,8 @@ class FSOInstaller {
   download() {
     return new Promise((resolve, reject) => {
       this.dl.run();
-      this.dl.on("error",()=>{});
-      this.dl.on("end", fileName => {
+      this.dl.on('error', () => {});
+      this.dl.on('end', fileName => {
         if (this.dl.failed) {
           this.cleanup();
           return reject(global.locale.FSO_NETWORK_ERROR);
@@ -174,29 +174,29 @@ class FSOInstaller {
    * @memberof FSOInstaller
    */
   extract() {
-    const unzipStream = require("node-unzip-2").Extract({
-      path: this.path,
+    const unzipStream = require('node-unzip-2').Extract({
+      path: this.path
     });
 
     this.createProgressItem(global.locale.EXTRACTING_CLIENT_FILES, 100);
 
     return new Promise((resolve, reject) => {
-      require("fs")
-        .createReadStream("temp/artifacts.zip")
+      require('fs')
+        .createReadStream('temp/artifacts.zip')
         .pipe(unzipStream)
-        .on("entry", entry => {
+        .on('entry', entry => {
           this.createProgressItem(
-            global.locale.EXTRACTING_CLIENT_FILES + " " + entry.path,
+            global.locale.EXTRACTING_CLIENT_FILES + ' ' + entry.path,
             100
           );
         });
 
-      unzipStream.on("error", err => {
+      unzipStream.on('error', err => {
         //this.cleanup();
         return reject(err);
       });
 
-      unzipStream.on("close", err => {
+      unzipStream.on('close', err => {
         this.cleanup();
         return resolve();
       });
@@ -208,13 +208,13 @@ class FSOInstaller {
    * @memberof FSOInstaller
    */
   cleanup() {
-    const fs = require("fs");
-    fs.stat("temp/artifacts.zip", function(err, stats) {
+    const fs = require('fs');
+    fs.stat('temp/artifacts.zip', function(err, stats) {
       if (err) {
         return;
       }
 
-      fs.unlink("temp/artifacts.zip", function(err) {
+      fs.unlink('temp/artifacts.zip', function(err) {
         if (err) return console.log(err);
       });
     });
@@ -228,7 +228,7 @@ class FSOInstaller {
    */
   setupDir(dir) {
     return new Promise((resolve, reject) => {
-      require("mkdirp")(dir, resolve);
+      require('mkdirp')(dir, resolve);
     });
   }
   /**
@@ -239,15 +239,15 @@ class FSOInstaller {
    */
   createShortcut() {
     return new Promise((resolve, reject) => {
-      const ws = require("windows-shortcuts");
+      const ws = require('windows-shortcuts');
 
       ws.create(
-        "%UserProfile%\\Desktop\\FreeSO.lnk",
+        '%UserProfile%\\Desktop\\FreeSO.lnk',
         {
-          target: this.path + "\\FreeSO.exe",
+          target: this.path + '\\FreeSO.exe',
           workingDir: this.path,
-          desc: "Play FreeSO online",
-          runStyle: ws.MAX,
+          desc: 'Play FreeSO online',
+          runStyle: ws.MAX
         },
         err => {
           return err ? reject(err) : resolve();
@@ -263,7 +263,7 @@ class FSOInstaller {
    */
   isInstalledInPath() {
     return new Promise((resolve, reject) => {
-      require("fs").stat(this.path + "\\FreeSO.exe", err => {
+      require('fs').stat(this.path + '\\FreeSO.exe', err => {
         resolve(err == null);
       });
     });
@@ -283,14 +283,15 @@ class FSOInstaller {
         if (!this.haltProgress) {
           this.createProgressItem(
             global.locale.DL_CLIENT_FILES +
-              " " +
+              ' ' +
               mb +
-              " MB " +
+              ' MB ' +
               global.locale.X_OUT_OF_X +
-              " " + size +
-              " MB (" +
+              ' ' +
+              size +
+              ' MB (' +
               p +
-              "%)",
+              '%)',
             p
           );
         }

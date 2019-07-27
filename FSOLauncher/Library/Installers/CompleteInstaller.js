@@ -1,4 +1,4 @@
-const Modal = require("../Modal");
+const Modal = require('../Modal');
 
 /**
  * Installs OpenAL, .NET, TSO and FreeSO.
@@ -40,7 +40,7 @@ class CompleteInstaller {
       global.locale.INS_OAL_WINDOW,
       10
     );
-    return this.FSOLauncher.install("OpenAL");
+    return this.FSOLauncher.install('OpenAL');
   }
   /**
    * Install .NET Framework.
@@ -55,7 +55,7 @@ class CompleteInstaller {
       global.locale.INS_NET_WINDOW,
       25
     );
-    return this.FSOLauncher.install("NET");
+    return this.FSOLauncher.install('NET');
   }
   /**
    * Installs The Sims Online.
@@ -70,7 +70,7 @@ class CompleteInstaller {
       global.locale.INS_INFO,
       50
     );
-    return this.FSOLauncher.install("TSO", { fullInstall: true });
+    return this.FSOLauncher.install('TSO', { fullInstall: true });
   }
   /**
    * Installs FreeSO.
@@ -85,7 +85,7 @@ class CompleteInstaller {
       global.locale.INS_INFO,
       75
     );
-    return this.FSOLauncher.install("FSO", { fullInstall: true });
+    return this.FSOLauncher.install('FSO', { fullInstall: true });
   }
   /**
    * When the installation finished.
@@ -93,7 +93,7 @@ class CompleteInstaller {
    * @memberof CompleteInstaller
    */
   end() {
-    this.FSOLauncher.removeActiveTask("FULL");
+    this.FSOLauncher.removeActiveTask('FULL');
     this.FSOLauncher.View.fullInstallProgressItem(
       global.locale.INS_FINISHED,
       global.locale.INS_PLAY,
@@ -101,8 +101,8 @@ class CompleteInstaller {
       100
     );
     Modal.sendNotification(
-      "FreeSO Launcher",
-      "FreeSO has finished installing and is ready to go!"
+      'FreeSO Launcher',
+      'FreeSO has finished installing and is ready to go!'
     );
     setTimeout(() => {
       this.FSOLauncher.View.fullInstallProgressItem();
@@ -114,7 +114,7 @@ class CompleteInstaller {
    * @memberof CompleteInstaller
    */
   error() {
-    this.FSOLauncher.removeActiveTask("FULL");
+    this.FSOLauncher.removeActiveTask('FULL');
     this.FSOLauncher.View.fullInstallProgressItem(
       global.locale.INS_ERROR,
       global.locale.INS_ERROR_DESCR,

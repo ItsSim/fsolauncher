@@ -19,7 +19,7 @@ class View {
    * @memberof View
    */
   loadRss() {
-    this.Window.webContents.send("LOAD_RSS");
+    this.Window.webContents.send('LOAD_RSS');
   }
 
   /**
@@ -28,7 +28,7 @@ class View {
    * @memberof View
    */
   hasNoInternet() {
-    this.Window.webContents.send("NO_INTERNET");
+    this.Window.webContents.send('NO_INTERNET');
   }
 
   /**
@@ -37,7 +37,7 @@ class View {
    * @memberof View
    */
   hasInternet() {
-    this.Window.webContents.send("HAS_INTERNET");
+    this.Window.webContents.send('HAS_INTERNET');
   }
 
   /**
@@ -47,7 +47,7 @@ class View {
    * @memberof View
    */
   setTheme(Theme) {
-    this.Window.webContents.send("SET_THEME", Theme);
+    this.Window.webContents.send('SET_THEME', Theme);
   }
 
   /**
@@ -58,7 +58,7 @@ class View {
    * @memberof View
    */
   restoreConfiguration(Configuration) {
-    this.Window.webContents.send("RESTORE_CONFIGURATION", Configuration);
+    this.Window.webContents.send('RESTORE_CONFIGURATION', Configuration);
   }
 
   /**
@@ -68,7 +68,7 @@ class View {
    * @memberof View
    */
   changePage(page) {
-    this.Window.webContents.send("CHANGE_PAGE", page);
+    this.Window.webContents.send('CHANGE_PAGE', page);
   }
 
   /**
@@ -85,7 +85,7 @@ class View {
   sendModal(title, text, yesText, noText, modalRespId, extra) {
     this.Window.focus();
     this.Window.webContents.send(
-      "POPUP",
+      'POPUP',
       title,
       text,
       yesText,
@@ -107,7 +107,7 @@ class View {
    */
   sendModalNoFocus(title, text, yesText, noText, modalRespId, extra) {
     this.Window.webContents.send(
-      "POPUP",
+      'POPUP',
       title,
       text,
       yesText,
@@ -130,7 +130,7 @@ class View {
   addProgressItem(elId, filename, origin, progress, percentage, miniconsole) {
     try {
       this.Window.webContents.send(
-        "CREATE_PROGRESS_ITEM",
+        'CREATE_PROGRESS_ITEM',
         elId,
         filename,
         origin,
@@ -146,7 +146,7 @@ class View {
    */
   stopProgressItem(elId) {
     try {
-      this.Window.webContents.send("STOP_PROGRESS_ITEM", elId);
+      this.Window.webContents.send('STOP_PROGRESS_ITEM', elId);
     } catch (e) {}
   }
   /**
@@ -161,7 +161,7 @@ class View {
   fullInstallProgressItem(title, text1, text2, progress) {
     try {
       this.Window.webContents.send(
-        "FULL_INSTALL_PROGRESS_ITEM",
+        'FULL_INSTALL_PROGRESS_ITEM',
         title,
         text1,
         text2,
@@ -179,7 +179,7 @@ class View {
    */
   toast(id, text) {
     try {
-      this.Window.webContents.send("TOAST", id, text);
+      this.Window.webContents.send('TOAST', id, text);
     } catch (e) {}
   }
 
@@ -191,13 +191,13 @@ class View {
    */
   removeToast(id) {
     try {
-      this.Window.webContents.send("REMOVE_TOAST", id);
+      this.Window.webContents.send('REMOVE_TOAST', id);
     } catch (e) {}
   }
 
   setRemeshInfo(v) {
     try {
-      this.Window.webContents.send("REMESH_INFO", v);
+      this.Window.webContents.send('REMESH_INFO', v);
     } catch (e) {}
   }
 
@@ -209,20 +209,26 @@ class View {
    */
   setTip(text) {
     try {
-      this.Window.webContents.send("SET_TIP", text);
+      this.Window.webContents.send('SET_TIP', text);
     } catch (e) {}
   }
 
   sendSound(sound) {
     try {
-      this.Window.webContents.send("PLAY_SOUND", sound);
+      this.Window.webContents.send('PLAY_SOUND', sound);
     } catch (e) {}
   }
 
   sendNotifLog(t, l, c) {
     try {
-      this.Window.webContents.send("NOTIFLOG", t, l, c);
-    } catch (e) {}   
+      this.Window.webContents.send('NOTIFLOG', t, l, c);
+    } catch (e) {}
+  }
+
+  sendInstalledPrograms(i) {
+    try {
+      this.Window.webContents.send('INSPROG', i);
+    } catch (e) {}
   }
 }
 

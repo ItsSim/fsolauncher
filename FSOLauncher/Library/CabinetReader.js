@@ -1,24 +1,24 @@
-const fs = require("fs");
+const fs = require('fs');
 
 var JSZip = function(f, l) {
   this.files = {};
-  this.root = "";
+  this.root = '';
   f && this.load(f, l);
 };
 JSZip.signature = {
-  LOCAL_FILE_HEADER: "PK\u0003\u0004",
-  CENTRAL_FILE_HEADER: "PK\u0001\u0002",
-  CENTRAL_DIRECTORY_END: "PK\u0005\u0006",
-  ZIP64_CENTRAL_DIRECTORY_LOCATOR: "PK\u0006\u0007",
-  ZIP64_CENTRAL_DIRECTORY_END: "PK\u0006\u0006",
-  DATA_DESCRIPTOR: "PK\u0007\b",
+  LOCAL_FILE_HEADER: 'PK\u0003\u0004',
+  CENTRAL_FILE_HEADER: 'PK\u0001\u0002',
+  CENTRAL_DIRECTORY_END: 'PK\u0005\u0006',
+  ZIP64_CENTRAL_DIRECTORY_LOCATOR: 'PK\u0006\u0007',
+  ZIP64_CENTRAL_DIRECTORY_END: 'PK\u0006\u0006',
+  DATA_DESCRIPTOR: 'PK\u0007\b'
 };
 JSZip.defaults = {
   base64: !1,
   binary: !1,
   dir: !1,
   date: null,
-  compression: null,
+  compression: null
 };
 JSZip.prototype = (function() {
   var f = function(a, b, c) {
@@ -29,14 +29,14 @@ JSZip.prototype = (function() {
   f.prototype = {
     asText: function() {
       var a = this.data;
-      if (null === a || "undefined" === typeof a) return "";
+      if (null === a || 'undefined' === typeof a) return '';
       this.options.base64 && (a = JSZipBase64.decode(a));
       this.options.binary && (a = JSZip.prototype.utf8decode(a));
       return a;
     },
     asBinary: function() {
       var a = this.data;
-      if (null === a || "undefined" === typeof a) return "";
+      if (null === a || 'undefined' === typeof a) return '';
       this.options.base64 && (a = JSZipBase64.decode(a));
       this.options.binary || (a = JSZip.prototype.utf8encode(a));
       return a;
@@ -46,10 +46,10 @@ JSZip.prototype = (function() {
     },
     asArrayBuffer: function() {
       return JSZip.utils.string2Uint8Array(this.asBinary()).buffer;
-    },
+    }
   };
   var l = function(a, b) {
-      var c = "",
+      var c = '',
         d;
       for (d = 0; d < b; d++) (c += String.fromCharCode(a & 255)), (a >>>= 8);
       return c;
@@ -61,7 +61,7 @@ JSZip.prototype = (function() {
       for (b = 0; b < arguments.length; b++)
         for (c in arguments[b])
           arguments[b].hasOwnProperty(c) &&
-            "undefined" === typeof a[c] &&
+            'undefined' === typeof a[c] &&
             (a[c] = arguments[b][c]);
       return a;
     },
@@ -73,31 +73,30 @@ JSZip.prototype = (function() {
       c = m(c, JSZip.defaults);
       c.date = c.date || new Date();
       null !== c.compression && (c.compression = c.compression.toUpperCase());
-      c.dir || null === b || "undefined" === typeof b
+      c.dir || null === b || 'undefined' === typeof b
         ? ((c.base64 = !1), (c.binary = !1), (b = null))
         : JSZip.support.uint8array && b instanceof Uint8Array
-          ? ((c.base64 = !1),
-            (c.binary = !0),
-            (b = JSZip.utils.uint8Array2String(b)))
-          : JSZip.support.arraybuffer && b instanceof ArrayBuffer
-            ? ((c.base64 = !1),
-              (c.binary = !0),
-              (b = new Uint8Array(b)),
-              (b = JSZip.utils.uint8Array2String(b)))
-            : c.binary &&
-              !c.base64 &&
-              (!0 !== c.optimizedBinaryString &&
-                (b = JSZip.utils.string2binary(b)),
-              delete c.optimizedBinaryString);
+        ? ((c.base64 = !1),
+          (c.binary = !0),
+          (b = JSZip.utils.uint8Array2String(b)))
+        : JSZip.support.arraybuffer && b instanceof ArrayBuffer
+        ? ((c.base64 = !1),
+          (c.binary = !0),
+          (b = new Uint8Array(b)),
+          (b = JSZip.utils.uint8Array2String(b)))
+        : c.binary &&
+          !c.base64 &&
+          (!0 !== c.optimizedBinaryString && (b = JSZip.utils.string2binary(b)),
+          delete c.optimizedBinaryString);
       return (this.files[a] = new f(a, b, c));
     },
     p = function(a) {
-      "/" == a.slice(-1) && (a = a.substring(0, a.length - 1));
-      var b = a.lastIndexOf("/");
-      return 0 < b ? a.substring(0, b) : "";
+      '/' == a.slice(-1) && (a = a.substring(0, a.length - 1));
+      var b = a.lastIndexOf('/');
+      return 0 < b ? a.substring(0, b) : '';
     },
     n = function(a) {
-      "/" != a.slice(-1) && (a += "/");
+      '/' != a.slice(-1) && (a += '/');
       if (!this.files[a]) {
         var b = p(a);
         b && n.call(this, b);
@@ -108,7 +107,7 @@ JSZip.prototype = (function() {
   return {
     load: function(a, b) {
       throw Error(
-        "Load method is not defined. Is the file jszip-load.js included ?"
+        'Load method is not defined. Is the file jszip-load.js included ?'
       );
     },
     filter: function(a) {
@@ -155,7 +154,7 @@ JSZip.prototype = (function() {
     remove: function(a) {
       a = this.root + a;
       var b = this.files[a];
-      b || ("/" != a.slice(-1) && (a += "/"), (b = this.files[a]));
+      b || ('/' != a.slice(-1) && (a += '/'), (b = this.files[a]));
       if (b)
         if (b.options.dir) {
           b = this.filter(function(b, c) {
@@ -166,10 +165,10 @@ JSZip.prototype = (function() {
       return this;
     },
     generate: function(a) {
-      a = m(a || {}, { base64: !0, compression: "STORE", type: "base64" });
+      a = m(a || {}, { base64: !0, compression: 'STORE', type: 'base64' });
       var b = a.compression.toUpperCase();
       if (!JSZip.compressions[b])
-        throw b + " is not a valid compression method !";
+        throw b + ' is not a valid compression method !';
       var c = [],
         d = [],
         f = 0,
@@ -193,62 +192,62 @@ JSZip.prototype = (function() {
           var t = null !== u && 0 !== u.length;
           w = v.compression || w;
           if (!JSZip.compressions[w])
-            throw w + " is not a valid compression method !";
+            throw w + ' is not a valid compression method !';
           v = JSZip.compressions[w];
-          w = t ? v.compress(u) : "";
+          w = t ? v.compress(u) : '';
           y =
-            "\n\x00" +
-            (y ? "\x00\b" : "\x00\x00") +
+            '\n\x00' +
+            (y ? '\x00\b' : '\x00\x00') +
             (t ? v.magic : JSZip.compressions.STORE.magic);
           y += l(F, 2);
           y += l(A, 2);
-          y += t ? l(this.crc32(u), 4) : "\x00\x00\x00\x00";
-          y += t ? l(w.length, 4) : "\x00\x00\x00\x00";
-          y += t ? l(u.length, 4) : "\x00\x00\x00\x00";
+          y += t ? l(this.crc32(u), 4) : '\x00\x00\x00\x00';
+          y += t ? l(w.length, 4) : '\x00\x00\x00\x00';
+          y += t ? l(u.length, 4) : '\x00\x00\x00\x00';
           y += l(h.length, 2);
-          h = y += "\x00\x00";
+          h = y += '\x00\x00';
           u = w;
           u = JSZip.signature.LOCAL_FILE_HEADER + h + p + u;
           p =
             JSZip.signature.CENTRAL_FILE_HEADER +
-            "\u0014\x00" +
+            '\u0014\x00' +
             h +
-            "\x00\x00\x00\x00\x00\x00" +
+            '\x00\x00\x00\x00\x00\x00' +
             (!0 === this.files[n].options.dir
-              ? "\u0010\x00\x00\x00"
-              : "\x00\x00\x00\x00") +
+              ? '\u0010\x00\x00\x00'
+              : '\x00\x00\x00\x00') +
             l(f, 4) +
             p;
           f += u.length;
           d.push(u);
           c.push(p);
         }
-      b = d.join("");
-      c = c.join("");
+      b = d.join('');
+      c = c.join('');
       d =
         JSZip.signature.CENTRAL_DIRECTORY_END +
-        "\x00\x00\x00\x00" +
+        '\x00\x00\x00\x00' +
         l(d.length, 2) +
         l(d.length, 2) +
         l(c.length, 4) +
         l(b.length, 4) +
-        "\x00\x00";
+        '\x00\x00';
       d = b + c + d;
       switch (a.type.toLowerCase()) {
-        case "uint8array":
+        case 'uint8array':
           return JSZip.utils.string2Uint8Array(d);
-        case "arraybuffer":
+        case 'arraybuffer':
           return JSZip.utils.string2Uint8Array(d).buffer;
-        case "blob":
+        case 'blob':
           return JSZip.utils.string2Blob(d);
-        case "base64":
+        case 'base64':
           return a.base64 ? JSZipBase64.encode(d) : d;
         default:
           return d;
       }
     },
     crc32: function(a, b) {
-      if ("" === a || "undefined" === typeof a) return 0;
+      if ('' === a || 'undefined' === typeof a) return 0;
       var c = [
         0,
         1996959894,
@@ -505,9 +504,9 @@ JSZip.prototype = (function() {
         3020668471,
         3272380065,
         1510334235,
-        755167117,
+        755167117
       ];
-      "undefined" == typeof b && (b = 0);
+      'undefined' == typeof b && (b = 0);
       b ^= -1;
       for (var d = 0, f = a.length; d < f; d++) {
         var h = (b ^ a.charCodeAt(d)) & 255;
@@ -519,11 +518,11 @@ JSZip.prototype = (function() {
     clone: function() {
       var a = new JSZip(),
         b;
-      for (b in this) "function" !== typeof this[b] && (a[b] = this[b]);
+      for (b in this) 'function' !== typeof this[b] && (a[b] = this[b]);
       return a;
     },
     utf8encode: function(a) {
-      for (var b = "", c = 0; c < a.length; c++) {
+      for (var b = '', c = 0; c < a.length; c++) {
         var d = a.charCodeAt(c);
         128 > d
           ? (b += String.fromCharCode(d))
@@ -536,49 +535,49 @@ JSZip.prototype = (function() {
       return b;
     },
     utf8decode: function(a) {
-      for (var b = "", c = 0, d, f, h; c < a.length; )
+      for (var b = '', c = 0, d, f, h; c < a.length; )
         (d = a.charCodeAt(c)),
           128 > d
             ? ((b += String.fromCharCode(d)), c++)
             : 191 < d && 224 > d
-              ? ((f = a.charCodeAt(c + 1)),
-                (b += String.fromCharCode(((d & 31) << 6) | (f & 63))),
-                (c += 2))
-              : ((f = a.charCodeAt(c + 1)),
-                (h = a.charCodeAt(c + 2)),
-                (b += String.fromCharCode(
-                  ((d & 15) << 12) | ((f & 63) << 6) | (h & 63)
-                )),
-                (c += 3));
+            ? ((f = a.charCodeAt(c + 1)),
+              (b += String.fromCharCode(((d & 31) << 6) | (f & 63))),
+              (c += 2))
+            : ((f = a.charCodeAt(c + 1)),
+              (h = a.charCodeAt(c + 2)),
+              (b += String.fromCharCode(
+                ((d & 15) << 12) | ((f & 63) << 6) | (h & 63)
+              )),
+              (c += 3));
       return b;
-    },
+    }
   };
 })();
 JSZip.compressions = {
   STORE: {
-    magic: "\x00\x00",
+    magic: '\x00\x00',
     compress: function(f) {
       return f;
     },
     uncompress: function(f) {
       return f;
-    },
-  },
+    }
+  }
 };
 JSZip.support = {
   arraybuffer: (function() {
     return (
-      "undefined" !== typeof ArrayBuffer && "undefined" !== typeof Uint8Array
+      'undefined' !== typeof ArrayBuffer && 'undefined' !== typeof Uint8Array
     );
   })(),
   uint8array: (function() {
-    return "undefined" !== typeof Uint8Array;
+    return 'undefined' !== typeof Uint8Array;
   })(),
   blob: (function() {
-    if ("undefined" === typeof ArrayBuffer) return !1;
+    if ('undefined' === typeof ArrayBuffer) return !1;
     var f = new ArrayBuffer(0);
     try {
-      return 0 === new Blob([f], { type: "application/zip" }).size;
+      return 0 === new Blob([f], { type: 'application/zip' }).size;
     } catch (m) {}
     try {
       var l = new (window.BlobBuilder ||
@@ -586,20 +585,20 @@ JSZip.support = {
         window.MozBlobBuilder ||
         window.MSBlobBuilder)();
       l.append(f);
-      return 0 === l.getBlob("application/zip").size;
+      return 0 === l.getBlob('application/zip').size;
     } catch (m) {}
     return !1;
-  })(),
+  })()
 };
 JSZip.utils = {
   string2binary: function(f) {
-    for (var l = "", m = 0; m < f.length; m++)
+    for (var l = '', m = 0; m < f.length; m++)
       l += String.fromCharCode(f.charCodeAt(m) & 255);
     return l;
   },
   string2Uint8Array: function(f) {
     if (!JSZip.support.uint8array)
-      throw Error("Uint8Array is not supported by this browser");
+      throw Error('Uint8Array is not supported by this browser');
     var l = new ArrayBuffer(f.length);
     l = new Uint8Array(l);
     for (var m = 0; m < f.length; m++) l[m] = f.charCodeAt(m);
@@ -607,16 +606,16 @@ JSZip.utils = {
   },
   uint8Array2String: function(f) {
     if (!JSZip.support.uint8array)
-      throw Error("Uint8Array is not supported by this browser");
-    for (var l = "", m = 0; m < f.length; m++) l += String.fromCharCode(f[m]);
+      throw Error('Uint8Array is not supported by this browser');
+    for (var l = '', m = 0; m < f.length; m++) l += String.fromCharCode(f[m]);
     return l;
   },
   string2Blob: function(f) {
     if (!JSZip.support.blob)
-      throw Error("Blob is not supported by this browser");
+      throw Error('Blob is not supported by this browser');
     f = JSZip.utils.string2Uint8Array(f).buffer;
     try {
-      return new Blob([f], { type: "application/zip" });
+      return new Blob([f], { type: 'application/zip' });
     } catch (m) {}
     try {
       var l = new (window.BlobBuilder ||
@@ -624,15 +623,15 @@ JSZip.utils = {
         window.MozBlobBuilder ||
         window.MSBlobBuilder)();
       l.append(f);
-      return l.getBlob("application/zip");
+      return l.getBlob('application/zip');
     } catch (m) {}
     throw Error("Bug : can't construct the Blob.");
-  },
+  }
 };
 var JSZipBase64 = (function() {
   return {
     encode: function(f, l) {
-      for (var m = "", h, p, n, a, b, c, d = 0; d < f.length; )
+      for (var m = '', h, p, n, a, b, c, d = 0; d < f.length; )
         (h = f.charCodeAt(d++)),
           (p = f.charCodeAt(d++)),
           (n = f.charCodeAt(d++)),
@@ -643,34 +642,34 @@ var JSZipBase64 = (function() {
           isNaN(p) ? (b = c = 64) : isNaN(n) && (c = 64),
           (m =
             m +
-            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".charAt(
+            'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='.charAt(
               a
             ) +
-            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".charAt(
+            'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='.charAt(
               h
             ) +
-            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".charAt(
+            'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='.charAt(
               b
             ) +
-            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".charAt(
+            'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='.charAt(
               c
             ));
       return m;
     },
     decode: function(f, l) {
-      var m = "",
+      var m = '',
         h = 0;
-      for (f = f.replace(/[^A-Za-z0-9\+\/=]/g, ""); h < f.length; ) {
-        var p = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".indexOf(
+      for (f = f.replace(/[^A-Za-z0-9\+\/=]/g, ''); h < f.length; ) {
+        var p = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='.indexOf(
           f.charAt(h++)
         );
-        var n = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".indexOf(
+        var n = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='.indexOf(
           f.charAt(h++)
         );
-        var a = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".indexOf(
+        var a = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='.indexOf(
           f.charAt(h++)
         );
-        var b = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".indexOf(
+        var b = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='.indexOf(
           f.charAt(h++)
         );
         p = (p << 2) | (n >> 4);
@@ -681,10 +680,10 @@ var JSZipBase64 = (function() {
         64 != b && (m += String.fromCharCode(c));
       }
       return m;
-    },
+    }
   };
 })();
-if (!JSZip) throw "JSZip not defined";
+if (!JSZip) throw 'JSZip not defined';
 (function() {
   function f() {
     this.list = this.next = null;
@@ -788,8 +787,8 @@ if (!JSZip) throw "JSZip not defined";
             D >= b
               ? (B.e = 99)
               : w[D] < c
-                ? ((B.e = 256 > w[D] ? 16 : 15), (B.n = w[D++]))
-                : ((B.e = d[w[D] - c]), (B.n = g[w[D++] - c]));
+              ? ((B.e = 256 > w[D] ? 16 : 15), (B.n = w[D++]))
+              : ((B.e = d[w[D] - c]), (B.n = g[w[D++] - c]));
             n = 1 << (x - C);
             for (q = e >> C; q < u; q += n)
               (m[q].e = B.e), (m[q].b = B.b), (m[q].n = B.n), (m[q].t = B.t);
@@ -977,7 +976,7 @@ if (!JSZip) throw "JSZip not defined";
                 w = 7;
                 e = new m(r, 288, 257, S, T, w);
                 if (0 != e.status) {
-                  alert("HufBuild error: " + e.status);
+                  alert('HufBuild error: ' + e.status);
                   z = -1;
                   break a;
                 }
@@ -988,7 +987,7 @@ if (!JSZip) throw "JSZip not defined";
                 e = new m(r, 30, 0, U, V, M);
                 if (1 < e.status) {
                   N = null;
-                  alert("HufBuild error: " + e.status);
+                  alert('HufBuild error: ' + e.status);
                   z = -1;
                   break a;
                 }
@@ -1064,7 +1063,7 @@ if (!JSZip) throw "JSZip not defined";
       8191,
       16383,
       32767,
-      65535,
+      65535
     ],
     S = [
       3,
@@ -1097,7 +1096,7 @@ if (!JSZip) throw "JSZip not defined";
       227,
       258,
       0,
-      0,
+      0
     ],
     T = [
       0,
@@ -1130,7 +1129,7 @@ if (!JSZip) throw "JSZip not defined";
       5,
       0,
       99,
-      99,
+      99
     ],
     U = [
       1,
@@ -1162,7 +1161,7 @@ if (!JSZip) throw "JSZip not defined";
       8193,
       12289,
       16385,
-      24577,
+      24577
     ],
     V = [
       0,
@@ -1194,12 +1193,12 @@ if (!JSZip) throw "JSZip not defined";
       12,
       12,
       13,
-      13,
+      13
     ],
     R = [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15];
   JSZip.compressions.DEFLATE
     ? (JSZip.compressions.DEFLATE.uncompress = d)
-    : (JSZip.compressions.DEFLATE = { magic: "\b\x00", uncompress: d });
+    : (JSZip.compressions.DEFLATE = { magic: '\b\x00', uncompress: d });
 })();
 
 /**
@@ -1221,7 +1220,7 @@ class CabinetReader {
     this.continued = false;
     this.dc = [];
     this.ucp = [];
-    this.dir = startFile.substring(0, startFile.lastIndexOf("/") + 1);
+    this.dir = startFile.substring(0, startFile.lastIndexOf('/') + 1);
     //console.log(this.dir);
     this.uncompressed = null;
     this.cabsRead = 0;
@@ -1293,20 +1292,20 @@ class CabinetReader {
           read += 2;
           cab.folResBytes = view.getUint8(read++);
           cab.dataResBytes = view.getUint8(read++);
-          let string = "";
+          let string = '';
           for (let i = 0; i < cab.cabResBytes; i++) {
             string += String.fromCharCode(view.getUint8(read++));
           }
           cab.cabReserve = string;
         }
         if (cab.flags & 0x0001) {
-          let string = "";
+          let string = '';
           while (view.getUint8(read) !== 0) {
             string += String.fromCharCode(view.getUint8(read++));
           }
           cab.prevCab = string;
           read++;
-          string = "";
+          string = '';
           while (view.getUint8(read) !== 0) {
             string += String.fromCharCode(view.getUint8(read++));
           }
@@ -1315,13 +1314,13 @@ class CabinetReader {
         }
 
         if (cab.flags & 0x0002) {
-          let string = "";
+          let string = '';
           while (view.getUint8(read) !== 0) {
             string += String.fromCharCode(view.getUint8(read++));
           }
           cab.nextCab = string;
           read++;
-          string = "";
+          string = '';
           while (view.getUint8(read) !== 0) {
             string += String.fromCharCode(view.getUint8(read++));
           }
@@ -1343,7 +1342,7 @@ class CabinetReader {
           read += 2;
 
           if (cab.flags & 0x0004) {
-            let string = "";
+            let string = '';
             for (let i = 0; i < cab.folResBytes; i++) {
               string += String.fromCharCode(view.getUint8(read++));
             }
@@ -1387,13 +1386,13 @@ class CabinetReader {
           f.iFolder = view.getUint16(read, true);
           read += 2;
           read += 6;
-          let string = "";
+          let string = '';
           while (view.getUint8(read) !== 0) {
             string += String.fromCharCode(view.getUint8(read++));
           }
           read++;
           f.name = string;
-          f.name = f.name.replace(/\\/g, "/");
+          f.name = f.name.replace(/\\/g, '/');
           cab.files.push(f);
         }
         this.extractNextFile(cab, data);
@@ -1438,7 +1437,7 @@ class CabinetReader {
 
         this.dataLeftToFill -= toCopy;
       } else if (file.uOff > this.ucp[folder]) {
-        console.log("Not implemented");
+        console.log('Not implemented');
       }
     } else {
       let chunk = chunks[0];
@@ -1474,7 +1473,7 @@ class CabinetReader {
         this.continued = true;
         this.ucp[0] = this.ucp[folder];
         if (this.cabsRead - 1 !== 0)
-          fs.unlink(this.dir + "Data" + (this.cabsRead - 1) + ".cab", () => {});
+          fs.unlink(this.dir + 'Data' + (this.cabsRead - 1) + '.cab', () => {});
         this.readCab(this.dir + cab.nextCab);
         return;
       }
@@ -1484,7 +1483,7 @@ class CabinetReader {
       this.setupDir(file.name, err => {
         if (err) console.log(err);
         fs.writeFile(
-          this.outDir + "/" + file.name,
+          this.outDir + '/' + file.name,
           new Buffer(this.fileBuffer),
           () => {
             //console.log("wrote " + file.name);
@@ -1495,15 +1494,15 @@ class CabinetReader {
                 //console.log(this.dir + cab.nextCab);
                 if (this.cabsRead - 1 !== 0)
                   fs.unlink(
-                    this.dir + "Data" + (this.cabsRead - 1) + ".cab",
+                    this.dir + 'Data' + (this.cabsRead - 1) + '.cab',
                     () => {}
                   );
 
                 this.readCab(this.dir + cab.nextCab);
               } else {
                 if (this.cabsRead === 1114) {
-                  fs.unlink(this.dir + "Data1113.cab", () => {});
-                  fs.unlink(this.dir + "Data1114.cab", () => {});
+                  fs.unlink(this.dir + 'Data1113.cab', () => {});
+                  fs.unlink(this.dir + 'Data1114.cab', () => {});
                 }
                 this.onEnd();
               }
@@ -1516,7 +1515,7 @@ class CabinetReader {
       //console.log(this.dir + cab.nextCab);
       //console.log(this.dc[folder]);
       if (this.cabsRead - 1 !== 0)
-        fs.unlink(this.dir + "Data" + (this.cabsRead - 1) + ".cab", () => {});
+        fs.unlink(this.dir + 'Data' + (this.cabsRead - 1) + '.cab', () => {});
       this.readCab(this.dir + cab.nextCab);
     }
   }
@@ -1532,8 +1531,8 @@ class CabinetReader {
    * @memberof CabinetReader
    */
   static MSZipDecomp(data, uncompSize) {
-    if (!(data[0] === 0x43 && data[1] === 0x4b)) console.log("MSZIP fail");
-    const temp = JSZip.compressions["DEFLATE"].uncompress(data.subarray(2));
+    if (!(data[0] === 0x43 && data[1] === 0x4b)) console.log('MSZIP fail');
+    const temp = JSZip.compressions['DEFLATE'].uncompress(data.subarray(2));
     const buf = new ArrayBuffer(temp.length);
     const view = new Uint8Array(buf);
     view.set(temp);
@@ -1549,9 +1548,9 @@ class CabinetReader {
    * @memberof CabinetReader
    */
   setupDir(file, callback) {
-    const mkdirp = require("mkdirp");
-    let dir = file.substring(0, file.lastIndexOf("/") + 1);
-    dir = this.outDir + "/" + dir;
+    const mkdirp = require('mkdirp');
+    let dir = file.substring(0, file.lastIndexOf('/') + 1);
+    dir = this.outDir + '/' + dir;
     if (this.foldersMade.indexOf(dir) === -1) {
       this.foldersMade.push(dir);
       //console.log("making dir " + dir);

@@ -1,5 +1,5 @@
-const Modal = require("../Modal");
-const HttpDownload = require("../http-download");
+const Modal = require('../Modal');
+const HttpDownload = require('../http-download');
 
 /**
  * Installs a launcher update. This class was introduced after having problems
@@ -19,7 +19,10 @@ class UpdateInstaller {
 
     this.id = Math.floor(Date.now() / 1000);
     this.haltProgress = false;
-    this.dl = new HttpDownload( "http://beta.freeso.org/FreeSO Launcher Setup.exe", 'temp/installer.exe' )
+    this.dl = new HttpDownload(
+      'http://beta.freeso.org/FreeSO Launcher Setup.exe',
+      'temp/installer.exe'
+    );
   }
   /**
    * Creates the download progress item.
@@ -30,9 +33,9 @@ class UpdateInstaller {
    */
   createProgressItem(Message, Percentage) {
     this.FSOLauncher.View.addProgressItem(
-      "FSOUpdateProgressItem" + this.id,
-      "FreeSO Launcher",
-      "Downloading from " + this.FSOLauncher.updateLocation,
+      'FSOUpdateProgressItem' + this.id,
+      'FreeSO Launcher',
+      'Downloading from ' + this.FSOLauncher.updateLocation,
       Message,
       Percentage
     );
@@ -64,8 +67,8 @@ class UpdateInstaller {
    */
   end() {
     // run and close
-    this.createProgressItem("Download finished. Setup will start...", 100);
-    this.FSOLauncher.View.stopProgressItem("FSOUpdateProgressItem" + this.id);
+    this.createProgressItem('Download finished. Setup will start...', 100);
+    this.FSOLauncher.View.stopProgressItem('FSOUpdateProgressItem' + this.id);
 
     setTimeout(() => {
       global.willQuit = true;
@@ -91,7 +94,7 @@ class UpdateInstaller {
         '">here</a>.',
       100
     );
-    this.FSOLauncher.View.stopProgressItem("FSOUpdateProgressItem" + this.id);
+    this.FSOLauncher.View.stopProgressItem('FSOUpdateProgressItem' + this.id);
     Modal.showFailedUpdateDownload();
     return Promise.reject(ErrorMessage);
   }
@@ -101,8 +104,8 @@ class UpdateInstaller {
    * @memberof UpdateInstaller
    */
   execute() {
-    require("child_process").exec("installer.exe", {
-      cwd: "temp",
+    require('child_process').exec('installer.exe', {
+      cwd: 'temp'
     });
   }
   /**
@@ -114,12 +117,12 @@ class UpdateInstaller {
   download() {
     return new Promise((resolve, reject) => {
       this.dl.run();
-      this.dl.on('error',()=>{});
-      this.dl.on("end", fileName => {
+      this.dl.on('error', () => {});
+      this.dl.on('end', fileName => {
         if (this.dl.failed) {
           this.cleanup();
           return reject(
-            "FreeSO Launcher installation files have failed to download. You can try again later or download it yourself at beta.freeso.org/FreeSO Launcher Setup.exe"
+            'FreeSO Launcher installation files have failed to download. You can try again later or download it yourself at beta.freeso.org/FreeSO Launcher Setup.exe'
           );
         }
         resolve();
@@ -141,15 +144,15 @@ class UpdateInstaller {
       if (p < 100) {
         if (!this.haltProgress) {
           this.createProgressItem(
-            "Downloading installation files... " +
+            'Downloading installation files... ' +
               mb +
-              " MB " +
+              ' MB ' +
               global.locale.X_OUT_OF_X +
-              " " +
+              ' ' +
               size +
-              " MB (" +
+              ' MB (' +
               p +
-              "%)",
+              '%)',
             p
           );
         }
@@ -164,13 +167,13 @@ class UpdateInstaller {
    * @memberof UpdateInstaller
    */
   cleanup() {
-    const fs = require("fs");
-    fs.stat("temp/installer.exe", function(err, stats) {
+    const fs = require('fs');
+    fs.stat('temp/installer.exe', function(err, stats) {
       if (err) {
         return;
       }
 
-      fs.unlink("temp/installer.exe", function(err) {
+      fs.unlink('temp/installer.exe', function(err) {
         if (err) return console.log(err);
       });
     });
