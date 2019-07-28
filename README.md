@@ -1,6 +1,6 @@
 # FreeSO Launcher
 
-![image](https://i.imgur.com/zzkWD8i.png)
+![image](https://i.imgur.com/su4ZDEm.png)
 
 # Installing FreeSO
 To install FreeSO you will also need to install OpenAL, .NET Framework >= 4.0 and the original The Sims Online client. These dependencies are all included in the launcher.
