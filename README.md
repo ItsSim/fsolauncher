@@ -39,4 +39,4 @@ Please note that **COMPLETE INSTALLATION** overrides any installations that may 
 
 To celebrate Simitone's progress, the launcher (since 1.6.0) now features a Simitone installer (latest release from GitHub: https://github.com/riperiperi/Simitone), a TSCC installation locator, and a brand new Simitone launcher theme.
 
-![image](https://i.imgur.com/hHl6Vgo.png)
+![image](https://i.imgur.com/7p9VLBA.png)
