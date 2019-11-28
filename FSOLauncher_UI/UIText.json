@@ -20,7 +20,7 @@
 
     "MODAL_INSTALLER": "Installer",
 
-    "MODAL_INSTALL_UPDATE": "Update available",
+    "MODAL_INSTALL_UPDATE": "Launcher Update",
     "MODAL_INSTALL_UPDATE_DESCR_1": "There is a new version (",
     "MODAL_INSTALL_UPDATE_DESCR_2": ") available to install. Would you like to update?",
     "MODAL_UPDATE": "Update",
@@ -33,7 +33,7 @@
 
     "MODAL_UPDATE_DESCR": "A new update is available to download. Click \"UPDATE\" on the dialog to update.",
 
-    "MODAL_NOT_AVAILABLE": "Unavailable",
+    "MODAL_NOT_AVAILABLE": "Missing requirements",
     "MODAL_NOT_AVAILABLE2": "Hold on!",
 
     "MODAL_UPDATE_CHECK_FAILED": "Failed check",
@@ -45,13 +45,13 @@
     "MODAL_NOT_AVAILABLE_DESCR_1": "You need to install",
     "MODAL_NOT_AVAILABLE_DESCR_2": "before installing this program.",
 
-    "MODAL_INSTALLATION": "Installation",
-    "MODAL_INSTALLATION_DESCR": "This will install OpenAL, .NET Framework, The Sims Online and FreeSO in this order.",
+    "MODAL_INSTALLATION": "Install Now",
+    "MODAL_INSTALLATION_DESCR": "This will install everything you need to get FreeSO up and running.",
 
     "MODAL_START": "Start installation",
     "MODAL_USE_IT": " Yes, use it",
 
-    "MODAL_LATER": "Later",
+    "MODAL_LATER": "Not now",
 
     "MODAL_RUNNING": "FreeSO.exe running",
     "MODAL_RUNNING_DESC": "FreeSO is already running. Close all FreeSO.exe tasks (Check Task Manager).",
@@ -65,7 +65,7 @@
     "MODAL_REINSTALL": "Reinstall?",
     "MODAL_CONTINUE": "Continue",
 
-    "MODAL_NEGATIVE": "Uh oh!",
+    "MODAL_NEGATIVE": "Error",
     "MODAL_NEED_FSOTSO": "You need FreeSO and The Sims Online installed to use this feature. Changes were not saved.",
 
     "MODAL_NEED_FSOTSO_PLAY": "You need FreeSO and The Sims Online installed to launch the game.",
@@ -125,7 +125,7 @@
     "INSTALLER_TSO_DESCR": "The Sims Online Client",
     "INSTALLER_OAL_TITLE": "OpenAL",
     "INSTALLER_OAL_DESCR": "Cross Platform 3D Audio",
-    "INSTALLER_NET_TITLE": ".NET Framework 4.6",
+    "INSTALLER_NET_TITLE": ".NET Framework",
     "INSTALLER_NET_DESCR": "For Microsoft Windows",
 
     "SETTINGS_DESCR": "Personalize your game and launcher",

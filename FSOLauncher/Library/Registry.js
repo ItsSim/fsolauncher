@@ -5,6 +5,24 @@
  * @class Registry
  */
 class Registry {
+  static getOpenALPath() {
+    return "\\SOFTWARE\\OpenAL";
+  }
+  static getFSOPath() {
+    return "\\SOFTWARE\\Rhys Simpson\\FreeSO";
+  }
+  static getTSOPath() {
+    return "\\SOFTWARE\\Maxis\\The Sims Online";
+  }
+  static getNETPath() {
+    return "\\SOFTWARE\\Microsoft\\NET Framework Setup\\NDP";
+  }
+  static getSimitonePath() {
+    return "\\SOFTWARE\\Rhys Simpson\\Simitone";
+  }
+  static getTS1Path() {
+    return "\\SOFTWARE\\Maxis\\The Sims";
+  }
   /**
    * Returns the status of all the required programs (Installed/not installed).
    *
@@ -16,23 +34,16 @@ class Registry {
     return new Promise((resolve, reject) => {
       let Promises = [];
 
-      Promises.push(Registry.get('OpenAL', '\\SOFTWARE\\OpenAL'));
-
-      Promises.push(Registry.get('FSO', '\\SOFTWARE\\Rhys Simpson\\FreeSO'));
-
-      Promises.push(Registry.get('TSO', '\\SOFTWARE\\Maxis\\The Sims Online'));
-
-      Promises.push(
-        Registry.get('NET', '\\SOFTWARE\\Microsoft\\NET Framework Setup\\NDP')
-      );
+      Promises.push(Registry.get('OpenAL', Registry.getOpenALPath()));
+      Promises.push(Registry.get('FSO', Registry.getFSOPath()));
+      Promises.push(Registry.get('TSO', Registry.getTSOPath()));
+      Promises.push(Registry.get('NET', Registry.getNETPath()));
+      Promises.push(Registry.get('Simitone', Registry.getSimitonePath()));
+      Promises.push(Registry.get('TS1', Registry.getTS1Path()));
 
       Promise.all(Promises)
-        .then(a => {
-          resolve(a);
-        })
-        .catch(err => {
-          if (err) reject(err);
-        });
+        .then(a => { resolve(a); })
+        .catch(err => { if (err) reject(err); });
     });
   }
 
@@ -54,18 +65,50 @@ class Registry {
         key: p
       });
 
-      if (e === 'FSO' || e === 'TSO') {
+      if (e === 'FSO' || e === 'TSO' || e === 'Simitone') {
         Key.get('InstallDir', (err, RegistryItem) => {
           if (err) {
-            return resolve({ key: e, isInstalled: false });
+            return resolve({ key: e, isInstalled: false, error: err });
           } else {
             return resolve({ key: e, isInstalled: RegistryItem.value });
+          }
+        });
+      } else if (e === 'TS1') {
+        Key.get('InstallPath', async (err, RegistryItem) => {
+          if (err) {
+            return resolve({
+              key: e,
+              isInstalled: false,
+              error: err
+            });
+          } else {
+            // SIMS_GAME_EDITION = 255 All EPs installed.
+            Key.get('SIMS_GAME_EDITION', (err, RegistryItem) => {
+              if (err) {
+                return reject({
+                  key: e,
+                  isInstalled: false
+                });
+              }
+
+              const TS1Edition = RegistryItem.value;
+              if (TS1Edition == 255) {
+                return resolve({
+                  key: e,
+                  isInstalled: true
+                });
+              }
+              resolve({
+                key: e,
+                isInstalled: false
+              });
+            });
           }
         });
       } else if (e === 'NET') {
         Key.keys((err, Registries) => {
           if (err) {
-            return resolve({ key: e, isInstalled: false });
+            return resolve({ key: e, isInstalled: false, error: err });
           } else {
             for (let i = 0; i < Registries.length; i++) {
               if (
@@ -81,7 +124,7 @@ class Registry {
       } else if (e === 'OpenAL') {
         Key.keyExists((err, exists) => {
           if (err) {
-            return resolve({ key: e, isInstalled: false });
+            return resolve({ key: e, isInstalled: false, error: err });
           } else {
             if (exists) {
               return resolve({ key: e, isInstalled: true });
@@ -147,19 +190,19 @@ class Registry {
 
   /**
    * Creates the *new* default FreeSO Registry Key.
+   * Reused for Simitone, second parameter as "Simitone".
    *
    * @static
    * @param {any} InstallDir Where FreeSO was installed.
    * @returns
    * @memberof Registry
    */
-  static createFreeSOEntry(InstallDir) {
+  static createFreeSOEntry(InstallDir, KeyName = 'FreeSO') {
     return new Promise((resolve, reject) => {
       const Registry = require('winreg');
-
       let Key = new Registry({
         hive: Registry.HKLM,
-        key: '\\SOFTWARE\\Rhys Simpson\\FreeSO'
+        key: '\\SOFTWARE\\Rhys Simpson\\' + KeyName
       });
 
       Key.keyExists((err, exists) => {

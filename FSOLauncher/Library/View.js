@@ -230,6 +230,12 @@ class View {
       this.Window.webContents.send('INSPROG', i);
     } catch (e) {}
   }
+
+  sendSimitoneShouldUpdate(v) {
+    try {
+      this.Window.webContents.send('SIMITONE_SHOULD_UPDATE', v);
+    } catch (e) {}    
+  }
 }
 
 module.exports = View;

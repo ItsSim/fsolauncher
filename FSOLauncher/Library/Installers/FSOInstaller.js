@@ -27,8 +27,8 @@ class FSOInstaller {
     this.id = Math.floor(Date.now() / 1000);
     this.path = path;
     this.haltProgress = false;
-
-    this.dl = new HttpDownload(DOWNLOAD_URL_SERVO, 'temp/artifacts.zip');
+    this.tempPath = `temp/artifacts-freeso-${this.id}.zip`;
+    this.dl = new HttpDownload(DOWNLOAD_URL_SERVO, this.tempPath);
   }
   /**
    * Create/Update the download progress item.
@@ -182,7 +182,7 @@ class FSOInstaller {
 
     return new Promise((resolve, reject) => {
       require('fs')
-        .createReadStream('temp/artifacts.zip')
+        .createReadStream(this.tempPath)
         .pipe(unzipStream)
         .on('entry', entry => {
           this.createProgressItem(
@@ -209,12 +209,9 @@ class FSOInstaller {
    */
   cleanup() {
     const fs = require('fs');
-    fs.stat('temp/artifacts.zip', function(err, stats) {
-      if (err) {
-        return;
-      }
-
-      fs.unlink('temp/artifacts.zip', function(err) {
+    fs.stat(this.tempPath, (err, stats) => {
+      if (err) return console.log(err);
+      fs.unlink(this.tempPath, err => {
         if (err) return console.log(err);
       });
     });
@@ -228,7 +225,10 @@ class FSOInstaller {
    */
   setupDir(dir) {
     return new Promise((resolve, reject) => {
-      require('mkdirp')(dir, resolve);
+      require('mkdirp')(dir, function(err) {
+        if(err) return reject(err);
+        resolve();
+      });
     });
   }
   /**

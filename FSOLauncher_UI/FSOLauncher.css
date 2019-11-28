@@ -317,6 +317,10 @@ div.page p {
   bottom: 0px;
   left: 0px;
   width: 100%;
+ 
+}
+
+#sidebar div.bottom li:last-child {
   border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
 
@@ -528,6 +532,11 @@ button.blue:hover,
 .button.blue:hover {
   background-color: #2daac4;
 }
+
+ /*li:hover i.simitone-icon,
+ li.active i.simitone-icon {
+  filter: opacity(0.5) drop-shadow(0 0 0 rgb(41, 117, 231)) drop-shadow(0 0 0 rgb(41, 117, 231));
+}*/
 
 #downloads div.item  div.tick {
   padding: 10px;

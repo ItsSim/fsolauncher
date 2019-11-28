@@ -23,6 +23,12 @@
   background-position: 99% !important;
 }
 
+/*.turbo li:hover i.simitone-icon,
+.turbo li.active i.simitone-icon {
+  filter: opacity(0.5) drop-shadow(0 0 0 #9844b7) drop-shadow(0 0 0 #9844b7);
+}*/
+
+
 .turbo #logo {
   background-image: url(../../FSOLauncher_Images/logo_turbo.png) !important;
 }

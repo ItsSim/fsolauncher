@@ -10,10 +10,15 @@ class Toast {
    * @param {any} View The Electron Window view.
    * @memberof Toast
    */
-  constructor(Message, View) {
+  constructor(Message, View, timeout = 0) {
     this.id = Math.floor(Date.now() / 1000);
     this.View = View;
     this.show(Message);
+    if(timeout > 0) {
+      setTimeout(() => {
+        this.destroy();
+      }, timeout);
+    }
   }
 
   /**

@@ -634,6 +634,15 @@ class Modal {
       'PLAY_VOLCANIC'
     );
   }
+  static showVolcanicPromptSimitone() {
+    Modal.View.sendModal(
+      global.locale.MODAL_START_VOLCANIC,
+      global.locale.MODAL_START_VOLCANIC_DESC,
+      global.locale.MODAL_START_VOLCANIC_OK,
+      global.locale.MODAL_CANCEL,
+      'PLAY_VOLCANIC_SIMITONE'
+    );
+  }
 
   /**
    * When the launcher could not recover from not

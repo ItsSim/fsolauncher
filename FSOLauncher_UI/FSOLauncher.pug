@@ -12,6 +12,7 @@ html
         link(rel='stylesheet', href='./FSOLauncher_Styles/FSOLauncher_Themes/turbo.css')
         link(rel='stylesheet', href='./FSOLauncher_Styles/FSOLauncher_Themes/dark.css')
         link(rel='stylesheet', href='./FSOLauncher_Styles/FSOLauncher_Themes/halloween.css')
+        link(rel='stylesheet', href='./FSOLauncher_Styles/FSOLauncher_Themes/simitone.css')
     body(rmstr=READ_MORE, rss=RSS_URL)
         #launcher.not-installed
             .hint.arrow-left(hint-page='home', style='top:215px;left:255px')
@@ -28,6 +29,7 @@ html
                 li#logo
                     // class="animated slideInDown"
                     div
+                div#simitone-gradient
                 button.launch #{PLAY}
                 //<div id="ponline">20 people playing</div>
                 li.active(page-trigger='home')
@@ -45,17 +47,18 @@ html
                 li(page-trigger='notifications')
                     i.material-icons.left notifications_none
                     |  NOTIFICATIONS
-
                 //li(page-trigger='help')
                     i.material-icons.left help_outline
                     |  HELP
                 // <li page-trigger="repair"><i class="material-icons left">build</i> REPAIR</li>
 
                 div.bottom
+                    li(page-trigger='simitone')
+                        i.material-icons.left.simitone-icon settings
+                        |  SIMITONE
                     li(page-trigger='about')
                         i.material-icons.left help_outline
                         |  #{ABOUT}
-
             #content
                 //
                   <div id="exit">
@@ -177,6 +180,7 @@ html
                                 span #{SETTINGS_THEME}
                                 select(option-id='Launcher.Theme')
                                     //option(value='halloween') Halloween
+                                    option(value='simitone') Simitone
                                     option(value='open_beta') Open Beta
                                     option(value='turbo') Neon
                                     //<option value="dark">Onyx</option>
@@ -282,5 +286,45 @@ html
                             block faq
                                 strong #{ABOUT_FAQ_5_H1}
                                 p !{ABOUT_FAQ_5_TEXT}.
+                #simitone-page.page(style='display:none')
+                    h1.jumbotron
+                        span PLAY SIMITONE
+                        small The Sims 1 like you've never seen it before.
+                    .page-content(style='padding:20px;')
+                        div#simitone-teaser
+                            button(id='simitone-install-button') DOWNLOAD & INSTALL
+                            button(id='simitone-play-button') LAUNCH SIMITONE
+                        div.simitone-column
+                            h1 What's Simitone?
+                            p <strong class="gradient">Simitone</strong> is an alternative C# Windows Frontend for The Sims 1, based off of FreeSO, which requires a legitimate copy of <strong class="gradient">The Sims Complete Collection</strong> in order to work.
+                        div.simitone-column.simitone-requirements
+                            h1 Game Requirements
+                            ul 
+                                li#ts1cc-indicator
+                                    | <i class="material-icons left"></i> The Sims Complete Collection
+                                li#simitone-indicator
+                                    | <i class="material-icons left"></i> Simitone for Windows 
+                                    br 
+                                    div#simitone-should-update
+                                        | Update Simitone to <span id="simitone-update-version">v8.0.9</span>
+                        div#simitone-ts1cc-error.simitone-box.simitone-error
+                            h2 The Sims Complete Collection is not installed!
+                            p 
+                                | It looks like you don't have <strong>The Sims Complete Colllection</strong> installed, which is needed for Simitone to work.
+                                | Please install a legitimate copy of <strong>The Sims Complete Collection</strong> on your computer.
+                        div.simitone-column
+                            div.simitone-image(style='background-image:url(./FSOLauncher_Images/simitone_teaser.png);')
+                        div.simitone-column
+                            h1 Play The Sims 1 in 3D, 60+ FPS and High Definition
+                            p 
+                                | Experience the Sims game you already know and love in a whole new way, optimized for modern PCs.
+                                | Choose to play in <strong class="gradient">3D</strong> or the more familiar 2D, and enjoy smooth gameplay at <strong class="gradient">high resolution and refresh rates</strong>.
+                        div(style='clear:both')
+                        div.simitone-column
+                            div.simitone-image(style='background-image:url(./FSOLauncher_Images/simitone_3.png);')
+                        div.simitone-column
+                            h1 Improved Custom UI for High Resolution support
+                            p 
+                                | Simitone features a <strong class="gradient">custom user interface</strong> that works at modern resolutions and delivers a fresh look and feel to the game. Work is being made towards a more desktop oriented interface.
         script(src='socket.io.js')
         script(src='client.js')

@@ -82,7 +82,10 @@ class RemeshesInstaller {
 
   setupDir(dir) {
     return new Promise((resolve, reject) => {
-      require('mkdirp')(dir, resolve);
+      require('mkdirp')(dir, function(err) {
+        if(err) return reject(err);
+        resolve();
+      });
     });
   }
 

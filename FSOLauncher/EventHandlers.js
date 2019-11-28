@@ -1,6 +1,6 @@
-const Modal = require("./Library/Modal");
-const Event = require("./Library/Event");
-const Toast = require("./Library/Toast");
+const Modal = require('./Library/Modal');
+const Event = require('./Library/Event');
+const Toast = require('./Library/Toast');
 
 /**
  * Handles all events from the client.
@@ -14,40 +14,57 @@ class EventHandlers {
    * @memberof Events
    */
   defineEvents() {
-    
-    let onInitDOM            = new Event("INIT_DOM");
-    let onInstall            = new Event("INSTALL");
-    let onSetConfiguration   = new Event("SET_CONFIGURATION");
-    let onInstallerRedirect  = new Event("INSTALLER_REDIRECT");
-    let onInstallComponent   = new Event("INSTALL_COMPONENT");
-    let onPlay               = new Event("PLAY");
-    let onFullInstall        = new Event("FULL_INSTALL");
-    let onFullInstallConfirm = new Event("FULL_INSTALL_CONFIRM");
-    let onChangeGamePath     = new Event("CHANGE_GAME_PATH");
-    let onCheckUpdates       = new Event("CHECK_UPDATES");
-    let onInstallUpdate      = new Event("INSTALL_UPDATE");
-    let onPlayVolcanic       = new Event("PLAY_VOLCANIC");
-    let onSocketMessage      = new Event("SOCKET_MESSAGE");
-    let onConsoleLog         = new Event("CONSOLE_LOG");
-    let onFTPTSO             = new Event("FTP_TSO");
-    let onFTPTSOResponse     = new Event("FTP_TSOResponse");
+    let onInitDOM = new Event('INIT_DOM');
+    let onInstall = new Event('INSTALL');
+    let onSetConfiguration = new Event('SET_CONFIGURATION');
+    let onInstallerRedirect = new Event('INSTALLER_REDIRECT');
+    let onInstallComponent = new Event('INSTALL_COMPONENT');
+    let onPlay = new Event('PLAY');
+    let onPlaySimitone = new Event('PLAY_SIMITONE');
+    let onFullInstall = new Event('FULL_INSTALL');
+    let onFullInstallConfirm = new Event('FULL_INSTALL_CONFIRM');
+    let onChangeGamePath = new Event('CHANGE_GAME_PATH');
+    let onCheckUpdates = new Event('CHECK_UPDATES');
+    let onInstallUpdate = new Event('INSTALL_UPDATE');
+    let onPlayVolcanic = new Event('PLAY_VOLCANIC');
+    let onPlayVolcanicSimitone = new Event('PLAY_VOLCANIC_SIMITONE');
+    let onSocketMessage = new Event('SOCKET_MESSAGE');
+    let onConsoleLog = new Event('CONSOLE_LOG');
+    let onFTPTSO = new Event('FTP_TSO');
+    let onFTPTSOResponse = new Event('FTP_TSOResponse');
+    let onCheckSimitoneRequirements = new Event('CHECK_SIMITONE');
+    let onInstallSimitoneUpdate = new Event('INSTALL_SIMITONE_UPDATE');
 
-    onInitDOM           .onFire(this.onInitDOM.bind(this));
-    onSetConfiguration  .onFire(this.onSetConfiguration.bind(this));
-    onInstallerRedirect .onFire(this.onInstallerRedirect.bind(this));
-    onInstallComponent  .onFire(this.onInstallComponent.bind(this));
-    onInstall           .onFire(this.onInstall.bind(this));
-    onPlay              .onFire(this.onPlay.bind(this));
-    onFullInstall       .onFire(this.onFullInstall.bind(this));
+    onInitDOM.onFire(this.onInitDOM.bind(this));
+    onSetConfiguration.onFire(this.onSetConfiguration.bind(this));
+    onInstallerRedirect.onFire(this.onInstallerRedirect.bind(this));
+    onInstallComponent.onFire(this.onInstallComponent.bind(this));
+    onInstall.onFire(this.onInstall.bind(this));
+    onPlay.onFire(this.onPlay.bind(this));
+    onPlaySimitone.onFire(this.onPlaySimitone.bind(this));
+    onFullInstall.onFire(this.onFullInstall.bind(this));
     onFullInstallConfirm.onFire(this.onFullInstallConfirm.bind(this));
-    onChangeGamePath    .onFire(this.onChangeGamePath.bind(this));
-    onCheckUpdates      .onFire(this.onCheckUpdates.bind(this));
-    onInstallUpdate     .onFire(this.onInstallUpdate.bind(this));
-    onPlayVolcanic      .onFire(this.onPlayVolcanic.bind(this));
-    onSocketMessage     .onFire(this.onSocketMessage.bind(this));
-    onConsoleLog        .onFire(this.onConsoleLog.bind(this));
-    onFTPTSO            .onFire(this.onFTPTSO.bind(this));
-    onFTPTSOResponse    .onFire(this.onFTPTSOResponse.bind(this));
+    onChangeGamePath.onFire(this.onChangeGamePath.bind(this));
+    onCheckUpdates.onFire(this.onCheckUpdates.bind(this));
+    onInstallUpdate.onFire(this.onInstallUpdate.bind(this));
+    onPlayVolcanic.onFire(this.onPlayVolcanic.bind(this));
+    onPlayVolcanicSimitone.onFire(this.onPlayVolcanicSimitone.bind(this));
+    onSocketMessage.onFire(this.onSocketMessage.bind(this));
+    onConsoleLog.onFire(this.onConsoleLog.bind(this));
+    onFTPTSO.onFire(this.onFTPTSO.bind(this));
+    onFTPTSOResponse.onFire(this.onFTPTSOResponse.bind(this));
+    onCheckSimitoneRequirements.onFire(this.onCheckSimitoneRequirements.bind(this));
+    onInstallSimitoneUpdate.onFire(this.onInstallSimitoneUpdate.bind(this));
+  }
+
+  onInstallSimitoneUpdate() {
+    this.install('Simitone', {
+      dir: this.isInstalled.Simitone
+    });
+  }
+
+  onCheckSimitoneRequirements() {
+    this.checkSimitoneRequirements();
   }
 
   onFTPTSO() {
@@ -56,10 +73,10 @@ class EventHandlers {
 
   onFTPTSOResponse(e, yes) {
     if (yes) {
-      this.install("TSO", {
+      this.install('TSO', {
         fullInstall: false,
-        tsoInstaller: "WebArchiveFTPInstaller",
-        override: false,
+        tsoInstaller: 'WebArchiveFTPInstaller',
+        override: false
       });
     }
   }
@@ -89,8 +106,8 @@ class EventHandlers {
    * @memberof Events
    */
   onSocketMessage(e, Response) {
-    if (this.conf.Launcher.DesktopNotifications === "1") {
-      Modal.sendNotification("FreeSO Announcement", Response[0], Response[1]);
+    if (this.conf.Launcher.DesktopNotifications === '1') {
+      Modal.sendNotification('FreeSO Announcement', Response[0], Response[1]);
     }
   }
 
@@ -124,7 +141,7 @@ class EventHandlers {
    */
   onInstallerRedirect(e, yes) {
     if (yes) {
-      this.View.changePage("installer");
+      this.View.changePage('installer');
     }
   }
 
@@ -167,6 +184,14 @@ class EventHandlers {
   onPlayVolcanic(e, yes) {
     if (yes) {
       this.launchGame(true);
+    }
+  }
+  onPlaySimitone(e, useVolcanic) {
+    this.play(useVolcanic, true);
+  }
+  onPlayVolcanicSimitone(e, yes) {
+    if (yes) {
+      this.launchGame(true, true);
     }
   }
 
@@ -219,7 +244,7 @@ class EventHandlers {
    */
   onFullInstallConfirm(e, yes) {
     if (yes) {
-      this.addActiveTask("FULL");
+      this.addActiveTask('FULL');
       this.runFullInstaller();
     }
   }

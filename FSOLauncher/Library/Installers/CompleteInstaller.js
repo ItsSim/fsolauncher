@@ -40,6 +40,10 @@ class CompleteInstaller {
       global.locale.INS_OAL_WINDOW,
       10
     );
+
+    if (this.FSOLauncher.isInstalled['OpenAL']) {
+      return Promise.resolve();
+    }
     return this.FSOLauncher.install('OpenAL');
   }
   /**
@@ -55,6 +59,9 @@ class CompleteInstaller {
       global.locale.INS_NET_WINDOW,
       25
     );
+    if (this.FSOLauncher.isInstalled['NET']) {
+      return Promise.resolve();
+    }
     return this.FSOLauncher.install('NET');
   }
   /**

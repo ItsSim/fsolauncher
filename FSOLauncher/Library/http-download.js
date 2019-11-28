@@ -1,5 +1,6 @@
 const EventEmitter = require('events'),
   http = require('follow-redirects').http,
+  https = require('follow-redirects').https,
   fs = require('fs');
 
 class HttpDownload extends EventEmitter {
@@ -19,7 +20,8 @@ class HttpDownload extends EventEmitter {
     this.paused = false;
     this.error = null;
     this.fileStream = fs.createWriteStream(this.target);
-    this.request = http.get(this.source, this.onDownload.bind(this));
+    const httpmodule = this.source.startsWith('https') ? https : http;
+    this.request = httpmodule.get(this.source, this.onDownload.bind(this));
     this.request.on('error', this.onError.bind(this));
   }
 

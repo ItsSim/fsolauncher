@@ -2,9 +2,9 @@ var remote = require('electron').remote;
 
 var Socket = io(
   'http://' +
-    remote.getGlobal('webService') +
+    remote.getGlobal('WEBSERVICE') +
     ':' +
-    remote.getGlobal('sockEndpoint')
+    remote.getGlobal('SOCKET_ENDPOINT')
 );
 
 Socket.on('receive global message', function(data) {
@@ -12,6 +12,8 @@ Socket.on('receive global message', function(data) {
 });
 
 var hasAlreadyLoaded = false;
+var simitoneRequirementsCheckInterval;
+var simitoneSuggestedUpdate;
 
 var Electron = require('electron'),
   ipcRenderer = Electron.ipcRenderer,
@@ -24,6 +26,33 @@ var Electron = require('electron'),
     this.loadRss();
   };
 
+FSOLauncher.prototype.simitoneInstalled = function() {
+  document.getElementById('simitone-page').classList.add('simitone-installed');
+};
+FSOLauncher.prototype.simitoneNotInstalled = function() {
+  document
+    .getElementById('simitone-page')
+    .classList.remove('simitone-installed');
+};
+FSOLauncher.prototype.ts1Installed = function() {
+  document.getElementById('simitone-page').classList.add('ts1cc-installed');
+};
+FSOLauncher.prototype.ts1NotInstalled = function() {
+  document.getElementById('simitone-page').classList.remove('ts1cc-installed');
+};
+FSOLauncher.prototype.simitoneShouldUpdate = function() {
+  document
+    .getElementById('simitone-page')
+    .classList.add('simitone-should-update');
+  document.getElementById(
+    'simitone-update-version'
+  ).innerHTML = simitoneSuggestedUpdate;
+};
+FSOLauncher.prototype.simitoneShouldntUpdate = function() {
+  document
+    .getElementById('simitone-page')
+    .classList.remove('simitone-should-update');
+};
 FSOLauncher.prototype.ago = function(date) {
   var seconds = Math.floor((new Date() - date) / 1000);
   var months = [
@@ -80,7 +109,7 @@ FSOLauncher.prototype.setTheme = function(a) {
   var date = new Date();
   var m = date.getMonth();
   var d = date.getDate();
-  if ((m == 9 && (d >= 30 && d <= 31)) || (m == 10 && d == 1)) {
+  if ((m == 9 && d >= 30 && d <= 31) || (m == 10 && d == 1)) {
     document.querySelector('body').className = 'halloween';
     /*document
       .querySelector(".twitter-timeline")
@@ -94,7 +123,7 @@ FSOLauncher.prototype.setTheme = function(a) {
 };
 FSOLauncher.prototype.removeToast = function(id) {
   var el = document.getElementById(id);
-  el.parentNode.removeChild(el);
+  if (el) el.parentNode.removeChild(el);
 };
 FSOLauncher.prototype.toast = function(id, message) {
   var div = document.createElement('div');
@@ -191,6 +220,18 @@ FSOLauncher.prototype.showHints = function(a) {
   }
 };
 FSOLauncher.prototype.changePage = function(a) {
+  if (a == 'simitone') {
+    FSOLauncher.setTheme('simitone');
+    FSOLauncher.fireEvent('CHECK_SIMITONE');
+    simitoneRequirementsCheckInterval = setInterval(() => {
+      FSOLauncher.fireEvent('CHECK_SIMITONE');
+    }, 15000);
+  } else {
+    if (simitoneRequirementsCheckInterval) {
+      clearInterval(simitoneRequirementsCheckInterval);
+      simitoneRequirementsCheckInterval = null;
+    }
+  }
   for (
     var z = document.querySelectorAll('li[page-trigger]'), x = 0;
     x < z.length;
@@ -416,6 +457,15 @@ FSOLauncher.registerServerEvent('REMESH_INFO', function(a, v) {
       '</span>';
   }
 });
+FSOLauncher.registerServerEvent('SIMITONE_SHOULD_UPDATE', function(a, b) {
+  if (!b) {
+    simitoneSuggestedUpdate = null;
+    FSOLauncher.simitoneShouldntUpdate();
+    return;
+  }
+  simitoneSuggestedUpdate = b;
+  FSOLauncher.simitoneShouldUpdate();
+});
 FSOLauncher.registerServerEvent('NO_INTERNET', function() {
   document.body.className += ' no-internet';
 });
@@ -444,26 +494,37 @@ FSOLauncher.registerServerEvent('CHANGE_PAGE', function(a, b) {
   FSOLauncher.changePage(b);
 });
 FSOLauncher.registerServerEvent('INSPROG', function(a, b) {
-  if(b) {
-    if(b.FSO) {
-      document.querySelector('.item[install=FSO]').className = "item installed"
+  if (b) {
+    if (b.FSO) {
+      document.querySelector('.item[install=FSO]').className = 'item installed';
     } else {
-      document.querySelector('.item[install=FSO]').className = "item"
+      document.querySelector('.item[install=FSO]').className = 'item';
     }
-    if(b.TSO) {
-      document.querySelector('.item[install=TSO]').className = "item installed"
+    if (b.TSO) {
+      document.querySelector('.item[install=TSO]').className = 'item installed';
     } else {
-      document.querySelector('.item[install=TSO]').className = "item"
+      document.querySelector('.item[install=TSO]').className = 'item';
     }
-    if(b.NET) {
-      document.querySelector('.item[install=NET]').className = "item installed"
+    if (b.NET) {
+      document.querySelector('.item[install=NET]').className = 'item installed';
     } else {
-      document.querySelector('.item[install=NET]').className = "item"
+      document.querySelector('.item[install=NET]').className = 'item';
     }
-    if(b.OpenAL) {
-      document.querySelector('.item[install=OpenAL]').className = "item installed"
+    if (b.OpenAL) {
+      document.querySelector('.item[install=OpenAL]').className =
+        'item installed';
     } else {
-      document.querySelector('.item[install=OpenAL]').className = "item"
+      document.querySelector('.item[install=OpenAL]').className = 'item';
+    }
+    if (b.TS1) {
+      FSOLauncher.ts1Installed();
+    } else {
+      FSOLauncher.ts1NotInstalled();
+    }
+    if (b.Simitone) {
+      FSOLauncher.simitoneInstalled();
+    } else {
+      FSOLauncher.simitoneNotInstalled();
     }
   }
 });
@@ -502,14 +563,28 @@ FSOLauncher.registerServerEvent('FULL_INSTALL_PROGRESS_ITEM', function(
 FSOLauncher.registerUIEvent('.launch', 'click', function(a) {
   FSOLauncher.fireEvent('PLAY');
 });
+FSOLauncher.registerUIEvent('#simitone-play-button', 'click', function(a) {
+  FSOLauncher.fireEvent('PLAY_SIMITONE');
+});
 FSOLauncher.registerUIEvent('.launch', 'contextmenu', function(a) {
   FSOLauncher.fireEvent('PLAY', true);
+});
+FSOLauncher.registerUIEvent('#simitone-play-button', 'contextmenu', function(
+  a
+) {
+  FSOLauncher.fireEvent('PLAY_SIMITONE', true);
 });
 FSOLauncher.registerUIEvent('#full-install-button', 'click', function() {
   FSOLauncher.fireEvent('FULL_INSTALL');
 });
 FSOLauncher.registerUIEvent('#update-check', 'click', function() {
   FSOLauncher.fireEvent('CHECK_UPDATES');
+});
+FSOLauncher.registerUIEvent('#simitone-install-button', 'click', function() {
+  FSOLauncher.fireEvent('INSTALL', 'Simitone');
+});
+FSOLauncher.registerUIEvent('#simitone-should-update', 'click', function() {
+  FSOLauncher.fireEvent('INSTALL_SIMITONE_UPDATE');
 });
 FSOLauncher.registerUIEventAll('[option-id]', 'change', function(a, b) {
   var c = a.currentTarget.getAttribute('option-id'),

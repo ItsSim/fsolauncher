@@ -6,18 +6,13 @@ const ini = require('ini');
 const UIText = require('./FSOLauncher_UI/UIText.json');
 const FSOLauncher = require('./FSOLauncher/FSOLauncher');
 
-// Use for hot reload while developing:
-// require("electron-reload")(__dirname, {
-//   electron:
-//     "%APPDATA%\\Roaming\\npm\\node_modules\\electron\\dist",
-// });
-
 process.title = 'FreeSO Launcher';
-global.version = '1.5.6';
-global.webService = '173.212.246.204';
-global.sockEndpoint = '30001';
-global.rmsPkgEndpoint = 'RemeshPackage';
-global.updateEndpoint = 'UpdateCheck';
+
+global.VERSION = '1.6.0';
+global.WEBSERVICE = '173.212.246.204';
+global.SOCKET_ENDPOINT = '30001';
+global.REMESH_ENDPOINT = 'RemeshPackage';
+global.UPDATE_ENDPOINT = 'UpdateCheck';
 
 let Window = null;
 let tray = null;
@@ -29,7 +24,7 @@ global.willQuit = false;
 let code = oslocale.sync().substring(0, 2);
 
 global.locale = UIText.hasOwnProperty(code) ? UIText[code] : UIText['en'];
-global.locale.LVERSION = global.version;
+global.locale.LVERSION = global.VERSION;
 
 require('electron-pug')({ pretty: false }, global.locale);
 
@@ -61,7 +56,7 @@ function CreateWindow() {
   tray = new Tray('beta.ico');
 
   let width = 1100;
-  let height = 675;
+  let height = 665;
 
   options.minWidth = width;
   options.minHeight = height;
@@ -71,9 +66,10 @@ function CreateWindow() {
   options.maximizable = false;
   options.width = width;
   options.height = height;
+  options.useContentSize = true;
   options.show = false;
   options.resizable = false;
-  options.title = 'FreeSO Launcher' /* + global.version*/;
+  options.title = 'FreeSO Launcher' /* + global.VERSION*/;
   options.icon = 'beta.ico';
   options.webPreferences = {
     nodeIntegration: true
@@ -83,7 +79,7 @@ function CreateWindow() {
   Window = new BrowserWindow(options);
 
   Window.setMenu(null);
-  //Window.openDevTools({ mode: "detach" });
+  //Window.openDevTools({ mode: 'detach' });
   Window.loadURL('file://' + __dirname + '/FSOLauncher_UI/FSOLauncher.pug');
 
   launcher = new FSOLauncher(Window, conf);
@@ -109,7 +105,7 @@ function CreateWindow() {
 
   const ContextMenu = Menu.buildFromTemplate(trayTemplate);
 
-  tray.setToolTip('FreeSO Launcher ' + global.version);
+  tray.setToolTip('FreeSO Launcher ' + global.VERSION);
   tray.setContextMenu(ContextMenu);
 
   tray.on('click', () => {
@@ -121,15 +117,18 @@ function CreateWindow() {
   });
 
   Window.once('ready-to-show', () => {
-    launcher.updateInstalledPrograms().then(() => {
-      if (conf.Launcher.DirectLaunch === '1' && launcher.isInstalled.FSO) {
-        launcher.onPlay();
-      } else {
+    launcher
+      .updateInstalledPrograms()
+      .then(() => {
+        if (conf.Launcher.DirectLaunch === '1' && launcher.isInstalled.FSO) {
+          launcher.onPlay();
+        } else {
+          Window.show();
+        }
+      })
+      .catch(err => {
         Window.show();
-      }
-    }).catch(err => {
-      Window.show();
-    })
+      });
   });
 
   Window.on('close', e => {

@@ -30,6 +30,7 @@ class FSOLauncher extends EventHandlers {
     this.remeshInfo = {};
     this.remeshInfo.location = false;
     this.remeshInfo.version = false;
+    this.remoteSimitoneVersion = null;
 
     this.Window.on('minimize', () => {
       if (!this.minimizeReminder) {
@@ -64,9 +65,8 @@ class FSOLauncher extends EventHandlers {
     return new Promise(async (resolve, reject) => {
       let Toast = new ToastComponent(global.locale.TOAST_REGISTRY, this.View);
       try {
-        const Registry = require('./Library/Registry');
-
-        let programs = await Registry.getInstalled();
+        const Registry = require('./Library/Registry'),
+          programs = await Registry.getInstalled();
 
         Toast.destroy();
 
@@ -120,9 +120,38 @@ class FSOLauncher extends EventHandlers {
     return new Promise((resolve, reject) => {
       require('dns').lookup('google.com', err => {
         this.hasInternet = !(err && err.code === 'ENOTFOUND');
-
         return resolve(this.hasInternet);
       });
+    });
+  }
+
+  getSimitoneReleaseInfo() {
+    return new Promise((resolve, reject) => {
+      const https = require('https');
+      const options = {
+        host: 'api.github.com',
+        path: '/repos/riperiperi/Simitone/releases/latest',
+        headers: { 'user-agent': 'node.js' }
+      };
+
+      const request = https.request(options, res => {
+        let data = '';
+
+        res.on('data', chunk => { data += chunk; });
+        res.on('end', () => {
+          try {
+            resolve(JSON.parse(data));
+          } catch (e) { reject(e); }
+        });
+      });
+
+      request.setTimeout(30000, () => {
+        reject(
+          'Timed out while trying to get GitHub release data for Simitone.'
+        );
+      });
+      request.on('error', e => { reject(e); });
+      request.end();
     });
   }
 
@@ -219,6 +248,8 @@ class FSOLauncher extends EventHandlers {
       case 'RMS':
         return 'Remesh Package';
         break;
+      case 'Simitone':
+        return 'Simitone for Windows';
     }
   }
 
@@ -233,8 +264,7 @@ class FSOLauncher extends EventHandlers {
   async editTTSMode(value) {
     const fs = require('fs');
     const ini = require('ini');
-
-    let Toast = new ToastComponent(global.locale.TOAST_TTS_MODE, this.View);
+    const Toast = new ToastComponent(global.locale.TOAST_TTS_MODE, this.View);
 
     this.addActiveTask('CHTTS');
 
@@ -273,22 +303,18 @@ class FSOLauncher extends EventHandlers {
   getRemeshData() {
     return new Promise(async (resolve, reject) => {
       const http = require('http');
-
-      let options = {};
-
-      options.host = global.webService;
-      options.path = '/' + global.rmsPkgEndpoint;
+      const options = {
+        host: global.WEBSERVICE,
+        path: '/' + global.REMESH_ENDPOINT
+      };
 
       const request = http.request(options, res => {
         let data = '';
 
-        res.on('data', chunk => {
-          data += chunk;
-        });
-
+        res.on('data', chunk => { data += chunk; });
         res.on('end', () => {
           try {
-            let j = JSON.parse(data);
+            const j = JSON.parse(data);
             this.remeshInfo.location = j.Location;
             this.remeshInfo.version = j.Version;
             resolve(j);
@@ -298,14 +324,8 @@ class FSOLauncher extends EventHandlers {
         });
       });
 
-      request.setTimeout(30000, () => {
-        reject('Timed out');
-      });
-
-      request.on('error', e => {
-        reject(e);
-      });
-
+      request.setTimeout(30000, () => { reject('Timed out'); });
+      request.on('error', e => { reject(e); });
       request.end();
     });
   }
@@ -320,28 +340,19 @@ class FSOLauncher extends EventHandlers {
     return new Promise(async (resolve, reject) => {
       const http = require('http');
       const os = require('os');
-
-      let options = {};
-
-      options.host = global.webService;
-      options.path =
-        '/' +
-        global.updateEndpoint +
-        '?os=' +
-        os.release() +
-        '&version=' +
-        global.version;
+      const options = {
+        host: global.WEBSERVICE,
+        path: '/' + global.UPDATE_ENDPOINT +
+          '?os=' + os.release() +
+          '&version=' + global.VERSION
+      };
 
       const request = http.request(options, res => {
         let data = '';
-
-        res.on('data', chunk => {
-          data += chunk;
-        });
-
+        res.on('data', chunk => { data += chunk; });
         res.on('end', () => {
           try {
-            let j = JSON.parse(data);
+            const j = JSON.parse(data);
             this.updateLocation = j.Location;
             resolve(j);
           } catch (e) {
@@ -349,25 +360,43 @@ class FSOLauncher extends EventHandlers {
           }
         });
       });
-
-      request.setTimeout(30000, () => {
-        reject('Timed out');
-      });
-
-      request.on('error', e => {
-        reject(e);
-      });
-
+      request.setTimeout(30000, () => { reject('Timed out'); });
+      request.on('error', e => { reject(e); });
       request.end();
     });
   }
 
   async checkRemeshInfo() {
-    let data = await this.getRemeshData();
-
+    const _data = await this.getRemeshData();
     if (this.remeshInfo.version != null) {
       this.View.setRemeshInfo(this.remeshInfo.version);
     }
+  }
+
+  async checkSimitoneRequirements() {
+    const Toast = new ToastComponent(
+      'Checking requirements',
+      this.View,
+      5000
+    );
+    const Registry = require('./Library/Registry');
+    const simitoneStatus = await Registry.get('Simitone', Registry.getSimitonePath());
+    const ts1ccStatus = await Registry.get('TS1', Registry.getTS1Path());
+    let simitoneUpdateStatus = null;
+    if(simitoneStatus.isInstalled) {
+      simitoneUpdateStatus = await this.getSimitoneReleaseInfo();
+      if(this.conf.Game.SimitoneVersion != simitoneUpdateStatus.tag_name) {
+        this.View.sendSimitoneShouldUpdate(simitoneUpdateStatus.tag_name);
+      } else {
+        this.View.sendSimitoneShouldUpdate(false);
+      }
+    } else {
+      this.View.sendSimitoneShouldUpdate(false);
+    }
+    this.isInstalled['Simitone'] = simitoneStatus.isInstalled;
+    this.isInstalled['TS1'] = ts1ccStatus.isInstalled;
+    this.View.sendInstalledPrograms(this.isInstalled);
+    //Toast.destroy();
   }
 
   /**
@@ -511,7 +540,10 @@ class FSOLauncher extends EventHandlers {
     }
 
     if (
-      (Component === 'TSO' || Component === 'FSO' || Component === 'RMS') &&
+      (Component === 'TSO' ||
+        Component === 'FSO' ||
+        Component === 'RMS' ||
+        Component === 'Simitone') &&
       !this.hasInternet
     ) {
       return Modal.showNoInternet();
@@ -557,7 +589,8 @@ class FSOLauncher extends EventHandlers {
     options = {
       fullInstall: false,
       override: false,
-      tsoInstaller: 'FilePlanetInstaller'
+      tsoInstaller: 'FilePlanetInstaller',
+      dir: false
     }
   ) {
     let InstallerInstance;
@@ -587,39 +620,51 @@ class FSOLauncher extends EventHandlers {
 
       case 'TSO':
       case 'FSO':
+      case 'Simitone':
         if (Component == 'TSO') {
           Installer = require('./Library/Installers/FilePlanetInstaller');
-        } else {
+        }
+        if (Component == 'FSO') {
           Installer = require('./Library/Installers/FSOInstaller');
+        }
+        if (Component == 'Simitone') {
+          Installer = require('./Library/Installers/SimitoneInstaller');
         }
 
         return new Promise(async (resolve, reject) => {
           if (!options.override) {
-            const Toast = new ToastComponent(
-              global.locale.TOAST_WAITING,
-              this.View
-            );
+            let InstallDir;
+            if(!options.dir) {
+              const Toast = new ToastComponent(
+                global.locale.TOAST_WAITING,
+                this.View
+              );
+  
+              let folder = await Modal.showChooseDirectory(
+                this.getPrettyName(Component),
+                this.Window
+              );
+              if(folder) {
+                InstallDir = folder[0] + '\\' + this.getPrettyName(Component);
+              }
+              Toast.destroy();
+            } else {
+              InstallDir = options.dir;
+            }
 
-            let folder = await Modal.showChooseDirectory(
-              this.getPrettyName(Component),
-              this.Window
-            );
-
-            Toast.destroy();
-
-            if (folder) {
+            if (InstallDir) {
               InstallerInstance = new Installer(
-                folder[0] + '\\' + this.getPrettyName(Component),
+                InstallDir,
                 this
               );
 
               let isInstalled = await InstallerInstance.isInstalledInPath();
 
-              if (isInstalled && !options.fullInstall) {
+              if (isInstalled && !options.fullInstall && !options.dir) {
                 return Modal.showAlreadyInstalled(
                   this.getPrettyName(Component),
                   Component,
-                  folder[0] + '\\' + this.getPrettyName(Component)
+                  InstallDir
                 );
               }
 
@@ -645,9 +690,15 @@ class FSOLauncher extends EventHandlers {
             const Registry = require('./Library/Registry');
 
             try {
-              Component === 'TSO'
-                ? await Registry.createMaxisEntry(options.override)
-                : await Registry.createFreeSOEntry(options.override);
+              if (Component === 'TSO') {
+                await Registry.createMaxisEntry(options.override);
+              }
+              if (Component === 'FSO') {
+                await Registry.createFreeSOEntry(options.override);
+              }
+              if (Component === 'Simitone') {
+                await Registry.createFreeSOEntry(options.override, 'Simitone');
+              }
 
               resolve();
             } catch (e) {
@@ -912,8 +963,8 @@ class FSOLauncher extends EventHandlers {
    * @returns
    * @memberof FSOLauncher
    */
-  play(useVolcanic) {
-    if (!this.isInstalled.FSO) {
+  play(useVolcanic, isSimitone = false) {
+    if (!this.isInstalled.FSO && !isSimitone) {
       return Modal.showNeedToPlay();
     }
 
@@ -922,32 +973,22 @@ class FSOLauncher extends EventHandlers {
     }
 
     if (useVolcanic) {
+      if (isSimitone) {
+        return Modal.showVolcanicPromptSimitone();
+      }
       return Modal.showVolcanicPrompt();
     }
 
     const fs = require('fs');
 
-    fs.stat(this.isInstalled.FSO + '\\FreeSO.exe', (err, stat) => {
-      if (err === null) {
-        this.launchGame();
-      } else if (err.code === 'ENOENT') {
-        fs.stat(this.isInstalled.FSO + '\\FreeSO.exe.old', (err, stat) => {
-          if (err === null) {
-            fs.rename(
-              this.isInstalled.FSO + '\\FreeSO.exe.old',
-              this.isInstalled.FSO + '\\FreeSO.exe',
-              err => {
-                if (err) return Modal.showCouldNotRecover();
+    let exeLocation = isSimitone
+      ? this.isInstalled.Simitone + '\\Simitone.Windows.exe'
+      : this.isInstalled.FSO + '\\FreeSO.exe';
 
-                this.launchGame();
-                Modal.showRecovered();
-              }
-            );
-          } else if (err.code === 'ENOENT') {
-            Modal.showCouldNotRecover();
-          }
-        });
-      }
+    fs.stat(exeLocation, (err, stat) => {
+      if (err) return Modal.showCouldNotRecover();
+
+      this.launchGame(false, isSimitone);
     });
   }
 
@@ -957,10 +998,17 @@ class FSOLauncher extends EventHandlers {
    * @param {any} useVolcanic If Volcanic.exe should be launched.
    * @memberof FSOLauncher
    */
-  launchGame(useVolcanic) {
-    let file = useVolcanic ? 'Volcanic.exe' : 'FreeSO.exe';
+  launchGame(useVolcanic, isSimitone = false) {
+    let gameExe = isSimitone ? 'Simitone.Windows.exe' : 'FreeSO.exe';
+    let file = useVolcanic ? 'Volcanic.exe' : gameExe;
+    let workingDirectory = isSimitone
+      ? this.isInstalled.Simitone
+      : this.isInstalled.FSO;
 
-    let Toast = new ToastComponent(global.locale.TOAST_LAUNCHING, this.View);
+    let ToastText = isSimitone
+      ? global.locale.TOAST_LAUNCHING.replace('FreeSO', 'Simitone')
+      : global.locale.TOAST_LAUNCHING;
+    let Toast = new ToastComponent(ToastText, this.View);
 
     require('child_process').exec(
       file +
@@ -975,7 +1023,7 @@ class FSOLauncher extends EventHandlers {
           ? ' -3d'
           : ''),
       {
-        cwd: this.isInstalled.FSO
+        cwd: workingDirectory
       }
     );
 
