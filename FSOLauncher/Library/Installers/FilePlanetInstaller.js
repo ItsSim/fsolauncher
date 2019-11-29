@@ -89,8 +89,7 @@ class FilePlanetInstaller {
   }
 
   step5() {
-    // patch
-    //console.log("step5");
+    // patch 1239toNI
     this.createProgressItem('Patching The Sims Online, please wait...', 100);
     return new Promise((resolve, reject) => {
       let child = require('child_process').exec(
@@ -101,9 +100,13 @@ class FilePlanetInstaller {
       );
 
       child.on('close', code => {
-        return code == 1
-          ? reject('Error while patching The Sims Online.')
-          : resolve();
+        // make it not care if it fails. FreeSO can patch this on its own.
+        // got reports that this was showing up as an error to some, making it impossible to finish
+        // installing, when it doesn't even matter.
+        //return code == 1
+        //  ? reject('Error while patching The Sims Online.')
+        //  : resolve();
+        resolve();
       });
 
       child.stderr.on('data', data => {
@@ -114,7 +117,6 @@ class FilePlanetInstaller {
 
   step6() {
     // registry
-    //console.log("step6");
     return require('../Registry').createMaxisEntry(this.path);
   }
 
@@ -170,7 +172,6 @@ class FilePlanetInstaller {
         });
 
       unzipStream.on('error', err => {
-        //this.cleanup();
         return reject(err);
       });
 

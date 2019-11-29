@@ -64,7 +64,9 @@ class SimitoneInstaller {
   async step1() {
     const simitoneReleaseData = await this.FSOLauncher.getSimitoneReleaseInfo();
 
-    this.simitoneVersion = simitoneReleaseData.tag_name;
+    if(simitoneReleaseData.tag_name !== undefined) {
+      this.simitoneVersion = simitoneReleaseData.tag_name;
+    }
 
     return Promise.resolve();
   }

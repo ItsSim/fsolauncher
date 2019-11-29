@@ -225,7 +225,7 @@ FSOLauncher.prototype.changePage = function(a) {
     FSOLauncher.fireEvent('CHECK_SIMITONE');
     simitoneRequirementsCheckInterval = setInterval(() => {
       FSOLauncher.fireEvent('CHECK_SIMITONE');
-    }, 15000);
+    }, 60000);
   } else {
     if (simitoneRequirementsCheckInterval) {
       clearInterval(simitoneRequirementsCheckInterval);
