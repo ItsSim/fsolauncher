@@ -8,7 +8,7 @@ const FSOLauncher = require('./FSOLauncher/FSOLauncher');
 
 process.title = 'FreeSO Launcher';
 
-global.VERSION = '1.6.0';
+global.VERSION = '1.6.1';
 global.WEBSERVICE = '173.212.246.204';
 global.SOCKET_ENDPOINT = '30001';
 global.REMESH_ENDPOINT = 'RemeshPackage';

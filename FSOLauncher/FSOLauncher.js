@@ -427,7 +427,7 @@ class FSOLauncher extends EventHandlers {
 
         Toast.destroy();
 
-        if (data.Version !== global.version) {
+        if (data.Version !== global.VERSION) {
           if (
             this.lastUpdateNotification !== data.Version &&
             !this.Window.isVisible()
