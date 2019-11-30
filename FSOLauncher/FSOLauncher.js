@@ -1019,15 +1019,16 @@ class FSOLauncher extends EventHandlers {
       ? this.conf.Game.GraphicsMode : 'ogl';
     args.push(`-${graphicsMode}`);
     // 3d is forced off when in SW
-    const arg3d = (
-      this.conf.Game['3DMode'] === '1' &&
-      this.conf.Game.GraphicsMode != 'sw'
-    ) ? '-3d' : '';
-    args.push(arg3d);
+    if(this.conf.Game['3DMode'] === '1' && (this.conf.Game.GraphicsMode != 'sw' || isSimitone)) {
+      args.push('-3d');
+    }
     if(isSimitone && useVolcanic) {
       // w Simitone you need to launch Simitone.Windows.exe with the -ide flag
       args.push('-ide');
       file = 'Simitone.Windows.exe';
+    }
+    if(isSimitone && this.conf.Game.SimitoneAA === '1') {
+      args.push('-aa');
     }
 
     require('child_process').exec(file + ' ' + args.join(' '), { cwd });

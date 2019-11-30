@@ -200,14 +200,14 @@ html
                                     option(value='dx') DirectX
                                     option(value='sw') Software
                                 small
-                                    | #{SETTINGS_GM_HINT}
+                                    | #{SETTINGS_GM_HINT} Applies to FreeSO and Simitone.
                             div
                                 span #{TD_MODE}
                                 select(option-id='Game.3DMode')
                                     option(value='0') #{SETTINGS_DISABLED}
                                     option(value='1') #{SETTINGS_ENABLED}
                                 small
-                                    | #{TD_MODE_HINT}
+                                    | #{TD_MODE_HINT} Applies to FreeSO and Simitone.
                             div
                                 span #{SETTINGS_LANG}
                                 select(option-id='Game.Language')
@@ -216,6 +216,15 @@ html
                                     //option(value='pt') Português
                                     option(value='it') Italiano
                                 small #{SETTINGS_LANG_HINT}
+                        div(style='clear:both')
+                        .form
+                            h1 Simitone Settings
+                            div
+                                span Anti-Aliasing
+                                select(option-id='Game.SimitoneAA')
+                                    option(value='0') Disabled
+                                    option(value='1') Enabled
+                                small Enables anti-aliasing for in-game objects and structures.
                             //div.notice(style='border-radius:6px;font-size:14px;')
                                 span(style='color:#fff') More languages coming soon...
                             //div

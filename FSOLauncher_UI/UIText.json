@@ -130,8 +130,8 @@
 
     "SETTINGS_DESCR": "Personalize your game and launcher",
     "SETTINGS_LAUNCHER_H1": "Launcher Settings",
-    "SETTINGS_DL": "Direct Launch",
-    "SETTINGS_DL_HINT": "The launcher will run the game automatically without showing the actual launcher (the icon will be in the tray).",
+    "SETTINGS_DL": "Launch FreeSO on Startup",
+    "SETTINGS_DL_HINT": "When enabled, the launcher will run FreeSO on startup and then stay put in the icon tray.",
     "SETTINGS_ENABLED": "Enabled",
     "SETTINGS_DISABLED": "Disabled",
     "SETTINGS_AU": "Auto-Download updates",
