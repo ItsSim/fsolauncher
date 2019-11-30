@@ -118,7 +118,7 @@ class UpdateInstaller {
     return new Promise((resolve, reject) => {
       this.dl.run();
       this.dl.on('error', () => {});
-      this.dl.on('end', fileName => {
+      this.dl.on('end', _fileName => {
         if (this.dl.failed) {
           this.cleanup();
           return reject(
@@ -168,7 +168,7 @@ class UpdateInstaller {
    */
   cleanup() {
     const fs = require('fs');
-    fs.stat('temp/installer.exe', function(err, stats) {
+    fs.stat('temp/installer.exe', function(err, _stats) {
       if (err) {
         return;
       }

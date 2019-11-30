@@ -91,7 +91,7 @@ class FilePlanetInstaller {
   step5() {
     // patch 1239toNI
     this.createProgressItem('Patching The Sims Online, please wait...', 100);
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       let child = require('child_process').exec(
         'TSOVersionPatcherF.exe 1239toNI.tsop "' + this.path + '"',
         {
@@ -99,7 +99,7 @@ class FilePlanetInstaller {
         }
       );
 
-      child.on('close', code => {
+      child.on('close', _code => {
         // make it not care if it fails. FreeSO can patch this on its own.
         // got reports that this was showing up as an error to some, making it impossible to finish
         // installing, when it doesn't even matter.
@@ -130,7 +130,7 @@ class FilePlanetInstaller {
     return new Promise((resolve, reject) => {
       this.dl.run();
       this.dl.on('error', () => {});
-      this.dl.on('end', fileName => {
+      this.dl.on('end', _fileName => {
         this.haltProgress = true;
 
         if (this.dl.failed) {
@@ -175,7 +175,7 @@ class FilePlanetInstaller {
         return reject(err);
       });
 
-      unzipStream.on('close', err => {
+      unzipStream.on('close', _err => {
         this.cleanup();
         return resolve();
       });
@@ -206,7 +206,7 @@ class FilePlanetInstaller {
 
   cleanup() {
     const fs = require('fs');
-    fs.stat('temp/' + FILENAME, function(err, stats) {
+    fs.stat('temp/' + FILENAME, function(err, _stats) {
       if (err) {
         return;
       }
@@ -216,7 +216,7 @@ class FilePlanetInstaller {
       });
     });
 
-    fs.stat('temp/TSO_Installer_v1.1239.1.0', function(err, stats) {
+    fs.stat('temp/TSO_Installer_v1.1239.1.0', function(err, _stats) {
       if (err) {
         return;
       }
@@ -242,8 +242,8 @@ class FilePlanetInstaller {
     });
   }
 
-  isInstalledInPath(after) {
-    return new Promise((resolve, reject) => {
+  isInstalledInPath(_after) {
+    return new Promise((resolve, _reject) => {
       require('fs').stat(this.path + '\\TSOClient\\TSOClient.exe', err => {
         resolve(err === null);
       });

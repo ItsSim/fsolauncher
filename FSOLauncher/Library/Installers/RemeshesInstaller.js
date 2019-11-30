@@ -2,27 +2,28 @@ const Modal = require('../Modal');
 const HttpDownload = require('../http-download');
 
 class RemeshesInstaller {
-  constructor(path, FSOLauncher) {
+  constructor(path, FSOLauncher, parentComponent = "FreeSO") {
     this.FSOLauncher = FSOLauncher;
     this.id = Math.floor(Date.now() / 1000);
     this.path = path;
     this.haltProgress = false;
-
+    this.tempPath = `temp/artifacts-remeshes-${this.id}.zip`;
+    this.parentComponent = parentComponent;
     const location = FSOLauncher.remeshInfo.location
       ? FSOLauncher.remeshInfo.location
       : 'http://beta.freeso.org/remeshes.docx';
 
     this.dl = new HttpDownload(
       location,
-      'temp/remeshes.zip'
+      this.tempPath
     );
   }
 
   createProgressItem(Message, Percentage) {
     this.FSOLauncher.View.addProgressItem(
       'FSOProgressItem' + this.id,
-      'Remesh Pack Download',
-      'Downloading from ' + this.FSOLauncher.remeshInfo.location,
+      'Remesh Pack Download for ' + this.parentComponent,
+      'Installing in ' + this.path,
       Message,
       Percentage
     );
@@ -69,7 +70,7 @@ class RemeshesInstaller {
     return new Promise((resolve, reject) => {
       this.dl.run();
       this.dl.on('error', () => {});
-      this.dl.on('end', fileName => {
+      this.dl.on('end', _fileName => {
         if (this.dl.failed) {
           this.cleanup();
           return reject(global.locale.FSO_NETWORK_ERROR);
@@ -111,22 +112,17 @@ class RemeshesInstaller {
             p
           );
         }
-
         return this.updateDownloadProgress();
       }
     }, 1000);
   }
 
   extract() {
-    const unzipStream = require('node-unzip-2').Extract({
-      path: this.path
-    });
-
+    const unzipStream = require('node-unzip-2').Extract({ path: this.path });
     this.createProgressItem(global.locale.EXTRACTING_CLIENT_FILES, 100);
-
     return new Promise((resolve, reject) => {
       require('fs')
-        .createReadStream('temp/remeshes.zip')
+        .createReadStream(this.tempPath)
         .pipe(unzipStream)
         .on('entry', entry => {
           this.createProgressItem(
@@ -134,13 +130,8 @@ class RemeshesInstaller {
             100
           );
         });
-
-      unzipStream.on('error', err => {
-        //this.cleanup();
-        return reject(err);
-      });
-
-      unzipStream.on('close', err => {
+      unzipStream.on('error', err => { return reject(err); });
+      unzipStream.on('close', _err => {
         this.cleanup();
         return resolve();
       });
@@ -149,12 +140,9 @@ class RemeshesInstaller {
 
   cleanup() {
     const fs = require('fs');
-    fs.stat('temp/remeshes.zip', function(err, stats) {
-      if (err) {
-        return;
-      }
-
-      fs.unlink('temp/remeshes.zip', function(err) {
+    fs.stat(this.tempPath, (err, _stats) => {
+      if (err) { return; }
+      fs.unlink(this.tempPath, function(err) {
         if (err) return console.log(err);
       });
     });

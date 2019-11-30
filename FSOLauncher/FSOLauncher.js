@@ -62,8 +62,9 @@ class FSOLauncher extends EventHandlers {
    * @memberof FSOLauncher
    */
   updateInstalledPrograms() {
+    // eslint-disable-next-line no-async-promise-executor
     return new Promise(async (resolve, reject) => {
-      let Toast = new ToastComponent(global.locale.TOAST_REGISTRY, this.View);
+      const Toast = new ToastComponent(global.locale.TOAST_REGISTRY, this.View);
       try {
         const Registry = require('./Library/Registry'),
           programs = await Registry.getInstalled();
@@ -75,7 +76,7 @@ class FSOLauncher extends EventHandlers {
         }
         this.View.sendInstalledPrograms(this.isInstalled);
         resolve();
-      } catch (e) {
+      } catch (err) {
         Toast.destroy();
         reject(err);
       }
@@ -117,7 +118,7 @@ class FSOLauncher extends EventHandlers {
    * @memberof FSOLauncher
    */
   getInternetStatus() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       require('dns').lookup('google.com', err => {
         this.hasInternet = !(err && err.code === 'ENOTFOUND');
         return resolve(this.hasInternet);
@@ -161,7 +162,7 @@ class FSOLauncher extends EventHandlers {
    * @param {any} init
    * @memberof FSOLauncher
    */
-  async updateNetRequiredUI(init) {
+  async updateNetRequiredUI(_init) {
     let hasInternet = await this.getInternetStatus();
 
     if (!hasInternet) {
@@ -235,19 +236,14 @@ class FSOLauncher extends EventHandlers {
     switch (Component) {
       case 'TSO':
         return 'The Sims Online';
-        break;
       case 'FSO':
         return 'FreeSO';
-        break;
       case 'OpenAL':
         return 'OpenAL';
-        break;
       case 'NET':
         return '.NET Framework';
-        break;
       case 'RMS':
         return 'Remesh Package';
-        break;
       case 'Simitone':
         return 'Simitone for Windows';
     }
@@ -301,7 +297,7 @@ class FSOLauncher extends EventHandlers {
   }
 
   getRemeshData() {
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
       const http = require('http');
       const options = {
         host: global.WEBSERVICE,
@@ -337,7 +333,7 @@ class FSOLauncher extends EventHandlers {
    * @memberof FSOLauncher
    */
   getLauncherData() {
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
       const http = require('http');
       const os = require('os');
       const options = {
@@ -367,17 +363,15 @@ class FSOLauncher extends EventHandlers {
   }
 
   async checkRemeshInfo() {
-    const _data = await this.getRemeshData();
+    await this.getRemeshData();
     if (this.remeshInfo.version != null) {
       this.View.setRemeshInfo(this.remeshInfo.version);
     }
   }
 
   async checkSimitoneRequirements() {
-    const Toast = new ToastComponent(
-      'Checking requirements',
-      this.View,
-      5000
+    new ToastComponent(
+      'Checking requirements', this.View, 1500
     );
     const Registry = require('./Library/Registry');
     const simitoneStatus = await Registry.get('Simitone', Registry.getSimitonePath());
@@ -558,7 +552,7 @@ class FSOLauncher extends EventHandlers {
     } else {
       if (Component == 'RMS') {
         if (this.remeshInfo.version == null) {
-          let data = await this.getRemeshData();
+          await this.getRemeshData();
           if (this.remeshInfo.version == null) {
             return Modal.showNoRemesh();
           } else {
@@ -595,6 +589,7 @@ class FSOLauncher extends EventHandlers {
   ) {
     let InstallerInstance;
     let Installer;
+    let Executable;
 
     this.addActiveTask(Component);
 
@@ -603,15 +598,22 @@ class FSOLauncher extends EventHandlers {
         Installer = require('./Library/Installers/RemeshesInstaller');
 
         InstallerInstance = new Installer(
-          this.isInstalled.FSO + '\\Content\\MeshReplace',
-          this
+          this.isInstalled.FSO + '\\Content\\MeshReplace', this
         );
 
         this.View.changePage('downloads');
 
+        // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve, reject) => {
           try {
             await InstallerInstance.install();
+            if(this.isInstalled.Simitone) {
+              const SimitoneInstallerInstance = new Installer(
+                this.isInstalled.Simitone + '\\Content\\MeshReplace', this,
+                "Simitone"
+              );
+              await SimitoneInstallerInstance.install();
+            }
             resolve();
           } catch (e) {
             reject(e);
@@ -631,6 +633,7 @@ class FSOLauncher extends EventHandlers {
           Installer = require('./Library/Installers/SimitoneInstaller');
         }
 
+        // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve, reject) => {
           if (!options.override) {
             let InstallDir;
@@ -708,8 +711,9 @@ class FSOLauncher extends EventHandlers {
         });
       case 'OpenAL':
       case 'NET':
-        const Executable = require('./Library/Installers/ExecutableInstaller');
+        Executable = require('./Library/Installers/ExecutableInstaller');
 
+        // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve, reject) => {
           let file =
             Component === 'NET' ? 'NDP46-KB3045560-Web.exe' : 'oalinst.exe';
@@ -765,7 +769,7 @@ class FSOLauncher extends EventHandlers {
 
     fs.remove(
       this.isInstalled.FSO + '\\Content\\Patch\\User\\translations',
-      async error => {
+      async _error => {
         fs.copy(
           path.join(
             __dirname,
@@ -885,8 +889,6 @@ class FSOLauncher extends EventHandlers {
    */
   disableSoftwareMode() {
     const fs = require('fs-extra');
-    const path = require('path');
-
     this.addActiveTask('CHSWM');
 
     let Toast = new ToastComponent('Disabling Software Mode...', this.View);
@@ -919,16 +921,12 @@ class FSOLauncher extends EventHandlers {
    */
   enableSoftwareMode() {
     const fs = require('fs-extra');
-    const path = require('path');
-
     this.addActiveTask('CHSWM');
 
     let Toast = new ToastComponent('Enabling Software Mode...', this.View);
 
     return new Promise((resolve, reject) => {
-      fs.copy(
-        'bin/dxtn.dll',
-        this.isInstalled.FSO + '\\dxtn.dll',
+      fs.copy('bin/dxtn.dll', this.isInstalled.FSO + '\\dxtn.dll',
         async error => {
           if (error) {
             Toast.destroy();
@@ -936,9 +934,7 @@ class FSOLauncher extends EventHandlers {
             return this.removeActiveTask('CHSWM');
           }
 
-          fs.copy(
-            'bin/opengl32.dll',
-            this.isInstalled.FSO + '\\opengl32.dll',
+          fs.copy('bin/opengl32.dll', this.isInstalled.FSO + '\\opengl32.dll',
             async error => {
               if (error) {
                 Toast.destroy();
@@ -985,7 +981,7 @@ class FSOLauncher extends EventHandlers {
       ? this.isInstalled.Simitone + '\\Simitone.Windows.exe'
       : this.isInstalled.FSO + '\\FreeSO.exe';
 
-    fs.stat(exeLocation, (err, stat) => {
+    fs.stat(exeLocation, (err, _stat) => {
       if (err) return Modal.showCouldNotRecover();
 
       this.launchGame(false, isSimitone);
@@ -999,37 +995,43 @@ class FSOLauncher extends EventHandlers {
    * @memberof FSOLauncher
    */
   launchGame(useVolcanic, isSimitone = false) {
-    let gameExe = isSimitone ? 'Simitone.Windows.exe' : 'FreeSO.exe';
-    let file = useVolcanic ? 'Volcanic.exe' : gameExe;
-    let workingDirectory = isSimitone
+    const gameFilename = isSimitone ? 'Simitone.Windows.exe' : 'FreeSO.exe';
+    let file = useVolcanic ? 'Volcanic.exe' : gameFilename;
+    const cwd = isSimitone
       ? this.isInstalled.Simitone
       : this.isInstalled.FSO;
 
-    let ToastText = isSimitone
+    const ToastText = isSimitone
       ? global.locale.TOAST_LAUNCHING.replace('FreeSO', 'Simitone')
       : global.locale.TOAST_LAUNCHING;
-    let Toast = new ToastComponent(ToastText, this.View);
+    const Toast = new ToastComponent(ToastText, this.View);
+    const args = [];
 
-    require('child_process').exec(
-      file +
-        ' w -lang' +
-        this.getLangCode(this.conf.Game.Language) +
-        ' -' +
-        (this.conf.Game.GraphicsMode != 'sw'
-          ? this.conf.Game.GraphicsMode
-          : 'ogl') +
-        (this.conf.Game['3DMode'] === '1' &&
-        this.conf.Game['GraphicsMode'] != 'sw'
-          ? ' -3d'
-          : ''),
-      {
-        cwd: workingDirectory
-      }
-    );
+    // windowed by default
+    args.push('w');
+    // game language, by default english
+    if(!isSimitone) {
+      // for now disable this for Simitone
+      args.push(`-lang${this.getLangCode(this.conf.Game.Language)}`);
+    }
+    // SW only allows ogl
+    const graphicsMode = this.conf.Game.GraphicsMode != 'sw'
+      ? this.conf.Game.GraphicsMode : 'ogl';
+    args.push(`-${graphicsMode}`);
+    // 3d is forced off when in SW
+    const arg3d = (
+      this.conf.Game['3DMode'] === '1' &&
+      this.conf.Game.GraphicsMode != 'sw'
+    ) ? '-3d' : '';
+    args.push(arg3d);
+    if(isSimitone && useVolcanic) {
+      // w Simitone you need to launch Simitone.Windows.exe with the -ide flag
+      args.push('-ide');
+      file = 'Simitone.Windows.exe';
+    }
 
-    setTimeout(() => {
-      Toast.destroy();
-    }, 4000);
+    require('child_process').exec(file + ' ' + args.join(' '), { cwd });
+    setTimeout(() => { Toast.destroy(); }, 4000);
   }
 
   /**
@@ -1125,17 +1127,13 @@ class FSOLauncher extends EventHandlers {
    * @param {any} showToast Display a toast while it is saving.
    * @memberof FSOLauncher
    */
-  persist(showToast) {
+  persist(_showToast) {
     const Toast = new ToastComponent(global.locale.TOAST_SETTINGS, this.View);
 
     require('fs').writeFile(
       'FSOLauncher.ini',
       require('ini').stringify(this.conf),
-      err => {
-        setTimeout(() => {
-          Toast.destroy();
-        }, 1500);
-      }
+      _err => { setTimeout(() => { Toast.destroy(); }, 1500); }
     );
   }
 }

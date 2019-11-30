@@ -74,7 +74,7 @@ class Registry {
           }
         });
       } else if (e === 'TS1') {
-        Key.get('InstallPath', async (err, RegistryItem) => {
+        Key.get('InstallPath', async (err, _RegistryItem) => {
           if (err) {
             return resolve({
               key: e,

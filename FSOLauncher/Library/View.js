@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 /**
  * Handles all the server => client communication.
  *

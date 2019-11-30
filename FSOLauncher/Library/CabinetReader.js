@@ -1,3 +1,7 @@
+/* eslint-disable no-prototype-builtins */
+/* eslint-disable no-useless-escape */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-empty */
 const fs = require('fs');
 
 var JSZip = function(f, l) {
@@ -1530,7 +1534,7 @@ class CabinetReader {
    * @returns
    * @memberof CabinetReader
    */
-  static MSZipDecomp(data, uncompSize) {
+  static MSZipDecomp(data, _uncompSize) {
     if (!(data[0] === 0x43 && data[1] === 0x4b)) console.log('MSZIP fail');
     const temp = JSZip.compressions['DEFLATE'].uncompress(data.subarray(2));
     const buf = new ArrayBuffer(temp.length);

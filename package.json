@@ -1,6 +1,6 @@
 {
   "name": "fsolauncher",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "description": "Install, play, and configure FreeSO easily",
   "main": "main.js",
   "scripts": {
@@ -15,7 +15,8 @@
   ],
   "author": "FreeSO.org",
   "devDependencies": {
-    "electron-reload": "^1.5.0"
+    "electron-reload": "^1.5.0",
+    "eslint": "^6.7.1"
   },
   "dependencies": {
     "cloudscraper": "^1.5.1",

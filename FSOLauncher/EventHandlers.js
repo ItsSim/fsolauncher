@@ -1,7 +1,5 @@
-const Modal = require('./Library/Modal');
-const Event = require('./Library/Event');
-const Toast = require('./Library/Toast');
-
+const Modal = require('./Library/Modal'),
+  Event = require('./Library/Event');
 /**
  * Handles all events from the client.
  *

@@ -168,7 +168,7 @@ class SimitoneInstaller {
     return new Promise((resolve, reject) => {
       this.dl.run();
       this.dl.on('error', () => {});
-      this.dl.on('end', fileName => {
+      this.dl.on('end', _fileName => {
         if (this.dl.failed) {
           this.cleanup();
           return reject(global.locale.FSO_NETWORK_ERROR);
@@ -209,7 +209,7 @@ class SimitoneInstaller {
         return reject(err);
       });
 
-      unzipStream.on('close', err => {
+      unzipStream.on('close', _err => {
         this.cleanup();
         return resolve();
       });
@@ -222,7 +222,7 @@ class SimitoneInstaller {
    */
   cleanup() {
     const fs = require('fs');
-    fs.stat(this.tempPath, (err, stats) => {
+    fs.stat(this.tempPath, (err, _stats) => {
       if (err) return console.log(err);
       fs.unlink(this.tempPath, err => {
         if (err) return console.log(err);
@@ -275,7 +275,7 @@ class SimitoneInstaller {
    * @memberof FSOInstaller
    */
   isInstalledInPath() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       require('fs').stat(this.path + '\\Simitone.Windows.exe', err => {
         resolve(err == null);
       });

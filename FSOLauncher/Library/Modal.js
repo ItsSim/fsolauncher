@@ -215,7 +215,7 @@ class Modal {
    * @memberof Modal
    */
   static showChooseDirectory(ComponentName, Window) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       require('fs').stat('C:\\Program Files', (err, stats) => {
         let defaultPath =
           !err && stats.isDirectory() ? 'C:\\Program Files' : null;
@@ -228,9 +228,7 @@ class Modal {
             defaultPath: defaultPath,
             buttonLabel: global.locale.MODAL_INSTALL_FOLDER
           },
-          folder => {
-            resolve(folder);
-          }
+          folder => { resolve(folder); }
         );
       });
     });

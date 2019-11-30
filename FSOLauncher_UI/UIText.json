@@ -143,7 +143,7 @@
     "SETTINGS_DN_HINT": "Enable live desktop notifications sent by FreeSO Staff about events and special news.",
     "SETTINGS_GAME_H1": "In-Game Settings",
     "SETTINGS_GM": "Graphics Mode",
-    "SETTINGS_GM_HINT": "If your computer has low specifications, DirectX will help. If not, always use OpenGL.",
+    "SETTINGS_GM_HINT": "DirectX usually results in better overall performance.",
     "SETTINGS_LANG": "In-game language",
     "SETTINGS_LANG_HINT": "Choose the language for your game. More languages available soon.",
     "SETTINGS_TTS": "Text To Speech",

@@ -1,5 +1,5 @@
+/* global io */
 var remote = require('electron').remote;
-
 var Socket = io(
   'http://' +
     remote.getGlobal('WEBSERVICE') +
@@ -19,7 +19,6 @@ var Electron = require('electron'),
   ipcRenderer = Electron.ipcRenderer,
   rss = require('rss-parser'),
   cloudscraper = require('cloudscraper'),
-  shell = Electron.shell,
   FSOLauncher = function() {
     this.fireEvent('INIT_DOM');
     this.changePage('home');
@@ -69,6 +68,9 @@ FSOLauncher.prototype.ago = function(date) {
     'November',
     'December'
   ];
+  var minutes;
+  var hours;
+  var days;
   if (seconds < 5) {
     return 'just now';
   } else if (seconds < 60) {
@@ -111,14 +113,8 @@ FSOLauncher.prototype.setTheme = function(a) {
   var d = date.getDate();
   if ((m == 9 && d >= 30 && d <= 31) || (m == 10 && d == 1)) {
     document.querySelector('body').className = 'halloween';
-    /*document
-      .querySelector(".twitter-timeline")
-      .setAttribute("data-theme", "dark");*/
   } else {
     document.querySelector('body').className = a;
-    /*document
-      .querySelector(".twitter-timeline")
-      .setAttribute("data-theme", "light");*/
   }
 };
 FSOLauncher.prototype.removeToast = function(id) {
@@ -252,8 +248,8 @@ FSOLauncher.prototype.changePage = function(a) {
   this.showHints(a);
 };
 FSOLauncher.prototype.restoreConfiguration = function(a) {
-  for (Section in a)
-    for (Item in a[Section]) {
+  for (var Section in a)
+    for (var Item in a[Section]) {
       var b = document.querySelector(
         '[option-id="' + Section + '.' + Item + '"'
       );
@@ -560,17 +556,17 @@ FSOLauncher.registerServerEvent('FULL_INSTALL_PROGRESS_ITEM', function(
 ) {
   FSOLauncher.updateFullInstallProgressItem(b, c, e, f);
 });
-FSOLauncher.registerUIEvent('.launch', 'click', function(a) {
+FSOLauncher.registerUIEvent('.launch', 'click', function(_a) {
   FSOLauncher.fireEvent('PLAY');
 });
-FSOLauncher.registerUIEvent('#simitone-play-button', 'click', function(a) {
+FSOLauncher.registerUIEvent('#simitone-play-button', 'click', function(_a) {
   FSOLauncher.fireEvent('PLAY_SIMITONE');
 });
-FSOLauncher.registerUIEvent('.launch', 'contextmenu', function(a) {
+FSOLauncher.registerUIEvent('.launch', 'contextmenu', function(_a) {
   FSOLauncher.fireEvent('PLAY', true);
 });
 FSOLauncher.registerUIEvent('#simitone-play-button', 'contextmenu', function(
-  a
+  _a
 ) {
   FSOLauncher.fireEvent('PLAY_SIMITONE', true);
 });
@@ -586,7 +582,7 @@ FSOLauncher.registerUIEvent('#simitone-install-button', 'click', function() {
 FSOLauncher.registerUIEvent('#simitone-should-update', 'click', function() {
   FSOLauncher.fireEvent('INSTALL_SIMITONE_UPDATE');
 });
-FSOLauncher.registerUIEventAll('[option-id]', 'change', function(a, b) {
+FSOLauncher.registerUIEventAll('[option-id]', 'change', function(a, _b) {
   var c = a.currentTarget.getAttribute('option-id'),
     e = a.currentTarget.value;
   'Launcher.Theme' === c && FSOLauncher.setTheme(e);
@@ -595,11 +591,11 @@ FSOLauncher.registerUIEventAll('[option-id]', 'change', function(a, b) {
 });
 var audioPageTrigger = new Audio('./FSOLauncher_Sounds/click2.m4a');
 audioPageTrigger.volume = 0.1;
-FSOLauncher.registerUIEventAll('[page-trigger]', 'click', function(a, b) {
+FSOLauncher.registerUIEventAll('[page-trigger]', 'click', function(a, _b) {
   audioPageTrigger.play();
   FSOLauncher.changePage(a.currentTarget.getAttribute('page-trigger'));
 });
-FSOLauncher.registerUIEventAll('[install]', 'click', function(a, b) {
+FSOLauncher.registerUIEventAll('[install]', 'click', function(a, _b) {
   var c = a.currentTarget.getAttribute('install');
   FSOLauncher.fireEvent('INSTALL', c);
 });
