@@ -6,8 +6,9 @@
 class Toast {
   /**
    * Creates an instance of Toast.
-   * @param {any} Message The message to show.
-   * @param {any} View The Electron Window view.
+   * @param {*} Message
+   * @param {*} View
+   * @param {number} [timeout=0]
    * @memberof Toast
    */
   constructor(Message, View, timeout = 0) {
@@ -15,12 +16,9 @@ class Toast {
     this.View = View;
     this.show(Message);
     if(timeout > 0) {
-      setTimeout(() => {
-        this.destroy();
-      }, timeout);
+      setTimeout(() => { this.destroy(); }, timeout);
     }
   }
-
   /**
    * Shows the toast.
    *
@@ -30,7 +28,6 @@ class Toast {
   show(Message) {
     this.View.toast(this.id, Message);
   }
-
   /**
    * Destroys the toast and removes it from the view.
    *

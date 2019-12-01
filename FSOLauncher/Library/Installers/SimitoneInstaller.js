@@ -5,7 +5,7 @@ const DOWNLOAD_URL_GITHUB =
   'https://github.com/riperiperi/Simitone/releases/latest/download/SimitoneWindows.zip';
 
 /**
- * Installs Simitone.
+ * Downloads and installs Simitone.
  *
  * @class SimitoneInstaller
  */
@@ -14,7 +14,7 @@ class SimitoneInstaller {
    * Creates an instance of FSOInstaller.
    * @param {any} path Path to install FreeSO in.
    * @param {any} FSOLauncher
-   * @memberof FSOInstaller
+   * @memberof SimitoneInstaller
    */
   constructor(path, FSOLauncher) {
     this.FSOLauncher = FSOLauncher;
@@ -30,7 +30,7 @@ class SimitoneInstaller {
    *
    * @param {any} Message
    * @param {any} Percentage
-   * @memberof FSOInstaller
+   * @memberof SimitoneInstaller
    */
   createProgressItem(Message, Percentage) {
     this.FSOLauncher.View.addProgressItem(
@@ -41,12 +41,11 @@ class SimitoneInstaller {
       Percentage
     );
   }
-
   /**
    * Begins the installation.
    *
    * @returns
-   * @memberof FSOInstaller
+   * @memberof SimitoneInstaller
    */
   install() {
     return this.step1()
@@ -57,7 +56,6 @@ class SimitoneInstaller {
       .then(() => this.end())
       .catch(ErrorMessage => this.error(ErrorMessage));
   }
-
   /**
    * Obtains GitHub release data.
    */
@@ -70,62 +68,46 @@ class SimitoneInstaller {
 
     return Promise.resolve();
   }
-
   /**
    * Download all the files.
    *
    * @returns
-   * @memberof FSOInstaller
+   * @memberof SimitoneInstaller
    */
   step2() {
     return this.download();
   }
-
   /**
    * Create the installation directory.
    *
    * @returns
-   * @memberof FSOInstaller
+   * @memberof SimitoneInstaller
    */
   step3() {
     return this.setupDir(this.path);
   }
-
   /**
    * Extract files into installation directory.
    *
    * @returns
-   * @memberof FSOInstaller
+   * @memberof SimitoneInstaller
    */
   step4() {
     return this.extract();
   }
-
   /**
    * Create the FreeSO Registry Key.
    *
    * @returns
-   * @memberof FSOInstaller
+   * @memberof SimitoneInstaller
    */
   step5() {
     return require('../Registry').createFreeSOEntry(this.path, 'Simitone');
   }
-
-  /**
-   * Creates a FreeSO shortcut.
-   * @deprecated Yeah, so people can nuke their game when they launch NOT as administrator. No, thanks.
-   *
-   * @returns
-   * @memberof FSOInstaller
-   */
-  step999() {
-    return this.FSOLauncher.createShortcut(this.path);
-  }
-
   /**
    * When the installation ends.
    *
-   * @memberof FSOInstaller
+   * @memberof SimitoneInstaller
    */
   end() {
     this.createProgressItem(global.locale.INSTALLATION_FINISHED, 100);
@@ -134,20 +116,17 @@ class SimitoneInstaller {
     this.FSOLauncher.removeActiveTask('Simitone');
     if (this.simitoneVersion) {
       this.FSOLauncher.setConfiguration([
-        'Game',
-        'SimitoneVersion',
-        this.simitoneVersion
+        'Game', 'SimitoneVersion', this.simitoneVersion
       ]);
     }
     Modal.showInstalled('Simitone');
   }
-
   /**
    * When the installation errors out.
    *
    * @param {any} ErrorMessage
    * @returns
-   * @memberof FSOInstaller
+   * @memberof SimitoneInstaller
    */
   error(ErrorMessage) {
     this.haltProgress = true;
@@ -157,12 +136,11 @@ class SimitoneInstaller {
     Modal.showFailedInstall('Simitone', ErrorMessage);
     return Promise.reject(ErrorMessage);
   }
-
   /**
    * Downloads the distribution file.
    *
    * @returns
-   * @memberof FSOInstaller
+   * @memberof SimitoneInstaller
    */
   download() {
     return new Promise((resolve, reject) => {
@@ -184,23 +162,18 @@ class SimitoneInstaller {
    * Always use unzip2 - unzip has some weird issues.
    *
    * @returns
-   * @memberof FSOInstaller
+   * @memberof SimitoneInstaller
    */
   extract() {
-    const unzipStream = require('node-unzip-2').Extract({
-      path: this.path
-    });
-
+    const unzipStream = require('node-unzip-2').Extract({ path: this.path });
     this.createProgressItem(global.locale.EXTRACTING_CLIENT_FILES, 100);
-
     return new Promise((resolve, reject) => {
       require('fs')
         .createReadStream(this.tempPath)
         .pipe(unzipStream)
         .on('entry', entry => {
           this.createProgressItem(
-            global.locale.EXTRACTING_CLIENT_FILES + ' ' + entry.path,
-            100
+            global.locale.EXTRACTING_CLIENT_FILES + ' ' + entry.path, 100
           );
         });
 
@@ -218,7 +191,7 @@ class SimitoneInstaller {
   /**
    * Deletes the downloaded artifacts file.
    *
-   * @memberof FSOInstaller
+   * @memberof SimitoneInstaller
    */
   cleanup() {
     const fs = require('fs');
@@ -234,7 +207,7 @@ class SimitoneInstaller {
    *
    * @param {any} dir
    * @returns
-   * @memberof FSOInstaller
+   * @memberof SimitoneInstaller
    */
   setupDir(dir) {
     return new Promise((resolve, reject) => {
@@ -245,34 +218,10 @@ class SimitoneInstaller {
     });
   }
   /**
-   * Creates a direct FreeSO shortcut.
-   *
-   * @returns
-   * @memberof FSOInstaller
-   */
-  createShortcut() {
-    return new Promise((resolve, reject) => {
-      const ws = require('windows-shortcuts');
-
-      ws.create(
-        '%UserProfile%\\Desktop\\FreeSO.lnk',
-        {
-          target: this.path + '\\FreeSO.exe',
-          workingDir: this.path,
-          desc: 'Play FreeSO online',
-          runStyle: ws.MAX
-        },
-        err => {
-          return err ? reject(err) : resolve();
-        }
-      );
-    });
-  }
-  /**
-   * Checks if FreeSO is already installed in a given path.
+   * Checks if Simitone is already installed in a given path.
    *
    * @param {any} after What to do after (callback).
-   * @memberof FSOInstaller
+   * @memberof SimitoneInstaller
    */
   isInstalledInPath() {
     return new Promise((resolve, _reject) => {
@@ -284,28 +233,18 @@ class SimitoneInstaller {
   /**
    * Updates the progress item with the download progress.
    *
-   * @memberof FSOInstaller
+   * @memberof SimitoneInstaller
    */
   updateDownloadProgress() {
     setTimeout(() => {
       let p = this.dl.getProgress();
-      let mb = this.dl.getProgressMB();
-      let size = this.dl.getSizeMB();
+      const mb = this.dl.getProgressMB(),
+        size = this.dl.getSizeMB();
       if (isNaN(p)) p = 0;
       if (p < 100) {
         if (!this.haltProgress) {
           this.createProgressItem(
-            global.locale.DL_CLIENT_FILES +
-              ' ' +
-              mb +
-              ' MB ' +
-              global.locale.X_OUT_OF_X +
-              ' ' +
-              size +
-              ' MB (' +
-              p +
-              '%)',
-            p
+            `${global.locale.DL_CLIENT_FILES} ${mb} MB ${global.locale.X_OUT_OF_X} ${size} MB (${p}%)`, p
           );
         }
 

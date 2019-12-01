@@ -431,10 +431,10 @@ FSOLauncher.registerServerEvent('HAS_INTERNET', function() {
 });
 FSOLauncher.registerServerEvent('REMESH_INFO', function(a, v) {
   if (v) {
-    let i = parseInt(v);
-    let f = FSOLauncher.ago(new Date(i * 1000));
+    const i = parseInt(v);
+    const f = FSOLauncher.ago(new Date(i * 1000));
 
-    let seconds = Math.floor((new Date() - new Date(i * 1000)) / 1000);
+    const seconds = Math.floor((new Date() - new Date(i * 1000)) / 1000);
 
     if (seconds < 172800) {
       if (Math.floor(seconds / 86400) <= 1) {

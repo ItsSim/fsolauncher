@@ -17,11 +17,11 @@ global.UPDATE_ENDPOINT = 'UpdateCheck';
 let Window = null;
 let tray = null;
 let launcher;
-let options = {};
+const options = {};
 
 global.willQuit = false;
 
-let code = oslocale.sync().substring(0, 2);
+const code = oslocale.sync().substring(0, 2);
 
 global.locale = Object.prototype.hasOwnProperty.call(UIText, code) ? UIText[code] : UIText['en'];
 global.locale.LVERSION = global.VERSION;
@@ -55,8 +55,8 @@ try {
 function CreateWindow() {
   tray = new Tray('beta.ico');
 
-  let width = 1100;
-  let height = 665;
+  const width = 1100;
+  const height = 665;
 
   options.minWidth = width;
   options.minHeight = height;

@@ -1,6 +1,5 @@
 const Modal = require('../Modal');
 const HttpDownload = require('../http-download');
-
 /**
  * Installs a launcher update. This class was introduced after having problems
  * with just downloading the .asar file and replacing it.
@@ -89,10 +88,7 @@ class UpdateInstaller {
   error(ErrorMessage) {
     this.haltProgress = true;
     this.createProgressItem(
-      'Failed to download FreeSO Launcher. Try again later, or download from <a target="_blank" href="' +
-        this.FSOLauncher.updateLocation +
-        '">here</a>.',
-      100
+      `Failed to download FreeSO Launcher. Try again later, or download from <a target="_blank" href="${this.FSOLauncher.updateLocation}">here</a>.`, 100
     );
     this.FSOLauncher.View.stopProgressItem('FSOUpdateProgressItem' + this.id);
     Modal.showFailedUpdateDownload();
@@ -104,9 +100,7 @@ class UpdateInstaller {
    * @memberof UpdateInstaller
    */
   execute() {
-    require('child_process').exec('installer.exe', {
-      cwd: 'temp'
-    });
+    require('child_process').exec('installer.exe', { cwd: 'temp' });
   }
   /**
    * Download the installer.
@@ -122,7 +116,7 @@ class UpdateInstaller {
         if (this.dl.failed) {
           this.cleanup();
           return reject(
-            'FreeSO Launcher installation files have failed to download. You can try again later or download it yourself at beta.freeso.org/FreeSO Launcher Setup.exe'
+            'FreeSO Launcher installation files have failed to download. You can try again later or download it yourself at https://beta.freeso.org'
           );
         }
         resolve();
@@ -137,23 +131,14 @@ class UpdateInstaller {
    */
   updateDownloadProgress() {
     setTimeout(() => {
-      let p = this.dl.getProgress();
-      let mb = this.dl.getProgressMB();
-      let size = this.dl.getSizeMB();
+      const p = this.dl.getProgress(),
+        mb = this.dl.getProgressMB(),
+        size = this.dl.getSizeMB();
 
       if (p < 100) {
         if (!this.haltProgress) {
           this.createProgressItem(
-            'Downloading installation files... ' +
-              mb +
-              ' MB ' +
-              global.locale.X_OUT_OF_X +
-              ' ' +
-              size +
-              ' MB (' +
-              p +
-              '%)',
-            p
+            `Downloading installation files... ${mb} MB ${global.locale.X_OUT_OF_X} ${size} MB (${p}%)`, p
           );
         }
 

@@ -14,6 +14,10 @@ module.exports = {
         "ecmaVersion": 2018
     },
     "rules": {
-        "no-unused-vars": [2, {"args": "after-used", "argsIgnorePattern": "^_"}]
+        "no-unused-vars": [2, {"args": "after-used", "argsIgnorePattern": "^_"}],
+        "prefer-const": ["error", {
+            "destructuring": "any",
+            "ignoreReadBeforeAssign": false
+        }]
     }
 };

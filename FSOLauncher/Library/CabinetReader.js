@@ -1204,7 +1204,6 @@ if (!JSZip) throw 'JSZip not defined';
     ? (JSZip.compressions.DEFLATE.uncompress = d)
     : (JSZip.compressions.DEFLATE = { magic: '\b\x00', uncompress: d });
 })();
-
 /**
  * Extracts a MSFT Cabinet file.
  *
@@ -1231,7 +1230,6 @@ class CabinetReader {
 
     this.readCab(startFile);
   }
-
   /**
    * Converts to UINT8Array.
    *
@@ -1246,7 +1244,6 @@ class CabinetReader {
     }
     return ab;
   }
-
   /**
    * Reads a cabinet file.
    *
@@ -1255,7 +1252,7 @@ class CabinetReader {
   readCab(file) {
     this.cabsRead++;
 
-    let cab = {};
+    const cab = {};
 
     cab.name = file;
 
@@ -1267,7 +1264,7 @@ class CabinetReader {
       try {
         let read = 0;
         data = CabinetReader.toArrayBuffer(data);
-        let view = new DataView(data);
+        const view = new DataView(data);
         read += 4;
         cab.reserved1 = view.getUint32(read, true);
         read += 4;
@@ -1337,7 +1334,7 @@ class CabinetReader {
         for (let i = 0; i < cab.folderN; i++) {
           if (!this.continued || i !== 0) this.ucp[i] = 0;
           this.dc[i] = 0;
-          let f = {};
+          const f = {};
           f.cfOffset = view.getUint32(read, true);
           read += 4;
           f.cfBlocks = view.getUint16(read, true);
@@ -1382,7 +1379,7 @@ class CabinetReader {
         read = cab.offsetFiles;
         cab.files = [];
         for (let i = 0; i < cab.fileN; i++) {
-          let f = {};
+          const f = {};
           f.uSize = view.getUint32(read, true);
           read += 4;
           f.uOff = view.getUint32(read, true);
@@ -1405,7 +1402,6 @@ class CabinetReader {
       }
     });
   }
-
   /**
    * Extracts the next cabinet file.
    *
@@ -1430,7 +1426,7 @@ class CabinetReader {
 
       if (file.uOff < this.ucp[folder]) {
         const pos = this.uncompressed.length - (this.ucp[folder] - file.uOff);
-        let toCopy = Math.min(
+        const toCopy = Math.min(
           this.ucp[folder] - file.uOff,
           this.dataLeftToFill
         );
@@ -1444,13 +1440,13 @@ class CabinetReader {
         console.log('Not implemented');
       }
     } else {
-      let chunk = chunks[0];
-      let view = new Uint8Array(data, chunk.offset, chunk.cBytes);
+      const chunk = chunks[0];
+      const view = new Uint8Array(data, chunk.offset, chunk.cBytes);
       const comb = new Uint8Array(view.length + this.prevData.length);
       comb.set(this.prevData);
       comb.subarray(this.prevData.length).set(view);
       this.uncompressed = CabinetReader.MSZipDecomp(comb, chunk.ucBytes);
-      let toCopy = Math.min(this.uncompressed.length, this.dataLeftToFill);
+      const toCopy = Math.min(this.uncompressed.length, this.dataLeftToFill);
       new Uint8Array(this.fileBuffer, this.fileOffset, toCopy).set(
         this.uncompressed.subarray(0, toCopy)
       );
@@ -1461,11 +1457,11 @@ class CabinetReader {
     }
 
     while (this.dc[folder] < chunks.length && this.dataLeftToFill !== 0) {
-      let chunk = chunks[this.dc[folder]++];
-      let view = new Uint8Array(data, chunk.offset, chunk.cBytes);
+      const chunk = chunks[this.dc[folder]++];
+      const view = new Uint8Array(data, chunk.offset, chunk.cBytes);
       if (chunk.ucBytes !== 0) {
         this.uncompressed = CabinetReader.MSZipDecomp(view, chunk.ucBytes);
-        let toCopy = Math.min(this.uncompressed.length, this.dataLeftToFill);
+        const toCopy = Math.min(this.uncompressed.length, this.dataLeftToFill);
         new Uint8Array(this.fileBuffer, this.fileOffset, toCopy).set(
           this.uncompressed.subarray(0, toCopy)
         );
@@ -1523,7 +1519,6 @@ class CabinetReader {
       this.readCab(this.dir + cab.nextCab);
     }
   }
-
   /**
    * Decompresses data using JSZip.
    *
@@ -1542,7 +1537,6 @@ class CabinetReader {
     view.set(temp);
     return view;
   }
-
   /**
    * Sets up the directory where the files will be extracted to.
    *
@@ -1561,7 +1555,6 @@ class CabinetReader {
       mkdirp(dir, callback);
       return;
     }
-
     callback();
   }
 }

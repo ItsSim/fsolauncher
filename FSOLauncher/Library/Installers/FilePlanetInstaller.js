@@ -38,9 +38,7 @@ class FilePlanetInstaller {
       'TSOProgressItem' + this.id,
       'The Sims Online (FilePlanet)',
       'Installing in ' + this.path,
-      Message,
-      Percentage,
-      Extraction
+      Message, Percentage, Extraction
     );
   }
 
@@ -92,7 +90,7 @@ class FilePlanetInstaller {
     // patch 1239toNI
     this.createProgressItem('Patching The Sims Online, please wait...', 100);
     return new Promise((resolve, _reject) => {
-      let child = require('child_process').exec(
+      const child = require('child_process').exec(
         'TSOVersionPatcherF.exe 1239toNI.tsop "' + this.path + '"',
         {
           cwd: 'bin/TSOVersionPatcherF'
@@ -144,7 +142,6 @@ class FilePlanetInstaller {
           this.cleanup();
           return reject(global.locale.FSO_NETWORK_ERROR);
         }
-
         resolve();
       });
 
@@ -153,28 +150,20 @@ class FilePlanetInstaller {
   }
 
   extractZip() {
-    const unzipStream = require('node-unzip-2').Extract({
-      path: 'temp'
-    });
-
+    const unzipStream = require('node-unzip-2').Extract({ path: 'temp' });
     this.createProgressItem('Extracting client files, please wait...', 100);
-
     return new Promise((resolve, reject) => {
       require('fs')
         .createReadStream('temp/' + FILENAME)
         .pipe(unzipStream)
         .on('entry', entry => {
           this.createProgressItem(
-            'Extracting client files, please wait... ' + entry.path,
-            100
+            'Extracting client files, please wait... ' + entry.path, 100
           );
           entry.autodrain();
         });
 
-      unzipStream.on('error', err => {
-        return reject(err);
-      });
-
+      unzipStream.on('error', err => { return reject(err); });
       unzipStream.on('close', _err => {
         this.cleanup();
         return resolve();
@@ -186,15 +175,11 @@ class FilePlanetInstaller {
     return new Promise((resolve, reject) => {
       new (require('../CabinetReader'))(
         'temp/TSO_Installer_v1.1239.1.0/Data1.cab',
-        this.path,
-        d => this.updateExtractionProgress(d),
-        errFile => {
+        this.path, d => this.updateExtractionProgress(d), errFile => {
           if (errFile) {
             return require('fs').unlink(errFile, () => {
               reject(
-                'Extraction failed. ' +
-                  errFile +
-                  ' was corrupted and has been deleted. Try running the installer again.'
+                `Extraction failed. ${errFile} was corrupted and has been deleted. Try running the installer again.`
               );
             });
           }
@@ -206,21 +191,16 @@ class FilePlanetInstaller {
 
   cleanup() {
     const fs = require('fs');
-    fs.stat('temp/' + FILENAME, function(err, _stats) {
-      if (err) {
-        return;
-      }
-
-      fs.unlink('temp/' + FILENAME, function(err) {
+    fs.stat('temp/' + FILENAME, (err, _stats) => {
+      if (err) return;
+      fs.unlink('temp/' + FILENAME, err => {
         if (err) return console.log(err);
       });
     });
 
-    fs.stat('temp/TSO_Installer_v1.1239.1.0', function(err, _stats) {
-      if (err) {
-        return;
-      }
-      fs.rmdir('temp/TSO_Installer_v1.1239.1.0', function(err) {
+    fs.stat('temp/TSO_Installer_v1.1239.1.0', (err, _stats) => {
+      if (err) return;
+      fs.rmdir('temp/TSO_Installer_v1.1239.1.0', err => {
         if (err) return console.log(err);
       });
     });
@@ -235,7 +215,7 @@ class FilePlanetInstaller {
    */
   setupDir(dir) {
     return new Promise((resolve, reject) => {
-      require('mkdirp')(dir, function(err) {
+      require('mkdirp')(dir, err => {
         if(err) return reject(err);
         resolve();
       });
@@ -271,8 +251,7 @@ class FilePlanetInstaller {
 
   updateExtractionProgress(d) {
     this.createProgressItem(
-      'Extracting ' + d.curFile + ' ' + '(Data' + d.read + '.cab)',
-      100 //(d.read / 1115) * 100
+      `Extracting ${d.curFile} (Data${d.read}.cab)`, 100 // (d.read / 1115) * 100
     );
   }
 
@@ -282,22 +261,14 @@ class FilePlanetInstaller {
    * @memberof TSOInstaller
    */
   updateDownloadProgress() {
-    //console.log("updateDownloadProgress");
     // Archive.org does not provide Content-Length
     setTimeout(() => {
-      let mb = this.dl.getProgressMB();
-
-      let p = ((mb / 1268) * 100).toFixed(0);
+      const mb = this.dl.getProgressMB();
+      const p = ((mb / 1268) * 100).toFixed(0);
 
       if (!this.haltProgress) {
         this.createProgressItem(
-          global.locale.DL_CLIENT_FILES +
-            ' ' +
-            mb +
-            ' MB out of 1268 MB (' +
-            p +
-            '%)',
-          p
+          `${global.locale.DL_CLIENT_FILES} ${mb} MB out of 1268 MB (${p}%)`, p
         );
       } else {
         return;

@@ -14,7 +14,7 @@ class ExecutableInstaller {
    */
   run(file) {
     return new Promise((resolve, _reject) => {
-      let child = require('child_process').exec(file, { cwd: 'bin' });
+      const child = require('child_process').exec(file, { cwd: 'bin' });
       child.on('close', _code => resolve());
       child.stderr.on('data', data => console.log('stdout: ' + data));
     });

@@ -3,7 +3,7 @@
  *
  * @class Event
  */
-class Event {
+class RendererEvent {
   /**
    * Creates an instance of Event.
    * @param {any} eventName
@@ -12,7 +12,6 @@ class Event {
   constructor(eventName) {
     this.eventName = eventName;
   }
-
   /**
    * Establishes the callback for the event.
    *
@@ -24,4 +23,4 @@ class Event {
   }
 }
 
-module.exports = Event;
+module.exports = RendererEvent;

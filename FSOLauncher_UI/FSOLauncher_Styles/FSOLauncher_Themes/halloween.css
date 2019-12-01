@@ -2,7 +2,7 @@
 }
 
 .halloween #logo:after {
-  content: "HALLOWEEN";
+  content: 'HALLOWEEN';
 }
 
 .halloween button,
@@ -103,7 +103,7 @@
   color: rgba(255, 255, 255, 0.7);
 }
 
-.halloween .item[install="FSO"] {
+.halloween .item[install='FSO'] {
   background-image: url(../../FSOLauncher_Images/freeso-logo.png) !important;
 }
 

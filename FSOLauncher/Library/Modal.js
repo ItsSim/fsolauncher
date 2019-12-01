@@ -4,6 +4,12 @@
  * @class Modal
  */
 class Modal {
+  /**
+   * Dialog for the alternative TSO download.
+   *
+   * @static
+   * @memberof Modal
+   */
   static showFTPTSO() {
     Modal.View.sendModal(
       'Try alternative download?',
@@ -217,7 +223,7 @@ class Modal {
   static showChooseDirectory(ComponentName, Window) {
     return new Promise((resolve, _reject) => {
       require('fs').stat('C:\\Program Files', (err, stats) => {
-        let defaultPath =
+        const defaultPath =
           !err && stats.isDirectory() ? 'C:\\Program Files' : null;
 
         require('electron').dialog.showOpenDialog(
@@ -671,6 +677,12 @@ class Modal {
     );
   }
 
+  /**
+   * Tells the user that Software Mode will be slower than the other options.
+   *
+   * @static
+   * @memberof Modal
+   */
   static showSoftwareModeEnabled() {
     Modal.View.sendModal(
       'Software Mode',
@@ -679,6 +691,13 @@ class Modal {
     );
   }
 
+  /**
+   * Used in generic error modal display.
+   *
+   * @static
+   * @param {*} error Error text.
+   * @memberof Modal
+   */
   static showGenericError(error) {
     Modal.View.sendModal('An error occurred', error, global.locale.MODAL_OK);
   }

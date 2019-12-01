@@ -10,7 +10,7 @@
   filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#fff', endColorstr='#eee', GradientType=0);
   background-repeat: no-repeat;
   background-attachment: fixed;
-  font-family: "Fredoka One";
+  font-family: 'Fredoka One';
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -221,7 +221,7 @@ div.page > h1.jumbotron {
   font-size: 22px;
   padding: 40px;
   color: #fff;
-  background: #4B88E4;
+  background: #4b88e4;
   /*font-weight:700;*/
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   /*text-shadow: 0px 3px 0px rgba(0,0,0,0.075);*/
@@ -231,8 +231,8 @@ div.page > h1.jumbotron {
   top: 0;
   z-index: 9;
   height: 100px;
-  border-bottom-left-radius:12px;
-  border-bottom-right-radius:12px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
 }
 
 div.page > h1.jumbotron span {
@@ -245,14 +245,14 @@ div.page > h1.jumbotron span {
 
 div.page > h1.jumbotron small {
   font-size: 14px;
-  font-family: "Munged";
+  font-family: 'Munged';
   font-weight: 400;
 }
 
 div.error,
 div.notice {
   padding: 15px;
-  font-family: "Munged";
+  font-family: 'Munged';
   font-size: 14px;
   display: block;
   text-align: center;
@@ -279,7 +279,7 @@ div.error {
 
 div.page p {
   padding: 20px;
-  font-family: "Munged";
+  font-family: 'Munged';
   font-size: 14px;
   line-height: 22px;
   text-align: justify;
@@ -300,7 +300,7 @@ div.page p {
 }
 
 #logo:after {
-  content: "OPEN BETA";
+  content: 'OPEN BETA';
 }
 
 /*#launcher #sidebar li.bottom
@@ -317,7 +317,6 @@ div.page p {
   bottom: 0px;
   left: 0px;
   width: 100%;
- 
 }
 
 #sidebar div.bottom li:last-child {
@@ -334,9 +333,9 @@ div.page p {
 
 #launcher #sidebar li.active,
 #launcher #sidebar li:not(#logo):hover {
-  border-right: 4px solid #4B88E4;
+  border-right: 4px solid #4b88e4;
   background-color: rgba(0, 0, 0, 0.05);
-  color: #4B88E4;
+  color: #4b88e4;
   cursor: pointer;
   padding-left: 30px;
 }
@@ -372,7 +371,7 @@ div.page p {
 }
 
 #launcher #content #full-install .bottom p {
-  font-family: "Munged";
+  font-family: 'Munged';
   font-size: 14px;
   font-weight: 400;
   margin-bottom: 15px;
@@ -415,7 +414,7 @@ div.page p {
 
 .download.stopped .loading .progress {
   background-image: none;
-  background: #4B88E4;
+  background: #4b88e4;
 }
 
 .loading .progress {
@@ -433,7 +432,7 @@ div.page p {
       transparent 66%
     ),
     -webkit-linear-gradient(top, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)),
-    -webkit-linear-gradient(left, #4B88E4, #4B88E4);
+    -webkit-linear-gradient(left, #4b88e4, #4b88e4);
   border-radius: 999px;
   background-size: 35px 20px, 100% 100%, 100% 100%;
   -webkit-animation: animate-stripes 5s linear infinite;
@@ -459,7 +458,7 @@ div.page p {
 }
 
 strong {
-  font-family: "Fredoka One";
+  font-family: 'Fredoka One';
   /*font-weight:700*/
 }
 
@@ -480,7 +479,9 @@ button,
   outline: 0;
   transition: background-color 0.4s;
   font-size: 16px !important;
-  box-shadow: inset 8px 8px 8px rgba(255, 255, 255, .2), inset -2px -2px 2px rgba(0, 0, 0, .2), 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  box-shadow: inset 8px 8px 8px rgba(255, 255, 255, 0.2),
+    inset -2px -2px 2px rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.12),
+    0 1px 2px rgba(0, 0, 0, 0.24);
 }
 
 button:hover,
@@ -525,7 +526,7 @@ button.launch,
 
 button.blue,
 .button.blue {
-  background-color: #4B88E4;
+  background-color: #4b88e4;
 }
 
 button.blue:hover,
@@ -533,12 +534,12 @@ button.blue:hover,
   background-color: #2daac4;
 }
 
- /*li:hover i.simitone-icon,
+/*li:hover i.simitone-icon,
  li.active i.simitone-icon {
   filter: opacity(0.5) drop-shadow(0 0 0 rgb(41, 117, 231)) drop-shadow(0 0 0 rgb(41, 117, 231));
 }*/
 
-#downloads div.item  div.tick {
+#downloads div.item div.tick {
   padding: 10px;
   padding-left: 12px;
   padding-right: 12px;
@@ -549,8 +550,9 @@ button.blue:hover,
   top: -10px;
   color: #fff;
   transition: background-color 0.6s;
-  box-shadow: inset 8px 8px 8px rgba(255, 255, 255, .2), inset -2px -2px 2px rgba(0, 0, 0, .2), 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-
+  box-shadow: inset 8px 8px 8px rgba(255, 255, 255, 0.2),
+    inset -2px -2px 2px rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.12),
+    0 1px 2px rgba(0, 0, 0, 0.24);
 }
 
 #downloads div.item div.tick:hover {
@@ -566,11 +568,11 @@ button.blue:hover,
 }
 
 #downloads div.installed.item div.tick.installed {
-  background-color: #43a900!important;
-  display: block!important;
+  background-color: #43a900 !important;
+  display: block !important;
 }
 
-#downloads  div.item.installed div.tick.missing {
+#downloads div.item.installed div.tick.missing {
   display: none;
 }
 
@@ -662,14 +664,14 @@ button.blue:hover,
 #downloads > div .tag h1 {
   /*font-weight:700;*/
   font-size: 20px;
-  color: #4B88E4;
+  color: #4b88e4;
   margin-bottom: 10px;
   transition: color 0.2s;
   /*text-shadow: 0px 3px 0px rgba(0,0,0,0.075);*/
 }
 
 #downloads > div .tag span {
-  font-family: "Munged";
+  font-family: 'Munged';
   font-size: 14px;
   line-height: 22px;
 }
@@ -721,7 +723,7 @@ select {
 
 #settings-page .form h1 {
   padding: 10px;
-  color: #4B88E4;
+  color: #4b88e4;
   letter-spacing: 1px;
   text-transform: uppercase;
   /*font-weight:700;*/
@@ -729,7 +731,7 @@ select {
   margin-bottom: 20px;
   padding-left: 0;
   font-size: 16px;
-  border-bottom: 1px solid rgba(0,0,0,0.05);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   /*text-shadow: 0px 3px 0px rgba(0,0,0,0.075);*/
 }
 
@@ -740,7 +742,7 @@ select {
 #settings-page .form div span {
   margin-bottom: 10px;
   display: block;
-  font-family: "Munged";
+  font-family: 'Munged';
   font-size: 16px;
   color: #898989;
 }
@@ -748,7 +750,7 @@ select {
 #settings-page .form div small {
   display: block;
   line-height: 20px;
-  font-family: "Munged";
+  font-family: 'Munged';
   font-size: 12px;
   margin-top: 10px;
   color: rgba(0, 0, 0, 0.4);
@@ -785,7 +787,7 @@ select {
 }
 
 #rss .rss-entry .rss-content {
-  font-family: "Munged";
+  font-family: 'Munged';
   line-height: 22px;
   text-align: justify;
   text-indent: 30px;
@@ -794,7 +796,7 @@ select {
 #rss .rss-entry > h1 {
   font-size: 25px;
   margin-bottom: 20px;
-  color: #4B88E4;
+  color: #4b88e4;
   line-height: 30px;
   text-align: center;
   /*font-weight:700;*/
@@ -887,7 +889,7 @@ select {
 }
 
 .hint span {
-  font-family: "Munged";
+  font-family: 'Munged';
 }
 
 .hint.arrow-left:after,
@@ -895,7 +897,7 @@ select {
   right: 100%;
   top: 50%;
   border: solid transparent;
-  content: " ";
+  content: ' ';
   height: 0;
   width: 0;
   position: absolute;
@@ -921,7 +923,7 @@ select {
   bottom: 100%;
   left: 50%;
   border: solid transparent;
-  content: " ";
+  content: ' ';
   height: 0;
   width: 0;
   position: absolute;
@@ -970,14 +972,14 @@ select {
 .modal h1 {
   font-size: 24px;
   /*font-weight:bold;*/
-  color: #4B88E4;
+  color: #4b88e4;
   /*text-transform: uppercase;*/
   margin-bottom: 20px;
   /*text-shadow: 0px 3px 0px rgba(0,0,0,0.075);*/
 }
 
 .modal p {
-  font-family: "Munged";
+  font-family: 'Munged';
   line-height: 21px;
   font-size: 16px;
 }
@@ -1029,18 +1031,18 @@ select {
 #downloads-page div.download h1 {
   margin-bottom: 10px;
   font-size: 16px;
-  font-family: "Munged";
+  font-family: 'Munged';
 }
 
 #downloads-page div.download span {
   color: rgba(0, 0, 0, 0.5);
   display: block;
   margin-bottom: 30px;
-  font-family: "Munged";
+  font-family: 'Munged';
 }
 
 #downloads-page div.download .info {
-  font-family: "Munged";
+  font-family: 'Munged';
 }
 
 #downloads-page div.download .loading {
@@ -1053,7 +1055,7 @@ select {
   height: 150px;
   overflow-y: auto;
   display: none;
-  font-family: "Munged";
+  font-family: 'Munged';
   margin-top: 10px;
   margin-bottom: 10px;
   max-width: 100%;
@@ -1105,7 +1107,7 @@ a {
 }
 
 #tip span {
-  font-family: "Munged";
+  font-family: 'Munged';
   font-size: 14px;
 }
 
@@ -1125,15 +1127,15 @@ a {
 #notifications-page div.notification h1 {
   font-size: 17px;
   margin-bottom: -10px;
-  font-family: "Fredoka One";
-  color:rgba(0,0,0,0.5);
+  font-family: 'Fredoka One';
+  color: rgba(0, 0, 0, 0.5);
 }
 
 #notifications-page div.notification i {
   float: left;
   display: inline-block;
-  margin-left:-27px;
-  display:none;
+  margin-left: -27px;
+  display: none;
   height: 100px;
   margin-top: -5px;
 }
@@ -1141,13 +1143,13 @@ a {
 #notifications-page div.notification p {
   color: rgba(0, 0, 0, 0.5);
   display: block;
-  font-family: "Munged";
+  font-family: 'Munged';
   text-decoration: none !important;
   padding-left: 0;
 }
 
 #notifications-page div.notification span {
-  font-family: "Munged";
+  font-family: 'Munged';
 }
 
 #notifications-page div.notification:hover {
@@ -1162,7 +1164,7 @@ a.twitter-timeline {
   border: #ccc solid 1px;
   border-radius: 3px;
   background: #f8f8f8
-    url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxNy4xLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DQo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNzIgNzIiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDcyIDcyIiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxyZWN0IHg9IjAiIGZpbGw9Im5vbmUiIHdpZHRoPSI3MiIgaGVpZ2h0PSI3MiIvPg0KPHBhdGggZmlsbD0iIzU1YWNlZSIgZD0iTTY4LjgxMiwxNS4xNDFjLTIuMzQ4LDEuMDM5LTQuODY5LDEuNzQzLTcuNTE5LDIuMDZjMi43MDMtMS42Miw0Ljc3OC00LjE4Nyw1Ljc1Ni03LjI0NGMtMi41MjksMS41LTUuMzMsMi41OTItOC4zMTMsMy4xNzYNCglDNTYuMzQ5LDEwLjU5MSw1Mi45NDgsOSw0OS4xODIsOWMtNy4yMjksMC0xMy4wOTIsNS44NjEtMTMuMDkyLDEzLjA5M2MwLDEuMDI2LDAuMTE4LDIuMDIxLDAuMzM4LDIuOTgxDQoJYy0xMC44ODUtMC41NDgtMjAuNTI4LTUuNzU3LTI2Ljk4Ny0xMy42NzljLTEuMTI2LDEuOTM2LTEuNzcxLDQuMTg0LTEuNzcxLDYuNTgxYzAsNC41NDIsMi4zMTIsOC41NTEsNS44MjQsMTAuODk4DQoJYy0yLjE0Ni0wLjA2OS00LjE2NS0wLjY1Ny01LjkzLTEuNjM4Yy0wLjAwMiwwLjA1NS0wLjAwMiwwLjExLTAuMDAyLDAuMTYyYzAsNi4zNDUsNC41MTMsMTEuNjM4LDEwLjUwNCwxMi44NA0KCWMtMS4xMDEsMC4yOTgtMi4yNTYsMC40NTctMy40NDksMC40NTdjLTAuODQ2LDAtMS42NjctMC4wNzgtMi40NjUtMC4yMzFjMS42NjcsNS4yLDYuNDk5LDguOTg2LDEyLjIzLDkuMDkNCgljLTQuNDgyLDMuNTEyLTEwLjEyOSw1LjYwNi0xNi4yNiw1LjYwNmMtMS4wNTUsMC0yLjA5Ni0wLjA2MS0zLjEyMi0wLjE4NGM1Ljc5NCwzLjcxNywxMi42NzYsNS44ODIsMjAuMDY3LDUuODgyDQoJYzI0LjA4MywwLDM3LjI1MS0xOS45NDksMzcuMjUxLTM3LjI0OWMwLTAuNTY2LTAuMDE0LTEuMTM0LTAuMDM5LTEuNjk0QzY0LjgzOCwyMC4wNjgsNjcuMDU4LDE3Ljc2NSw2OC44MTIsMTUuMTQxeiIvPg0KPC9zdmc+DQo=")
+    url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxNy4xLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DQo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNzIgNzIiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDcyIDcyIiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxyZWN0IHg9IjAiIGZpbGw9Im5vbmUiIHdpZHRoPSI3MiIgaGVpZ2h0PSI3MiIvPg0KPHBhdGggZmlsbD0iIzU1YWNlZSIgZD0iTTY4LjgxMiwxNS4xNDFjLTIuMzQ4LDEuMDM5LTQuODY5LDEuNzQzLTcuNTE5LDIuMDZjMi43MDMtMS42Miw0Ljc3OC00LjE4Nyw1Ljc1Ni03LjI0NGMtMi41MjksMS41LTUuMzMsMi41OTItOC4zMTMsMy4xNzYNCglDNTYuMzQ5LDEwLjU5MSw1Mi45NDgsOSw0OS4xODIsOWMtNy4yMjksMC0xMy4wOTIsNS44NjEtMTMuMDkyLDEzLjA5M2MwLDEuMDI2LDAuMTE4LDIuMDIxLDAuMzM4LDIuOTgxDQoJYy0xMC44ODUtMC41NDgtMjAuNTI4LTUuNzU3LTI2Ljk4Ny0xMy42NzljLTEuMTI2LDEuOTM2LTEuNzcxLDQuMTg0LTEuNzcxLDYuNTgxYzAsNC41NDIsMi4zMTIsOC41NTEsNS44MjQsMTAuODk4DQoJYy0yLjE0Ni0wLjA2OS00LjE2NS0wLjY1Ny01LjkzLTEuNjM4Yy0wLjAwMiwwLjA1NS0wLjAwMiwwLjExLTAuMDAyLDAuMTYyYzAsNi4zNDUsNC41MTMsMTEuNjM4LDEwLjUwNCwxMi44NA0KCWMtMS4xMDEsMC4yOTgtMi4yNTYsMC40NTctMy40NDksMC40NTdjLTAuODQ2LDAtMS42NjctMC4wNzgtMi40NjUtMC4yMzFjMS42NjcsNS4yLDYuNDk5LDguOTg2LDEyLjIzLDkuMDkNCgljLTQuNDgyLDMuNTEyLTEwLjEyOSw1LjYwNi0xNi4yNiw1LjYwNmMtMS4wNTUsMC0yLjA5Ni0wLjA2MS0zLjEyMi0wLjE4NGM1Ljc5NCwzLjcxNywxMi42NzYsNS44ODIsMjAuMDY3LDUuODgyDQoJYzI0LjA4MywwLDM3LjI1MS0xOS45NDksMzcuMjUxLTM3LjI0OWMwLTAuNTY2LTAuMDE0LTEuMTM0LTAuMDM5LTEuNjk0QzY0LjgzOCwyMC4wNjgsNjcuMDU4LDE3Ljc2NSw2OC44MTIsMTUuMTQxeiIvPg0KPC9zdmc+DQo=')
     8px 8px no-repeat;
   background-size: 1em 1em;
 

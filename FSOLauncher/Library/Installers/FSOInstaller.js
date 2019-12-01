@@ -275,24 +275,14 @@ class FSOInstaller {
    */
   updateDownloadProgress() {
     setTimeout(() => {
-      let p = this.dl.getProgress();
-      let mb = this.dl.getProgressMB();
-      let size = this.dl.getSizeMB();
+      const p = this.dl.getProgress(),
+        mb = this.dl.getProgressMB(),
+        size = this.dl.getSizeMB();
 
       if (p < 100) {
         if (!this.haltProgress) {
           this.createProgressItem(
-            global.locale.DL_CLIENT_FILES +
-              ' ' +
-              mb +
-              ' MB ' +
-              global.locale.X_OUT_OF_X +
-              ' ' +
-              size +
-              ' MB (' +
-              p +
-              '%)',
-            p
+            `${global.locale.DL_CLIENT_FILES} ${mb} MB ${global.locale.X_OUT_OF_X} ${size} MB (${p}%)`, p
           );
         }
 

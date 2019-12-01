@@ -2,7 +2,7 @@
 }
 
 .turbo #logo:after {
-  content: "NEON";
+  content: 'NEON';
 }
 
 .turbo button,
@@ -27,7 +27,6 @@
 .turbo li.active i.simitone-icon {
   filter: opacity(0.5) drop-shadow(0 0 0 #9844b7) drop-shadow(0 0 0 #9844b7);
 }*/
-
 
 .turbo #logo {
   background-image: url(../../FSOLauncher_Images/logo_turbo.png) !important;

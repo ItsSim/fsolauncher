@@ -1,43 +1,38 @@
-@media only screen and (min-width: 1000px)
-{
-    #downloads > div,
-    #settings-page .form 
-    {
-        width: 50%!important;
-    }
+@media only screen and (min-width: 1000px) {
+  #downloads > div,
+  #settings-page .form {
+    width: 50% !important;
+  }
 
-    #downloads > div.block {
-        width:100%!important;
-    }
+  #downloads > div.block {
+    width: 100% !important;
+  }
 }
 
-@media only screen and (min-width: 875px)
-{
-    #rss
-    {
-        width: 50%!important;
-    }
+@media only screen and (min-width: 875px) {
+  #rss {
+    width: 50% !important;
+  }
 
-    #did-you-know {
-        width:50%;
-        height:100%
-    }
+  #did-you-know {
+    width: 50%;
+    height: 100%;
+  }
 
-    #rss {
-        height:100%;
-        overflow-y: auto
-    }
+  #rss {
+    height: 100%;
+    overflow-y: auto;
+  }
 
-    .tw {
-        height:100%
-    }
+  .tw {
+    height: 100%;
+  }
 
-    #did-you-know {
-        /*border-bottom-left-radius:6px;*/
-        max-height:100%;
-    }
+  #did-you-know {
+    /*border-bottom-left-radius:6px;*/
+    max-height: 100%;
+  }
 
-    #home-page .page-content {
-
-    }
+  #home-page .page-content {
+  }
 }

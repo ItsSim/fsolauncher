@@ -32,7 +32,7 @@ class Registry {
    */
   static getInstalled() {
     return new Promise((resolve, reject) => {
-      let Promises = [];
+      const Promises = [];
 
       Promises.push(Registry.get('OpenAL', Registry.getOpenALPath()));
       Promises.push(Registry.get('FSO', Registry.getFSOPath()));
@@ -46,7 +46,6 @@ class Registry {
         .catch(err => { if (err) reject(err); });
     });
   }
-
   /**
    * Checks if a Registry Key exists and returns if it is installed or not.
    *
@@ -60,7 +59,7 @@ class Registry {
     return new Promise((resolve, reject) => {
       const Registry = require('winreg');
 
-      let Key = new Registry({
+      const Key = new Registry({
         hive: Registry.HKLM,
         key: p
       });
@@ -136,7 +135,6 @@ class Registry {
       }
     });
   }
-
   /**
    * Creates the default Maxis Registry Key.
    *
@@ -149,7 +147,7 @@ class Registry {
     return new Promise((resolve, reject) => {
       const Registry = require('winreg');
 
-      let Key = new Registry({
+      const Key = new Registry({
         hive: Registry.HKLM,
         key: '\\SOFTWARE\\Maxis\\The Sims Online'
       });
@@ -187,7 +185,6 @@ class Registry {
       });
     });
   }
-
   /**
    * Creates the *new* default FreeSO Registry Key.
    * Reused for Simitone, second parameter as "Simitone".
@@ -200,7 +197,7 @@ class Registry {
   static createFreeSOEntry(InstallDir, KeyName = 'FreeSO') {
     return new Promise((resolve, reject) => {
       const Registry = require('winreg');
-      let Key = new Registry({
+      const Key = new Registry({
         hive: Registry.HKLM,
         key: '\\SOFTWARE\\Rhys Simpson\\' + KeyName
       });

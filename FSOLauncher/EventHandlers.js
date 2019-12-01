@@ -1,5 +1,5 @@
 const Modal = require('./Library/Modal'),
-  Event = require('./Library/Event');
+  RendererEvent = require('./Library/RendererEvent');
 /**
  * Handles all events from the client.
  *
@@ -12,63 +12,102 @@ class EventHandlers {
    * @memberof Events
    */
   defineEvents() {
-    let onInitDOM = new Event('INIT_DOM');
-    let onInstall = new Event('INSTALL');
-    let onSetConfiguration = new Event('SET_CONFIGURATION');
-    let onInstallerRedirect = new Event('INSTALLER_REDIRECT');
-    let onInstallComponent = new Event('INSTALL_COMPONENT');
-    let onPlay = new Event('PLAY');
-    let onPlaySimitone = new Event('PLAY_SIMITONE');
-    let onFullInstall = new Event('FULL_INSTALL');
-    let onFullInstallConfirm = new Event('FULL_INSTALL_CONFIRM');
-    let onChangeGamePath = new Event('CHANGE_GAME_PATH');
-    let onCheckUpdates = new Event('CHECK_UPDATES');
-    let onInstallUpdate = new Event('INSTALL_UPDATE');
-    let onPlayVolcanic = new Event('PLAY_VOLCANIC');
-    let onPlayVolcanicSimitone = new Event('PLAY_VOLCANIC_SIMITONE');
-    let onSocketMessage = new Event('SOCKET_MESSAGE');
-    let onConsoleLog = new Event('CONSOLE_LOG');
-    let onFTPTSO = new Event('FTP_TSO');
-    let onFTPTSOResponse = new Event('FTP_TSOResponse');
-    let onCheckSimitoneRequirements = new Event('CHECK_SIMITONE');
-    let onInstallSimitoneUpdate = new Event('INSTALL_SIMITONE_UPDATE');
+    const onInitDOM                   = new RendererEvent('INIT_DOM');
+    const onInstall                   = new RendererEvent('INSTALL');
+    const onSetConfiguration          = new RendererEvent('SET_CONFIGURATION');
+    const onInstallerRedirect         = new RendererEvent('INSTALLER_REDIRECT');
+    const onInstallComponent          = new RendererEvent('INSTALL_COMPONENT');
+    const onPlay                      = new RendererEvent('PLAY');
+    const onPlaySimitone              = new RendererEvent('PLAY_SIMITONE');
+    const onFullInstall               = new RendererEvent('FULL_INSTALL');
+    const onFullInstallConfirm        = new RendererEvent('FULL_INSTALL_CONFIRM');
+    const onChangeGamePath            = new RendererEvent('CHANGE_GAME_PATH');
+    const onCheckUpdates              = new RendererEvent('CHECK_UPDATES');
+    const onInstallUpdate             = new RendererEvent('INSTALL_UPDATE');
+    const onPlayVolcanic              = new RendererEvent('PLAY_VOLCANIC');
+    const onPlayVolcanicSimitone      = new RendererEvent('PLAY_VOLCANIC_SIMITONE');
+    const onSocketMessage             = new RendererEvent('SOCKET_MESSAGE');
+    const onConsoleLog                = new RendererEvent('CONSOLE_LOG');
+    const onFTPTSO                    = new RendererEvent('FTP_TSO');
+    const onFTPTSOResponse            = new RendererEvent('FTP_TSOResponse');
+    const onCheckSimitoneRequirements = new RendererEvent('CHECK_SIMITONE');
+    const onInstallSimitoneUpdate     = new RendererEvent('INSTALL_SIMITONE_UPDATE');
 
-    onInitDOM.onFire(this.onInitDOM.bind(this));
-    onSetConfiguration.onFire(this.onSetConfiguration.bind(this));
-    onInstallerRedirect.onFire(this.onInstallerRedirect.bind(this));
-    onInstallComponent.onFire(this.onInstallComponent.bind(this));
-    onInstall.onFire(this.onInstall.bind(this));
-    onPlay.onFire(this.onPlay.bind(this));
-    onPlaySimitone.onFire(this.onPlaySimitone.bind(this));
-    onFullInstall.onFire(this.onFullInstall.bind(this));
-    onFullInstallConfirm.onFire(this.onFullInstallConfirm.bind(this));
-    onChangeGamePath.onFire(this.onChangeGamePath.bind(this));
-    onCheckUpdates.onFire(this.onCheckUpdates.bind(this));
-    onInstallUpdate.onFire(this.onInstallUpdate.bind(this));
-    onPlayVolcanic.onFire(this.onPlayVolcanic.bind(this));
-    onPlayVolcanicSimitone.onFire(this.onPlayVolcanicSimitone.bind(this));
-    onSocketMessage.onFire(this.onSocketMessage.bind(this));
-    onConsoleLog.onFire(this.onConsoleLog.bind(this));
-    onFTPTSO.onFire(this.onFTPTSO.bind(this));
-    onFTPTSOResponse.onFire(this.onFTPTSOResponse.bind(this));
-    onCheckSimitoneRequirements.onFire(this.onCheckSimitoneRequirements.bind(this));
-    onInstallSimitoneUpdate.onFire(this.onInstallSimitoneUpdate.bind(this));
+    onInitDOM
+      .onFire(this.onInitDOM.bind(this));
+    onSetConfiguration
+      .onFire(this.onSetConfiguration.bind(this));
+    onInstallerRedirect
+      .onFire(this.onInstallerRedirect.bind(this));
+    onInstallComponent
+      .onFire(this.onInstallComponent.bind(this));
+    onInstall
+      .onFire(this.onInstall.bind(this));
+    onPlay
+      .onFire(this.onPlay.bind(this));
+    onPlaySimitone
+      .onFire(this.onPlaySimitone.bind(this));
+    onFullInstall
+      .onFire(this.onFullInstall.bind(this));
+    onFullInstallConfirm
+      .onFire(this.onFullInstallConfirm.bind(this));
+    onChangeGamePath
+      .onFire(this.onChangeGamePath.bind(this));
+    onCheckUpdates
+      .onFire(this.onCheckUpdates.bind(this));
+    onInstallUpdate
+      .onFire(this.onInstallUpdate.bind(this));
+    onPlayVolcanic
+      .onFire(this.onPlayVolcanic.bind(this));
+    onPlayVolcanicSimitone
+      .onFire(this.onPlayVolcanicSimitone.bind(this));
+    onSocketMessage
+      .onFire(this.onSocketMessage.bind(this));
+    onConsoleLog
+      .onFire(this.onConsoleLog.bind(this));
+    onFTPTSO
+      .onFire(this.onFTPTSO.bind(this));
+    onFTPTSOResponse
+      .onFire(this.onFTPTSOResponse.bind(this));
+    onCheckSimitoneRequirements
+      .onFire(this.onCheckSimitoneRequirements.bind(this));
+    onInstallSimitoneUpdate
+      .onFire(this.onInstallSimitoneUpdate.bind(this));
   }
-
+  /**
+   * Received when the user request a Simitone update.
+   *
+   * @memberof EventHandlers
+   */
   onInstallSimitoneUpdate() {
-    this.install('Simitone', {
-      dir: this.isInstalled.Simitone
-    });
+    this.install('Simitone', { dir: this.isInstalled.Simitone });
   }
-
+  /**
+   * Received when the renderer process asks the main process to check for 
+   * Simitone updates.
+   *
+   * @memberof EventHandlers
+   */
   onCheckSimitoneRequirements() {
     this.checkSimitoneRequirements();
   }
-
+  /**
+   * Fires when the user requests an alternative TSO installation source.
+   * @deprecated Not used since there's really only one source available right now
+   *             since largedownloads went down.
+   *
+   * @memberof EventHandlers
+   */
   onFTPTSO() {
     Modal.showFTPTSO();
   }
-
+  /**
+   * Fires as a user's response to showFTPTSO().
+   * @deprecated Not used since there's really only one source available right now
+   *             since largedownloads went down.
+   *
+   * @memberof EventHandlers
+   */
   onFTPTSOResponse(e, yes) {
     if (yes) {
       this.install('TSO', {
@@ -95,7 +134,6 @@ class EventHandlers {
     //this.checkLauncherUpdates(true);
     this.Window.focus();
   }
-
   /**
    * Fires when the client receives a Socket.io request.
    *
@@ -108,7 +146,6 @@ class EventHandlers {
       Modal.sendNotification('FreeSO Announcement', Response[0], Response[1]);
     }
   }
-
   /**
    * When the user wants to install a Component.
    *
@@ -119,7 +156,6 @@ class EventHandlers {
   onInstall(e, Component) {
     this.fireInstallModal(Component);
   }
-
   /**
    * When the configuration settings are altered.
    *
@@ -129,7 +165,6 @@ class EventHandlers {
   onSetConfiguration(e, v) {
     this.setConfiguration(v);
   }
-
   /**
    * When the user needs to be redirected.
    *
@@ -142,7 +177,6 @@ class EventHandlers {
       this.View.changePage('installer');
     }
   }
-
   /**
    * When the user wants to install a single Component.
    *
@@ -157,11 +191,16 @@ class EventHandlers {
       this.install(Component, options);
     }
   }
-
+  /**
+   * When the renderer process requests a main process console.log.
+   *
+   * @param {*} e
+   * @param {*} v
+   * @memberof EventHandlers
+   */
   onConsoleLog(e, v) {
     console.log(v);
   }
-
   /**
    * When the user clicks the play button.
    *
@@ -172,7 +211,6 @@ class EventHandlers {
   onPlay(e, useVolcanic) {
     this.play(useVolcanic);
   }
-
   /**
    * When the user wants to launch Volcanic.
    *
@@ -192,7 +230,6 @@ class EventHandlers {
       this.launchGame(true, true);
     }
   }
-
   /**
    * When the user requests a launcher update check.
    *
@@ -205,7 +242,6 @@ class EventHandlers {
     }
     this.checkLauncherUpdates();
   }
-
   /**
    * Update dialog callback.
    *
@@ -218,7 +254,6 @@ class EventHandlers {
       this.installLauncherUpdate();
     }
   }
-
   /**
    * When the user clicks the Full Install button.
    *
@@ -232,7 +267,6 @@ class EventHandlers {
       Modal.showAlreadyInstalling();
     }
   }
-
   /**
    * Full install dialog callback.
    *
@@ -246,7 +280,6 @@ class EventHandlers {
       this.runFullInstaller();
     }
   }
-
   /**
    * When the user changes the game path.
    *
