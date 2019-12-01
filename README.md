@@ -5,7 +5,7 @@
 # Installing FreeSO
 To install FreeSO you will also need to install OpenAL, .NET Framework >= 4.0 and the original The Sims Online client. These dependencies are all included in the launcher.
 
-By clicking the **COMPLETE INSTALLATION** button in the **INSTALLER** tab you can install FreeSO and all of its dependencies all together.
+By clicking the **Complete Installation** button in the **Installer** tab you can install FreeSO and all of its dependencies all together.
 
 If you already have some of the dependencies installed, you can install the ones you don't have by clicking them separately in the installer tab. 
 
@@ -16,7 +16,10 @@ For example, if you already have FreeSO installed in C:/Program Files/FreeSO, th
 
 The folder needs to be named **FreeSO** or **The Sims Online** in order for the launcher to pick up previous installations.
 
-Please note that **COMPLETE INSTALLATION** overrides any installations that may already be present on your computer. To use a previous installation, you should use the solo installers from the installer tab.
+Please note that a **Complete Installation** overrides any installations that may already be present on your computer. To use a previous installation, you should use the solo installers from the installer tab.
+
+### Using a previous Simitone installation
+The folder needs to be named "Simitone for Windows" in order for the launcher to pick it up.
 
 # Extra features
 * You can right click the Play button to run FreeSO along with the Volcanic IDE.
@@ -40,3 +43,9 @@ Please note that **COMPLETE INSTALLATION** overrides any installations that may 
 To celebrate Simitone's progress, the launcher (since 1.6.0) now features a Simitone installer (latest release from GitHub: https://github.com/riperiperi/Simitone), a TSCC installation locator, and a brand new Simitone launcher theme.
 
 ![image](https://i.imgur.com/7p9VLBA.png)
+
+## Updating Simitone through the launcher
+
+The launcher keeps track of the Simitone version installed, and checks for new releases on the official Simitone GitHub repository (https://github.com/riperiperi/Simitone). Whenever there's a new Simitone release, an update button will appear on the launcher's Simitone screen. Here's an image to demonstrate:
+
+![image](https://i.imgur.com/UrX8s45.png)
