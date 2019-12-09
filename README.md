@@ -49,3 +49,12 @@ To celebrate Simitone's progress, the launcher (since 1.6.0) now features a Simi
 The launcher keeps track of the Simitone version installed, and checks for new releases on the official Simitone GitHub repository (https://github.com/riperiperi/Simitone). Whenever there's a new Simitone release, an update button will appear on the launcher's Simitone screen. Here's an image to demonstrate:
 
 ![image](https://i.imgur.com/UrX8s45.png)
+
+## Launching Simitone without TS1 registry entries
+
+Although the launcher does check for The Sims Complete Collection registry entries and displays a big red error message when not found, the launcher will still let you launch Simitone once downloaded and installed.
+Simitone will pick up your The Sims Complete Collection files when placed in one of these locations (ordered by priority):
+1. A folder named "The Sims" adjacent to the Simitone installation folder. For example, if you installed Simitone in C:\Program Files\Simitone, you'd need to place your The Sims Complete Collection files in C:\Program Files\The Sims.
+2. The default The Sims installation folder: C:\Program Files (x86)\Maxis\The Sims\
+
+
