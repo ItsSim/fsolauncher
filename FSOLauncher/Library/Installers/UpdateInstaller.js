@@ -69,7 +69,6 @@ class UpdateInstaller {
    */
   end() {
     // run and close
-    this.dl.cleanup();
     this.FSOLauncher.Window.setProgressBar(-1);
     this.createProgressItem('Download finished. Setup will start...', 100);
     this.FSOLauncher.View.stopProgressItem('FSOUpdateProgressItem' + this.id);
