@@ -59,6 +59,7 @@ class CompleteInstaller {
       global.locale.INS_NET_WINDOW,
       25
     );
+    // Skip .NET if already installed.
     if (this.FSOLauncher.isInstalled['NET']) {
       return Promise.resolve();
     }

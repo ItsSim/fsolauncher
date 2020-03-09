@@ -33,7 +33,7 @@
 
     "MODAL_UPDATE_DESCR": "A new update is available to download. Click \"UPDATE\" on the dialog to update.",
 
-    "MODAL_NOT_AVAILABLE": "Missing requirements",
+    "MODAL_NOT_AVAILABLE": "Missing Requirements",
     "MODAL_NOT_AVAILABLE2": "Hold on!",
 
     "MODAL_UPDATE_CHECK_FAILED": "Failed check",
@@ -45,7 +45,7 @@
     "MODAL_NOT_AVAILABLE_DESCR_1": "You need to install",
     "MODAL_NOT_AVAILABLE_DESCR_2": "before installing this program.",
 
-    "MODAL_INSTALLATION": "Install Now",
+    "MODAL_INSTALLATION": "Install Software?",
     "MODAL_INSTALLATION_DESCR": "This will install everything you need to get FreeSO up and running.",
 
     "MODAL_START": "Start installation",
@@ -62,7 +62,7 @@
 
     "MODAL_INSTALL_FOLDER": "Install in this folder",
 
-    "MODAL_REINSTALL": "Reinstall?",
+    "MODAL_REINSTALL": "Reinstall Software?",
     "MODAL_CONTINUE": "Continue",
 
     "MODAL_NEGATIVE": "Error",

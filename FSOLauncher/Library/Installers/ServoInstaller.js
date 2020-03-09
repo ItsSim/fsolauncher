@@ -1,6 +1,6 @@
-const Modal = require('../Modal');
-const HttpDownload = require('../http-download');
-
+const Modal = require('../Modal'),
+  download = require('../download')(),
+  unzip = require('../unzip')();
 const DOWNLOAD_URL_SERVO =
   'http://servo.freeso.org' +
   '/guestAuth' +
@@ -9,18 +9,17 @@ const DOWNLOAD_URL_SERVO =
   '/FreeSO_TsoClient' +
   '/.lastSuccessful' +
   '/client-<>.zip';
-
 /**
- * Installs FreeSO.
+ * Installs FreeSO from servo.freeso.org.
  *
- * @class FSOInstaller
+ * @class ServoInstaller
  */
-class FSOInstaller {
+class ServoInstaller {
   /**
-   * Creates an instance of FSOInstaller.
+   * Creates an instance of ServoInstaller.
    * @param {any} path Path to install FreeSO in.
    * @param {any} FSOLauncher
-   * @memberof FSOInstaller
+   * @memberof ServoInstaller
    */
   constructor(path, FSOLauncher) {
     this.FSOLauncher = FSOLauncher;
@@ -28,30 +27,32 @@ class FSOInstaller {
     this.path = path;
     this.haltProgress = false;
     this.tempPath = `temp/artifacts-freeso-${this.id}.zip`;
-    this.dl = new HttpDownload(DOWNLOAD_URL_SERVO, this.tempPath);
+    this.dl = download({ from: DOWNLOAD_URL_SERVO, to: this.tempPath });
   }
   /**
    * Create/Update the download progress item.
    *
    * @param {any} Message
    * @param {any} Percentage
-   * @memberof FSOInstaller
+   * @memberof ServoInstaller
    */
   createProgressItem(Message, Percentage) {
     this.FSOLauncher.View.addProgressItem(
-      'FSOProgressItem' + this.id,
+      `FSOProgressItem${this.id}`,
       'FreeSO Client',
-      'Installing in ' + this.path,
+      `Installing in ${this.path}`,
       Message,
       Percentage
     );
+    this.FSOLauncher.Window.setProgressBar(
+      Percentage == 100 ? 2 : Percentage / 100
+    );
   }
-
   /**
    * Begins the installation.
    *
    * @returns
-   * @memberof FSOInstaller
+   * @memberof ServoInstaller
    */
   install() {
     return (
@@ -64,79 +65,68 @@ class FSOInstaller {
         .catch(ErrorMessage => this.error(ErrorMessage))
     );
   }
-
   /**
    * Download all the files.
    *
    * @returns
-   * @memberof FSOInstaller
+   * @memberof ServoInstaller
    */
   step1() {
     return this.download();
   }
-
   /**
    * Create the installation directory.
    *
    * @returns
-   * @memberof FSOInstaller
+   * @memberof ServoInstaller
    */
   step2() {
     return this.setupDir(this.path);
   }
-
   /**
    * Extract files into installation directory.
    *
    * @returns
-   * @memberof FSOInstaller
+   * @memberof ServoInstaller
    */
   step3() {
     return this.extract();
   }
-
   /**
    * Create the FreeSO Registry Key.
    *
    * @returns
-   * @memberof FSOInstaller
+   * @memberof ServoInstaller
    */
   step4() {
     return require('../Registry').createFreeSOEntry(this.path);
   }
-
-  /**
-   * Creates a FreeSO shortcut.
-   * @deprecated Yeah, so people can nuke their game when they launch NOT as administrator. No, thanks.
-   *
-   * @returns
-   * @memberof FSOInstaller
-   */
-  step5() {
-    return this.FSOLauncher.createShortcut(this.path);
-  }
-
   /**
    * When the installation ends.
    *
-   * @memberof FSOInstaller
+   * @memberof ServoInstaller
    */
   end() {
+    this.dl.cleanup();
+    this.FSOLauncher.Window.setProgressBar(-1);
     this.createProgressItem(global.locale.INSTALLATION_FINISHED, 100);
     this.FSOLauncher.View.stopProgressItem('FSOProgressItem' + this.id);
     this.FSOLauncher.updateInstalledPrograms();
     this.FSOLauncher.removeActiveTask('FSO');
     Modal.showInstalled('FreeSO');
   }
-
   /**
    * When the installation errors out.
    *
    * @param {any} ErrorMessage
    * @returns
-   * @memberof FSOInstaller
+   * @memberof ServoInstaller
    */
   error(ErrorMessage) {
+    this.dl.cleanup();
+    this.FSOLauncher.Window.setProgressBar(1, {
+      mode: 'error'
+    });
     this.haltProgress = true;
     this.createProgressItem(global.locale.FSO_FAILED_INSTALLATION, 100);
     this.FSOLauncher.View.stopProgressItem('FSOProgressItem' + this.id);
@@ -144,20 +134,18 @@ class FSOInstaller {
     Modal.showFailedInstall('FreeSO', ErrorMessage);
     return Promise.reject(ErrorMessage);
   }
-
   /**
    * Downloads the distribution file.
    *
    * @returns
-   * @memberof FSOInstaller
+   * @memberof ServoInstaller
    */
   download() {
     return new Promise((resolve, reject) => {
       this.dl.run();
-      this.dl.on('error', () => {});
-      this.dl.on('end', _fileName => {
-        if (this.dl.failed) {
-          this.cleanup();
+      this.dl.events.on('error', () => {});
+      this.dl.events.on('end', _fileName => {
+        if (this.dl.hasFailed()) {
           return reject(global.locale.FSO_NETWORK_ERROR);
         }
         resolve();
@@ -165,47 +153,24 @@ class FSOInstaller {
       this.updateDownloadProgress();
     });
   }
-
   /**
    * Extracts the zipped artifacts.
-   * Always use unzip2 - unzip has some weird issues.
    *
    * @returns
-   * @memberof FSOInstaller
+   * @memberof ServoInstaller
    */
-  extract() {
-    const unzipStream = require('node-unzip-2').Extract({
-      path: this.path
-    });
-
-    this.createProgressItem(global.locale.EXTRACTING_CLIENT_FILES, 100);
-
-    return new Promise((resolve, reject) => {
-      require('fs')
-        .createReadStream(this.tempPath)
-        .pipe(unzipStream)
-        .on('entry', entry => {
-          this.createProgressItem(
-            global.locale.EXTRACTING_CLIENT_FILES + ' ' + entry.path,
-            100
-          );
-        });
-
-      unzipStream.on('error', err => {
-        //this.cleanup();
-        return reject(err);
-      });
-
-      unzipStream.on('close', _err => {
-        this.cleanup();
-        return resolve();
-      });
+  async extract() {
+    await unzip({ from: this.tempPath, to: this.path }, filename => {
+      this.createProgressItem(
+        global.locale.EXTRACTING_CLIENT_FILES + ' ' + filename,
+        100
+      );
     });
   }
   /**
    * Deletes the downloaded artifacts file.
    *
-   * @memberof FSOInstaller
+   * @memberof ServoInstaller
    */
   cleanup() {
     const fs = require('fs');
@@ -221,45 +186,21 @@ class FSOInstaller {
    *
    * @param {any} dir
    * @returns
-   * @memberof FSOInstaller
+   * @memberof ServoInstaller
    */
   setupDir(dir) {
     return new Promise((resolve, reject) => {
-      require('mkdirp')(dir, function(err) {
-        if(err) return reject(err);
+      require('fs-extra').ensureDir(dir, err => {
+        if (err) return reject(err);
         resolve();
       });
-    });
-  }
-  /**
-   * Creates a direct FreeSO shortcut.
-   *
-   * @returns
-   * @memberof FSOInstaller
-   */
-  createShortcut() {
-    return new Promise((resolve, reject) => {
-      const ws = require('windows-shortcuts');
-
-      ws.create(
-        '%UserProfile%\\Desktop\\FreeSO.lnk',
-        {
-          target: this.path + '\\FreeSO.exe',
-          workingDir: this.path,
-          desc: 'Play FreeSO online',
-          runStyle: ws.MAX
-        },
-        err => {
-          return err ? reject(err) : resolve();
-        }
-      );
     });
   }
   /**
    * Checks if FreeSO is already installed in a given path.
    *
    * @param {any} after What to do after (callback).
-   * @memberof FSOInstaller
+   * @memberof ServoInstaller
    */
   isInstalledInPath() {
     return new Promise((resolve, _reject) => {
@@ -271,7 +212,7 @@ class FSOInstaller {
   /**
    * Updates the progress item with the download progress.
    *
-   * @memberof FSOInstaller
+   * @memberof ServoInstaller
    */
   updateDownloadProgress() {
     setTimeout(() => {
@@ -282,7 +223,8 @@ class FSOInstaller {
       if (p < 100) {
         if (!this.haltProgress) {
           this.createProgressItem(
-            `${global.locale.DL_CLIENT_FILES} ${mb} MB ${global.locale.X_OUT_OF_X} ${size} MB (${p}%)`, p
+            `${global.locale.DL_CLIENT_FILES} ${mb} MB ${global.locale.X_OUT_OF_X} ${size} MB (${p}%)`,
+            p
           );
         }
 
@@ -292,4 +234,4 @@ class FSOInstaller {
   }
 }
 
-module.exports = FSOInstaller;
+module.exports = ServoInstaller;

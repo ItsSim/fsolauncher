@@ -1,3 +1,4 @@
+require('v8-compile-cache');
 const { app, BrowserWindow, shell, Tray, Menu } = require('electron');
 
 const oslocale = require('os-locale');
@@ -5,10 +6,11 @@ const fs = require('fs');
 const ini = require('ini');
 const UIText = require('./FSOLauncher_UI/UIText.json');
 const FSOLauncher = require('./FSOLauncher/FSOLauncher');
+const package = require('./package.json');
 
 process.title = 'FreeSO Launcher';
 
-global.VERSION = '1.6.4';
+global.VERSION = package.version;
 global.WEBSERVICE = '173.212.246.204';
 global.SOCKET_ENDPOINT = '30001';
 global.REMESH_ENDPOINT = 'RemeshPackage';
@@ -23,7 +25,9 @@ global.willQuit = false;
 
 const code = oslocale.sync().substring(0, 2);
 
-global.locale = Object.prototype.hasOwnProperty.call(UIText, code) ? UIText[code] : UIText['en'];
+global.locale = Object.prototype.hasOwnProperty.call(UIText, code)
+  ? UIText[code]
+  : UIText['en'];
 global.locale.LVERSION = global.VERSION;
 
 require('electron-pug')({ pretty: false }, global.locale);
@@ -126,7 +130,9 @@ function CreateWindow() {
           Window.show();
         }
       })
-      .catch(_err => { Window.show(); });
+      .catch(_err => {
+        Window.show();
+      });
   });
 
   Window.on('close', e => {
@@ -161,8 +167,7 @@ const gotTheLock = app.requestSingleInstanceLock();
 if (!gotTheLock) {
   app.quit();
 } else {
-  app.on('second-instance', 
-  (_event, _commandLine, _workingDirectory) => {
+  app.on('second-instance', (_event, _commandLine, _workingDirectory) => {
     if (Window) {
       Window.show();
       Window.focus();

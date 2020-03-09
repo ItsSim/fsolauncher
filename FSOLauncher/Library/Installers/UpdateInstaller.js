@@ -1,5 +1,5 @@
-const Modal = require('../Modal');
-const HttpDownload = require('../http-download');
+const Modal = require('../Modal'),
+  download = require('../download')();
 /**
  * Installs a launcher update. This class was introduced after having problems
  * with just downloading the .asar file and replacing it.
@@ -18,10 +18,10 @@ class UpdateInstaller {
 
     this.id = Math.floor(Date.now() / 1000);
     this.haltProgress = false;
-    this.dl = new HttpDownload(
-      'http://beta.freeso.org/FreeSO Launcher Setup.exe',
-      'temp/installer.exe'
-    );
+    this.dl = download({
+      from: 'http://beta.freeso.org/FreeSO Launcher Setup.exe',
+      to: 'temp/installer.exe'
+    });
   }
   /**
    * Creates the download progress item.
@@ -37,6 +37,9 @@ class UpdateInstaller {
       'Downloading from ' + this.FSOLauncher.updateLocation,
       Message,
       Percentage
+    );
+    this.FSOLauncher.Window.setProgressBar(
+      Percentage == 100 ? 2 : Percentage / 100
     );
   }
   /**
@@ -66,6 +69,8 @@ class UpdateInstaller {
    */
   end() {
     // run and close
+    this.dl.cleanup();
+    this.FSOLauncher.Window.setProgressBar(-1);
     this.createProgressItem('Download finished. Setup will start...', 100);
     this.FSOLauncher.View.stopProgressItem('FSOUpdateProgressItem' + this.id);
 
@@ -86,9 +91,14 @@ class UpdateInstaller {
    * @memberof UpdateInstaller
    */
   error(ErrorMessage) {
+    this.dl.cleanup();
+    this.FSOLauncher.Window.setProgressBar(1, {
+      mode: 'error'
+    });
     this.haltProgress = true;
     this.createProgressItem(
-      `Failed to download FreeSO Launcher. Try again later, or download from <a target="_blank" href="${this.FSOLauncher.updateLocation}">here</a>.`, 100
+      `Failed to download FreeSO Launcher. Try again later, or download from <a target="_blank" href="${this.FSOLauncher.updateLocation}">here</a>.`,
+      100
     );
     this.FSOLauncher.View.stopProgressItem('FSOUpdateProgressItem' + this.id);
     Modal.showFailedUpdateDownload();
@@ -111,10 +121,9 @@ class UpdateInstaller {
   download() {
     return new Promise((resolve, reject) => {
       this.dl.run();
-      this.dl.on('error', () => {});
-      this.dl.on('end', _fileName => {
-        if (this.dl.failed) {
-          this.cleanup();
+      this.dl.events.on('error', () => {});
+      this.dl.events.on('end', _fileName => {
+        if (this.dl.hasFailed()) {
           return reject(
             'FreeSO Launcher installation files have failed to download. You can try again later or download it yourself at https://beta.freeso.org'
           );
@@ -138,7 +147,8 @@ class UpdateInstaller {
       if (p < 100) {
         if (!this.haltProgress) {
           this.createProgressItem(
-            `Downloading installation files... ${mb} MB ${global.locale.X_OUT_OF_X} ${size} MB (${p}%)`, p
+            `Downloading installation files... ${mb} MB ${global.locale.X_OUT_OF_X} ${size} MB (${p}%)`,
+            p
           );
         }
 

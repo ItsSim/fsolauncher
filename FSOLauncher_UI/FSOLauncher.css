@@ -19,6 +19,10 @@
   user-select: none;
 }
 
+* {
+  letter-spacing:-0.02em;
+}
+
 /*body.no-internet #home-page .page-content {
     display:none
 }

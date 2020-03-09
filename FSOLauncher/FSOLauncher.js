@@ -620,6 +620,10 @@ class FSOLauncher extends EventHandlers {
             resolve();
           } catch (e) {
             reject(e);
+          } finally {
+            setTimeout(() => {
+              this.Window.setProgressBar(-1);
+            }, 5000);
           }
         });
 
@@ -630,7 +634,7 @@ class FSOLauncher extends EventHandlers {
           Installer = require('./Library/Installers/FilePlanetInstaller');
         }
         if (Component == 'FSO') {
-          Installer = require('./Library/Installers/FSOInstaller');
+          Installer = require('./Library/Installers/ServoInstaller');
         }
         if (Component == 'Simitone') {
           Installer = require('./Library/Installers/SimitoneInstaller');
@@ -645,7 +649,6 @@ class FSOLauncher extends EventHandlers {
                 global.locale.TOAST_WAITING,
                 this.View
               );
-  
               const folder = await Modal.showChooseDirectory(
                 this.getPrettyName(Component),
                 this.Window
@@ -683,6 +686,10 @@ class FSOLauncher extends EventHandlers {
                 resolve();
               } catch (e) {
                 reject(e);
+              } finally {
+                setTimeout(() => {
+                  this.Window.setProgressBar(-1);
+                }, 5000);
               }
             } else {
               if (!options.fullInstall) {
@@ -709,6 +716,10 @@ class FSOLauncher extends EventHandlers {
               resolve();
             } catch (e) {
               reject(e);
+            } finally {
+              setTimeout(() => {
+                this.Window.setProgressBar(-1);
+              }, 5000);
             }
           }
         });
@@ -731,6 +742,10 @@ class FSOLauncher extends EventHandlers {
           } catch (e) {
             this.removeActiveTask(Component);
             return reject(e);
+          } finally {
+            setTimeout(() => {
+              this.Window.setProgressBar(-1);
+            }, 5000);
           }
         });
     }
@@ -759,78 +774,57 @@ class FSOLauncher extends EventHandlers {
     if (!this.isInstalled.TSO || !this.isInstalled.FSO) {
       return Modal.showNeedFSOTSO();
     }
-
-    const fs = require('fs-extra');
-    const ini = require('ini');
-    const path = require('path');
-
+    const fs = require('fs-extra'),ini = require('ini'),path = require('path');
     const Toast = new ToastComponent(global.locale.TOAST_LANGUAGE, this.View);
 
     this.addActiveTask('CHLANG');
 
-    fs.remove(
-      this.isInstalled.FSO + '\\Content\\Patch\\User\\translations',
-      async _error => {
-        fs.copy(
-          path.join(
-            __dirname,
-            '../export/LanguagePacks/' + language.toUpperCase() + '/TSO'
-          ),
-          this.isInstalled.TSO + '\\TSOClient',
-          async error => {
-            if (error) {
-              this.removeActiveTask('CHLANG');
-              Toast.destroy();
-              return Modal.showTSOLangFail();
-            }
-
-            fs.copy(
-              path.join(
-                __dirname,
-                '../export/LanguagePacks/' + language.toUpperCase() + '/FSO'
-              ),
-              this.isInstalled.FSO,
-              async error => {
-                if (error) {
-                  this.removeActiveTask('CHLANG');
-                  Toast.destroy();
-                  return Modal.showFSOLangFail();
-                }
-
-                try {
-                  const data = await this.getFSOConfig();
-
-                  data.CurrentLang = this.getLangString(
-                    this.getLangCode(language)
-                  )[0];
-
-                  fs.writeFile(
-                    this.isInstalled.FSO + '\\Content\\config.ini',
-                    ini.stringify(data),
-                    error => {
-                      this.removeActiveTask('CHLANG');
-                      Toast.destroy();
-
-                      if (error) return Modal.showIniFail();
-
-                      this.conf.Game.Language = this.getLangString(
-                        this.getLangCode(language)
-                      )[1];
-
-                      this.persist(true);
-                    }
-                  );
-                } catch (e) {
-                  Modal.showFirstRun();
-                  this.removeActiveTask('CHLANG');
-                  Toast.destroy();
-                }
-              }
-            );
-          }
-        );
+    try {
+      try {
+        await fs.remove(this.isInstalled.FSO + '\\Content\\Patch\\User\\translations');
+      } catch(err) {
+        this.removeActiveTask('CHLANG');
+        Toast.destroy();
+        return Modal.showTSOLangFail();
       }
-    );
+      try {
+        await fs.copy(path.join(
+          __dirname, 
+          '../export/LanguagePacks/' + language.toUpperCase() + '/TSO'), 
+          this.isInstalled.TSO + '\\TSOClient'
+        );
+      } catch(err) {
+        this.removeActiveTask('CHLANG');
+        Toast.destroy();
+        return Modal.showFSOLangFail();
+      }
+
+      let data;
+      try {
+        data = await this.getFSOConfig();
+        data.CurrentLang = this.getLangString(this.getLangCode(language))[0];
+      } catch(err) {
+        this.removeActiveTask('CHLANG');
+        Toast.destroy();
+        return Modal.showFirstRun();
+      }
+      try {
+        await fs.writeFile(
+          this.isInstalled.FSO + '\\Content\\config.ini',
+          ini.stringify(data)
+        );
+      } catch(err) {
+        this.removeActiveTask('CHLANG');
+        Toast.destroy();
+        return Modal.showIniFail();
+      }
+      this.removeActiveTask('CHLANG');
+      Toast.destroy();
+      this.conf.Game.Language = this.getLangString(this.getLangCode(language))[1];
+      this.persist(true);
+    } catch(err) {
+      return Modal.showGenericError("An error ocurred: " + err);
+    }
   }
   /**
    * Updates a configuration variable. Used after
@@ -1033,32 +1027,6 @@ class FSOLauncher extends EventHandlers {
 
     require('child_process').exec(file + ' ' + args.join(' '), { cwd });
     setTimeout(() => { Toast.destroy(); }, 4000);
-  }
-  /**
-   * Creates a shortcut for FreeSO.exe.
-   *
-   * @deprecated
-   * @param {any} path Path to create the shortcut in.
-   * @returns
-   * @memberof FSOLauncher
-   */
-  createShortcut(path) {
-    return new Promise((resolve, reject) => {
-      const ws = require('windows-shortcuts');
-
-      ws.create(
-        '%UserProfile%\\Desktop\\FreeSO.lnk',
-        {
-          target: path + '\\FreeSO.exe',
-          workingDir: path,
-          desc: 'Play FreeSO Online',
-          runStyle: ws.MAX
-        },
-        err => {
-          return err ? reject(err) : resolve();
-        }
-      );
-    });
   }
   /**
    * Promise that returns FreeSO's configuration

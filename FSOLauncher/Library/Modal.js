@@ -412,7 +412,8 @@ class Modal {
   static sendNotification(title, message, url) {
     const {
       setGlobalStyles,
-      createNotification
+      createNotification,
+      setContainerWidth
     } = require('electron-custom-notifications');
 
     const path = require('path');
@@ -450,6 +451,7 @@ class Modal {
               (err, fredokaOne) => {
                 if (err) return;
 
+                setContainerWidth(360);
                 setGlobalStyles(`
                 @font-face {
                   font-family: 'Munged';
@@ -468,31 +470,35 @@ class Modal {
                   cursor:pointer;
                   overflow:hidden;
                   display:block;
-                  padding:17px;
+                  padding:20px;
                   background-image: -webkit-linear-gradient(#fafafa, #f4f4f4 40%, #e5e5e5);
-                  border-radius:12px;
                   margin:10px;
+                  border-radius:8px;
                   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
                   display:flex;
                 }
                 notification h1 {
                   font-family:'Fredoka One';
                   margin-bottom:8px;
+                  font-size:18px;
+                  font-weight:200!important;
                   color:#4B88E4;
                 }
                 notification p {
                   font-family:'Munged';
-                  font-size:13px;
+                  font-size:14px;
+                  font-weight:100!important;
                   line-height:16px;
-                  color:rgba(0,0,0,0.6);
+                  letter-spacing:-0.02em;
+                  color:rgba(0,0,0,0.45);
                 }
                 notification #logo {
                   background-image:url("data:image/png;base64,${logo}");
-                  background-size:100%;
+                  background-size:contain;
                   background-position:center center;
                   background-repeat:no-repeat;
-                  width:70px;
-                  height:60px;
+                  width:50px;
+                  height:50px;
                   margin-right:10px;
                   flex:0.2;
                 }
@@ -503,7 +509,7 @@ class Modal {
 
                 const notification = createNotification({
                   template: `
-                  <notification id="%id%" class="animated fadeIn faster">
+                  <notification id="%id%" class="animated slideInUp faster">
                     <div id="logo"></div>
                     <div id="content">
                       <h1>${title}</h1>
