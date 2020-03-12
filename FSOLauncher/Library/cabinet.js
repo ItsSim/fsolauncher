@@ -1,5 +1,5 @@
 /* eslint-disable require-atomic-updates */
-const ZlibInflate = require("zlibjs/bin/rawinflate.min").Zlib,
+const inflate = require("deflate-js").inflate,
   fs = require("fs-extra"),
   path = require("path");
 /**
@@ -43,7 +43,7 @@ module.exports = function makeCabinetReader() {
      */
     const _MSZipDecomp = (data, _uncompSize) => {
       if (!(data[0] === 0x43 && data[1] === 0x4b)) console.log("MSZIP fail");
-      const temp = new ZlibInflate.RawInflate(data.subarray(2)).decompress();
+      const temp = inflate(data.subarray(2));
       const view = new Uint8Array(new ArrayBuffer(temp.length));
       view.set(temp);
       return view;
