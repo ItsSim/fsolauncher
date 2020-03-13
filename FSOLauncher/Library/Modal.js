@@ -222,7 +222,7 @@ class Modal {
    */
   static showChooseDirectory(ComponentName, Window) {
     return new Promise((resolve, _reject) => {
-      require('fs').stat('C:\\Program Files', (err, stats) => {
+      require('fs-extra').stat('C:\\Program Files', (err, stats) => {
         const defaultPath =
           !err && stats.isDirectory() ? 'C:\\Program Files' : null;
 
@@ -409,134 +409,127 @@ class Modal {
    * @param {any} url Notification url.
    * @memberof Modal
    */
-  static sendNotification(title, message, url) {
+  static async sendNotification(title, message, url) {
     const {
       setGlobalStyles,
       createNotification,
       setContainerWidth
     } = require('electron-custom-notifications');
 
-    const path = require('path');
-    const fs = require('fs');
+    const path = require('path'),
+      fs = require('fs-extra');
 
-    fs.readFile(
-      path.join(__dirname, '../../', 'beta.ico'),
-      {
-        encoding: 'base64'
-      },
-      (err, logo) => {
-        if (err) return;
+    try {
+      const b64icon = await fs.readFile(
+        path.join(__dirname, '../../', 'beta.ico'),
+        {
+          encoding: 'base64'
+        }
+      );
+      const b64fontMunged = await fs.readFile(
+        path.join(
+          __dirname,
+          '../../FSOLauncher_UI/FSOLauncher_Fonts',
+          'hinted-Munged-embOpitJmj.ttf'
+        ),
+        {
+          encoding: 'base64'
+        }
+      );
+      const b64fontFredokaOne = await fs.readFile(
+        path.join(
+          __dirname,
+          '../../FSOLauncher_UI/FSOLauncher_Fonts',
+          'FredokaOne-Regular.ttf'
+        ),
+        {
+          encoding: 'base64'
+        }
+      );
 
-        fs.readFile(
-          path.join(
-            __dirname,
-            '../../FSOLauncher_UI/FSOLauncher_Fonts',
-            'hinted-Munged-embOpitJmj.ttf'
-          ),
-          {
-            encoding: 'base64'
-          },
-          (err, munged) => {
-            if (err) return;
+      setContainerWidth(360);
+      setGlobalStyles(`
+        @font-face {
+          font-family: 'Munged';
+          src: url(data:font/truetype;charset=utf-8;base64,${b64fontMunged}) format('truetype');
+          font-weight: normal;
+          font-style: normal;
+        }
+        @font-face {
+          font-family: 'Fredoka One';
+          src: url(data:font/truetype;charset=utf-8;base64,${b64fontFredokaOne}) format('truetype');
+          font-weight: normal;
+          font-style: normal;
+        }
+        notification {
+          -webkit-user-select: none;
+          cursor:pointer;
+          overflow:hidden;
+          display:block;
+          padding:20px;
+          background-image: -webkit-linear-gradient(#fafafa, #f4f4f4 40%, #e5e5e5);
+          margin:10px;
+          border-radius:8px;
+          box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+          display:flex;
+        }
+        notification h1 {
+          font-family:'Fredoka One';
+          margin-bottom:8px;
+          font-size:18px;
+          font-weight:200!important;
+          color:#4B88E4;
+        }
+        notification p {
+          font-family:'Munged';
+          font-size:14px;
+          font-weight:100!important;
+          line-height:16px;
+          letter-spacing:-0.02em;
+          color:rgba(0,0,0,0.45);
+        }
+        notification #logo {
+          background-image:url("data:image/png;base64,${b64icon}");
+          background-size:contain;
+          background-position:center center;
+          background-repeat:no-repeat;
+          width:50px;
+          height:50px;
+          margin-right:10px;
+          flex:0.2;
+        }
+        notification #content {
+          flex:0.8;
+        }
+        `);
 
-            fs.readFile(
-              path.join(
-                __dirname,
-                '../../FSOLauncher_UI/FSOLauncher_Fonts',
-                'FredokaOne-Regular.ttf'
-              ),
-              {
-                encoding: 'base64'
-              },
-              (err, fredokaOne) => {
-                if (err) return;
+      const notification = createNotification({
+        template: `
+          <notification id="%id%" class="animated slideInUp faster">
+            <div id="logo"></div>
+            <div id="content">
+              <h1>${title}</h1>
+              <p>${message}</p>
+            </div>
+          </notification> 
+          `,
+        timeout: 10000
+      });
 
-                setContainerWidth(360);
-                setGlobalStyles(`
-                @font-face {
-                  font-family: 'Munged';
-                  src: url(data:font/truetype;charset=utf-8;base64,${munged}) format('truetype');
-                  font-weight: normal;
-                  font-style: normal;
-                }
-                @font-face {
-                  font-family: 'Fredoka One';
-                  src: url(data:font/truetype;charset=utf-8;base64,${fredokaOne}) format('truetype');
-                  font-weight: normal;
-                  font-style: normal;
-                }
-                notification {
-                  -webkit-user-select: none;
-                  cursor:pointer;
-                  overflow:hidden;
-                  display:block;
-                  padding:20px;
-                  background-image: -webkit-linear-gradient(#fafafa, #f4f4f4 40%, #e5e5e5);
-                  margin:10px;
-                  border-radius:8px;
-                  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-                  display:flex;
-                }
-                notification h1 {
-                  font-family:'Fredoka One';
-                  margin-bottom:8px;
-                  font-size:18px;
-                  font-weight:200!important;
-                  color:#4B88E4;
-                }
-                notification p {
-                  font-family:'Munged';
-                  font-size:14px;
-                  font-weight:100!important;
-                  line-height:16px;
-                  letter-spacing:-0.02em;
-                  color:rgba(0,0,0,0.45);
-                }
-                notification #logo {
-                  background-image:url("data:image/png;base64,${logo}");
-                  background-size:contain;
-                  background-position:center center;
-                  background-repeat:no-repeat;
-                  width:50px;
-                  height:50px;
-                  margin-right:10px;
-                  flex:0.2;
-                }
-                notification #content {
-                  flex:0.8;
-                }
-                `);
+      notification.on('display', () => {
+        Modal.View.sendSound('notification');
+        Modal.View.sendNotifLog(title, message, url);
+      });
 
-                const notification = createNotification({
-                  template: `
-                  <notification id="%id%" class="animated slideInUp faster">
-                    <div id="logo"></div>
-                    <div id="content">
-                      <h1>${title}</h1>
-                      <p>${message}</p>
-                    </div>
-                  </notification> 
-                  `,
-                  timeout: 10000
-                });
-
-                notification.on('display', () => {
-                  Modal.View.sendSound('notification');
-                  Modal.View.sendNotifLog(title, message, url);
-                });
-
-                notification.on('click', () => {
-                  if (url) {
-                    require('electron').shell.openExternal(url);
-                  }
-                  notification.close();
-                });
-              }
-            );
-          }
-        );
-      }
-    );
+      notification.on('click', () => {
+        if (url) {
+          require('electron').shell.openExternal(url);
+        }
+        notification.close();
+      });
+    } catch (e) {
+      console.log('Notification broke:', e);
+    }
   }
 
   /**

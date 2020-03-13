@@ -161,7 +161,7 @@ class UpdateInstaller {
    * @memberof UpdateInstaller
    */
   cleanup() {
-    const fs = require('fs');
+    const fs = require('fs-extra');
     fs.stat('temp/installer.exe', function(err, _stats) {
       if (err) {
         return;

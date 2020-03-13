@@ -219,6 +219,7 @@ FSOLauncher.prototype.changePage = function(a) {
   if (a == 'simitone') {
     FSOLauncher.setTheme('simitone');
     FSOLauncher.fireEvent('CHECK_SIMITONE');
+    simitoneRequirementsCheckInterval && clearInterval(simitoneRequirementsCheckInterval);
     simitoneRequirementsCheckInterval = setInterval(() => {
       FSOLauncher.fireEvent('CHECK_SIMITONE');
     }, 60000);

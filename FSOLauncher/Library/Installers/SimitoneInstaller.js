@@ -190,7 +190,7 @@ class SimitoneInstaller {
    * @memberof SimitoneInstaller
    */
   cleanup() {
-    const fs = require('fs');
+    const fs = require('fs-extra');
     fs.stat(this.tempPath, (err, _stats) => {
       if (err) return console.log(err);
       fs.unlink(this.tempPath, err => {
@@ -221,7 +221,7 @@ class SimitoneInstaller {
    */
   isInstalledInPath() {
     return new Promise((resolve, _reject) => {
-      require('fs').stat(this.path + '\\Simitone.Windows.exe', err => {
+      require('fs-extra').stat(this.path + '\\Simitone.Windows.exe', err => {
         resolve(err == null);
       });
     });

@@ -124,7 +124,7 @@ class RemeshesInstaller {
   }
 
   cleanup() {
-    const fs = require('fs');
+    const fs = require('fs-extra');
     fs.stat(this.tempPath, (err, _stats) => {
       if (err) {
         return;

@@ -173,7 +173,7 @@ class ServoInstaller {
    * @memberof ServoInstaller
    */
   cleanup() {
-    const fs = require('fs');
+    const fs = require('fs-extra');
     fs.stat(this.tempPath, (err, _stats) => {
       if (err) return console.log(err);
       fs.unlink(this.tempPath, err => {
@@ -204,7 +204,7 @@ class ServoInstaller {
    */
   isInstalledInPath() {
     return new Promise((resolve, _reject) => {
-      require('fs').stat(this.path + '\\FreeSO.exe', err => {
+      require('fs-extra').stat(this.path + '\\FreeSO.exe', err => {
         resolve(err == null);
       });
     });

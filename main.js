@@ -2,7 +2,7 @@ require('v8-compile-cache');
 const { app, BrowserWindow, shell, Tray, Menu } = require('electron');
 
 const oslocale = require('os-locale');
-const fs = require('fs');
+const fs = require('fs-extra');
 const ini = require('ini');
 const UIText = require('./FSOLauncher_UI/UIText.json');
 const FSOLauncher = require('./FSOLauncher/FSOLauncher');
@@ -10,8 +10,8 @@ const package = require('./package.json');
 
 process.title = 'FreeSO Launcher';
 
-global.VERSION = package.version;
-global.WEBSERVICE = '173.212.246.204';
+global.VERSION         = package.version;
+global.WEBSERVICE      = '173.212.246.204';
 global.SOCKET_ENDPOINT = '30001';
 global.REMESH_ENDPOINT = 'RemeshPackage';
 global.UPDATE_ENDPOINT = 'UpdateCheck';
@@ -36,7 +36,7 @@ let conf;
 
 try {
   // Check if launcher configuration exists.
-  conf = ini.parse(require('fs').readFileSync('FSOLauncher.ini', 'utf-8'));
+  conf = ini.parse(fs.readFileSync('FSOLauncher.ini', 'utf-8'));
 } catch (e) {
   // Else create the configuration with default values.
   conf = {

@@ -252,8 +252,7 @@ class FSOLauncher extends EventHandlers {
    * @memberof FSOLauncher
    */
   async editTTSMode(value) {
-    const fs = require('fs');
-    const ini = require('ini');
+    const fs = require('fs-extra'), ini = require('ini');
     const Toast = new ToastComponent(global.locale.TOAST_TTS_MODE, this.View);
 
     this.addActiveTask('CHTTS');
@@ -270,8 +269,7 @@ class FSOLauncher extends EventHandlers {
 
       fs.writeFile(
         this.isInstalled.FSO + '\\Content\\config.ini',
-        ini.stringify(data),
-        err => {
+        ini.stringify(data), err => {
           this.removeActiveTask('CHTTS');
           Toast.destroy();
 
@@ -970,7 +968,7 @@ class FSOLauncher extends EventHandlers {
       return Modal.showVolcanicPrompt();
     }
 
-    const fs = require('fs');
+    const fs = require('fs-extra');
 
     const exeLocation = isSimitone
       ? this.isInstalled.Simitone + '\\Simitone.Windows.exe'
@@ -1038,7 +1036,7 @@ class FSOLauncher extends EventHandlers {
   getFSOConfig() {
     return new Promise((resolve, reject) => {
       const ini = require('ini');
-      const fs = require('fs');
+      const fs = require('fs-extra');
 
       fs.readFile(
         this.isInstalled.FSO + '\\Content\\config.ini',
@@ -1092,7 +1090,7 @@ class FSOLauncher extends EventHandlers {
    */
   persist(_showToast) {
     const Toast = new ToastComponent(global.locale.TOAST_SETTINGS, this.View);
-    require('fs').writeFile(
+    require('fs-extra').writeFile(
       'FSOLauncher.ini',
       require('ini').stringify(this.conf),
       _err => { setTimeout(() => { Toast.destroy(); }, 1500); }
