@@ -772,12 +772,16 @@ class FSOLauncher extends EventHandlers {
     if (!this.isInstalled.TSO || !this.isInstalled.FSO) {
       return Modal.showNeedFSOTSO();
     }
-    const fs = require('fs-extra'),ini = require('ini'),path = require('path');
-    const Toast = new ToastComponent(global.locale.TOAST_LANGUAGE, this.View);
-
     this.addActiveTask('CHLANG');
-
+    const fs = require('fs-extra'),
+      ini = require('ini'),
+      path = require('path');
+    const Toast = new ToastComponent(global.locale.TOAST_LANGUAGE, this.View);
     try {
+      /**
+      No object translations for now. 
+      There should be a way of translating them collaboratively (maybe by using a GitHub repo?) 
+      since one str.piff file contains all language strings for that object.
       try {
         await fs.remove(this.isInstalled.FSO + '\\Content\\Patch\\User\\translations');
       } catch(err) {
@@ -785,11 +789,17 @@ class FSOLauncher extends EventHandlers {
         Toast.destroy();
         return Modal.showTSOLangFail();
       }
+      **/
       try {
         await fs.copy(path.join(
           __dirname, 
           '../export/LanguagePacks/' + language.toUpperCase() + '/TSO'), 
           this.isInstalled.TSO + '\\TSOClient'
+        );
+        await fs.copy(path.join(
+          __dirname, 
+          '../export/LanguagePacks/' + language.toUpperCase() + '/FSO'), 
+          this.isInstalled.FSO
         );
       } catch(err) {
         this.removeActiveTask('CHLANG');
