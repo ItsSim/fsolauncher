@@ -1,0 +1,8 @@
+{
+    "guid": "1380ae82-4f41-4e4e-a0ed-b7e94a826db2", 
+    "trigger": "land:skilldisabled",
+    "title": "Habilidades desactivadas",
+    "category": "Avanzado",
+    "image": "hint_skilldisabled.png",
+    "body": "La propiedad a la que te has unido tiene las habilidades desactivadas. Esto significa que las habilidades desbloqueadas no decaerán mientras te encuentres en esta propiedad, pero a su vez no podrás subir tus habilidades o ganar dinero con objetos que otorguen dinero. Ten en cuenta que si eres un inquilino, según la configuración que se muestre en la Página de propiedad, puede estar exento de este efecto."
+}

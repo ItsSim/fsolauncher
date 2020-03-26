@@ -1,0 +1,47 @@
+1  ^Quejarse^
+2  ^Acoso^
+3  ^Hacer trampa^
+4  ^Acción ilegal^
+5  ^Actitud inapropiada^
+6  ^Nombre de Propiedad/Sim inapropiado^
+7  ^Para enviar una queja, rellena la información solicitada. Use este sistema solo para quejas reales. El mal uso puede causar acciones tomadas contra tu cuenta.^
+8  ^¿Acerca de que es tu queja?^
+9  ^Nota: No se aceptan peticiones sobre Obscenidad, Blasfemia en el chat, llamadas de teléfono o correos. Por favor, use la función "Ignorar" para evitar ser molestado.^
+10 ^Descripción clara del problema.^
+11 ^Descripción clara del problema. Asegúrese de describir el papel de cada Sim que haya seleccionado a la izquierda.^
+12 ^Selecciona hasta %d Sims o %d Propiedades de la lista (usa Ctrl-Clic para seleccionar varios). Si el Sim ofensor no está en la lista, puedes añadirlo mediante la caja de edición.^
+13 ^Objetos en juego^
+14 ^Alertas de Texto^
+15 ^Sim^
+16 ^Cancelar^
+17 ^Volver al juego^
+18 ^No se ha encontrado el Sim^
+19 ^El Sim que intentabas añadir no se ha encontrado.^
+20 ^Añadir^
+21 ^Añadir Propiedad o Sim a la lista^
+22 ^Atras^
+23 ^Ir al diálogo anterior^
+24 ^Enviar^
+25 ^Enviar petición^
+26 ^Hacia arriba^
+27 ^Hacia abajo^
+28 ^Queja relacionada con Objetos^
+29 ^Queja relacionada con Texto^
+30 ^Queja relacionada con Sims^
+31 ^^
+32 ^^
+33 ^^
+34 ^^
+
+These strings have constants in the code.  If their ID changes then the code needs to be updated and compiled.
+35 ^Solicitud de Petición^
+36 ^Por favor introduce el nombre del Sim antes de pulsar en Añadir.^
+37 ^Esa entrada ya existe.  Por favor, solo introduce nombres únicos.^
+38 ^^
+39 ^^
+
+These are tooltips for the submit button
+40 ^Se necesita un tipo de Queja^
+41 ^Se necesita seleccionar un Sim o una propiedad^
+42 ^Se necesita una descripción breve^
+43 ^Se necesita una descripción detallada^

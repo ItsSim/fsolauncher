@@ -1,0 +1,27 @@
+1 ^Error de Red^
+2 ^Se ha perdido la conexión al servidor. Posibles causas: tu cliente se ha desconectado erróneamente o el servidor se ha colgado. ( Código de Error: %d )^
+3 ^Conexión finalizada.^
+4 ^Error de Creación de Sim.^
+5 ^El nombre de tu Sim está en uso. Elige otro.^
+6 ^Error de Base de Datos^
+7 ^No se ha podido crear el Sim.^
+8 ^No se ha podido crear el Sim.^
+9 ^No se ha podido generar el Dinero.^
+10 ^Tu Bonus de Último Visitante^
+11 ^El Bonus de Último Visitante que recibiste fue de %lu Simoleones. Los Bonus de Visitantes son pagados diariamente. (Este mensaje no aparecerá si tu ganancia es de 0)^
+12 ^Desconexión por Inactividad^
+13 ^Has sido automáticamente desconectado del Servidor debido a tu inactividad.^
+14 ^Error - El nombre del Sim no es válido. Introduce otro.^
+15 ^Error - Cabeza no válida.^
+16 ^Error - Ropa Casual no válida.^
+17 ^Error - Cuerpo desnudo no válido.^
+18 ^Error - Traje de baño no válido.^
+19 ^Error - Pijama no válido.^
+20 ^Error - Género no válido.^
+21 ^Error - Tono de piel no válido.^
+22 ^Error - Le faltan datos a la solicitud..^
+23 ^Error - Inserción en la base de datos no válida.^
+24 ^Has sido vetado.^
+25 ^Es de nuestro deber informarte que tu cuenta ha sido vetada por no cumplir los "Términos de Servicio". Se ha enviado un e-mail con la razón de tu expulsión.^
+26 ^Has sido desconectado porque alguien ha entrado en tu cuenta desde otra localización.^
+27 ^Has sido desconectado porque alguien ha entrado en tu cuenta desde otra localización y ha retirado este Sim.^

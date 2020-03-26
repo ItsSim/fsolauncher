@@ -1,0 +1,8 @@
+{
+    "guid": "98bfcfa8-00b1-47be-9a61-63cc9236c898", 
+    "trigger": "ui:mayor_buildbuy",
+    "title": "Donar, ¿o no donar?",
+    "category": "Barrios",
+    "image": "hint_mayor_buildbuy.png",
+    "body": "Como Alcalde de este barrio, tienes control completo sobre su Ayuntamiento y los objetos colocados en él. Hay dos maneras de colocar objetos: De forma [s][color=white]'Normal'[/color][/s], que funciona de forma similar a cuando colocas objetos en propiedades privadas - puedes mover libremente los objetos de la propiedad a tu inventario, y los objetos colocados volverán a tu inventario cuando te mudes. Como [s][color=white]'Donación'[/color][/s], el cual permite un mayor límite de objetos, pero éstos [s][color=red]NUNCA VUELVEN A SER TUYOS[/color][/s] y no pueden ser reembolsados. Cuando donas un objeto a una propiedad de tipo comunidad, está destinado a convertirse en un bien fijo que pertenece al barrio como un todo, y puede persistir tras la sucesión de Alcaldes. Aparecerá un recordatorio cada vez que abras tu inventario, por si acaso tienes planeado colocar objetos de gran valor...\n\nPero, hay una ventaja - cuando compras objetos del catálogo para realizar una donación, [s][color=#B3FF99]¡cuestan 1/3 del precio![/color][/s] Esto hace que sea más fácil empezar o hacer renovaciones sin preocuparte tanto si tus aportaciones desaparecen en un futuro. Como Alcalde, puedes añadir jugadores a la lista blanca de 'donantes', permitiéndoles que donen y muevan objetos, o incluso construyan. Puedes modificar esta opción en el panel de propiedad (F4)."
+}

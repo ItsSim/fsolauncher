@@ -1,9 +1,0 @@
-{
-    "guid": "f2c4cfad-9060-40ec-9958-a48c57b95023", 
-    "trigger": "screen:city",
-    "title": "¡Bienvenido a FreeSO!",
-    "category": "Básico",
-    "image": "hint_city.png",
-    "order": -2,
-    "body": "Ahora que has creado tu Sim y has elegido una ciudad, eres libre de hacer lo que quieras... ¡Pero quizás no sepas como empezar! Quizás te gustaría ir a una propiedad y saludar, así que manos a la obra.\n\nLa ventana que ves en la parte inferior derecha se llama 'Gizmo', y te permite filtrar las propiedades más populares, además de buscarlas por su nombre. Las propiedades en el juego tienen diferentes categorías. Un buen sitio para empezar son aquellos con la categoría de Bienvenida, si es que hay alguno abierto. Puedes ver las propiedades con más visitantes en esta categoría haciendo clic sobre "Bienvenida" en Gizmo. Si tienes menos de 2 semanas de edad, ¡este filtro ya debe activarse!\n\nTambién puedes explorar la ciudad y abrir propiedades por ubicación. Las propiedades abiertas se verán como puntos rojos parpadeantes en el mapa, simplemente dale clic para hacerles zoom, y luego haz clic sobre la propiedad parpadeante para entrar."
-}

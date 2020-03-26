@@ -1,9 +1,0 @@
-// BuyBuild mode strings strings
-1 ^Solo puedes tener ^
-2 ^ objetos en tu propiedad. Estás cinco objetos por encimad de ese límite. Dentro de un tiempo podrás poner más objetos.^
-3 ^Ups, has llegado a tu límite de objetos. Mejor haz una limpieza.^
-4 ^Has alcanzado el límite de objetos en tu propiedad.  Limitando el número de objetos en una propiedad ayuda a mantener la estabilidad del juego.  Para añadir objetos en el futuro, deberás eliminar algunos.^
-5 ^Categoría de la Propiedad^
-6 ^La categoría de la propiedad local no permitirá interactuar con este objeto.  ¿Estás seguro de comprarlo?^
-7 ^La categoría de la propiedad local no permitirá interactuar con este objeto.  ¿Seguro que quieres quitarlo de tu inventario?^
-

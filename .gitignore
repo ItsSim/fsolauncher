@@ -1,5 +1,5 @@
-node_modules/
-FSOLauncher.ini
-package-lock.json
-bin/
-temp/
+/src/node_modules/
+/src/FSOLauncher.ini
+/src/package-lock.json
+/src/bin/
+/src/temp/

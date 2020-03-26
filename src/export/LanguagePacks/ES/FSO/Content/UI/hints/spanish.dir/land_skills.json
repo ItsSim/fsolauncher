@@ -1,0 +1,8 @@
+{
+    "guid": "817f6eb9-c54a-4b23-820a-126e5ac44705", 
+    "trigger": "land:skills",
+    "title": "Habilidades",
+    "category": "Tipos de propiedades",
+    "image": "hint_skills.png",
+    "body": "Las propiedades de tipo Habilidad son el lugar perfecto para aprender habilidades lo más rápido posible. El aprender habilidades es una actividad bastante pasiva, así que es una buena idea hacerlo si quieres tener una conversación casual o dividir tu atención con alguna otra cosa. Manténte atento a las habilidades que están aprendiendo los jugadores en la propiedad - la velocidad a la que aprendes habilidades depende del número de jugadores en la propiedad que estén aprendiendo lo mismo que tú. Las necesidades son bastante complicadas aquí, así que si quieres aprender habilidades para rato, deberías [s][color=white]Sobrellenar[/color][/s] tus necesidades en propiedades de tipo Servicios o Entretenimiento.\n\nNecesidades: [s][color=#FF9999]Difícil[/color][/s], Especialidad: [s]Aprender habilidades más rápido.[/s]"
+}

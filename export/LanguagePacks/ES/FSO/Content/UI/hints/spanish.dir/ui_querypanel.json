@@ -1,8 +1,0 @@
-{
-    "guid": "cfd4645a-5e2f-46f5-b278-9432a8165d95", 
-    "trigger": "ui:querypanel",
-    "title": "The Query Panel",
-    "category": "Básico",
-    "image": "@hint_buildmode.bmp",
-    "body": "Cuando haces clic sobre un objeto en el Modo Comprar, se abre el Panel de consulta. Desde esta página, puedes vender el objeto, devolverlo a tu inventario, configurarlo para la venta (en una propiedad de Tienda) y ver su nivel de desgaste. Cada objeto del Modo Comprar es propiedad de un Inquilino específico: el panel de consulta mostrará de quién. Puedes mover los objetos de tus Inquilinos, pero no puedes venderlos... Puedes intentarlo, aunque el objeto simplemente será enviado de vuelta al inventario del propietario del objeto. Si se muda a una nueva propiedad, tus objetos se moverán contigo."
-}

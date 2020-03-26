@@ -1,0 +1,8 @@
+{
+    "guid": "8f865a98-5adb-4641-930f-7efc55c55742", 
+    "trigger": "land:welcome",
+    "title": "Una Acogedora Bienvenida",
+    "category": "Tipos de propiedades",
+    "image": "hint_welcome.png",
+    "body": "Bienvenido a... ¡una propiedad de tipo bienvenida! En propiedades de este tipo, los jugadores que se hayan unido en la última semana ganarán el doble de dinero y habilidades que en otras propiedades (incluyendo en los objetos de hacer dinero en grupo)... Sin embargo, ¡jugadores que lleven más de una semana tendrán sus habilidades deshabilitadas por completo! Aquí encontrarás gente dispuesta a ayudar - gente que te quiere ayudar a dar tus primeros pasos en tus comienzos, y quizás futuros amigos y compañeros de piso. Los dueños de propiedades de este tipo ganan el triple de bonificación por visitantes - por lo que también sacan algo por ayudarte.\n\nNecesidades: [s][color=#B3FF99]Fácil[/color][/s], Especialidad: [s]Aumento de ganancias en los objetos de hacer dinero en grupo + aprender habilidades más rápido[/s] \n[s][color=white]Bonus de Visitante: 3x[/color][/s]\n[s][color=#FF9999]Habilidades deshabilitadas para jugadores que lleven más de una semana jugando.[/color][/s]"
+}

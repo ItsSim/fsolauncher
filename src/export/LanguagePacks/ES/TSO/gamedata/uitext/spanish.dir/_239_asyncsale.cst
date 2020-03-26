@@ -1,0 +1,15 @@
+// Async Sale String
+1 ^Objeto a la Venta^
+2 ^Has elegido %s para ponerlo a la venta.^
+3 ^Introduce tu precio de venta.^
+4 ^Aumentar precio de venta^
+5 ^Disminuir precio de venta^
+6 ^Precio de venta^
+7 ^Guardar cambios^
+8 ^Cerrar la ventana y descartar cambios^
+9 ^$^
+10 ^Esta carta fue enviada en nombre de un cliente. Un objeto que has marcado como en venta ha sido comprado. 
+El '%s' que originalmente costaba %s ha sido vendido por %s a %s.^
+11 ^Transacción de venta completada^
+12 ^Contabilidad^
+13 ^Lo siento, pero tu compra no ha sido completada. Quizás el objeto ya no esté disponible o esté siendo modificado por el vendedor.^

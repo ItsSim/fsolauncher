@@ -1,0 +1,9 @@
+{
+    "guid": "5e8046af-bd51-4d5b-837c-1b89e6f8b48a", 
+    "trigger": "screen:cas",
+    "title": "Crear un Sim",
+    "category": "Básico",
+    "catorder": -2,
+    "image": "@hint3.bmp",
+    "body": "Crea un alter-ego para representarte en Los Sims Online. Puedes tener hasta tres Sims, pero solo puedes jugar uno a la vez. El nombre y la cabeza que elijas aquí serán en su mayoría permanentes y serán la identidad por la que otros jugadores te conocerán. Podrás cambiar tu ropa usando varios armarios y editar tu perfil de Sim más adelante."
+}

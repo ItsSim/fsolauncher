@@ -1,0 +1,38 @@
+1 ^Cerrar^
+2 ^Enviar Mensaje^
+3 ^Ayuda^
+4 ^Ordenar por Asunto^
+5 ^Ordenar por Emisor^
+6 ^Ordenar por Fecha^
+7 ^Ordenar por Tipo^
+8 ^Ordenar por Urgencia^
+9 ^Borrar^
+10 ^Seleccionar Receptor^
+11 ^Hacia arriba^
+12 ^Hacia abajo^
+13 ^Borrar Mensaje^
+14 ^¿Seguro que quieres eliminar este mensaje?^
+15 ^Borrar^
+16 ^Responder^
+17 ^RE: ^
+18 ^Sim No Encontrado^
+19 ^El Sim con el nombre que has elegido no existe y no puede recibir mensajes...^
+20 ^Dom^
+21 ^Lun^
+22 ^Mar^
+23 ^Mié^
+24 ^Jue^
+25 ^Vie^
+26 ^Sab^
+27 ^Obteniendo nuevos mensajes...^
+28 ^Progreso general:^
+29 ^Tarea Actual:^
+30 ^Obteniendo mensaje %d / %d^
+31 ^Mensajes totales: %d / Mensajes sin leer: %d^
+32 ^EA_REP_^
+33 ^Eliminar todos los mensajes de este tipo^
+34 ^Eliminar todos los mensajes de este Emisor^
+35 ^¿Seguro que quieres eliminar todos los mensajes de este tipo?^
+36 ^¿Seguro que quieres eliminar todos los mensajes de este emisor?^
+
+

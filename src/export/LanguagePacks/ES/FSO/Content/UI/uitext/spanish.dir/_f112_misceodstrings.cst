@@ -1,0 +1,28 @@
+﻿1 ^Tienes cero cartas en este mazo de juegos.^
+2 ^Borrar carta^
+3 ^¿Quieres guardar los cambios?^
+4 ^Editar carta^
+5 ^Error: Ya has guardado el máximo número de cartas individuales.^
+6 ^Error del servidor. La carta no ha podido ser eliminada.^
+7 ^¡Uf! Esta ronda ha acabado en empate^
+8 ^Robar carta^
+9 ^¡Vaya! El juego ha acabado en un punto muerto.^
+10 ^Punto muerto^
+11 ^Color de la celda: ^
+12 ^Azul^
+13 ^Verde^
+14 ^Rojo^
+15 ^Amarillo^
+16 ^Ninguno^
+17 ^¡Oh no! Una manada de llamas pasó corriendo y destrozó la brújula. ¡Mejor suerte el próximo viaje!^
+18 ^¡No tuviste suerte en este laberinto, tal vez tu tesoro esté en otro castillo!^
+19 ^Oyes un ruido sordo y la radio se apaga. No te preocupes ... ¡Estoy seguro de que el explorador está BIEN!^
+20 ^¡Tu mapa arde espontáneamente! La Maldición de la Llama es solo una historia ... ¿verdad?^
+21 ^¡Explosión, parece que alguien te venció en la recompensa esta vez!^
+22 ^¡Hurra, has encontrado una llama de oro macizo! Estoy seguro de que alguien necesita una.^
+23 ^¡El tesoro es tuyo! No olvides darle una propina a tu amigable explorador de vecindario..^
+24 ^¡WOW un cráneo púrpura misteriosamente brillante con gemas en él! Estoy seguro de que no está maldito en absoluto.^
+25 ^¡En un último segundo enfrentamiento, echas un explorador rival fuera del camino y reclamas el premio!^
+26 ^¡Un cofre del tesoro! Serías rico si no fuera por el hecho de que no estás realmente en el laberinto.^
+27 ^Fallo^
+28 ^Éxito^

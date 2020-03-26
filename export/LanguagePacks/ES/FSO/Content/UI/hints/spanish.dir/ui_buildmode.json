@@ -1,8 +1,0 @@
-{
-    "guid": "d4bc3267-0030-4253-b2e9-689b020b96ae", 
-    "trigger": "ui:buildmode",
-    "title": "Modo Construir",
-    "category": "Básico",
-    "image": "@hint_buildtools.bmp",
-    "body": "El Modo Construir te permite tomar el control de la arquitectura y el terreno de tu propiedad. Para aprender a utilizar cualquiera de las herramientas de construcción, haz clic en la miniatura de la herramienta y mantén el cursor sobre ella para que aparezca un panel de ayuda. El Modo Construir es inaccesible para los inquilinos de forma predeterminada: si quieres ayuda para construir tu propiedad, tendrás que otorgar permisos de construcción a tus inquilinos manualmente desde el Modo Propiedad.\n\nAtención: cualquier inquilino con permisos de cosntrucción puede eliminar la arquitectura, independientemente de quién lo haya colocado. Esto se aplica a todos los objetos que no están en el Modo Construir: paredes, pisos, piscinas, terreno, etc. Si un inquilino cubre tu preciado papel tapiz floral, no obtendrás reembolso."
-}
