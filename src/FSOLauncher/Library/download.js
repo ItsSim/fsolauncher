@@ -1,8 +1,8 @@
-const fs = require('fs-extra'),
-  http = require('follow-redirects').http,
-  https = require('follow-redirects').https,
-  path = require('path');
-const { EventEmitter } = require('events');
+const fs = require( 'fs-extra' ),
+  http = require( 'follow-redirects' ).http,
+  https = require( 'follow-redirects' ).https,
+  path = require( 'path' );
+const { EventEmitter } = require( 'events' );
 /**
  * makeDownload factory
  */
@@ -12,9 +12,9 @@ module.exports = function makeDownload() {
    * with archive.org responses.
    * Supports pause, resume, retry and abort (stop).
    */
-  return function download({ from, to, immediate = false }) {
+  return function download( { from, to, immediate = false } ) {
     const events = new EventEmitter();
-    const httpModule = from.startsWith('https') ? https : http;
+    const httpModule = from.startsWith( 'https' ) ? https : http;
 
     let _retries = 0,
       _failed,
@@ -36,20 +36,20 @@ module.exports = function makeDownload() {
       _length = 0;
       _paused = false;
       _error = null;
-      await fs.ensureDir(path.dirname(to));
-      _fileStream = fs.createWriteStream(to);
-      _request = httpModule.get(from, _onDownload);
-      _request.on('error', _onError);
+      await fs.ensureDir( path.dirname( to ) );
+      _fileStream = fs.createWriteStream( to );
+      _request = httpModule.get( from, _onDownload );
+      _request.on( 'error', _onError );
     };
 
     /**
      * @param {string} chunk
      */
     const _onData = chunk => {
-      _fileStream.write(chunk);
+      _fileStream.write( chunk );
       _bytesRead += chunk.length;
       _progress = getProgress();
-      events.emit('progress', _progress);
+      events.emit( 'progress', _progress );
     };
 
     /**
@@ -59,7 +59,7 @@ module.exports = function makeDownload() {
       _error = e;
       _failed = true;
       _request.abort();
-      events.emit('error', e.message);
+      events.emit( 'error', e.message );
       _onEnd();
     };
 
@@ -67,27 +67,27 @@ module.exports = function makeDownload() {
      * @param {HttpResponse} r
      */
     const _onDownload = r => {
-      console.log(r.headers);
-      if (!r) return _onError(new Error('Server did not return a response.'));
+      console.log( r.headers );
+      if ( !r ) return _onError( new Error( 'Server did not return a response.' ) );
 
-      if (r.statusCode < 200 || r.statusCode > 299)
-        return _onError(new Error('Received status code ' + r.statusCode));
+      if ( r.statusCode < 200 || r.statusCode > 299 )
+        return _onError( new Error( 'Received status code ' + r.statusCode ) );
 
       _response = r; // Make the response accessible.
 
-      _length = parseInt(r.headers['content-length'], 10);
+      _length = parseInt( r.headers['content-length'], 10 );
 
-      r.on('data', _onData);
-      r.on('error', _onError);
-      r.on('end', _onEnd);
+      r.on( 'data', _onData );
+      r.on( 'error', _onError );
+      r.on( 'end', _onEnd );
 
-      r.setTimeout(30000, () => _onError(new Error('Download timed out.')));
+      r.setTimeout( 30000, () => _onError( new Error( 'Download timed out.' ) ) );
     };
 
     const _onEnd = () => {
-      if (!_failed) {
+      if ( !_failed ) {
         // Archive.org downloads fail silently when x-page-cache is MISS or EXPIRED.
-        if (_response.headers['x-page-cache']) {
+        if ( _response.headers['x-page-cache'] ) {
           if (
             ['MISS', 'EXPIRED'].includes(
               _response.headers['x-page-cache'].trim()
@@ -97,49 +97,49 @@ module.exports = function makeDownload() {
               'internal-retry',
               'X-Page-Cache header present with value "MISS" or "EXPIRED". Retrying download in 5 seconds.'
             );
-            return setTimeout(() => retry(), 5000);
+            return setTimeout( () => retry(), 5000 );
           }
         }
         // Nonetheless, check if the filesize is 0 and retry.
-        if (_bytesRead == 0) {
+        if ( _bytesRead == 0 ) {
           events.emit(
             'internal-retry',
             'Download size was zero. Retrying download in 5 seconds.'
           );
-          return setTimeout(() => retry(), 5000);
+          return setTimeout( () => retry(), 5000 );
         }
       }
       // If we've gone this far, we're most likely OK.
       _progress = 100;
       _request.abort();
       _fileStream.end();
-      events.emit('end', to);
+      events.emit( 'end', to );
     };
 
     const retry = () => (
       _request.abort(), _fileStream.end(), _retries++, run()
     );
-    const pause = () => _response && (_response.pause(), (_paused = 1));
+    const pause = () => _response && ( _response.pause(), ( _paused = 1 ) );
     const abort = () => _request && _request.abort();
     const resume = () => _paused && _response.resume();
 
     const getProgress = () =>
-      parseInt(((100.0 * _bytesRead) / _length).toFixed(0));
-    const getProgressMB = () => (_bytesRead / 1048576).toFixed(0);
-    const getSizeMB = () => (_length / 1048576).toFixed(0);
+      parseInt( ( ( 100.0 * _bytesRead ) / _length ).toFixed( 0 ) );
+    const getProgressMB = () => ( _bytesRead / 1048576 ).toFixed( 0 );
+    const getSizeMB = () => ( _length / 1048576 ).toFixed( 0 );
     const hasFailed = () => _failed;
     const cleanup = async () => {
       _request && _request.abort();
       _fileStream && _fileStream.end();
-      return await fs.remove(to);
+      return await fs.remove( to );
     };
     const getDestination = () => to;
     const getOrigin = () => from;
     const getRetries = () => _retries;
 
-    if (immediate) run();
+    if ( immediate ) run();
 
-    return Object.freeze({
+    return Object.freeze( {
       events,
       run,
       retry,
@@ -154,6 +154,6 @@ module.exports = function makeDownload() {
       hasFailed,
       cleanup,
       getRetries
-    });
+    } );
   };
 };

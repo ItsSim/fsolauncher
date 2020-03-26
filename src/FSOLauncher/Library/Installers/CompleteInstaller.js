@@ -1,4 +1,4 @@
-const Modal = require('../Modal');
+const Modal = require( '../Modal' );
 
 /**
  * Installs OpenAL, .NET, TSO and FreeSO.
@@ -11,7 +11,7 @@ class CompleteInstaller {
    * @param {any} FSOLauncher
    * @memberof CompleteInstaller
    */
-  constructor(FSOLauncher) {
+  constructor( FSOLauncher ) {
     this.FSOLauncher = FSOLauncher;
   }
   /**
@@ -21,11 +21,11 @@ class CompleteInstaller {
    */
   run() {
     this.step1()
-      .then(() => this.step2())
-      .then(() => this.step3())
-      .then(() => this.step4())
-      .then(() => this.end())
-      .catch(() => this.error());
+      .then( () => this.step2() )
+      .then( () => this.step3() )
+      .then( () => this.step4() )
+      .then( () => this.end() )
+      .catch( () => this.error() );
   }
   /**
    * Install OpenAL.
@@ -41,10 +41,10 @@ class CompleteInstaller {
       10
     );
 
-    if (this.FSOLauncher.isInstalled['OpenAL']) {
+    if ( this.FSOLauncher.isInstalled['OpenAL'] ) {
       return Promise.resolve();
     }
-    return this.FSOLauncher.install('OpenAL');
+    return this.FSOLauncher.install( 'OpenAL' );
   }
   /**
    * Install .NET Framework.
@@ -60,10 +60,10 @@ class CompleteInstaller {
       25
     );
     // Skip .NET if already installed.
-    if (this.FSOLauncher.isInstalled['NET']) {
+    if ( this.FSOLauncher.isInstalled['NET'] ) {
       return Promise.resolve();
     }
-    return this.FSOLauncher.install('NET');
+    return this.FSOLauncher.install( 'NET' );
   }
   /**
    * Installs The Sims Online.
@@ -78,7 +78,7 @@ class CompleteInstaller {
       global.locale.INS_INFO,
       50
     );
-    return this.FSOLauncher.install('TSO', { fullInstall: true });
+    return this.FSOLauncher.install( 'TSO', { fullInstall: true } );
   }
   /**
    * Installs FreeSO.
@@ -93,7 +93,7 @@ class CompleteInstaller {
       global.locale.INS_INFO,
       75
     );
-    return this.FSOLauncher.install('FSO', { fullInstall: true });
+    return this.FSOLauncher.install( 'FSO', { fullInstall: true } );
   }
   /**
    * When the installation finished.
@@ -101,7 +101,7 @@ class CompleteInstaller {
    * @memberof CompleteInstaller
    */
   end() {
-    this.FSOLauncher.removeActiveTask('FULL');
+    this.FSOLauncher.removeActiveTask( 'FULL' );
     this.FSOLauncher.View.fullInstallProgressItem(
       global.locale.INS_FINISHED,
       global.locale.INS_PLAY,
@@ -112,9 +112,9 @@ class CompleteInstaller {
       'FreeSO Launcher',
       'FreeSO has finished installing and is ready to go!'
     );
-    setTimeout(() => {
+    setTimeout( () => {
       this.FSOLauncher.View.fullInstallProgressItem();
-    }, 5000);
+    }, 5000 );
   }
   /**
    * Communicates that an error happened.
@@ -122,16 +122,16 @@ class CompleteInstaller {
    * @memberof CompleteInstaller
    */
   error() {
-    this.FSOLauncher.removeActiveTask('FULL');
+    this.FSOLauncher.removeActiveTask( 'FULL' );
     this.FSOLauncher.View.fullInstallProgressItem(
       global.locale.INS_ERROR,
       global.locale.INS_ERROR_DESCR,
       global.locale.INS_CLOSE,
       100
     );
-    setTimeout(() => {
+    setTimeout( () => {
       this.FSOLauncher.View.fullInstallProgressItem();
-    }, 5000);
+    }, 5000 );
   }
 }
 

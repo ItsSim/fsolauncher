@@ -1,6 +1,6 @@
-const Modal = require('../Modal'),
-  download = require('../download')(),
-  unzip = require('../unzip')();
+const Modal = require( '../Modal' ),
+  download = require( '../download' )(),
+  unzip = require( '../unzip' )();
 const DOWNLOAD_URL_GITHUB =
   'https://github.com/riperiperi/Simitone/releases/latest/download/SimitoneWindows.zip';
 /**
@@ -15,16 +15,16 @@ class SimitoneInstaller {
    * @param {any} FSOLauncher
    * @memberof SimitoneInstaller
    */
-  constructor(path, FSOLauncher) {
+  constructor( path, FSOLauncher ) {
     this.FSOLauncher = FSOLauncher;
-    this.id = Math.floor(Date.now() / 1000);
+    this.id = Math.floor( Date.now() / 1000 );
     this.path = path;
     this.haltProgress = false;
     this.tempPath = `temp/artifacts-simitone-${this.id}.zip`;
-    this.dl = download({
+    this.dl = download( {
       from: DOWNLOAD_URL_GITHUB,
       to: this.tempPath
-    });
+    } );
     this.simitoneVersion = '';
   }
   /**
@@ -34,7 +34,7 @@ class SimitoneInstaller {
    * @param {any} Percentage
    * @memberof SimitoneInstaller
    */
-  createProgressItem(Message, Percentage) {
+  createProgressItem( Message, Percentage ) {
     this.FSOLauncher.View.addProgressItem(
       'FSOProgressItem' + this.id,
       'Simitone Client ' + this.simitoneVersion,
@@ -54,12 +54,12 @@ class SimitoneInstaller {
    */
   install() {
     return this.step1()
-      .then(() => this.step2())
-      .then(() => this.step3())
-      .then(() => this.step4())
-      .then(() => this.step5())
-      .then(() => this.end())
-      .catch(ErrorMessage => this.error(ErrorMessage));
+      .then( () => this.step2() )
+      .then( () => this.step3() )
+      .then( () => this.step4() )
+      .then( () => this.step5() )
+      .then( () => this.end() )
+      .catch( ErrorMessage => this.error( ErrorMessage ) );
   }
   /**
    * Obtains GitHub release data.
@@ -69,7 +69,7 @@ class SimitoneInstaller {
   async step1() {
     const simitoneReleaseData = await this.FSOLauncher.getSimitoneReleaseInfo();
 
-    if (simitoneReleaseData.tag_name !== undefined) {
+    if ( simitoneReleaseData.tag_name !== undefined ) {
       this.simitoneVersion = simitoneReleaseData.tag_name;
     }
 
@@ -91,7 +91,7 @@ class SimitoneInstaller {
    * @memberof SimitoneInstaller
    */
   step3() {
-    return this.setupDir(this.path);
+    return this.setupDir( this.path );
   }
   /**
    * Extract files into installation directory.
@@ -109,7 +109,7 @@ class SimitoneInstaller {
    * @memberof SimitoneInstaller
    */
   step5() {
-    return require('../Registry').createFreeSOEntry(this.path, 'Simitone');
+    return require( '../Registry' ).createFreeSOEntry( this.path, 'Simitone' );
   }
   /**
    * When the installation ends.
@@ -118,19 +118,19 @@ class SimitoneInstaller {
    */
   end() {
     this.dl.cleanup();
-    this.FSOLauncher.Window.setProgressBar(-1);
-    this.createProgressItem(global.locale.INSTALLATION_FINISHED, 100);
-    this.FSOLauncher.View.stopProgressItem('FSOProgressItem' + this.id);
+    this.FSOLauncher.Window.setProgressBar( -1 );
+    this.createProgressItem( global.locale.INSTALLATION_FINISHED, 100 );
+    this.FSOLauncher.View.stopProgressItem( 'FSOProgressItem' + this.id );
     this.FSOLauncher.updateInstalledPrograms();
-    this.FSOLauncher.removeActiveTask('Simitone');
-    if (this.simitoneVersion) {
-      this.FSOLauncher.setConfiguration([
+    this.FSOLauncher.removeActiveTask( 'Simitone' );
+    if ( this.simitoneVersion ) {
+      this.FSOLauncher.setConfiguration( [
         'Game',
         'SimitoneVersion',
         this.simitoneVersion
-      ]);
+      ] );
     }
-    Modal.showInstalled('Simitone');
+    Modal.showInstalled( 'Simitone' );
   }
   /**
    * When the installation errors out.
@@ -139,17 +139,17 @@ class SimitoneInstaller {
    * @returns
    * @memberof SimitoneInstaller
    */
-  error(ErrorMessage) {
+  error( ErrorMessage ) {
     this.dl.cleanup();
-    this.FSOLauncher.Window.setProgressBar(1, {
+    this.FSOLauncher.Window.setProgressBar( 1, {
       mode: 'error'
-    });
+    } );
     this.haltProgress = true;
-    this.createProgressItem(global.locale.FSO_FAILED_INSTALLATION, 100);
-    this.FSOLauncher.View.stopProgressItem('FSOProgressItem' + this.id);
-    this.FSOLauncher.removeActiveTask('Simitone');
-    Modal.showFailedInstall('Simitone', ErrorMessage);
-    return Promise.reject(ErrorMessage);
+    this.createProgressItem( global.locale.FSO_FAILED_INSTALLATION, 100 );
+    this.FSOLauncher.View.stopProgressItem( 'FSOProgressItem' + this.id );
+    this.FSOLauncher.removeActiveTask( 'Simitone' );
+    Modal.showFailedInstall( 'Simitone', ErrorMessage );
+    return Promise.reject( ErrorMessage );
   }
   /**
    * Downloads the distribution file.
@@ -158,17 +158,17 @@ class SimitoneInstaller {
    * @memberof SimitoneInstaller
    */
   download() {
-    return new Promise((resolve, reject) => {
+    return new Promise( ( resolve, reject ) => {
       this.dl.run();
-      this.dl.events.on('error', () => {});
-      this.dl.events.on('end', _fileName => {
-        if (this.dl.hasFailed()) {
-          return reject(global.locale.FSO_NETWORK_ERROR);
+      this.dl.events.on( 'error', () => {} );
+      this.dl.events.on( 'end', _fileName => {
+        if ( this.dl.hasFailed() ) {
+          return reject( global.locale.FSO_NETWORK_ERROR );
         }
         resolve();
-      });
+      } );
       this.updateDownloadProgress();
-    });
+    } );
   }
   /**
    * Extracts the zipped artifacts.
@@ -177,12 +177,12 @@ class SimitoneInstaller {
    * @memberof SimitoneInstaller
    */
   async extract() {
-    await unzip({ from: this.tempPath, to: this.path }, filename => {
+    await unzip( { from: this.tempPath, to: this.path }, filename => {
       this.createProgressItem(
         global.locale.EXTRACTING_CLIENT_FILES + ' ' + filename,
         100
       );
-    });
+    } );
   }
   /**
    * Deletes the downloaded artifacts file.
@@ -190,13 +190,13 @@ class SimitoneInstaller {
    * @memberof SimitoneInstaller
    */
   cleanup() {
-    const fs = require('fs-extra');
-    fs.stat(this.tempPath, (err, _stats) => {
-      if (err) return console.log(err);
-      fs.unlink(this.tempPath, err => {
-        if (err) return console.log(err);
-      });
-    });
+    const fs = require( 'fs-extra' );
+    fs.stat( this.tempPath, ( err, _stats ) => {
+      if ( err ) return console.log( err );
+      fs.unlink( this.tempPath, err => {
+        if ( err ) return console.log( err );
+      } );
+    } );
   }
   /**
    * Creates all the directories in a string.
@@ -205,13 +205,13 @@ class SimitoneInstaller {
    * @returns
    * @memberof SimitoneInstaller
    */
-  setupDir(dir) {
-    return new Promise((resolve, reject) => {
-      require('fs-extra').ensureDir(dir, err => {
-        if (err) return reject(err);
+  setupDir( dir ) {
+    return new Promise( ( resolve, reject ) => {
+      require( 'fs-extra' ).ensureDir( dir, err => {
+        if ( err ) return reject( err );
         resolve();
-      });
-    });
+      } );
+    } );
   }
   /**
    * Checks if Simitone is already installed in a given path.
@@ -220,11 +220,11 @@ class SimitoneInstaller {
    * @memberof SimitoneInstaller
    */
   isInstalledInPath() {
-    return new Promise((resolve, _reject) => {
-      require('fs-extra').stat(this.path + '\\Simitone.Windows.exe', err => {
-        resolve(err == null);
-      });
-    });
+    return new Promise( ( resolve, _reject ) => {
+      require( 'fs-extra' ).stat( this.path + '\\Simitone.Windows.exe', err => {
+        resolve( err == null );
+      } );
+    } );
   }
   /**
    * Updates the progress item with the download progress.
@@ -232,13 +232,13 @@ class SimitoneInstaller {
    * @memberof SimitoneInstaller
    */
   updateDownloadProgress() {
-    setTimeout(() => {
+    setTimeout( () => {
       let p = this.dl.getProgress();
       const mb = this.dl.getProgressMB(),
         size = this.dl.getSizeMB();
-      if (isNaN(p)) p = 0;
-      if (p < 100) {
-        if (!this.haltProgress) {
+      if ( isNaN( p ) ) p = 0;
+      if ( p < 100 ) {
+        if ( !this.haltProgress ) {
           this.createProgressItem(
             `${global.locale.DL_CLIENT_FILES} ${mb} MB ${global.locale.X_OUT_OF_X} ${size} MB (${p}%)`,
             p
@@ -247,7 +247,7 @@ class SimitoneInstaller {
 
         return this.updateDownloadProgress();
       }
-    }, 1000);
+    }, 1000 );
   }
 }
 

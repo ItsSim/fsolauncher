@@ -1,8 +1,8 @@
-const Modal = require('../Modal');
+const Modal = require( '../Modal' );
 
-const download = require('../download')(),
-  unzip = require('../unzip')(),
-  extract = require('../cabinet')();
+const download = require( '../download' )(),
+  unzip = require( '../unzip' )(),
+  extract = require( '../cabinet' )();
 
 const DOWNLOAD_URL_FILEPLANET =
   'http://archive.org/download/Fileplanet_dd_042006/Fileplanet_dd_042006.tar/042006/TSO_Installer_v1.1239.1.0.zip';
@@ -18,16 +18,16 @@ const TEMP_FILE = 'FilePlanetTSOFiles.zip';
  * @class FilePlanetInstaller
  */
 class FilePlanetInstaller {
-  constructor(path, FSOLauncher) {
+  constructor( path, FSOLauncher ) {
     this.FSOLauncher = FSOLauncher;
-    this.id = Math.floor(Date.now() / 1000);
+    this.id = Math.floor( Date.now() / 1000 );
     this.path = path;
     this.haltProgress = false;
     this.tempFilePath = TEMP_PATH + TEMP_FILE;
-    this.dl = download({
+    this.dl = download( {
       from: DOWNLOAD_URL_FILEPLANET,
       to: this.tempFilePath
-    });
+    } );
   }
   /**
    * Create/Update the download progress item.
@@ -36,7 +36,7 @@ class FilePlanetInstaller {
    * @param {any} Percentage
    * @memberof FilePlanetInstaller
    */
-  createProgressItem(Message, Percentage, Extraction) {
+  createProgressItem( Message, Percentage, Extraction ) {
     this.FSOLauncher.View.addProgressItem(
       'TSOProgressItem' + this.id,
       'The Sims Online (FilePlanet)',
@@ -57,41 +57,41 @@ class FilePlanetInstaller {
    */
   install() {
     return this.step1()
-      .then(() => this.step2())
-      .then(() => this.step3())
-      .then(unzipgc => this.step4(unzipgc))
-      .then(() => this.step5())
-      .then(() => this.step6())
-      .then(() => this.end())
-      .catch(ErrorMessage => this.error(ErrorMessage));
+      .then( () => this.step2() )
+      .then( () => this.step3() )
+      .then( unzipgc => this.step4( unzipgc ) )
+      .then( () => this.step5() )
+      .then( () => this.step6() )
+      .then( () => this.end() )
+      .catch( ErrorMessage => this.error( ErrorMessage ) );
   }
   step1() {
     return this.download();
   }
   step2() {
-    return this.setupDir(this.path);
+    return this.setupDir( this.path );
   }
 
   step3() {
     // extract zip
     return this.extractZip();
   }
-  step4(unzipgc) {
+  step4( unzipgc ) {
     // extract cabs
-    return this.extractCabs(unzipgc);
+    return this.extractCabs( unzipgc );
   }
   step5() {
     // patch 1239toNI
-    this.createProgressItem('Patching The Sims Online, please wait...', 100);
-    return new Promise((resolve, _reject) => {
-      const child = require('child_process').exec(
+    this.createProgressItem( 'Patching The Sims Online, please wait...', 100 );
+    return new Promise( ( resolve, _reject ) => {
+      const child = require( 'child_process' ).exec(
         'TSOVersionPatcherF.exe 1239toNI.tsop "' + this.path + '"',
         {
           cwd: 'bin/TSOVersionPatcherF'
         }
       );
 
-      child.on('close', _code => {
+      child.on( 'close', _code => {
         // make it not care if it fails. FreeSO can patch this on its own.
         // got reports that this was showing up as an error to some, making it impossible to finish
         // installing, when it doesn't even matter.
@@ -99,16 +99,16 @@ class FilePlanetInstaller {
         //  ? reject('Error while patching The Sims Online.')
         //  : resolve();
         resolve();
-      });
+      } );
 
-      child.stderr.on('data', data => {
-        console.log('stdout: ' + data);
-      });
-    });
+      child.stderr.on( 'data', data => {
+        console.log( 'stdout: ' + data );
+      } );
+    } );
   }
   step6() {
     // registry
-    return require('../Registry').createMaxisEntry(this.path);
+    return require( '../Registry' ).createMaxisEntry( this.path );
   }
   /**
    * Downloads the distribution file.
@@ -117,19 +117,19 @@ class FilePlanetInstaller {
    * @memberof FilePlanetInstaller
    */
   download() {
-    return new Promise((resolve, reject) => {
+    return new Promise( ( resolve, reject ) => {
       this.dl.run();
-      this.dl.events.on('error', () => {});
-      this.dl.events.on('end', _fileName => {
+      this.dl.events.on( 'error', () => {} );
+      this.dl.events.on( 'end', _fileName => {
         this.haltProgress = true;
-        if (this.dl.hasFailed()) {
-          return reject(global.locale.FSO_NETWORK_ERROR);
+        if ( this.dl.hasFailed() ) {
+          return reject( global.locale.FSO_NETWORK_ERROR );
         }
         resolve();
-      });
+      } );
 
       this.updateDownloadProgress();
-    });
+    } );
   }
   /**
    * Extracts the downloaded zip file that includes the cabinets.
@@ -138,7 +138,7 @@ class FilePlanetInstaller {
    * @memberof FilePlanetInstaller
    */
   async extractZip() {
-    this.createProgressItem('Extracting client files, please wait...', 100);
+    this.createProgressItem( 'Extracting client files, please wait...', 100 );
     return await unzip(
       {
         from: this.tempFilePath,
@@ -158,23 +158,23 @@ class FilePlanetInstaller {
    * @returns
    * @memberof FilePlanetInstaller
    */
-  extractCabs(unzipgc) {
-    return new Promise((resolve, reject) => {
+  extractCabs( unzipgc ) {
+    return new Promise( ( resolve, reject ) => {
       extract(
         {
           from: `${TEMP_PATH}FilePlanetTSOFiles/TSO_Installer_v1.1239.1.0/Data1.cab`,
           to: this.path,
           purge: true
         },
-        d => this.updateExtractionProgress(d),
+        d => this.updateExtractionProgress( d ),
         err => {
           unzipgc();
           this.dl.cleanup();
-          if (err) return reject(`The Sims Online extraction failed: ${err}`);
+          if ( err ) return reject( `The Sims Online extraction failed: ${err}` );
           resolve();
         }
       );
-    });
+    } );
   }
   /**
    * Prepare directories.
@@ -183,13 +183,13 @@ class FilePlanetInstaller {
    * @returns
    * @memberof TSOInstaller
    */
-  setupDir(dir) {
-    return new Promise((resolve, reject) => {
-      require('fs-extra').ensureDir(dir, err => {
-        if (err) return reject(err);
+  setupDir( dir ) {
+    return new Promise( ( resolve, reject ) => {
+      require( 'fs-extra' ).ensureDir( dir, err => {
+        if ( err ) return reject( err );
         resolve();
-      });
-    });
+      } );
+    } );
   }
   /**
    * Checks if TSO is already installed.
@@ -198,12 +198,12 @@ class FilePlanetInstaller {
    * @returns
    * @memberof FilePlanetInstaller
    */
-  isInstalledInPath(_after) {
-    return new Promise((resolve, _reject) => {
-      require('fs-extra').stat(this.path + '\\TSOClient\\TSOClient.exe', err => {
-        resolve(err === null);
-      });
-    });
+  isInstalledInPath( _after ) {
+    return new Promise( ( resolve, _reject ) => {
+      require( 'fs-extra' ).stat( this.path + '\\TSOClient\\TSOClient.exe', err => {
+        resolve( err === null );
+      } );
+    } );
   }
   /**
    * Installation ending tasks.
@@ -213,12 +213,12 @@ class FilePlanetInstaller {
   end() {
     // Successful installation
     this.dl.cleanup();
-    this.FSOLauncher.Window.setProgressBar(-1);
-    this.FSOLauncher.removeActiveTask('TSO');
-    this.createProgressItem(global.locale.INSTALLATION_FINISHED, 100);
-    this.FSOLauncher.View.stopProgressItem('TSOProgressItem' + this.id);
+    this.FSOLauncher.Window.setProgressBar( -1 );
+    this.FSOLauncher.removeActiveTask( 'TSO' );
+    this.createProgressItem( global.locale.INSTALLATION_FINISHED, 100 );
+    this.FSOLauncher.View.stopProgressItem( 'TSOProgressItem' + this.id );
     this.FSOLauncher.updateInstalledPrograms();
-    Modal.showInstalled('The Sims Online');
+    Modal.showInstalled( 'The Sims Online' );
   }
   /**
    * Installation error tasks.
@@ -227,18 +227,18 @@ class FilePlanetInstaller {
    * @returns
    * @memberof FilePlanetInstaller
    */
-  error(ErrorMessage) {
+  error( ErrorMessage ) {
     // Failed installation
     this.dl.cleanup();
-    this.FSOLauncher.Window.setProgressBar(1, {
+    this.FSOLauncher.Window.setProgressBar( 1, {
       mode: 'error'
-    });
-    this.FSOLauncher.removeActiveTask('TSO');
+    } );
+    this.FSOLauncher.removeActiveTask( 'TSO' );
     this.haltProgress = true;
-    this.createProgressItem(global.locale.TSO_FAILED_INSTALLATION, 100);
-    this.FSOLauncher.View.stopProgressItem('TSOProgressItem' + this.id);
-    Modal.showFailedInstall('The Sims Online', ErrorMessage);
-    return Promise.reject(ErrorMessage);
+    this.createProgressItem( global.locale.TSO_FAILED_INSTALLATION, 100 );
+    this.FSOLauncher.View.stopProgressItem( 'TSOProgressItem' + this.id );
+    Modal.showFailedInstall( 'The Sims Online', ErrorMessage );
+    return Promise.reject( ErrorMessage );
   }
   /**
    * Cabinet extraction progress.
@@ -246,9 +246,9 @@ class FilePlanetInstaller {
    * @param {*} d
    * @memberof FilePlanetInstaller
    */
-  updateExtractionProgress(d) {
+  updateExtractionProgress( d ) {
     this.createProgressItem(
-      `Extracting ${d.file} (${require('path').basename(d.current)})`,
+      `Extracting ${d.file} (${require( 'path' ).basename( d.current )})`,
       100
     );
   }
@@ -258,17 +258,17 @@ class FilePlanetInstaller {
    * @memberof TSOInstaller
    */
   updateDownloadProgress() {
-    setTimeout(() => {
+    setTimeout( () => {
       const mb = this.dl.getProgressMB();
-      const p = ((mb / 1268) * 100).toFixed(0);
-      if (this.haltProgress) return;
+      const p = ( ( mb / 1268 ) * 100 ).toFixed( 0 );
+      if ( this.haltProgress ) return;
       this.createProgressItem(
         // Archive.org does not provide Content-Length so the MBs are hardcoded.
         `${global.locale.DL_CLIENT_FILES} ${mb} MB out of 1268 MB (${p}%)`,
         p
       );
       return this.updateDownloadProgress();
-    }, 1000);
+    }, 1000 );
   }
 }
 

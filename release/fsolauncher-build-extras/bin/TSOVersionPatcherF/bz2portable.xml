@@ -1,0 +1,434 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>bz2portable</name>
+    </assembly>
+    <members>
+        <member name="T:bz2portable.BZip2.BZip2">
+            <summary>
+            An example class to demonstrate compression and decompression of BZip2 streams.
+            </summary>
+        </member>
+        <member name="M:bz2portable.BZip2.BZip2.Decompress(System.IO.Stream,System.IO.Stream,System.Boolean)">
+            <summary>
+            Decompress the <paramref name="inStream">input</paramref> writing 
+            uncompressed data to the <paramref name="outStream">output stream</paramref>
+            </summary>
+            <param name="inStream">The readable stream containing data to decompress.</param>
+            <param name="outStream">The output stream to receive the decompressed data.</param>
+            <param name="isStreamOwner">Both streams are closed on completion if true.</param>
+        </member>
+        <member name="M:bz2portable.BZip2.BZip2.Compress(System.IO.Stream,System.IO.Stream,System.Boolean,System.Int32)">
+            <summary>
+            Compress the <paramref name="inStream">input stream</paramref> sending 
+            result data to <paramref name="outStream">output stream</paramref>
+            </summary>
+            <param name="inStream">The readable stream to compress.</param>
+            <param name="outStream">The output stream to receive the compressed data.</param>
+            <param name="isStreamOwner">Both streams are closed on completion if true.</param>
+            <param name="level">Block size acts as compression level (1 to 9) with 1 giving 
+            the lowest compression and 9 the highest.</param>
+        </member>
+        <member name="T:bz2portable.Checksums.StrangeCRC">
+            <summary>
+            Bzip2 checksum algorithm
+            </summary>
+        </member>
+        <member name="T:bz2portable.Checksums.IChecksum">
+            <summary>
+            Interface to compute a data checksum used by checked input/output streams.
+            A data checksum can be updated by one byte or with a byte array. After each
+            update the value of the current checksum can be returned by calling
+            <code>getValue</code>. The complete checksum object can also be reset
+            so it can be used again with new data.
+            </summary>
+        </member>
+        <member name="M:bz2portable.Checksums.IChecksum.Reset">
+            <summary>
+            Resets the data checksum as if no update was ever called.
+            </summary>
+        </member>
+        <member name="M:bz2portable.Checksums.IChecksum.Update(System.Int32)">
+            <summary>
+            Adds one byte to the data checksum.
+            </summary>
+            <param name = "value">
+            the data value to add. The high byte of the int is ignored.
+            </param>
+        </member>
+        <member name="M:bz2portable.Checksums.IChecksum.Update(System.Byte[])">
+            <summary>
+            Updates the data checksum with the bytes taken from the array.
+            </summary>
+            <param name="buffer">
+            buffer an array of bytes
+            </param>
+        </member>
+        <member name="M:bz2portable.Checksums.IChecksum.Update(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Adds the byte array to the data checksum.
+            </summary>
+            <param name = "buffer">
+            The buffer which contains the data
+            </param>
+            <param name = "offset">
+            The offset in the buffer where the data starts
+            </param>
+            <param name = "count">
+            the number of data bytes to add.
+            </param>
+        </member>
+        <member name="P:bz2portable.Checksums.IChecksum.Value">
+            <summary>
+            Returns the data checksum computed so far.
+            </summary>
+        </member>
+        <member name="M:bz2portable.Checksums.StrangeCRC.#ctor">
+            <summary>
+            Initialise a default instance of <see cref="T:bz2portable.Checksums.StrangeCRC"></see>
+            </summary>	
+        </member>
+        <member name="M:bz2portable.Checksums.StrangeCRC.Reset">
+            <summary>
+            Reset the state of Crc.
+            </summary>
+        </member>
+        <member name="M:bz2portable.Checksums.StrangeCRC.Update(System.Int32)">
+            <summary>
+            Update the Crc value.
+            </summary>
+            <param name="value">data update is based on</param>
+        </member>
+        <member name="M:bz2portable.Checksums.StrangeCRC.Update(System.Byte[])">
+            <summary>
+            Update Crc based on a block of data
+            </summary>
+            <param name="buffer">The buffer containing data to update the crc with.</param>
+        </member>
+        <member name="M:bz2portable.Checksums.StrangeCRC.Update(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Update Crc based on a portion of a block of data
+            </summary>
+            <param name="buffer">block of data</param>
+            <param name="offset">index of first byte to use</param>
+            <param name="count">number of bytes to use</param>
+        </member>
+        <member name="P:bz2portable.Checksums.StrangeCRC.Value">
+            <summary>
+            Get the current Crc value.
+            </summary>
+        </member>
+        <member name="T:bz2portable.BZip2.BZip2InputStream">
+            <summary>
+            An input stream that decompresses files in the BZip2 format 
+            </summary>
+        </member>
+        <member name="M:bz2portable.BZip2.BZip2InputStream.#ctor(System.IO.Stream)">
+            <summary>
+            Construct instance for reading from stream
+            </summary>
+            <param name="stream">Data source</param>
+        </member>
+        <member name="M:bz2portable.BZip2.BZip2InputStream.Flush">
+            <summary>
+            Flushes the stream.
+            </summary>
+        </member>
+        <member name="M:bz2portable.BZip2.BZip2InputStream.Seek(System.Int64,System.IO.SeekOrigin)">
+            <summary>
+            Set the streams position.  This operation is not supported and will throw a NotSupportedException
+            </summary>
+            <param name="offset">A byte offset relative to the <paramref name="origin"/> parameter.</param>
+            <param name="origin">A value of type <see cref="T:System.IO.SeekOrigin"/> indicating the reference point used to obtain the new position.</param>
+            <returns>The new position of the stream.</returns>
+            <exception cref="T:System.NotSupportedException">Any access</exception>
+        </member>
+        <member name="M:bz2portable.BZip2.BZip2InputStream.SetLength(System.Int64)">
+            <summary>
+            Sets the length of this stream to the given value.
+            This operation is not supported and will throw a NotSupportedExceptionortedException
+            </summary>
+            <param name="value">The new length for the stream.</param>
+            <exception cref="T:System.NotSupportedException">Any access</exception>
+        </member>
+        <member name="M:bz2portable.BZip2.BZip2InputStream.Write(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Writes a block of bytes to this stream using data from a buffer.
+            This operation is not supported and will throw a NotSupportedException
+            </summary>
+            <param name="buffer">The buffer to source data from.</param>
+            <param name="offset">The offset to start obtaining data from.</param>
+            <param name="count">The number of bytes of data to write.</param>
+            <exception cref="T:System.NotSupportedException">Any access</exception>
+        </member>
+        <member name="M:bz2portable.BZip2.BZip2InputStream.WriteByte(System.Byte)">
+            <summary>
+            Writes a byte to the current position in the file stream.
+            This operation is not supported and will throw a NotSupportedException
+            </summary>
+            <param name="value">The value to write.</param>
+            <exception cref="T:System.NotSupportedException">Any access</exception>
+        </member>
+        <member name="M:bz2portable.BZip2.BZip2InputStream.Read(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Read a sequence of bytes and advances the read position by one byte.
+            </summary>
+            <param name="buffer">Array of bytes to store values in</param>
+            <param name="offset">Offset in array to begin storing data</param>
+            <param name="count">The maximum number of bytes to read</param>
+            <returns>The total number of bytes read into the buffer. This might be less
+            than the number of bytes requested if that number of bytes are not 
+            currently available or zero if the end of the stream is reached.
+            </returns>
+        </member>
+        <member name="M:bz2portable.BZip2.BZip2InputStream.ReadByte">
+            <summary>
+            Read a byte from stream advancing position
+            </summary>
+            <returns>byte read or -1 on end of stream</returns>
+        </member>
+        <member name="P:bz2portable.BZip2.BZip2InputStream.IsStreamOwner">
+            <summary>
+            Get/set flag indicating ownership of underlying stream.
+            </summary>
+        </member>
+        <member name="P:bz2portable.BZip2.BZip2InputStream.CanRead">
+            <summary>
+            Gets a value indicating if the stream supports reading
+            </summary>
+        </member>
+        <member name="P:bz2portable.BZip2.BZip2InputStream.CanSeek">
+            <summary>
+            Gets a value indicating whether the current stream supports seeking.
+            </summary>
+        </member>
+        <member name="P:bz2portable.BZip2.BZip2InputStream.CanWrite">
+            <summary>
+            Gets a value indicating whether the current stream supports writing.
+            This property always returns false
+            </summary>
+        </member>
+        <member name="P:bz2portable.BZip2.BZip2InputStream.Length">
+            <summary>
+            Gets the length in bytes of the stream.
+            </summary>
+        </member>
+        <member name="P:bz2portable.BZip2.BZip2InputStream.Position">
+            <summary>
+            Gets or sets the streams position.
+            Setting the position is not supported and will throw a NotSupportException
+            </summary>
+            <exception cref="T:System.NotSupportedException">Any attempt to set the position</exception>
+        </member>
+        <member name="T:bz2portable.BZip2.BZip2OutputStream">
+            <summary>
+            An output stream that compresses into the BZip2 format 
+            including file header chars into another stream.
+            </summary>
+        </member>
+        <member name="M:bz2portable.BZip2.BZip2OutputStream.#ctor(System.IO.Stream)">
+            <summary>
+            Construct a default output stream with maximum block size
+            </summary>
+            <param name="stream">The stream to write BZip data onto.</param>
+        </member>
+        <member name="M:bz2portable.BZip2.BZip2OutputStream.#ctor(System.IO.Stream,System.Int32)">
+            <summary>
+            Initialise a new instance of the <see cref="T:bz2portable.BZip2.BZip2OutputStream"></see> 
+            for the specified stream, using the given blocksize.
+            </summary>
+            <param name="stream">The stream to write compressed data to.</param>
+            <param name="blockSize">The block size to use.</param>
+            <remarks>
+            Valid block sizes are in the range 1..9, with 1 giving 
+            the lowest compression and 9 the highest.
+            </remarks>
+        </member>
+        <member name="M:bz2portable.BZip2.BZip2OutputStream.Finalize">
+            <summary>
+            Ensures that resources are freed and other cleanup operations 
+            are performed when the garbage collector reclaims the BZip2OutputStream.
+            </summary>
+        </member>
+        <member name="M:bz2portable.BZip2.BZip2OutputStream.Seek(System.Int64,System.IO.SeekOrigin)">
+            <summary>
+            Sets the current position of this stream to the given value.
+            </summary>
+            <param name="offset">The point relative to the offset from which to being seeking.</param>
+            <param name="origin">The reference point from which to begin seeking.</param>
+            <returns>The new position in the stream.</returns>
+        </member>
+        <member name="M:bz2portable.BZip2.BZip2OutputStream.SetLength(System.Int64)">
+            <summary>
+            Sets the length of this stream to the given value.
+            </summary>
+            <param name="value">The new stream length.</param>
+        </member>
+        <member name="M:bz2portable.BZip2.BZip2OutputStream.ReadByte">
+            <summary>
+            Read a byte from the stream advancing the position.
+            </summary>
+            <returns>The byte read cast to an int; -1 if end of stream.</returns>
+        </member>
+        <member name="M:bz2portable.BZip2.BZip2OutputStream.Read(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Read a block of bytes
+            </summary>
+            <param name="buffer">The buffer to read into.</param>
+            <param name="offset">The offset in the buffer to start storing data at.</param>
+            <param name="count">The maximum number of bytes to read.</param>
+            <returns>The total number of bytes read. This might be less than the number of bytes
+            requested if that number of bytes are not currently available, or zero 
+            if the end of the stream is reached.</returns>
+        </member>
+        <member name="M:bz2portable.BZip2.BZip2OutputStream.Write(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Write a block of bytes to the stream
+            </summary>
+            <param name="buffer">The buffer containing data to write.</param>
+            <param name="offset">The offset of the first byte to write.</param>
+            <param name="count">The number of bytes to write.</param>
+        </member>
+        <member name="M:bz2portable.BZip2.BZip2OutputStream.WriteByte(System.Byte)">
+            <summary>
+            Write a byte to the stream.
+            </summary>
+            <param name="value">The byte to write to the stream.</param>
+        </member>
+        <member name="M:bz2portable.BZip2.BZip2OutputStream.WriteRun">
+            <summary>
+            Get the number of bytes written to output.
+            </summary>
+        </member>
+        <member name="M:bz2portable.BZip2.BZip2OutputStream.Dispose(System.Boolean)">
+            <summary>
+            Releases the unmanaged resources used by the <see cref="T:bz2portable.BZip2.BZip2OutputStream"/> and optionally releases the managed resources.
+            </summary>
+            <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
+        </member>
+        <member name="M:bz2portable.BZip2.BZip2OutputStream.Flush">
+            <summary>
+            Flush output buffers
+            </summary>		
+        </member>
+        <member name="P:bz2portable.BZip2.BZip2OutputStream.IsStreamOwner">
+            <summary>
+            Get/set flag indicating ownership of underlying stream.
+            </summary>
+        </member>
+        <member name="P:bz2portable.BZip2.BZip2OutputStream.CanRead">
+            <summary>
+            Gets a value indicating whether the current stream supports reading
+            </summary>
+        </member>
+        <member name="P:bz2portable.BZip2.BZip2OutputStream.CanSeek">
+            <summary>
+            Gets a value indicating whether the current stream supports seeking
+            </summary>
+        </member>
+        <member name="P:bz2portable.BZip2.BZip2OutputStream.CanWrite">
+            <summary>
+            Gets a value indicating whether the current stream supports writing
+            </summary>
+        </member>
+        <member name="P:bz2portable.BZip2.BZip2OutputStream.Length">
+            <summary>
+            Gets the length in bytes of the stream
+            </summary>
+        </member>
+        <member name="P:bz2portable.BZip2.BZip2OutputStream.Position">
+            <summary>
+            Gets or sets the current position of this stream.
+            </summary>
+        </member>
+        <member name="P:bz2portable.BZip2.BZip2OutputStream.BytesWritten">
+            <summary>
+            Get the number of bytes written to the output.
+            </summary>
+        </member>
+        <member name="T:bz2portable.BZip2.BZip2Constants">
+            <summary>
+            Defines internal values for both compression and decompression
+            </summary>
+        </member>
+        <member name="F:bz2portable.BZip2.BZip2Constants.BaseBlockSize">
+            <summary>
+            When multiplied by compression parameter (1-9) gives the block size for compression
+            9 gives the best compression but uses the most memory.
+            </summary>		
+        </member>
+        <member name="F:bz2portable.BZip2.BZip2Constants.MaximumAlphaSize">
+            <summary>
+            Backend constant
+            </summary>
+        </member>
+        <member name="F:bz2portable.BZip2.BZip2Constants.MaximumCodeLength">
+            <summary>
+            Backend constant
+            </summary>
+        </member>
+        <member name="F:bz2portable.BZip2.BZip2Constants.RunA">
+            <summary>
+            Backend constant
+            </summary>
+        </member>
+        <member name="F:bz2portable.BZip2.BZip2Constants.RunB">
+            <summary>
+            Backend constant
+            </summary>
+        </member>
+        <member name="F:bz2portable.BZip2.BZip2Constants.GroupCount">
+            <summary>
+            Backend constant
+            </summary>
+        </member>
+        <member name="F:bz2portable.BZip2.BZip2Constants.GroupSize">
+            <summary>
+            Backend constant
+            </summary>
+        </member>
+        <member name="F:bz2portable.BZip2.BZip2Constants.NumberOfIterations">
+            <summary>
+            Backend constant
+            </summary>
+        </member>
+        <member name="F:bz2portable.BZip2.BZip2Constants.MaximumSelectors">
+            <summary>
+            Backend constant
+            </summary>
+        </member>
+        <member name="F:bz2portable.BZip2.BZip2Constants.OvershootBytes">
+            <summary>
+            Backend constant
+            </summary>
+        </member>
+        <member name="F:bz2portable.BZip2.BZip2Constants.RandomNumbers">
+            <summary>
+            Random numbers used to randomise repetitive blocks
+            </summary>
+        </member>
+        <member name="T:bz2portable.BZip2.BZip2Exception">
+            <summary>
+            BZip2Exception represents exceptions specific to Bzip2 algorithm
+            </summary>
+        </member>
+        <member name="M:bz2portable.BZip2.BZip2Exception.#ctor">
+            <summary>
+            Initialise a new instance of BZip2Exception.
+            </summary>
+        </member>
+        <member name="M:bz2portable.BZip2.BZip2Exception.#ctor(System.String)">
+            <summary>
+            Initialise a new instance of BZip2Exception with its message set to message.
+            </summary>
+            <param name="message">The message describing the error.</param>
+        </member>
+        <member name="M:bz2portable.BZip2.BZip2Exception.#ctor(System.String,System.Exception)">
+            <summary>
+            Initialise an instance of BZip2Exception
+            </summary>
+            <param name="message">A message describing the error.</param>
+            <param name="exception">The exception that is the cause of the current exception.</param>
+        </member>
+    </members>
+</doc>

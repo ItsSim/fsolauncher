@@ -1,12 +1,12 @@
 {
   "name": "fsolauncher",
-  "version": "1.6.6",
+  "version": "1.7.0",
   "description": "Install, play, and configure FreeSO easily",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-packager . fsolauncher --asar --platform=win32 --arch=all --overwrite --electron-version=5.0.3 --version-string.FileDescription='FreeSO Launcher' --out ../release",
-    "builddarwin": "electron-packager . fsolauncher --asar --platform=darwin --arch=all --overwrite --electron-version=5.0.3 --version-string.FileDescription='FreeSO Launcher' --out ../release",
+    "build": "electron-packager . fsolauncher --asar.unpackDir=\"{export,FSOLauncher_UI/FSOLauncher_Images,FSOLauncher_UI/FSOLauncher_Sounds,FSOLauncher_UI/FSOLauncher_Fonts}\" --platform=win32 --arch=all --overwrite --electron-version=8.2.0 --version-string.FileDescription='FreeSO Launcher' --out ../release",
+    "builddarwin": "electron-packager . fsolauncher --asar.unpackDir=\"{export,FSOLauncher_UI/FSOLauncher_Images,FSOLauncher_UI/FSOLauncher_Sounds,FSOLauncher_UI/FSOLauncher_Fonts}\" --platform=darwin --arch=all --overwrite --electron-version=8.2.0 --version-string.FileDescription='FreeSO Launcher' --out ../release",
     "buildasar": "asar pack . \"../asar/app.asar\" --unpack-dir \"{export,FSOLauncher_UI/FSOLauncher_Images,FSOLauncher_UI/FSOLauncher_Sounds,FSOLauncher_UI/FSOLauncher_Fonts}\""
   },
   "keywords": [
@@ -14,7 +14,7 @@
     "launcher"
   ],
   "author": "FreeSO.org",
-  "devDependencies": {
+  "optionalDependencies": {
     "electron-reload": "^1.5.0",
     "eslint": "^6.7.1"
   },
@@ -29,6 +29,14 @@
     "rss-parser": "^2.7.0",
     "v8-compile-cache": "^2.1.0",
     "winreg": "^1.2.4",
-    "yauzl": "^2.10.0"
+    "yauzl": "^2.10.0",
+    "electron-custom-notifications": "file:../vendor/electron-custom-notifications"
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "semi": true,
+    "singleQuote": true,
+    "bracketSpacing": true
   }
 }

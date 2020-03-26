@@ -1,7 +1,7 @@
-const Modal = require('./Library/Modal');
-const EventHandlers = require('./EventHandlers');
-const View = require('./Library/IPCBridge');
-const ToastComponent = require('./Library/Toast');
+const Modal = require( './Library/Modal' );
+const EventHandlers = require( './EventHandlers' );
+const View = require( './Library/IPCBridge' );
+const ToastComponent = require( './Library/Toast' );
 /**
  * Main launcher class.
  *
@@ -15,7 +15,7 @@ class FSOLauncher extends EventHandlers {
    * @param {any} conf
    * @memberof FSOLauncher
    */
-  constructor(Window, conf) {
+  constructor( Window, conf ) {
     super();
 
     this.Window = Window;
@@ -31,8 +31,8 @@ class FSOLauncher extends EventHandlers {
     this.remeshInfo.version = false;
     this.remoteSimitoneVersion = null;
 
-    this.Window.on('minimize', () => {
-      if (!this.minimizeReminder) {
+    this.Window.on( 'minimize', () => {
+      if ( !this.minimizeReminder ) {
         Modal.sendNotification(
           'FreeSO Launcher',
           global.locale.MINIMIZE_REMINDER
@@ -41,16 +41,16 @@ class FSOLauncher extends EventHandlers {
         this.minimizeReminder = true;
       }
       this.Window.hide();
-    });
+    } );
 
-    Modal.View = this.View = new View(this.Window);
+    Modal.View = this.View = new View( this.Window );
 
     this.ActiveTasks = [];
     this.isInstalled = {};
 
     this.checkUpdatesRecursive();
     this.updateTipRecursive();
-    this.updateNetRequiredUIRecursive(true);
+    this.updateNetRequiredUIRecursive( true );
     this.defineEvents();
   }
   /**
@@ -61,24 +61,24 @@ class FSOLauncher extends EventHandlers {
    */
   updateInstalledPrograms() {
     // eslint-disable-next-line no-async-promise-executor
-    return new Promise(async (resolve, reject) => {
-      const Toast = new ToastComponent(global.locale.TOAST_REGISTRY, this.View);
+    return new Promise( async ( resolve, reject ) => {
+      const Toast = new ToastComponent( global.locale.TOAST_REGISTRY, this.View );
       try {
-        const Registry = require('./Library/Registry'),
+        const Registry = require( './Library/Registry' ),
           programs = await Registry.getInstalled();
 
         Toast.destroy();
 
-        for (let i = 0; i < programs.length; i++) {
+        for ( let i = 0; i < programs.length; i++ ) {
           this.isInstalled[programs[i].key] = programs[i].isInstalled;
         }
-        this.View.sendInstalledPrograms(this.isInstalled);
+        this.View.sendInstalledPrograms( this.isInstalled );
         resolve();
-      } catch (err) {
+      } catch ( err ) {
         Toast.destroy();
-        reject(err);
+        reject( err );
       }
-    });
+    } );
   }
   /**
    * Update tips recursively.
@@ -102,11 +102,11 @@ class FSOLauncher extends EventHandlers {
       global.locale.TIP13
     ];
 
-    this.View.setTip(tips[Math.floor(Math.random() * tips.length)]);
+    this.View.setTip( tips[Math.floor( Math.random() * tips.length )] );
 
-    setTimeout(() => {
+    setTimeout( () => {
       this.updateTipRecursive();
-    }, 30000);
+    }, 30000 );
   }
   /**
    * Gets the current internet status.
@@ -115,12 +115,12 @@ class FSOLauncher extends EventHandlers {
    * @memberof FSOLauncher
    */
   getInternetStatus() {
-    return new Promise((resolve, _reject) => {
-      require('dns').lookup('google.com', err => {
-        this.hasInternet = !(err && err.code === 'ENOTFOUND');
-        return resolve(this.hasInternet);
-      });
-    });
+    return new Promise( ( resolve, _reject ) => {
+      require( 'dns' ).lookup( 'google.com', err => {
+        this.hasInternet = !( err && err.code === 'ENOTFOUND' );
+        return resolve( this.hasInternet );
+      } );
+    } );
   }
   /**
    * Obtains Simitone release information from GitHub.
@@ -129,33 +129,33 @@ class FSOLauncher extends EventHandlers {
    * @memberof FSOLauncher
    */
   getSimitoneReleaseInfo() {
-    return new Promise((resolve, reject) => {
-      const https = require('https');
+    return new Promise( ( resolve, reject ) => {
+      const https = require( 'https' );
       const options = {
         host: 'api.github.com',
         path: '/repos/riperiperi/Simitone/releases/latest',
         headers: { 'user-agent': 'node.js' }
       };
 
-      const request = https.request(options, res => {
+      const request = https.request( options, res => {
         let data = '';
 
-        res.on('data', chunk => { data += chunk; });
-        res.on('end', () => {
+        res.on( 'data', chunk => { data += chunk; } );
+        res.on( 'end', () => {
           try {
-            resolve(JSON.parse(data));
-          } catch (e) { reject(e); }
-        });
-      });
+            resolve( JSON.parse( data ) );
+          } catch ( e ) { reject( e ); }
+        } );
+      } );
 
-      request.setTimeout(30000, () => {
+      request.setTimeout( 30000, () => {
         reject(
           'Timed out while trying to get GitHub release data for Simitone.'
         );
-      });
-      request.on('error', e => { reject(e); });
+      } );
+      request.on( 'error', e => { reject( e ); } );
       request.end();
-    });
+    } );
   }
   /**
    * Hides all view elements that need internet connection.
@@ -163,10 +163,10 @@ class FSOLauncher extends EventHandlers {
    * @param {any} init
    * @memberof FSOLauncher
    */
-  async updateNetRequiredUI(_init) {
+  async updateNetRequiredUI( _init ) {
     const hasInternet = await this.getInternetStatus();
 
-    if (!hasInternet) {
+    if ( !hasInternet ) {
       return this.View.hasNoInternet();
     }
     return this.View.hasInternet();
@@ -177,10 +177,10 @@ class FSOLauncher extends EventHandlers {
    * @memberof FSOLauncher
    */
   updateNetRequiredUIRecursive() {
-    setTimeout(() => {
+    setTimeout( () => {
       this.updateNetRequiredUI();
       this.updateNetRequiredUIRecursive();
-    }, 5000);
+    }, 5000 );
   }
   /**
    * Installs the game using the complete installer
@@ -189,7 +189,7 @@ class FSOLauncher extends EventHandlers {
    * @memberof FSOLauncher
    */
   runFullInstaller() {
-    new (require('./Library/Installers/CompleteInstaller'))(this).run();
+    new ( require( './Library/Installers/CompleteInstaller' ) )( this ).run();
   }
   /**
    * Adds a task in progress.
@@ -197,9 +197,9 @@ class FSOLauncher extends EventHandlers {
    * @param {any} Name
    * @memberof FSOLauncher
    */
-  addActiveTask(Name) {
-    if (!this.isActiveTask(Name)) {
-      this.ActiveTasks.push(Name);
+  addActiveTask( Name ) {
+    if ( !this.isActiveTask( Name ) ) {
+      this.ActiveTasks.push( Name );
     }
   }
   /**
@@ -207,9 +207,9 @@ class FSOLauncher extends EventHandlers {
    *
    * @param {*} Name
    */
-  removeActiveTask(Name) {
-    if (Name) {
-      return this.ActiveTasks.splice(this.ActiveTasks.indexOf(Name), 1);
+  removeActiveTask( Name ) {
+    if ( Name ) {
+      return this.ActiveTasks.splice( this.ActiveTasks.indexOf( Name ), 1 );
     }
 
     this.ActiveTasks = [];
@@ -219,16 +219,16 @@ class FSOLauncher extends EventHandlers {
    *
    * @param {*} Name
    */
-  isActiveTask(Name) {
-    return this.ActiveTasks.indexOf(Name) > -1;
+  isActiveTask( Name ) {
+    return this.ActiveTasks.indexOf( Name ) > -1;
   }
   /**
    * Returns a component's hard-coded pretty name.
    *
    * @param {*} Component
    */
-  getPrettyName(Component) {
-    switch (Component) {
+  getPrettyName( Component ) {
+    switch ( Component ) {
       case 'TSO':
         return 'The Sims Online';
       case 'FSO':
@@ -251,14 +251,14 @@ class FSOLauncher extends EventHandlers {
    * @returns
    * @memberof FSOLauncher
    */
-  async editTTSMode(value) {
-    const fs = require('fs-extra'), ini = require('ini');
-    const Toast = new ToastComponent(global.locale.TOAST_TTS_MODE, this.View);
+  async editTTSMode( value ) {
+    const fs = require( 'fs-extra' ), ini = require( 'ini' );
+    const Toast = new ToastComponent( global.locale.TOAST_TTS_MODE, this.View );
 
-    this.addActiveTask('CHTTS');
+    this.addActiveTask( 'CHTTS' );
 
-    if (!this.isInstalled.FSO) {
-      this.removeActiveTask('CHTTS');
+    if ( !this.isInstalled.FSO ) {
+      this.removeActiveTask( 'CHTTS' );
       Toast.destroy();
       return Modal.showNeedFSOTSO();
     }
@@ -269,20 +269,20 @@ class FSOLauncher extends EventHandlers {
 
       fs.writeFile(
         this.isInstalled.FSO + '\\Content\\config.ini',
-        ini.stringify(data), err => {
-          this.removeActiveTask('CHTTS');
+        ini.stringify( data ), err => {
+          this.removeActiveTask( 'CHTTS' );
           Toast.destroy();
 
-          if (err) {
+          if ( err ) {
             return Modal.showErrorIni();
           }
 
           this.conf.Game.TTS = value;
-          this.persist(true);
+          this.persist( true );
         }
       );
-    } catch (e) {
-      this.removeActiveTask('CHTTS');
+    } catch ( e ) {
+      this.removeActiveTask( 'CHTTS' );
       Toast.destroy();
       Modal.showFirstRun();
     }
@@ -294,33 +294,33 @@ class FSOLauncher extends EventHandlers {
    * @memberof FSOLauncher
    */
   getRemeshData() {
-    return new Promise((resolve, reject) => {
-      const http = require('http');
+    return new Promise( ( resolve, reject ) => {
+      const http = require( 'http' );
       const options = {
         host: global.WEBSERVICE,
         path: '/' + global.REMESH_ENDPOINT
       };
 
-      const request = http.request(options, res => {
+      const request = http.request( options, res => {
         let data = '';
 
-        res.on('data', chunk => { data += chunk; });
-        res.on('end', () => {
+        res.on( 'data', chunk => { data += chunk; } );
+        res.on( 'end', () => {
           try {
-            const j = JSON.parse(data);
+            const j = JSON.parse( data );
             this.remeshInfo.location = j.Location;
             this.remeshInfo.version = j.Version;
-            resolve(j);
-          } catch (e) {
-            reject(e);
+            resolve( j );
+          } catch ( e ) {
+            reject( e );
           }
-        });
-      });
+        } );
+      } );
 
-      request.setTimeout(30000, () => { reject('Timed out'); });
-      request.on('error', e => { reject(e); });
+      request.setTimeout( 30000, () => { reject( 'Timed out' ); } );
+      request.on( 'error', e => { reject( e ); } );
       request.end();
-    });
+    } );
   }
   /**
    * Returns the launcher's update endpoint response.
@@ -329,9 +329,9 @@ class FSOLauncher extends EventHandlers {
    * @memberof FSOLauncher
    */
   getLauncherData() {
-    return new Promise((resolve, reject) => {
-      const http = require('http');
-      const os = require('os');
+    return new Promise( ( resolve, reject ) => {
+      const http = require( 'http' );
+      const os = require( 'os' );
       const options = {
         host: global.WEBSERVICE,
         path: '/' + global.UPDATE_ENDPOINT +
@@ -339,23 +339,23 @@ class FSOLauncher extends EventHandlers {
           '&version=' + global.VERSION
       };
 
-      const request = http.request(options, res => {
+      const request = http.request( options, res => {
         let data = '';
-        res.on('data', chunk => { data += chunk; });
-        res.on('end', () => {
+        res.on( 'data', chunk => { data += chunk; } );
+        res.on( 'end', () => {
           try {
-            const j = JSON.parse(data);
+            const j = JSON.parse( data );
             this.updateLocation = j.Location;
-            resolve(j);
-          } catch (e) {
-            reject(e);
+            resolve( j );
+          } catch ( e ) {
+            reject( e );
           }
-        });
-      });
-      request.setTimeout(30000, () => { reject('Timed out'); });
-      request.on('error', e => { reject(e); });
+        } );
+      } );
+      request.setTimeout( 30000, () => { reject( 'Timed out' ); } );
+      request.on( 'error', e => { reject( e ); } );
       request.end();
-    });
+    } );
   }
   /**
    * Obtains remesh info and updates the renderer process.
@@ -364,8 +364,8 @@ class FSOLauncher extends EventHandlers {
    */
   async checkRemeshInfo() {
     await this.getRemeshData();
-    if (this.remeshInfo.version != null) {
-      this.View.setRemeshInfo(this.remeshInfo.version);
+    if ( this.remeshInfo.version != null ) {
+      this.View.setRemeshInfo( this.remeshInfo.version );
     }
   }
   /**
@@ -380,23 +380,23 @@ class FSOLauncher extends EventHandlers {
     new ToastComponent(
       'Checking requirements', this.View, 1500
     );
-    const Registry = require('./Library/Registry');
-    const simitoneStatus = await Registry.get('Simitone', Registry.getSimitonePath());
-    const ts1ccStatus = await Registry.get('TS1', Registry.getTS1Path());
+    const Registry = require( './Library/Registry' );
+    const simitoneStatus = await Registry.get( 'Simitone', Registry.getSimitonePath() );
+    const ts1ccStatus = await Registry.get( 'TS1', Registry.getTS1Path() );
     let simitoneUpdateStatus = null;
-    if(simitoneStatus.isInstalled) {
+    if( simitoneStatus.isInstalled ) {
       simitoneUpdateStatus = await this.getSimitoneReleaseInfo();
-      if(this.conf.Game.SimitoneVersion != simitoneUpdateStatus.tag_name) {
-        this.View.sendSimitoneShouldUpdate(simitoneUpdateStatus.tag_name);
+      if( this.conf.Game.SimitoneVersion != simitoneUpdateStatus.tag_name ) {
+        this.View.sendSimitoneShouldUpdate( simitoneUpdateStatus.tag_name );
       } else {
-        this.View.sendSimitoneShouldUpdate(false);
+        this.View.sendSimitoneShouldUpdate( false );
       }
     } else {
-      this.View.sendSimitoneShouldUpdate(false);
+      this.View.sendSimitoneShouldUpdate( false );
     }
     this.isInstalled['Simitone'] = simitoneStatus.isInstalled;
     this.isInstalled['TS1'] = ts1ccStatus.isInstalled;
-    this.View.sendInstalledPrograms(this.isInstalled);
+    this.View.sendInstalledPrograms( this.isInstalled );
     //Toast.destroy();
   }
   /**
@@ -406,7 +406,7 @@ class FSOLauncher extends EventHandlers {
    * to not spam the user with possible request error modals.
    * @memberof FSOLauncher
    */
-  async checkLauncherUpdates(wasAutomatic) {
+  async checkLauncherUpdates( wasAutomatic ) {
     if (
       !this.isSearchingForUpdates &&
       !this.isUpdating &&
@@ -427,7 +427,7 @@ class FSOLauncher extends EventHandlers {
 
         Toast.destroy();
 
-        if (data.Version !== global.VERSION) {
+        if ( data.Version !== global.VERSION ) {
           if (
             this.lastUpdateNotification !== data.Version &&
             !this.Window.isVisible()
@@ -442,19 +442,19 @@ class FSOLauncher extends EventHandlers {
             );
           }
 
-          if (this.lastUpdateNotification !== data.Version) {
+          if ( this.lastUpdateNotification !== data.Version ) {
             this.lastUpdateNotification = data.Version;
-            Modal.showInstallUpdate(data.Version);
+            Modal.showInstallUpdate( data.Version );
           } else {
-            if (!wasAutomatic) {
-              Modal.showInstallUpdate(data.Version);
+            if ( !wasAutomatic ) {
+              Modal.showInstallUpdate( data.Version );
             }
           }
         }
-      } catch (e) {
+      } catch ( e ) {
         this.isSearchingForUpdates = false;
         Toast.destroy();
-        if (!wasAutomatic) Modal.showFailedUpdateCheck();
+        if ( !wasAutomatic ) Modal.showFailedUpdateCheck();
       }
     }
   }
@@ -466,16 +466,16 @@ class FSOLauncher extends EventHandlers {
    * @memberof FSOLauncher
    */
   async installLauncherUpdate() {
-    this.View.changePage('downloads');
+    this.View.changePage( 'downloads' );
     this.isUpdating = true;
 
-    const UpdateInstaller = require('./Library/Installers/UpdateInstaller');
-    const Installer = new UpdateInstaller(this);
+    const UpdateInstaller = require( './Library/Installers/UpdateInstaller' );
+    const Installer = new UpdateInstaller( this );
 
     try {
       await Installer.install();
       this.isUpdating = false;
-    } catch (e) {
+    } catch ( e ) {
       this.isUpdating = false;
     }
   }
@@ -485,24 +485,24 @@ class FSOLauncher extends EventHandlers {
    * @param {any} options
    * @memberof FSOLauncher
    */
-  async changeGamePath(options) {
-    const Toast = new ToastComponent(global.locale.TOAST_CHPATH, this.View);
+  async changeGamePath( options ) {
+    const Toast = new ToastComponent( global.locale.TOAST_CHPATH, this.View );
 
     try {
-      await this.install(options.component, {
+      await this.install( options.component, {
         fullInstall: false,
         override: options.override
-      });
+      } );
 
       Modal.showChangedGamePath();
 
       this.updateInstalledPrograms();
-      this.removeActiveTask(options.component);
+      this.removeActiveTask( options.component );
 
       Toast.destroy();
-    } catch (e) {
-      Modal.showFailedInstall(this.getPrettyName(options.component), e);
-      this.removeActiveTask(options.component);
+    } catch ( e ) {
+      Modal.showFailedInstall( this.getPrettyName( options.component ), e );
+      this.removeActiveTask( options.component );
       Toast.destroy();
     }
   }
@@ -513,61 +513,61 @@ class FSOLauncher extends EventHandlers {
    * @returns
    * @memberof FSOLauncher
    */
-  async fireInstallModal(Component) {
+  async fireInstallModal( Component ) {
     const missing = [];
 
-    const prettyName = this.getPrettyName(Component);
+    const prettyName = this.getPrettyName( Component );
 
-    switch (Component) {
+    switch ( Component ) {
       case 'FSO':
-        if (!this.isInstalled['TSO']) missing.push(this.getPrettyName('TSO'));
+        if ( !this.isInstalled['TSO'] ) missing.push( this.getPrettyName( 'TSO' ) );
 
-        if (!this.isInstalled['OpenAL'])
-          missing.push(this.getPrettyName('OpenAL'));
+        if ( !this.isInstalled['OpenAL'] )
+          missing.push( this.getPrettyName( 'OpenAL' ) );
         break;
 
       case 'TSO':
-        if (!this.isInstalled['NET']) missing.push(this.getPrettyName('NET'));
+        if ( !this.isInstalled['NET'] ) missing.push( this.getPrettyName( 'NET' ) );
         break;
 
       case 'RMS':
-        if (!this.isInstalled['FSO']) missing.push(this.getPrettyName('FSO'));
+        if ( !this.isInstalled['FSO'] ) missing.push( this.getPrettyName( 'FSO' ) );
         break;
     }
 
     if (
-      (Component === 'TSO' ||
+      ( Component === 'TSO' ||
         Component === 'FSO' ||
         Component === 'RMS' ||
-        Component === 'Simitone') &&
+        Component === 'Simitone' ) &&
       !this.hasInternet
     ) {
       return Modal.showNoInternet();
     }
 
-    if (this.isActiveTask(Component)) {
+    if ( this.isActiveTask( Component ) ) {
       return Modal.showAlreadyInstalling();
     }
 
-    if (missing.length > 0) {
-      Modal.showRequirementsNotMet(missing);
+    if ( missing.length > 0 ) {
+      Modal.showRequirementsNotMet( missing );
     } else {
-      if (Component == 'RMS') {
-        if (this.remeshInfo.version == null) {
+      if ( Component == 'RMS' ) {
+        if ( this.remeshInfo.version == null ) {
           await this.getRemeshData();
-          if (this.remeshInfo.version == null) {
+          if ( this.remeshInfo.version == null ) {
             return Modal.showNoRemesh();
           } else {
-            return Modal.showFirstInstall(prettyName, Component);
+            return Modal.showFirstInstall( prettyName, Component );
           }
         }
-        return Modal.showFirstInstall(prettyName, Component);
+        return Modal.showFirstInstall( prettyName, Component );
       }
 
-      if (this.isInstalled[Component] === false) {
-        Modal.showFirstInstall(prettyName, Component);
+      if ( this.isInstalled[Component] === false ) {
+        Modal.showFirstInstall( prettyName, Component );
       } else {
-        Modal.showReInstall(prettyName, Component);
+        Modal.showReInstall( prettyName, Component );
       }
     }
   }
@@ -592,23 +592,23 @@ class FSOLauncher extends EventHandlers {
     let Installer;
     let Executable;
 
-    this.addActiveTask(Component);
+    this.addActiveTask( Component );
 
-    switch (Component) {
+    switch ( Component ) {
       case 'RMS':
-        Installer = require('./Library/Installers/RemeshesInstaller');
+        Installer = require( './Library/Installers/RemeshesInstaller' );
 
         InstallerInstance = new Installer(
           this.isInstalled.FSO + '\\Content\\MeshReplace', this
         );
 
-        this.View.changePage('downloads');
+        this.View.changePage( 'downloads' );
 
         // eslint-disable-next-line no-async-promise-executor
-        return new Promise(async (resolve, reject) => {
+        return new Promise( async ( resolve, reject ) => {
           try {
             await InstallerInstance.install();
-            if(this.isInstalled.Simitone) {
+            if( this.isInstalled.Simitone ) {
               const SimitoneInstallerInstance = new Installer(
                 this.isInstalled.Simitone + '\\Content\\MeshReplace', this,
                 "Simitone"
@@ -616,50 +616,50 @@ class FSOLauncher extends EventHandlers {
               await SimitoneInstallerInstance.install();
             }
             resolve();
-          } catch (e) {
-            reject(e);
+          } catch ( e ) {
+            reject( e );
           } finally {
-            setTimeout(() => {
-              this.Window.setProgressBar(-1);
-            }, 5000);
+            setTimeout( () => {
+              this.Window.setProgressBar( -1 );
+            }, 5000 );
           }
-        });
+        } );
 
       case 'TSO':
       case 'FSO':
       case 'Simitone':
-        if (Component == 'TSO') {
-          Installer = require('./Library/Installers/FilePlanetInstaller');
+        if ( Component == 'TSO' ) {
+          Installer = require( './Library/Installers/FilePlanetInstaller' );
         }
-        if (Component == 'FSO') {
-          Installer = require('./Library/Installers/ServoInstaller');
+        if ( Component == 'FSO' ) {
+          Installer = require( './Library/Installers/ServoInstaller' );
         }
-        if (Component == 'Simitone') {
-          Installer = require('./Library/Installers/SimitoneInstaller');
+        if ( Component == 'Simitone' ) {
+          Installer = require( './Library/Installers/SimitoneInstaller' );
         }
 
         // eslint-disable-next-line no-async-promise-executor
-        return new Promise(async (resolve, reject) => {
-          if (!options.override) {
+        return new Promise( async ( resolve, reject ) => {
+          if ( !options.override ) {
             let InstallDir;
-            if(!options.dir) {
+            if( !options.dir ) {
               const Toast = new ToastComponent(
                 global.locale.TOAST_WAITING,
                 this.View
               );
               const folder = await Modal.showChooseDirectory(
-                this.getPrettyName(Component),
+                this.getPrettyName( Component ),
                 this.Window
               );
-              if(folder) {
-                InstallDir = folder[0] + '\\' + this.getPrettyName(Component);
+              if( folder ) {
+                InstallDir = folder[0] + '\\' + this.getPrettyName( Component );
               }
               Toast.destroy();
             } else {
               InstallDir = options.dir;
             }
 
-            if (InstallDir) {
+            if ( InstallDir ) {
               InstallerInstance = new Installer(
                 InstallDir,
                 this
@@ -667,85 +667,85 @@ class FSOLauncher extends EventHandlers {
 
               const isInstalled = await InstallerInstance.isInstalledInPath();
 
-              if (isInstalled && !options.fullInstall && !options.dir) {
+              if ( isInstalled && !options.fullInstall && !options.dir ) {
                 return Modal.showAlreadyInstalled(
-                  this.getPrettyName(Component),
+                  this.getPrettyName( Component ),
                   Component,
                   InstallDir
                 );
               }
 
-              if (!options.fullInstall) {
-                this.View.changePage('downloads');
+              if ( !options.fullInstall ) {
+                this.View.changePage( 'downloads' );
               }
 
               try {
                 await InstallerInstance.install();
                 resolve();
-              } catch (e) {
-                reject(e);
+              } catch ( e ) {
+                reject( e );
               } finally {
-                setTimeout(() => {
-                  this.Window.setProgressBar(-1);
-                }, 5000);
+                setTimeout( () => {
+                  this.Window.setProgressBar( -1 );
+                }, 5000 );
               }
             } else {
-              if (!options.fullInstall) {
-                this.removeActiveTask(Component);
+              if ( !options.fullInstall ) {
+                this.removeActiveTask( Component );
               } else {
                 this.removeActiveTask();
                 this.View.fullInstallProgressItem();
               }
             }
           } else {
-            const Registry = require('./Library/Registry');
+            const Registry = require( './Library/Registry' );
 
             try {
-              if (Component === 'TSO') {
-                await Registry.createMaxisEntry(options.override);
+              if ( Component === 'TSO' ) {
+                await Registry.createMaxisEntry( options.override );
               }
-              if (Component === 'FSO') {
-                await Registry.createFreeSOEntry(options.override);
+              if ( Component === 'FSO' ) {
+                await Registry.createFreeSOEntry( options.override );
               }
-              if (Component === 'Simitone') {
-                await Registry.createFreeSOEntry(options.override, 'Simitone');
+              if ( Component === 'Simitone' ) {
+                await Registry.createFreeSOEntry( options.override, 'Simitone' );
               }
 
               resolve();
-            } catch (e) {
-              reject(e);
+            } catch ( e ) {
+              reject( e );
             } finally {
-              setTimeout(() => {
-                this.Window.setProgressBar(-1);
-              }, 5000);
+              setTimeout( () => {
+                this.Window.setProgressBar( -1 );
+              }, 5000 );
             }
           }
-        });
+        } );
       case 'OpenAL':
       case 'NET':
-        Executable = require('./Library/Installers/ExecutableInstaller');
+        Executable = require( './Library/Installers/ExecutableInstaller' );
 
         // eslint-disable-next-line no-async-promise-executor
-        return new Promise(async (resolve, reject) => {
+        return new Promise( async ( resolve, reject ) => {
           const file =
             Component === 'NET' ? 'NDP46-KB3045560-Web.exe' : 'oalinst.exe';
 
           InstallerInstance = new Executable();
 
           try {
-            await InstallerInstance.run(file);
-            this.removeActiveTask(Component);
+            await InstallerInstance.run( file );
+            this.removeActiveTask( Component );
             this.updateInstalledPrograms();
             return resolve();
-          } catch (e) {
-            this.removeActiveTask(Component);
-            return reject(e);
+          } catch ( e ) {
+            this.removeActiveTask( Component );
+            return reject( e );
           } finally {
-            setTimeout(() => {
-              this.Window.setProgressBar(-1);
-            }, 5000);
+            setTimeout( () => {
+              this.Window.setProgressBar( -1 );
+            }, 5000 );
           }
-        });
+        } );
     }
   }
   /**
@@ -754,11 +754,11 @@ class FSOLauncher extends EventHandlers {
    * @memberof FSOLauncher
    */
   checkUpdatesRecursive() {
-    setTimeout(() => {
-      this.checkLauncherUpdates(true);
+    setTimeout( () => {
+      this.checkLauncherUpdates( true );
       this.checkRemeshInfo();
       this.checkUpdatesRecursive();
-    }, 60000);
+    }, 60000 );
   }
   /**
    * Switches the game language. Copies the translation files and
@@ -768,15 +768,15 @@ class FSOLauncher extends EventHandlers {
    * @returns
    * @memberof FSOLauncher
    */
-  async switchLanguage(language) {
-    if (!this.isInstalled.TSO || !this.isInstalled.FSO) {
+  async switchLanguage( language ) {
+    if ( !this.isInstalled.TSO || !this.isInstalled.FSO ) {
       return Modal.showNeedFSOTSO();
     }
-    this.addActiveTask('CHLANG');
-    const fs = require('fs-extra'),
-      ini = require('ini'),
-      path = require('path');
-    const Toast = new ToastComponent(global.locale.TOAST_LANGUAGE, this.View);
+    this.addActiveTask( 'CHLANG' );
+    const fs = require( 'fs-extra' ),
+      ini = require( 'ini' ),
+      path = require( 'path' );
+    const Toast = new ToastComponent( global.locale.TOAST_LANGUAGE, this.View );
     try {
       /**
       No object translations for now. 
@@ -791,18 +791,18 @@ class FSOLauncher extends EventHandlers {
       }
       **/
       try {
-        await fs.copy(path.join(
+        await fs.copy( path.join(
           __dirname, 
-          '../export/LanguagePacks/' + language.toUpperCase() + '/TSO'), 
+          '../export/LanguagePacks/' + language.toUpperCase() + '/TSO' ), 
           this.isInstalled.TSO + '\\TSOClient'
         );
-        await fs.copy(path.join(
+        await fs.copy( path.join(
           __dirname, 
-          '../export/LanguagePacks/' + language.toUpperCase() + '/FSO'), 
+          '../export/LanguagePacks/' + language.toUpperCase() + '/FSO' ), 
           this.isInstalled.FSO
         );
-      } catch(err) {
-        this.removeActiveTask('CHLANG');
+      } catch( err ) {
+        this.removeActiveTask( 'CHLANG' );
         Toast.destroy();
         return Modal.showFSOLangFail();
       }
@@ -810,28 +810,28 @@ class FSOLauncher extends EventHandlers {
       let data;
       try {
         data = await this.getFSOConfig();
-        data.CurrentLang = this.getLangString(this.getLangCode(language))[0];
-      } catch(err) {
-        this.removeActiveTask('CHLANG');
+        data.CurrentLang = this.getLangString( this.getLangCode( language ) )[0];
+      } catch( err ) {
+        this.removeActiveTask( 'CHLANG' );
         Toast.destroy();
         return Modal.showFirstRun();
       }
       try {
         await fs.writeFile(
           this.isInstalled.FSO + '\\Content\\config.ini',
-          ini.stringify(data)
+          ini.stringify( data )
         );
-      } catch(err) {
-        this.removeActiveTask('CHLANG');
+      } catch( err ) {
+        this.removeActiveTask( 'CHLANG' );
         Toast.destroy();
         return Modal.showIniFail();
       }
-      this.removeActiveTask('CHLANG');
+      this.removeActiveTask( 'CHLANG' );
       Toast.destroy();
-      this.conf.Game.Language = this.getLangString(this.getLangCode(language))[1];
-      this.persist(true);
-    } catch(err) {
-      return Modal.showGenericError("An error ocurred: " + err);
+      this.conf.Game.Language = this.getLangString( this.getLangCode( language ) )[1];
+      this.persist( true );
+    } catch( err ) {
+      return Modal.showGenericError( "An error ocurred: " + err );
     }
   }
   /**
@@ -841,29 +841,29 @@ class FSOLauncher extends EventHandlers {
    * @param {any} v
    * @memberof FSOLauncher
    */
-  async setConfiguration(v) {
-    switch (true) {
+  async setConfiguration( v ) {
+    switch ( true ) {
       case v[1] == 'Language':
-        this.switchLanguage(v[2]);
+        this.switchLanguage( v[2] );
         break;
 
       case v[1] == 'TTS':
-        this.editTTSMode(v[2]);
+        this.editTTSMode( v[2] );
         break;
 
       case v[1] == 'GraphicsMode' &&
         v[2] == 'sw' &&
         this.conf.Game.GraphicsMode != 'sw':
-        if (!this.isInstalled.FSO) Modal.showNeedFSOTSO();
+        if ( !this.isInstalled.FSO ) Modal.showNeedFSOTSO();
         else {
           try {
             await this.enableSoftwareMode();
             Modal.showSoftwareModeEnabled();
             this.conf[v[0]][v[1]] = v[2];
-            this.persist(true);
-          } catch (e) {
+            this.persist( true );
+          } catch ( e ) {
             //Modal.showFailedUpdateMove()
-            Modal.showGenericError(e.message);
+            Modal.showGenericError( e.message );
           }
         }
         break;
@@ -874,15 +874,15 @@ class FSOLauncher extends EventHandlers {
         try {
           await this.disableSoftwareMode();
           this.conf[v[0]][v[1]] = v[2];
-          this.persist(true);
-        } catch (e) {
-          Modal.showGenericError(e.message);
+          this.persist( true );
+        } catch ( e ) {
+          Modal.showGenericError( e.message );
         }
         break;
 
       default:
         this.conf[v[0]][v[1]] = v[2];
-        this.persist(v[1] !== 'Language');
+        this.persist( v[1] !== 'Language' );
     }
   }
   /**
@@ -891,32 +891,32 @@ class FSOLauncher extends EventHandlers {
    * @memberof FSOLauncher
    */
   disableSoftwareMode() {
-    const fs = require('fs-extra');
-    this.addActiveTask('CHSWM');
+    const fs = require( 'fs-extra' );
+    this.addActiveTask( 'CHSWM' );
 
-    const Toast = new ToastComponent('Disabling Software Mode...', this.View);
+    const Toast = new ToastComponent( 'Disabling Software Mode...', this.View );
 
-    return new Promise((resolve, reject) => {
-      fs.remove(this.isInstalled.FSO + '\\dxtn.dll', async error => {
-        if (error) {
+    return new Promise( ( resolve, reject ) => {
+      fs.remove( this.isInstalled.FSO + '\\dxtn.dll', async error => {
+        if ( error ) {
           Toast.destroy();
-          reject(error);
-          return this.removeActiveTask('CHSWM');
+          reject( error );
+          return this.removeActiveTask( 'CHSWM' );
         }
 
-        fs.remove(this.isInstalled.FSO + '\\opengl32.dll', async error => {
-          if (error) {
+        fs.remove( this.isInstalled.FSO + '\\opengl32.dll', async error => {
+          if ( error ) {
             Toast.destroy();
-            reject(error);
-            return this.removeActiveTask('CHSWM');
+            reject( error );
+            return this.removeActiveTask( 'CHSWM' );
           }
 
           Toast.destroy();
-          this.removeActiveTask('CHSWM');
+          this.removeActiveTask( 'CHSWM' );
           return resolve();
-        });
-      });
-    });
+        } );
+      } );
+    } );
   }
   /**
    * Enables Software Mode and adds the needed files.
@@ -924,36 +924,36 @@ class FSOLauncher extends EventHandlers {
    * @memberof FSOLauncher
    */
   enableSoftwareMode() {
-    const fs = require('fs-extra');
-    this.addActiveTask('CHSWM');
+    const fs = require( 'fs-extra' );
+    this.addActiveTask( 'CHSWM' );
 
-    const Toast = new ToastComponent('Enabling Software Mode...', this.View);
+    const Toast = new ToastComponent( 'Enabling Software Mode...', this.View );
 
-    return new Promise((resolve, reject) => {
-      fs.copy('bin/dxtn.dll', this.isInstalled.FSO + '\\dxtn.dll',
+    return new Promise( ( resolve, reject ) => {
+      fs.copy( 'bin/dxtn.dll', this.isInstalled.FSO + '\\dxtn.dll',
         async error => {
-          if (error) {
+          if ( error ) {
             Toast.destroy();
-            reject(error);
-            return this.removeActiveTask('CHSWM');
+            reject( error );
+            return this.removeActiveTask( 'CHSWM' );
           }
 
-          fs.copy('bin/opengl32.dll', this.isInstalled.FSO + '\\opengl32.dll',
+          fs.copy( 'bin/opengl32.dll', this.isInstalled.FSO + '\\opengl32.dll',
             async error => {
-              if (error) {
+              if ( error ) {
                 Toast.destroy();
-                reject(error);
-                return this.removeActiveTask('CHSWM');
+                reject( error );
+                return this.removeActiveTask( 'CHSWM' );
               }
 
               Toast.destroy();
-              this.removeActiveTask('CHSWM');
+              this.removeActiveTask( 'CHSWM' );
               return resolve();
             }
           );
         }
       );
-    });
+    } );
   }
   /**
    * Runs FreeSO or Simitone's executable.
@@ -962,33 +962,33 @@ class FSOLauncher extends EventHandlers {
    * @returns
    * @memberof FSOLauncher
    */
-  play(useVolcanic, isSimitone = false) {
-    if (!this.isInstalled.FSO && !isSimitone) {
+  play( useVolcanic, isSimitone = false ) {
+    if ( !this.isInstalled.FSO && !isSimitone ) {
       return Modal.showNeedToPlay();
     }
 
-    if (this.isActiveTask('CHLANG')) {
+    if ( this.isActiveTask( 'CHLANG' ) ) {
       return Modal.showFailPlay();
     }
 
-    if (useVolcanic) {
-      if (isSimitone) {
+    if ( useVolcanic ) {
+      if ( isSimitone ) {
         return Modal.showVolcanicPromptSimitone();
       }
       return Modal.showVolcanicPrompt();
     }
 
-    const fs = require('fs-extra');
+    const fs = require( 'fs-extra' );
 
     const exeLocation = isSimitone
       ? this.isInstalled.Simitone + '\\Simitone.Windows.exe'
       : this.isInstalled.FSO + '\\FreeSO.exe';
 
-    fs.stat(exeLocation, (err, _stat) => {
-      if (err) return Modal.showCouldNotRecover();
+    fs.stat( exeLocation, ( err, _stat ) => {
+      if ( err ) return Modal.showCouldNotRecover();
 
-      this.launchGame(false, isSimitone);
-    });
+      this.launchGame( false, isSimitone );
+    } );
   }
   /**
    * Launches the game with the user's configuration.
@@ -996,7 +996,7 @@ class FSOLauncher extends EventHandlers {
    * @param {any} useVolcanic If Volcanic.exe should be launched.
    * @memberof FSOLauncher
    */
-  launchGame(useVolcanic, isSimitone = false) {
+  launchGame( useVolcanic, isSimitone = false ) {
     const gameFilename = isSimitone ? 'Simitone.Windows.exe' : 'FreeSO.exe';
     let file = useVolcanic ? 'Volcanic.exe' : gameFilename;
     const cwd = isSimitone
@@ -1004,37 +1004,37 @@ class FSOLauncher extends EventHandlers {
       : this.isInstalled.FSO;
 
     const ToastText = isSimitone
-      ? global.locale.TOAST_LAUNCHING.replace('FreeSO', 'Simitone')
+      ? global.locale.TOAST_LAUNCHING.replace( 'FreeSO', 'Simitone' )
       : global.locale.TOAST_LAUNCHING;
-    const Toast = new ToastComponent(ToastText, this.View);
+    const Toast = new ToastComponent( ToastText, this.View );
     const args = [];
 
     // windowed by default
-    args.push('w');
+    args.push( 'w' );
     // game language, by default english
-    if(!isSimitone) {
+    if( !isSimitone ) {
       // for now disable this for Simitone
-      args.push(`-lang${this.getLangCode(this.conf.Game.Language)}`);
+      args.push( `-lang${this.getLangCode( this.conf.Game.Language )}` );
     }
     // SW only allows ogl
     const graphicsMode = this.conf.Game.GraphicsMode != 'sw'
       ? this.conf.Game.GraphicsMode : 'ogl';
-    args.push(`-${graphicsMode}`);
+    args.push( `-${graphicsMode}` );
     // 3d is forced off when in SW
-    if(this.conf.Game['3DMode'] === '1' && (this.conf.Game.GraphicsMode != 'sw' || isSimitone)) {
-      args.push('-3d');
+    if( this.conf.Game['3DMode'] === '1' && ( this.conf.Game.GraphicsMode != 'sw' || isSimitone ) ) {
+      args.push( '-3d' );
     }
-    if(isSimitone && useVolcanic) {
+    if( isSimitone && useVolcanic ) {
       // w Simitone you need to launch Simitone.Windows.exe with the -ide flag
-      args.push('-ide');
+      args.push( '-ide' );
       file = 'Simitone.Windows.exe';
     }
-    if(isSimitone && this.conf.Game.SimitoneAA === '1') {
-      args.push('-aa');
+    if( isSimitone && this.conf.Game.SimitoneAA === '1' ) {
+      args.push( '-aa' );
     }
 
-    require('child_process').exec(file + ' ' + args.join(' '), { cwd });
-    setTimeout(() => { Toast.destroy(); }, 4000);
+    require( 'child_process' ).exec( file + ' ' + args.join( ' ' ), { cwd } );
+    setTimeout( () => { Toast.destroy(); }, 4000 );
   }
   /**
    * Promise that returns FreeSO's configuration
@@ -1044,19 +1044,19 @@ class FSOLauncher extends EventHandlers {
    * @memberof FSOLauncher
    */
   getFSOConfig() {
-    return new Promise((resolve, reject) => {
-      const ini = require('ini');
-      const fs = require('fs-extra');
+    return new Promise( ( resolve, reject ) => {
+      const ini = require( 'ini' );
+      const fs = require( 'fs-extra' );
 
       fs.readFile(
         this.isInstalled.FSO + '\\Content\\config.ini',
         'utf8',
-        (err, data) => {
-          if (err) return reject(err);
-          return resolve(ini.parse(data));
+        ( err, data ) => {
+          if ( err ) return reject( err );
+          return resolve( ini.parse( data ) );
         }
       );
-    });
+    } );
   }
   /**
    * Returns hardcoded language integers from the language string.
@@ -1066,7 +1066,7 @@ class FSOLauncher extends EventHandlers {
    * @returns
    * @memberof FSOLauncher
    */
-  getLangCode(lang) {
+  getLangCode( lang ) {
     const codes = {
       en: 0,
       es: 6,
@@ -1082,7 +1082,7 @@ class FSOLauncher extends EventHandlers {
    * @returns
    * @memberof FSOLauncher
    */
-  getLangString(code) {
+  getLangString( code ) {
     const languageStrings = {
       0: ['English', 'en'], // default
       6: ['Spanish', 'es'],
@@ -1098,12 +1098,12 @@ class FSOLauncher extends EventHandlers {
    * @param {any} showToast Display a toast while it is saving.
    * @memberof FSOLauncher
    */
-  persist(_showToast) {
-    const Toast = new ToastComponent(global.locale.TOAST_SETTINGS, this.View);
-    require('fs-extra').writeFile(
+  persist( _showToast ) {
+    const Toast = new ToastComponent( global.locale.TOAST_SETTINGS, this.View );
+    require( 'fs-extra' ).writeFile(
       'FSOLauncher.ini',
-      require('ini').stringify(this.conf),
-      _err => { setTimeout(() => { Toast.destroy(); }, 1500); }
+      require( 'ini' ).stringify( this.conf ),
+      _err => { setTimeout( () => { Toast.destroy(); }, 1500 ); }
     );
   }
 }

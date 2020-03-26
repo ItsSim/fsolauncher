@@ -18,6 +18,7 @@ module.exports = {
         "prefer-const": ["error", {
             "destructuring": "any",
             "ignoreReadBeforeAssign": false
-        }]
+        }],
+        "space-in-parens": ["error", "always"],
     }
 };

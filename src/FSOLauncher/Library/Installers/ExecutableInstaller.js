@@ -12,12 +12,12 @@ class ExecutableInstaller {
    * @returns
    * @memberof ExecutableInstaller
    */
-  run(file) {
-    return new Promise((resolve, _reject) => {
-      const child = require('child_process').exec(file, { cwd: 'bin' });
-      child.on('close', _code => resolve());
-      child.stderr.on('data', data => console.log('stdout: ' + data));
-    });
+  run( file ) {
+    return new Promise( ( resolve, _reject ) => {
+      const child = require( 'child_process' ).exec( file, { cwd: 'bin' } );
+      child.on( 'close', _code => resolve() );
+      child.stderr.on( 'data', data => console.log( 'stdout: ' + data ) );
+    } );
   }
 }
 

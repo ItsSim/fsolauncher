@@ -10,14 +10,14 @@ class IPCBridge {
    * @param {any} Window
    * @memberof IPCBridge
    */
-  constructor(Window) { this.Window = Window; }
+  constructor( Window ) { this.Window = Window; }
   /**
    * Loads the FreeSO blog RSS for the main page.
    *
    * @memberof IPCBridge
    */
   loadRss() {
-    this.Window.webContents.send('LOAD_RSS');
+    this.Window.webContents.send( 'LOAD_RSS' );
   }
   /**
    * Informs the renderer process that there is not internet connection.
@@ -25,7 +25,7 @@ class IPCBridge {
    * @memberof IPCBridge
    */
   hasNoInternet() {
-    this.Window.webContents.send('NO_INTERNET');
+    this.Window.webContents.send( 'NO_INTERNET' );
   }
   /**
    * Informs the renderer process that internet connection was restored.
@@ -33,7 +33,7 @@ class IPCBridge {
    * @memberof IPCBridge
    */
   hasInternet() {
-    this.Window.webContents.send('HAS_INTERNET');
+    this.Window.webContents.send( 'HAS_INTERNET' );
   }
 
   /**
@@ -42,8 +42,8 @@ class IPCBridge {
    * @param {any} Theme
    * @memberof IPCBridge
    */
-  setTheme(Theme) {
-    this.Window.webContents.send('SET_THEME', Theme);
+  setTheme( Theme ) {
+    this.Window.webContents.send( 'SET_THEME', Theme );
   }
 
   /**
@@ -53,8 +53,8 @@ class IPCBridge {
    * @param {any} Configuration
    * @memberof IPCBridge
    */
-  restoreConfiguration(Configuration) {
-    this.Window.webContents.send('RESTORE_CONFIGURATION', Configuration);
+  restoreConfiguration( Configuration ) {
+    this.Window.webContents.send( 'RESTORE_CONFIGURATION', Configuration );
   }
   /**
    * Tells the renderer process to go to another tab.
@@ -62,8 +62,8 @@ class IPCBridge {
    * @param {any} page
    * @memberof IPCBridge
    */
-  changePage(page) {
-    this.Window.webContents.send('CHANGE_PAGE', page);
+  changePage( page ) {
+    this.Window.webContents.send( 'CHANGE_PAGE', page );
   }
   /**
    * Tells the renderer process to show a modal window.
@@ -76,7 +76,7 @@ class IPCBridge {
    * @param {any} extra Extra parameters.
    * @memberof IPCBridge
    */
-  sendModal(title, text, yesText, noText, modalRespId, extra) {
+  sendModal( title, text, yesText, noText, modalRespId, extra ) {
     this.Window.focus();
     this.Window.webContents.send(
       'POPUP',
@@ -99,7 +99,7 @@ class IPCBridge {
    * @param {any} extra
    * @memberof IPCBridge
    */
-  sendModalNoFocus(title, text, yesText, noText, modalRespId, extra) {
+  sendModalNoFocus( title, text, yesText, noText, modalRespId, extra ) {
     this.Window.webContents.send(
       'POPUP',
       title,
@@ -121,7 +121,7 @@ class IPCBridge {
    * @param {any} miniconsole Deprecated, leave as null.
    * @memberof IPCBridge
    */
-  addProgressItem(elId, filename, origin, progress, percentage, miniconsole) {
+  addProgressItem( elId, filename, origin, progress, percentage, miniconsole ) {
     try {
       this.Window.webContents.send(
         'CREATE_PROGRESS_ITEM',
@@ -132,16 +132,16 @@ class IPCBridge {
         percentage,
         miniconsole
       );
-    } catch (e) {}
+    } catch ( e ) {}
   }
   /**
    * Stop progress animation.
    * @param {*} elId
    */
-  stopProgressItem(elId) {
+  stopProgressItem( elId ) {
     try {
-      this.Window.webContents.send('STOP_PROGRESS_ITEM', elId);
-    } catch (e) {}
+      this.Window.webContents.send( 'STOP_PROGRESS_ITEM', elId );
+    } catch ( e ) {}
   }
   /**
    * Asks the renderer process to show the Full Install progress Window.
@@ -152,7 +152,7 @@ class IPCBridge {
    * @param {any} progress Progress percentage.
    * @memberof IPCBridge
    */
-  fullInstallProgressItem(title, text1, text2, progress) {
+  fullInstallProgressItem( title, text1, text2, progress ) {
     try {
       this.Window.webContents.send(
         'FULL_INSTALL_PROGRESS_ITEM',
@@ -161,7 +161,7 @@ class IPCBridge {
         text2,
         progress
       );
-    } catch (e) {}
+    } catch ( e ) {}
   }
   /**
    * Asks the renderer process to visually show a toast.
@@ -170,10 +170,10 @@ class IPCBridge {
    * @param {any} text
    * @memberof IPCBridge
    */
-  toast(id, text) {
+  toast( id, text ) {
     try {
-      this.Window.webContents.send('TOAST', id, text);
-    } catch (e) {}
+      this.Window.webContents.send( 'TOAST', id, text );
+    } catch ( e ) {}
   }
   /**
    * Tells the renderer process to remove a toast by ID.
@@ -181,10 +181,10 @@ class IPCBridge {
    * @param {any} id
    * @memberof IPCBridge
    */
-  removeToast(id) {
+  removeToast( id ) {
     try {
-      this.Window.webContents.send('REMOVE_TOAST', id);
-    } catch (e) {}
+      this.Window.webContents.send( 'REMOVE_TOAST', id );
+    } catch ( e ) {}
   }
   /**
    * Sets the obtained remesh info for the renderer process.
@@ -192,10 +192,10 @@ class IPCBridge {
    * @param {*} v
    * @memberof IPCBridge
    */
-  setRemeshInfo(v) {
+  setRemeshInfo( v ) {
     try {
-      this.Window.webContents.send('REMESH_INFO', v);
-    } catch (e) {}
+      this.Window.webContents.send( 'REMESH_INFO', v );
+    } catch ( e ) {}
   }
   /**
    * Updates the current installation tip.
@@ -203,10 +203,10 @@ class IPCBridge {
    * @param {any} text
    * @memberof IPCBridge
    */
-  setTip(text) {
+  setTip( text ) {
     try {
-      this.Window.webContents.send('SET_TIP', text);
-    } catch (e) {}
+      this.Window.webContents.send( 'SET_TIP', text );
+    } catch ( e ) {}
   }
   /**
    * Plays a sound file on the renderer process.
@@ -214,10 +214,10 @@ class IPCBridge {
    * @param {*} sound
    * @memberof IPCBridge
    */
-  sendSound(sound) {
+  sendSound( sound ) {
     try {
-      this.Window.webContents.send('PLAY_SOUND', sound);
-    } catch (e) {}
+      this.Window.webContents.send( 'PLAY_SOUND', sound );
+    } catch ( e ) {}
   }
   /**
    * Displays a notification in the renderer.
@@ -227,10 +227,10 @@ class IPCBridge {
    * @param {*} c
    * @memberof IPCBridge
    */
-  sendNotifLog(t, l, c) {
+  sendNotifLog( t, l, c ) {
     try {
-      this.Window.webContents.send('NOTIFLOG', t, l, c);
-    } catch (e) {}
+      this.Window.webContents.send( 'NOTIFLOG', t, l, c );
+    } catch ( e ) {}
   }
   /**
    * Sends a list of installed programs. This is used to display
@@ -239,10 +239,10 @@ class IPCBridge {
    * @param {*} i
    * @memberof IPCBridge
    */
-  sendInstalledPrograms(i) {
+  sendInstalledPrograms( i ) {
     try {
-      this.Window.webContents.send('INSPROG', i);
-    } catch (e) {}
+      this.Window.webContents.send( 'INSPROG', i );
+    } catch ( e ) {}
   }
   /**
    * Makes the renderer process show that a Simitone update is available.
@@ -250,10 +250,10 @@ class IPCBridge {
    * @param {*} v
    * @memberof IPCBridge
    */
-  sendSimitoneShouldUpdate(v) {
+  sendSimitoneShouldUpdate( v ) {
     try {
-      this.Window.webContents.send('SIMITONE_SHOULD_UPDATE', v);
-    } catch (e) {}    
+      this.Window.webContents.send( 'SIMITONE_SHOULD_UPDATE', v );
+    } catch ( e ) {}    
   }
 }
 

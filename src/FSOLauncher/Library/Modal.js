@@ -27,12 +27,12 @@ class Modal {
    * @param {any} Missing An Array of strings of all the missing programs.
    * @memberof Modal
    */
-  static showRequirementsNotMet(Missing) {
+  static showRequirementsNotMet( Missing ) {
     Modal.View.sendModal(
       global.locale.MODAL_NOT_AVAILABLE,
       global.locale.MODAL_NOT_AVAILABLE_DESCR_1 +
         ' <strong>' +
-        Missing.join(', ') +
+        Missing.join( ', ' ) +
         '</strong> ' +
         global.locale.MODAL_NOT_AVAILABLE_DESCR_2,
       global.locale.MODAL_OK2
@@ -46,7 +46,7 @@ class Modal {
    * @param {any} ComponentID The Component ID to install if YES.
    * @memberof Modal
    */
-  static showFirstInstall(ComponentName, ComponentID) {
+  static showFirstInstall( ComponentName, ComponentID ) {
     Modal.View.sendModal(
       global.locale.MODAL_INSTALLATION,
       global.locale.MODAL_INSTALL_DESCR_1 +
@@ -68,7 +68,7 @@ class Modal {
    * @param {any} ComponentID The Component ID to install if YES.
    * @memberof Modal
    */
-  static showReInstall(ComponentName, ComponentID) {
+  static showReInstall( ComponentName, ComponentID ) {
     Modal.View.sendModal(
       global.locale.MODAL_REINSTALL,
       global.locale.MODAL_REINSTALL_DESCR_X +
@@ -115,7 +115,7 @@ class Modal {
    * @param {any} ComponentName Visual Component name.
    * @memberof Modal
    */
-  static showInstalled(ComponentName) {
+  static showInstalled( ComponentName ) {
     Modal.View.sendModal(
       global.locale.MODAL_INS_COMPLETE,
       ComponentName + ' ' + global.locale.MODAL_INS_COMPLETE_DESCR,
@@ -130,7 +130,7 @@ class Modal {
    * @param {any} ErrorMessage Error message to display.
    * @memberof Modal
    */
-  static showFailedInstall(ComponentName, ErrorMessage) {
+  static showFailedInstall( ComponentName, ErrorMessage ) {
     Modal.View.sendModal(
       global.locale.MODAL_INS_FAILED,
       ComponentName +
@@ -180,7 +180,7 @@ class Modal {
    * @param {any} path The path to install to.
    * @memberof Modal
    */
-  static showAlreadyInstalled(ComponentName, ComponentID, path) {
+  static showAlreadyInstalled( ComponentName, ComponentID, path ) {
     const options = {
       component: ComponentID,
       override: path
@@ -196,7 +196,7 @@ class Modal {
       global.locale.MODAL_USE_IT,
       global.locale.MODAL_CANCEL,
       'CHANGE_GAME_PATH',
-      JSON.stringify(options)
+      JSON.stringify( options )
     );
   }
   /**
@@ -220,13 +220,13 @@ class Modal {
    * @returns
    * @memberof Modal
    */
-  static showChooseDirectory(ComponentName, Window) {
-    return new Promise((resolve, _reject) => {
-      require('fs-extra').stat('C:\\Program Files', (err, stats) => {
+  static showChooseDirectory( ComponentName, Window ) {
+    return new Promise( ( resolve, _reject ) => {
+      require( 'fs-extra' ).stat( 'C:\\Program Files', ( err, stats ) => {
         const defaultPath =
           !err && stats.isDirectory() ? 'C:\\Program Files' : null;
 
-        require('electron').dialog.showOpenDialog(
+        require( 'electron' ).dialog.showOpenDialog(
           Window,
           {
             properties: ['openDirectory'],
@@ -234,10 +234,10 @@ class Modal {
             defaultPath: defaultPath,
             buttonLabel: global.locale.MODAL_INSTALL_FOLDER
           },
-          folder => { resolve(folder); }
+          folder => { resolve( folder ); }
         );
-      });
-    });
+      } );
+    } );
   }
 
   /**
@@ -293,7 +293,7 @@ class Modal {
    * @param {any} c Count of FreeSO processes that have been closed.
    * @memberof Modal
    */
-  static showKilled(c) {
+  static showKilled( c ) {
     Modal.View.sendModalNoFocus(
       global.locale.MODAL_CLOSED_FREESO,
       global.locale.MODAL_CLOSED + ' ' + c + ' ' + global.locale.MODAL_CLOSED_2,
@@ -349,7 +349,7 @@ class Modal {
    * @param {any} value The new value.
    * @memberof Modal
    */
-  static showCHTTSComplete(value) {
+  static showCHTTSComplete( value ) {
     Modal.View.sendModal(
       value === '1'
         ? global.locale.MODAL_SUCCESS
@@ -409,19 +409,19 @@ class Modal {
    * @param {any} url Notification url.
    * @memberof Modal
    */
-  static async sendNotification(title, message, url) {
+  static async sendNotification( title, message, url ) {
     const {
       setGlobalStyles,
       createNotification,
       setContainerWidth
-    } = require('electron-custom-notifications');
+    } = require( 'electron-custom-notifications' );
 
-    const path = require('path'),
-      fs = require('fs-extra');
+    const path = require( 'path' ),
+      fs = require( 'fs-extra' );
 
     try {
       const b64icon = await fs.readFile(
-        path.join(__dirname, '../../', 'beta.ico'),
+        path.join( __dirname, '../../', 'beta.ico' ),
         {
           encoding: 'base64'
         }
@@ -447,8 +447,8 @@ class Modal {
         }
       );
 
-      setContainerWidth(360);
-      setGlobalStyles(`
+      setContainerWidth( 360 );
+      setGlobalStyles( `
         @font-face {
           font-family: 'Munged';
           src: url(data:font/truetype;charset=utf-8;base64,${b64fontMunged}) format('truetype');
@@ -501,9 +501,9 @@ class Modal {
         notification #content {
           flex:0.8;
         }
-        `);
+        ` );
 
-      const notification = createNotification({
+      const notification = createNotification( {
         template: `
           <notification id="%id%" class="animated slideInUp faster">
             <div id="logo"></div>
@@ -514,21 +514,21 @@ class Modal {
           </notification> 
           `,
         timeout: 10000
-      });
+      } );
 
-      notification.on('display', () => {
-        Modal.View.sendSound('notification');
-        Modal.View.sendNotifLog(title, message, url);
-      });
+      notification.on( 'display', () => {
+        Modal.View.sendSound( 'notification' );
+        Modal.View.sendNotifLog( title, message, url );
+      } );
 
-      notification.on('click', () => {
-        if (url) {
-          require('electron').shell.openExternal(url);
+      notification.on( 'click', () => {
+        if ( url ) {
+          require( 'electron' ).shell.openExternal( url );
         }
         notification.close();
-      });
-    } catch (e) {
-      console.log('Notification broke:', e);
+      } );
+    } catch ( e ) {
+      console.log( 'Notification broke:', e );
     }
   }
 
@@ -568,7 +568,7 @@ class Modal {
    * @param {any} v
    * @memberof Modal
    */
-  static showInstallUpdate(v) {
+  static showInstallUpdate( v ) {
     Modal.View.sendModal(
       global.locale.MODAL_INSTALL_UPDATE,
       global.locale.MODAL_INSTALL_UPDATE_DESCR_1 +
@@ -697,8 +697,8 @@ class Modal {
    * @param {*} error Error text.
    * @memberof Modal
    */
-  static showGenericError(error) {
-    Modal.View.sendModal('An error occurred', error, global.locale.MODAL_OK);
+  static showGenericError( error ) {
+    Modal.View.sendModal( 'An error occurred', error, global.locale.MODAL_OK );
   }
 }
 

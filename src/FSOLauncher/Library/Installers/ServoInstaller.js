@@ -1,6 +1,6 @@
-const Modal = require('../Modal'),
-  download = require('../download')(),
-  unzip = require('../unzip')();
+const Modal = require( '../Modal' ),
+  download = require( '../download' )(),
+  unzip = require( '../unzip' )();
 const DOWNLOAD_URL_SERVO =
   'http://servo.freeso.org' +
   '/guestAuth' +
@@ -21,13 +21,13 @@ class ServoInstaller {
    * @param {any} FSOLauncher
    * @memberof ServoInstaller
    */
-  constructor(path, FSOLauncher) {
+  constructor( path, FSOLauncher ) {
     this.FSOLauncher = FSOLauncher;
-    this.id = Math.floor(Date.now() / 1000);
+    this.id = Math.floor( Date.now() / 1000 );
     this.path = path;
     this.haltProgress = false;
     this.tempPath = `temp/artifacts-freeso-${this.id}.zip`;
-    this.dl = download({ from: DOWNLOAD_URL_SERVO, to: this.tempPath });
+    this.dl = download( { from: DOWNLOAD_URL_SERVO, to: this.tempPath } );
   }
   /**
    * Create/Update the download progress item.
@@ -36,7 +36,7 @@ class ServoInstaller {
    * @param {any} Percentage
    * @memberof ServoInstaller
    */
-  createProgressItem(Message, Percentage) {
+  createProgressItem( Message, Percentage ) {
     this.FSOLauncher.View.addProgressItem(
       `FSOProgressItem${this.id}`,
       'FreeSO Client (from Servo)',
@@ -57,12 +57,12 @@ class ServoInstaller {
   install() {
     return (
       this.step1()
-        .then(() => this.step2())
-        .then(() => this.step3())
-        .then(() => this.step4())
+        .then( () => this.step2() )
+        .then( () => this.step3() )
+        .then( () => this.step4() )
         //.then(() => this.step5())
-        .then(() => this.end())
-        .catch(ErrorMessage => this.error(ErrorMessage))
+        .then( () => this.end() )
+        .catch( ErrorMessage => this.error( ErrorMessage ) )
     );
   }
   /**
@@ -81,7 +81,7 @@ class ServoInstaller {
    * @memberof ServoInstaller
    */
   step2() {
-    return this.setupDir(this.path);
+    return this.setupDir( this.path );
   }
   /**
    * Extract files into installation directory.
@@ -99,7 +99,7 @@ class ServoInstaller {
    * @memberof ServoInstaller
    */
   step4() {
-    return require('../Registry').createFreeSOEntry(this.path);
+    return require( '../Registry' ).createFreeSOEntry( this.path );
   }
   /**
    * When the installation ends.
@@ -108,12 +108,12 @@ class ServoInstaller {
    */
   end() {
     this.dl.cleanup();
-    this.FSOLauncher.Window.setProgressBar(-1);
-    this.createProgressItem(global.locale.INSTALLATION_FINISHED, 100);
-    this.FSOLauncher.View.stopProgressItem('FSOProgressItem' + this.id);
+    this.FSOLauncher.Window.setProgressBar( -1 );
+    this.createProgressItem( global.locale.INSTALLATION_FINISHED, 100 );
+    this.FSOLauncher.View.stopProgressItem( 'FSOProgressItem' + this.id );
     this.FSOLauncher.updateInstalledPrograms();
-    this.FSOLauncher.removeActiveTask('FSO');
-    Modal.showInstalled('FreeSO');
+    this.FSOLauncher.removeActiveTask( 'FSO' );
+    Modal.showInstalled( 'FreeSO' );
   }
   /**
    * When the installation errors out.
@@ -122,29 +122,29 @@ class ServoInstaller {
    * @returns
    * @memberof ServoInstaller
    */
-  async error(ErrorMessage) {
+  async error( ErrorMessage ) {
     this.dl.cleanup();
-    this.FSOLauncher.Window.setProgressBar(1, {
+    this.FSOLauncher.Window.setProgressBar( 1, {
       mode: 'error'
-    });
+    } );
     this.haltProgress = true;
-    this.createProgressItem(global.locale.FSO_FAILED_INSTALLATION, 100);
-    this.FSOLauncher.View.stopProgressItem('FSOProgressItem' + this.id);
+    this.createProgressItem( global.locale.FSO_FAILED_INSTALLATION, 100 );
+    this.FSOLauncher.View.stopProgressItem( 'FSOProgressItem' + this.id );
     
-    if(!this.isGitHub) {
+    if( !this.isGitHub ) {
       // TODO move circular dependency to a factory, temporary solution
-      const GitHubInstaller = require('./GitHubInstaller');
-      const altInstaller = new GitHubInstaller(this.path, this.FSOLauncher);
+      const GitHubInstaller = require( './GitHubInstaller' );
+      const altInstaller = new GitHubInstaller( this.path, this.FSOLauncher );
       try {
         await altInstaller.install();
-      } catch(e) {
+      } catch( e ) {
         return Promise.reject(
-          'A network error ocurred when downloading from alternative source after the primary download failed.');
+          'A network error ocurred when downloading from alternative source after the primary download failed.' );
       }
     } else {
-      this.FSOLauncher.removeActiveTask('FSO');
-      Modal.showFailedInstall('FreeSO', ErrorMessage);
-      return Promise.reject(ErrorMessage);
+      this.FSOLauncher.removeActiveTask( 'FSO' );
+      Modal.showFailedInstall( 'FreeSO', ErrorMessage );
+      return Promise.reject( ErrorMessage );
     } 
   }
   /**
@@ -154,17 +154,17 @@ class ServoInstaller {
    * @memberof ServoInstaller
    */
   download() {
-    return new Promise((resolve, reject) => {
+    return new Promise( ( resolve, reject ) => {
       this.dl.run();
-      this.dl.events.on('error', () => {});
-      this.dl.events.on('end', _fileName => {
-        if (this.dl.hasFailed()) {
-          return reject(global.locale.FSO_NETWORK_ERROR);
+      this.dl.events.on( 'error', () => {} );
+      this.dl.events.on( 'end', _fileName => {
+        if ( this.dl.hasFailed() ) {
+          return reject( global.locale.FSO_NETWORK_ERROR );
         }
         resolve();
-      });
+      } );
       this.updateDownloadProgress();
-    });
+    } );
   }
   /**
    * Extracts the zipped artifacts.
@@ -173,12 +173,12 @@ class ServoInstaller {
    * @memberof ServoInstaller
    */
   async extract() {
-    await unzip({ from: this.tempPath, to: this.path }, filename => {
+    await unzip( { from: this.tempPath, to: this.path }, filename => {
       this.createProgressItem(
         global.locale.EXTRACTING_CLIENT_FILES + ' ' + filename,
         100
       );
-    });
+    } );
   }
   /**
    * Deletes the downloaded artifacts file.
@@ -186,13 +186,13 @@ class ServoInstaller {
    * @memberof ServoInstaller
    */
   cleanup() {
-    const fs = require('fs-extra');
-    fs.stat(this.tempPath, (err, _stats) => {
-      if (err) return console.log(err);
-      fs.unlink(this.tempPath, err => {
-        if (err) return console.log(err);
-      });
-    });
+    const fs = require( 'fs-extra' );
+    fs.stat( this.tempPath, ( err, _stats ) => {
+      if ( err ) return console.log( err );
+      fs.unlink( this.tempPath, err => {
+        if ( err ) return console.log( err );
+      } );
+    } );
   }
   /**
    * Creates all the directories in a string.
@@ -201,13 +201,13 @@ class ServoInstaller {
    * @returns
    * @memberof ServoInstaller
    */
-  setupDir(dir) {
-    return new Promise((resolve, reject) => {
-      require('fs-extra').ensureDir(dir, err => {
-        if (err) return reject(err);
+  setupDir( dir ) {
+    return new Promise( ( resolve, reject ) => {
+      require( 'fs-extra' ).ensureDir( dir, err => {
+        if ( err ) return reject( err );
         resolve();
-      });
-    });
+      } );
+    } );
   }
   /**
    * Checks if FreeSO is already installed in a given path.
@@ -216,11 +216,11 @@ class ServoInstaller {
    * @memberof ServoInstaller
    */
   isInstalledInPath() {
-    return new Promise((resolve, _reject) => {
-      require('fs-extra').stat(this.path + '\\FreeSO.exe', err => {
-        resolve(err == null);
-      });
-    });
+    return new Promise( ( resolve, _reject ) => {
+      require( 'fs-extra' ).stat( this.path + '\\FreeSO.exe', err => {
+        resolve( err == null );
+      } );
+    } );
   }
   /**
    * Updates the progress item with the download progress.
@@ -229,14 +229,14 @@ class ServoInstaller {
    */
   updateDownloadProgress() {
     //console.log('updateDownloadProgress');
-    setTimeout(() => {
+    setTimeout( () => {
       let p = this.dl.getProgress();
       const mb = this.dl.getProgressMB(),
         size = this.dl.getSizeMB();
       //console.log('Progress:', p);
-      if (isNaN(p)) p = 0;
-      if (p < 100) {
-        if (!this.haltProgress) {
+      if ( isNaN( p ) ) p = 0;
+      if ( p < 100 ) {
+        if ( !this.haltProgress ) {
           //console.log(mb, size, p);
           this.createProgressItem(
             `${global.locale.DL_CLIENT_FILES} ${mb} MB ${global.locale.X_OUT_OF_X} ${size} MB (${p}%)`,
@@ -246,7 +246,7 @@ class ServoInstaller {
 
         return this.updateDownloadProgress();
       }
-    }, 1000);
+    }, 1000 );
   }
 }
 

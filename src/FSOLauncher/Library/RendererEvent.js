@@ -9,7 +9,7 @@ class RendererEvent {
    * @param {any} eventName
    * @memberof Event
    */
-  constructor(eventName) {
+  constructor( eventName ) {
     this.eventName = eventName;
   }
   /**
@@ -18,8 +18,8 @@ class RendererEvent {
    * @param {any} callback
    * @memberof Event
    */
-  onFire(callback) {
-    require('electron').ipcMain.on(this.eventName, callback);
+  onFire( callback ) {
+    require( 'electron' ).ipcMain.on( this.eventName, callback );
   }
 }
 

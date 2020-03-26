@@ -1,5 +1,5 @@
-const Modal = require('../Modal'),
-  download = require('../download')();
+const Modal = require( '../Modal' ),
+  download = require( '../download' )();
 /**
  * Installs a launcher update. This class was introduced after having problems
  * with just downloading the .asar file and replacing it.
@@ -13,15 +13,15 @@ class UpdateInstaller {
    * @param {any} FSOLauncher
    * @memberof UpdateInstaller
    */
-  constructor(FSOLauncher) {
+  constructor( FSOLauncher ) {
     this.FSOLauncher = FSOLauncher;
 
-    this.id = Math.floor(Date.now() / 1000);
+    this.id = Math.floor( Date.now() / 1000 );
     this.haltProgress = false;
-    this.dl = download({
+    this.dl = download( {
       from: 'http://beta.freeso.org/FreeSO Launcher Setup.exe',
       to: 'temp/installer.exe'
-    });
+    } );
   }
   /**
    * Creates the download progress item.
@@ -30,7 +30,7 @@ class UpdateInstaller {
    * @param {any} Percentage
    * @memberof UpdateInstaller
    */
-  createProgressItem(Message, Percentage) {
+  createProgressItem( Message, Percentage ) {
     this.FSOLauncher.View.addProgressItem(
       'FSOUpdateProgressItem' + this.id,
       'FreeSO Launcher',
@@ -50,8 +50,8 @@ class UpdateInstaller {
    */
   install() {
     return this.step1()
-      .then(() => this.end())
-      .catch(ErrorMessage => this.error(ErrorMessage));
+      .then( () => this.end() )
+      .catch( ErrorMessage => this.error( ErrorMessage ) );
   }
   /**
    * Download the launcher installer.
@@ -69,16 +69,16 @@ class UpdateInstaller {
    */
   end() {
     // run and close
-    this.FSOLauncher.Window.setProgressBar(-1);
-    this.createProgressItem('Download finished. Setup will start...', 100);
-    this.FSOLauncher.View.stopProgressItem('FSOUpdateProgressItem' + this.id);
+    this.FSOLauncher.Window.setProgressBar( -1 );
+    this.createProgressItem( 'Download finished. Setup will start...', 100 );
+    this.FSOLauncher.View.stopProgressItem( 'FSOUpdateProgressItem' + this.id );
 
-    setTimeout(() => {
+    setTimeout( () => {
       global.willQuit = true;
       // const notify = require("electron-notify");
       // notify.closeAll();
       this.FSOLauncher.Window.close();
-    }, 3000);
+    }, 3000 );
 
     this.execute();
   }
@@ -89,19 +89,19 @@ class UpdateInstaller {
    * @returns
    * @memberof UpdateInstaller
    */
-  error(ErrorMessage) {
+  error( ErrorMessage ) {
     this.dl.cleanup();
-    this.FSOLauncher.Window.setProgressBar(1, {
+    this.FSOLauncher.Window.setProgressBar( 1, {
       mode: 'error'
-    });
+    } );
     this.haltProgress = true;
     this.createProgressItem(
       `Failed to download FreeSO Launcher. Try again later, or download from <a target="_blank" href="${this.FSOLauncher.updateLocation}">here</a>.`,
       100
     );
-    this.FSOLauncher.View.stopProgressItem('FSOUpdateProgressItem' + this.id);
+    this.FSOLauncher.View.stopProgressItem( 'FSOUpdateProgressItem' + this.id );
     Modal.showFailedUpdateDownload();
-    return Promise.reject(ErrorMessage);
+    return Promise.reject( ErrorMessage );
   }
   /**
    * Execute the installer.
@@ -109,7 +109,7 @@ class UpdateInstaller {
    * @memberof UpdateInstaller
    */
   execute() {
-    require('child_process').exec('installer.exe', { cwd: 'temp' });
+    require( 'child_process' ).exec( 'installer.exe', { cwd: 'temp' } );
   }
   /**
    * Download the installer.
@@ -118,19 +118,19 @@ class UpdateInstaller {
    * @memberof UpdateInstaller
    */
   download() {
-    return new Promise((resolve, reject) => {
+    return new Promise( ( resolve, reject ) => {
       this.dl.run();
-      this.dl.events.on('error', () => {});
-      this.dl.events.on('end', _fileName => {
-        if (this.dl.hasFailed()) {
+      this.dl.events.on( 'error', () => {} );
+      this.dl.events.on( 'end', _fileName => {
+        if ( this.dl.hasFailed() ) {
           return reject(
             'FreeSO Launcher installation files have failed to download. You can try again later or download it yourself at https://beta.freeso.org'
           );
         }
         resolve();
-      });
+      } );
       this.updateDownloadProgress();
-    });
+    } );
   }
   /**
    * Updates the download progress.
@@ -138,13 +138,13 @@ class UpdateInstaller {
    * @memberof UpdateInstaller
    */
   updateDownloadProgress() {
-    setTimeout(() => {
+    setTimeout( () => {
       const p = this.dl.getProgress(),
         mb = this.dl.getProgressMB(),
         size = this.dl.getSizeMB();
 
-      if (p < 100) {
-        if (!this.haltProgress) {
+      if ( p < 100 ) {
+        if ( !this.haltProgress ) {
           this.createProgressItem(
             `Downloading installation files... ${mb} MB ${global.locale.X_OUT_OF_X} ${size} MB (${p}%)`,
             p
@@ -153,7 +153,7 @@ class UpdateInstaller {
 
         this.updateDownloadProgress();
       }
-    }, 1000);
+    }, 1000 );
   }
   /**
    * Deletes the installer after updating.
@@ -161,16 +161,16 @@ class UpdateInstaller {
    * @memberof UpdateInstaller
    */
   cleanup() {
-    const fs = require('fs-extra');
-    fs.stat('temp/installer.exe', function(err, _stats) {
-      if (err) {
+    const fs = require( 'fs-extra' );
+    fs.stat( 'temp/installer.exe', function( err, _stats ) {
+      if ( err ) {
         return;
       }
 
-      fs.unlink('temp/installer.exe', function(err) {
-        if (err) return console.log(err);
-      });
-    });
+      fs.unlink( 'temp/installer.exe', function( err ) {
+        if ( err ) return console.log( err );
+      } );
+    } );
   }
 }
 
