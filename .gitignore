@@ -4,3 +4,5 @@
 /src/bin/
 /src/temp/
 /vendor/
+/release/*
+!/release/fsolauncher-build-extras/
