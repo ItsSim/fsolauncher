@@ -409,7 +409,7 @@ class Modal {
    * @param {any} url Notification url.
    * @memberof Modal
    */
-  static async sendNotification( title, message, url ) {
+  static async sendNotification( title, message, url, ok = false ) {
     const {
       setGlobalStyles,
       createNotification,
@@ -521,7 +521,7 @@ class Modal {
       } );
 
       notification.on( 'display', () => {
-        Modal.View.sendSound( 'notification' );
+        Modal.View.sendSound( ok ? 'ok' : 'notification' );
         Modal.View.sendNotifLog( title, message, url );
       } );
 
