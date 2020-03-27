@@ -48,7 +48,7 @@ class Modal {
    */
   static showFirstInstall( ComponentName, ComponentID ) {
     Modal.View.sendModal(
-      global.locale.MODAL_INSTALLATION,
+      ComponentName,
       global.locale.MODAL_INSTALL_DESCR_1 +
         ' <strong>' +
         ComponentName +
@@ -70,7 +70,7 @@ class Modal {
    */
   static showReInstall( ComponentName, ComponentID ) {
     Modal.View.sendModal(
-      global.locale.MODAL_REINSTALL,
+      ComponentName,
       global.locale.MODAL_REINSTALL_DESCR_X +
         ' <strong>' +
         ComponentName +
@@ -222,20 +222,20 @@ class Modal {
    */
   static showChooseDirectory( ComponentName, Window ) {
     return new Promise( ( resolve, _reject ) => {
-      require( 'fs-extra' ).stat( 'C:\\Program Files', ( err, stats ) => {
+      require( 'fs-extra' ).stat( 'C:\\Program Files', async ( err, stats ) => {
         const defaultPath =
           !err && stats.isDirectory() ? 'C:\\Program Files' : null;
 
-        require( 'electron' ).dialog.showOpenDialog(
+        const response = await require( 'electron' ).dialog.showOpenDialog(
           Window,
           {
             properties: ['openDirectory'],
             title: global.locale.MODAL_INSTALL + ' ' + ComponentName,
             defaultPath: defaultPath,
             buttonLabel: global.locale.MODAL_INSTALL_FOLDER
-          },
-          folder => { resolve( folder ); }
+          }
         );
+        resolve(response.canceled ? [] : response.filePaths);
       } );
     } );
   }
@@ -698,7 +698,7 @@ class Modal {
    * @memberof Modal
    */
   static showGenericError( error ) {
-    Modal.View.sendModal( 'An error occurred', error, global.locale.MODAL_OK );
+    Modal.View.sendModal( 'Ooops!', error, global.locale.MODAL_OK );
   }
 }
 

@@ -1,5 +1,6 @@
 const Modal = require( './Library/Modal' ),
-  RendererEvent = require( './Library/RendererEvent' );
+  RendererEvent = require( './Library/RendererEvent' ),
+  FSODetector = require( './FSODetector' );
 /**
  * Handles all events from the client.
  *
@@ -32,6 +33,7 @@ class EventHandlers {
     const onFTPTSOResponse            = new RendererEvent( 'FTP_TSOResponse' );
     const onCheckSimitoneRequirements = new RendererEvent( 'CHECK_SIMITONE' );
     const onInstallSimitoneUpdate     = new RendererEvent( 'INSTALL_SIMITONE_UPDATE' );
+    const onDetectedPathConfirm       = new RendererEvent( 'FSODETECTOR_CONFIRM' );
 
     onInitDOM
       .onFire( this.onInitDOM.bind( this ) );
@@ -73,6 +75,8 @@ class EventHandlers {
       .onFire( this.onCheckSimitoneRequirements.bind( this ) );
     onInstallSimitoneUpdate
       .onFire( this.onInstallSimitoneUpdate.bind( this ) );
+    onDetectedPathConfirm
+      .onFire( this.onDetectedPathConfirm.bind( this ) );
   }
   /**
    * Received when the user request a Simitone update.
@@ -133,7 +137,22 @@ class EventHandlers {
 
     //this.checkLauncherUpdates(true);
     this.Window.focus();
+
+    this.FSODetector = new FSODetector( this.onDetectorResponse.bind( this ) );
+    this.FSODetector.start();
   }
+
+  async onDetectorResponse( dir ) {
+    console.log( this.isInstalled.FSO, dir );
+    if( this.isInstalled.FSO == dir ) {
+      dir = null;
+    }
+    this.View.sendDetectorResponse( dir );
+  }
+  onDetectedPathConfirm( e, dir ) {
+    this.changeFSOPath( dir );
+  }
+
   /**
    * Fires when the client receives a Socket.io request.
    *

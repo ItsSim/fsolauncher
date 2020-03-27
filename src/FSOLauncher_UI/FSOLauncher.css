@@ -20,7 +20,7 @@
 }
 
 * {
-  letter-spacing:-0.02em;
+  letter-spacing: -0.02em;
 }
 
 /*body.no-internet #home-page .page-content {
@@ -1176,4 +1176,28 @@ a.twitter-timeline {
   font: normal 12px/18px Helvetica, Arial, sans-serif;
   color: #333;
   white-space: nowrap;
+}
+
+#detector-response {
+  margin: 20px;
+  padding: 5px;
+  border-radius: 12px;
+  background-color: #f1c40f;
+  display: none;
+  overflow: hidden;
+  height:90px;
+}
+
+#detector-response p {
+  font-family: 'Munged';
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 14px;
+  line-height: 20px;
+  float: left;
+  width: 80%;
+}
+
+#detector-response .button {
+  margin-top:22px;
+  margin-right:20px;
 }

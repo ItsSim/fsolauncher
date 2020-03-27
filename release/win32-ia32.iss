@@ -25,14 +25,14 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-AppCopyright=Copyright (C) 2020 FreeSO.
+AppCopyright=Copyright (C) 2020 FreeSO.org. All rights reserved.
 DefaultDirName={pf}\{#MyAppName}
 DisableProgramGroupPage=yes
 OutputDir=.
 OutputBaseFilename=FreeSO Launcher Setup
 SetupIconFile=.\fsolauncher-win32-ia32\beta.ico
 UninstallDisplayIcon={uninstallexe}
-InfoBeforeFile=fsolauncher-win32-ia32\readme.txt
+InfoBeforeFile=.\fsolauncher-win32-ia32\readme.txt
 ;MinVersion=0,6.1
 
 [Languages]

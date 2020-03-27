@@ -204,17 +204,27 @@ class Registry {
 
       Key.keyExists( ( err, exists ) => {
         if ( err ) {
+          console.log( err );
           return reject( global.locale.TSO_REGISTRY_EDIT_FAIL );
         } else {
           if ( exists ) {
             Key.destroy( err => {
-              if ( err ) return reject( global.locale.TSO_INSTALLDIR_FAIL );
+              if ( err ) {
+                console.log( err );
+                return reject( global.locale.TSO_INSTALLDIR_FAIL );
+              }
 
               Key.create( err => {
-                if ( err ) return reject( global.locale.TSO_INSTALLDIR_FAIL );
+                if ( err ) {
+                  console.log( err );
+                  return reject( global.locale.TSO_INSTALLDIR_FAIL );
+                }
 
                 Key.set( 'InstallDir', Registry.REG_SZ, InstallDir, err => {
-                  if ( err ) return reject( global.locale.TSO_INSTALLDIR_FAIL );
+                  if ( err ) {
+                    console.log( err );
+                    return reject( global.locale.TSO_INSTALLDIR_FAIL );
+                  }
 
                   return resolve();
                 } );
@@ -222,10 +232,16 @@ class Registry {
             } );
           } else {
             Key.create( err => {
-              if ( err ) return reject( global.locale.TSO_REGISTRY_EDIT_FAIL );
+              if ( err ) {
+                console.log( err );
+                return reject( global.locale.TSO_REGISTRY_EDIT_FAIL );
+              }
 
               Key.set( 'InstallDir', Registry.REG_SZ, InstallDir, err => {
-                if ( err ) return reject( global.locale.TSO_INSTALLDIR_FAIL );
+                if ( err ) {
+                  console.log( err );
+                  return reject( global.locale.TSO_INSTALLDIR_FAIL );
+                }
 
                 return resolve();
               } );

@@ -30,6 +30,7 @@ class FSOLauncher extends EventHandlers {
     this.remeshInfo.location = false;
     this.remeshInfo.version = false;
     this.remoteSimitoneVersion = null;
+    this.lastDetected = null;
 
     this.Window.on( 'minimize', () => {
       if ( !this.minimizeReminder ) {
@@ -632,7 +633,7 @@ class FSOLauncher extends EventHandlers {
           Installer = require( './Library/Installers/FilePlanetInstaller' );
         }
         if ( Component == 'FSO' ) {
-          Installer = require( './Library/Installers/ServoInstaller' );
+          Installer = require( './Library/Installers/GitHubInstaller' );
         }
         if ( Component == 'Simitone' ) {
           Installer = require( './Library/Installers/SimitoneInstaller' );
@@ -647,12 +648,12 @@ class FSOLauncher extends EventHandlers {
                 global.locale.TOAST_WAITING,
                 this.View
               );
-              const folder = await Modal.showChooseDirectory(
+              const folders = await Modal.showChooseDirectory(
                 this.getPrettyName( Component ),
                 this.Window
               );
-              if( folder ) {
-                InstallDir = folder[0] + '\\' + this.getPrettyName( Component );
+              if( folders && folders.length > 0 ) {
+                InstallDir = folders[0] + '\\' + this.getPrettyName( Component );
               }
               Toast.destroy();
             } else {
@@ -1105,6 +1106,26 @@ class FSOLauncher extends EventHandlers {
       require( 'ini' ).stringify( this.conf ),
       _err => { setTimeout( () => { Toast.destroy(); }, 1500 ); }
     );
+  }
+  /**
+   * Change FreeSO installation path.
+   * This fn is for the new FSODetector feature.
+   *
+   * @param {*} dir
+   * @memberof FSOLauncher
+   */
+  async changeFSOPath( dir ) {
+    const Registry = require( './Library/Registry' );
+    try {
+      console.log( dir );
+      await Registry.createFreeSOEntry( dir );
+      Modal.showChangedGamePath();
+      this.View.sendDetectorResponse();
+      this.updateInstalledPrograms();
+    } catch( e ) {
+      Modal.showGenericError( 
+        'Failed while trying to change the FreeSO installation directory: ' + e );
+    }
   }
 }
 

@@ -24,7 +24,19 @@ var Electron = require( 'electron' ),
     this.changePage( 'home' );
     this.loadRss();
   };
-
+var detectedPath;
+FSOLauncher.prototype.setDetectorResponse = function( dir ) {
+  detectedPath = dir;
+  if ( dir ) {
+    document.getElementById( 'detector-response' ).style.display = 'block';
+    document.getElementById( 'detector-response-path' ).innerHTML = dir;
+  } else {
+    document.getElementById( 'detector-response' ).style.display = 'none';
+  }
+};
+FSOLauncher.prototype.sendDetectedPathConfirm = function() {
+  FSOLauncher.fireEvent( 'FSODETECTOR_CONFIRM', detectedPath );
+};
 FSOLauncher.prototype.simitoneInstalled = function() {
   document.getElementById( 'simitone-page' ).classList.add( 'simitone-installed' );
 };
@@ -66,7 +78,7 @@ FSOLauncher.prototype.ago = function( date ) {
     'September',
     'October',
     'November',
-    'December'
+    'December',
   ];
   var minutes;
   var hours;
@@ -221,7 +233,8 @@ FSOLauncher.prototype.changePage = function( a ) {
     prevTheme = document.querySelector( 'body' ).className;
     FSOLauncher.setTheme( 'simitone' );
     FSOLauncher.fireEvent( 'CHECK_SIMITONE' );
-    simitoneRequirementsCheckInterval && clearInterval( simitoneRequirementsCheckInterval );
+    simitoneRequirementsCheckInterval &&
+      clearInterval( simitoneRequirementsCheckInterval );
     simitoneRequirementsCheckInterval = setInterval( () => {
       FSOLauncher.fireEvent( 'CHECK_SIMITONE' );
     }, 60000 );
@@ -426,6 +439,9 @@ FSOLauncher.prototype.yesNo = function( a, b, c, e, f, g ) {
 };
 FSOLauncher = new FSOLauncher();
 
+FSOLauncher.registerServerEvent( 'FSODETECTOR_RESPONSE', function( a, b ) {
+  FSOLauncher.setDetectorResponse( b );
+} );
 FSOLauncher.registerServerEvent( 'HAS_INTERNET', function() {
   document.body.className = document.body.className.replace( 'no-internet', '' );
   var tw = document.querySelector( '#tw' ).cloneNode( true );
@@ -588,6 +604,9 @@ FSOLauncher.registerUIEvent( '#simitone-install-button', 'click', function() {
 } );
 FSOLauncher.registerUIEvent( '#simitone-should-update', 'click', function() {
   FSOLauncher.fireEvent( 'INSTALL_SIMITONE_UPDATE' );
+} );
+FSOLauncher.registerUIEvent( '#detector-confirm', 'click', function() {
+  FSOLauncher.sendDetectedPathConfirm();
 } );
 FSOLauncher.registerUIEventAll( '[option-id]', 'change', function( a, _b ) {
   var c = a.currentTarget.getAttribute( 'option-id' ),

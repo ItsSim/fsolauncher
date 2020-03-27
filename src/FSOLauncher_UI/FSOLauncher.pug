@@ -88,7 +88,7 @@ html
                             a.twitter-timeline(style='text-decoration:none;' data-height='490', data-theme='light', href=TW_URL) @FreeSOGame on Twitter
                             //a.twitter-timeline.light(style='text-decoration:none;' data-height='500', data-theme='light', data-chrome='transparent', href=TW_URL) @FreeSOGame on Twitter
                             script#tw(src='https://platform.twitter.com/widgets.js', charset='utf-8')
-                #installer-page.page(style='/**background-image:url(city.jpg); **/display:none')
+                #installer-page.page(style='/**background-image:url(city.jpg); **/display:none;background-color:#fff')
                     .hint.arrow-left(hint-page='installer', style='top:110px;left:375px')
                         h1 3D Remesh Package!
                         span After you've installed FreeSO, download this remesh package to make 3D Mode even better.
@@ -114,6 +114,11 @@ html
                             .hint.arrow-top(hint-page='installer', style='top:0px;right:60px')
                                 h1 #{TOOLTIP_TITLE_2}
                                 span #{TOOLTIP_DESCR_2}
+                            span#detector-response
+                                p
+                                    | We have detected that you are running FreeSO from a directory that is not set as the current installation
+                                    | directory (<strong id="detector-response-path"></strong>). 
+                                span#detector-confirm.button(style='float:right') CHANGE PATH
                             div.block
                                 .item(install='RMS', style='border-top:0;background-image:url(FSOLauncher_Images/volcanic.png); background-color:#fff; background-size:30%;background-position:center center;background-repeat:no-repeat;')
                                     .new(style='top:30px;height:50px;left:30px;padding:6px;padding-left:8px;padding-right:8px;border-radius:8px;font-size:14px;display:none;position:absolute;') <i style="vertical-align:middle;" class="material-icons">new_releases</i> RECENTLY&nbsp;UPDATED

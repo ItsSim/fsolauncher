@@ -65,7 +65,7 @@
     "MODAL_REINSTALL": "Reinstall Software?",
     "MODAL_CONTINUE": "Continue",
 
-    "MODAL_NEGATIVE": "Error",
+    "MODAL_NEGATIVE": "Oops!",
     "MODAL_NEED_FSOTSO": "You need FreeSO and The Sims Online installed to use this feature. Changes were not saved.",
 
     "MODAL_NEED_FSOTSO_PLAY": "You need FreeSO and The Sims Online installed to launch the game.",
@@ -100,7 +100,7 @@
     "MODAL_INS_COMPLETE_DESCR": "has finished installing successfully.",
 
     "MODAL_INS_FAILED": "Installation failed!",
-    "MODAL_MODIFIED_PATH": "Modified path",
+    "MODAL_MODIFIED_PATH": "Modified Path",
     "MODAL_MODIFIED_PATH_DESCR": "The installation path for this program has been changed to a folder where it is already installed.",
 
     "MODAL_DETECTED_THAT_1": "We have detected that",

@@ -255,6 +255,17 @@ class IPCBridge {
       this.Window.webContents.send( 'SIMITONE_SHOULD_UPDATE', v );
     } catch ( e ) {}    
   }
+  /**
+   * Response of a FSODetector run.
+   *
+   * @param {*} dir
+   * @memberof IPCBridge
+   */
+  sendDetectorResponse( dir ) {
+    try {
+      this.Window.webContents.send( 'FSODETECTOR_RESPONSE', dir );
+    } catch ( e ) {}   
+  }
 }
 
 module.exports = IPCBridge;

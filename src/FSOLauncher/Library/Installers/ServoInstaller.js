@@ -123,7 +123,7 @@ class ServoInstaller {
    * @memberof ServoInstaller
    */
   async error( ErrorMessage ) {
-    this.dl.cleanup();
+    if( this.dl ) this.dl.cleanup();
     this.FSOLauncher.Window.setProgressBar( 1, {
       mode: 'error'
     } );
@@ -131,10 +131,10 @@ class ServoInstaller {
     this.createProgressItem( global.locale.FSO_FAILED_INSTALLATION, 100 );
     this.FSOLauncher.View.stopProgressItem( 'FSOProgressItem' + this.id );
     
-    if( !this.isGitHub ) {
+    if( this.isGitHub ) {
       // TODO move circular dependency to a factory, temporary solution
-      const GitHubInstaller = require( './GitHubInstaller' );
-      const altInstaller = new GitHubInstaller( this.path, this.FSOLauncher );
+      const ServoInstaller = require( './ServoInstaller' );
+      const altInstaller = new ServoInstaller( this.path, this.FSOLauncher );
       try {
         await altInstaller.install();
       } catch( e ) {
