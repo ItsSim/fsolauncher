@@ -1,6 +1,6 @@
 # FreeSO Launcher
 
-![image](https://i.imgur.com/su4ZDEm.png)
+![image](https://i.imgur.com/eWYBVuY.png)
 
 # Installing FreeSO
 To install FreeSO you will also need to install OpenAL, .NET Framework >= 4.0 and the original The Sims Online client. These dependencies are all included in the launcher.
@@ -20,6 +20,11 @@ Please note that a **Complete Installation** overrides any installations that ma
 
 ### Using a previous Simitone installation
 The folder needs to be named "Simitone for Windows" in order for the launcher to pick it up.
+
+# Using a previous FreeSO installation after being auto-detected by the launcher
+The launcher (since 1.7.0) detects a running FreeSO instance and checks if the path is set as the installation directory. If it isn't set as the installation directory, an alert will appear in the Installer tab of the launcher giving you the option to reset it:
+
+![image](https://i.imgur.com/79loHnb.png)
 
 # Extra features
 * You can right click the Play button to run FreeSO along with the Volcanic IDE.
