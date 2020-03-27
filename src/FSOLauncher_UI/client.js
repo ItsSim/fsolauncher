@@ -396,9 +396,9 @@ FSOLauncher.prototype.createOrModifyProgressItem = function( a, b, c, e, f, g ) 
       document.querySelector( '#downloads-page .page-content' ).innerHTML;
   }
 };
+var yesNoAudio = new Audio( './FSOLauncher_Sounds/modal.wav' );
 FSOLauncher.prototype.yesNo = function( a, b, c, e, f, g ) {
-  var audio = new Audio( './FSOLauncher_Sounds/modal.wav' );
-  audio.play();
+  yesNoAudio.play();
   var d = document.createElement( 'div' );
   d.className = 'modal';
   var h = document.createElement( 'h1' );

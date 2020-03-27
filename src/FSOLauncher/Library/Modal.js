@@ -235,7 +235,7 @@ class Modal {
             buttonLabel: global.locale.MODAL_INSTALL_FOLDER
           }
         );
-        resolve(response.canceled ? [] : response.filePaths);
+        resolve( response.canceled ? [] : response.filePaths );
       } );
     } );
   }
@@ -430,7 +430,7 @@ class Modal {
         path.join(
           __dirname,
           '../../FSOLauncher_UI/FSOLauncher_Fonts',
-          'hinted-Munged-embOpitJmj.ttf'
+          'hinted-Munged-otVXWjH6W8.ttf'
         ),
         {
           encoding: 'base64'
@@ -449,6 +449,10 @@ class Modal {
 
       setContainerWidth( 360 );
       setGlobalStyles( `
+        body {
+          text-rendering: optimizeLegibility !important;
+          -webkit-font-smoothing: antialiased !important;
+        }
         @font-face {
           font-family: 'Munged';
           src: url(data:font/truetype;charset=utf-8;base64,${b64fontMunged}) format('truetype');
@@ -483,10 +487,10 @@ class Modal {
         notification p {
           font-family:'Munged';
           font-size:14px;
-          font-weight:100!important;
+          font-weight:normal!important;
           line-height:16px;
           letter-spacing:-0.02em;
-          color:rgba(0,0,0,0.45);
+          color:#595959;
         }
         notification #logo {
           background-image:url("data:image/png;base64,${b64icon}");
@@ -505,7 +509,7 @@ class Modal {
 
       const notification = createNotification( {
         template: `
-          <notification id="%id%" class="animated slideInUp faster">
+          <notification id="%id%" class="animated fadeInUp faster">
             <div id="logo"></div>
             <div id="content">
               <h1>${title}</h1>

@@ -137,6 +137,7 @@ class EventHandlers {
 
     //this.checkLauncherUpdates(true);
     this.Window.focus();
+    this.updateInstalledPrograms();
 
     this.FSODetector = new FSODetector( this.onDetectorResponse.bind( this ) );
     this.FSODetector.start();
