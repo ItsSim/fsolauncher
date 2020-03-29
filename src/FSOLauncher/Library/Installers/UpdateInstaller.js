@@ -38,7 +38,7 @@ class UpdateInstaller {
       Message,
       Percentage
     );
-    this.FSOLauncher.Window.setProgressBar(
+    this.FSOLauncher.setProgressBar(
       Percentage == 100 ? 2 : Percentage / 100
     );
   }
@@ -69,7 +69,7 @@ class UpdateInstaller {
    */
   end() {
     // run and close
-    this.FSOLauncher.Window.setProgressBar( -1 );
+    this.FSOLauncher.setProgressBar( -1 );
     this.createProgressItem( 'Download finished. Setup will start...', 100 );
     this.FSOLauncher.View.stopProgressItem( 'FSOUpdateProgressItem' + this.id );
 
@@ -91,7 +91,7 @@ class UpdateInstaller {
    */
   error( ErrorMessage ) {
     this.dl.cleanup();
-    this.FSOLauncher.Window.setProgressBar( 1, {
+    this.FSOLauncher.setProgressBar( 1, {
       mode: 'error'
     } );
     this.haltProgress = true;

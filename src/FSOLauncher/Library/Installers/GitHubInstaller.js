@@ -30,7 +30,7 @@ class GitHubInstaller extends ServoInstaller {
       `Installing in ${this.path}`,
       Message, Percentage
     );
-    this.FSOLauncher.Window.setProgressBar(
+    this.FSOLauncher.setProgressBar(
       Percentage == 100 ? 2 : Percentage / 100
     );
   }

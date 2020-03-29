@@ -621,7 +621,7 @@ class FSOLauncher extends EventHandlers {
             reject( e );
           } finally {
             setTimeout( () => {
-              this.Window.setProgressBar( -1 );
+              this.setProgressBar( -1 );
             }, 5000 );
           }
         } );
@@ -687,7 +687,7 @@ class FSOLauncher extends EventHandlers {
                 reject( e );
               } finally {
                 setTimeout( () => {
-                  this.Window.setProgressBar( -1 );
+                  this.setProgressBar( -1 );
                 }, 5000 );
               }
             } else {
@@ -717,7 +717,7 @@ class FSOLauncher extends EventHandlers {
               reject( e );
             } finally {
               setTimeout( () => {
-                this.Window.setProgressBar( -1 );
+                this.setProgressBar( -1 );
               }, 5000 );
             }
           }
@@ -743,7 +743,7 @@ class FSOLauncher extends EventHandlers {
             return reject( e );
           } finally {
             setTimeout( () => {
-              this.Window.setProgressBar( -1 );
+              this.setProgressBar( -1 );
             }, 5000 );
           }
         } );
@@ -1125,6 +1125,15 @@ class FSOLauncher extends EventHandlers {
     } catch( e ) {
       Modal.showGenericError( 
         'Failed while trying to change the FreeSO installation directory: ' + e );
+    }
+  }
+  setProgressBar( val, options ) {
+    if( this.Window ) {
+      try {
+        this.Window.setProgressBar( val, options );
+      } catch( err ) {
+        console.log( 'Failed setting ProgressBar' )
+      }
     }
   }
 }
