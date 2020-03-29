@@ -21,7 +21,7 @@ Please note that a **Complete Installation** overrides any installations that ma
 ### Using a previous Simitone installation
 The folder needs to be named "Simitone for Windows" in order for the launcher to pick it up.
 
-# Using a previous FreeSO installation after being auto-detected by the launcher
+### Linking a FreeSO folder to the launcher using AutoDetection
 The launcher (since 1.7.0) detects a running FreeSO instance and checks if the path is set as the installation directory. If it isn't set as the installation directory, an alert will appear in the Installer tab of the launcher giving you the option to reset it:
 
 ![image](https://i.imgur.com/79loHnb.png)
