@@ -779,18 +779,6 @@ class FSOLauncher extends EventHandlers {
       path = require( 'path' );
     const Toast = new ToastComponent( global.locale.TOAST_LANGUAGE, this.View );
     try {
-      /**
-      No object translations for now. 
-      There should be a way of translating them collaboratively (maybe by using a GitHub repo?) 
-      since one str.piff file contains all language strings for that object.
-      try {
-        await fs.remove(this.isInstalled.FSO + '\\Content\\Patch\\User\\translations');
-      } catch(err) {
-        this.removeActiveTask('CHLANG');
-        Toast.destroy();
-        return Modal.showTSOLangFail();
-      }
-      **/
       try {
         await fs.copy( path.join(
           __dirname, 
@@ -897,26 +885,18 @@ class FSOLauncher extends EventHandlers {
 
     const Toast = new ToastComponent( 'Disabling Software Mode...', this.View );
 
-    return new Promise( ( resolve, reject ) => {
-      fs.remove( this.isInstalled.FSO + '\\dxtn.dll', async error => {
-        if ( error ) {
-          Toast.destroy();
-          reject( error );
-          return this.removeActiveTask( 'CHSWM' );
-        }
-
-        fs.remove( this.isInstalled.FSO + '\\opengl32.dll', async error => {
-          if ( error ) {
-            Toast.destroy();
-            reject( error );
-            return this.removeActiveTask( 'CHSWM' );
-          }
-
-          Toast.destroy();
-          this.removeActiveTask( 'CHSWM' );
-          return resolve();
-        } );
-      } );
+    // eslint-disable-next-line no-async-promise-executor
+    return new Promise( async ( resolve, reject ) => {
+      try {
+        await fs.remove( this.isInstalled.FSO + '\\dxtn.dll' );
+        await fs.remove( this.isInstalled.FSO + '\\opengl32.dll' );
+        resolve();
+      } catch( err ) {
+        reject( err );
+      } finally {
+        Toast.destroy();
+        this.removeActiveTask( 'CHSWM' );
+      }
     } );
   }
   /**
@@ -930,30 +910,18 @@ class FSOLauncher extends EventHandlers {
 
     const Toast = new ToastComponent( 'Enabling Software Mode...', this.View );
 
-    return new Promise( ( resolve, reject ) => {
-      fs.copy( 'bin/dxtn.dll', this.isInstalled.FSO + '\\dxtn.dll',
-        async error => {
-          if ( error ) {
-            Toast.destroy();
-            reject( error );
-            return this.removeActiveTask( 'CHSWM' );
-          }
-
-          fs.copy( 'bin/opengl32.dll', this.isInstalled.FSO + '\\opengl32.dll',
-            async error => {
-              if ( error ) {
-                Toast.destroy();
-                reject( error );
-                return this.removeActiveTask( 'CHSWM' );
-              }
-
-              Toast.destroy();
-              this.removeActiveTask( 'CHSWM' );
-              return resolve();
-            }
-          );
-        }
-      );
+    // eslint-disable-next-line no-async-promise-executor
+    return new Promise( async( resolve, reject ) => {
+      try {
+        await fs.copy( 'bin/dxtn.dll', this.isInstalled.FSO + '\\dxtn.dll' );
+        await fs.copy( 'bin/opengl32.dll', this.isInstalled.FSO + '\\opengl32.dll' );
+        resolve();
+      } catch( err ) {
+        reject( err );
+      } finally {
+        Toast.destroy();
+        this.removeActiveTask( 'CHSWM' );
+      }
     } );
   }
   /**
@@ -986,8 +954,16 @@ class FSOLauncher extends EventHandlers {
       : this.isInstalled.FSO + '\\FreeSO.exe';
 
     fs.stat( exeLocation, ( err, _stat ) => {
-      if ( err ) return Modal.showCouldNotRecover();
+      if ( err ) {
+        const altExeLocation = isSimitone
+        ? this.isInstalled.Simitone + '\\FreeSOClient\\Simitone.Windows.exe'
+        : this.isInstalled.FSO + '\\FreeSOClient\\FreeSO.exe';
 
+        return fs.stat( altExeLocation, ( err, _stat ) => {
+          if( err ) return Modal.showCouldNotRecover();
+          this.launchGame( false, isSimitone, '\\FreeSOClient' );
+        } );
+      }
       this.launchGame( false, isSimitone );
     } );
   }
@@ -997,10 +973,10 @@ class FSOLauncher extends EventHandlers {
    * @param {any} useVolcanic If Volcanic.exe should be launched.
    * @memberof FSOLauncher
    */
-  launchGame( useVolcanic, isSimitone = false ) {
+  launchGame( useVolcanic, isSimitone = false, subfolder ) {
     const gameFilename = isSimitone ? 'Simitone.Windows.exe' : 'FreeSO.exe';
     let file = useVolcanic ? 'Volcanic.exe' : gameFilename;
-    const cwd = isSimitone
+    let cwd = isSimitone
       ? this.isInstalled.Simitone
       : this.isInstalled.FSO;
 
@@ -1034,6 +1010,9 @@ class FSOLauncher extends EventHandlers {
       args.push( '-aa' );
     }
 
+    if( subfolder ) {
+      cwd += subfolder;
+    }
     require( 'child_process' ).exec( file + ' ' + args.join( ' ' ), { cwd } );
     setTimeout( () => { Toast.destroy(); }, 4000 );
   }

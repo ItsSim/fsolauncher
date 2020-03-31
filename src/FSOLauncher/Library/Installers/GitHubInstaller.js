@@ -43,21 +43,15 @@ class GitHubInstaller extends ServoInstaller {
   async step1() {
     this.dl = null;
 
-    const releaseInfo = await this.getFreeSOReleaseInfo();
-    if( !Array.isArray( releaseInfo.assets ) ) {
-      throw new Error( "Invalid response when trying to obtain FreeSO release information from GitHub." );
-    }
-    for ( let i = 0; i < releaseInfo.assets.length; i++ ) {
-      const asset = releaseInfo.assets[i];
-      if( asset["name"].indexOf( "client" ) > -1 ) {
-        // This asset contains the full client.
-        this.dl = download( { from: asset["browser_download_url"], to: this.tempPath } );
-      }
+    this.createProgressItem( 'Obtaining download sources, please wait a few seconds...', 0 );
+
+    const from = await this.getZipUrl();
+    if( !from ) {
+      throw new Error( "Could not obtain FreeSO release information..." );
     }
 
-    if( !this.dl ) {
-      throw new Error( "No release link found in GitHub release information." );
-    }
+    this.dl = download( { from, to: this.tempPath } );
+
     return this.download();
   }
   /**
@@ -66,7 +60,7 @@ class GitHubInstaller extends ServoInstaller {
    * @returns
    * @memberof GitHubInstaller
    */
-  getFreeSOReleaseInfo() {
+  getFreeSOGitHubReleaseInfo() {
     return new Promise( ( resolve, reject ) => {
       const https = require( 'https' );
       const options = {
@@ -91,6 +85,75 @@ class GitHubInstaller extends ServoInstaller {
       request.on( 'error', e => { reject( e ); } );
       request.end();
     } );
+  }
+  /**
+   * Obtain FreeSO release information from the API.
+   *
+   * @returns
+   * @memberof GitHubInstaller
+   */
+  getFreeSOApiReleaseInfo() {
+    return new Promise( ( resolve, reject ) => {
+      const https = require( 'https' );
+      const options = {
+        host: 'api.freeso.org',
+        path: '/userapi/update/beta',
+        headers: { 'user-agent': 'node.js' }
+      },
+      request = https.request( options, res => {
+        let data = '';
+        res.on( 'data', chunk => { data += chunk; } );
+        res.on( 'end', () => {
+          try {
+            resolve( JSON.parse( data ) );
+          } catch ( e ) { reject( e ); }
+        } );
+      } );
+      request.setTimeout( 30000, () => {
+        reject(
+          'Timed out while trying to get GitHub release data for FreeSO.'
+        );
+      } );
+      request.on( 'error', e => { reject( e ); } );
+      request.end();
+    } );
+  }
+  /**
+   * Obtains the latest release zip either from api.freeso.org or GitHub directly.
+   * Use api.freeso.org first, fallback to GitHub.
+   *
+   * @returns
+   * @memberof GitHubInstaller
+   */
+  async getZipUrl() {
+    let url;
+    try {
+      const apiReleaseInfo = await this.getFreeSOApiReleaseInfo();
+      if( !Array.isArray( apiReleaseInfo ) || apiReleaseInfo.length == 0 ) throw new Error( "Wrong response" );
+      url = apiReleaseInfo[0].full_zip; // Latest version
+    } catch( err ) {
+      console.log( 'Failed getting apiReleaseInfo', err );
+    }
+    
+    if( !url ) {
+      try {
+        const githubReleaseInfo = await this.getFreeSOGitHubReleaseInfo();
+        if( !Array.isArray( githubReleaseInfo.assets ) ) {
+          throw new Error( "Invalid response when trying to obtain FreeSO release information from GitHub." );
+        }
+        for ( let i = 0; i < githubReleaseInfo.assets.length; i++ ) {
+          const asset = githubReleaseInfo.assets[i];
+          if( asset["name"].indexOf( "client" ) > -1 ) {
+            // This asset contains the full client.
+            url = asset["browser_download_url"];
+          }
+        }
+      } catch( err ) {
+        console.log( 'Failed getting githubReleaseInfo', err );
+      }
+    }
+
+    return url;
   }
 }
 

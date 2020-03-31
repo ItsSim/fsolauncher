@@ -67,6 +67,7 @@ class Registry {
       if ( e === 'FSO' || e === 'TSO' || e === 'Simitone' ) {
         Key.get( 'InstallDir', ( err, RegistryItem ) => {
           if ( err ) {
+            console.log( err );
             return resolve( { key: e, isInstalled: false, error: err } );
           } else {
             return resolve( { key: e, isInstalled: RegistryItem.value } );
@@ -75,6 +76,7 @@ class Registry {
       } else if ( e === 'TS1' ) {
         Key.get( 'InstallPath', async ( err, _RegistryItem ) => {
           if ( err ) {
+            console.log( err );
             return resolve( {
               key: e,
               isInstalled: false,
@@ -84,6 +86,7 @@ class Registry {
             // SIMS_GAME_EDITION = 255 All EPs installed.
             Key.get( 'SIMS_GAME_EDITION', ( err, RegistryItem ) => {
               if ( err ) {
+                console.log( err );
                 return reject( {
                   key: e,
                   isInstalled: false
@@ -107,6 +110,7 @@ class Registry {
       } else if ( e === 'NET' ) {
         Key.keys( ( err, Registries ) => {
           if ( err ) {
+            console.log( err );
             return resolve( { key: e, isInstalled: false, error: err } );
           } else {
             for ( let i = 0; i < Registries.length; i++ ) {
@@ -123,6 +127,7 @@ class Registry {
       } else if ( e === 'OpenAL' ) {
         Key.keyExists( ( err, exists ) => {
           if ( err ) {
+            console.log( err );
             return resolve( { key: e, isInstalled: false, error: err } );
           } else {
             if ( exists ) {
@@ -154,17 +159,27 @@ class Registry {
 
       Key.keyExists( ( err, exists ) => {
         if ( err ) {
+          console.log( err );
           return reject( global.locale.TSO_REGISTRY_EDIT_FAIL );
         } else {
           if ( exists ) {
             Key.destroy( err => {
-              if ( err ) return reject( global.locale.TSO_INSTALLDIR_FAIL );
+              if ( err ) {
+                console.log( err );
+                return reject( global.locale.TSO_INSTALLDIR_FAIL );
+              }
 
               Key.create( err => {
-                if ( err ) return reject( global.locale.TSO_INSTALLDIR_FAIL );
+                if ( err ) {
+                  console.log( err );
+                  return reject( global.locale.TSO_INSTALLDIR_FAIL );
+                }
 
                 Key.set( 'InstallDir', Registry.REG_SZ, InstallDir, err => {
-                  if ( err ) return reject( global.locale.TSO_INSTALLDIR_FAIL );
+                  if ( err ) {
+                    console.log( err );
+                    return reject( global.locale.TSO_INSTALLDIR_FAIL );
+                  }
 
                   return resolve();
                 } );
@@ -172,10 +187,16 @@ class Registry {
             } );
           } else {
             Key.create( err => {
-              if ( err ) return reject( global.locale.TSO_REGISTRY_EDIT_FAIL );
+              if ( err ) {
+                console.log( err );
+                return reject( global.locale.TSO_REGISTRY_EDIT_FAIL );
+              }
 
               Key.set( 'InstallDir', Registry.REG_SZ, InstallDir, err => {
-                if ( err ) return reject( global.locale.TSO_INSTALLDIR_FAIL );
+                if ( err ) {
+                  console.log( err );
+                  return reject( global.locale.TSO_INSTALLDIR_FAIL );
+                }
 
                 return resolve();
               } );
