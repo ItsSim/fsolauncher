@@ -6,5 +6,4 @@
 /vendor/
 /release/*
 !/release/fsolauncher-build-extras/
-/release/*
 !/release/win32-ia32.iss
