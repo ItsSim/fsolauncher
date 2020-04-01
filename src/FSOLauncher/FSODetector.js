@@ -22,7 +22,7 @@ class FSODetector {
   async interval() {
     try {
       let dir = null;
-      const gameprocs = await find( 'name', 'FreeSO.exe', true );
+      const gameprocs = await find( 'name', 'FreeSO.exe' );
       if ( gameprocs.length > 0 ) {
         const gameproc = gameprocs[0];
         if ( gameproc.bin && gameproc.bin.length > 0 ) {

@@ -1,6 +1,6 @@
 {
   "name": "fsolauncher",
-  "version": "1.7.1",
+  "version": "1.7.2",
   "description": "Install, play, and configure FreeSO easily",
   "main": "main.js",
   "scripts": {
