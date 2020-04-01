@@ -23,10 +23,13 @@ class FSODetector {
     try {
       let dir = null;
       const gameprocs = await find( 'name', 'FreeSO.exe' );
+      //console.log( gameprocs );
       if ( gameprocs.length > 0 ) {
         const gameproc = gameprocs[0];
         if ( gameproc.bin && gameproc.bin.length > 0 ) {
-          dir = require( 'path' ).dirname( gameproc.bin );
+          if( gameproc.bin.indexOf( 'FreeSO.exe' ) > -1 ) {
+            dir = require( 'path' ).dirname( gameproc.bin );
+          }
         }
       }
       this.onDetectorResponse( dir );
