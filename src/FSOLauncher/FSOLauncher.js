@@ -960,7 +960,7 @@ class FSOLauncher extends EventHandlers {
         : this.isInstalled.FSO + '\\FreeSOClient\\FreeSO.exe';
 
         return fs.stat( altExeLocation, ( err, _stat ) => {
-          if( err ) return Modal.showCouldNotRecover();
+          if( err ) return Modal.showCouldNotRecover( isSimitone );
           this.launchGame( false, isSimitone, '\\FreeSOClient' );
         } );
       }

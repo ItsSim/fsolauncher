@@ -658,10 +658,16 @@ class Modal {
    * @static
    * @memberof Modal
    */
-  static showCouldNotRecover() {
+  static showCouldNotRecover( isSimitone = false ) {
+    let str2 = global.locale.MODAL_FAILED_LAUNCH_DESC;
+    if( isSimitone ) {
+      str2 = str2
+        .replace( 'FreeSO.exe', 'Simitone.Windows.exe' )
+        .replace( 'FreeSO', 'Simitone' ); 
+    }
     Modal.View.sendModal(
       global.locale.MODAL_FAILED_LAUNCH,
-      global.locale.MODAL_FAILED_LAUNCH_DESC,
+      str2,
       global.locale.MODAL_OK2
     );
   }
