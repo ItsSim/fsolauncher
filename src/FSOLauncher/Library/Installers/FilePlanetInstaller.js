@@ -202,7 +202,7 @@ class FilePlanetInstaller {
    */
   isInstalledInPath( _after ) {
     return new Promise( ( resolve, _reject ) => {
-      require( 'fs-extra' ).stat( this.path + '\\TSOClient\\TSOClient.exe', err => {
+      require( 'fs-extra' ).stat( this.path + '/TSOClient/TSOClient.exe', err => {
         resolve( err === null );
       } );
     } );

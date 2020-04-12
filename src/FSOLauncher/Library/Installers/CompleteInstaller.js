@@ -41,7 +41,7 @@ class CompleteInstaller {
       10
     );
 
-    if ( this.FSOLauncher.isInstalled['OpenAL'] ) {
+    if ( this.FSOLauncher.isInstalled['OpenAL'] || process.platform === "darwin" ) {
       return Promise.resolve();
     }
     return this.FSOLauncher.install( 'OpenAL' );
@@ -59,6 +59,13 @@ class CompleteInstaller {
       global.locale.INS_NET_WINDOW,
       25
     );
+    if( process.platform === "darwin" ) {
+      // Skip Mono if already installed.
+      if ( this.FSOLauncher.isInstalled['Mono'] ) {
+        return Promise.resolve();
+      }
+      return this.FSOLauncher.install( 'Mono' );
+    }
     // Skip .NET if already installed.
     if ( this.FSOLauncher.isInstalled['NET'] ) {
       return Promise.resolve();

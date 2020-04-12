@@ -7,3 +7,4 @@
 /release/*
 !/release/fsolauncher-build-extras/
 !/release/win32-ia32.iss
+.DS_Store

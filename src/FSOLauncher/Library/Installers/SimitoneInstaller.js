@@ -221,7 +221,7 @@ class SimitoneInstaller {
    */
   isInstalledInPath() {
     return new Promise( ( resolve, _reject ) => {
-      require( 'fs-extra' ).stat( this.path + '\\Simitone.Windows.exe', err => {
+      require( 'fs-extra' ).stat( this.path + '/Simitone.Windows.exe', err => {
         resolve( err == null );
       } );
     } );

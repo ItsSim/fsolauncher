@@ -1,5 +1,5 @@
 doctype html
-html
+html(class=PLATFORM)
     head
         meta(charset='utf-8')
         meta(http-equiv='X-UA-Compatible', content='IE=edge')
@@ -53,7 +53,7 @@ html
                 // <li page-trigger="repair"><i class="material-icons left">build</i> REPAIR</li>
 
                 div.bottom
-                    li(page-trigger='simitone')
+                    li.win32-only(page-trigger='simitone')
                         i.material-icons.left.simitone-icon settings
                         |  SIMITONE
                     li(page-trigger='about')
@@ -122,6 +122,7 @@ html
                             div.block
                                 .item(install='RMS', style='border-top:0;background-image:url(FSOLauncher_Images/volcanic.png); background-color:#fff; background-size:30%;background-position:center center;background-repeat:no-repeat;')
                                     .new(style='top:30px;height:50px;left:30px;padding:6px;padding-left:8px;padding-right:8px;border-radius:8px;font-size:14px;display:none;position:absolute;') <i style="vertical-align:middle;" class="material-icons">new_releases</i> RECENTLY&nbsp;UPDATED
+                                    .stag.orange OPTIONAL
                                     .tag
                                         h1 Remesh Package
                                         span Improved 3D visual quality for FreeSO and Simitone
@@ -147,20 +148,35 @@ html
                                         span #{INSTALLER_TSO_DESCR}
                                         .tick.installed
                                             i.material-icons done                                             
-                            div
+                            div.win32-only
                                 .item(install='OpenAL', style='background:url(FSOLauncher_Images/openal.png) #fff; background-position:center center; background-size:80%;background-repeat:no-repeat;')
                                     .tag
                                         h1 #{INSTALLER_OAL_TITLE}
                                         span #{INSTALLER_OAL_DESCR}
                                         .tick.installed
                                             i.material-icons done     
-                            div
+                            div.win32-only
                                 .item(install='NET', style='background:url(FSOLauncher_Images/netframework.png) #fff; background-position:center center; background-size:80%;background-repeat:no-repeat;')
                                     .tag
                                         h1 #{INSTALLER_NET_TITLE}
                                         span #{INSTALLER_NET_DESCR}
                                         .tick.installed
                                             i.material-icons done     
+                            div.darwin-only
+                                .item(install='Mono', style='border-bottom:0;background-image:url(FSOLauncher_Images/mono.png); background-color:#fff; background-size:80%;background-position:center center;background-repeat:no-repeat;')
+                                    .tag
+                                        h1 Mono Runtime
+                                        span Mono Runtime Library for Mac
+                                        .tick.installed
+                                            i.material-icons done  
+                            div.darwin-only
+                                .item(install='MacExtras', style='border-bottom:0;background-image:url(FSOLauncher_Images/macos.png); background-color:#fff; background-size:80%;background-position:center 80px;background-repeat:no-repeat;')
+                                    .stag.orange OPTIONAL
+                                    .tag
+                                        h1 FreeSO MacExtras
+                                        span Redownload the MacExtras
+                                        .tick.installed
+                                            i.material-icons done  
                 #settings-page.page(style='display:none')
                     h1.jumbotron
                         span #{SETTINGS}
@@ -222,7 +238,7 @@ html
                                     option(value='it') Italiano
                                 small #{SETTINGS_LANG_HINT}
                         div(style='clear:both')
-                        .form
+                        .form.win32-only
                             h1 Simitone Settings
                             div
                                 span Anti-Aliasing

@@ -60,7 +60,8 @@ class ServoInstaller {
         .then( () => this.step2() )
         .then( () => this.step3() )
         .then( () => this.step4() )
-        //.then(() => this.step5())
+        .then( () => this.step5() )
+        .then( () => this.step6() )
         .then( () => this.end() )
         .catch( ErrorMessage => this.error( ErrorMessage ) )
     );
@@ -99,7 +100,31 @@ class ServoInstaller {
    * @memberof ServoInstaller
    */
   step4() {
+    if( process.platform === "darwin" ) return Promise.resolve(); 
     return require( '../Registry' ).createFreeSOEntry( this.path );
+  }
+  step5() {
+    if( process.platform === "darwin" ) {
+      console.log('Darwin:', 'Downloading MacExtras');
+      this.dl = download( { 
+        from: 'http://freeso.org/stuff/macextras.zip', 
+        to: `temp/macextras-freeso-${this.id}.zip` 
+      } );
+      return this.download();
+    }
+    return Promise.resolve();
+  }
+  async step6() {
+    if( process.platform === "darwin" ) {
+      console.log('Darwin:', 'Extracting MacExtras');
+      await unzip( { from: `temp/macextras-freeso-${this.id}.zip`, to: this.path }, filename => {
+        this.createProgressItem(
+          'Extracting MacExtras... ' + filename, 100
+        );
+      } );
+      return 1;
+    }
+    return 1;
   }
   /**
    * When the installation ends.
@@ -138,13 +163,12 @@ class ServoInstaller {
       try {
         await altInstaller.install();
       } catch( e ) {
-        return Promise.reject(
-          'A network error ocurred when downloading from alternative source after the primary download failed.' );
+        console.log( 'A network error ocurred when downloading from alternative source after the primary download failed.', e );
       }
     } else {
       this.FSOLauncher.removeActiveTask( 'FSO' );
       Modal.showFailedInstall( 'FreeSO', ErrorMessage );
-      return Promise.reject( ErrorMessage );
+      console.log( ErrorMessage );
     } 
   }
   /**
@@ -217,7 +241,7 @@ class ServoInstaller {
    */
   isInstalledInPath() {
     return new Promise( ( resolve, _reject ) => {
-      require( 'fs-extra' ).stat( this.path + '\\FreeSO.exe', err => {
+      require( 'fs-extra' ).stat( this.path + '/FreeSO.exe', err => {
         resolve( err == null );
       } );
     } );

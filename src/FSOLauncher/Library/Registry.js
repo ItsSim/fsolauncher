@@ -9,10 +9,12 @@ class Registry {
     return "\\SOFTWARE\\OpenAL";
   }
   static getFSOPath() {
-    return "\\SOFTWARE\\Rhys Simpson\\FreeSO";
+    return process.platform === "win32" ? 
+      "\\SOFTWARE\\Rhys Simpson\\FreeSO" : `${global.HOMEDIR}/Documents/FreeSO/FreeSO.exe`;
   }
   static getTSOPath() {
-    return "\\SOFTWARE\\Maxis\\The Sims Online";
+    return process.platform === "win32" ? 
+      "\\SOFTWARE\\Maxis\\The Sims Online" : `${global.HOMEDIR}/Documents/The Sims Online/TSOClient/TSOClient.exe`;
   }
   static getNETPath() {
     return "\\SOFTWARE\\Microsoft\\NET Framework Setup\\NDP";
@@ -22,6 +24,9 @@ class Registry {
   }
   static getTS1Path() {
     return "\\SOFTWARE\\Maxis\\The Sims";
+  }
+  static getMonoPath() {
+    return '/Library/Frameworks/Mono.framework';
   }
   /**
    * Returns the status of all the required programs (Installed/not installed).
@@ -40,6 +45,7 @@ class Registry {
       Promises.push( Registry.get( 'NET', Registry.getNETPath() ) );
       Promises.push( Registry.get( 'Simitone', Registry.getSimitonePath() ) );
       Promises.push( Registry.get( 'TS1', Registry.getTS1Path() ) );
+      Promises.push( Registry.get( 'Mono', Registry.getMonoPath() ) );
 
       Promise.all( Promises )
         .then( a => { resolve( a ); } )
@@ -56,6 +62,15 @@ class Registry {
    * @memberof Registry
    */
   static get( e, p ) {
+    if( process.platform === "darwin" ) {
+      // when darwin directly test if file exists
+      return new Promise( ( resolve, reject ) => {
+        require('fs-extra').pathExists( p, (err, exists) => {
+          console.log( 'Mac Check:', e, p, exists );
+          resolve( { key: e, isInstalled: exists ? require('path').dirname( p ) : false } );
+        } );
+      } );
+    }
     return new Promise( ( resolve, reject ) => {
       const Registry = require( 'winreg' );
 

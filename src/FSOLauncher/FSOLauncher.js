@@ -73,6 +73,7 @@ class FSOLauncher extends EventHandlers {
         for ( let i = 0; i < programs.length; i++ ) {
           this.isInstalled[programs[i].key] = programs[i].isInstalled;
         }
+        console.log( 'updateInstalledPrograms', this.isInstalled );
         this.View.sendInstalledPrograms( this.isInstalled );
         resolve();
       } catch ( err ) {
@@ -242,6 +243,8 @@ class FSOLauncher extends EventHandlers {
         return 'Remesh Package';
       case 'Simitone':
         return 'Simitone for Windows';
+      case 'Mono':
+        return 'Mono Runtime';
     }
   }
   /**
@@ -269,7 +272,7 @@ class FSOLauncher extends EventHandlers {
       data.EnableTTS = value === '0' ? 'False' : 'True';
 
       fs.writeFile(
-        this.isInstalled.FSO + '\\Content\\config.ini',
+        this.isInstalled.FSO + '/Content/config.ini',
         ini.stringify( data ), err => {
           this.removeActiveTask( 'CHTTS' );
           Toast.destroy();
@@ -301,6 +304,7 @@ class FSOLauncher extends EventHandlers {
         host: global.WEBSERVICE,
         path: '/' + global.REMESH_ENDPOINT
       };
+      console.log( 'Getting remesh data from', options.path );
 
       const request = http.request( options, res => {
         let data = '';
@@ -311,6 +315,7 @@ class FSOLauncher extends EventHandlers {
             const j = JSON.parse( data );
             this.remeshInfo.location = j.Location;
             this.remeshInfo.version = j.Version;
+            console.log( 'getRemeshData', j );
             resolve( j );
           } catch ( e ) {
             reject( e );
@@ -339,6 +344,7 @@ class FSOLauncher extends EventHandlers {
           '?os=' + os.release() +
           '&version=' + global.VERSION
       };
+      console.log( 'Getting launcher data from', options.path );
 
       const request = http.request( options, res => {
         let data = '';
@@ -347,6 +353,7 @@ class FSOLauncher extends EventHandlers {
           try {
             const j = JSON.parse( data );
             this.updateLocation = j.Location;
+            console.log( 'getLauncherData', j );
             resolve( j );
           } catch ( e ) {
             reject( e );
@@ -522,13 +529,13 @@ class FSOLauncher extends EventHandlers {
     switch ( Component ) {
       case 'FSO':
         if ( !this.isInstalled['TSO'] ) missing.push( this.getPrettyName( 'TSO' ) );
-
-        if ( !this.isInstalled['OpenAL'] )
+        if ( !this.isInstalled['Mono'] && process.platform === "darwin" ) missing.push( this.getPrettyName( 'Mono' ) );
+        if ( !this.isInstalled['OpenAL'] && process.platform === "win32" )
           missing.push( this.getPrettyName( 'OpenAL' ) );
         break;
 
       case 'TSO':
-        if ( !this.isInstalled['NET'] ) missing.push( this.getPrettyName( 'NET' ) );
+        if ( !this.isInstalled['NET'] && process.platform === "win32" ) missing.push( this.getPrettyName( 'NET' ) );
         break;
 
       case 'RMS':
@@ -596,11 +603,29 @@ class FSOLauncher extends EventHandlers {
     this.addActiveTask( Component );
 
     switch ( Component ) {
+      case 'Mono':
+        Installer = require( './Library/Installers/MonoInstaller' );
+        InstallerInstance = new Installer(this);
+        this.View.changePage( 'downloads' );
+         // eslint-disable-next-line no-async-promise-executor
+         return new Promise( async ( resolve, reject ) => {
+          try {
+            await InstallerInstance.install();
+            resolve();
+          } catch ( e ) {
+            reject( e );
+          } finally {
+            setTimeout( () => {
+              this.setProgressBar( -1 );
+            }, 5000 );
+          }
+        } );
+
       case 'RMS':
         Installer = require( './Library/Installers/RemeshesInstaller' );
 
         InstallerInstance = new Installer(
-          this.isInstalled.FSO + '\\Content\\MeshReplace', this
+          this.isInstalled.FSO + '/Content/MeshReplace', this
         );
 
         this.View.changePage( 'downloads' );
@@ -611,7 +636,7 @@ class FSOLauncher extends EventHandlers {
             await InstallerInstance.install();
             if( this.isInstalled.Simitone ) {
               const SimitoneInstallerInstance = new Installer(
-                this.isInstalled.Simitone + '\\Content\\MeshReplace', this,
+                this.isInstalled.Simitone + '/Content/MeshReplace', this,
                 "Simitone"
               );
               await SimitoneInstallerInstance.install();
@@ -644,18 +669,24 @@ class FSOLauncher extends EventHandlers {
           if ( !options.override ) {
             let InstallDir;
             if( !options.dir ) {
-              const Toast = new ToastComponent(
-                global.locale.TOAST_WAITING,
-                this.View
-              );
-              const folders = await Modal.showChooseDirectory(
-                this.getPrettyName( Component ),
-                this.Window
-              );
-              if( folders && folders.length > 0 ) {
-                InstallDir = folders[0] + '\\' + this.getPrettyName( Component );
+              if( process.platform === "win32" )  {
+                const Toast = new ToastComponent(
+                  global.locale.TOAST_WAITING,
+                  this.View
+                );
+                const folders = await Modal.showChooseDirectory(
+                  this.getPrettyName( Component ),
+                  this.Window
+                );
+                if( folders && folders.length > 0 ) {
+                  InstallDir = folders[0] + '/' + this.getPrettyName( Component );
+                }
+                Toast.destroy();
+              } else {
+                // darwin doesnt get to choose
+                InstallDir = global.HOMEDIR + '/Documents/' + this.getPrettyName( Component );
               }
-              Toast.destroy();
+
             } else {
               InstallDir = options.dir;
             }
@@ -783,7 +814,7 @@ class FSOLauncher extends EventHandlers {
         await fs.copy( path.join(
           __dirname, 
           '../export/LanguagePacks/' + language.toUpperCase() + '/TSO' ), 
-          this.isInstalled.TSO + '\\TSOClient'
+          this.isInstalled.TSO + '/TSOClient'
         );
         await fs.copy( path.join(
           __dirname, 
@@ -791,6 +822,7 @@ class FSOLauncher extends EventHandlers {
           this.isInstalled.FSO
         );
       } catch( err ) {
+        console.log( err );
         this.removeActiveTask( 'CHLANG' );
         Toast.destroy();
         return Modal.showFSOLangFail();
@@ -801,13 +833,14 @@ class FSOLauncher extends EventHandlers {
         data = await this.getFSOConfig();
         data.CurrentLang = this.getLangString( this.getLangCode( language ) )[0];
       } catch( err ) {
+        console.log( err );
         this.removeActiveTask( 'CHLANG' );
         Toast.destroy();
         return Modal.showFirstRun();
       }
       try {
         await fs.writeFile(
-          this.isInstalled.FSO + '\\Content\\config.ini',
+          this.isInstalled.FSO + '/Content/config.ini',
           ini.stringify( data )
         );
       } catch( err ) {
@@ -888,8 +921,8 @@ class FSOLauncher extends EventHandlers {
     // eslint-disable-next-line no-async-promise-executor
     return new Promise( async ( resolve, reject ) => {
       try {
-        await fs.remove( this.isInstalled.FSO + '\\dxtn.dll' );
-        await fs.remove( this.isInstalled.FSO + '\\opengl32.dll' );
+        await fs.remove( this.isInstalled.FSO + '/dxtn.dll' );
+        await fs.remove( this.isInstalled.FSO + '/opengl32.dll' );
         resolve();
       } catch( err ) {
         reject( err );
@@ -913,8 +946,8 @@ class FSOLauncher extends EventHandlers {
     // eslint-disable-next-line no-async-promise-executor
     return new Promise( async( resolve, reject ) => {
       try {
-        await fs.copy( 'bin/dxtn.dll', this.isInstalled.FSO + '\\dxtn.dll' );
-        await fs.copy( 'bin/opengl32.dll', this.isInstalled.FSO + '\\opengl32.dll' );
+        await fs.copy( 'bin/dxtn.dll', this.isInstalled.FSO + '/dxtn.dll' );
+        await fs.copy( 'bin/opengl32.dll', this.isInstalled.FSO + '/opengl32.dll' );
         resolve();
       } catch( err ) {
         reject( err );
@@ -932,6 +965,11 @@ class FSOLauncher extends EventHandlers {
    * @memberof FSOLauncher
    */
   play( useVolcanic, isSimitone = false ) {
+    if ( process.platform === "darwin" ) {
+      // no volcanic for darwin
+      useVolcanic = false;
+    }
+
     if ( !this.isInstalled.FSO && !isSimitone ) {
       return Modal.showNeedToPlay();
     }
@@ -950,18 +988,18 @@ class FSOLauncher extends EventHandlers {
     const fs = require( 'fs-extra' );
 
     const exeLocation = isSimitone
-      ? this.isInstalled.Simitone + '\\Simitone.Windows.exe'
-      : this.isInstalled.FSO + '\\FreeSO.exe';
+      ? this.isInstalled.Simitone + '/Simitone.Windows.exe'
+      : this.isInstalled.FSO + '/FreeSO.exe';
 
     fs.stat( exeLocation, ( err, _stat ) => {
       if ( err ) {
         const altExeLocation = isSimitone
-        ? this.isInstalled.Simitone + '\\FreeSOClient\\Simitone.Windows.exe'
-        : this.isInstalled.FSO + '\\FreeSOClient\\FreeSO.exe';
+        ? this.isInstalled.Simitone + '/FreeSOClient/Simitone.Windows.exe'
+        : this.isInstalled.FSO + '/FreeSOClient/FreeSO.exe';
 
         return fs.stat( altExeLocation, ( err, _stat ) => {
           if( err ) return Modal.showCouldNotRecover( isSimitone );
-          this.launchGame( false, isSimitone, '\\FreeSOClient' );
+          this.launchGame( false, isSimitone, '/FreeSOClient' );
         } );
       }
       this.launchGame( false, isSimitone );
@@ -1013,6 +1051,10 @@ class FSOLauncher extends EventHandlers {
     if( subfolder ) {
       cwd += subfolder;
     }
+
+    if( process.platform === "darwin" ) {
+      file = "./freeso.command";
+    }
     require( 'child_process' ).exec( file + ' ' + args.join( ' ' ), { cwd } );
     setTimeout( () => { Toast.destroy(); }, 4000 );
   }
@@ -1029,7 +1071,7 @@ class FSOLauncher extends EventHandlers {
       const fs = require( 'fs-extra' );
 
       fs.readFile(
-        this.isInstalled.FSO + '\\Content\\config.ini',
+        this.isInstalled.FSO + '/Content/config.ini',
         'utf8',
         ( err, data ) => {
           if ( err ) return reject( err );
@@ -1080,6 +1122,7 @@ class FSOLauncher extends EventHandlers {
    */
   persist( _showToast ) {
     const Toast = new ToastComponent( global.locale.TOAST_SETTINGS, this.View );
+    console.log( 'persist', this.conf );
     require( 'fs-extra' ).writeFile(
       'FSOLauncher.ini',
       require( 'ini' ).stringify( this.conf ),

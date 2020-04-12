@@ -67,7 +67,7 @@ module.exports = function makeDownload() {
      * @param {HttpResponse} r
      */
     const _onDownload = r => {
-      console.log( r.headers );
+      console.log( from, r.headers );
       if ( !r ) return _onError( new Error( 'Server did not return a response.' ) );
 
       if ( r.statusCode < 200 || r.statusCode > 299 )

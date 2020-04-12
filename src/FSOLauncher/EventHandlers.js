@@ -139,12 +139,14 @@ class EventHandlers {
     this.Window.focus();
     this.updateInstalledPrograms();
 
-    this.FSODetector = new FSODetector( this.onDetectorResponse.bind( this ) );
-    this.FSODetector.start();
+    if( process.platform == "win32" ) {
+      this.FSODetector = new FSODetector( this.onDetectorResponse.bind( this ) );
+      this.FSODetector.start();
+    }
   }
 
   async onDetectorResponse( dir ) {
-    console.log( this.isInstalled.FSO, dir );
+    console.log( 'FSODetector:', this.isInstalled.FSO, dir );
     if( this.isInstalled.FSO == dir ) {
       dir = null;
     }

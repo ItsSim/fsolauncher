@@ -713,7 +713,7 @@ select {
 }
 
 select {
-  -webkit-appearance: button;
+  -webkit-appearance: none;
   background-image: url(FSOLauncher_Images/15xvbd5.png),
     -webkit-linear-gradient(#fafafa, #f4f4f4 40%, #e5e5e5);
 }
@@ -1200,4 +1200,26 @@ a.twitter-timeline {
 #detector-response .button {
   margin-top:22px;
   margin-right:20px;
+}
+
+.win32 .win32-only,
+.darwin .darwin-only {
+  display:block;
+}
+.win32 .darwin-only,
+.darwin .win32-only {
+  display:none;
+}
+
+.item .stag {
+  position: absolute;
+  top: 20px;
+  background-color:#43a900;
+  font-size:12px;
+  padding:4px;
+  border-radius:20px;
+  left: 20px;
+  color:#fff;
+  padding-left:8px;
+  padding-right:8px;
 }

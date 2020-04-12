@@ -221,22 +221,32 @@ class Modal {
    * @memberof Modal
    */
   static showChooseDirectory( ComponentName, Window ) {
-    return new Promise( ( resolve, _reject ) => {
-      require( 'fs-extra' ).stat( 'C:\\Program Files', async ( err, stats ) => {
-        const defaultPath =
-          !err && stats.isDirectory() ? 'C:\\Program Files' : null;
-
-        const response = await require( 'electron' ).dialog.showOpenDialog(
-          Window,
-          {
-            properties: ['openDirectory'],
-            title: global.locale.MODAL_INSTALL + ' ' + ComponentName,
-            defaultPath: defaultPath,
-            buttonLabel: global.locale.MODAL_INSTALL_FOLDER
+    return new Promise( async( resolve, _reject ) => {
+      let defaultPath = null;
+      if( process.platform === "win32" ){
+        try {
+          let winDefaultPath = await require( 'fs-extra' ).stat( 'C:/Program Files' );
+          if( winDefaultPath.isDirectory() ) {
+            defaultPath = 'C:/Program Files';
           }
-        );
+        } catch( err ) {
+          console.log( err );
+        }
+      }
+      if( process.platform === "darwin" ) {
+        defaultPath = "~/Documents";
+      }
+
+      const response = await require( 'electron' ).dialog.showOpenDialog(
+        Window,
+        {
+          properties: ['openDirectory'],
+          title: `${global.locale.MODAL_INSTALL} ${ComponentName}`,
+          defaultPath: defaultPath,
+          buttonLabel: global.locale.MODAL_INSTALL_FOLDER
+        }
+      );
         resolve( response.canceled ? [] : response.filePaths );
-      } );
     } );
   }
 

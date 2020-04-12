@@ -1,5 +1,5 @@
 require( 'v8-compile-cache' );
-const { app, BrowserWindow, shell, Tray, Menu } = require( 'electron' );
+const { app, BrowserWindow, shell, Tray, Menu, nativeImage } = require( 'electron' );
 
 const oslocale = require( 'os-locale' );
 const fs = require( 'fs-extra' );
@@ -34,6 +34,11 @@ global.REMESH_ENDPOINT = 'RemeshPackage';
  * Exposes the current launcher info.
  */
 global.UPDATE_ENDPOINT = 'UpdateCheck';
+/**
+ * User homedir.
+ * Used to detect installations on Mac.
+ */
+global.HOMEDIR = require("os").homedir();
 
 let Window = null;
 let tray = null;
@@ -48,6 +53,7 @@ global.locale = Object.prototype.hasOwnProperty.call( UIText, code )
   ? UIText[code]
   : UIText['en'];
 global.locale.LVERSION = global.VERSION;
+global.locale.PLATFORM = process.platform;
 
 require( 'electron-pug' )( { pretty: false }, global.locale );
 
@@ -74,7 +80,7 @@ try {
 }
 
 function CreateWindow() {
-  tray = new Tray( 'beta.ico' );
+  tray = new Tray( nativeImage.createFromPath(require('path').join(__dirname, 'beta.ico') ) );
 
   const width = 1100;
   const height = 665;
@@ -90,7 +96,7 @@ function CreateWindow() {
   options.useContentSize = true;
   options.show = false;
   options.resizable = false;
-  options.title = 'FreeSO Launcher' /* + global.VERSION*/;
+  options.title = 'FreeSO Launcher ' + global.VERSION;
   options.icon = 'beta.ico';
   options.webPreferences = {
     nodeIntegration: true

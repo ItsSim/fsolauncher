@@ -545,6 +545,12 @@ FSOLauncher.registerServerEvent( 'INSPROG', function( a, b ) {
     } else {
       FSOLauncher.simitoneNotInstalled();
     }
+    if ( b.Mono ) {
+      document.querySelector( '.item[install=Mono]' ).className =
+        'item installed';
+    } else {
+      document.querySelector( '.item[install=Mono]' ).className = 'item';
+    }
   }
 } );
 FSOLauncher.registerServerEvent( 'STOP_PROGRESS_ITEM', function( a, b ) {
