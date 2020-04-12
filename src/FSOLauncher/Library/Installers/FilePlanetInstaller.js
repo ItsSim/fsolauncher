@@ -220,7 +220,7 @@ class FilePlanetInstaller {
     this.createProgressItem( global.locale.INSTALLATION_FINISHED, 100 );
     this.FSOLauncher.View.stopProgressItem( 'TSOProgressItem' + this.id );
     this.FSOLauncher.updateInstalledPrograms();
-    Modal.showInstalled( 'The Sims Online' );
+    if(!this.isFullInstall) Modal.showInstalled( 'The Sims Online' );
   }
   /**
    * Installation error tasks.

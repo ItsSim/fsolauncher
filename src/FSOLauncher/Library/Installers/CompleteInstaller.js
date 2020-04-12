@@ -35,13 +35,19 @@ class CompleteInstaller {
    */
   step1() {
     this.FSOLauncher.View.fullInstallProgressItem(
-      global.locale.INS_OAL,
+      process.platform === "win32" ? global.locale.INS_OAL : "Installing SDL2...",
       global.locale.INS_WINDOW,
-      global.locale.INS_OAL_WINDOW,
+      process.platform === "win32" ? global.locale.INS_OAL_WINDOW : "The SDL2 Installer has been launched.",
       10
     );
-
-    if ( this.FSOLauncher.isInstalled['OpenAL'] || process.platform === "darwin" ) {
+    if( process.platform === "darwin" ) {
+      // Skip Mono if already installed.
+      if ( this.FSOLauncher.isInstalled['SDL'] ) {
+        return Promise.resolve();
+      }
+      return this.FSOLauncher.install( 'SDL', { fullInstall: true } );
+    }
+    if ( this.FSOLauncher.isInstalled['OpenAL'] ) {
       return Promise.resolve();
     }
     return this.FSOLauncher.install( 'OpenAL' );
@@ -54,9 +60,9 @@ class CompleteInstaller {
    */
   step2() {
     this.FSOLauncher.View.fullInstallProgressItem(
-      global.locale.INS_NET,
+      process.platform === "win32" ? global.locale.INS_NET : "Installing the Mono Framework...",
       global.locale.INS_WINDOW,
-      global.locale.INS_NET_WINDOW,
+      process.platform === "win32" ? global.locale.INS_NET_WINDOW : "The Mono Runtime Installer has been launched.",
       25
     );
     if( process.platform === "darwin" ) {
@@ -64,7 +70,7 @@ class CompleteInstaller {
       if ( this.FSOLauncher.isInstalled['Mono'] ) {
         return Promise.resolve();
       }
-      return this.FSOLauncher.install( 'Mono' );
+      return this.FSOLauncher.install( 'Mono', { fullInstall: true } );
     }
     // Skip .NET if already installed.
     if ( this.FSOLauncher.isInstalled['NET'] ) {

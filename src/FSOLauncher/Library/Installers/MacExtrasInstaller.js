@@ -1,24 +1,23 @@
 const Modal = require( '../Modal' ),
   download = require( '../download' )(),
-  unzip = require( '../unzip' )(),
-  sudo = require( 'sudo-prompt' );
+  unzip = require( '../unzip' )();
 
-class MonoInstaller {
-  constructor( FSOLauncher ) {
+class MacExtrasInstaller {
+  constructor( FSOLauncher, path ) {
     this.FSOLauncher = FSOLauncher;
     this.id = Math.floor( Date.now() / 1000 );
-    //this.path = path;
+    this.path = path;
     this.haltProgress = false;
-    this.tempPath = `temp/mono-${this.id}.pkg`;
-    // todo- change download URL to beta.freeso.org proxy
-    this.dl = download( { from: 'https://download.mono-project.com/archive/6.8.0/macos-10-universal/MonoFramework-MDK-6.8.0.105.macos10.xamarin.universal.pkg', to: this.tempPath } );
+    this.tempPath = `temp/macextras-${this.id}.zip`;
+
+    this.dl = download( { from: 'http://freeso.org/stuff/macextras.zip', to: this.tempPath } );
   }
 
   createProgressItem( Message, Percentage ) {
     this.FSOLauncher.View.addProgressItem(
       'FSOProgressItem' + this.id,
-      'Mono Runtime for Mac',
-      'Downloading from mono-project.com',
+      'FreeSO MacExtras',
+      'Installing in ' + this.path,
       Message,
       Percentage
     );
@@ -30,6 +29,7 @@ class MonoInstaller {
   install() {
     return this.step1()
       .then( () => this.step2() )
+      .then( () => this.step3() )
       .then( () => this.end() )
       .catch( ErrorMessage => this.error( ErrorMessage ) );
   }
@@ -39,6 +39,10 @@ class MonoInstaller {
   }
 
   step2() {
+    return this.setupDir( this.path );
+  }
+
+  step3() {
     return this.extract();
   }
 
@@ -50,8 +54,8 @@ class MonoInstaller {
     this.haltProgress = true;
     this.createProgressItem( global.locale.FSO_FAILED_INSTALLATION, 100 );
     this.FSOLauncher.View.stopProgressItem( 'FSOProgressItem' + this.id );
-    this.FSOLauncher.removeActiveTask( 'Mono' );
-    Modal.showFailedInstall( 'Mono', ErrorMessage );
+    this.FSOLauncher.removeActiveTask( 'MacExtras' );
+    Modal.showFailedInstall( 'FreeSO MacExtras', ErrorMessage );
     return Promise.reject( ErrorMessage );
   }
 
@@ -61,8 +65,8 @@ class MonoInstaller {
     this.createProgressItem( global.locale.INSTALLATION_FINISHED, 100 );
     this.FSOLauncher.View.stopProgressItem( 'FSOProgressItem' + this.id );
     this.FSOLauncher.updateInstalledPrograms();
-    this.FSOLauncher.removeActiveTask( 'Mono' );
-    if(!this.isFullInstall) Modal.showInstalled( 'Mono' );
+    this.FSOLauncher.removeActiveTask( 'MacExtras' );
+    Modal.showInstalled( 'FreeSO MacExtras' );
   }
 
   download() {
@@ -106,18 +110,12 @@ class MonoInstaller {
     }, 1000 );
   }
 
-  extract() {
-    this.createProgressItem(
-      'Installing the Mono runtime on your system, please wait...', 100
-    );
-    return new Promise( ( resolve, reject ) => {
-      // headless install
-      sudo.exec( `installer -pkg ./temp/mono-${this.id}.pkg -target /`, {}, 
-        (err, stdout, stderr) => {
-          if( err ) return reject(err);
-          console.log('Mono Installer:', stdout, stderr);
-          resolve();
-      } );
+  async extract() {
+    await unzip( { from: this.tempPath, to: this.path }, filename => {
+      this.createProgressItem(
+        global.locale.EXTRACTING_CLIENT_FILES + ' ' + filename,
+        100
+      );
     } );
   }
 
@@ -134,4 +132,4 @@ class MonoInstaller {
   }
 }
 
-module.exports = MonoInstaller;
+module.exports = MacExtrasInstaller;

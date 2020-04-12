@@ -14,6 +14,7 @@ Socket.on( 'receive global message', function( data ) {
 var hasAlreadyLoaded = false;
 var simitoneRequirementsCheckInterval;
 var simitoneSuggestedUpdate;
+var platform = document.querySelector('html').className;
 
 var Electron = require( 'electron' ),
   ipcRenderer = Electron.ipcRenderer,
@@ -273,7 +274,9 @@ FSOLauncher.prototype.restoreConfiguration = function( a ) {
       var b = document.querySelector(
         '[option-id="' + Section + '.' + Item + '"'
       );
-      b && ( b.value = a[Section][Item] );
+      if(platform!=="darwin" || Item != 'GraphicsMode') {
+        b && ( b.value = a[Section][Item] );
+      }
     }
 };
 FSOLauncher.prototype.updateFullInstallProgressItem = function( a, b, c, e ) {
@@ -550,6 +553,12 @@ FSOLauncher.registerServerEvent( 'INSPROG', function( a, b ) {
         'item installed';
     } else {
       document.querySelector( '.item[install=Mono]' ).className = 'item';
+    }
+    if ( b.SDL ) {
+      document.querySelector( '.item[install=SDL]' ).className =
+        'item installed';
+    } else {
+      document.querySelector( '.item[install=SDL]' ).className = 'item';
     }
   }
 } );

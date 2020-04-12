@@ -245,6 +245,10 @@ class FSOLauncher extends EventHandlers {
         return 'Simitone for Windows';
       case 'Mono':
         return 'Mono Runtime';
+      case 'MacExtras':
+        return 'FreeSO MacExtras';
+      case 'SDL':
+        return 'SDL2';
     }
   }
   /**
@@ -530,6 +534,7 @@ class FSOLauncher extends EventHandlers {
       case 'FSO':
         if ( !this.isInstalled['TSO'] ) missing.push( this.getPrettyName( 'TSO' ) );
         if ( !this.isInstalled['Mono'] && process.platform === "darwin" ) missing.push( this.getPrettyName( 'Mono' ) );
+        if ( !this.isInstalled['SDL'] && process.platform === "darwin" ) missing.push( this.getPrettyName( 'SDL' ) );
         if ( !this.isInstalled['OpenAL'] && process.platform === "win32" )
           missing.push( this.getPrettyName( 'OpenAL' ) );
         break;
@@ -539,6 +544,8 @@ class FSOLauncher extends EventHandlers {
         break;
 
       case 'RMS':
+      case 'MacExtras':
+        
         if ( !this.isInstalled['FSO'] ) missing.push( this.getPrettyName( 'FSO' ) );
         break;
     }
@@ -547,7 +554,10 @@ class FSOLauncher extends EventHandlers {
       ( Component === 'TSO' ||
         Component === 'FSO' ||
         Component === 'RMS' ||
-        Component === 'Simitone' ) &&
+        Component === 'Simitone' ||
+        Component === 'Mono' ||
+        Component === 'MacExtras' ||
+        Component === 'SDL' ) &&
       !this.hasInternet
     ) {
       return Modal.showNoInternet();
@@ -572,7 +582,7 @@ class FSOLauncher extends EventHandlers {
         return Modal.showFirstInstall( prettyName, Component );
       }
 
-      if ( this.isInstalled[Component] === false ) {
+      if ( !this.isInstalled[Component] ) {
         Modal.showFirstInstall( prettyName, Component );
       } else {
         Modal.showReInstall( prettyName, Component );
@@ -596,6 +606,7 @@ class FSOLauncher extends EventHandlers {
       dir: false
     }
   ) {
+    console.log('Installing:', Component, options);
     let InstallerInstance;
     let Installer;
     let Executable;
@@ -604,9 +615,15 @@ class FSOLauncher extends EventHandlers {
 
     switch ( Component ) {
       case 'Mono':
-        Installer = require( './Library/Installers/MonoInstaller' );
-        InstallerInstance = new Installer(this);
-        this.View.changePage( 'downloads' );
+      case 'MacExtras':
+      case 'SDL':
+        Installer = require( `./Library/Installers/${Component}Installer` );
+        InstallerInstance = new Installer(this, this.isInstalled.FSO);
+        if ( !options.fullInstall ) {
+          this.View.changePage( 'downloads' );
+        } else {
+          InstallerInstance.isFullInstall = true;
+        }
          // eslint-disable-next-line no-async-promise-executor
          return new Promise( async ( resolve, reject ) => {
           try {
@@ -709,6 +726,8 @@ class FSOLauncher extends EventHandlers {
 
               if ( !options.fullInstall ) {
                 this.View.changePage( 'downloads' );
+              } else {
+                InstallerInstance.isFullInstall = true;
               }
 
               try {
@@ -1032,8 +1051,9 @@ class FSOLauncher extends EventHandlers {
       args.push( `-lang${this.getLangCode( this.conf.Game.Language )}` );
     }
     // SW only allows ogl
-    const graphicsMode = this.conf.Game.GraphicsMode != 'sw'
+    let graphicsMode = this.conf.Game.GraphicsMode != 'sw'
       ? this.conf.Game.GraphicsMode : 'ogl';
+    if( process.platform === "darwin" ) graphicsMode = "ogl";
     args.push( `-${graphicsMode}` );
     // 3d is forced off when in SW
     if( this.conf.Game['3DMode'] === '1' && ( this.conf.Game.GraphicsMode != 'sw' || isSimitone ) ) {

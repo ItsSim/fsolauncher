@@ -28,6 +28,9 @@ class Registry {
   static getMonoPath() {
     return '/Library/Frameworks/Mono.framework';
   }
+  static getSDLPath() {
+    return '/Library/Frameworks/SDL2.framework';
+  }
   /**
    * Returns the status of all the required programs (Installed/not installed).
    *
@@ -46,6 +49,7 @@ class Registry {
       Promises.push( Registry.get( 'Simitone', Registry.getSimitonePath() ) );
       Promises.push( Registry.get( 'TS1', Registry.getTS1Path() ) );
       Promises.push( Registry.get( 'Mono', Registry.getMonoPath() ) );
+      Promises.push( Registry.get( 'SDL', Registry.getSDLPath() ) );
 
       Promise.all( Promises )
         .then( a => { resolve( a ); } )

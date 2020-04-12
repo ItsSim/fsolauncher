@@ -3,22 +3,22 @@ const Modal = require( '../Modal' ),
   unzip = require( '../unzip' )(),
   sudo = require( 'sudo-prompt' );
 
-class MonoInstaller {
+class SDLInstaller {
   constructor( FSOLauncher ) {
     this.FSOLauncher = FSOLauncher;
     this.id = Math.floor( Date.now() / 1000 );
     //this.path = path;
     this.haltProgress = false;
-    this.tempPath = `temp/mono-${this.id}.pkg`;
+    this.tempPath = `temp/sdl2-${this.id}.dmg`;
     // todo- change download URL to beta.freeso.org proxy
-    this.dl = download( { from: 'https://download.mono-project.com/archive/6.8.0/macos-10-universal/MonoFramework-MDK-6.8.0.105.macos10.xamarin.universal.pkg', to: this.tempPath } );
+    this.dl = download( { from: 'https://www.libsdl.org/release/SDL2-2.0.12.dmg', to: this.tempPath } );
   }
 
   createProgressItem( Message, Percentage ) {
     this.FSOLauncher.View.addProgressItem(
       'FSOProgressItem' + this.id,
-      'Mono Runtime for Mac',
-      'Downloading from mono-project.com',
+      'Single DirectMedia Layer 2',
+      'Downloading from libsdl.org',
       Message,
       Percentage
     );
@@ -50,8 +50,8 @@ class MonoInstaller {
     this.haltProgress = true;
     this.createProgressItem( global.locale.FSO_FAILED_INSTALLATION, 100 );
     this.FSOLauncher.View.stopProgressItem( 'FSOProgressItem' + this.id );
-    this.FSOLauncher.removeActiveTask( 'Mono' );
-    Modal.showFailedInstall( 'Mono', ErrorMessage );
+    this.FSOLauncher.removeActiveTask( 'SDL' );
+    Modal.showFailedInstall( 'SDL2', ErrorMessage );
     return Promise.reject( ErrorMessage );
   }
 
@@ -61,8 +61,8 @@ class MonoInstaller {
     this.createProgressItem( global.locale.INSTALLATION_FINISHED, 100 );
     this.FSOLauncher.View.stopProgressItem( 'FSOProgressItem' + this.id );
     this.FSOLauncher.updateInstalledPrograms();
-    this.FSOLauncher.removeActiveTask( 'Mono' );
-    if(!this.isFullInstall) Modal.showInstalled( 'Mono' );
+    this.FSOLauncher.removeActiveTask( 'SDL' );
+    if(!this.isFullInstall) Modal.showInstalled( 'SDL2' );
   }
 
   download() {
@@ -108,14 +108,17 @@ class MonoInstaller {
 
   extract() {
     this.createProgressItem(
-      'Installing the Mono runtime on your system, please wait...', 100
+      'Installing the SDL2 runtime on your system, please wait...', 100
     );
     return new Promise( ( resolve, reject ) => {
       // headless install
-      sudo.exec( `installer -pkg ./temp/mono-${this.id}.pkg -target /`, {}, 
+      let cmd = `hdiutil attach ./temp/sdl2-${this.id}.dmg && `; // mount SDL dmg
+      cmd += `cp -R /Volumes/SDL2/SDL2.framework /Library/Frameworks && `; // move SDL2.framework to /Library/Frameworks
+      cmd += `hdiutil unmount /Volumes/SDL2`; // unmount SDL dmg
+      sudo.exec( cmd, {}, 
         (err, stdout, stderr) => {
           if( err ) return reject(err);
-          console.log('Mono Installer:', stdout, stderr);
+          console.log('SDL2 Installer:', stdout, stderr);
           resolve();
       } );
     } );
@@ -134,4 +137,4 @@ class MonoInstaller {
   }
 }
 
-module.exports = MonoInstaller;
+module.exports = SDLInstaller;

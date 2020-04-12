@@ -170,7 +170,14 @@ html(class=PLATFORM)
                                         .tick.installed
                                             i.material-icons done  
                             div.darwin-only
-                                .item(install='MacExtras', style='border-bottom:0;background-image:url(FSOLauncher_Images/macos.png); background-color:#fff; background-size:80%;background-position:center 80px;background-repeat:no-repeat;')
+                                .item(install='SDL', style='border-bottom: 1px solid #f0f0f0;background-image:url(FSOLauncher_Images/sdl.png); background-color:#fff; background-size:80%;background-position:center center;background-repeat:no-repeat;')
+                                    .tag
+                                        h1 SDL2
+                                        span Single DirectMedia Layer 2
+                                        .tick.installed
+                                            i.material-icons done  
+                            div.darwin-only
+                                .item(install='MacExtras', style='border-bottom:0;background-image:url(FSOLauncher_Images/macos.png); background-color:#fff; background-size:50%;background-position:center center;background-repeat:no-repeat;')
                                     .stag.orange OPTIONAL
                                     .tag
                                         h1 FreeSO MacExtras
@@ -218,8 +225,8 @@ html(class=PLATFORM)
                                 span #{SETTINGS_GM}
                                 select(option-id='Game.GraphicsMode')
                                     option(value='ogl') OpenGL
-                                    option(value='dx') DirectX
-                                    option(value='sw') Software
+                                    option.win32-only(value='dx') DirectX
+                                    option.win32-only(value='sw') Software
                                 small
                                     | #{SETTINGS_GM_HINT} Applies to FreeSO and Simitone.
                             div

@@ -612,6 +612,10 @@ button.blue:hover,
   background-size: 35% !important;
 }
 
+#downloads > div > .item[install=MacExtras]:hover {
+  background-size: 60% !important;
+}
+
 #downloads > div > .item > .new {
   float: left;
   color: #fff;
