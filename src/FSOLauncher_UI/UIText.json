@@ -34,7 +34,7 @@
     "MODAL_UPDATE_DESCR": "A new update is available to download. Click \"UPDATE\" on the dialog to update.",
 
     "MODAL_NOT_AVAILABLE": "Missing Requirements",
-    "MODAL_NOT_AVAILABLE2": "Hold on!",
+    "MODAL_NOT_AVAILABLE2": "In Progress",
 
     "MODAL_UPDATE_CHECK_FAILED": "Failed check",
     "MODAL_UPDATE_CHECK_FAILED_DESCR": "Network error trying to retrieve latest launcher version. Try again later.",

@@ -168,6 +168,10 @@ class Registry {
    * @memberof Registry
    */
   static createMaxisEntry( InstallDir ) {
+    if(process.platform === "darwin") {
+      return Promise.resolve();
+    }
+
     return new Promise( ( resolve, reject ) => {
       const Registry = require( 'winreg' );
 
@@ -235,6 +239,9 @@ class Registry {
    * @memberof Registry
    */
   static createFreeSOEntry( InstallDir, KeyName = 'FreeSO' ) {
+    if(process.platform === "darwin") {
+      return Promise.resolve();
+    }
     return new Promise( ( resolve, reject ) => {
       const Registry = require( 'winreg' );
       const Key = new Registry( {
