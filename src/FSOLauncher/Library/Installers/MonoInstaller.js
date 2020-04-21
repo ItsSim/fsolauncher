@@ -10,8 +10,7 @@ class MonoInstaller {
     //this.path = path;
     this.haltProgress = false;
     this.tempPath = `temp/mono-${this.id}.pkg`;
-    // todo- change download URL to beta.freeso.org proxy
-    this.dl = download( { from: 'https://download.mono-project.com/archive/6.8.0/macos-10-universal/MonoFramework-MDK-6.8.0.105.macos10.xamarin.universal.pkg', to: this.tempPath } );
+    this.dl = download( { from: 'https://beta.freeso.org/LauncherResourceCentral/Mono', to: this.tempPath } );
   }
 
   createProgressItem( Message, Percentage ) {

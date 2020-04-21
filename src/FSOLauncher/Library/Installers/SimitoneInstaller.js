@@ -2,7 +2,7 @@ const Modal = require( '../Modal' ),
   download = require( '../download' )(),
   unzip = require( '../unzip' )();
 const DOWNLOAD_URL_GITHUB =
-  'https://github.com/riperiperi/Simitone/releases/latest/download/SimitoneWindows.zip';
+  'https://beta.freeso.org/LauncherResourceCentral/Simitone';
 /**
  * Downloads and installs Simitone.
  *

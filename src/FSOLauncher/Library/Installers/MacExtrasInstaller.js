@@ -10,7 +10,7 @@ class MacExtrasInstaller {
     this.haltProgress = false;
     this.tempPath = `temp/macextras-${this.id}.zip`;
 
-    this.dl = download( { from: 'http://freeso.org/stuff/macextras.zip', to: this.tempPath } );
+    this.dl = download( { from: 'https://beta.freeso.org/LauncherResourceCentral/MacExtras', to: this.tempPath } );
   }
 
   createProgressItem( Message, Percentage ) {

@@ -10,8 +10,7 @@ class SDLInstaller {
     //this.path = path;
     this.haltProgress = false;
     this.tempPath = `temp/sdl2-${this.id}.dmg`;
-    // todo- change download URL to beta.freeso.org proxy
-    this.dl = download( { from: 'https://www.libsdl.org/release/SDL2-2.0.12.dmg', to: this.tempPath } );
+    this.dl = download( { from: 'https://beta.freeso.org/LauncherResourceCentral/SDL', to: this.tempPath } );
   }
 
   createProgressItem( Message, Percentage ) {

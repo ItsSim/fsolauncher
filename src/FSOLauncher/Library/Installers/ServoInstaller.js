@@ -1,14 +1,9 @@
 const Modal = require( '../Modal' ),
   download = require( '../download' )(),
   unzip = require( '../unzip' )();
+//servo is no more, so ServoInstaller serves as a backup.
 const DOWNLOAD_URL_SERVO =
-  'http://servo.freeso.org' +
-  '/guestAuth' +
-  '/repository' +
-  '/download' +
-  '/FreeSO_TsoClient' +
-  '/.lastSuccessful' +
-  '/client-<>.zip';
+  'https://beta.freeso.org/LauncherResourceCentral/FreeSO';
 /**
  * Installs FreeSO from servo.freeso.org.
  *
