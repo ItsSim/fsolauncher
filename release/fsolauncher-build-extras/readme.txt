@@ -2,7 +2,8 @@ Version: 2020 1.7.x
 Author: Sim
 
 Changelog:
-- 2020.03.27: GitHub FreeSO Installer, FreeSO AutoDetect
+- 2020.04.23: Change TSO download source.
+- 2020.03.27: GitHub FreeSO Installer, FreeSO AutoDetect.
 - 2020.03.12: Dependency switch to deflate-js.
 - 2020.03.09: Installer refactoring. Dependency switch to yauzl.
 - 2019.11.29: Simitone installer tweaks and other improvements.
