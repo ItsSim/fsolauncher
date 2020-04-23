@@ -15,7 +15,7 @@ module.exports = function makeUnzip() {
    *
    * @since 1.6.5
    */
-  return ( { from, to }, onEntry = () => {} ) =>
+  return ( { from, to, cpperm }, onEntry = () => {} ) =>
     new Promise( ( resolve, reject ) => {
       /**
        * Empties the folder it extracted to.
@@ -41,11 +41,13 @@ module.exports = function makeUnzip() {
         // Write the file.
         zipfile.openReadStream( entry, async function( err, readStream ) {
           if ( err ) return reject( err );
+          let options = null;
+          if( cpperm ) options = { mode: entry.externalFileAttributes >>> 16 };
           const destination =
             ( to.endsWith( '/' ) ? to : to + '/' ) + entry.fileName;
           try {
             await fs.ensureDir( path.dirname( destination ) );
-            readStream.pipe( fs.createWriteStream( destination ) );
+            readStream.pipe( fs.createWriteStream( destination, options ) );
             readStream.on( 'end', () => zipfile.readEntry() );
           } catch ( e ) {
             reject( e );

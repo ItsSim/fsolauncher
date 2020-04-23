@@ -112,7 +112,11 @@ class ServoInstaller {
   async step6() {
     if( process.platform === "darwin" ) {
       console.log('Darwin:', 'Extracting MacExtras');
-      await unzip( { from: `${global.APPDATA}temp/macextras-${this.id}.zip`, to: this.path }, filename => {
+      await unzip( { 
+        from: `${global.APPDATA}temp/macextras-${this.id}.zip`, 
+        to: this.path, 
+        cpperm: true 
+      }, filename => {
         this.createProgressItem(
           'Extracting MacExtras... ' + filename, 100
         );

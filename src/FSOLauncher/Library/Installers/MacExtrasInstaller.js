@@ -111,7 +111,11 @@ class MacExtrasInstaller {
   }
 
   async extract() {
-    await unzip( { from: this.tempPath, to: this.path }, filename => {
+    await unzip( { 
+      from: this.tempPath, 
+      to: this.path, 
+      cpperm: true 
+    }, filename => {
       this.createProgressItem(
         global.locale.EXTRACTING_CLIENT_FILES + ' ' + filename,
         100
