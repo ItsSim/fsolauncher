@@ -162,10 +162,20 @@ class FilePlanetInstaller {
    * @memberof FilePlanetInstaller
    */
   extractCabs( unzipgc ) {
-    return new Promise( ( resolve, reject ) => {
+    // eslint-disable-next-line no-async-promise-executor
+    return new Promise( async( resolve, reject ) => {
+      let from = `${TEMP_PATH}FilePlanetTSOFiles/TSO_Installer_v1.1239.1.0/Data1.cab`;
+      try {
+        // support cabs in root
+        if( !await require( 'fs-extra' ).exists( from ) ) {
+          from = `${TEMP_PATH}FilePlanetTSOFiles/Data1.cab`;
+        }
+      } catch( err ) {
+        console.log( err );
+      }
       extract(
         {
-          from: `${TEMP_PATH}FilePlanetTSOFiles/TSO_Installer_v1.1239.1.0/Data1.cab`,
+          from,
           to: this.path,
           purge: true
         },
