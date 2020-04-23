@@ -713,7 +713,7 @@ select {
 }
 
 select {
-  -webkit-appearance: button;
+  -webkit-appearance: none;
   background-image: url(FSOLauncher_Images/15xvbd5.png),
     -webkit-linear-gradient(#fafafa, #f4f4f4 40%, #e5e5e5);
 }
