@@ -21,7 +21,7 @@ class ServoInstaller {
     this.id = Math.floor( Date.now() / 1000 );
     this.path = path;
     this.haltProgress = false;
-    this.tempPath = `temp/artifacts-freeso-${this.id}.zip`;
+    this.tempPath = `${global.APPDATA}temp/artifacts-freeso-${this.id}.zip`;
     this.dl = download( { from: DOWNLOAD_URL_SERVO, to: this.tempPath } );
   }
   /**
@@ -102,8 +102,8 @@ class ServoInstaller {
     if( process.platform === "darwin" ) {
       console.log('Darwin:', 'Downloading MacExtras');
       this.dl = download( { 
-        from: 'http://freeso.org/stuff/macextras.zip', 
-        to: `temp/macextras-${this.id}.zip` 
+        from: 'https://beta.freeso.org/LauncherResourceCentral/MacExtras', 
+        to: `${global.APPDATA}temp/macextras-${this.id}.zip` 
       } );
       return this.download();
     }
@@ -112,7 +112,7 @@ class ServoInstaller {
   async step6() {
     if( process.platform === "darwin" ) {
       console.log('Darwin:', 'Extracting MacExtras');
-      await unzip( { from: `temp/macextras-${this.id}.zip`, to: this.path }, filename => {
+      await unzip( { from: `${global.APPDATA}temp/macextras-${this.id}.zip`, to: this.path }, filename => {
         this.createProgressItem(
           'Extracting MacExtras... ' + filename, 100
         );

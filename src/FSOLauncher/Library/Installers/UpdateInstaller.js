@@ -20,7 +20,7 @@ class UpdateInstaller {
     this.haltProgress = false;
     this.dl = download( {
       from: 'http://beta.freeso.org/FreeSO Launcher Setup.exe',
-      to: 'temp/installer.exe'
+      to: `${global.APPDATA}temp/installer.exe`
     } );
   }
   /**
@@ -162,12 +162,12 @@ class UpdateInstaller {
    */
   cleanup() {
     const fs = require( 'fs-extra' );
-    fs.stat( 'temp/installer.exe', function( err, _stats ) {
+    fs.stat( `${global.APPDATA}temp/installer.exe`, function( err, _stats ) {
       if ( err ) {
         return;
       }
 
-      fs.unlink( 'temp/installer.exe', function( err ) {
+      fs.unlink( `${global.APPDATA}temp/installer.exe`, function( err ) {
         if ( err ) return console.log( err );
       } );
     } );

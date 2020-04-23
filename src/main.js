@@ -1,12 +1,13 @@
 require( 'v8-compile-cache' );
 const { app, BrowserWindow, shell, Tray, Menu, nativeImage } = require( 'electron' );
 
-const oslocale = require( 'os-locale' );
-const fs = require( 'fs-extra' );
-const ini = require( 'ini' );
-const UIText = require( './FSOLauncher_UI/UIText.json' );
-const FSOLauncher = require( './FSOLauncher/FSOLauncher' );
-const package = require( './package.json' );
+const oslocale = require( 'os-locale' ),
+  fs = require( 'fs-extra' ),
+  ini = require( 'ini' );
+
+const UIText = require( './FSOLauncher_UI/UIText.json' ),
+  FSOLauncher = require( './FSOLauncher/FSOLauncher' ),
+  package = require( './package.json' );
 
 process.title = 'FreeSO Launcher';
 /**
@@ -39,6 +40,15 @@ global.UPDATE_ENDPOINT = 'UpdateCheck';
  * Used to detect installations on Mac.
  */
 global.HOMEDIR = require("os").homedir();
+/**
+ * Where to write user preferences and temp files.
+ * On Windows, prefs are written straight to the launcher folder.
+ * On Mac, they are written in /Users/user/Library/Application Support/fsolauncher.
+ */
+global.APPDATA = process.platform == 'darwin' ? `${global.HOMEDIR}/Library/Application Support/fsolauncher/` : '';
+if(process.platform == 'darwin') {
+  fs.ensureDirSync(global.APPDATA + 'temp');
+}
 
 let Window = null;
 let tray = null;
@@ -60,7 +70,7 @@ require( 'electron-pug' )( { pretty: false }, global.locale );
 let conf;
 
 try {
-  conf = ini.parse( fs.readFileSync( 'FSOLauncher.ini', 'utf-8' ) );
+  conf = ini.parse( fs.readFileSync( global.APPDATA + 'FSOLauncher.ini', 'utf-8' ) );
 } catch ( e ) {
   conf = {
     Launcher: {
@@ -76,7 +86,7 @@ try {
     }
   };
 
-  fs.writeFileSync( 'FSOLauncher.ini', ini.stringify( conf ), 'utf-8' );
+  fs.writeFileSync( global.APPDATA + 'FSOLauncher.ini', ini.stringify( conf ), 'utf-8' );
 }
 
 function CreateWindow() {

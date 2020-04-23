@@ -1144,7 +1144,7 @@ class FSOLauncher extends EventHandlers {
     const Toast = new ToastComponent( global.locale.TOAST_SETTINGS, this.View );
     console.log( 'persist', this.conf );
     require( 'fs-extra' ).writeFile(
-      'FSOLauncher.ini',
+      global.APPDATA + 'FSOLauncher.ini',
       require( 'ini' ).stringify( this.conf ),
       _err => { setTimeout( () => { Toast.destroy(); }, 1500 ); }
     );

@@ -20,7 +20,7 @@ class SimitoneInstaller {
     this.id = Math.floor( Date.now() / 1000 );
     this.path = path;
     this.haltProgress = false;
-    this.tempPath = `temp/artifacts-simitone-${this.id}.zip`;
+    this.tempPath = `${global.APPDATA}temp/artifacts-simitone-${this.id}.zip`;
     this.dl = download( {
       from: DOWNLOAD_URL_GITHUB,
       to: this.tempPath

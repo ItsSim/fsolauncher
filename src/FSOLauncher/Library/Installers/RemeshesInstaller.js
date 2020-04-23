@@ -8,11 +8,11 @@ class RemeshesInstaller {
     this.id = Math.floor( Date.now() / 1000 );
     this.path = path;
     this.haltProgress = false;
-    this.tempPath = `temp/artifacts-remeshes-${this.id}.zip`;
+    this.tempPath = `${global.APPDATA}temp/artifacts-remeshes-${this.id}.zip`;
     this.parentComponent = parentComponent;
     const location = FSOLauncher.remeshInfo.location
       ? FSOLauncher.remeshInfo.location
-      : 'http://beta.freeso.org/remeshes.docx';
+      : 'https://beta.freeso.org/LauncherResourceCentral/3DModels';
 
     this.dl = download( { from: location, to: this.tempPath } );
   }

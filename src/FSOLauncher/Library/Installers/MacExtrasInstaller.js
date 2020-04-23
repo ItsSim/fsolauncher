@@ -8,7 +8,7 @@ class MacExtrasInstaller {
     this.id = Math.floor( Date.now() / 1000 );
     this.path = path;
     this.haltProgress = false;
-    this.tempPath = `temp/macextras-${this.id}.zip`;
+    this.tempPath = `${global.APPDATA}temp/macextras-${this.id}.zip`;
 
     this.dl = download( { from: 'https://beta.freeso.org/LauncherResourceCentral/MacExtras', to: this.tempPath } );
   }
