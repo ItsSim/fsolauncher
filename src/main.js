@@ -1,3 +1,4 @@
+require('fix-path')();
 require( 'v8-compile-cache' );
 const { app, BrowserWindow, shell, Tray, Menu, nativeImage } = require( 'electron' );
 
@@ -117,7 +118,7 @@ function CreateWindow() {
 
   Window.setMenu( null );
   //Window.openDevTools({ mode: 'detach' });
-  Window.loadURL( 'file://' + __dirname + '/FSOLauncher_UI/FSOLauncher.pug' );
+  Window.loadURL( `file://${__dirname}/FSOLauncher_UI/FSOLauncher.pug` );
 
   launcher = new FSOLauncher( Window, conf );
 

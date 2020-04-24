@@ -1075,7 +1075,11 @@ class FSOLauncher extends EventHandlers {
     if( process.platform === "darwin" ) {
       file = "./freeso.command";
     }
-    require( 'child_process' ).exec( file + ' ' + args.join( ' ' ), { cwd } );
+    console.log('Running', file + ' ' + args.join( ' ' ));
+    require( 'child_process' ).exec( file + ' ' + args.join( ' ' ), { cwd }, 
+    (err, stdout, stderr) => {
+      console.log(err, stdout, stderr);
+    });
     setTimeout( () => { Toast.destroy(); }, 4000 );
   }
   /**

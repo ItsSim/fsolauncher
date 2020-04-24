@@ -75,25 +75,25 @@
     "MODAL_CLOSED": "Closed",
     "MODAL_CLOSED_2": "FreeSO task(s) to continue the installation.",
 
-    "MODAL_LAUNCH_UPDATING": "You shouldn't launch FreeSO right now because it is updating.",
+    "MODAL_LAUNCH_UPDATING": "You shouldn’t launch FreeSO right now because it is updating.",
 
     "MODAL_REINSTALL_DESCR_X": "We have detected that you already have this program installed on your system. Would you like to reinstall",
     "MODAL_CANCEL": "Close",
 
-    "MODAL_NO_INTERNET": "Where's your internet?",
+    "MODAL_NO_INTERNET": "Where’s your internet?",
     "MODAL_NEED_INTERNET_SINGLE": "You need internet access to install this program because it is downloaded from the internet.",
 
     "MODAL_OK": "Gotcha",
     "MODAL_OK2": "Okay",
 
-    "MODAL_NOT_COMPLETE": "Couldn't complete",
-    "MODAL_FSO_LANG_ERR": "Couldn't move the necessary language files to the FreeSO directory.",
-    "MODAL_TSO_LANG_ERR": "Couldn't move the necessary language files to the Sims Online directory.",
+    "MODAL_NOT_COMPLETE": "Couldn’t complete",
+    "MODAL_FSO_LANG_ERR": "Couldn’t move the necessary language files to the FreeSO directory.",
+    "MODAL_TSO_LANG_ERR": "Couldn’t move the necessary language files to the Sims Online directory.",
     "MODAL_SUCCESS": "Hurray!",
     "MODAL_TTS_DISABLED": "Too much...?",
     "MODAL_TTS_ENABLED_TEXT": "FreeSO will now read back to you every line in the chat next time you launch the game.",
-    "MODAL_TTS_DISABLED_TEXT": "You have disabled FreeSO's text to speech feature.",
-    "MODAL_INI_ERR": "Couldn't edit the FreeSO/Content/config.ini file.",
+    "MODAL_TTS_DISABLED_TEXT": "You have disabled FreeSO’s text to speech feature.",
+    "MODAL_INI_ERR": "Couldn’t edit the FreeSO/Content/config.ini file.",
     "MODAL_LANG_SUCCESS": "FreeSO will now be displayed in your language next time you launch the game.",
 
     "MODAL_INS_COMPLETE": "Installation completed!",
@@ -147,7 +147,7 @@
     "SETTINGS_LANG": "In-game language",
     "SETTINGS_LANG_HINT": "Choose the language for your game. More languages available soon.",
     "SETTINGS_TTS": "Text To Speech",
-    "SETTINGS_TTS_HINT": "Enable TTS to listen to all the text typed in game read back to you in your system's default TTS voice.",
+    "SETTINGS_TTS_HINT": "Enable TTS to listen to all the text typed in game read back to you in your system’s default TTS voice.",
 
     "DOWNLOADS_DESCR": "View current and finished downloads",
     "DOWNLOADS_EMPTY": "No downloads finished or in progress!",
@@ -166,7 +166,7 @@
     "ABOUT_FAQ_1_H1": "What is FreeSO?",
     "ABOUT_FAQ_1_TEXT": "FreeSO (“Free Simulator Online”) is a reimplementation of The Sims Online™’s game engine, using C# and Monogame.",
     "ABOUT_FAQ_2_H1": "Is FreeSO legal?",
-    "ABOUT_FAQ_2_TEXT": "Yes. Free Simulator Online (FreeSO) is a reimplementation of the game engine of Electronic Arts' The Sims Online (TSO), using C# and Monogame. It consists of 100% original code reverse-engineered to replicate the gameplay of TSO. FreeSO is merely a game engine, thus any content that resembles the graphics or sound effects of TSO must be provided by the legally-obtained software of the user. We neither distribute, nor alter any intellectual property belonging to Electronic Arts, Inc. We use our own original artwork to promote FreeSO, and we maintain the project as non-commercial.",
+    "ABOUT_FAQ_2_TEXT": "Yes. Free Simulator Online (FreeSO) is a reimplementation of the game engine of Electronic Arts’ The Sims Online (TSO), using C# and Monogame. It consists of 100% original code reverse-engineered to replicate the gameplay of TSO. FreeSO is merely a game engine, thus any content that resembles the graphics or sound effects of TSO must be provided by the legally-obtained software of the user. We neither distribute, nor alter any intellectual property belonging to Electronic Arts, Inc. We use our own original artwork to promote FreeSO, and we maintain the project as non-commercial.",
     "ABOUT_FAQ_3_H1": "Will FreeSO always be free-to-play?",
     "ABOUT_FAQ_3_TEXT": "Yes, it will always be free in its entirety.",
 
@@ -229,9 +229,9 @@
     "TSO_REGISTRY_EDIT_FAIL": "Failed creating The Sims Online registry entry.",
     "TSO_INSTALLDIR_FAIL": "Failed inserting the InstallDir registry value.",
 
-    "TIP1": "FreeSO's first playtest was in July 2015.",
+    "TIP1": "FreeSO’s first playtest was in July 2015.",
     "TIP2": "You can visit <a href='http://tsomania.net' target='_blank'>TSOMania</a> for a starter guide.",
-    "TIP3": "FreeSO's main developer is Rhys.",
+    "TIP3": "FreeSO’s main developer is Rhys.",
     "TIP4": "Open Beta started in February 2017, after January's failed launch.",
     "TIP5": "FreeSO is written in C# using the MonoGame library.",
     "TIP6": "FreeSO is <a href='https://github.com/RHY3756547/FreeSO' target='_blank'>open source</a> and is looking for developers.",
@@ -240,13 +240,13 @@
     "TIP9": "Before Global Server, there were multiple lot servers, like FreeSO.ml.",
     "TIP10": "If you forget your password, you can <a href='http://beta.freeso.org/forgot' target='_blank'>reset it.</a>",
     "TIP11": "More than 75% of players are from the United States.",
-    "TIP12": "FreeSO's Terms of Service are available <a href='http://freeso.org/rules' target='_blank'>here</a>.",
+    "TIP12": "FreeSO’s Terms of Service are available <a href='http://freeso.org/rules' target='_blank'>here</a>.",
     "TIP13": "You can join the <a href='https://discord.gg/xveESFj' target='_blank'>official Discord</a> to get involved in the community.",
 
     "AFTER_X": "Closing Behavior",
     "STAY_TRAY": "Stay in icon tray",
     "EXIT_LAUNCHER": "Exit launcher",
-    "AFTER_X_HINT": "The launcher can stay in the icon tray to make sure you don't miss any important live notifications.",
+    "AFTER_X_HINT": "The launcher can stay in the icon tray to make sure you don’t miss any important live notifications.",
 
     "TD_MODE": "3D Mode",
     "TD_MODE_HINT": "Enable 3D Mode. Disabling this feature will take the game back to 2D.",

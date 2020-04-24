@@ -573,6 +573,9 @@ FSOLauncher.registerServerEvent( 'PLAY_SOUND', function( a, b ) {
   var audio = new Howl( { src: `FSOLauncher_Sounds/${b}.wav`, volume: 0.4 } );
   audio.play();
 } );
+FSOLauncher.registerServerEvent( 'CONSOLE_LOG', function( a, b ) {
+  console.log( b );
+} );
 FSOLauncher.registerServerEvent( 'CREATE_PROGRESS_ITEM', function(
   a,
   b,

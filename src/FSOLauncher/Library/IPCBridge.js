@@ -266,6 +266,15 @@ class IPCBridge {
       this.Window.webContents.send( 'FSODETECTOR_RESPONSE', dir );
     } catch ( e ) {}   
   }
+  /**
+   * Useful for debugging with a production build.
+   * @param {*} str 
+   */
+  sendConsoleLog( str ) {
+    try {
+      this.Window.webContents.send( 'CONSOLE_LOG', str );
+    } catch ( e ) {}
+  }
 }
 
 module.exports = IPCBridge;
