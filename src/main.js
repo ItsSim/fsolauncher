@@ -1,64 +1,35 @@
-require('fix-path')();
+require('fix-path')(); // Fix $PATH on darwin
 require( 'v8-compile-cache' );
 const { app, BrowserWindow, shell, Tray, Menu, nativeImage } = require( 'electron' );
 
 const oslocale = require( 'os-locale' ),
-  fs = require( 'fs-extra' ),
+   fs = require( 'fs-extra' ),
   ini = require( 'ini' );
 
 const UIText = require( './FSOLauncher_UI/UIText.json' ),
-  FSOLauncher = require( './FSOLauncher/FSOLauncher' ),
-  package = require( './package.json' );
+ FSOLauncher = require( './FSOLauncher/FSOLauncher' ),
+     package = require( './package.json' );
 
-process.title = 'FreeSO Launcher';
-/**
- * FreeSO Launcher version.
- * Must be defined in package.json.
- */
-global.VERSION = package.version;
-/**
- * WS Host.
- * Host of API serving launcher data.
- */
-global.WEBSERVICE = '173.212.246.204';
-/**
- * WS Port.
- * Port for the launcher WebSocket Server.
- */
+         process.title = 'FreeSO Launcher';
+        global.VERSION = package.version;
+     global.WEBSERVICE = '173.212.246.204';
 global.SOCKET_ENDPOINT = '30001';
-/**
- * API Remesh Endpoint.
- * Exposes the current remesh package info.
- */
 global.REMESH_ENDPOINT = 'RemeshPackage';
-/**
- * API Launcher Endpoint.
- * Exposes the current launcher info.
- */
 global.UPDATE_ENDPOINT = 'UpdateCheck';
+        global.HOMEDIR = require("os").homedir();
+       global.willQuit = false;
 /**
- * User homedir.
- * Used to detect installations on Mac.
+ * On Windows, prefs and temps are written straight to the launcher folder.
+ * On Mac, they are written in ~/Library/Application Support/fsolauncher.
  */
-global.HOMEDIR = require("os").homedir();
-/**
- * Where to write user preferences and temp files.
- * On Windows, prefs are written straight to the launcher folder.
- * On Mac, they are written in /Users/user/Library/Application Support/fsolauncher.
- */
-global.APPDATA = process.platform == 'darwin' ? `${global.HOMEDIR}/Library/Application Support/fsolauncher/` : '';
-if(process.platform == 'darwin') {
-  fs.ensureDirSync(global.APPDATA + 'temp');
-}
+global.APPDATA = process.platform == 'darwin' ? 
+  `${global.HOMEDIR}/Library/Application Support/fsolauncher/` : '';
+if(process.platform == 'darwin') fs.ensureDirSync(global.APPDATA + 'temp');
 
-let Window = null;
-let tray = null;
-let launcher;
-const options = {};
+let Window, tray, launcher, trayIcon, conf;
 
-global.willQuit = false;
-
-const code = oslocale.sync().substring( 0, 2 );
+const code = oslocale.sync().substring( 0, 2 ), 
+   options = {};
 
 global.locale = Object.prototype.hasOwnProperty.call( UIText, code )
   ? UIText[code]
@@ -67,8 +38,6 @@ global.locale.LVERSION = global.VERSION;
 global.locale.PLATFORM = process.platform;
 
 require( 'electron-pug' )( { pretty: false }, global.locale );
-
-let conf;
 
 try {
   conf = ini.parse( fs.readFileSync( global.APPDATA + 'FSOLauncher.ini', 'utf-8' ) );
@@ -91,10 +60,15 @@ try {
 }
 
 function CreateWindow() {
-  tray = new Tray( nativeImage.createFromPath(require('path').join(__dirname, 'beta.ico') ) );
+  trayIcon = nativeImage.createFromPath(
+    require('path').join(__dirname, process.platform == 'darwin' ? 'beta.png' : 'beta.ico')
+  );
+  if(process.platform == 'darwin') {
+    trayIcon = trayIcon.resize({ width: 16, height: 16 });
+  }
+  tray = new Tray( trayIcon );
 
-  const width = 1100;
-  const height = 665;
+  const width = 1100, height = 665;
 
   options.minWidth = width;
   options.minHeight = height;
@@ -108,7 +82,7 @@ function CreateWindow() {
   options.show = false;
   options.resizable = false;
   options.title = 'FreeSO Launcher ' + global.VERSION;
-  options.icon = 'beta.ico';
+  options.icon = process.platform == 'darwin' ? 'beta.icns' : 'beta.ico';
   options.webPreferences = {
     nodeIntegration: true
   }; // Since we're not displaying untrusted content
@@ -122,7 +96,8 @@ function CreateWindow() {
 
   launcher = new FSOLauncher( Window, conf );
 
-  const trayTemplate = [
+  tray.setToolTip( `FreeSO Launcher ${global.VERSION}` );
+  tray.setContextMenu( Menu.buildFromTemplate( [
     {
       label: global.locale.TRAY_LABEL_1,
       click: () => {
@@ -139,20 +114,13 @@ function CreateWindow() {
         Window.close();
       }
     }
-  ];
-
-  const ContextMenu = Menu.buildFromTemplate( trayTemplate );
-
-  tray.setToolTip( 'FreeSO Launcher ' + global.VERSION );
-  tray.setContextMenu( ContextMenu );
+  ] ) );
 
   tray.on( 'click', () => {
     Window.isVisible() ? Window.hide() : Window.show();
   } );
 
-  Window.on( 'closed', () => {
-    Window = null;
-  } );
+  Window.on( 'closed', () => { Window = null; } );
 
   Window.once( 'ready-to-show', () => {
     launcher
@@ -160,6 +128,9 @@ function CreateWindow() {
       .then( () => {
         if ( conf.Launcher.DirectLaunch === '1' && launcher.isInstalled.FSO ) {
           launcher.onPlay();
+          if(process.platform == 'darwin') {
+            Window.show();
+          }
         } else {
           Window.show();
         }

@@ -486,6 +486,7 @@ class Modal {
           border-radius:8px;
           box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
           display:flex;
+          ${process.platform == 'darwin' ? 'margin-bottom:40px;' : ''}
         }
         notification h1 {
           font-family:'Fredoka One';

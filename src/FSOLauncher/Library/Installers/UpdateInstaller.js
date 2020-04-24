@@ -15,12 +15,12 @@ class UpdateInstaller {
    */
   constructor( FSOLauncher ) {
     this.FSOLauncher = FSOLauncher;
-
     this.id = Math.floor( Date.now() / 1000 );
     this.haltProgress = false;
+    this.tempPath = process.platform == 'darwin' ? `${global.APPDATA}temp/fsolauncher-${id}.dmg` : `${global.APPDATA}temp/fsolauncher-${id}.exe`
     this.dl = download( {
-      from: 'http://beta.freeso.org/FreeSO Launcher Setup.exe',
-      to: `${global.APPDATA}temp/installer.exe`
+      from: process.platform == 'darwin' ? 'http://beta.freeso.org/fsolauncher.dmg' : 'http://beta.freeso.org/FreeSO Launcher Setup.exe',
+      to: this.tempPath
     } );
   }
   /**
@@ -70,17 +70,13 @@ class UpdateInstaller {
   end() {
     // run and close
     this.FSOLauncher.setProgressBar( -1 );
-    this.createProgressItem( 'Download finished. Setup will start...', 100 );
+    this.createProgressItem( 'Download finished. Setup will run in 5 seconds...', 100 );
     this.FSOLauncher.View.stopProgressItem( 'FSOUpdateProgressItem' + this.id );
-
+    this.execute();
     setTimeout( () => {
       global.willQuit = true;
-      // const notify = require("electron-notify");
-      // notify.closeAll();
       this.FSOLauncher.Window.close();
-    }, 3000 );
-
-    this.execute();
+    }, 5000 );
   }
   /**
    * Error the installation out.
@@ -96,7 +92,7 @@ class UpdateInstaller {
     } );
     this.haltProgress = true;
     this.createProgressItem(
-      `Failed to download FreeSO Launcher. Try again later, or download from <a target="_blank" href="${this.FSOLauncher.updateLocation}">here</a>.`,
+      `Failed to download FreeSO Launcher. Try again later, or download from <a target="_blank" href="https://beta.freeso.org">here</a>.`,
       100
     );
     this.FSOLauncher.View.stopProgressItem( 'FSOUpdateProgressItem' + this.id );
@@ -109,7 +105,11 @@ class UpdateInstaller {
    * @memberof UpdateInstaller
    */
   execute() {
-    require( 'child_process' ).exec( 'installer.exe', { cwd: 'temp' } );
+    if(process.platform == 'darwin') {
+      require( 'child_process' ).exec( `hdiutil attach ${global.APPDATA.replace(/ /g, '\\ ')}temp/fsolauncher-${this.id}.dmg` );
+    } else {
+      require( 'child_process' ).exec( `fsolauncher-${id}.exe`, { cwd: 'temp' } );
+    }
   }
   /**
    * Download the installer.
@@ -124,7 +124,7 @@ class UpdateInstaller {
       this.dl.events.on( 'end', _fileName => {
         if ( this.dl.hasFailed() ) {
           return reject(
-            'FreeSO Launcher installation files have failed to download. You can try again later or download it yourself at https://beta.freeso.org'
+            'FreeSO Launcher installation files have failed to download. You can try again later or download it yourself at https://beta.freeso.org.'
           );
         }
         resolve();
@@ -162,12 +162,12 @@ class UpdateInstaller {
    */
   cleanup() {
     const fs = require( 'fs-extra' );
-    fs.stat( `${global.APPDATA}temp/installer.exe`, function( err, _stats ) {
+    fs.stat( this.tempPath, function( err, _stats ) {
       if ( err ) {
         return;
       }
 
-      fs.unlink( `${global.APPDATA}temp/installer.exe`, function( err ) {
+      fs.unlink( this.tempPath, function( err ) {
         if ( err ) return console.log( err );
       } );
     } );
