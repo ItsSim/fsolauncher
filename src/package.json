@@ -1,12 +1,13 @@
 {
   "name": "fsolauncher",
+  "productName": "FreeSO Launcher",
   "version": "1.7.3",
   "description": "Install, play, and configure FreeSO easily",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "build": "electron-packager . fsolauncher --asar.unpackDir=\"{export,FSOLauncher_UI/FSOLauncher_Images,FSOLauncher_UI/FSOLauncher_Sounds,FSOLauncher_UI/FSOLauncher_Fonts}\" --platform=win32 --arch=all --overwrite --electron-version=8.2.0 --version-string.FileDescription='FreeSO Launcher' --out ../release",
-    "builddarwin": "electron-packager . fsolauncher --asar.unpackDir=\"{export,FSOLauncher_UI/FSOLauncher_Images,FSOLauncher_UI/FSOLauncher_Sounds,FSOLauncher_UI/FSOLauncher_Fonts}\" --platform=darwin --arch=all --overwrite --electron-version=8.2.0 --version-string.FileDescription='FreeSO Launcher' --out ../release",
+    "builddarwin": "electron-packager . fsolauncher --icon=./beta.icns --asar.unpackDir=\"{export,FSOLauncher_UI/FSOLauncher_Images,FSOLauncher_UI/FSOLauncher_Sounds,FSOLauncher_UI/FSOLauncher_Fonts}\" --platform=darwin --arch=all --overwrite --electron-version=8.2.0 --version-string.FileDescription='FreeSO Launcher' --out ../release && electron-installer-dmg ../release/fsolauncher-darwin-x64/fsolauncher.app FSOLauncher --out=../release --icon=./beta.icns --background=./osx_dmg.png --title=FSOLauncher --overwrite",
     "buildasar": "asar pack . \"../release/asar/app.asar\" --unpack-dir \"{export,FSOLauncher_UI/FSOLauncher_Images,FSOLauncher_UI/FSOLauncher_Sounds,FSOLauncher_UI/FSOLauncher_Fonts}\""
   },
   "keywords": [
@@ -15,6 +16,8 @@
   ],
   "author": "FreeSO.org",
   "devDependencies": {
+    "electron-installer-dmg": "^3.0.0",
+    "electron-packager": "^14.2.1",
     "electron-reload": "^1.5.0",
     "eslint": "^6.7.1"
   },
