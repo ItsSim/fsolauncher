@@ -716,7 +716,7 @@ class FSOLauncher extends EventHandlers {
 
               const isInstalled = await InstallerInstance.isInstalledInPath();
 
-              if ( isInstalled && !options.fullInstall && !options.dir ) {
+              if ( isInstalled && !options.fullInstall && !options.dir && process.platform != 'darwin' ) {
                 return Modal.showAlreadyInstalled(
                   this.getPrettyName( Component ),
                   Component,
