@@ -76,7 +76,7 @@ class UpdateInstaller {
     setTimeout( () => {
       global.willQuit = true;
       this.FSOLauncher.Window.close();
-    }, 3000 );
+    }, 3500 );
   }
   /**
    * Error the installation out.
