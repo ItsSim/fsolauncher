@@ -17,7 +17,7 @@ class UpdateInstaller {
     this.FSOLauncher = FSOLauncher;
     this.id = Math.floor( Date.now() / 1000 );
     this.haltProgress = false;
-    this.tempPath = process.platform == 'darwin' ? `${global.APPDATA}temp/fsolauncher-${id}.dmg` : `${global.APPDATA}temp/fsolauncher-${id}.exe`
+    this.tempPath = process.platform == 'darwin' ? `${global.APPDATA}temp/fsolauncher-${this.id}.dmg` : `${global.APPDATA}temp/fsolauncher-${this.id}.exe`
     this.dl = download( {
       from: process.platform == 'darwin' ? 'http://beta.freeso.org/fsolauncher.dmg' : 'http://beta.freeso.org/FreeSO Launcher Setup.exe',
       to: this.tempPath
@@ -70,13 +70,13 @@ class UpdateInstaller {
   end() {
     // run and close
     this.FSOLauncher.setProgressBar( -1 );
-    this.createProgressItem( 'Download finished. Setup will run in 5 seconds...', 100 );
+    this.createProgressItem( 'Download finished. Opening Setup...', 100 );
     this.FSOLauncher.View.stopProgressItem( 'FSOUpdateProgressItem' + this.id );
     this.execute();
     setTimeout( () => {
       global.willQuit = true;
       this.FSOLauncher.Window.close();
-    }, 5000 );
+    }, 3000 );
   }
   /**
    * Error the installation out.
@@ -108,7 +108,7 @@ class UpdateInstaller {
     if(process.platform == 'darwin') {
       require( 'child_process' ).exec( `hdiutil attach ${global.APPDATA.replace(/ /g, '\\ ')}temp/fsolauncher-${this.id}.dmg` );
     } else {
-      require( 'child_process' ).exec( `fsolauncher-${id}.exe`, { cwd: 'temp' } );
+      require( 'child_process' ).exec( `fsolauncher-${this.id}.exe`, { cwd: 'temp' } );
     }
   }
   /**

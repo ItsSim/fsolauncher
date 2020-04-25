@@ -344,9 +344,7 @@ class FSOLauncher extends EventHandlers {
       const os = require( 'os' );
       const options = {
         host: global.WEBSERVICE,
-        path: '/' + global.UPDATE_ENDPOINT +
-          '?os=' + os.release() +
-          '&version=' + global.VERSION
+        path: `/${global.UPDATE_ENDPOINT}?os=${os.release()}&version=${global.VERSION}&fso=${(this.isInstalled && this.isInstalled.FSO) ? '1' : '0'}`
       };
       console.log( 'Getting launcher data from', options.path );
 
