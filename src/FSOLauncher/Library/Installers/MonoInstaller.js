@@ -61,7 +61,7 @@ class MonoInstaller {
     this.FSOLauncher.View.stopProgressItem( 'FSOProgressItem' + this.id );
     this.FSOLauncher.updateInstalledPrograms();
     this.FSOLauncher.removeActiveTask( 'Mono' );
-    if(!this.isFullInstall) Modal.showInstalled( 'Mono' );
+    if( !this.isFullInstall ) Modal.showInstalled( 'Mono' );
   }
 
   download() {
@@ -111,10 +111,10 @@ class MonoInstaller {
     );
     return new Promise( ( resolve, reject ) => {
       // headless install
-      sudo.exec( `installer -pkg ${global.APPDATA.replace(/ /g, '\\ ')}temp/mono-${this.id}.pkg -target /`, {}, 
-        (err, stdout, stderr) => {
-          if( err ) return reject(err);
-          console.log('Mono Installer:', stdout, stderr);
+      sudo.exec( `installer -pkg ${global.APPDATA.replace( / /g, '\\ ' )}temp/mono-${this.id}.pkg -target /`, {}, 
+        ( err, stdout, stderr ) => {
+          if( err ) return reject( err );
+          console.log( 'Mono Installer:', stdout, stderr );
           resolve();
       } );
     } );

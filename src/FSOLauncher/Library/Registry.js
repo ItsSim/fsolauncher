@@ -48,8 +48,10 @@ class Registry {
       Promises.push( Registry.get( 'NET', Registry.getNETPath() ) );
       Promises.push( Registry.get( 'Simitone', Registry.getSimitonePath() ) );
       Promises.push( Registry.get( 'TS1', Registry.getTS1Path() ) );
-      Promises.push( Registry.get( 'Mono', Registry.getMonoPath() ) );
-      Promises.push( Registry.get( 'SDL', Registry.getSDLPath() ) );
+      if( process.platform == 'darwin' ) {
+        Promises.push( Registry.get( 'Mono', Registry.getMonoPath() ) );
+        Promises.push( Registry.get( 'SDL', Registry.getSDLPath() ) );
+      }
 
       Promise.all( Promises )
         .then( a => { resolve( a ); } )
@@ -68,10 +70,10 @@ class Registry {
   static get( e, p ) {
     if( process.platform === "darwin" ) {
       // when darwin directly test if file exists
-      return new Promise( ( resolve, reject ) => {
-        require('fs-extra').pathExists( p, (err, exists) => {
+      return new Promise( ( resolve, _reject ) => {
+        require( 'fs-extra' ).pathExists( p, ( err, exists ) => {
           console.log( 'Mac Check:', e, p, exists );
-          resolve( { key: e, isInstalled: exists ? require('path').dirname( p ) : false } );
+          resolve( { key: e, isInstalled: exists ? require( 'path' ).dirname( p ) : false } );
         } );
       } );
     }
@@ -168,7 +170,7 @@ class Registry {
    * @memberof Registry
    */
   static createMaxisEntry( InstallDir ) {
-    if(process.platform === "darwin") {
+    if( process.platform === "darwin" ) {
       return Promise.resolve();
     }
 
@@ -239,7 +241,7 @@ class Registry {
    * @memberof Registry
    */
   static createFreeSOEntry( InstallDir, KeyName = 'FreeSO' ) {
-    if(process.platform === "darwin") {
+    if( process.platform === "darwin" ) {
       return Promise.resolve();
     }
     return new Promise( ( resolve, reject ) => {

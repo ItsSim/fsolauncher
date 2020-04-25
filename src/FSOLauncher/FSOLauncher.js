@@ -344,7 +344,7 @@ class FSOLauncher extends EventHandlers {
       const os = require( 'os' );
       const options = {
         host: global.WEBSERVICE,
-        path: `/${global.UPDATE_ENDPOINT}?os=${os.release()}&version=${global.VERSION}&fso=${(this.isInstalled && this.isInstalled.FSO) ? '1' : '0'}`
+        path: `/${global.UPDATE_ENDPOINT}?os=${os.release()}&version=${global.VERSION}&fso=${( this.isInstalled && this.isInstalled.FSO ) ? '1' : '0'}`
       };
       console.log( 'Getting launcher data from', options.path );
 
@@ -604,7 +604,7 @@ class FSOLauncher extends EventHandlers {
       dir: false
     }
   ) {
-    console.log('Installing:', Component, options);
+    console.log( 'Installing:', Component, options );
     let InstallerInstance;
     let Installer;
     let Executable;
@@ -616,7 +616,7 @@ class FSOLauncher extends EventHandlers {
       case 'MacExtras':
       case 'SDL':
         Installer = require( `./Library/Installers/${Component}Installer` );
-        InstallerInstance = new Installer(this, this.isInstalled.FSO);
+        InstallerInstance = new Installer( this, this.isInstalled.FSO );
         if ( !options.fullInstall ) {
           this.View.changePage( 'downloads' );
         } else {
@@ -1073,11 +1073,11 @@ class FSOLauncher extends EventHandlers {
     if( process.platform === "darwin" ) {
       file = "./freeso.command";
     }
-    console.log('Running', file + ' ' + args.join( ' ' ));
+    console.log( 'Running', file + ' ' + args.join( ' ' ) );
     require( 'child_process' ).exec( file + ' ' + args.join( ' ' ), { cwd }, 
-    (err, stdout, stderr) => {
-      console.log(err, stdout, stderr);
-    });
+    ( err, stdout, stderr ) => {
+      console.log( err, stdout, stderr );
+    } );
     setTimeout( () => { Toast.destroy(); }, 4000 );
   }
   /**

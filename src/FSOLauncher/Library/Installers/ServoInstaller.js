@@ -100,7 +100,7 @@ class ServoInstaller {
   }
   step5() {
     if( process.platform === "darwin" ) {
-      console.log('Darwin:', 'Downloading MacExtras');
+      console.log( 'Darwin:', 'Downloading MacExtras' );
       this.dl = download( { 
         from: 'https://beta.freeso.org/LauncherResourceCentral/MacExtras', 
         to: `${global.APPDATA}temp/macextras-${this.id}.zip` 
@@ -111,7 +111,7 @@ class ServoInstaller {
   }
   async step6() {
     if( process.platform === "darwin" ) {
-      console.log('Darwin:', 'Extracting MacExtras');
+      console.log( 'Darwin:', 'Extracting MacExtras' );
       await unzip( { 
         from: `${global.APPDATA}temp/macextras-${this.id}.zip`, 
         to: this.path, 
@@ -137,7 +137,7 @@ class ServoInstaller {
     this.FSOLauncher.View.stopProgressItem( 'FSOProgressItem' + this.id );
     this.FSOLauncher.updateInstalledPrograms();
     this.FSOLauncher.removeActiveTask( 'FSO' );
-    if(!this.isFullInstall) Modal.showInstalled( 'FreeSO' );
+    if( !this.isFullInstall ) Modal.showInstalled( 'FreeSO' );
   }
   /**
    * When the installation errors out.

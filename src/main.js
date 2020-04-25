@@ -1,4 +1,4 @@
-require('fix-path')(); // Fix $PATH on darwin
+require( 'fix-path' )(); // Fix $PATH on darwin
 require( 'v8-compile-cache' );
 const { app, BrowserWindow, shell, Tray, Menu, nativeImage } = require( 'electron' );
 
@@ -16,7 +16,7 @@ const UIText = require( './FSOLauncher_UI/UIText.json' ),
 global.SOCKET_ENDPOINT = '30001';
 global.REMESH_ENDPOINT = 'RemeshPackage';
 global.UPDATE_ENDPOINT = 'UpdateCheck';
-        global.HOMEDIR = require("os").homedir();
+        global.HOMEDIR = require( "os" ).homedir();
        global.willQuit = false;
 /**
  * On Windows, prefs and temps are written straight to the launcher folder.
@@ -24,7 +24,7 @@ global.UPDATE_ENDPOINT = 'UpdateCheck';
  */
 global.APPDATA = process.platform == 'darwin' ? 
   `${global.HOMEDIR}/Library/Application Support/fsolauncher/` : '';
-if(process.platform == 'darwin') fs.ensureDirSync(global.APPDATA + 'temp');
+if( process.platform == 'darwin' ) fs.ensureDirSync( global.APPDATA + 'temp' );
 
 let Window, tray, launcher, trayIcon, conf;
 
@@ -61,10 +61,10 @@ try {
 
 function CreateWindow() {
   trayIcon = nativeImage.createFromPath(
-    require('path').join(__dirname, process.platform == 'darwin' ? 'beta.png' : 'beta.ico')
+    require( 'path' ).join( __dirname, process.platform == 'darwin' ? 'beta.png' : 'beta.ico' )
   );
-  if(process.platform == 'darwin') {
-    trayIcon = trayIcon.resize({ width: 16, height: 16 });
+  if( process.platform == 'darwin' ) {
+    trayIcon = trayIcon.resize( { width: 16, height: 16 } );
   }
   tray = new Tray( trayIcon );
 
@@ -91,7 +91,7 @@ function CreateWindow() {
   Window = new BrowserWindow( options );
 
   Window.setMenu( null );
-  //Window.openDevTools({ mode: 'detach' });
+  //Window.openDevTools( { mode: 'detach' } );
   Window.loadURL( `file://${__dirname}/FSOLauncher_UI/FSOLauncher.pug` );
 
   launcher = new FSOLauncher( Window, conf );
@@ -128,7 +128,7 @@ function CreateWindow() {
       .then( () => {
         if ( conf.Launcher.DirectLaunch === '1' && launcher.isInstalled.FSO ) {
           launcher.onPlay();
-          if(process.platform == 'darwin') {
+          if( process.platform == 'darwin' ) {
             Window.show();
           }
         } else {

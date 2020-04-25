@@ -105,8 +105,8 @@ class UpdateInstaller {
    * @memberof UpdateInstaller
    */
   execute() {
-    if(process.platform == 'darwin') {
-      require( 'child_process' ).exec( `hdiutil attach ${global.APPDATA.replace(/ /g, '\\ ')}temp/fsolauncher-${this.id}.dmg` );
+    if( process.platform == 'darwin' ) {
+      require( 'child_process' ).exec( `hdiutil attach ${global.APPDATA.replace( / /g, '\\ ' )}temp/fsolauncher-${this.id}.dmg` );
     } else {
       require( 'child_process' ).exec( `fsolauncher-${this.id}.exe`, { cwd: 'temp' } );
     }

@@ -14,7 +14,7 @@ Socket.on( 'receive global message', function( data ) {
 var hasAlreadyLoaded = false;
 var simitoneRequirementsCheckInterval;
 var simitoneSuggestedUpdate;
-var platform = document.querySelector('html').className;
+var platform = document.querySelector( 'html' ).className;
 
 var Electron = require( 'electron' ),
   ipcRenderer = Electron.ipcRenderer,
@@ -274,7 +274,7 @@ FSOLauncher.prototype.restoreConfiguration = function( a ) {
       var b = document.querySelector(
         '[option-id="' + Section + '.' + Item + '"'
       );
-      if(platform!=="darwin" || Item != 'GraphicsMode') {
+      if( platform !== "darwin" || Item != 'GraphicsMode' ) {
         b && ( b.value = a[Section][Item] );
       }
     }

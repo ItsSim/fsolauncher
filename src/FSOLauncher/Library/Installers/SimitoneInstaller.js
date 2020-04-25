@@ -130,7 +130,7 @@ class SimitoneInstaller {
         this.simitoneVersion
       ] );
     }
-    if(!this.isFullInstall) Modal.showInstalled( 'Simitone' );
+    if( !this.isFullInstall ) Modal.showInstalled( 'Simitone' );
   }
   /**
    * When the installation errors out.
