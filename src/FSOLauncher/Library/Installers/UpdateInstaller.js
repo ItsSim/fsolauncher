@@ -34,7 +34,7 @@ class UpdateInstaller {
     this.FSOLauncher.View.addProgressItem(
       'FSOUpdateProgressItem' + this.id,
       'FreeSO Launcher',
-      'Downloading from ' + this.FSOLauncher.updateLocation,
+      'Downloading from beta.freeso.org',
       Message,
       Percentage
     );
