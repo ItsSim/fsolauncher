@@ -236,7 +236,7 @@ html(class=PLATFORM)
                                     option(value='1') #{SETTINGS_ENABLED}
                                 small
                                     | #{TD_MODE_HINT} Applies to FreeSO and Simitone.
-                            div
+                            div.win32-only
                                 span #{SETTINGS_LANG}
                                 select(option-id='Game.Language')
                                     option(value='en') English
@@ -316,7 +316,7 @@ html(class=PLATFORM)
                                 strong #{ABOUT_FAQ_3_H1}
                                 p #{ABOUT_FAQ_3_TEXT}
 
-                            block faq
+                            block.win32-only faq
                                 strong #{ABOUT_FAQ_4_H1}
                                 p #{ABOUT_FAQ_4_TEXT}
 

@@ -60,6 +60,10 @@ try {
 }
 
 function CreateWindow() {
+  if( process.platform == 'darwin' ) {
+    const darwinAppMenu = require( './darwin-app-menu' );
+    Menu.setApplicationMenu( Menu.buildFromTemplate( darwinAppMenu( app.getName() ) ) );
+  }
   trayIcon = nativeImage.createFromPath(
     require( 'path' ).join( __dirname, process.platform == 'darwin' ? 'beta.png' : 'beta.ico' )
   );
