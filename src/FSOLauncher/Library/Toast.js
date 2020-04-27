@@ -34,7 +34,6 @@ class Toast {
    * @memberof Toast
    */
   destroy() {
-    console.log( 'remove', this.id );
     this.View.removeToast( this.id );
   }
 }

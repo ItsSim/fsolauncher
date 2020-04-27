@@ -20,10 +20,10 @@ global.UPDATE_ENDPOINT = 'UpdateCheck';
        global.willQuit = false;
 /**
  * On Windows, prefs and temps are written straight to the launcher folder.
- * On Mac, they are written in ~/Library/Application Support/fsolauncher.
+ * On Mac, they are written in ~/Library/Application Support/FreeSO Launcher
  */
 global.APPDATA = process.platform == 'darwin' ? 
-  `${global.HOMEDIR}/Library/Application Support/fsolauncher/` : '';
+  `${global.HOMEDIR}/Library/Application Support/FreeSO Launcher/` : '';
 if( process.platform == 'darwin' ) fs.ensureDirSync( global.APPDATA + 'temp' );
 
 let Window, tray, launcher, trayIcon, conf;

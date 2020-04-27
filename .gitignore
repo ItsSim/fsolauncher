@@ -6,5 +6,6 @@
 /vendor/
 /release/*
 !/release/fsolauncher-build-extras/
+!/release/fsolauncher-mac-extras/
 !/release/win32-ia32.iss
 .DS_Store
