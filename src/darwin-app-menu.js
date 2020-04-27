@@ -1,4 +1,4 @@
-const { shell } = require( 'electron' );
+const { app, shell } = require( 'electron' );
 
 module.exports = (name) => [
     {
