@@ -630,6 +630,10 @@ class FSOLauncher extends EventHandlers {
          return new Promise( async ( resolve, reject ) => {
           try {
             await InstallerInstance.install();
+            if( Component == 'MacExtras' && this.isInstalled.Simitone ) {
+              const SimitoneInstallerInstance = new Installer( this, this.isInstalled.Simitone, "Simitone" );
+              await SimitoneInstallerInstance.install();
+            }
             resolve();
           } catch ( e ) {
             reject( e );

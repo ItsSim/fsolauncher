@@ -3,11 +3,12 @@ const Modal = require( '../Modal' ),
   unzip = require( '../unzip' )();
 
 class MacExtrasInstaller {
-  constructor( FSOLauncher, path ) {
+  constructor( FSOLauncher, path, parentComponent = 'FreeSO' ) {
     this.FSOLauncher = FSOLauncher;
     this.id = Math.floor( Date.now() / 1000 );
     this.path = path;
     this.haltProgress = false;
+    this.parentComponent = parentComponent;
     this.tempPath = `${global.APPDATA}temp/macextras-${this.id}.zip`;
 
     this.dl = download( { from: 'https://beta.freeso.org/LauncherResourceCentral/MacExtras', to: this.tempPath } );
@@ -16,7 +17,7 @@ class MacExtrasInstaller {
   createProgressItem( Message, Percentage ) {
     this.FSOLauncher.View.addProgressItem(
       'FSOProgressItem' + this.id,
-      'FreeSO MacExtras',
+      `${this.parentComponent} MacExtras`,
       'Installing in ' + this.path,
       Message,
       Percentage
