@@ -543,8 +543,12 @@ class FSOLauncher extends EventHandlers {
 
       case 'RMS':
       case 'MacExtras':
-        
         if ( !this.isInstalled['FSO'] ) missing.push( this.getPrettyName( 'FSO' ) );
+        break;
+
+      case 'Simitone': 
+        if ( !this.isInstalled['Mono'] && process.platform === "darwin" ) missing.push( this.getPrettyName( 'Mono' ) );
+        if ( !this.isInstalled['SDL'] && process.platform === "darwin" ) missing.push( this.getPrettyName( 'SDL' ) );
         break;
     }
 
@@ -1071,13 +1075,16 @@ class FSOLauncher extends EventHandlers {
     }
 
     if( process.platform === "darwin" ) {
-      file = "./freeso.command";
+      if( isSimitone ) {
+        file = "mono";
+        args.unshift( "Simitone.Windows.exe" );
+      } else {
+        file = "./freeso.command";
+      }
     }
-    console.log( 'Running', file + ' ' + args.join( ' ' ) );
-    require( 'child_process' ).exec( file + ' ' + args.join( ' ' ), { cwd }, 
-    ( err, stdout, stderr ) => {
-      console.log( err, stdout, stderr );
-    } );
+    console.log( 'Running', file + ' ' + args.join( ' ' ), cwd );
+    ( require( 'child_process' ).spawn( file, args, { cwd, detached: true } ) ).unref();
+
     setTimeout( () => { Toast.destroy(); }, 4000 );
   }
   /**

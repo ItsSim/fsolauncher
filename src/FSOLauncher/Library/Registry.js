@@ -20,10 +20,12 @@ class Registry {
     return "\\SOFTWARE\\Microsoft\\NET Framework Setup\\NDP";
   }
   static getSimitonePath() {
-    return "\\SOFTWARE\\Rhys Simpson\\Simitone";
+    return process.platform === "win32" ?
+      "\\SOFTWARE\\Rhys Simpson\\Simitone" : `${global.HOMEDIR}/Documents/Simitone for Windows/Simitone.Windows.exe`;
   }
   static getTS1Path() {
-    return "\\SOFTWARE\\Maxis\\The Sims";
+    return process.platform === "win32" ?
+      "\\SOFTWARE\\Maxis\\The Sims" : `${global.HOMEDIR}/Documents/The Sims/Sims.exe`;
   }
   static getMonoPath() {
     return '/Library/Frameworks/Mono.framework';

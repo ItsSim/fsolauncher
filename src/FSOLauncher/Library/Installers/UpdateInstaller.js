@@ -73,10 +73,7 @@ class UpdateInstaller {
     this.createProgressItem( 'Download finished. Opening Setup...', 100 );
     this.FSOLauncher.View.stopProgressItem( 'FSOUpdateProgressItem' + this.id );
     this.execute();
-    setTimeout( () => {
-      global.willQuit = true;
-      this.FSOLauncher.Window.close();
-    }, 3500 );
+    setTimeout( () => { global.willQuit = true; this.FSOLauncher.Window.close(); }, 3000 );
   }
   /**
    * Error the installation out.
@@ -108,7 +105,7 @@ class UpdateInstaller {
     if( process.platform == 'darwin' ) {
       require( 'child_process' ).exec( `hdiutil attach ${global.APPDATA.replace( / /g, '\\ ' )}temp/fsolauncher-${this.id}.dmg` );
     } else {
-      require( 'child_process' ).exec( `fsolauncher-${this.id}.exe`, { cwd: 'temp' } );
+      ( require( 'child_process' ).spawn( `fsolauncher-${this.id}.exe`, [], { cwd: 'temp', detached: true } ) ).unref();
     }
   }
   /**

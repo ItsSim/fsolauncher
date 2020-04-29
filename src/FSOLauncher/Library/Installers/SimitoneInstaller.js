@@ -58,6 +58,8 @@ class SimitoneInstaller {
       .then( () => this.step3() )
       .then( () => this.step4() )
       .then( () => this.step5() )
+      .then( () => this.step6() )
+      .then( () => this.step7() )
       .then( () => this.end() )
       .catch( ErrorMessage => this.error( ErrorMessage ) );
   }
@@ -110,6 +112,33 @@ class SimitoneInstaller {
    */
   step5() {
     return require( '../Registry' ).createFreeSOEntry( this.path, 'Simitone' );
+  }
+  step6() {
+    if( process.platform === "darwin" ) {
+      console.log( 'Darwin:', 'Downloading MacExtras' );
+      this.dl = download( { 
+        from: 'https://beta.freeso.org/LauncherResourceCentral/MacExtras', 
+        to: `${global.APPDATA}temp/macextras-${this.id}.zip` 
+      } );
+      return this.download();
+    }
+    return Promise.resolve();
+  }
+  async step7() {
+    if( process.platform === "darwin" ) {
+      console.log( 'Darwin:', 'Extracting MacExtras' );
+      await unzip( { 
+        from: `${global.APPDATA}temp/macextras-${this.id}.zip`, 
+        to: this.path, 
+        cpperm: true 
+      }, filename => {
+        this.createProgressItem(
+          'Extracting MacExtras... ' + filename, 100
+        );
+      } );
+      return 1;
+    }
+    return 1;
   }
   /**
    * When the installation ends.

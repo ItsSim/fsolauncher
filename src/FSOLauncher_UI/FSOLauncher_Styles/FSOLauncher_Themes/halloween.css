@@ -25,6 +25,11 @@
   border-right-color: #ff691f;
 }
 
+.halloween #launcher #sidebar li:not(#logo):hover path,
+.halloween #launcher #sidebar li.active path {
+  fill: #ff691f;
+}
+
 .halloween .hint {
   background-color: #ff691f;
 }

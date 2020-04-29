@@ -39,6 +39,10 @@
   cursor: pointer;
   padding-left: 30px;
 }
+.dark #launcher #sidebar li:not(#logo):hover path,
+.dark #launcher #sidebar li.active path {
+  fill: #7dc6bf;
+}
 
 .dark input,
 .dark select {

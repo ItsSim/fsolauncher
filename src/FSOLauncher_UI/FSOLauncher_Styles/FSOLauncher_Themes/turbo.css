@@ -38,6 +38,11 @@
   border-right-color: #d33c97;
 }
 
+.turbo #launcher #sidebar li:not(#logo):hover path,
+.turbo #launcher #sidebar li.active path {
+  fill: #725dd2;
+}
+
 .turbo .hint {
   background-color: #9d43b3;
 }

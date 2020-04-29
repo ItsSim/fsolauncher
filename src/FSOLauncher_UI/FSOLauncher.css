@@ -343,6 +343,14 @@ div.page p {
   cursor: pointer;
   padding-left: 30px;
 }
+#launcher #sidebar li path {
+  fill: #7f7f7f;
+  transition: fill 0.4s;
+}
+#launcher #sidebar li:not(#logo):hover path,
+#launcher #sidebar li.active path {
+  fill: #4b88e4;
+}
 
 #launcher #content #full-install {
   position: absolute;

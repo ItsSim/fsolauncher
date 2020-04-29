@@ -43,11 +43,9 @@
  .simitone li.active i.simitone-icon {
    filter: opacity(0.5) drop-shadow(0 0 0 #1A9D88) drop-shadow(0 0 0 #1A9D88);
  }*/
-i.simitone-icon {
-  color: transparent;
-  background-image: url(../../FSOLauncher_Images/simitone_icon.png);
-  background-size: contain;
-  background-repeat: no-repeat;
+.simitone-icon {
+  height: 20px;
+  width: 20px;
 }
 
 #simitone-gradient {
@@ -94,6 +92,10 @@ i.simitone-icon {
 .simitone #launcher #sidebar li:not(#logo):hover {
   color: #328b96;
   border-right-color: #1fae86;
+}
+.simitone #launcher #sidebar li:not(#logo):hover path,
+.simitone #launcher #sidebar li.active path {
+  fill: #328b96;
 }
 
 .simitone button:hover,
