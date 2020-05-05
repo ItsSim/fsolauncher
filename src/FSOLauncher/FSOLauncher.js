@@ -1080,7 +1080,7 @@ class FSOLauncher extends EventHandlers {
 
     if( process.platform === "darwin" ) {
       if( isSimitone ) {
-        file = "mono";
+        file = "/Library/Frameworks/Mono.framework/Commands/mono";
         args.unshift( "Simitone.Windows.exe" );
       } else {
         file = "./freeso.command";
