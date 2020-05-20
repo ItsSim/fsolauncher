@@ -46,7 +46,7 @@ try {
     Launcher: {
       Theme: 'open_beta',
       DesktopNotifications: '1',
-      Persistence: '1',
+      Persistence: '0',
       DirectLaunch: '0'
     },
     Game: {
