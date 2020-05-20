@@ -88,6 +88,7 @@ class UpdateInstaller {
       mode: 'error'
     } );
     this.haltProgress = true;
+    console.log( ErrorMessage );
     this.createProgressItem(
       `Failed to download FreeSO Launcher. Try again later, or download from <a target="_blank" href="https://beta.freeso.org">here</a>.`,
       100
@@ -105,7 +106,7 @@ class UpdateInstaller {
     if( process.platform == 'darwin' ) {
       require( 'child_process' ).exec( `hdiutil attach ${global.APPDATA.replace( / /g, '\\ ' )}temp/fsolauncher-${this.id}.dmg` );
     } else {
-      ( require( 'child_process' ).spawn( `fsolauncher-${this.id}.exe`, [], { cwd: 'temp', detached: true } ) ).unref();
+      ( require( 'child_process' ).spawn( `fsolauncher-${this.id}.exe`, [], { cwd: 'temp', detached: true, stdio: 'ignore' } ) ).unref();
     }
   }
   /**

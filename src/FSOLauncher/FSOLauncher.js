@@ -1087,7 +1087,7 @@ class FSOLauncher extends EventHandlers {
       }
     }
     console.log( 'Running', file + ' ' + args.join( ' ' ), cwd );
-    ( require( 'child_process' ).spawn( file, args, { cwd, detached: true } ) ).unref();
+    ( require( 'child_process' ).spawn( file, args, { cwd, detached: true, stdio: 'ignore' } ) ).unref();
 
     setTimeout( () => { Toast.destroy(); }, 4000 );
   }
