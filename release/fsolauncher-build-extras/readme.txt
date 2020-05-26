@@ -2,6 +2,8 @@ Version: 2020 1.7.x
 Author: Sim
 
 Changelog:
+- 2020.05.26: Updater changes.
+- 2020.05.21: Fix freezing.
 - 2020.04.23: Change TSO download source.
 - 2020.03.27: GitHub FreeSO Installer, FreeSO AutoDetect.
 - 2020.03.12: Dependency switch to deflate-js.

@@ -469,25 +469,25 @@ class FSOLauncher extends EventHandlers {
     }
   }
   /**
-   * Installs a launcher update which is simply a static executable
-   * located in a remote server, whose URL is received when contacting
-   * the update server endpoint.
+   * Launcher update is downloaded from beta.freeso.org manually by the user.
    *
    * @memberof FSOLauncher
    */
   async installLauncherUpdate() {
-    this.View.changePage( 'downloads' );
-    this.isUpdating = true;
+    return require( 'electron' ).shell.openExternal( 'https://beta.freeso.org' );
 
-    const UpdateInstaller = require( './Library/Installers/UpdateInstaller' );
-    const Installer = new UpdateInstaller( this );
+    //this.View.changePage( 'downloads' );
+    //this.isUpdating = true;
 
-    try {
-      await Installer.install();
-      this.isUpdating = false;
-    } catch ( e ) {
-      this.isUpdating = false;
-    }
+    //const UpdateInstaller = require( './Library/Installers/UpdateInstaller' );
+    //const Installer = new UpdateInstaller( this );
+
+    //try {
+    //  await Installer.install();
+    //  this.isUpdating = false;
+    //} catch ( e ) {
+    //  this.isUpdating = false;
+    //}
   }
   /**
    * Changes the game path in the registry.

@@ -1,6 +1,6 @@
 const { app, shell } = require( 'electron' );
 
-module.exports = (name) => [
+module.exports = ( name ) => [
     {
         label: name,
         submenu: [

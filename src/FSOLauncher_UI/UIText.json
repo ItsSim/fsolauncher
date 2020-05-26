@@ -22,8 +22,8 @@
 
     "MODAL_INSTALL_UPDATE": "Launcher Update",
     "MODAL_INSTALL_UPDATE_DESCR_1": "There is a new version (",
-    "MODAL_INSTALL_UPDATE_DESCR_2": ") available to install. Would you like to update?",
-    "MODAL_UPDATE": "Update",
+    "MODAL_INSTALL_UPDATE_DESCR_2": ") available to download. Launcher updates include fixes and new features. Open download page in browser?",
+    "MODAL_UPDATE": "Open In Browser",
 
     "MODAL_UPDATE_X": "Update",
     "X_AVAILABLE": "available!",
