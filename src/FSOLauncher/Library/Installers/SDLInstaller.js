@@ -17,7 +17,7 @@ class SDLInstaller {
     this.FSOLauncher.View.addProgressItem(
       'FSOProgressItem' + this.id,
       'Single DirectMedia Layer 2',
-      'Downloading from libsdl.org',
+      global.locale.INS_DOWNLOADING_FROM + ' libsdl.org',
       Message,
       Percentage
     );
@@ -107,7 +107,7 @@ class SDLInstaller {
 
   extract() {
     this.createProgressItem(
-      'Installing the SDL2 runtime on your system, please wait...', 100
+      global.locale.INS_SDL_DESCR_LONG, 100
     );
     return new Promise( ( resolve, reject ) => {
       // headless install

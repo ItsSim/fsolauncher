@@ -118,7 +118,7 @@ class ServoInstaller {
         cpperm: true 
       }, filename => {
         this.createProgressItem(
-          'Extracting MacExtras... ' + filename, 100
+          global.locale.INS_EXTRACTING_ME + ' ' + filename, 100
         );
       } );
       return 1;

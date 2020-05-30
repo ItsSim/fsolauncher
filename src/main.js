@@ -33,7 +33,9 @@ const code = oslocale.sync().substring( 0, 2 ),
 
 global.locale = Object.prototype.hasOwnProperty.call( UIText, code )
   ? UIText[code]
-  : UIText['en'];
+  : UIText.en;
+
+global.locale = Object.assign(global.locale, UIText.en);
 global.locale.LVERSION = global.VERSION;
 global.locale.PLATFORM = process.platform;
 

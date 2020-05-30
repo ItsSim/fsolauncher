@@ -41,7 +41,7 @@ class FilePlanetInstaller {
     this.FSOLauncher.View.addProgressItem(
       'TSOProgressItem' + this.id,
       'The Sims Online (FilePlanet)',
-      'Installing in ' + this.path,
+      global.locale.INS_IN + ' ' + this.path,
       Message,
       Percentage,
       Extraction
@@ -277,7 +277,7 @@ class FilePlanetInstaller {
       if ( this.haltProgress ) return;
       this.createProgressItem(
         // Archive.org does not provide Content-Length so the MBs are hardcoded.
-        `${global.locale.DL_CLIENT_FILES} ${mb} MB out of 1268 MB (${p}%)`,
+        `${global.locale.DL_CLIENT_FILES} ${mb} MB ${global.locale.X_OUT_OF_X} 1268 MB (${p}%)`,
         p
       );
       return this.updateDownloadProgress();

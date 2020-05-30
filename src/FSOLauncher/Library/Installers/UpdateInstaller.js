@@ -6,6 +6,7 @@ const Modal = require( '../Modal' ),
  * This way we can update binaries as well.
  *
  * @class UpdateInstaller
+ * @deprecated
  */
 class UpdateInstaller {
   /**

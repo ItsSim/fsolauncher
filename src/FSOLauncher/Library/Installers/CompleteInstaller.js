@@ -35,9 +35,9 @@ class CompleteInstaller {
    */
   step1() {
     this.FSOLauncher.View.fullInstallProgressItem(
-      process.platform === "win32" ? global.locale.INS_OAL : "Installing SDL2...",
+      process.platform === "win32" ? global.locale.INS_OAL : global.locale.INS_SDL,
       global.locale.INS_WINDOW,
-      process.platform === "win32" ? global.locale.INS_OAL_WINDOW : "The SDL2 Installer has been launched.",
+      process.platform === "win32" ? global.locale.INS_OAL_WINDOW : global.locale.INS_SDL_WINDOW,
       10
     );
     if( process.platform === "darwin" ) {
@@ -60,9 +60,9 @@ class CompleteInstaller {
    */
   step2() {
     this.FSOLauncher.View.fullInstallProgressItem(
-      process.platform === "win32" ? global.locale.INS_NET : "Installing the Mono Framework...",
+      process.platform === "win32" ? global.locale.INS_NET : global.locale.INS_MONO,
       global.locale.INS_WINDOW,
-      process.platform === "win32" ? global.locale.INS_NET_WINDOW : "The Mono Runtime Installer has been launched.",
+      process.platform === "win32" ? global.locale.INS_NET_WINDOW : global.locale.INS_MONO_WINDOW,
       25
     );
     if( process.platform === "darwin" ) {
@@ -123,7 +123,7 @@ class CompleteInstaller {
     );
     Modal.sendNotification(
       'FreeSO Launcher',
-      'FreeSO has finished installing and is ready to go!',
+      global.locale.INS_FINISHED_LONG,
       null,
       true
     );

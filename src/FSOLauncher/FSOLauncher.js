@@ -941,7 +941,7 @@ class FSOLauncher extends EventHandlers {
     const fs = require( 'fs-extra' );
     this.addActiveTask( 'CHSWM' );
 
-    const Toast = new ToastComponent( 'Disabling Software Mode...', this.View );
+    const Toast = new ToastComponent( global.locale.TOAST_DISABLING_SWM, this.View );
 
     // eslint-disable-next-line no-async-promise-executor
     return new Promise( async ( resolve, reject ) => {
@@ -966,7 +966,7 @@ class FSOLauncher extends EventHandlers {
     const fs = require( 'fs-extra' );
     this.addActiveTask( 'CHSWM' );
 
-    const Toast = new ToastComponent( 'Enabling Software Mode...', this.View );
+    const Toast = new ToastComponent( TOAST_ENABLING_SWM, this.View );
 
     // eslint-disable-next-line no-async-promise-executor
     return new Promise( async( resolve, reject ) => {

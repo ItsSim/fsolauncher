@@ -38,7 +38,7 @@ class SimitoneInstaller {
     this.FSOLauncher.View.addProgressItem(
       'FSOProgressItem' + this.id,
       'Simitone Client ' + this.simitoneVersion,
-      'Installing in ' + this.path,
+      global.locale.INS_IN + ' ' + this.path,
       Message,
       Percentage
     );
@@ -133,7 +133,7 @@ class SimitoneInstaller {
         cpperm: true 
       }, filename => {
         this.createProgressItem(
-          'Extracting MacExtras... ' + filename, 100
+          global.locale.INS_EXTRACTING_ME + ' ' + filename, 100
         );
       } );
       return 1;

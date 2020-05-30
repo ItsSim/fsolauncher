@@ -18,7 +18,7 @@ class MacExtrasInstaller {
     this.FSOLauncher.View.addProgressItem(
       'FSOProgressItem' + this.id,
       `${this.parentComponent} MacExtras`,
-      'Installing in ' + this.path,
+      global.locale.INS_IN + ' ' + this.path,
       Message,
       Percentage
     );

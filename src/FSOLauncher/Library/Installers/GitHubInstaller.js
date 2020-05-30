@@ -27,7 +27,7 @@ class GitHubInstaller extends ServoInstaller {
     this.FSOLauncher.View.addProgressItem(
       `FSOProgressItem${this.id}`,
       'FreeSO Client (from GitHub)',
-      `Installing in ${this.path}`,
+      `${global.locale.INS_IN} ${this.path}`,
       Message, Percentage
     );
     this.FSOLauncher.setProgressBar(
@@ -43,7 +43,7 @@ class GitHubInstaller extends ServoInstaller {
   async step1() {
     this.dl = null;
 
-    this.createProgressItem( 'Obtaining download sources, please wait a few seconds...', 0 );
+    this.createProgressItem( global.locale.INS_SOURCES, 0 );
 
     const from = await this.getZipUrl();
     if( !from ) {

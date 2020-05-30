@@ -16,8 +16,8 @@ class MonoInstaller {
   createProgressItem( Message, Percentage ) {
     this.FSOLauncher.View.addProgressItem(
       'FSOProgressItem' + this.id,
-      'Mono Runtime for Mac',
-      'Downloading from mono-project.com',
+      global.locale.INSTALLER_MONO_DESCR,
+      global.locale.INS_DOWNLOADING_FROM + ' mono-project.com',
       Message,
       Percentage
     );
@@ -107,7 +107,7 @@ class MonoInstaller {
 
   extract() {
     this.createProgressItem(
-      'Installing the Mono runtime on your system, please wait...', 100
+      global.locale.INS_MONO_DESCR_LONG, 100
     );
     return new Promise( ( resolve, reject ) => {
       // headless install

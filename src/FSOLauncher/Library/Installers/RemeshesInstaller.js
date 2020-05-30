@@ -20,8 +20,8 @@ class RemeshesInstaller {
   createProgressItem( Message, Percentage ) {
     this.FSOLauncher.View.addProgressItem(
       'FSOProgressItem' + this.id,
-      'Remesh Pack Download for ' + this.parentComponent,
-      'Installing in ' + this.path,
+      global.locale.INS_RPD_FOR + ' ' + this.parentComponent,
+      global.locale.INS_IN + ' ' + this.path,
       Message,
       Percentage
     );

@@ -404,8 +404,8 @@ class Modal {
 
   static showNoRemesh() {
     Modal.View.sendModal(
-      'Remesh Pack Unavailable',
-      "Couldn't get the remesh package info from the internet. Try again later.",
+      global.locale.MODAL_RPU,
+      global.locale.MODAL_RPU_DESCR,
       global.locale.MODAL_OK
     );
   }
@@ -705,8 +705,8 @@ class Modal {
    */
   static showSoftwareModeEnabled() {
     Modal.View.sendModal(
-      'Software Mode',
-      'Please note that Software Mode is notably slower than graphics accelerated modes like OpenGL and DirectX. Because of this, 3D Mode will be disabled while on Software Mode.',
+      global.locale.MODAL_SWM,
+      global.locale.MODAL_SWM_DESCR,
       global.locale.MODAL_OK
     );
   }
