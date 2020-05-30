@@ -345,36 +345,34 @@ html(class=PLATFORM)
                             button(id='simitone-play-button') #{SIMITONE_LAUNCH}
                         div.simitone-column
                             h1 #{SIMITONE_COL1_H1}
-                            p #{SIMITONE_COL1_DESCR}
+                            p !{SIMITONE_COL1_DESCR}
                         div.simitone-column.simitone-requirements
                             h1 #{SIMITONE_COL2_H1}
                             ul 
                                 li#ts1cc-indicator
-                                    | <i class="material-icons left"></i> #{SIMITONE_REQ_TSCC}
+                                    | <i class="material-icons left"></i> !{SIMITONE_REQ_TSCC}
                                 li#simitone-indicator
-                                    | <i class="material-icons left"></i> #{SIMITONE_REQ_ST}
+                                    | <i class="material-icons left"></i> !{SIMITONE_REQ_ST}
                                     br 
                                     div#simitone-should-update
-                                        | #{SIMITONE_UPDATE} <span id="simitone-update-version">v8.0.9</span>
+                                        | !{SIMITONE_UPDATE} <span id="simitone-update-version">v8.0.9</span>
                         div#simitone-ts1cc-error.simitone-box.simitone-error
                             h2 #{SIMITONE_MISSING_TSCC_H1}
                             p 
-                                #{SIMITONE_MISSING_TSCC_DESCR}
-                                span.darwin-only <br />#{SIMITONE_MISSING_TSCC_DESCR_MAC}
+                                | !{SIMITONE_MISSING_TSCC_DESCR} 
+                                span.darwin-only <br />!{SIMITONE_MISSING_TSCC_DESCR_MAC}
                         div(style='clear:both')
                         div.simitone-column
                             div.simitone-image(style='background-image:url(./FSOLauncher_Images/simitone_teaser.png);')
                         div.simitone-column
                             h1 #{SIMITONE_FEATURES_1_H1}
-                            p 
-                                #{SIMITONE_FEATURES_1_DESCR}
+                            p !{SIMITONE_FEATURES_1_DESCR}
                         div(style='clear:both')
                         div.simitone-column
                             div.simitone-image(style='background-image:url(./FSOLauncher_Images/simitone_3.png);')
                         div.simitone-column
                             h1 #{SIMITONE_FEATURES_2_H1}
-                            p 
-                                #{SIMITONE_FEATURES_2_DESCR}
+                            p !{SIMITONE_FEATURES_2_DESCR}
         script(src='vendor/socket.io.min.js')
         script(src='vendor/howler.min.js')
         script(src='client.js')
