@@ -108,7 +108,7 @@
       "MODAL_INSTALL": "Install",
       "MODAL_INSTALL_DESCR_1": "This will install the",
       "MODAL_INSTALL_DESCR_2": "component on your computer. Are you sure you want to install it?",
-      "MODAL_INSTALL_FOLDER": "Install in this folder",
+      "MODAL_INSTALL_FOLDER": "Install here",
       "MODAL_INSTALL_UPDATE": "Launcher Update",
       "MODAL_INSTALL_UPDATE_DESCR_1": "There is a new version (",
       "MODAL_INSTALL_UPDATE_DESCR_2": ") available to download. Launcher updates include fixes and new features. Open download page in browser?",

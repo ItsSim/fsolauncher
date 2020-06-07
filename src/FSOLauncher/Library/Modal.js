@@ -225,9 +225,9 @@ class Modal {
       let defaultPath = null;
       if( process.platform === "win32" ){
         try {
-          let winDefaultPath = await require( 'fs-extra' ).stat( 'C:/Program Files' );
+          let winDefaultPath = await require( 'fs-extra' ).stat( 'C:\\Program Files' );
           if( winDefaultPath.isDirectory() ) {
-            defaultPath = 'C:/Program Files';
+            defaultPath = 'C:\\Program Files';
           }
         } catch( err ) {
           console.log( err );
