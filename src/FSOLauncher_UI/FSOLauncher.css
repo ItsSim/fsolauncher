@@ -909,12 +909,12 @@ select {
 }
 
 .hint.arrow-left {
-  animation: ghostlyLeft 1s 4s infinite;
+  animation: ghostlyLeft 1.5s 4s infinite;
   animation-delay: 0.25s;
 }
 
 .hint.arrow-top {
-  animation: ghostlyUp 1s 4s infinite;
+  animation: ghostlyUp 1.5s 4s infinite;
   animation-delay: 0.25s;
 }
 
