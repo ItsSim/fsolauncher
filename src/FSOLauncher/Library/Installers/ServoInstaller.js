@@ -34,7 +34,7 @@ class ServoInstaller {
   createProgressItem( Message, Percentage ) {
     this.FSOLauncher.View.addProgressItem(
       `FSOProgressItem${this.id}`,
-      'FreeSO Client (from Servo)',
+      'FreeSO Client (Alternative Source)',
       `Installing in ${this.path}`,
       Message,
       Percentage
@@ -154,21 +154,9 @@ class ServoInstaller {
     this.haltProgress = true;
     this.createProgressItem( global.locale.FSO_FAILED_INSTALLATION, 100 );
     this.FSOLauncher.View.stopProgressItem( 'FSOProgressItem' + this.id );
-    
-    if( this.isGitHub ) {
-      // TODO move circular dependency to a factory, temporary solution
-      const ServoInstaller = require( './ServoInstaller' );
-      const altInstaller = new ServoInstaller( this.path, this.FSOLauncher );
-      try {
-        await altInstaller.install();
-      } catch( e ) {
-        console.log( 'A network error ocurred when downloading from alternative source after the primary download failed.', e );
-      }
-    } else {
-      this.FSOLauncher.removeActiveTask( 'FSO' );
-      Modal.showFailedInstall( 'FreeSO', ErrorMessage );
-      console.log( ErrorMessage );
-    } 
+    this.FSOLauncher.removeActiveTask( 'FSO' );
+    Modal.showFailedInstall( 'FreeSO', ErrorMessage );
+    console.log( ErrorMessage );
   }
   /**
    * Downloads the distribution file.

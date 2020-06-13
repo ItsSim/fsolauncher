@@ -41,7 +41,7 @@ class CompleteInstaller {
       10
     );
     if( process.platform === "darwin" ) {
-      // Skip Mono if already installed.
+      // Skip SDL if already installed.
       if ( this.FSOLauncher.isInstalled['SDL'] ) {
         return Promise.resolve();
       }

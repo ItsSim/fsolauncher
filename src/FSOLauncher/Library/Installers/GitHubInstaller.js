@@ -14,7 +14,6 @@ class GitHubInstaller extends ServoInstaller {
    */
   constructor( path, FSOLauncher ) {
     super( path, FSOLauncher );
-    this.isGitHub = true;
   }
   /**
    * Create/Update the download progress item.
@@ -154,6 +153,26 @@ class GitHubInstaller extends ServoInstaller {
     }
 
     return url;
+  }
+  /**
+   * When the installation errors out.
+   *
+   * @param {any} ErrorMessage
+   * @returns
+   * @memberof GitHubInstaller
+   */
+  async error( ErrorMessage ) {
+    if( this.dl ) this.dl.cleanup();
+    this.FSOLauncher.setProgressBar( 1, { mode: 'error' } );
+    this.haltProgress = true;
+    this.createProgressItem( 
+      global.locale.FSO_FAILED_INSTALLATION, 100 
+    );
+    this.FSOLauncher.View.stopProgressItem( 
+      'FSOProgressItem' + this.id 
+    );
+    const secondaryInstaller = new ServoInstaller( this.path, this.FSOLauncher );
+    await secondaryInstaller.install();
   }
 }
 
