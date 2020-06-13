@@ -111,7 +111,7 @@
       "MODAL_INSTALL_FOLDER": "Install here",
       "MODAL_INSTALL_UPDATE": "Launcher Update",
       "MODAL_INSTALL_UPDATE_DESCR_1": "There is a new version (",
-      "MODAL_INSTALL_UPDATE_DESCR_2": ") available to download. Launcher updates include fixes and new features. Open download page in browser?",
+      "MODAL_INSTALL_UPDATE_DESCR_2": ") available to download. Launcher updates include fixes and new features.",
       "MODAL_INSTALLATION": "Install Software?",
       "MODAL_INSTALLATION_DESCR": "This will install everything you need to get FreeSO up and running.",
       "MODAL_INSTALLER": "Installer",

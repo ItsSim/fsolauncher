@@ -331,14 +331,14 @@ div.page p {
   padding: 15px;
   /*font-weight:700;*/
   padding-left: 25px;
-  transition: background 0.4s, color 0.4s, padding-left 0.4s, border-left 0.4s;
+  transition: background 0.4s, color 0.4s, padding-left 0.4s;
   -webkit-app-region: no-drag;
 }
 
 #launcher #sidebar li.active,
 #launcher #sidebar li:not(#logo):hover {
-  border-left: 4px solid #4b88e4;
-  /*background-color: rgba(0, 0, 0, 0.025);*/
+  border-right: 4px solid #4b88e4;
+  background-color: rgba(0, 0, 0, 0.025);
   color: #4b88e4;
   cursor: pointer;
   padding-left: 30px;
@@ -744,7 +744,7 @@ select {
 #settings-page .form h1 {
   padding: 10px;
   color: #4b88e4;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
   text-transform: uppercase;
   /*font-weight:700;*/
   /*color:#4B88E4;*/
@@ -782,6 +782,9 @@ select {
   padding-top: 30px;
   width: 100%;
   float: left;
+}
+#rss {
+  padding: 30px;
 }
 
 #rss img {
@@ -906,11 +909,13 @@ select {
 }
 
 .hint.arrow-left {
-  -webkit-animation: ghostlyLeft 2s 4s infinite;
+  animation: ghostlyLeft 1s 4s infinite;
+  animation-delay: 0.25s;
 }
 
 .hint.arrow-top {
-  -webkit-animation: ghostlyUp 2s 4s infinite;
+  animation: ghostlyUp 1s 4s infinite;
+  animation-delay: 0.25s;
 }
 
 .hint {

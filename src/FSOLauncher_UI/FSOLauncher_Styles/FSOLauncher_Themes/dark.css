@@ -33,11 +33,8 @@
 
 .dark #sidebar li.active,
 .dark #sidebar li:not(#logo):hover {
-  border-right: 4px solid #7dc6bf !important;
-  background-color: rgba(0, 0, 0, 0.05);
+  border-right-color: #7dc6bf !important;
   color: #7dc6bf !important;
-  cursor: pointer;
-  padding-left: 30px;
 }
 .dark #launcher #sidebar li:not(#logo):hover path,
 .dark #launcher #sidebar li.active path {

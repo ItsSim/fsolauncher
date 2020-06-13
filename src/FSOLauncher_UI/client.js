@@ -248,7 +248,7 @@ FSOLauncher.prototype.showHints = function( a ) {
     c++
   )
     b[c].style.display = 'none';
-  if ( !localStorage['HINT_' + a] ) {
+  if ( true ){//!localStorage['HINT_' + a] ) {
     b = document.querySelectorAll( '[hint-page="' + a + '"]' );
     for ( c = 0; c < b.length; c++ )
       ( b[c].style.display = 'block' ),
