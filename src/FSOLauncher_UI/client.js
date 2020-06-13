@@ -11,6 +11,36 @@ Socket.on( 'receive global message', function( data ) {
   FSOLauncher.fireEvent( 'SOCKET_MESSAGE', [data.Message, data.Url] );
 } );
 
+setInterval(function() {
+  // credits tsomania.net
+  var currenttime = new Date() ;
+  var hours = currenttime.getUTCHours();
+  var minutes = currenttime.getUTCMinutes();
+  var seconds = currenttime.getUTCSeconds();
+  var timesuffix = "AM";
+  var cycle = 0;
+  if (hours %2 ==1) {
+    cycle = 3600;
+    timesuffix = "PM";
+  }
+  cycle = cycle + minutes * 60 + seconds;
+  var tsohours =  Math.floor(cycle /300);
+  if (tsohours > 12) {
+    tsohours = tsohours - 12;
+  }
+  if (tsohours ==0) {
+    tsohours = 12;
+  }
+  var tsomins = Math.floor((cycle % 300) / 5);
+  if (tsomins < 10) {
+    tsomins = "0" + tsomins;
+  }
+  var simTime = document.getElementById('simtime');
+  if(simTime) {
+    simTime.innerHTML= tsohours + ":" + tsomins + " " + timesuffix ;
+  }
+}, 1000);
+
 var hasAlreadyLoaded = false;
 var simitoneRequirementsCheckInterval;
 var simitoneSuggestedUpdate;
