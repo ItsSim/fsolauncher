@@ -3,7 +3,7 @@
 
 #define MyAppName "FreeSO Launcher"
 ; App Version should match the one in package.json.
-#define MyAppVersion "1.7.5" 
+#define MyAppVersion "1.7.6" 
 #define MyAppPublisher "FreeSO.org"
 #define MyAppURL "http://freeso.org"
 #define MyAppExeName "fsolauncher.exe"
@@ -34,6 +34,7 @@ SetupIconFile=.\fsolauncher-win32-ia32\beta.ico
 UninstallDisplayIcon={uninstallexe}
 InfoBeforeFile=.\fsolauncher-win32-ia32\readme.txt
 ;MinVersion=0,6.1
+WizardStyle=modern
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
