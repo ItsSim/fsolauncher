@@ -823,25 +823,25 @@ class FSOLauncher extends EventHandlers {
     const Toast = new ToastComponent( global.locale.TOAST_LANGUAGE, this.View );
     try {
       try {
-        if( process.platform == 'darwin' ) {
+        if( process.platform == 'darwin' || process.platform == 'win32' ) {
           // why is this necessary? we will never know...
           process.noAsar = true;
         }
         let exportTSODir = `../export/LanguagePacks/${language.toUpperCase()}/TSO`;
           exportTSODir = path.join( __dirname, exportTSODir );
-        if( process.platform == 'darwin' ) {
+        if( process.platform == 'darwin' || process.platform == 'win32' ) {
           exportTSODir = exportTSODir.replace( 'app.asar', 'app.asar.unpacked' );
         }
         let exportFSODir = `../export/LanguagePacks/${language.toUpperCase()}/FSO`;
           exportFSODir = path.join( __dirname, exportFSODir );
-        if( process.platform == 'darwin' ) {
+        if( process.platform == 'darwin' || process.platform == 'win32' ) {
           exportFSODir = exportFSODir.replace( 'app.asar', 'app.asar.unpacked' );
         }
         await fs.copy( exportTSODir, 
           process.platform == 'win32' ? this.isInstalled.TSO + '/TSOClient' : this.isInstalled.TSO
         );
         await fs.copy( exportFSODir, this.isInstalled.FSO );
-        if( process.platform == 'darwin' ) {
+        if( process.platform == 'darwin' || process.platform == 'win32' ) {
           process.noAsar = false;
         }
       } catch( err ) {
