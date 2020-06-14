@@ -88,7 +88,7 @@ function CreateWindow() {
   options.show = false;
   options.resizable = false;
   options.title = 'FreeSO Launcher ' + global.VERSION;
-  options.icon = process.platform == 'darwin' ? 'beta.icns' : 'beta.ico';
+  //options.icon = process.platform == 'darwin' ? 'beta.icns' : 'beta.ico';
   options.webPreferences = {
     nodeIntegration: true
   }; // Since we're not displaying untrusted content
