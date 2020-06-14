@@ -823,16 +823,27 @@ class FSOLauncher extends EventHandlers {
     const Toast = new ToastComponent( global.locale.TOAST_LANGUAGE, this.View );
     try {
       try {
-        await fs.copy( path.join(
-          __dirname, 
-          '../export/LanguagePacks/' + language.toUpperCase() + '/TSO' ), 
+        if( process.platform == 'darwin' ) {
+          // why is this necessary? we will never know...
+          process.noAsar = true;
+        }
+        let exportTSODir = `../export/LanguagePacks/${language.toUpperCase()}/TSO`;
+          exportTSODir = path.join( __dirname, exportTSODir );
+        if( process.platform == 'darwin' ) {
+          exportTSODir = exportTSODir.replace( 'app.asar', 'app.asar.unpacked' );
+        }
+        let exportFSODir = `../export/LanguagePacks/${language.toUpperCase()}/FSO`;
+          exportFSODir = path.join( __dirname, exportFSODir );
+        if( process.platform == 'darwin' ) {
+          exportFSODir = exportFSODir.replace( 'app.asar', 'app.asar.unpacked' );
+        }
+        await fs.copy( exportTSODir, 
           process.platform == 'win32' ? this.isInstalled.TSO + '/TSOClient' : this.isInstalled.TSO
         );
-        await fs.copy( path.join(
-          __dirname, 
-          '../export/LanguagePacks/' + language.toUpperCase() + '/FSO' ), 
-          this.isInstalled.FSO
-        );
+        await fs.copy( exportFSODir, this.isInstalled.FSO );
+        if( process.platform == 'darwin' ) {
+          process.noAsar = false;
+        }
       } catch( err ) {
         console.log( err );
         this.removeActiveTask( 'CHLANG' );
