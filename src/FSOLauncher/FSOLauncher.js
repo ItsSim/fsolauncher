@@ -826,7 +826,7 @@ class FSOLauncher extends EventHandlers {
         await fs.copy( path.join(
           __dirname, 
           '../export/LanguagePacks/' + language.toUpperCase() + '/TSO' ), 
-          this.isInstalled.TSO + '/TSOClient'
+          process.platform == 'win32' ? this.isInstalled.TSO + '/TSOClient' : this.isInstalled.TSO
         );
         await fs.copy( path.join(
           __dirname, 
