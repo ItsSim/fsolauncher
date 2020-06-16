@@ -27,7 +27,7 @@ Changelog:
 
 Thank you for downloading the official FreeSO Launcher.
 This program was made using:
-- Electron 8.2.0
+- Electron 9.0.4
 
 * This program does not include a copy of The Sims Online or any other type of content of EA IP. It downloads everything needed from EA's public FTP server (http://largedownloads.ea.com/pub/misc/tso/) upon the user's request through the Installer tab.
 * FreeSO is downloaded from the official FreeSO Servo distribution platform (http://servo.freeso.org).
