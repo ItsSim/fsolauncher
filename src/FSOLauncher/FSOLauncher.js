@@ -964,7 +964,7 @@ class FSOLauncher extends EventHandlers {
     const fs = require( 'fs-extra' );
     this.addActiveTask( 'CHSWM' );
 
-    const Toast = new ToastComponent( TOAST_ENABLING_SWM, this.View );
+    const Toast = new ToastComponent( global.locale.TOAST_ENABLING_SWM, this.View );
 
     // eslint-disable-next-line no-async-promise-executor
     return new Promise( async( resolve, reject ) => {
