@@ -245,6 +245,7 @@ div.page > h1.jumbotron span {
   margin-right: 10px;*/
   display: block;
   margin-top: -10px;
+  text-transform: uppercase;
 }
 
 div.page > h1.jumbotron small {
