@@ -351,6 +351,9 @@ div.page p {
 #launcher #sidebar li.active path {
   fill: #4b88e4;
 }
+#launcher #sidebar li {
+  text-transform: uppercase;
+}
 
 #launcher #content #full-install {
   position: absolute;

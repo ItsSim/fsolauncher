@@ -35,7 +35,7 @@ global.locale = Object.prototype.hasOwnProperty.call( UIText, code )
   ? UIText[code]
   : UIText.en;
 
-global.locale = Object.assign(global.locale, UIText.en);
+global.locale = Object.assign( UIText.en, global.locale );
 global.locale.LVERSION = global.VERSION;
 global.locale.PLATFORM = process.platform;
 
