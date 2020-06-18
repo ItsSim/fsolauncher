@@ -474,7 +474,7 @@ class FSOLauncher extends EventHandlers {
    * @memberof FSOLauncher
    */
   async installLauncherUpdate() {
-    return require( 'electron' ).shell.openExternal( 'https://beta.freeso.org' );
+    return require( 'electron' ).shell.openExternal( 'https://beta.freeso.org/update' );
   }
   /**
    * Changes the game path in the registry.
