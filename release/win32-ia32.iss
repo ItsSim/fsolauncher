@@ -35,6 +35,7 @@ UninstallDisplayIcon={uninstallexe}
 InfoBeforeFile=.\fsolauncher-win32-ia32\readme.txt
 ;MinVersion=0,6.1
 WizardStyle=modern
+CloseApplications=force
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
