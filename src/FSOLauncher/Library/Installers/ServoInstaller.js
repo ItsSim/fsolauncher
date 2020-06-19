@@ -104,7 +104,7 @@ class ServoInstaller {
       this.dl = download( { 
         from: 'https://beta.freeso.org/LauncherResourceCentral/MacExtras', 
         to: `${global.APPDATA}temp/macextras-${this.id}.zip` 
-      } );
+      } );
       return this.download();
     }
     return Promise.resolve();

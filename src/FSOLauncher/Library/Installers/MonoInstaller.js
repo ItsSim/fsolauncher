@@ -1,6 +1,5 @@
 const Modal = require( '../Modal' ),
   download = require( '../download' )(),
-  unzip = require( '../unzip' )(),
   sudo = require( 'sudo-prompt' );
 
 class MonoInstaller {

@@ -1,6 +1,5 @@
 const Modal = require( '../Modal' ),
   download = require( '../download' )(),
-  unzip = require( '../unzip' )(),
   sudo = require( 'sudo-prompt' );
 
 class SDLInstaller {
@@ -61,7 +60,7 @@ class SDLInstaller {
     this.FSOLauncher.View.stopProgressItem( 'FSOProgressItem' + this.id );
     this.FSOLauncher.updateInstalledPrograms();
     this.FSOLauncher.removeActiveTask( 'SDL' );
-    if(!this.isFullInstall) Modal.showInstalled( 'SDL2' );
+    if( !this.isFullInstall ) Modal.showInstalled( 'SDL2' );
   }
 
   download() {
@@ -111,14 +110,14 @@ class SDLInstaller {
     );
     return new Promise( ( resolve, reject ) => {
       // headless install
-      let cmd = `hdiutil attach ${global.APPDATA.replace(/ /g, '\\ ')}temp/sdl2-${this.id}.dmg && `; // mount SDL dmg
+      let cmd = `hdiutil attach ${global.APPDATA.replace( / /g, '\\ ' )}temp/sdl2-${this.id}.dmg && `; // mount SDL dmg
       cmd += `sudo rm -rf /Library/Frameworks/SDL2.framework && `; // delete in case it exists to avoid errors
       cmd += `sudo cp -R /Volumes/SDL2/SDL2.framework /Library/Frameworks && `; // move SDL2.framework to /Library/Frameworks
       cmd += `hdiutil unmount /Volumes/SDL2`; // unmount SDL dmg
       sudo.exec( cmd, {}, 
-        (err, stdout, stderr) => {
-          if( err ) return reject(err);
-          console.log('SDL2 Installer:', stdout, stderr);
+        ( err, stdout, stderr ) => {
+          if( err ) return reject( err );
+          console.log( 'SDL2 Installer:', stdout, stderr );
           resolve();
       } );
     } );

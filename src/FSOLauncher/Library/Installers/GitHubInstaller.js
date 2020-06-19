@@ -161,7 +161,7 @@ class GitHubInstaller extends ServoInstaller {
    * @returns
    * @memberof GitHubInstaller
    */
-  async error( ErrorMessage ) {
+  async error( _ErrorMessage ) {
     if( this.dl ) this.dl.cleanup();
     this.FSOLauncher.setProgressBar( 1, { mode: 'error' } );
     this.haltProgress = true;
