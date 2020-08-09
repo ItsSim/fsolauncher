@@ -114,10 +114,9 @@ class Registry {
           if ( err ) {
             console.log( err );
             let isInstalled = false;
-            if( process.platform == 'win32' ) {
-              // Fallback for failed registry interaction.
+            try {
               isInstalled = await this.win32LocalPathFallbacks( e );
-            }
+            } catch( err ) {/**/}
             return resolve( { key: e, isInstalled, error: err } );
           } else {
             return resolve( { key: e, isInstalled: RegistryItem.value } );
