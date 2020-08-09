@@ -46,9 +46,13 @@ class Registry {
     if( program == 'Simitone' ) {
       locals.push( 'C:/Program Files/Simitone' );
     }
+    if( program == 'OpenAL' ) {
+      locals.push( 'C:/Program Files (x86)/OpenAL' );
+    }
     if( locals.length > 0 ) {
       for ( let i = 0; i < locals.length; i++ ) {
         const local = locals[i];
+        console.log( 'Testing local', local );
         const exists = await require( 'fs-extra' ).exists( local );
         if( exists ) { return local; }
       }
@@ -160,7 +164,8 @@ class Registry {
         Key.keys( ( err, Registries ) => {
           if ( err ) {
             console.log( err );
-            return resolve( { key: e, isInstalled: false, error: err } );
+            // Trust our galaxy and return that it’s installed...
+            return resolve( { key: e, isInstalled: true, error: err } );
           } else {
             for ( let i = 0; i < Registries.length; i++ ) {
               if (
@@ -174,15 +179,23 @@ class Registry {
           }
         } );
       } else if ( e === 'OpenAL' ) {
-        Key.keyExists( ( err, exists ) => {
+        Key.keyExists( async( err, exists ) => {
           if ( err ) {
             console.log( err );
-            return resolve( { key: e, isInstalled: false, error: err } );
+            let isInstalled = false;
+            try {
+              isInstalled = await this.win32LocalPathFallbacks( e );
+            } catch( err ) {/**/}
+            return resolve( { key: e, isInstalled, error: err } );
           } else {
             if ( exists ) {
               return resolve( { key: e, isInstalled: true } );
             } else {
-              return resolve( { key: e, isInstalled: false } );
+              let isInstalled = false;
+              try {
+                isInstalled = await this.win32LocalPathFallbacks( e );
+              } catch( err ) {/**/}
+              return resolve( { key: e, isInstalled } );
             }
           }
         } );
