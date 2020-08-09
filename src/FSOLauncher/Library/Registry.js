@@ -33,6 +33,28 @@ class Registry {
   static getSDLPath() {
     return '/Library/Frameworks/SDL2.framework';
   }
+
+  static async win32LocalPathFallbacks( program ) {
+    const locals = [];
+    if( program == 'FSO' ) {
+      locals.push( 'C:/Program Files/FreeSO' );
+    }
+    if( program == 'TSO' ) {
+      locals.push( 'C:/Program Files/Maxis/The Sims Online' );
+      locals.push( 'C:/Program Files/The Sims Online' ); 
+    }
+    if( program == 'Simitone' ) {
+      locals.push( 'C:/Program Files/Simitone' );
+    }
+    if( locals.length > 0 ) {
+      for ( let i = 0; i < locals.length; i++ ) {
+        const local = locals[i];
+        const exists = await require( 'fs-extra' ).exists( local );
+        if( exists ) { return local; }
+      }
+    }
+    return false;
+  }
   /**
    * Returns the status of all the required programs (Installed/not installed).
    *
@@ -88,10 +110,15 @@ class Registry {
       } );
 
       if ( e === 'FSO' || e === 'TSO' || e === 'Simitone' ) {
-        Key.get( 'InstallDir', ( err, RegistryItem ) => {
+        Key.get( 'InstallDir', async ( err, RegistryItem ) => {
           if ( err ) {
             console.log( err );
-            return resolve( { key: e, isInstalled: false, error: err } );
+            let isInstalled = false;
+            if( process.platform == 'win32' ) {
+              // Fallback for failed registry interaction.
+              isInstalled = await this.win32LocalPathFallbacks( e );
+            }
+            return resolve( { key: e, isInstalled, error: err } );
           } else {
             return resolve( { key: e, isInstalled: RegistryItem.value } );
           }
