@@ -38,6 +38,7 @@ global.locale = Object.prototype.hasOwnProperty.call( UIText, code )
 global.locale = Object.assign( UIText.en, global.locale );
 global.locale.LVERSION = global.VERSION;
 global.locale.PLATFORM = process.platform;
+global.locale.LANGCODE = code;
 
 require( 'electron-pug' )( { pretty: false }, global.locale );
 

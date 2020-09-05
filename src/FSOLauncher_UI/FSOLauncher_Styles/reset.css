@@ -161,6 +161,12 @@ html {
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'Balsamiq';
+    src: url('../FSOLauncher_Fonts/BalsamiqSans-Bold.ttf') format('truetype');
+    font-style: normal;
+}
+
 html,
 body {
     width: 100%;

@@ -23,6 +23,10 @@
   letter-spacing: -0.02em;
 }
 
+.ru #launcher, .pl #launcher {
+  font-family: "Balsamiq";
+}
+
 /*body.no-internet #home-page .page-content {
     display:none
 }
@@ -477,6 +481,10 @@ div.page p {
 strong {
   font-family: 'Fredoka One';
   /*font-weight:700*/
+}
+
+.ru strong, .pl strong {
+  font-family: "Balsamiq";
 }
 
 button,
@@ -1192,6 +1200,10 @@ a {
   margin-bottom: -10px;
   font-family: 'Fredoka One';
   color: rgba(0, 0, 0, 0.5);
+}
+
+.ru #notifications-page div.notification h1, .pl #notifications-page div.notification h1 {
+  font-family: "Balsamiq"
 }
 
 #notifications-page div.notification i {

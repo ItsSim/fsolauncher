@@ -2,6 +2,7 @@ Version: 2020 1.7.x
 Author: Sim
 
 Changelog:
+- 2020.09.05: Added Russian and Polish launcher languages, adjusted fonts.
 - 2020.06.13: In-game clock, style changes.
 - 2020.05.26: Updater changes.
 - 2020.05.21: Fix freezing.
@@ -40,6 +41,8 @@ Special Thanks to:
 - Womsy: Spanish Translator
 - Alessandro: Italian Translator
 - Maria: FreeSO Admin/Collaborator
+- Alven: Russian Translator
+- Emiloowski: Polish Translator
 
 Contact:
 - Discord: Sim#0046 
