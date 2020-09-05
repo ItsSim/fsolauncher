@@ -6,8 +6,8 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-packager . fsolauncher --asar.unpackDir=\"{export,FSOLauncher_UI/FSOLauncher_Images,FSOLauncher_UI/FSOLauncher_Sounds,FSOLauncher_UI/FSOLauncher_Fonts}\" --platform=win32 --arch=ia32 --overwrite --electron-version=10.1.11 --version-string.FileDescription='FreeSO Launcher' --out ../release",
-    "builddarwin": "electron-packager . FreeSO\\ Launcher --icon=./beta.icns --asar.unpackDir=\"{export,FSOLauncher_UI/FSOLauncher_Images,FSOLauncher_UI/FSOLauncher_Sounds,FSOLauncher_UI/FSOLauncher_Fonts}\" --platform=darwin --arch=all --overwrite --electron-version=10.1.11 --version-string.FileDescription='FreeSO Launcher' --out ../release && electron-installer-dmg ../release/FreeSO\\ Launcher-darwin-x64/FreeSO\\ Launcher.app FreeSO\\ Launcher --out=../release --icon=./beta.icns --background=./osx_dmg.png --title=FreeSO\\ Launcher --overwrite",
+    "build": "electron-packager . fsolauncher --asar.unpackDir=\"{export,FSOLauncher_UI/FSOLauncher_Images,FSOLauncher_UI/FSOLauncher_Sounds,FSOLauncher_UI/FSOLauncher_Fonts}\" --platform=win32 --arch=ia32 --overwrite --electron-version=10.1.1 --version-string.FileDescription='FreeSO Launcher' --out ../release",
+    "builddarwin": "electron-packager . FreeSO\\ Launcher --icon=./beta.icns --asar.unpackDir=\"{export,FSOLauncher_UI/FSOLauncher_Images,FSOLauncher_UI/FSOLauncher_Sounds,FSOLauncher_UI/FSOLauncher_Fonts}\" --platform=darwin --arch=all --overwrite --electron-version=10.1.1 --version-string.FileDescription='FreeSO Launcher' --out ../release && electron-installer-dmg ../release/FreeSO\\ Launcher-darwin-x64/FreeSO\\ Launcher.app FreeSO\\ Launcher --out=../release --icon=./beta.icns --background=./osx_dmg.png --title=FreeSO\\ Launcher --overwrite",
     "buildasar": "asar pack . \"../release/asar/app.asar\" --unpack-dir \"{export,FSOLauncher_UI/FSOLauncher_Images,FSOLauncher_UI/FSOLauncher_Sounds,FSOLauncher_UI/FSOLauncher_Fonts}\""
   },
   "keywords": [
