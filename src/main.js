@@ -91,7 +91,8 @@ function CreateWindow() {
   options.title = 'FreeSO Launcher ' + global.VERSION;
   //options.icon = process.platform == 'darwin' ? 'beta.icns' : 'beta.ico';
   options.webPreferences = {
-    nodeIntegration: true
+    nodeIntegration: true,
+    enableRemoteModule: true
   }; // Since we're not displaying untrusted content
   // (all links are opened in a real browser window), we can enable this.
 
