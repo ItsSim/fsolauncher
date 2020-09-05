@@ -24,7 +24,7 @@
   "dependencies": {
     "cloudscraper": "^1.5.1",
     "deflate-js": "^0.2.3",
-    "electron": "^9.0.4",
+    "electron-custom-notifications": "file:../vendor/electron-custom-notifications",
     "electron-pug": "^1.5.1",
     "find-process": "^1.4.3",
     "fix-path": "^3.0.0",
