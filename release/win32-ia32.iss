@@ -3,7 +3,7 @@
 
 #define MyAppName "FreeSO Launcher"
 ; App Version should match the one in package.json.
-#define MyAppVersion "1.7.6" 
+#define MyAppVersion "1.7.7" 
 #define MyAppPublisher "FreeSO.org"
 #define MyAppURL "http://freeso.org"
 #define MyAppExeName "fsolauncher.exe"
