@@ -525,7 +525,7 @@ class FSOLauncher extends EventHandlers {
         break;
 
       case 'TSO':
-        if ( !this.isInstalled['NET'] && process.platform === "win32" ) missing.push( this.getPrettyName( 'NET' ) );
+        //if ( !this.isInstalled['NET'] && process.platform === "win32" ) missing.push( this.getPrettyName( 'NET' ) );
         break;
 
       case 'RMS':
