@@ -681,11 +681,11 @@ class FSOLauncher extends EventHandlers {
             if( !options.dir ) {
               if( process.platform === "win32" )  {
                 const Toast = new ToastComponent(
-                  global.locale.TOAST_WAITING,
+                  `Choose where to install ${this.getPrettyName( Component )}`,
                   this.View
                 );
                 const folders = await Modal.showChooseDirectory(
-                  `Choose where to install ${this.getPrettyName( Component )}`,
+                  this.getPrettyName( Component ),
                   this.Window
                 );
                 if( folders && folders.length > 0 ) {
