@@ -685,7 +685,7 @@ class FSOLauncher extends EventHandlers {
                   this.View
                 );
                 const folders = await Modal.showChooseDirectory(
-                  this.getPrettyName( Component ),
+                  `Choose where to install ${this.getPrettyName( Component )}`,
                   this.Window
                 );
                 if( folders && folders.length > 0 ) {
