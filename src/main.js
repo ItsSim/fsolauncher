@@ -10,14 +10,21 @@ const UIText = require( './fsolauncher_ui/uitext.json' ),
  FSOLauncher = require( './fsolauncher/fsolauncher' ),
      package = require( './package.json' );
 
-         process.title = 'FreeSO Launcher';
-        global.VERSION = package.version;
-     global.WEBSERVICE = '173.212.246.204';
+global.normalizePathSlashes = function( d ) {
+    return d ? d.replace( /\\/g, '/' ) : d
+}
+
+process.title = 'FreeSO Launcher';
+global.VERSION = package.version;
+global.WEBSERVICE = '173.212.246.204';
+
+global.HOMEDIR = require( "os" ).homedir();
+global.willQuit = false;
+
 global.SOCKET_ENDPOINT = '30001';
 global.REMESH_ENDPOINT = 'RemeshPackage';
 global.UPDATE_ENDPOINT = 'UpdateCheck';
-        global.HOMEDIR = require( "os" ).homedir();
-       global.willQuit = false;
+
 /**
  * On Windows, prefs and temps are written straight to the launcher folder.
  * On Mac, they are written in ~/Library/Application Support/FreeSO Launcher

@@ -146,8 +146,11 @@ class EventHandlers {
   }
 
   async onDetectorResponse( dir ) {
-    console.log( 'FSODetector:', this.isInstalled.FSO, dir );
-    if( this.isInstalled.FSO == dir ) {
+    dir = global.normalizePathSlashes( dir )
+    const reg_dir = global.normalizePathSlashes( this.isInstalled.FSO )
+
+    console.log( 'FSODetector:', reg_dir, dir );
+    if( reg_dir == dir ) {
       dir = null;
     }
     this.View.sendDetectorResponse( dir );
