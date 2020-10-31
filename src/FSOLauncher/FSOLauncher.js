@@ -1,7 +1,7 @@
-const Modal = require( './Library/Modal' );
-const EventHandlers = require( './EventHandlers' );
-const View = require( './Library/IPCBridge' );
-const ToastComponent = require( './Library/Toast' );
+const Modal = require( './library/modal' );
+const EventHandlers = require( './event-handlers' );
+const View = require( './library/ipc-bridge' );
+const ToastComponent = require( './library/toast' );
 /**
  * Main launcher class.
  *
@@ -65,7 +65,7 @@ class FSOLauncher extends EventHandlers {
     return new Promise( async ( resolve, reject ) => {
       const Toast = new ToastComponent( global.locale.TOAST_REGISTRY, this.View );
       try {
-        const Registry = require( './Library/Registry' ),
+        const Registry = require( './library/registry' ),
           programs = await Registry.getInstalled();
 
         Toast.destroy();
@@ -191,7 +191,7 @@ class FSOLauncher extends EventHandlers {
    * @memberof FSOLauncher
    */
   runFullInstaller() {
-    new ( require( './Library/Installers/CompleteInstaller' ) )( this ).run();
+    new ( require( './library/installers/complete-installer' ) )( this ).run();
   }
   /**
    * Adds a task in progress.
@@ -390,7 +390,7 @@ class FSOLauncher extends EventHandlers {
     new ToastComponent(
       'Checking requirements', this.View, 1500
     );
-    const Registry = require( './Library/Registry' );
+    const Registry = require( './library/registry' );
     const simitoneStatus = await Registry.get( 'Simitone', Registry.getSimitonePath() );
     const ts1ccStatus = await Registry.get( 'TS1', Registry.getTS1Path() );
     let simitoneUpdateStatus = null;
@@ -606,7 +606,7 @@ class FSOLauncher extends EventHandlers {
       case 'Mono':
       case 'MacExtras':
       case 'SDL':
-        Installer = require( `./Library/Installers/${Component}Installer` );
+        Installer = require( `./library/installers/${Component.toLowerCase()}-installer` );
         InstallerInstance = new Installer( this, this.isInstalled.FSO );
         if ( !options.fullInstall ) {
           this.View.changePage( 'downloads' );
@@ -632,7 +632,7 @@ class FSOLauncher extends EventHandlers {
         } );
 
       case 'RMS':
-        Installer = require( './Library/Installers/RemeshesInstaller' );
+        Installer = require( './library/installers/remeshes-installer' );
 
         InstallerInstance = new Installer(
           this.isInstalled.FSO + '/Content/MeshReplace', this
@@ -665,13 +665,13 @@ class FSOLauncher extends EventHandlers {
       case 'FSO':
       case 'Simitone':
         if ( Component == 'TSO' ) {
-          Installer = require( './Library/Installers/FilePlanetInstaller' );
+          Installer = require( './library/installers/fileplanet-installer' );
         }
         if ( Component == 'FSO' ) {
-          Installer = require( './Library/Installers/GitHubInstaller' );
+          Installer = require( './library/installers/github-installer' );
         }
         if ( Component == 'Simitone' ) {
-          Installer = require( './Library/Installers/SimitoneInstaller' );
+          Installer = require( './library/installers/simitone-installer' );
         }
 
         // eslint-disable-next-line no-async-promise-executor
@@ -742,7 +742,7 @@ class FSOLauncher extends EventHandlers {
               }
             }
           } else {
-            const Registry = require( './Library/Registry' );
+            const Registry = require( './library/registry' );
 
             try {
               if ( Component === 'TSO' ) {
@@ -767,7 +767,7 @@ class FSOLauncher extends EventHandlers {
         } );
       case 'OpenAL':
       case 'NET':
-        Executable = require( './Library/Installers/ExecutableInstaller' );
+        Executable = require( './library/installers/executable-installer' );
 
         // eslint-disable-next-line no-async-promise-executor
         return new Promise( async ( resolve, reject ) => {
@@ -1168,7 +1168,7 @@ class FSOLauncher extends EventHandlers {
    * @memberof FSOLauncher
    */
   async changeFSOPath( dir ) {
-    const Registry = require( './Library/Registry' );
+    const Registry = require( './library/registry' );
     try {
       console.log( dir );
       await Registry.createFreeSOEntry( dir );

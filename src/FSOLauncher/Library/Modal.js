@@ -225,7 +225,7 @@ class Modal {
       let defaultPath = null;
       if( process.platform === "win32" ){
         try {
-          let winDefaultPath = await require( 'fs-extra' ).stat( 'C:\\Program Files' );
+          const winDefaultPath = await require( 'fs-extra' ).stat( 'C:\\Program Files' );
           if( winDefaultPath.isDirectory() ) {
             defaultPath = 'C:\\Program Files';
           }
@@ -439,7 +439,7 @@ class Modal {
       const b64fontMunged = await fs.readFile(
         path.join(
           __dirname,
-          '../../FSOLauncher_UI/FSOLauncher_Fonts',
+          '../../fsolauncher_ui/fsolauncher_fonts',
           'hinted-Munged-otVXWjH6W8.ttf'
         ),
         {
@@ -449,7 +449,7 @@ class Modal {
       const b64fontFredokaOne = await fs.readFile(
         path.join(
           __dirname,
-          '../../FSOLauncher_UI/FSOLauncher_Fonts',
+          '../../fsolauncher_ui/fsolauncher_fonts',
           'FredokaOne-Regular.ttf'
         ),
         {

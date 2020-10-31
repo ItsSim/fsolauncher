@@ -1,4 +1,4 @@
-const ServoInstaller = require( './ServoInstaller' ),
+const ServoInstaller = require( './servo-installer' ),
   download = require( '../download' )();
 /**
  * Installs FreeSO from GitHub Releases.

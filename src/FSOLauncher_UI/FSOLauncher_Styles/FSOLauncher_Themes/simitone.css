@@ -1,5 +1,5 @@
 .simitone h1.jumbotron {
-  background-image: url(../../FSOLauncher_Images/simitone_bg.png) !important;
+  background-image: url(../../fsolauncher_images/simitone_bg.png) !important;
   background-position: -20px 400px !important;
   text-shadow: 2px 2px rgba(0, 0, 0, 0.2) !important;
 }
@@ -32,7 +32,7 @@
   content: 'LAUNCHER' !important;
 }
 .simitone #logo {
-  background-image: url(../../FSOLauncher_Images/simitone_logo.png) !important;
+  background-image: url(../../fsolauncher_images/simitone_logo.png) !important;
   background-size: contain !important;
   position: relative;
   z-index: 1;
@@ -105,7 +105,7 @@
 }
 
 #simitone-teaser {
-  background-image: url(../../FSOLauncher_Images/simitone_teaser.png);
+  background-image: url(../../fsolauncher_images/simitone_teaser.png);
   width: 100%;
   height: 75px;
   background-size: cover;

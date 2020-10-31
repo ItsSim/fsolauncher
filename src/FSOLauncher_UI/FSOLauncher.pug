@@ -3,16 +3,16 @@ html(class=PLATFORM + ' ' + LANGCODE)
     head
         meta(charset='utf-8')
         meta(http-equiv='X-UA-Compatible', content='IE=edge')
-        link(rel='stylesheet', href='./FSOLauncher_Styles/animate.css')
-        link(rel='stylesheet', href='./FSOLauncher_Styles/reset.css')
-        link(rel='stylesheet', href='./FSOLauncher.css')
-        link(rel='stylesheet', href='./FSOLauncher_Styles/responsive.css')
-        link(rel='stylesheet', href='./FSOLauncher_Styles/font-awesome.min.css')
-        link(rel='stylesheet', href='./FSOLauncher_Styles/material-icons.css')
-        link(rel='stylesheet', href='./FSOLauncher_Styles/FSOLauncher_Themes/turbo.css')
-        link(rel='stylesheet', href='./FSOLauncher_Styles/FSOLauncher_Themes/dark.css')
-        link(rel='stylesheet', href='./FSOLauncher_Styles/FSOLauncher_Themes/halloween.css')
-        link(rel='stylesheet', href='./FSOLauncher_Styles/FSOLauncher_Themes/simitone.css')
+        link(rel='stylesheet', href='./fsolauncher_styles/animate.css')
+        link(rel='stylesheet', href='./fsolauncher_styles/reset.css')
+        link(rel='stylesheet', href='./fsolauncher.css')
+        link(rel='stylesheet', href='./fsolauncher_styles/responsive.css')
+        link(rel='stylesheet', href='./fsolauncher_styles/font-awesome.min.css')
+        link(rel='stylesheet', href='./fsolauncher_styles/material-icons.css')
+        link(rel='stylesheet', href='./fsolauncher_styles/fsolauncher_themes/turbo.css')
+        link(rel='stylesheet', href='./fsolauncher_styles/fsolauncher_themes/dark.css')
+        link(rel='stylesheet', href='./fsolauncher_styles/fsolauncher_themes/halloween.css')
+        link(rel='stylesheet', href='./fsolauncher_styles/fsolauncher_themes/simitone.css')
     body(rmstr=READ_MORE, rss=RSS_URL)
         #launcher.not-installed
             .hint.arrow-left(hint-page='home', style='top:245px;left:255px')
@@ -129,11 +129,10 @@ html(class=PLATFORM + ' ' + LANGCODE)
                                 h1 #{TOOLTIP_TITLE_2}
                                 span #{TOOLTIP_DESCR_2}
                             span#detector-response
-                                p
-                                    #{AUTODETECT_TEXT} (<strong id="detector-response-path"></strong>). 
+                                p #{AUTODETECT_TEXT} (<strong id="detector-response-path"></strong>). 
                                 span#detector-confirm.button(style='float:right') #{AUTODETECT_BTN}
                             div.block
-                                .item(install='RMS', style='border-top:0;background-image:url(FSOLauncher_Images/volcanic.png); background-color:#fff; background-size:30%;background-position:center center;background-repeat:no-repeat;')
+                                .item(install='RMS', style='border-top:0;background-image:url(fsolauncher_images/volcanic.png); background-color:#fff; background-size:30%;background-position:center center;background-repeat:no-repeat;')
                                     .new(style='top:30px;height:50px;left:30px;padding:6px;padding-left:8px;padding-right:8px;border-radius:8px;font-size:14px;display:none;position:absolute;') <i style="vertical-align:middle;" class="material-icons">new_releases</i> #{INSTALLER_RP_ALERT}
                                     .stag.orange #{INSTALLER_OPTIONAL}
                                     .tag
@@ -142,7 +141,7 @@ html(class=PLATFORM + ' ' + LANGCODE)
                                         br
                                         small(id='remeshinfo', style='font-size:14px;color:rgba(0,0,0,0.5);margin-top:5px;display:block;overflow:hidden') <i style="vertica-align:middle;float:left;margin-right:5px" class="material-icons">access_time</i> <span style="line-height:25px">#{UNKNOWN}</span>
                             div
-                                .item(install='FSO', style='background:url(FSOLauncher_Images/banner.jpg) #fff; background-position:center center; background-size:80%;background-repeat:no-repeat;')
+                                .item(install='FSO', style='background:url(fsolauncher_images/banner.jpg) #fff; background-position:center center; background-size:80%;background-repeat:no-repeat;')
                                     //.hint.arrow-left(hint-page='installer', style='top:130px;right:25px')
                                         h1 ALREADY HAVE FreeSO?
                                         span
@@ -155,42 +154,42 @@ html(class=PLATFORM + ' ' + LANGCODE)
                                             i.material-icons done                                        
 
                             div
-                                .item(install='TSO', style='background:url(FSOLauncher_Images/tsologo.png) #fff; background-position:center center;background-size:80%;background-repeat:no-repeat;')
+                                .item(install='TSO', style='background:url(fsolauncher_images/tsologo.png) #fff; background-position:center center;background-size:80%;background-repeat:no-repeat;')
                                     .tag(style='z-index:1')
                                         h1 #{INSTALLER_TSO_TITLE}
                                         span #{INSTALLER_TSO_DESCR}
                                         .tick.installed
                                             i.material-icons done                                             
                             div.win32-only
-                                .item(install='OpenAL', style='background:url(FSOLauncher_Images/openal.png) #fff; background-position:center center; background-size:80%;background-repeat:no-repeat;')
+                                .item(install='OpenAL', style='background:url(fsolauncher_images/openal.png) #fff; background-position:center center; background-size:80%;background-repeat:no-repeat;')
                                     .tag
                                         h1 #{INSTALLER_OAL_TITLE}
                                         span #{INSTALLER_OAL_DESCR}
                                         .tick.installed
                                             i.material-icons done     
                             div.win32-only
-                                .item(install='NET', style='background:url(FSOLauncher_Images/netframework.png) #fff; background-position:center center; background-size:80%;background-repeat:no-repeat;')
+                                .item(install='NET', style='background:url(fsolauncher_images/netframework.png) #fff; background-position:center center; background-size:80%;background-repeat:no-repeat;')
                                     .tag
                                         h1 #{INSTALLER_NET_TITLE}
                                         span #{INSTALLER_NET_DESCR}
                                         .tick.installed
                                             i.material-icons done     
                             div.darwin-only
-                                .item(install='Mono', style='border-bottom:0;background-image:url(FSOLauncher_Images/mono.png); background-color:#fff; background-size:80%;background-position:center center;background-repeat:no-repeat;')
+                                .item(install='Mono', style='border-bottom:0;background-image:url(fsolauncher_images/mono.png); background-color:#fff; background-size:80%;background-position:center center;background-repeat:no-repeat;')
                                     .tag
                                         h1 #{INSTALLER_MONO_TITLE}
                                         span #{INSTALLER_MONO_DESCR}
                                         .tick.installed
                                             i.material-icons done  
                             div.darwin-only
-                                .item(install='SDL', style='border-bottom: 1px solid #f0f0f0;background-image:url(FSOLauncher_Images/sdl.png); background-color:#fff; background-size:80%;background-position:center center;background-repeat:no-repeat;')
+                                .item(install='SDL', style='border-bottom: 1px solid #f0f0f0;background-image:url(fsolauncher_images/sdl.png); background-color:#fff; background-size:80%;background-position:center center;background-repeat:no-repeat;')
                                     .tag
                                         h1 #{INSTALLER_SDL_TITLE}
                                         span #{INSTALLER_SDL_DESCR}
                                         .tick.installed
                                             i.material-icons done  
                             div.darwin-only
-                                .item(install='MacExtras', style='border-bottom:0;background-image:url(FSOLauncher_Images/macos.png); background-color:#fff; background-size:60%;background-position:center center;background-repeat:no-repeat;')
+                                .item(install='MacExtras', style='border-bottom:0;background-image:url(fsolauncher_images/macos.png); background-color:#fff; background-size:60%;background-position:center center;background-repeat:no-repeat;')
                                     .stag.orange #{INSTALLER_OPTIONAL}
                                     .tag
                                         h1 #{INSTALLER_MACEXTRAS_TITLE}
@@ -291,7 +290,7 @@ html(class=PLATFORM + ' ' + LANGCODE)
                             br
                             span(style='color:rgba(0,0,0,0.4)') #{DOWNLOADS_EMPTY}
                             //br
-                            //img(src='FSOLauncher_Images/fame.png')
+                            //img(src='fsolauncher_images/fame.png')
                 #notifications-page.page(style='display:none')
                     h1.jumbotron
                         span #{NOTIFICATIONS}
@@ -365,13 +364,13 @@ html(class=PLATFORM + ' ' + LANGCODE)
                                 span.darwin-only <br />!{SIMITONE_MISSING_TSCC_DESCR_MAC}
                         div(style='clear:both')
                         div.simitone-column
-                            div.simitone-image(style='background-image:url(./FSOLauncher_Images/simitone_teaser.png);')
+                            div.simitone-image(style='background-image:url(./fsolauncher_images/simitone_teaser.png);')
                         div.simitone-column
                             h1 #{SIMITONE_FEATURES_1_H1}
                             p !{SIMITONE_FEATURES_1_DESCR}
                         div(style='clear:both')
                         div.simitone-column
-                            div.simitone-image(style='background-image:url(./FSOLauncher_Images/simitone_3.png);')
+                            div.simitone-image(style='background-image:url(./fsolauncher_images/simitone_3.png);')
                         div.simitone-column
                             h1 #{SIMITONE_FEATURES_2_H1}
                             p !{SIMITONE_FEATURES_2_DESCR}

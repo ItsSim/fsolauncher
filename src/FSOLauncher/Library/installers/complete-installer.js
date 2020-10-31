@@ -1,4 +1,4 @@
-const Modal = require( '../Modal' );
+const Modal = require( '../modal' );
 
 /**
  * Installs OpenAL, .NET, TSO and FreeSO.

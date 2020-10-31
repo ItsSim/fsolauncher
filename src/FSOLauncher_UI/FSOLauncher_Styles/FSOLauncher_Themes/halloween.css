@@ -16,7 +16,7 @@
 }
 
 .halloween #logo {
-  /*background-image: url(../../FSOLauncher_Images/logo_turbo.png) !important;*/
+  /*background-image: url(../../fsolauncher_images/logo_turbo.png) !important;*/
 }
 
 .halloween #launcher #sidebar li.active,
@@ -99,7 +99,7 @@
   border-color: transparent !important;
   font-weight: bold;
   color: #15202b !important;
-  background: url(../../FSOLauncher_Images/15xvbd5.png), #ff691f;
+  background: url(../../fsolauncher_images/15xvbd5.png), #ff691f;
   background-position: 97% center;
   background-repeat: no-repeat;
 }
@@ -109,7 +109,7 @@
 }
 
 .halloween .item[install='FSO'] {
-  background-image: url(../../FSOLauncher_Images/freeso-logo.png) !important;
+  background-image: url(../../fsolauncher_images/freeso-logo.png) !important;
 }
 
 .halloween #did-you-know {
@@ -186,5 +186,5 @@
 }
 
 .halloween #installer-page .page-content {
-  background-color: #10161E !important;
+  background-color: #10161e !important;
 }

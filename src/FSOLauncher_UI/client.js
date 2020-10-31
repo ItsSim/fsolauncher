@@ -429,7 +429,7 @@ FSOLauncher.prototype.createOrModifyProgressItem = function( a, b, c, e, f, g ) 
       document.querySelector( '#downloads-page .page-content' ).innerHTML;
   }
 };
-var yesNoAudio = new Howl( { src: 'FSOLauncher_Sounds/modal.wav', volume: 0.4 } );
+var yesNoAudio = new Howl( { src: 'fsolauncher_sounds/modal.wav', volume: 0.4 } );
 FSOLauncher.prototype.yesNo = function( a, b, c, e, f, g ) {
   yesNoAudio.play();
   var d = document.createElement( 'div' );
@@ -600,7 +600,7 @@ FSOLauncher.registerServerEvent( 'STOP_PROGRESS_ITEM', function( a, b ) {
   }
 } );
 FSOLauncher.registerServerEvent( 'PLAY_SOUND', function( a, b ) {
-  var audio = new Howl( { src: `FSOLauncher_Sounds/${b}.wav`, volume: 0.4 } );
+  var audio = new Howl( { src: `fsolauncher_sounds/${b}.wav`, volume: 0.4 } );
   audio.play();
 } );
 FSOLauncher.registerServerEvent( 'CONSOLE_LOG', function( a, b ) {
@@ -662,7 +662,7 @@ FSOLauncher.registerUIEventAll( '[option-id]', 'change', function( a, _b ) {
   c = c.split( '.' );
   FSOLauncher.fireEvent( 'SET_CONFIGURATION', [c[0], c[1], e] );
 } );
-var audioPageTrigger = new Howl( { src: `FSOLauncher_Sounds/click.wav`, volume: 0.4 } );
+var audioPageTrigger = new Howl( { src: `fsolauncher_sounds/click.wav`, volume: 0.4 } );
 FSOLauncher.registerUIEventAll( '[page-trigger]', 'click', function( a, _b ) {
   audioPageTrigger.play();
   FSOLauncher.changePage( a.currentTarget.getAttribute( 'page-trigger' ) );

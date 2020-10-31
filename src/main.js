@@ -6,8 +6,8 @@ const oslocale = require( 'os-locale' ),
    fs = require( 'fs-extra' ),
   ini = require( 'ini' );
 
-const UIText = require( './FSOLauncher_UI/UIText.json' ),
- FSOLauncher = require( './FSOLauncher/FSOLauncher' ),
+const UIText = require( './fsolauncher_ui/uitext.json' ),
+ FSOLauncher = require( './fsolauncher/fsolauncher' ),
      package = require( './package.json' );
 
          process.title = 'FreeSO Launcher';
@@ -100,7 +100,7 @@ function CreateWindow() {
 
   Window.setMenu( null );
   //Window.openDevTools( { mode: 'detach' } );
-  Window.loadURL( `file://${__dirname}/FSOLauncher_UI/FSOLauncher.pug` );
+  Window.loadURL( `file://${__dirname}/fsolauncher_ui/fsolauncher.pug` );
 
   launcher = new FSOLauncher( Window, conf );
 

@@ -1,6 +1,6 @@
-const Modal = require( './Library/Modal' ),
-  RendererEvent = require( './Library/RendererEvent' ),
-  FSODetector = require( './FSODetector' );
+const Modal = require( './library/modal' ),
+  RendererEvent = require( './library/renderer-event' ),
+  FSODetector = require( './fsodetector' );
 /**
  * Handles all events from the client.
  *

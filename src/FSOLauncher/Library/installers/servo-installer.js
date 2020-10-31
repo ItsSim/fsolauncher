@@ -1,4 +1,4 @@
-const Modal = require( '../Modal' ),
+const Modal = require( '../modal' ),
   download = require( '../download' )(),
   unzip = require( '../unzip' )();
 //servo is no more, so ServoInstaller serves as a backup.
@@ -96,7 +96,7 @@ class ServoInstaller {
    */
   step4() {
     if( process.platform === "darwin" ) return Promise.resolve(); 
-    return require( '../Registry' ).createFreeSOEntry( this.path );
+    return require( '../registry' ).createFreeSOEntry( this.path );
   }
   step5() {
     if( process.platform === "darwin" ) {

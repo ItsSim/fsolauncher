@@ -1,22 +1,27 @@
-const Modal = require( '../Modal' ),
+const Modal = require( '../modal' ),
   download = require( '../download' )(),
-  sudo = require( 'sudo-prompt' );
+  unzip = require( '../unzip' )();
 
-class SDLInstaller {
-  constructor( FSOLauncher ) {
+class RemeshesInstaller {
+  constructor( path, FSOLauncher, parentComponent = 'FreeSO' ) {
     this.FSOLauncher = FSOLauncher;
     this.id = Math.floor( Date.now() / 1000 );
-    //this.path = path;
+    this.path = path;
     this.haltProgress = false;
-    this.tempPath = `${global.APPDATA}temp/sdl2-${this.id}.dmg`;
-    this.dl = download( { from: 'https://beta.freeso.org/LauncherResourceCentral/SDL', to: this.tempPath } );
+    this.tempPath = `${global.APPDATA}temp/artifacts-remeshes-${this.id}.zip`;
+    this.parentComponent = parentComponent;
+    const location = FSOLauncher.remeshInfo.location
+      ? FSOLauncher.remeshInfo.location
+      : 'https://beta.freeso.org/LauncherResourceCentral/3DModels';
+
+    this.dl = download( { from: location, to: this.tempPath } );
   }
 
   createProgressItem( Message, Percentage ) {
     this.FSOLauncher.View.addProgressItem(
       'FSOProgressItem' + this.id,
-      'Single DirectMedia Layer 2',
-      global.locale.INS_DOWNLOADING_FROM + ' libsdl.org',
+      global.locale.INS_RPD_FOR + ' ' + this.parentComponent,
+      global.locale.INS_IN + ' ' + this.path,
       Message,
       Percentage
     );
@@ -28,6 +33,7 @@ class SDLInstaller {
   install() {
     return this.step1()
       .then( () => this.step2() )
+      .then( () => this.step3() )
       .then( () => this.end() )
       .catch( ErrorMessage => this.error( ErrorMessage ) );
   }
@@ -37,6 +43,10 @@ class SDLInstaller {
   }
 
   step2() {
+    return this.setupDir( this.path );
+  }
+
+  step3() {
     return this.extract();
   }
 
@@ -48,8 +58,8 @@ class SDLInstaller {
     this.haltProgress = true;
     this.createProgressItem( global.locale.FSO_FAILED_INSTALLATION, 100 );
     this.FSOLauncher.View.stopProgressItem( 'FSOProgressItem' + this.id );
-    this.FSOLauncher.removeActiveTask( 'SDL' );
-    Modal.showFailedInstall( 'SDL2', ErrorMessage );
+    this.FSOLauncher.removeActiveTask( 'RMS' );
+    Modal.showFailedInstall( 'Remesh Package', ErrorMessage );
     return Promise.reject( ErrorMessage );
   }
 
@@ -59,8 +69,8 @@ class SDLInstaller {
     this.createProgressItem( global.locale.INSTALLATION_FINISHED, 100 );
     this.FSOLauncher.View.stopProgressItem( 'FSOProgressItem' + this.id );
     this.FSOLauncher.updateInstalledPrograms();
-    this.FSOLauncher.removeActiveTask( 'SDL' );
-    if( !this.isFullInstall ) Modal.showInstalled( 'SDL2' );
+    this.FSOLauncher.removeActiveTask( 'RMS' );
+    Modal.showInstalled( 'Remesh Package' );
   }
 
   download() {
@@ -104,22 +114,12 @@ class SDLInstaller {
     }, 1000 );
   }
 
-  extract() {
-    this.createProgressItem(
-      global.locale.INS_SDL_DESCR_LONG, 100
-    );
-    return new Promise( ( resolve, reject ) => {
-      // headless install
-      let cmd = `hdiutil attach ${global.APPDATA.replace( / /g, '\\ ' )}temp/sdl2-${this.id}.dmg && `; // mount SDL dmg
-      cmd += `sudo rm -rf /Library/Frameworks/SDL2.framework && `; // delete in case it exists to avoid errors
-      cmd += `sudo cp -R /Volumes/SDL2/SDL2.framework /Library/Frameworks && `; // move SDL2.framework to /Library/Frameworks
-      cmd += `hdiutil unmount /Volumes/SDL2`; // unmount SDL dmg
-      sudo.exec( cmd, {}, 
-        ( err, stdout, stderr ) => {
-          if( err ) return reject( err );
-          console.log( 'SDL2 Installer:', stdout, stderr );
-          resolve();
-      } );
+  async extract() {
+    await unzip( { from: this.tempPath, to: this.path }, filename => {
+      this.createProgressItem(
+        global.locale.EXTRACTING_CLIENT_FILES + ' ' + filename,
+        100
+      );
     } );
   }
 
@@ -136,4 +136,4 @@ class SDLInstaller {
   }
 }
 
-module.exports = SDLInstaller;
+module.exports = RemeshesInstaller;

@@ -1,4 +1,4 @@
-const Modal = require( '../Modal' ),
+const Modal = require( '../modal' ),
   download = require( '../download' )(),
   sudo = require( 'sudo-prompt' );
 

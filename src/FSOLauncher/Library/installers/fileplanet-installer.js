@@ -1,6 +1,5 @@
-const Modal = require( '../Modal' );
-
-const download = require( '../download' )(),
+const Modal = require( '../modal' ),
+  download = require( '../download' )(),
   unzip = require( '../unzip' )(),
   extract = require( '../cabinet' )();
 
@@ -109,7 +108,7 @@ class FilePlanetInstaller {
   }
   step6() {
     // registry
-    return require( '../Registry' ).createMaxisEntry( this.path );
+    return require( '../registry' ).createMaxisEntry( this.path );
   }
   /**
    * Downloads the distribution file.

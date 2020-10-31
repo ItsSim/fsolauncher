@@ -122,6 +122,8 @@ class IPCBridge {
    * @memberof IPCBridge
    */
   addProgressItem( elId, filename, origin, progress, percentage, miniconsole ) {
+    filename = filename.replace( /\\/g, '/' );
+    origin = origin.replace( /\\/g, '/' );
     try {
       this.Window.webContents.send(
         'CREATE_PROGRESS_ITEM',

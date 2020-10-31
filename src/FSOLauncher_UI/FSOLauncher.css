@@ -23,8 +23,9 @@
   letter-spacing: -0.02em;
 }
 
-.ru #launcher, .pl #launcher {
-  font-family: "Balsamiq";
+.ru #launcher,
+.pl #launcher {
+  font-family: 'Balsamiq';
 }
 
 /*body.no-internet #home-page .page-content {
@@ -301,7 +302,7 @@ div.page p {
   margin: 0 auto;
   margin-top: 20px;
   /*font-weight:700;*/
-  background: url(FSOLauncher_Images/logo.png) no-repeat;
+  background: url(fsolauncher_images/logo.png) no-repeat;
   margin-bottom: 40px;
   border-bottom: 1px solid rgba(0, 0, 0, 0);
   padding-top: 70px;
@@ -365,7 +366,7 @@ div.page p {
   width: 100%;
   top: -20px;
   height: calc(100% + 20px);
-  background: url(FSOLauncher_Images/city.jpg) no-repeat;
+  background: url(fsolauncher_images/city.jpg) no-repeat;
   background-position: center center;
   background-size: cover;
   z-index: 10;
@@ -402,7 +403,7 @@ div.page p {
 .backdrop {
   height: 215px;
   width: 100%;
-  background-image: url(FSOLauncher_Images/backdrop.png);
+  background-image: url(fsolauncher_images/backdrop.png);
   background-position: center center;
   background-size: cover;
 }
@@ -483,8 +484,9 @@ strong {
   /*font-weight:700*/
 }
 
-.ru strong, .pl strong {
-  font-family: "Balsamiq";
+.ru strong,
+.pl strong {
+  font-family: 'Balsamiq';
 }
 
 button,
@@ -633,11 +635,11 @@ button.blue:hover,
   background-size: 35% !important;
 }
 
-#downloads > div > .item[install=MacExtras]:hover {
+#downloads > div > .item[install='MacExtras']:hover {
   background-size: 70% !important;
 }
-#downloads > div > .item[install=Mono] {
-  background-color: #fff!important;
+#downloads > div > .item[install='Mono'] {
+  background-color: #fff !important;
 }
 
 #downloads > div > .item > .new {
@@ -742,7 +744,7 @@ select {
 
 select {
   -webkit-appearance: none;
-  background-image: url(FSOLauncher_Images/15xvbd5.png),
+  background-image: url(fsolauncher_images/15xvbd5.png),
     -webkit-linear-gradient(#fafafa, #f4f4f4 40%, #e5e5e5);
 }
 
@@ -817,7 +819,7 @@ select {
 }
 
 #rss .rss-entry:not(:last-child):before {
-  content: "";
+  content: '';
   position: absolute;
   left: 0;
   right: 0;
@@ -830,19 +832,19 @@ select {
 
 #simtime-container {
   border-radius: 6px;
-  background: rgba(0,0,0,0.03);
+  background: rgba(0, 0, 0, 0.03);
   padding: 5px;
-  padding-left:0px;
+  padding-left: 0px;
   width: 100px;
   text-align: center;
   margin: 0 auto;
   margin-top: -8px;
   margin-bottom: 8px;
   font-size: 12px;
-  color: rgba(0,0,0,0.6);
+  color: rgba(0, 0, 0, 0.6);
 }
 
-#simtime-container i, 
+#simtime-container i,
 #simtime-container #simtime {
   display: inline-block;
   vertical-align: middle;
@@ -1202,8 +1204,9 @@ a {
   color: rgba(0, 0, 0, 0.5);
 }
 
-.ru #notifications-page div.notification h1, .pl #notifications-page div.notification h1 {
-  font-family: "Balsamiq"
+.ru #notifications-page div.notification h1,
+.pl #notifications-page div.notification h1 {
+  font-family: 'Balsamiq';
 }
 
 #notifications-page div.notification i {
@@ -1256,7 +1259,7 @@ a.twitter-timeline {
   background-color: #f1c40f;
   display: none;
   overflow: hidden;
-  height:90px;
+  height: 90px;
 }
 
 #detector-response p {
@@ -1269,28 +1272,28 @@ a.twitter-timeline {
 }
 
 #detector-response .button {
-  margin-top:22px;
-  margin-right:20px;
+  margin-top: 22px;
+  margin-right: 20px;
 }
 
 .win32 .win32-only,
 .darwin .darwin-only {
-  display:block;
+  display: block;
 }
 .win32 .darwin-only,
 .darwin .win32-only {
-  display:none;
+  display: none;
 }
 
 .item .stag {
   position: absolute;
   top: 20px;
-  background-color:#43a900;
-  font-size:12px;
-  padding:4px;
-  border-radius:20px;
+  background-color: #43a900;
+  font-size: 12px;
+  padding: 4px;
+  border-radius: 20px;
   left: 20px;
-  color:#fff;
-  padding-left:8px;
-  padding-right:8px;
+  color: #fff;
+  padding-left: 8px;
+  padding-right: 8px;
 }

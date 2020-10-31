@@ -1,4 +1,4 @@
-const Modal = require( '../Modal' ),
+const Modal = require( '../modal' ),
   download = require( '../download' )(),
   unzip = require( '../unzip' )();
 const DOWNLOAD_URL_GITHUB =
@@ -111,7 +111,7 @@ class SimitoneInstaller {
    * @memberof SimitoneInstaller
    */
   step5() {
-    return require( '../Registry' ).createFreeSOEntry( this.path, 'Simitone' );
+    return require( '../registry' ).createFreeSOEntry( this.path, 'Simitone' );
   }
   step6() {
     if( process.platform === "darwin" ) {
