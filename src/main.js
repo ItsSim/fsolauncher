@@ -10,9 +10,7 @@ const UIText = require( './fsolauncher_ui/uitext.json' ),
  FSOLauncher = require( './fsolauncher/fsolauncher' ),
      package = require( './package.json' );
 
-global.normalizePathSlashes = function( d ) {
-    return d ? d.replace( /\\/g, '/' ) : d
-}
+global.normalizePathSlashes = ( d ) => d ? d.replace( /\\/g, '/' ) : d
 
 process.title = 'FreeSO Launcher';
 global.VERSION = package.version;
