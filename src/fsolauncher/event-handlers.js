@@ -1,6 +1,6 @@
 const Modal = require( './library/modal' ),
-  RendererEvent = require( './library/renderer-event' ),
-  FSODetector = require( './fsodetector' );
+  RendererEvent = require( './library/renderer-event' )
+  //FSODetector = require( './fsodetector' );
 /**
  * Handles all events from the client.
  *
@@ -140,8 +140,8 @@ class EventHandlers {
     this.updateInstalledPrograms();
 
     if( process.platform == "win32" ) {
-      this.FSODetector = new FSODetector( this.onDetectorResponse.bind( this ) );
-      this.FSODetector.start();
+      //this.FSODetector = new FSODetector( this.onDetectorResponse.bind( this ) );
+      //this.FSODetector.start();
     }
   }
 
