@@ -1,4 +1,4 @@
-## Repo is now archived
+## Repo is soon being archived
 The next generation version of the launcher [is coming soon](https://github.com/ItsSim/fsolauncher).
 
 # FreeSO Launcher
