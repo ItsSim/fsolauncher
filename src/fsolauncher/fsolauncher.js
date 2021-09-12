@@ -344,7 +344,9 @@ class FSOLauncher extends EventHandlers {
       const os = require( 'os' );
       const options = {
         host: global.WEBSERVICE,
-        path: `/${global.UPDATE_ENDPOINT}?os=${os.release()}&version=${global.VERSION}&fso=${( this.isInstalled && this.isInstalled.FSO ) ? '1' : '0'}`
+        path: `/${global.UPDATE_ENDPOINT}?os=${os.release()}` + 
+        `&version=${global.VERSION}` + 
+        `&fso=${( this.isInstalled && this.isInstalled.FSO ) ? '1' : '0'}`
       };
       console.log( 'Getting launcher data from', options.path );
 
@@ -613,8 +615,8 @@ class FSOLauncher extends EventHandlers {
         } else {
           InstallerInstance.isFullInstall = true;
         }
-         // eslint-disable-next-line no-async-promise-executor
-         return new Promise( async ( resolve, reject ) => {
+        // eslint-disable-next-line no-async-promise-executor
+        return new Promise( async ( resolve, reject ) => {
           try {
             await InstallerInstance.install();
             if( Component == 'MacExtras' && this.isInstalled.Simitone ) {
@@ -702,19 +704,12 @@ class FSOLauncher extends EventHandlers {
             }
 
             if ( InstallDir ) {
-              InstallerInstance = new Installer(
-                InstallDir,
-                this
-              );
+              InstallerInstance = new Installer( InstallDir, this );
 
               const isInstalled = await InstallerInstance.isInstalledInPath();
 
               if ( isInstalled && !options.fullInstall && !options.dir && process.platform != 'darwin' ) {
-                return Modal.showAlreadyInstalled(
-                  this.getPrettyName( Component ),
-                  Component,
-                  InstallDir
-                );
+                return Modal.showAlreadyInstalled( this.getPrettyName( Component ), Component, InstallDir );
               }
 
               if ( !options.fullInstall ) {
@@ -759,9 +754,7 @@ class FSOLauncher extends EventHandlers {
             } catch ( e ) {
               reject( e );
             } finally {
-              setTimeout( () => {
-                this.setProgressBar( -1 );
-              }, 5000 );
+              setTimeout( () => this.setProgressBar( -1 ), 5000 );
             }
           }
         } );
@@ -785,9 +778,7 @@ class FSOLauncher extends EventHandlers {
             this.removeActiveTask( Component );
             return reject( e );
           } finally {
-            setTimeout( () => {
-              this.setProgressBar( -1 );
-            }, 5000 );
+            setTimeout( () => this.setProgressBar( -1 ), 5000 );
           }
         } );
     }
@@ -896,9 +887,7 @@ class FSOLauncher extends EventHandlers {
         this.editTTSMode( v[2] );
         break;
 
-      case v[1] == 'GraphicsMode' &&
-        v[2] == 'sw' &&
-        this.conf.Game.GraphicsMode != 'sw':
+      case v[1] == 'GraphicsMode' && v[2] == 'sw' && this.conf.Game.GraphicsMode != 'sw':
         if ( !this.isInstalled.FSO ) Modal.showNeedFSOTSO();
         else {
           try {
@@ -1157,7 +1146,7 @@ class FSOLauncher extends EventHandlers {
     require( 'fs-extra' ).writeFile(
       global.APPDATA + 'FSOLauncher.ini',
       require( 'ini' ).stringify( this.conf ),
-      _err => { setTimeout( () => { Toast.destroy(); }, 1500 ); }
+      _err => setTimeout( () => Toast.destroy(), 1500 )
     );
   }
   /**

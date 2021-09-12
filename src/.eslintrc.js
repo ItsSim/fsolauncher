@@ -3,7 +3,8 @@ module.exports = {
         "browser": true,
         "commonjs": true,
         "es6": true,
-        "node": true
+        "node": true,
+        "es2021": true
     },
     "extends": "eslint:recommended",
     "globals": {
@@ -11,7 +12,7 @@ module.exports = {
         "SharedArrayBuffer": "readonly"
     },
     "parserOptions": {
-        "ecmaVersion": 2018
+        "ecmaVersion": 12
     },
     "rules": {
         "no-unused-vars": [2, {"args": "after-used", "argsIgnorePattern": "^_"}],

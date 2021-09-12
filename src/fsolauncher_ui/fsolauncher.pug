@@ -13,7 +13,8 @@ html(class=PLATFORM + ' ' + LANGCODE)
         link(rel='stylesheet', href='./fsolauncher_styles/fsolauncher_themes/dark.css')
         link(rel='stylesheet', href='./fsolauncher_styles/fsolauncher_themes/halloween.css')
         link(rel='stylesheet', href='./fsolauncher_styles/fsolauncher_themes/simitone.css')
-    body(rmstr=READ_MORE, rss=RSS_URL)
+        link(rel='stylesheet', href='./fsolauncher_styles/fsolauncher_themes/summer2021.css')
+    body(readMoreString=READ_MORE, rss=RSS_URL, wsUrl=WS_URL, wsPort=WS_PORT)
         #launcher.not-installed
             .hint.arrow-left(hint-page='home', style='top:245px;left:255px')
                 h1 #{TOOLTIP_TITLE_1}
@@ -22,12 +23,9 @@ html(class=PLATFORM + ' ' + LANGCODE)
                 #no-internet-notice
                     i.material-icons(style='margin-top:-5px') wifi_off
                     |  #{INTERNET_TOASTT}
-                //<button onclick="localStorage.clear()">Clear Local Storage</button>
             #overlay
             ul#sidebar
-                // class="animated slideInLeft"
                 li#logo
-                    // class="animated slideInDown"
                     div
                 div#simitone-gradient
                 button.launch #{PLAY}
@@ -49,10 +47,6 @@ html(class=PLATFORM + ' ' + LANGCODE)
                 li(page-trigger='notifications')
                     i.material-icons.left notifications_none
                     |  #{NOTIFICATIONS}
-                //li(page-trigger='help')
-                    i.material-icons.left help_outline
-                    |  HELP
-                // <li page-trigger="repair"><i class="material-icons left">build</i> REPAIR</li>
 
                 div.bottom
                     li(page-trigger='simitone')
@@ -74,17 +68,8 @@ html(class=PLATFORM + ' ' + LANGCODE)
                         i.material-icons.left help_outline
                         |  #{ABOUT}
             #content
-                //
-                  <div id="exit">
-                  &times;
-                  </div>
                 #home-page.page(style='display:none')
                     h1.jumbotron
-                        #social-icons
-                            //
-                              <i class="fa fa-wordpress" aria-hidden="true"></i>
-                              <i class="fa fa-twitter" aria-hidden="true"></i>
-                              <i class="fa fa-facebook" aria-hidden="true"></i>
                         span #{HOME}
                         small #{HOME_DESCR}
                     .page-content(style='position:relative')
@@ -100,9 +85,7 @@ html(class=PLATFORM + ' ' + LANGCODE)
                             #rss-root
                         #did-you-know(style='display:none')
                             a.twitter-timeline(style='text-decoration:none;' data-height='490', data-theme='light', href=TW_URL) @FreeSOGame on Twitter
-                            //a.twitter-timeline.light(style='text-decoration:none;' data-height='500', data-theme='light', data-chrome='transparent', href=TW_URL) @FreeSOGame on Twitter
-                            script#tw(src='https://platform.twitter.com/widgets.js', charset='utf-8')
-                #installer-page.page(style='/**background-image:url(city.jpg); **/display:none;background-color:#fff')
+                #installer-page.page(style='display:none;background-color:#fff')
                     .hint.arrow-left(hint-page='installer', style='top:110px;left:375px')
                         h1 #{TOOLTIP_REMESH_TITLE}
                         span #{TOOLTIP_REMESH_DESCR}
@@ -142,11 +125,6 @@ html(class=PLATFORM + ' ' + LANGCODE)
                                         small(id='remeshinfo', style='font-size:14px;color:rgba(0,0,0,0.5);margin-top:5px;display:block;overflow:hidden') <i style="vertica-align:middle;float:left;margin-right:5px" class="material-icons">access_time</i> <span style="line-height:25px">#{UNKNOWN}</span>
                             div
                                 .item(install='FSO', style='background:url(fsolauncher_images/banner.jpg) #fff; background-position:center center; background-size:80%;background-repeat:no-repeat;')
-                                    //.hint.arrow-left(hint-page='installer', style='top:130px;right:25px')
-                                        h1 ALREADY HAVE FreeSO?
-                                        span
-                                            | Click here and choose your installation path. It will detect if it's installed there.
-
                                     .tag
                                         h1 #{INSTALLER_FSO_TITLE}
                                         span #{INSTALLER_FSO_DESCR}
@@ -203,12 +181,6 @@ html(class=PLATFORM + ' ' + LANGCODE)
                     .page-content
                         .form
                             h1 #{SETTINGS_LAUNCHER_H1}
-                            //div
-                                span #{SETTINGS_DN}
-                                select(option-id='Launcher.DesktopNotifications')
-                                    option(value='1') #{SETTINGS_ENABLED}
-                                    option(value='0') #{SETTINGS_DISABLED}
-                                small #{SETTINGS_DN_HINT}
                             div
                                 span #{SETTINGS_DL}
                                 select(option-id='Launcher.DirectLaunch')
@@ -219,11 +191,10 @@ html(class=PLATFORM + ' ' + LANGCODE)
                             div
                                 span #{SETTINGS_THEME}
                                 select(option-id='Launcher.Theme')
-                                    //option(value='halloween') Halloween
                                     option(value='simitone') Simitone
                                     option(value='open_beta') Open Beta
                                     option(value='turbo') Neon
-                                    //<option value="dark">Onyx</option>
+                                    option(value='summer2021') Sugar Storm
                                 small #{SETTINGS_THEME_HINT}
                             div
                                 span #{AFTER_X}
@@ -253,7 +224,6 @@ html(class=PLATFORM + ' ' + LANGCODE)
                                 select(option-id='Game.Language')
                                     option(value='en') English
                                     option(value='es') Español
-                                    //option(value='pt') Português
                                     option(value='it') Italiano
                                 small #{SETTINGS_LANG_HINT}
                         div(style='clear:both')
@@ -265,21 +235,7 @@ html(class=PLATFORM + ' ' + LANGCODE)
                                     option(value='0') #{SETTINGS_DISABLED}
                                     option(value='1') #{SETTINGS_ENABLED}
                                 small #{SETTINGS_AA_HINT}
-                            //div.notice(style='border-radius:6px;font-size:14px;')
-                                span(style='color:#fff') More languages coming soon...
-                            //div
-                                span #{SETTINGS_TTS}
-                                select(option-id='Game.TTS')
-                                    option(value='0') #{SETTINGS_DISABLED}
-                                    option(value='1') #{SETTINGS_ENABLED}
-                                small
-                                    | #{SETTINGS_TTS_HINT}
-                //#help-page.page(style='display:none')
-                    h1.jumbotron
-                        span HELP
-                        small Oh no! What do I do?
-                    .page-content
-                        p Coming soon...
+
                 #downloads-page.page(style='display:none')
                     h1.jumbotron
                         span #{DOWNLOADS}
@@ -289,8 +245,6 @@ html(class=PLATFORM + ' ' + LANGCODE)
                             i.material-icons(style='font-size:28px;margin-bottom:10px') get_app
                             br
                             span(style='color:rgba(0,0,0,0.4)') #{DOWNLOADS_EMPTY}
-                            //br
-                            //img(src='fsolauncher_images/fame.png')
                 #notifications-page.page(style='display:none')
                     h1.jumbotron
                         span #{NOTIFICATIONS}
@@ -309,6 +263,7 @@ html(class=PLATFORM + ' ' + LANGCODE)
                             block faq
                                 strong #{ABOUT_LAUNCHER_VERSION}
                                 p FreeSO Launcher #{LVERSION}
+                                    <br> Electron <span id="electron-version"></span>
                                 button#update-check(style='margin-bottom:20px')
                                     i.material-icons.left update
                                     |  #{ABOUT_CHECK}
@@ -376,4 +331,5 @@ html(class=PLATFORM + ' ' + LANGCODE)
                             p !{SIMITONE_FEATURES_2_DESCR}
         script(src='vendor/socket.io.min.js')
         script(src='vendor/howler.min.js')
+        script(src='vendor/purify.min.js')
         script(src='client.js')

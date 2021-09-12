@@ -1,13 +1,13 @@
 {
   "name": "fsolauncher",
   "productName": "FreeSO Launcher",
-  "version": "1.7.7",
+  "version": "1.8.0",
   "description": "Install, play, and configure FreeSO easily",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-packager . fsolauncher --asar.unpackDir=\"{export,fsolauncher_ui/fsolauncher_images,fsolauncher_ui/fsolauncher_sounds,fsolauncher_ui/fsolauncher_fonts}\" --platform=win32 --arch=ia32 --overwrite --electron-version=10.1.5 --version-string.FileDescription='FreeSO Launcher' --out ../release",
-    "builddarwin": "electron-packager . FreeSO\\ Launcher --icon=./beta.icns --asar.unpackDir=\"{export,fsolauncher_ui/fsolauncher_images,fsolauncher_ui/fsolauncher_sounds,fsolauncher_ui/fsolauncher_fonts}\" --platform=darwin --arch=all --overwrite --electron-version=10.1.5 --version-string.FileDescription='FreeSO Launcher' --out ../release && electron-installer-dmg ../release/FreeSO\\ Launcher-darwin-x64/FreeSO\\ Launcher.app FreeSO\\ Launcher --out=../release --icon=./beta.icns --background=./osx_dmg.png --title=FreeSO\\ Launcher --overwrite",
+    "build": "electron-packager . fsolauncher --asar.unpackDir=\"{export,fsolauncher_ui/fsolauncher_images,fsolauncher_ui/fsolauncher_sounds,fsolauncher_ui/fsolauncher_fonts}\" --platform=win32 --arch=ia32 --overwrite --electron-version=14.0.0 --version-string.FileDescription='FreeSO Launcher' --out ../release",
+    "builddarwin": "electron-packager . FreeSO\\ Launcher --icon=./beta.icns --asar.unpackDir=\"{export,fsolauncher_ui/fsolauncher_images,fsolauncher_ui/fsolauncher_sounds,fsolauncher_ui/fsolauncher_fonts}\" --platform=darwin --arch=all --overwrite --electron-version=14.0.0 --version-string.FileDescription='FreeSO Launcher' --out ../release && electron-installer-dmg ../release/FreeSO\\ Launcher-darwin-x64/FreeSO\\ Launcher.app FreeSO\\ Launcher --out=../release --icon=./beta.icns --background=./osx_dmg.png --title=FreeSO\\ Launcher --overwrite",
     "buildasar": "asar pack . \"../release/asar/app.asar\" --unpack-dir \"{export,fsolauncher_ui/fsolauncher_images,fsolauncher_ui/fsolauncher_sounds,fsolauncher_ui/fsolauncher_fonts}\""
   },
   "keywords": [
@@ -17,31 +17,25 @@
   "author": "FreeSO.org",
   "devDependencies": {
     "electron-installer-dmg": "^3.0.0",
-    "electron-packager": "^14.2.1",
+    "electron-packager": "^15.4.0",
     "electron-reload": "^1.5.0",
-    "eslint": "^6.7.1"
+    "electron": "^14.0.0",
+    "eslint": "^7.32.0",
+    "babel-eslint": "^10.1.0"
   },
   "dependencies": {
-    "cloudscraper": "^1.5.1",
     "deflate-js": "^0.2.3",
-    "electron-pug": "^1.5.1",
-    "find-process": "^1.4.3",
+    "electron-custom-notifications": "file:../vendor/electron-custom-notifications",
+    "electron-pug": "^2.0.0",
     "fix-path": "^3.0.0",
-    "follow-redirects": "^1.13.0",
-    "fs-extra": "^9.0.1",
-    "ini": "^1.3.5",
+    "follow-redirects": "^1.14.3",
+    "fs-extra": "^10.0.0",
+    "ini": "^2.0.0",
     "os-locale": "^5.0.0",
-    "rss-parser": "^2.7.0",
+    "rss-parser": "^3.12.0",
     "sudo-prompt": "^9.2.1",
-    "v8-compile-cache": "^2.1.1",
+    "v8-compile-cache": "^2.3.0",
     "winreg": "^1.2.4",
     "yauzl": "^2.10.0"
-  },
-  "prettier": {
-    "trailingComma": "es5",
-    "tabWidth": 2,
-    "semi": true,
-    "singleQuote": true,
-    "bracketSpacing": true
   }
 }

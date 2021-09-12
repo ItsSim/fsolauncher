@@ -19,7 +19,7 @@ global.WEBSERVICE = '173.212.246.204';
 global.HOMEDIR = require( "os" ).homedir();
 global.willQuit = false;
 
-global.SOCKET_ENDPOINT = '30001';
+global.SOCKET_ENDPOINT = 30001;
 global.REMESH_ENDPOINT = 'RemeshPackage';
 global.UPDATE_ENDPOINT = 'UpdateCheck';
 
@@ -44,8 +44,8 @@ global.locale = Object.assign( UIText.en, global.locale );
 global.locale.LVERSION = global.VERSION;
 global.locale.PLATFORM = process.platform;
 global.locale.LANGCODE = code;
-
-require( 'electron-pug' )( { pretty: false }, global.locale );
+global.locale.WS_PORT  = global.SOCKET_ENDPOINT;
+global.locale.WS_URL   = global.WEBSERVICE;
 
 try {
   conf = ini.parse( fs.readFileSync( global.APPDATA + 'FSOLauncher.ini', 'utf-8' ) );
@@ -68,6 +68,7 @@ try {
 }
 
 function CreateWindow() {
+  require( 'electron-pug' )( { pretty: false }, global.locale );
   if( process.platform == 'darwin' ) {
     const darwinAppMenu = require( './darwin-app-menu' );
     Menu.setApplicationMenu( Menu.buildFromTemplate( darwinAppMenu( app.getName() ) ) );
@@ -97,15 +98,17 @@ function CreateWindow() {
   //options.icon = process.platform == 'darwin' ? 'beta.icns' : 'beta.ico';
   options.webPreferences = {
     nodeIntegration: true,
-    enableRemoteModule: true
+    contextIsolation: false,
   }; // Since we're not displaying untrusted content
   // (all links are opened in a real browser window), we can enable this.
 
   Window = new BrowserWindow( options );
-
+// when coming back form no internet blog posts dont reload
   Window.setMenu( null );
-  //Window.openDevTools( { mode: 'detach' } );
+  Window.openDevTools( { mode: 'detach' } );
   Window.loadURL( `file://${__dirname}/fsolauncher_ui/fsolauncher.pug` );
+
+  Window.on( 'restore', _e => Window.setSize( width, height ) );
 
   launcher = new FSOLauncher( Window, conf );
 

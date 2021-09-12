@@ -818,6 +818,13 @@ select {
   position: relative;
 }
 
+#rss .rss-entry p {
+  padding: 5px;
+  font-size: 16px;
+  line-height: 22px;
+  text-align: justify;
+}
+
 #rss .rss-entry:not(:last-child):before {
   content: '';
   position: absolute;
@@ -829,6 +836,8 @@ select {
   margin: auto;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
+
+#rss .rss-entry p:last-child { display:none; }
 
 #simtime-container {
   border-radius: 6px;

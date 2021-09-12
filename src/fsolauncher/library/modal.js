@@ -221,6 +221,7 @@ class Modal {
    * @memberof Modal
    */
   static showChooseDirectory( ComponentName, Window ) {
+    // eslint-disable-next-line no-async-promise-executor
     return new Promise( async( resolve, _reject ) => {
       let defaultPath = null;
       if( process.platform === "win32" ){

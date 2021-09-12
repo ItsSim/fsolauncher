@@ -1,0 +1,217 @@
+.summer2021 {
+}
+
+.summer2021 #sidebar {
+    background-image: url(../../fsolauncher_images/sidebar-nologo.png)!important
+}
+
+.summer2021 li#logo {
+    background-image: url(../../fsolauncher_images/freeso-summer.gif)!important;
+    background-size: contain!important;
+    width: 100%!important;
+    height: 200px!important;
+    margin-top: 0px!important;
+    margin-bottom: -60px!important;
+}
+
+.summer2021 #sidebar li {
+    color:#6D4B22!important;
+    transition: none!important;
+}
+
+.summer2021 #sidebar li:not(#logo).active,
+.summer2021 #sidebar li:not(#logo):hover {
+    color:#6D4B22!important;
+    border: 0!important;
+    background-image:url(../../fsolauncher_images/button-on-summer.png)!important;
+    background-position: 16px 4px!important;
+    background-repeat: no-repeat
+}
+
+.summer2021 #sidebar .bottom li {
+  margin-bottom:2px!important;
+  border:0!important;
+}
+
+.summer2021 #simtime, 
+.summer2021 #simtime-container i.material-icons {
+    color:#6D4B22!important;
+}
+
+.summer2021 #logo:after {
+    content: '';
+}
+
+.summer2021 button.launch {
+    background: none!important;
+    box-shadow: none!important;
+    background-image: url(../../fsolauncher_images/play-summer.gif)!important;
+    background-position:-5px -5px!important;
+    text-indent: -9999px; 
+}
+
+.summer2021 .jumbotron {
+    background: none!important;
+    background: url(https://transparenttextures.com/patterns/dark-dotted-2.png), url(../../fsolauncher_images/header-summer.png)!important;
+    color: #F5EDD0 !important;
+    text-shadow: 0 0 8px #804900;
+}
+
+.summer2021 #launcher {
+    background:none !important;
+    background-image: url(../../fsolauncher_images/body-summer.png)!important;
+    background-size:cover!important;
+}
+
+.summer2021 #rss .rss-entry > h1 {
+    color: #583d1ee0;
+}
+
+.summer2021 #rss .rss-entry p {
+    color:#8c683f;
+}
+
+.summer2021 #rss .rss-entry span {
+    color:#8c683f;
+}
+
+.summer2021 .button, 
+.summer2021 button {
+  color:#ffffd6 !important;
+  background-image: linear-gradient(#D7647F, #F29CA5 10%, #c15366)!important;
+}
+
+.summer2021 #did-you-know {
+    background: transparent;
+}
+
+.summer2021 ::-webkit-scrollbar-thumb {
+  background: rgb(105 82 50);
+}
+
+.summer2021 ::-webkit-scrollbar-thumb:active {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.summer2021 ::-webkit-scrollbar-track {
+  background: #c2935b66;
+}
+
+.summer2021 #launcher #sidebar li:not(#logo):hover path,
+.summer2021 #launcher #sidebar li.active path {
+  fill: #6D4B22;
+}
+
+.summer2021 #launcher #sidebar li path {
+  fill: #6D4B22;
+}
+
+.summer2021 #launcher #sidebar li:hover {
+  padding-left: 24px!important;
+}
+
+.summer2021 div.page p {
+  color:#8c683f;
+}
+
+.summer2021 div.page strong {
+  color:#845D2F;
+}
+
+.summer2021 .alt-content span,
+.summer2021 .alt-content i {
+  color:#845d2f9c !important;
+}
+
+.summer2021 .page-content h1 {
+  color: #845D2F!important;
+}
+
+.summer2021 #settings-page .form *:not(select) {
+  color: #845d2f !important;
+}
+
+.summer2021 select {
+    color:#ffffd6 !important;
+    -webkit-appearance: none;
+    background-image: url(../../fsolauncher_images/15xvbd5.png), -webkit-linear-gradient(#D7647F, #F29CA5 10%, #c15366)!important;
+}
+
+.summer2021 #notifications-page div.notification {
+  background:#f3ebd0;
+  color: #845d2f9c;
+}
+
+.summer2021 #notifications-page div.notification p {
+  color: #4f2f099c;
+}
+
+.summer2021 .modal h1 {
+  color:#D7647F;
+}
+
+.summer2021 .tick.installed {
+  color:#ffffd6 !important;
+  background-image: linear-gradient(#D7647F, #F29CA5 10%, #c15366)!important;
+}
+
+.summer2021 #downloads > div .tag h1 {
+  color: #D7647F!important;
+}
+
+.summer2021 .stag.orange {
+  background-color:#58b371;
+  color:#ffffff;
+}
+
+.summer2021 #full-install * {
+  color:#fff!important;
+}
+
+.summer2021 .loading .progress {
+      background-image: -webkit-linear-gradient( 
+-45deg, 
+transparent 33%, 
+rgba(255, 255, 255, 0.3) 33%, 
+rgba(255, 255, 255, 0.3) 66%,
+ transparent 66% ), 
+ -webkit-linear-gradient(top, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), 
+ -webkit-linear-gradient(left, #D76881, #D76881);
+}
+
+.summer2021 .download.stopped .loading .progress {
+  background: #D76881;
+}
+
+.summer2021 #downloads-page div.download {
+    background:#f3ebd0;
+  color: #845d2f9c;
+}
+
+.summer2021 #downloads-page div.download .info {
+  color:#a53750 !important;
+}
+
+.summer2021 #downloads-page div.download h1 {
+  color: #ec3962bd !important;
+  font-family: Fredoka One;
+  font-weight: normal!important;
+}
+
+.summer2021 #downloads-page div.download {
+  border-color: #ff691f29 ;
+}
+
+.summer2021 #downloads-page div.download span {
+  color:#845d2fdb;
+}
+
+.summer2021 #launcher #content #full-install {
+  background: none!important;
+  background: url(../../fsolauncher_images/fso-summer-castle.png) no-repeat!important;
+  background-position:-300px!important;
+} 
+
+.summer2021 #downloads-page div.download .loading {
+  background:#dfdfdf!important;
+}
