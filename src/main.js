@@ -103,9 +103,9 @@ function CreateWindow() {
   // (all links are opened in a real browser window), we can enable this.
 
   Window = new BrowserWindow( options );
-// when coming back form no internet blog posts dont reload
+
   Window.setMenu( null );
-  Window.openDevTools( { mode: 'detach' } );
+  // Window.openDevTools( { mode: 'detach' } );
   Window.loadURL( `file://${__dirname}/fsolauncher_ui/fsolauncher.pug` );
 
   Window.on( 'restore', _e => Window.setSize( width, height ) );
