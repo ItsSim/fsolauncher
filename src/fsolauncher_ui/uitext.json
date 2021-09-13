@@ -1249,7 +1249,7 @@
     "INS_FINISHED_LONG": "FreeSO is geïnstalleerd en is klaar voor gebruik!",
     "INS_FSO": "FreeSO Installeren...",
     "INS_IN": "Installeren in",
-    "INS_INFO": "Ga voor meer gedetailleerde informatie over de installatie naar het tabblad <strong style='cursor:pointer' onclick='FSOLauncher.changePage(\"downloads\")'>downloads</strong> tab.",
+    "INS_INFO": "Ga voor meer gedetailleerde informatie over de installatie naar het tabblad <strong style='cursor:pointer' onclick='setCurrentPage(\"downloads\")'>downloads</strong> tab.",
     "INS_MONO": "Mono Framework Installeren...",
     "INS_MONO_DESCR_LONG": " Mono runtime op uw systeem installeren, een ogenblik geduld...",
     "INS_MONO_WINDOW": "The Mono Runtime installatieprogramma is gestart.",
