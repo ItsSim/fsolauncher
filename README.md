@@ -1,8 +1,7 @@
-## Repo soon to be archived
-The next generation version of the launcher [is coming soon](https://github.com/ItsSim/fsolauncher).
-
 # FreeSO Launcher
 The official FreeSO Launcher available for Windows and Mac OS X.
+
+![image](https://i.imgur.com/uRjWpfq.png)
 ![image](https://i.imgur.com/59YUj54.png)
 ![image](https://i.imgur.com/dPRDgHh.jpg)
 ![image](https://i.imgur.com/F5t1tf0.png)
