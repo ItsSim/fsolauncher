@@ -215,3 +215,7 @@ rgba(255, 255, 255, 0.3) 66%,
 .summer2021 #downloads-page div.download .loading {
   background:#dfdfdf!important;
 }
+
+.summer2021 .hint h1 {
+  color: #fff!important;
+}
