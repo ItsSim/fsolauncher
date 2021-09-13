@@ -3,7 +3,7 @@
 
 #define MyAppName "FreeSO Launcher"
 ; App Version should match the one in package.json.
-#define MyAppVersion "1.7.7" 
+#define MyAppVersion "1.8.1" 
 #define MyAppPublisher "FreeSO.org"
 #define MyAppURL "http://freeso.org"
 #define MyAppExeName "fsolauncher.exe"
@@ -25,7 +25,7 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-AppCopyright=Copyright (C) 2020 FreeSO.org. All rights reserved.
+AppCopyright=Copyright (C) 2021 FreeSO.org. All rights reserved.
 DefaultDirName={pf}\{#MyAppName}
 DisableProgramGroupPage=yes
 OutputDir=.

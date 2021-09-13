@@ -1,7 +1,9 @@
-Version: 2020 1.7.x
+Version: 2020 1.8.x
 Author: Sim
 
 Changelog:
+- 2021.09.13: Updated NL language.
+- 2021.09.12: Updated Electron, new theme, added NL language, misc. improvements.
 - 2020.10.31: Updated Electron and dependencies.
 - 2020.09.05: Added Russian and Polish launcher languages, adjusted fonts.
 - 2020.06.13: In-game clock, style changes.
@@ -29,7 +31,7 @@ Changelog:
 
 Thank you for downloading the official FreeSO Launcher.
 This program was made using:
-- Electron 10.1.5
+- Electron 11.5.0
 
 Upon installing this software, you understand and accept the following:
 * This program does not include a copy of The Sims Online or any other type of content of EA IP. It downloads everything needed from Archive.org upon the user’s request through the Installer tab.
@@ -45,6 +47,7 @@ Special Thanks to:
 - Maria: FreeSO Admin/Collaborator
 - Alven: Russian Translator
 - Emiloowski: Polish Translator
+- Seger#2027: Dutch Translator
 
 Contact:
 - Discord: Sim#0046 
