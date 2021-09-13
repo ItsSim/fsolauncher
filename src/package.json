@@ -25,7 +25,6 @@
   },
   "dependencies": {
     "deflate-js": "^0.2.3",
-    "electron-custom-notifications": "file:../vendor/electron-custom-notifications",
     "electron-pug": "^2.0.0",
     "fix-path": "^3.0.0",
     "follow-redirects": "^1.14.3",
