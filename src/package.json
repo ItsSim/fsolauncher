@@ -24,6 +24,7 @@
     "babel-eslint": "^10.1.0"
   },
   "dependencies": {
+    "electron-custom-notifications": "file:../vendor/electron-custom-notifications",
     "deflate-js": "^0.2.3",
     "electron-pug": "^2.0.0",
     "fix-path": "^3.0.0",
