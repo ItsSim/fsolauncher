@@ -47,7 +47,7 @@ Special Thanks to:
 - Maria: FreeSO Admin/Collaborator
 - Alven: Russian Translator
 - Emiloowski: Polish Translator
-- Seger#2027: Dutch Translator
+- Seger: Dutch Translator
 
 Contact:
 - Discord: Sim#0046 
