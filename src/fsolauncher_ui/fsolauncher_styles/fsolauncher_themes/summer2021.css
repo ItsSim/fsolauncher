@@ -52,7 +52,7 @@
 
 .summer2021 .jumbotron {
     background: none!important;
-    background: url(https://transparenttextures.com/patterns/dark-dotted-2.png), url(../../fsolauncher_images/header-summer.png)!important;
+    background: url(../../fsolauncher_images/dark-dotted-2.png), url(../../fsolauncher_images/header-summer.png)!important;
     color: #F5EDD0 !important;
     text-shadow: 0 0 8px #804900;
 }
