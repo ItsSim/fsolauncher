@@ -1,10 +1,10 @@
-const Modal = require( './library/modal' ),
-  RendererEvent = require( './library/renderer-event' )
-  //FSODetector = require( './fsodetector' );
+const FSOLauncher = require('./fsolauncher'),
+  Modal = require( './library/modal' ),
+  RendererEvent = require( './library/renderer-event' );
 /**
  * Handles all events from the client.
  *
- * @class Events
+ * @class EventHandlers
  */
 class EventHandlers {
   /**
@@ -12,7 +12,13 @@ class EventHandlers {
    *
    * @memberof Events
    */
-  defineEvents() {
+  defineEvents( fsolauncher ) {
+    /**
+     * The launcher instance.
+     * @type {FSOLauncher}
+     */
+    this.fsolauncher = fsolauncher;
+
     const onInitDOM                   = new RendererEvent( 'INIT_DOM' );
     const onInstall                   = new RendererEvent( 'INSTALL' );
     const onSetConfiguration          = new RendererEvent( 'SET_CONFIGURATION' );
@@ -33,7 +39,6 @@ class EventHandlers {
     const onFTPTSOResponse            = new RendererEvent( 'FTP_TSOResponse' );
     const onCheckSimitoneRequirements = new RendererEvent( 'CHECK_SIMITONE' );
     const onInstallSimitoneUpdate     = new RendererEvent( 'INSTALL_SIMITONE_UPDATE' );
-    const onDetectedPathConfirm       = new RendererEvent( 'FSODETECTOR_CONFIRM' );
 
     onInitDOM
       .onFire( this.onInitDOM.bind( this ) );
@@ -75,8 +80,6 @@ class EventHandlers {
       .onFire( this.onCheckSimitoneRequirements.bind( this ) );
     onInstallSimitoneUpdate
       .onFire( this.onInstallSimitoneUpdate.bind( this ) );
-    onDetectedPathConfirm
-      .onFire( this.onDetectedPathConfirm.bind( this ) );
   }
   /**
    * Received when the user request a Simitone update.
@@ -84,7 +87,7 @@ class EventHandlers {
    * @memberof EventHandlers
    */
   onInstallSimitoneUpdate() {
-    this.install( 'Simitone', { dir: this.isInstalled.Simitone } );
+    this.fsolauncher.install( 'Simitone', { dir: this.fsolauncher.isInstalled.Simitone } );
   }
   /**
    * Received when the renderer process asks the main process to check for 
@@ -93,7 +96,7 @@ class EventHandlers {
    * @memberof EventHandlers
    */
   onCheckSimitoneRequirements() {
-    this.checkSimitoneRequirements();
+    this.fsolauncher.checkSimitoneRequirements();
   }
   /**
    * Fires when the user requests an alternative TSO installation source.
@@ -114,11 +117,12 @@ class EventHandlers {
    */
   onFTPTSOResponse( e, yes ) {
     if ( yes ) {
-      this.install( 'TSO', {
+      const params = {
         fullInstall: false,
         tsoInstaller: 'WebArchiveFTPInstaller',
         override: false
-      } );
+      };
+      this.fsolauncher.install( 'TSO', params );
     }
   }
   /**
@@ -127,36 +131,22 @@ class EventHandlers {
    * @memberof Events
    */
   onInitDOM() {
-    this.View.setTheme( this.conf.Launcher.Theme );
+    this.fsolauncher.View.setTheme( this.fsolauncher.conf.Launcher.Theme );
 
-    this.View.restoreConfiguration( this.conf );
+    this.fsolauncher.View.restoreConfiguration( this.fsolauncher.conf );
 
-    this.checkRemeshInfo();
+    this.fsolauncher.checkRemeshInfo();
 
-    this.updateNetRequiredUI( true );
+    this.fsolauncher.updateNetRequiredUI( true );
 
     //this.checkLauncherUpdates(true);
-    this.Window.focus();
-    this.updateInstalledPrograms();
+    this.fsolauncher.Window.focus();
+    this.fsolauncher.updateInstalledPrograms();
 
     if( process.platform == "win32" ) {
       //this.FSODetector = new FSODetector( this.onDetectorResponse.bind( this ) );
       //this.FSODetector.start();
     }
-  }
-
-  async onDetectorResponse( dir ) {
-    dir = global.normalizePathSlashes( dir )
-    const reg_dir = global.normalizePathSlashes( this.isInstalled.FSO )
-
-    console.log( 'FSODetector:', reg_dir, dir );
-    if( reg_dir == dir ) {
-      dir = null;
-    }
-    this.View.sendDetectorResponse( dir );
-  }
-  onDetectedPathConfirm( e, dir ) {
-    this.changeFSOPath( dir );
   }
 
   /**
@@ -167,7 +157,7 @@ class EventHandlers {
    * @memberof Events
    */
   onSocketMessage( e, Response ) {
-    if ( this.conf.Launcher.DesktopNotifications === '1' ) {
+    if ( this.fsolauncher.conf.Launcher.DesktopNotifications === '1' ) {
       Modal.sendNotification( 'FreeSO Announcement', Response[0], Response[1] );
     }
   }
@@ -179,7 +169,7 @@ class EventHandlers {
    * @memberof Events
    */
   onInstall( e, Component ) {
-    this.fireInstallModal( Component );
+    this.fsolauncher.fireInstallModal( Component );
   }
   /**
    * When the configuration settings are altered.
@@ -188,7 +178,7 @@ class EventHandlers {
    * @param {*} v 2D Array with key and value.
    */
   onSetConfiguration( e, v ) {
-    this.setConfiguration( v );
+    this.fsolauncher.setConfiguration( v );
   }
   /**
    * When the user needs to be redirected.
@@ -199,7 +189,7 @@ class EventHandlers {
    */
   onInstallerRedirect( e, yes ) {
     if ( yes ) {
-      this.View.changePage( 'installer' );
+      this.fsolauncher.View.changePage( 'installer' );
     }
   }
   /**
@@ -213,7 +203,7 @@ class EventHandlers {
    */
   onInstallComponent( e, yes, Component, options ) {
     if ( yes ) {
-      this.install( Component, options );
+      this.fsolauncher.install( Component, options );
     }
   }
   /**
@@ -234,7 +224,7 @@ class EventHandlers {
    * @memberof Events
    */
   onPlay( e, useVolcanic ) {
-    this.play( useVolcanic );
+    this.fsolauncher.play( useVolcanic );
   }
   /**
    * When the user wants to launch Volcanic.
@@ -244,15 +234,15 @@ class EventHandlers {
    */
   onPlayVolcanic( e, yes ) {
     if ( yes ) {
-      this.launchGame( true );
+      this.fsolauncher.launchGame( true );
     }
   }
   onPlaySimitone( e, useVolcanic ) {
-    this.play( useVolcanic, true );
+    this.fsolauncher.play( useVolcanic, true );
   }
   onPlayVolcanicSimitone( e, yes ) {
     if ( yes ) {
-      this.launchGame( true, true );
+      this.fsolauncher.launchGame( true, true );
     }
   }
   /**
@@ -262,10 +252,10 @@ class EventHandlers {
    * @memberof Events
    */
   onCheckUpdates() {
-    if ( this.ActiveTasks.length > 0 ) {
+    if ( this.fsolauncher.ActiveTasks.length > 0 ) {
       return Modal.showAlreadyInstalling();
     }
-    this.checkLauncherUpdates();
+    this.fsolauncher.checkLauncherUpdates();
   }
   /**
    * Update dialog callback.
@@ -276,7 +266,7 @@ class EventHandlers {
    */
   onInstallUpdate( e, yes ) {
     if ( yes ) {
-      this.installLauncherUpdate();
+      this.fsolauncher.installLauncherUpdate();
     }
   }
   /**
@@ -285,8 +275,8 @@ class EventHandlers {
    * @memberof Events
    */
   onFullInstall() {
-    if ( this.ActiveTasks.length === 0 ) {
-      if ( this.hasInternet ) Modal.showFullInstall();
+    if ( this.fsolauncher.ActiveTasks.length === 0 ) {
+      if ( this.fsolauncher.hasInternet ) Modal.showFullInstall();
       else Modal.showNoInternetFullInstall();
     } else {
       Modal.showAlreadyInstalling();
@@ -301,8 +291,8 @@ class EventHandlers {
    */
   onFullInstallConfirm( e, yes ) {
     if ( yes ) {
-      this.addActiveTask( 'FULL' );
-      this.runFullInstaller();
+      this.fsolauncher.addActiveTask( 'FULL' );
+      this.fsolauncher.runFullInstaller();
     }
   }
   /**
@@ -317,9 +307,9 @@ class EventHandlers {
     options = JSON.parse( options );
 
     if ( yes ) {
-      this.changeGamePath( options );
+      this.fsolauncher.changeGamePath( options );
     } else {
-      this.removeActiveTask( options.component );
+      this.fsolauncher.removeActiveTask( options.component );
     }
   }
 }

@@ -275,6 +275,15 @@ class IPCBridge {
       this.Window.webContents.send( 'CONSOLE_LOG', str );
     } catch ( e ) {}
   }
+  /**
+   * Sets the Simitone Version for the UI.
+   * @param {*} v Simitone version
+   */
+  setSimitoneVersion( v ) {
+    try {
+      this.Window.webContents.send( 'SIMITONE_SET_VER', v );
+    } catch ( e ) {}
+  }
 }
 
 module.exports = IPCBridge;

@@ -641,6 +641,13 @@ var setCurrentPage;
     simitoneSuggestedUpdate = b;
     simitoneShouldUpdate();
   } );
+  onMessage( 'SIMITONE_SET_VER', ( a, b ) => {
+    if( b ) {
+      $( '#simitone-ver' ).textContent = `(Installed: ${b})`;
+    } else {
+      $( '#simitone-ver' ).textContent = "";
+    }
+  } );
   // SET_THEME
   onMessage( 'SET_THEME', ( a, themeId ) => setTheme( themeId ) );
   // SET_TIP

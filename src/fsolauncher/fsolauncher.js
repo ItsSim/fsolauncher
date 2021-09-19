@@ -8,7 +8,7 @@ const ToastComponent = require( './library/toast' );
  * @class FSOLauncher
  * @extends {Events}
  */
-class FSOLauncher extends EventHandlers {
+class FSOLauncher {
   /**
    * Creates an instance of FSOLauncher.
    * @param {any} Window
@@ -16,8 +16,6 @@ class FSOLauncher extends EventHandlers {
    * @memberof FSOLauncher
    */
   constructor( Window, conf ) {
-    super();
-
     this.Window = Window;
     this.conf = conf;
     this.minimizeReminder = false;
@@ -52,7 +50,9 @@ class FSOLauncher extends EventHandlers {
     this.checkUpdatesRecursive();
     this.updateTipRecursive();
     this.updateNetRequiredUIRecursive( true );
-    this.defineEvents();
+    
+    this.events = new EventHandlers();
+    this.events.defineEvents( this );
   }
   /**
    * Reads the registry and updates the programs list.
@@ -397,6 +397,11 @@ class FSOLauncher extends EventHandlers {
     const ts1ccStatus = await Registry.get( 'TS1', Registry.getTS1Path() );
     let simitoneUpdateStatus = null;
     if( simitoneStatus.isInstalled ) {
+      if( this.conf.Game && this.conf.Game.SimitoneVersion ) {
+        this.View.setSimitoneVersion( this.conf.Game.SimitoneVersion );
+      } else {
+        this.View.setSimitoneVersion( null );
+      }
       simitoneUpdateStatus = await this.getSimitoneReleaseInfo();
       if( this.conf.Game.SimitoneVersion != simitoneUpdateStatus.tag_name ) {
         this.View.sendSimitoneShouldUpdate( simitoneUpdateStatus.tag_name );
@@ -404,8 +409,10 @@ class FSOLauncher extends EventHandlers {
         this.View.sendSimitoneShouldUpdate( false );
       }
     } else {
+      this.View.setSimitoneVersion( null );
       this.View.sendSimitoneShouldUpdate( false );
     }
+    
     this.isInstalled['Simitone'] = simitoneStatus.isInstalled;
     this.isInstalled['TS1'] = ts1ccStatus.isInstalled;
     this.View.sendInstalledPrograms( this.isInstalled );

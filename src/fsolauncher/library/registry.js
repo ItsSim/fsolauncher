@@ -44,7 +44,8 @@ class Registry {
       locals.push( 'C:/Program Files/The Sims Online' ); 
     }
     if( program == 'Simitone' ) {
-      locals.push( 'C:/Program Files/Simitone' );
+      locals.push( 'C:/Program Files/Simitone for Windows' );
+      locals.push( 'C:/Program Files (x86)/Simitone for Windows' );
     }
     if( program == 'OpenAL' ) {
       locals.push( 'C:/Program Files (x86)/OpenAL' );
