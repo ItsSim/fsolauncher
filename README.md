@@ -6,6 +6,14 @@ The official FreeSO Launcher available for Windows and Mac OS X.
 ![image](https://i.imgur.com/uRjWpfq.png)<!-- ![image](https://i.imgur.com/dPRDgHh.jpg) -->
 ![image](https://i.imgur.com/F5t1tf0.png)
 
+## Run from Source
+Clone the repo and then:
+```
+cd src
+npm i 
+npm run start
+```
+
 ## Latest Releases
 [Microsoft Windows 7 or later](https://beta.freeso.org/FreeSO%20Launcher%20Setup.exe) <br/>
 [Mac OS X 10.10 (Yosemite) or later](https://beta.freeso.org/fsolauncher.dmg)
