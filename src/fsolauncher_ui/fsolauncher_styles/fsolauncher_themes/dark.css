@@ -298,3 +298,11 @@ background-image: url(../../fsolauncher_images/15xvbd5.png),
 .dark .hint {
   color: #10171E!important
 }
+.dark #downloads > div > .item[install='Mono'] {
+  background-size: 40% !important;
+  background-color: #10171E!important
+}
+
+.dark #downloads > div > .item[install='Mono']:hover {
+  background-size: 45% !important;
+}
