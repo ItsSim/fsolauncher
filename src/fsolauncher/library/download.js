@@ -59,6 +59,7 @@ module.exports = function makeDownload() {
       _error = e;
       _failed = true;
       _request.abort();
+      console.log( 'Download error:', e );
       events.emit( 'error', e.message );
       _onEnd();
     };

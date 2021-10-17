@@ -143,7 +143,7 @@ function CreateWindow() {
       .updateInstalledPrograms()
       .then( () => {
         if ( conf.Launcher.DirectLaunch === '1' && launcher.isInstalled.FSO ) {
-          launcher.onPlay();
+          launcher.events.onPlay();
           if( process.platform == 'darwin' ) {
             Window.show();
           }
@@ -152,6 +152,7 @@ function CreateWindow() {
         }
       } )
       .catch( _err => {
+        console.log( _err );
         Window.show();
       } );
   } );
