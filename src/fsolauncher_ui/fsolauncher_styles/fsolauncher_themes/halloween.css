@@ -405,10 +405,6 @@ background-image: url(../../fsolauncher_images/15xvbd5.png),
 }
 
 .halloween #downloads > div > .item[install='Mono'] {
-  background-size: 40% !important;
-  background-color: #10171E!important
-}
-
-.halloween #downloads > div > .item[install='Mono']:hover {
-  background-size: 45% !important;
+  background-color: #10171E!important;
+  background-image:url(../../fsolauncher_images/mono_dark.png)!important
 }
