@@ -14,7 +14,7 @@ html(class=PLATFORM + ' ' + LANGCODE)
         link(rel='stylesheet', href='./fsolauncher_styles/fsolauncher_themes/halloween.css')
         link(rel='stylesheet', href='./fsolauncher_styles/fsolauncher_themes/simitone.css')
         link(rel='stylesheet', href='./fsolauncher_styles/fsolauncher_themes/summer2021.css')
-    body(readMoreString=READ_MORE, rss=RSS_URL, wsUrl=WS_URL, wsPort=WS_PORT)
+    body(readMoreString=READ_MORE, rss=RSS_URL, wsUrl=WS_URL, wsPort=WS_PORT, twUrl=TW_URL)
         #launcher.not-installed
             .hint.arrow-left(hint-page='home', style='top:245px;left:255px')
                 h1 #{TOOLTIP_TITLE_1}
@@ -84,7 +84,6 @@ html(class=PLATFORM + ' ' + LANGCODE)
                                 | #{INTERNET_REQ}
                             #rss-root
                         #did-you-know(style='display:none')
-                            a.twitter-timeline(style='text-decoration:none;' data-height='490', data-theme='light', href=TW_URL) @FreeSOGame on Twitter
                 #installer-page.page(style='display:none;background-color:#fff')
                     .hint.arrow-left(hint-page='installer', style='top:110px;left:375px')
                         h1 #{TOOLTIP_REMESH_TITLE}
@@ -193,6 +192,7 @@ html(class=PLATFORM + ' ' + LANGCODE)
                                 select(option-id='Launcher.Theme')
                                     option(value='simitone') Simitone
                                     option(value='open_beta') Open Beta
+                                    option(value='dark') Open Beta (Dark)
                                     option(value='turbo') Neon
                                     option(value='summer2021') Sugar Storm
                                 small #{SETTINGS_THEME_HINT}

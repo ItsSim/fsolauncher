@@ -18,6 +18,8 @@ DOMPurify.addHook( 'afterSanitizeAttributes', node => {
   }
 } );
 
+var darkThemes = [ 'halloween', 'dark' ];
+
 // Expose setCurrentPage to the DOM.
 var setCurrentPage;
 
@@ -159,7 +161,7 @@ var setCurrentPage;
    * Changes the launcher theme.
    * @param {string} theme The theme id.
    */
-  var setTheme = theme => {
+  var setTheme = async theme => {
     var date = new Date();
     var m = date.getMonth();
     var d = date.getDate(); 
@@ -168,7 +170,7 @@ var setCurrentPage;
     if( theme != 'simitone' ) {
       // Halloween theme activates in October.
       if ( ( m == 9 && d >= 15 && d <= 31 ) || ( m == 10 && d == 1 ) ) {
-        theme = 'halloween';
+        //theme = 'halloween';
       }
 
       // Summer 2021 theme.
@@ -178,6 +180,12 @@ var setCurrentPage;
     }
 
     $( 'body' ).className = theme;
+
+    try {
+      await loadTwitter();
+    } catch( terr ) {
+      console.log( 'Error loading Twitter:', terr );
+    }
   }
 
   /**
@@ -314,11 +322,24 @@ var setCurrentPage;
   var loadTwitter = () => {
     console.log( 'Loading Twitter...' );
     return new Promise( ( resolve, reject ) => {
+      $( '#did-you-know' ).innerHTML = '';
+      var currentTheme = $( 'body' ).className;
+      var twitterTheme = darkThemes.includes( currentTheme ) ? 'dark' : 'light';
+      var $preloadElement = $c( 'a' );
+        $preloadElement.className = 'twitter-timeline';
+        $preloadElement.style = 'text-decoration:none;';
+        $preloadElement.setAttribute( 'data-height', '490' );
+        if( currentTheme != 'summer2021' ) {
+          $preloadElement.setAttribute( 'data-chrome', 'transparent' );
+        }
+        $preloadElement.setAttribute( 'data-theme', twitterTheme );
+        $preloadElement.setAttribute( 'href', $( 'body' ).getAttribute( 'twUrl' ) );
+        $preloadElement.innerHTML = '@FreeSOGame on Twitter';
+        $( '#did-you-know' ).append( $preloadElement );
       var $prevWidget = $( '#tw' );
       if( $prevWidget ) {
         $prevWidget.parentNode.removeChild( $prevWidget );
       }
-  
       var $head = $( 'head' );
       var $script = $c( 'script' );
           $script.setAttribute( 'id', 'tw' );
@@ -342,7 +363,10 @@ var setCurrentPage;
     if( pageId == 'simitone' ) {
       prevTheme = $( 'body' ).className;
 
-      setTheme( 'simitone' );
+      if( ! darkThemes.includes( prevTheme ) ) { // Stay in dark theme.
+        setTheme( 'simitone' );
+      }
+      
       sendToMain( 'CHECK_SIMITONE' );
 
       simitoneRequirementsCheckInterval && clearInterval( simitoneRequirementsCheckInterval );

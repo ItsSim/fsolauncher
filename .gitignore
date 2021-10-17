@@ -9,3 +9,5 @@
 !/release/fsolauncher-mac-extras/
 !/release/win32-ia32.iss
 .DS_Store
+tools/fsolauncher.exe
+tools/resource_hacker/

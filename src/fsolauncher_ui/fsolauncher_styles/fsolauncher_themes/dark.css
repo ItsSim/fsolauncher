@@ -1,111 +1,300 @@
-.dark #logo:after {
-  content: 'ONYX';
+.dark {
+}
+
+/*.dark button,
+.dark .button {
+  background-color: #ff691f;
+  color: #15202b;
+}*/
+
+.dark button:hover,
+.dark .button:hover {
+}
+
+.dark #logo {
+  /*background-image: url(../../fsolauncher_images/logo_turbo.png) !important;*/
+}
+
+/*.dark #launcher #sidebar li.active,
+.dark #launcher #sidebar li:not(#logo):hover {
+  color: #ff691f;
+  border-right-color: #ff691f;
+}
+
+.dark #launcher #sidebar li:not(#logo):hover path,
+.dark #launcher #sidebar li.active path {
+  fill: #ff691f;
+}
+
+.dark .hint {
+  background-color: #ff691f;
+}
+
+.dark .hint.arrow-left:before {
+  border-right-color: #ff691f;
+}
+
+.dark .hint.arrow-top:before {
+  border-bottom-color: #ff691f;
+}*/
+
+/*.dark .loading .progress {
+  background-image: -webkit-linear-gradient(
+      -45deg,
+      transparent 33%,
+      rgba(255, 255, 255, 0.3) 33%,
+      rgba(255, 255, 255, 0.3) 66%,
+      transparent 66%
+    ),
+    -webkit-linear-gradient(top, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)),
+    -webkit-linear-gradient(left, #ff691f, #ff691f);
+}*/
+
+/*.dark .hint.arrow-top:after {
+  border-bottom-color: #ff691f;
+}
+
+.dark .hint.arrow-left:after {
+  border-right-color: #ff691f;
+}*/
+
+/*.dark #rss .rss-entry h1,
+.dark #settings-page .form h1,
+.dark #downloads > div .tag h1,
+.dark .modal h1 {
+  color: #ff691f;
+}*/
+
+/*.dark #settings-page .form h1 {
+  border-color: #ff691f !important;
+}*/
+
+.dark .download {
+  background: rgba(0, 0, 0, 0.3) !important;
+  color: #fff !important;
+}
+
+.dark .download h1 {
+  color: #4B88E4 !important;
+}
+
+.dark .download .loading {
+  background: rgba(255, 255, 255, 0.2) !important;
+}
+
+.dark .download span {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+/*.dark .jumbotron span {
+  color: #ff691f !important;
+}*/
+
+/*.dark input,
+.dark select {
+  border-color: transparent !important;
+  font-weight: bold;
+  color: #15202b !important;
+  background: url(../../fsolauncher_images/15xvbd5.png), #ff691f;
+  background-position: 97% center;
+  background-repeat: no-repeat;
+}*/
+
+.dark #settings-page .form div small {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.dark .item[install='FSO'] {
+  background-image: url(../../fsolauncher_images/freeso-logo.png) !important;
+}
+
+.dark #did-you-know {
+  background: #10171e !important;
+}
+
+.dark .modal {
+  background: -webkit-linear-gradient(#15202b, #10171e 5%, #15202b) !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.dark .tag {
+  background-image: -webkit-linear-gradient(#15202b, #10171e 100%, #15202b)!important;
+  color: rgba(255, 255, 255, 0.5) !important;
+  border: 1px solid #414141;
+}
+.dark #settings-page .form h1 {
 }
 
 .dark #sidebar {
-  background: #303030 !important;
-  color: #fff !important;
+  background: #10171e !important;
+  color: rgba(255, 255, 255, 0.75) !important;
+  text-shadow: 2px 2px rgba(0, 0, 0, 0.2) !important;
+  border-right: 1px solid #414141;
 }
-
+.dark #content,
+.dark #launcher {
+  background: #10171e !important;
+}
+.dark .item {
+  color: #fff !important;
+  border-color: #414141 !important;
+  background-color: #10171e !important;
+}
 .dark h1.jumbotron {
-  background: #273238 !important;
-  color: #fff !important;
+  /*background: -webkit-linear-gradient(#15202b, #10171e 5%, #15202b)
+  !important;*/
+  background-image: -webkit-linear-gradient(#15202b, #10171e 100%, #15202b)!important;
+  color: rgba(255, 255, 255, 0.75) !important;
+  border: 1px solid #414141;
 }
 
-.dark #content {
-  background: #424242 !important;
-  color: #fff !important;
+/*.dark button.dark-transparent,
+.dark .button.dark-transparent {
+  background: #ff691f;
+}
+
+.dark button.dark-transparent:hover,
+.dark .button.dark-transparent:hover {
+  background: #ff691f;
+}*/
+
+.dark ::-webkit-scrollbar {
+  width: 5px;
+  padding: 3px;
+}
+
+/*.dark ::-webkit-scrollbar-thumb {
+  background: #ff691f;
+}*/
+
+.dark ::-webkit-scrollbar-thumb:active {
+  background: #080b0f;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #15202b;
+}
+
+.dark .notification {
+  background: rgba(0, 0, 0, 0.3) !important;
+}
+
+.dark .notification h1,
+.dark .notification i {
+  color: #4B88E4 !important;
+}
+.dark .notification p {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.dark #installer-page .page-content {
+  background-color: #10161e !important;
+}
+
+.dark #simtime-container {
+  color:rgba(255,255,255,0.5);
+  background:rgba(0,0,0,0.3)
+}
+.dark #sidebar li {
+  color:rgba(255,255,255,0.6);
+}
+.dark h1.jumbotron span {
+  color: #4b88e4;
+  text-shadow: 2px 2px rgba(0, 0, 0, 0.2) !important;
+}
+.dark h1.jumbotron small {
+  color:rgba(255,255,255,0.6)
 }
 
 .dark button,
 .dark .button {
-  background: #7dc6bf !important;
-  color: rgba(0, 0, 0, 0.7);
+  color: #15202B;
 }
 
-.dark .rss-entry > h1 {
-  color: #7dc6bf !important;
+.dark #rss .rss-entry > span {
+ color:rgba(255,255,255,0.4)
 }
 
-.dark .rss-entry > span {
-  color: #7dc6bf !important;
+.dark div.stag {
+  color: #10171e;
 }
 
-.dark #sidebar li.active,
-.dark #sidebar li:not(#logo):hover {
-  border-right-color: #7dc6bf !important;
-  color: #7dc6bf !important;
-}
-.dark #launcher #sidebar li:not(#logo):hover path,
-.dark #launcher #sidebar li.active path {
-  fill: #7dc6bf;
+.dark .modal {
+  border: 1px solid #414141;
 }
 
 .dark input,
 .dark select {
-  border-color: #273238 !important;
+background-image: url(../../fsolauncher_images/15xvbd5.png), 
+-webkit-linear-gradient(#15202b, #10171e 95%, #15202b);
   font-weight: bold;
-  color: #273238;
-  background: #7dc6bf;
+  color:rgba(255,255,255,0.7) !important;
+  border-color:#414141
 }
 
-.dark select {
-  background: url(../../fsolauncher_images/15xvbd5.png), #7dc6bf;
-  background-position: 97% center;
-  background-repeat: no-repeat;
+.dark option {
+  background: #10171e;
 }
 
-.dark #settings-page .form h1 {
-  color: #7dc6bf !important;
+.dark .alt-content > * {
+  color:rgba(255,255,255,0.4)!important;
+  text-shadow: 2px 2px rgba(0, 0, 0, 0.2) !important;
 }
 
-.dark #settings-page .form div small {
-  color: rgba(255, 255, 255, 0.5);
+.dark .simitone-error {
+  color:rgba(255,255,255,0.75)!important
 }
 
-.dark #rss .rss-entry h1,
-.dark #settings-page .form h1,
-.dark #downloads > div .tag h1,
-.dark #downloads > div .tag,
-.dark .modal h1 {
-  color: #7dc6bf !important;
+.dark .tag .tick.installed {
+  color:#10171e!important;
 }
 
-.dark #downloads > div > .item {
-  background-color: #7dc6bf;
+.dark #remeshinfo {
+  color:rgba(255,255,255,0.6)!important
 }
 
-.dark #downloads > div {
+.dark ::-webkit-scrollbar-thumb {
+  background: #4B88E4;
 }
 
-.dark .modal {
-  background: #424242;
-}
-.dark .modal p,
-.dark .modal div span {
-  color: rgba(255, 255, 255, 0.5);
+.dark ::-webkit-scrollbar-thumb:active {
+  background: #6397e6;
 }
 
-.dark #downloads > div .tag {
-  background: #303030;
+.dark .rss-content {
+  color: rgba(255,255,255,0.6)
 }
 
-.dark #downloads > div.installed > div.item > div.tick.installed {
-  background-color: #7dc6bf;
+.dark #settings-page .form div span {
+  color: rgba(255,255,255,0.6)
 }
 
-.dark #downloads-page div.download {
-  background: #424242;
+.dark #simitone-install-button {
+  color:#fff!important;
+  background: linear-gradient(
+    45deg,
+    #2d6e96 0%,
+    #1b9a88 50%,
+    #05d474 100%
+  ) !important;
+  text-shadow: 2px 2px rgba(0, 0, 0, 0.2) !important;
+  transition: background-position 1s !important;
+  background-size: 150% !important;
 }
 
-.dark #downloads-page div.download h1 {
-  color: #7dc6bf;
+.dark #launcher #sidebar li.active,
+.dark #launcher #sidebar li:not(#logo):hover {
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
-.dark #downloads-page div.download span {
-  color: rgba(255, 255, 255, 0.5);
+.dark #did-you-know {
+  border-left: 1px solid #414141;
 }
 
-.dark #downloads-page div.download .loading .progress {
-  background-color: #7dc6bf;
+.dark #sidebar div.bottom li:last-child {
+  border-top: 1px solid #414141;
+}
+
+.dark .hint {
+  color: #10171E!important
 }
