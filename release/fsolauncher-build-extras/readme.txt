@@ -2,6 +2,7 @@ Version: 2021 1.8.x
 Author: Sim
 
 Changelog:
+- 2021.10.17: Fixed shortcut mode feature regression.
 - 2021.10.17: Halloween v2 and Open Beta Dark themes. Light/Dark Twitter widget.
 - 2021.09.13: Updated NL language.
 - 2021.09.12: Updated Electron, new theme, added NL language, misc. improvements.
