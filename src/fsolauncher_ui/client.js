@@ -170,7 +170,7 @@ var setCurrentPage;
     if( theme != 'simitone' ) {
       // Halloween theme activates in October.
       if ( ( m == 9 && d >= 15 && d <= 31 ) || ( m == 10 && d == 1 ) ) {
-        //theme = 'halloween';
+        theme = 'halloween';
       }
 
       // Summer 2021 theme.
