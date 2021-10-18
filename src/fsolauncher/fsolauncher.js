@@ -881,26 +881,26 @@ class FSOLauncher {
    * Updates a configuration variable. Used after
    * a users changes a setting.
    *
-   * @param {any} v
+   * @param {any} newConfig
    * @memberof FSOLauncher
    */
-  async setConfiguration( v ) {
+  async setConfiguration( newConfig ) {
     switch ( true ) {
-      case v[1] == 'Language':
-        this.switchLanguage( v[2] );
+      case newConfig[0] == 'Game' && newConfig[1] == 'Language':
+        this.switchLanguage( newConfig[2] );
         break;
 
-      case v[1] == 'TTS':
-        this.editTTSMode( v[2] );
+      case newConfig[1] == 'TTS':
+        this.editTTSMode( newConfig[2] );
         break;
 
-      case v[1] == 'GraphicsMode' && v[2] == 'sw' && this.conf.Game.GraphicsMode != 'sw':
+      case newConfig[1] == 'GraphicsMode' && newConfig[2] == 'sw' && this.conf.Game.GraphicsMode != 'sw':
         if ( !this.isInstalled.FSO ) Modal.showNeedFSOTSO();
         else {
           try {
             await this.enableSoftwareMode();
             Modal.showSoftwareModeEnabled();
-            this.conf[v[0]][v[1]] = v[2];
+            this.conf[newConfig[0]][newConfig[1]] = newConfig[2];
             this.persist( true );
           } catch ( e ) {
             //Modal.showFailedUpdateMove()
@@ -909,21 +909,27 @@ class FSOLauncher {
         }
         break;
 
-      case v[1] == 'GraphicsMode' &&
-        v[2] != 'sw' &&
+      case newConfig[1] == 'GraphicsMode' &&
+        newConfig[2] != 'sw' &&
         this.conf.Game.GraphicsMode == 'sw':
         try {
           await this.disableSoftwareMode();
-          this.conf[v[0]][v[1]] = v[2];
+          this.conf[newConfig[0]][newConfig[1]] = newConfig[2];
           this.persist( true );
         } catch ( e ) {
           Modal.showGenericError( e.message );
         }
         break;
 
+      case newConfig[0] == 'Launcher' && newConfig[1] == 'Language':
+        this.conf[newConfig[0]][newConfig[1]] = newConfig[2];
+        this.persist( true );
+        Modal.showLanguageOnRestart();
+        break;
+
       default:
-        this.conf[v[0]][v[1]] = v[2];
-        this.persist( v[1] !== 'Language' );
+        this.conf[newConfig[0]][newConfig[1]] = newConfig[2];
+        this.persist( newConfig[1] !== 'Language' );
     }
   }
   /**

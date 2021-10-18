@@ -713,6 +713,20 @@ class Modal {
   }
 
   /**
+   * Language will be displayed on launcher restart.
+   *
+   * @static
+   * @memberof Modal
+   */
+     static showLanguageOnRestart() {
+      Modal.View.sendModal( 
+        'Needs a Restart', 
+        'The language you selected will be visible once you restart the launcher.', 
+        global.locale.MODAL_OK 
+      );
+    }
+
+  /**
    * Used in generic error modal display.
    *
    * @static

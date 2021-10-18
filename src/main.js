@@ -33,7 +33,29 @@ if( process.platform == 'darwin' ) fs.ensureDirSync( global.APPDATA + 'temp' );
 
 let Window, tray, launcher, trayIcon, conf;
 
-const code = oslocale.sync().substring( 0, 2 ), 
+try {
+  conf = ini.parse( fs.readFileSync( global.APPDATA + 'FSOLauncher.ini', 'utf-8' ) );
+} catch ( e ) {
+  conf = {
+    Launcher: {
+      Theme: nativeTheme.shouldUseDarkColors ? 'dark' : 'open_beta',
+      DesktopNotifications: '1',
+      Persistence: process.platform == 'darwin' ? '0' : '1',
+      DirectLaunch: '0',
+      Language: 'default'
+    },
+    Game: {
+      GraphicsMode: 'ogl',
+      Language: 'en',
+      TTS: '0'
+    }
+  };
+
+  fs.writeFileSync( global.APPDATA + 'FSOLauncher.ini', ini.stringify( conf ), 'utf-8' );
+}
+
+const code = ( ! conf.Launcher.Language || conf.Launcher.Language == 'default' ) ? 
+  oslocale.sync().substring( 0, 2 ) : conf.Launcher.Language, 
    options = {};
 
 global.locale = Object.prototype.hasOwnProperty.call( UIText, code )
@@ -46,26 +68,6 @@ global.locale.PLATFORM = process.platform;
 global.locale.LANGCODE = code;
 global.locale.WS_PORT  = global.SOCKET_ENDPOINT;
 global.locale.WS_URL   = global.WEBSERVICE;
-
-try {
-  conf = ini.parse( fs.readFileSync( global.APPDATA + 'FSOLauncher.ini', 'utf-8' ) );
-} catch ( e ) {
-  conf = {
-    Launcher: {
-      Theme: nativeTheme.shouldUseDarkColors ? 'dark' : 'open_beta',
-      DesktopNotifications: '1',
-      Persistence: process.platform == 'darwin' ? '0' : '1',
-      DirectLaunch: '0'
-    },
-    Game: {
-      GraphicsMode: 'ogl',
-      Language: 'en',
-      TTS: '0'
-    }
-  };
-
-  fs.writeFileSync( global.APPDATA + 'FSOLauncher.ini', ini.stringify( conf ), 'utf-8' );
-}
 
 function CreateWindow() {
   require( 'electron-pug' )( { pretty: false }, global.locale );
