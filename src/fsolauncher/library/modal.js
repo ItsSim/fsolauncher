@@ -720,8 +720,8 @@ class Modal {
    */
      static showLanguageOnRestart() {
       Modal.View.sendModal( 
-        'Needs a Restart', 
-        'The language you selected will be visible once you restart the launcher.', 
+        global.locale.MODAL_REQUIRES_RESTART, 
+        global.locale.MODAL_REQUIRES_RESTART_DESC, 
         global.locale.MODAL_OK 
       );
     }

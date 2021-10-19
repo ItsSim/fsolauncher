@@ -203,7 +203,7 @@ html(class=PLATFORM + ' ' + LANGCODE)
                                     option(value='0') #{EXIT_LAUNCHER}
                                 small #{AFTER_X_HINT}
                             div
-                                span Launcher Language
+                                span #{SETTINGS_LAUNCHER_LANGUAGE}
                                 select(option-id='Launcher.Language')
                                     option(value='default') System Default
                                     option(value='en') English
@@ -212,7 +212,7 @@ html(class=PLATFORM + ' ' + LANGCODE)
                                     option(value='ru') русский
                                     option(value='pl') Polskie
                                     option(value='nl') Nederlands
-                                small Choose the language for the launcher.
+                                small #{SETTINGS_LAUNCHER_LANGUAGE_HINT}
                         .form
                             h1 #{SETTINGS_GAME_H1}
                             div
