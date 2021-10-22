@@ -6,8 +6,8 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-packager . fsolauncher --asar.unpackDir=\"{export,fsolauncher_ui/fsolauncher_images,fsolauncher_ui/fsolauncher_sounds,fsolauncher_ui/fsolauncher_fonts}\" --platform=win32 --arch=ia32 --overwrite --electron-version=11.5.0 --version-string.FileDescription='FreeSO Launcher' --out ../release",
-    "builddarwin": "electron-packager . FreeSO\\ Launcher --icon=./beta.icns --asar.unpackDir=\"{export,fsolauncher_ui/fsolauncher_images,fsolauncher_ui/fsolauncher_sounds,fsolauncher_ui/fsolauncher_fonts}\" --platform=darwin --arch=all --overwrite --electron-version=11.5.0 --version-string.FileDescription='FreeSO Launcher' --out ../release && electron-installer-dmg ../release/FreeSO\\ Launcher-darwin-x64/FreeSO\\ Launcher.app FreeSO\\ Launcher --out=../release --icon=./beta.icns --background=./osx_dmg.png --title=FreeSO\\ Launcher --overwrite",
+    "build": "electron-packager . fsolauncher --asar.unpackDir=\"{export,fsolauncher_ui/fsolauncher_images,fsolauncher_ui/fsolauncher_sounds,fsolauncher_ui/fsolauncher_fonts}\" --platform=win32 --arch=ia32 --overwrite --electron-version=15.3.0 --version-string.FileDescription='FreeSO Launcher' --out ../release",
+    "builddarwin": "electron-packager . FreeSO\\ Launcher --icon=./beta.icns --asar.unpackDir=\"{export,fsolauncher_ui/fsolauncher_images,fsolauncher_ui/fsolauncher_sounds,fsolauncher_ui/fsolauncher_fonts}\" --platform=darwin --arch=all --overwrite --electron-version=15.3.0 --version-string.FileDescription='FreeSO Launcher' --out ../release && electron-installer-dmg ../release/FreeSO\\ Launcher-darwin-x64/FreeSO\\ Launcher.app FreeSO\\ Launcher --out=../release --icon=./beta.icns --background=./osx_dmg.png --title=FreeSO\\ Launcher --overwrite",
     "buildasar": "asar pack . \"../release/asar/app.asar\" --unpack-dir \"{export,fsolauncher_ui/fsolauncher_images,fsolauncher_ui/fsolauncher_sounds,fsolauncher_ui/fsolauncher_fonts}\""
   },
   "keywords": [
@@ -19,7 +19,7 @@
     "electron-installer-dmg": "^3.0.0",
     "electron-packager": "^15.4.0",
     "electron-reload": "^1.5.0",
-    "electron": "^11.0.0",
+    "electron": "^15.3.0",
     "eslint": "^7.32.0",
     "babel-eslint": "^10.1.0"
   },

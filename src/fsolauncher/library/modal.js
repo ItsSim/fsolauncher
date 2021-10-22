@@ -433,9 +433,7 @@ class Modal {
     try {
       const b64icon = await fs.readFile(
         path.join( __dirname, '../../', 'beta.ico' ),
-        {
-          encoding: 'base64'
-        }
+        { encoding: 'base64' }
       );
       const b64fontMunged = await fs.readFile(
         path.join(
@@ -443,9 +441,7 @@ class Modal {
           '../../fsolauncher_ui/fsolauncher_fonts',
           'hinted-Munged-otVXWjH6W8.ttf'
         ),
-        {
-          encoding: 'base64'
-        }
+        { encoding: 'base64' }
       );
       const b64fontFredokaOne = await fs.readFile(
         path.join(
@@ -453,13 +449,13 @@ class Modal {
           '../../fsolauncher_ui/fsolauncher_fonts',
           'FredokaOne-Regular.ttf'
         ),
-        {
-          encoding: 'base64'
-        }
+        { encoding: 'base64' }
       );
 
       setContainerWidth( 360 );
-      setGlobalStyles( `
+      // Use the vscode extension es6-string-html to highlight
+      // the syntax for this CSS.
+      setGlobalStyles( /* css */`
         body {
           text-rendering: optimizeLegibility !important;
           -webkit-font-smoothing: antialiased !important;
@@ -520,8 +516,8 @@ class Modal {
         ` );
 
       const notification = createNotification( {
-        template: `
-          <notification id="%id%" class="animated fadeInUp faster">
+        content: /* html */`
+          <notification class="animate__animated animate__fadeInUp animate__faster">
             <div id="logo"></div>
             <div id="content">
               <h1>${title}</h1>
