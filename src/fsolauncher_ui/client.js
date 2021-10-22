@@ -161,13 +161,13 @@ var setCurrentPage;
    * Changes the launcher theme.
    * @param {string} theme The theme id.
    */
-  var setTheme = async theme => {
+  var setTheme = async ( theme, forced ) => {
     var date = new Date();
     var m = date.getMonth();
     var d = date.getDate(); 
     var y = date.getFullYear();
 
-    if( theme != 'simitone' ) {
+    if( ! forced ) {
       // Halloween theme activates in October.
       if ( ( m == 9 && d >= 15 && d <= 31 ) || ( m == 10 && d == 1 ) ) {
         theme = 'halloween';
@@ -364,7 +364,7 @@ var setCurrentPage;
       prevTheme = $( 'body' ).className;
 
       if( ! darkThemes.includes( prevTheme ) ) { // Stay in dark theme.
-        setTheme( 'simitone' );
+        setTheme( 'simitone', true );
       }
       
       sendToMain( 'CHECK_SIMITONE' );
