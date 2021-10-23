@@ -408,3 +408,29 @@ background-image: url(../../fsolauncher_images/15xvbd5.png),
   background-color: #10171E!important;
   background-image:url(../../fsolauncher_images/mono_dark.png)!important
 }
+
+.halloween #simitone-install-button {
+  color:#fff!important;
+  background: linear-gradient(
+    45deg,
+    #2d6e96 0%,
+    #1b9a88 50%,
+    #05d474 100%
+  ) !important;
+  text-shadow: 2px 2px rgba(0, 0, 0, 0.2) !important;
+  transition: background-position 1s !important;
+  background-size: 150% !important;
+}
+
+.halloween #simitone-play-button {
+  color:#fff!important;
+  background: linear-gradient(
+    45deg,
+    #2d6e96 0%,
+    #1b9a88 50%,
+    #05d474 100%
+  ) !important;
+  text-shadow: 2px 2px rgba(0, 0, 0, 0.2) !important;
+  transition: background-position 1s !important;
+  background-size: 150% !important;
+}

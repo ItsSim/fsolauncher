@@ -2,8 +2,8 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "FreeSO Launcher"
-; App Version should match the one in package.json.
-#define MyAppVersion "1.8.3" 
+; App Version should not be modified manually (npm build script does it).
+#define MyAppVersion "0.0.0" 
 #define MyAppPublisher "FreeSO.org"
 #define MyAppURL "http://freeso.org"
 #define MyAppExeName "fsolauncher.exe"
