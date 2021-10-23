@@ -825,12 +825,12 @@ class FSOLauncher {
           // why is this necessary? we will never know...
           process.noAsar = true;
         }
-        let exportTSODir = `../export/LanguagePacks/${language.toUpperCase()}/TSO`;
+        let exportTSODir = `../export/language_packs/${language.toUpperCase()}/TSO`;
           exportTSODir = path.join( __dirname, exportTSODir );
         if( process.platform == 'darwin' || process.platform == 'win32' ) {
           exportTSODir = exportTSODir.replace( 'app.asar', 'app.asar.unpacked' );
         }
-        let exportFSODir = `../export/LanguagePacks/${language.toUpperCase()}/FSO`;
+        let exportFSODir = `../export/language_packs/${language.toUpperCase()}/FSO`;
           exportFSODir = path.join( __dirname, exportFSODir );
         if( process.platform == 'darwin' || process.platform == 'win32' ) {
           exportFSODir = exportFSODir.replace( 'app.asar', 'app.asar.unpacked' );
