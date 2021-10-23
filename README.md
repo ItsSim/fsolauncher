@@ -12,7 +12,7 @@ The official FreeSO Launcher available for Windows and Mac OS X.
 
 ### Prerequisites for development
 * You must have `Node 14.16` installed on your system.
-* A Windows dev environment is preferred, especially for generating Windows builds. Building for Windows on Mac has not been tested.
+* It’s recommended to build the launcher on the target OS. If you’re building for Mac, use a Mac. If you’re building for Windows, use a PC. I have not tested building both on one single OS, so I’m not sure if it works.
 
 ## How to run
 Clone the repo and then:
