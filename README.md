@@ -10,6 +10,10 @@ The official FreeSO Launcher available for Windows and Mac OS X.
 ![image](https://i.imgur.com/1h6OPE2.png)
 ![image](https://i.imgur.com/uRjWpfq.png)<!-- ![image](https://i.imgur.com/dPRDgHh.jpg) -->
 
+### Prerequisites for development
+* You must have `Node 14.16` installed on your system.
+* A Windows dev environment is preferred, especially for generating Windows builds. Building for Windows on Mac has not been tested.
+
 ## How to run
 Clone the repo and then:
 ```
@@ -17,17 +21,17 @@ cd src
 npm i 
 npm run start
 ```
-### How to build
-After cloning and `npm i` the repo, run:
+## How to build
+After cloning and `npm i` the repo, run from the `src` folder:
 * For Windows:
 ```
-npm run build
+npm run buildwin
 ```
 * For Mac:
 ```
 npm run builddarwin
 ```
-Built binaries are generated in the `release` folder.
+Built binaries are generated in the `release` folder (`FreeSO Launcher.dmg` for Mac and `FreeSO Launcher Setup.exe` for Windows)
 
 ## Latest Releases
 [Microsoft Windows 7 or later](https://beta.freeso.org/FreeSO%20Launcher%20Setup.exe) <br/>
