@@ -1,6 +1,5 @@
 **/node_modules
 /src/FSOLauncher.ini
-/src/package-lock.json
 /src/bin/
 /src/temp/
 /release/*
