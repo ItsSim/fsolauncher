@@ -1,9 +1,8 @@
-/src/node_modules/
+**/node_modules
 /src/FSOLauncher.ini
 /src/package-lock.json
 /src/bin/
 /src/temp/
-/vendor/
 /release/*
 !/release/fsolauncher-build-extras/
 !/release/fsolauncher-mac-extras/
