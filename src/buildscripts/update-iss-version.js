@@ -11,7 +11,7 @@ try {
     } else {
       const updatediss = iss.replace( matches[0], newString )
       fs.writeFileSync( '../release/win32-ia32.iss', updatediss )
-      console.log( 'BUILD NOTICE: ', '.iss version was updated to', version )
+      console.log( 'BUILD NOTICE:', '.iss version was updated to', version )
     }
   } else {
     throw new Error( 'Could not find MyAppVersion string' )
