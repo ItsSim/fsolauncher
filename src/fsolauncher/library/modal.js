@@ -452,6 +452,8 @@ class Modal {
         { encoding: 'base64' }
       );
 
+      const shouldBeDark = require( 'electron' ).nativeTheme.shouldUseDarkColors
+
       setContainerWidth( 360 );
       // Use the vscode extension es6-string-html to highlight
       // the syntax for this CSS.
@@ -478,12 +480,15 @@ class Modal {
           overflow:hidden;
           display:block;
           padding:20px;
-          background-image: -webkit-linear-gradient(#fafafa, #f4f4f4 40%, #e5e5e5);
+          ${shouldBeDark ? 
+          'background-image: -webkit-linear-gradient(#15202b, #10171e 100%, #15202b);' : 
+          'background-image: -webkit-linear-gradient(#fafafa, #f4f4f4 40%, #e5e5e5);'}
           margin:10px;
           border-radius:8px;
           box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
           display:flex;
           ${process.platform == 'darwin' ? 'margin-bottom:40px;' : ''}
+          ${shouldBeDark ? 'border: 1px solid #414141;' : ''}
         }
         notification h1 {
           font-family:'Fredoka One';
@@ -498,7 +503,7 @@ class Modal {
           font-weight:normal!important;
           line-height:16px;
           letter-spacing:-0.02em;
-          color:#595959;
+          ${shouldBeDark ? 'color: rgba(255, 255, 255, 0.65);' : 'color:#595959;'}
         }
         notification #logo {
           background-image:url("data:image/png;base64,${b64icon}");
