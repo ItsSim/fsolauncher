@@ -6,7 +6,8 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "compileiss": "node build_scripts/update-iss-version.js && innosetup-compiler --verbose ../release/win32-ia32.iss",
+    "startiss": "cmd /K \"../release/FreeSO Launcher Setup.exe\"",
+    "compileiss": "node build_scripts/update-iss-version.js && innosetup-compiler --verbose ../release/win32-ia32.iss && npm run startiss",
     "copywin": "cpy \"./**/*\" ../fsolauncher-win32-ia32 --cwd=../release/fsolauncher-build-extras --parents",
     "buildwin": "electron-packager . fsolauncher --app-copyright=\"Copyright (C) FreeSO. All rights reserved.\" --icon=./beta.ico --asar.unpackDir=\"{export,fsolauncher_ui/fsolauncher_images,fsolauncher_ui/fsolauncher_sounds,fsolauncher_ui/fsolauncher_fonts}\" --platform=win32 --arch=ia32 --overwrite --electron-version=15.3.0 --win32metadata.CompanyName=\"FreeSO.org\" --win32metadata.requested-execution-level=\"requireAdministrator\" --version-string.FileDescription=\"FreeSO Launcher\" --out ../release && npm run copywin && npm run compileiss",
     "builddarwin": "electron-packager . FreeSO\\ Launcher --icon=./beta.icns  --app-copyright=\"Copyright (C) FreeSO. All rights reserved.\" --asar.unpackDir=\"{export,fsolauncher_ui/fsolauncher_images,fsolauncher_ui/fsolauncher_sounds,fsolauncher_ui/fsolauncher_fonts}\" --platform=darwin --arch=all --overwrite --electron-version=15.3.0 --version-string.FileDescription=\"FreeSO Launcher\" --out ../release && electron-installer-dmg ../release/FreeSO\\ Launcher-darwin-x64/FreeSO\\ Launcher.app FreeSO\\ Launcher --out=../release --icon=./beta.icns --background=./osx_dmg.png --title=FreeSO\\ Launcher --overwrite",
