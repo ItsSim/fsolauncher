@@ -1,4 +1,4 @@
-/* global io Howl DOMPurify twttr */
+/* global io Howl DOMPurify */
 var Electron = require( 'electron' );
 var Parser   = require( 'rss-parser' );
 var parser   = new Parser();
