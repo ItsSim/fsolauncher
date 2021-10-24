@@ -1,4 +1,5 @@
-const FSOLauncher = require('./fsolauncher'),
+// eslint-disable-next-line no-unused-vars
+const FSOLauncher = require( './fsolauncher' ),
   Modal = require( './library/modal' ),
   RendererEvent = require( './library/renderer-event' );
 /**
