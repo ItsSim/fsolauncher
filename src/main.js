@@ -119,7 +119,7 @@ function CreateWindow() {
     {
       label: global.locale.TRAY_LABEL_1,
       click: () => {
-        launcher.onPlay();
+        launcher.events.onPlay();
       }
     },
     {
