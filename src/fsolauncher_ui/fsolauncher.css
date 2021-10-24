@@ -657,6 +657,15 @@ button.blue:hover,
   padding-left: 15px;
   padding-right: 15px;
   text-align: center;
+  top:30px;
+  height:50px;
+  left:30px;
+  padding:6px;
+  padding-left:8px;
+  padding-right:8px;
+  border-radius:8px;
+  font-size:14px;
+  position:absolute;
 }
 
 ::-webkit-scrollbar {

@@ -434,3 +434,8 @@ background-image: url(../../fsolauncher_images/15xvbd5.png),
   transition: background-position 1s !important;
   background-size: 150% !important;
 }
+
+.halloween #downloads > div > .item > .new,
+.halloween #simitone-should-update {
+  color: #10171E!important;
+}
