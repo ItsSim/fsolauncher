@@ -361,8 +361,10 @@ var setCurrentPage;
    */
   setCurrentPage = pageId => {
     if( pageId == 'simitone' ) {
-      prevTheme = $( 'body' ).className;
-
+      if( $( 'body' ).className != 'simitone' ) {
+        prevTheme = $( 'body' ).className;
+      }
+      
       if( ! darkThemes.includes( prevTheme ) ) { // Stay in dark theme.
         setTheme( 'simitone', true );
       }
