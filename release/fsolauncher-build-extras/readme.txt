@@ -2,6 +2,7 @@ Version: 2021 1.8.x
 Author: Sim
 
 Changelog:
+- 2021.10.26: Small tweaks and fixes. Update to Electron 15.3.0.
 - 2021.10.17: Fixed shortcut mode feature regression.
 - 2021.10.17: Halloween v2 and Open Beta Dark themes. Light/Dark Twitter widget.
 - 2021.09.13: Updated NL language.
@@ -33,7 +34,7 @@ Changelog:
 
 Thank you for downloading the official FreeSO Launcher.
 This program was made using:
-- Electron 11.5.0
+- Electron 15.3.0
 
 Upon installing this software, you understand and accept the following:
 * This program does not include a copy of The Sims Online or any other type of content of EA IP. It downloads everything needed from Archive.org upon the user’s request through the Installer tab.
