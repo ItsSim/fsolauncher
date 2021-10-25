@@ -109,10 +109,10 @@ class ServoInstaller {
     }
     return Promise.resolve();
   }
-  async step6() {
+  step6() {
     if( process.platform === "darwin" ) {
       console.log( 'Darwin:', 'Extracting MacExtras' );
-      await unzip( { 
+      return unzip( { 
         from: `${global.APPDATA}temp/macextras-${this.id}.zip`, 
         to: this.path, 
         cpperm: true 
@@ -121,9 +121,8 @@ class ServoInstaller {
           global.locale.INS_EXTRACTING_ME + ' ' + filename, 100
         );
       } );
-      return 1;
     }
-    return 1;
+    return Promise.resolve();
   }
   /**
    * When the installation ends.
@@ -146,7 +145,7 @@ class ServoInstaller {
    * @returns
    * @memberof ServoInstaller
    */
-  async error( ErrorMessage ) {
+  error( ErrorMessage ) {
     if( this.dl ) this.dl.cleanup();
     this.FSOLauncher.setProgressBar( 1, {
       mode: 'error'
@@ -183,8 +182,8 @@ class ServoInstaller {
    * @returns
    * @memberof ServoInstaller
    */
-  async extract() {
-    await unzip( { from: this.tempPath, to: this.path }, filename => {
+  extract() {
+    return unzip( { from: this.tempPath, to: this.path }, filename => {
       this.createProgressItem(
         global.locale.EXTRACTING_CLIENT_FILES + ' ' + filename,
         100

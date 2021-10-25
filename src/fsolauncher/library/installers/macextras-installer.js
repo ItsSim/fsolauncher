@@ -111,8 +111,8 @@ class MacExtrasInstaller {
     }, 1000 );
   }
 
-  async extract() {
-    await unzip( { 
+  extract() {
+    return unzip( { 
       from: this.tempPath, 
       to: this.path, 
       cpperm: true 

@@ -139,9 +139,9 @@ class FilePlanetInstaller {
    * @returns
    * @memberof FilePlanetInstaller
    */
-  async extractZip() {
+  extractZip() {
     this.createProgressItem( 'Extracting client files, please wait...', 100 );
-    return await unzip(
+    return unzip(
       {
         from: this.tempFilePath,
         to: `${TEMP_PATH}FilePlanetTSOFiles`

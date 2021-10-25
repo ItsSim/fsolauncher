@@ -47,7 +47,9 @@ module.exports = function makeUnzip() {
             ( to.endsWith( '/' ) ? to : to + '/' ) + entry.fileName;
           try {
             await fs.ensureDir( path.dirname( destination ) );
-            readStream.pipe( fs.createWriteStream( destination, options ) );
+            const file = fs.createWriteStream( destination, options );
+            file.on( 'error', reject );
+            readStream.pipe( file );
             readStream.on( 'end', () => zipfile.readEntry() );
           } catch ( e ) {
             reject( e );

@@ -114,8 +114,8 @@ class RemeshesInstaller {
     }, 1000 );
   }
 
-  async extract() {
-    await unzip( { from: this.tempPath, to: this.path }, filename => {
+  extract() {
+    return unzip( { from: this.tempPath, to: this.path }, filename => {
       this.createProgressItem(
         global.locale.EXTRACTING_CLIENT_FILES + ' ' + filename,
         100

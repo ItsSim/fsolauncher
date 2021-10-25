@@ -124,10 +124,10 @@ class SimitoneInstaller {
     }
     return Promise.resolve();
   }
-  async step7() {
+  step7() {
     if( process.platform === "darwin" ) {
       console.log( 'Darwin:', 'Extracting MacExtras' );
-      await unzip( { 
+      return unzip( { 
         from: `${global.APPDATA}temp/macextras-${this.id}.zip`, 
         to: this.path, 
         cpperm: true 
@@ -136,9 +136,8 @@ class SimitoneInstaller {
           global.locale.INS_EXTRACTING_ME + ' ' + filename, 100
         );
       } );
-      return 1;
     }
-    return 1;
+    return Promise.resolve();
   }
   /**
    * When the installation ends.
@@ -205,8 +204,8 @@ class SimitoneInstaller {
    * @returns
    * @memberof SimitoneInstaller
    */
-  async extract() {
-    await unzip( { from: this.tempPath, to: this.path }, filename => {
+  extract() {
+    return unzip( { from: this.tempPath, to: this.path }, filename => {
       this.createProgressItem(
         global.locale.EXTRACTING_CLIENT_FILES + ' ' + filename,
         100

@@ -88,7 +88,8 @@ class EventHandlers {
    * @memberof EventHandlers
    */
   onInstallSimitoneUpdate() {
-    this.fsolauncher.install( 'Simitone', { dir: this.fsolauncher.isInstalled.Simitone } );
+    this.fsolauncher.install( 'Simitone', { dir: this.fsolauncher.isInstalled.Simitone } )
+      .catch( console.error );
   }
   /**
    * Received when the renderer process asks the main process to check for 
@@ -123,7 +124,8 @@ class EventHandlers {
         tsoInstaller: 'WebArchiveFTPInstaller',
         override: false
       };
-      this.fsolauncher.install( 'TSO', params );
+      this.fsolauncher.install( 'TSO', params )
+        .catch( console.error );
     }
   }
   /**
@@ -204,7 +206,8 @@ class EventHandlers {
    */
   onInstallComponent( e, yes, Component, options ) {
     if ( yes ) {
-      this.fsolauncher.install( Component, options );
+      this.fsolauncher.install( Component, options )
+        .catch( console.error );
     }
   }
   /**

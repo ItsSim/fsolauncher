@@ -589,34 +589,33 @@ class FSOLauncher {
   }
   /**
    * Installs a single Component.
+   * 
+   * Each switch returns a Promise that is rejected when the installer that runs
+   * fails to install the Component, which is then handled wherever
+   * install() is called. 
+   * 
+   * If the installation goes OK, the Promise will resolve.
    *
    * @param {any} Component The Component to install.
    * @param {any} options Extra options like fullInstall or override.
    * @returns
    * @memberof FSOLauncher
    */
-  install(
-    Component,
-    options = {
-      fullInstall: false,
-      override: false,
-      tsoInstaller: 'FilePlanetInstaller',
-      dir: false
-    }
-  ) {
+  install( Component, options = {
+    fullInstall: false,
+    override: false,
+    tsoInstaller: 'FilePlanetInstaller',
+    dir: false
+  } ) {
     console.log( 'Installing:', Component, options );
-    let InstallerInstance;
-    let Installer;
-    let Executable;
-
     this.addActiveTask( Component );
 
     switch ( Component ) {
       case 'Mono':
       case 'MacExtras':
-      case 'SDL':
-        Installer = require( `./library/installers/${Component.toLowerCase()}-installer` );
-        InstallerInstance = new Installer( this, this.isInstalled.FSO );
+      case 'SDL': {
+        const Installer = require( `./library/installers/${Component.toLowerCase()}-installer` );
+        const InstallerInstance = new Installer( this, this.isInstalled.FSO );
         if ( !options.fullInstall ) {
           this.View.changePage( 'downloads' );
         } else {
@@ -634,19 +633,15 @@ class FSOLauncher {
           } catch ( e ) {
             reject( e );
           } finally {
-            setTimeout( () => {
-              this.setProgressBar( -1 );
-            }, 5000 );
+            setTimeout( () => this.setProgressBar( -1 ), 5000 );
           }
         } );
-
-      case 'RMS':
-        Installer = require( './library/installers/remeshes-installer' );
-
-        InstallerInstance = new Installer(
+      }
+      case 'RMS': {
+        const Installer = require( './library/installers/remeshes-installer' );
+        const InstallerInstance = new Installer(
           this.isInstalled.FSO + '/Content/MeshReplace', this
         );
-
         this.View.changePage( 'downloads' );
 
         // eslint-disable-next-line no-async-promise-executor
@@ -664,15 +659,15 @@ class FSOLauncher {
           } catch ( e ) {
             reject( e );
           } finally {
-            setTimeout( () => {
-              this.setProgressBar( -1 );
-            }, 5000 );
+            setTimeout( () => this.setProgressBar( -1 ), 5000 );
           }
         } );
-
+      }
       case 'TSO':
       case 'FSO':
-      case 'Simitone':
+      case 'Simitone': {
+        let Installer;
+        
         if ( Component == 'TSO' ) {
           Installer = require( './library/installers/fileplanet-installer' );
         }
@@ -705,14 +700,12 @@ class FSOLauncher {
                 // darwin doesnt get to choose
                 InstallDir = global.HOMEDIR + '/Documents/' + this.getPrettyName( Component );
               }
-
             } else {
               InstallDir = options.dir;
             }
 
             if ( InstallDir ) {
-              InstallerInstance = new Installer( InstallDir, this );
-
+              const InstallerInstance = new Installer( InstallDir, this );
               const isInstalled = await InstallerInstance.isInstalledInPath();
 
               if ( isInstalled && !options.fullInstall && !options.dir && process.platform != 'darwin' ) {
@@ -731,9 +724,7 @@ class FSOLauncher {
               } catch ( e ) {
                 reject( e );
               } finally {
-                setTimeout( () => {
-                  this.setProgressBar( -1 );
-                }, 5000 );
+                setTimeout( () => this.setProgressBar( -1 ), 5000 );
               }
             } else {
               if ( !options.fullInstall ) {
@@ -765,16 +756,17 @@ class FSOLauncher {
             }
           }
         } );
+      }
       case 'OpenAL':
-      case 'NET':
-        Executable = require( './library/installers/executable-installer' );
+      case 'NET': {
+        const Executable = require( './library/installers/executable-installer' );
 
         // eslint-disable-next-line no-async-promise-executor
         return new Promise( async ( resolve, reject ) => {
           const file =
             Component === 'NET' ? 'NDP46-KB3045560-Web.exe' : 'oalinst.exe';
 
-          InstallerInstance = new Executable();
+          const InstallerInstance = new Executable();
 
           try {
             await InstallerInstance.run( file );
@@ -788,6 +780,11 @@ class FSOLauncher {
             setTimeout( () => this.setProgressBar( -1 ), 5000 );
           }
         } );
+      }
+      default: {
+        console.error( 'Component not found:', Component );
+        this.removeActiveTask( Component );
+      }
     }
   }
   /**
