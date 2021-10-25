@@ -208,7 +208,7 @@
 
 .dark button,
 .dark .button {
-  color: #15202B;
+  color: #10171E;
 }
 
 .dark #rss .rss-entry > span {
@@ -319,4 +319,11 @@ background-image: url(../../fsolauncher_images/15xvbd5.png),
 .dark #downloads > div > .item > .new,
 .dark #simitone-should-update {
   color: #10171E!important;
+}
+
+.dark #rss .rss-entry h1,
+.dark #settings-page .form h1,
+.dark #downloads > div .tag h1,
+.dark .modal h1 {
+  text-shadow: 2px 2px rgba(0, 0, 0, 0.2) !important;
 }

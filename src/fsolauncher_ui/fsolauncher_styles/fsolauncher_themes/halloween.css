@@ -301,8 +301,9 @@ background-image: url(../../fsolauncher_images/15xvbd5.png),
 
 .halloween button,
 .halloween .button {
-  background-image: -webkit-linear-gradient(#ff691f, #c04f16 100%, #ff691f)!important;
-  color: #15202b;
+  background-image: -webkit-linear-gradient(#ff5400, #ff5600 90%, #b03d04)!important;
+  color: #10171E;
+  text-shadow: 1px 1px rgba(0, 0, 0, 0.2) !important;
 }
 
 .halloween #launcher #sidebar li.active,
@@ -353,6 +354,7 @@ background-image: url(../../fsolauncher_images/15xvbd5.png),
 .halloween #downloads > div .tag h1,
 .halloween .modal h1 {
   color: #ff691f;
+  text-shadow: 2px 2px rgba(0, 0, 0, 0.2) !important;
 }
 
 .halloween #settings-page .form h1 {
@@ -370,8 +372,9 @@ background-image: url(../../fsolauncher_images/15xvbd5.png),
 .halloween input,
 .halloween select {
   font-weight: bold;
-  color: #15202b !important;
-  background-image: url(../../fsolauncher_images/15xvbd5.png),-webkit-linear-gradient(#ff691f, #c04f16 95%, #ff691f)!important;
+  color: #10171E !important;
+  border-color: #0B1015;
+  background-image: url(../../fsolauncher_images/15xvbd5.png),-webkit-linear-gradient(#ff5400, #ff5600 90%, #b03d04)!important;
   background-position: 97% center;
   background-repeat: no-repeat;
 }
@@ -438,4 +441,9 @@ background-image: url(../../fsolauncher_images/15xvbd5.png),
 .halloween #downloads > div > .item > .new,
 .halloween #simitone-should-update {
   color: #10171E!important;
+}
+
+.halloween .download.stopped .loading .progress {
+  background-image: none;
+  background: #FF691F;
 }
