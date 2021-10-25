@@ -303,7 +303,6 @@ background-image: url(../../fsolauncher_images/15xvbd5.png),
 .halloween .button {
   background-image: -webkit-linear-gradient(#ff5400, #ff5600 90%, #b03d04)!important;
   color: #10171E;
-  text-shadow: 1px 1px rgba(0, 0, 0, 0.2) !important;
 }
 
 .halloween #launcher #sidebar li.active,
