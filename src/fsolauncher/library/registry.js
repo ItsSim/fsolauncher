@@ -50,6 +50,9 @@ class Registry {
     if( program == 'OpenAL' ) {
       locals.push( 'C:/Program Files (x86)/OpenAL' );
     }
+    if( program == 'TS1' ) {
+      locals.push( 'C:/Program Files (x86)/Maxis/The Sims' );
+    }
     if( locals.length > 0 ) {
       for ( let i = 0; i < locals.length; i++ ) {
         const local = locals[i];
@@ -131,6 +134,12 @@ class Registry {
         Key.get( 'InstallPath', async ( err, _RegistryItem ) => {
           if ( err ) {
             console.log( err );
+            if( await this.win32LocalPathFallbacks( e ) ) {
+              return resolve( {
+                key: e,
+                isInstalled: true
+              } );
+            }
             return resolve( {
               key: e,
               isInstalled: false,
@@ -138,9 +147,15 @@ class Registry {
             } );
           } else {
             // SIMS_GAME_EDITION = 255 All EPs installed.
-            Key.get( 'SIMS_GAME_EDITION', ( err, RegistryItem ) => {
+            Key.get( 'SIMS_GAME_EDITION', async ( err, RegistryItem ) => {
               if ( err ) {
                 console.log( err );
+                if( await this.win32LocalPathFallbacks( e ) ) {
+                  return resolve( {
+                    key: e,
+                    isInstalled: true
+                  } );
+                }
                 return reject( {
                   key: e,
                   isInstalled: false
