@@ -212,7 +212,7 @@
 }
 
 .dark #rss .rss-entry > span {
- color:rgba(255,255,255,0.4)
+  color:rgba(255,255,255,0.6);
 }
 
 .dark div.stag {

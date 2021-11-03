@@ -55,8 +55,10 @@ try {
 }
 
 const code = ( ! conf.Launcher.Language || conf.Launcher.Language == 'default' ) ? 
-  oslocale.sync().substring( 0, 2 ) : conf.Launcher.Language, 
-   options = {};
+  oslocale.sync().substring( 0, 2 ) : conf.Launcher.Language;
+   
+/** @type {Electron.BrowserWindowConstructorOptions} */
+const options = {};
 
 global.locale = Object.prototype.hasOwnProperty.call( UIText, code )
   ? UIText[code]
