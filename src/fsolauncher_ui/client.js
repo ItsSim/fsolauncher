@@ -18,15 +18,6 @@ DOMPurify.addHook( 'afterSanitizeAttributes', node => {
   }
 } );
 
-var timeout = ( promise, milliseconds = 5000 ) => {
-  return new Promise( ( resolve, reject ) => {
-    setTimeout( () => {
-      reject( new Error( "Timeout exceeded" ) )
-    }, milliseconds )
-    promise.then( resolve, reject )
-  } )
-};
-
 var darkThemes = [ 'halloween', 'dark' ];
 
 // Expose setCurrentPage to the DOM.
@@ -41,6 +32,14 @@ var setCurrentPage;
   var simitoneSuggestedUpdate;
   var platform = $( 'html' ).className;
   var prevTheme;
+  var timeout = ( promise, milliseconds = 5000 ) => {
+    return new Promise( ( resolve, reject ) => {
+      setTimeout( () => {
+        reject( new Error( "Timeout exceeded" ) )
+      }, milliseconds )
+      promise.then( resolve, reject )
+    } )
+  };
   var init = () => {
     ( sendToMain( 'INIT_DOM' ), setCurrentPage( 'home' ), fetchNews() )
     setInterval( updateTSOClock, 1000 );
