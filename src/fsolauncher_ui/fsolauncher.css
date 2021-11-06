@@ -1323,7 +1323,7 @@ a.twitter-timeline {
 #launcher #sidebar li:not(#logo):hover,
 #launcher #sidebar li:not(#logo).active
  {
-  border:0!important;
+  border-right:0!important;
 }
 
 #launcher #sidebar li.active:after,

@@ -272,7 +272,8 @@ class FilePlanetInstaller {
   updateDownloadProgress() {
     setTimeout( () => {
       const mb = this.dl.getProgressMB();
-      const p = ( ( mb / 1268 ) * 100 ).toFixed( 0 );
+      let p = ( ( mb / 1268 ) * 100 ).toFixed( 0 );
+      if ( isNaN( p ) ) p = 0;
       if ( this.haltProgress ) return;
       this.createProgressItem(
         // Archive.org does not provide Content-Length so the MBs are hardcoded.

@@ -99,7 +99,7 @@ class FSOLauncher {
       global.locale.TIP8,
       global.locale.TIP9,
       global.locale.TIP10,
-      global.locale.TIP11,
+      // global.locale.TIP11,
       global.locale.TIP12,
       global.locale.TIP13
     ];
@@ -108,7 +108,7 @@ class FSOLauncher {
 
     setTimeout( () => {
       this.updateTipRecursive();
-    }, 30000 );
+    }, 10000 );
   }
   /**
    * Gets the current internet status.

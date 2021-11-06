@@ -98,10 +98,11 @@ class RemeshesInstaller {
 
   updateDownloadProgress() {
     setTimeout( () => {
-      const p = this.dl.getProgress(),
-        mb = this.dl.getProgressMB(),
+      let p = this.dl.getProgress();
+      const mb = this.dl.getProgressMB(),
         size = this.dl.getSizeMB();
 
+      if ( isNaN( p ) ) p = 0;
       if ( p < 100 ) {
         if ( !this.haltProgress ) {
           this.createProgressItem(

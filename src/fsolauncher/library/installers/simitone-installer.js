@@ -173,7 +173,7 @@ class SimitoneInstaller {
       mode: 'error'
     } );
     this.haltProgress = true;
-    this.createProgressItem( global.locale.FSO_FAILED_INSTALLATION, 100 );
+    this.createProgressItem( global.locale.FSO_FAILED_INSTALLATION.replace( /freeso/ig, 'Simitone' ), 100 );
     this.FSOLauncher.View.stopProgressItem( 'FSOProgressItem' + this.id );
     this.FSOLauncher.removeActiveTask( 'Simitone' );
     Modal.showFailedInstall( 'Simitone', ErrorMessage );
@@ -264,6 +264,7 @@ class SimitoneInstaller {
       let p = this.dl.getProgress();
       const mb = this.dl.getProgressMB(),
         size = this.dl.getSizeMB();
+
       if ( isNaN( p ) ) p = 0;
       if ( p < 100 ) {
         if ( !this.haltProgress ) {

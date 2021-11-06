@@ -156,6 +156,7 @@ class ServoInstaller {
     this.FSOLauncher.removeActiveTask( 'FSO' );
     Modal.showFailedInstall( 'FreeSO', ErrorMessage );
     console.log( ErrorMessage );
+    return Promise.reject( ErrorMessage );
   }
   /**
    * Downloads the distribution file.
@@ -238,16 +239,14 @@ class ServoInstaller {
    * @memberof ServoInstaller
    */
   updateDownloadProgress() {
-    //console.log('updateDownloadProgress');
     setTimeout( () => {
       let p = this.dl.getProgress();
       const mb = this.dl.getProgressMB(),
         size = this.dl.getSizeMB();
-      //console.log('Progress:', p);
+
       if ( isNaN( p ) ) p = 0;
       if ( p < 100 ) {
         if ( !this.haltProgress ) {
-          //console.log(mb, size, p);
           this.createProgressItem(
             `${global.locale.DL_CLIENT_FILES} ${mb} MB ${global.locale.X_OUT_OF_X} ${size} MB (${p}%)`,
             p
