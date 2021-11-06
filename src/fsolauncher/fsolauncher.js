@@ -390,7 +390,7 @@ class FSOLauncher {
    */
   async checkSimitoneRequirements() {
     new ToastComponent(
-      'Checking requirements', this.View, 1500
+      global.locale.TOAST_CHECKING_UPDATES, this.View, 1500
     );
     const Registry = require( './library/registry' );
     const simitoneStatus = await Registry.get( 'Simitone', Registry.getSimitonePath() );
