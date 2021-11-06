@@ -2,12 +2,8 @@
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
-  src: /*url(../fsolauncher_fonts/MaterialIcons-Regular.eot);
-    src: local('Material Icons'),
-    local('MaterialIcons-Regular'),
-    url(../fsolauncher_fonts/MaterialIcons-Regular.woff2) format('woff2'),
-    url(../fsolauncher_fonts/MaterialIcons-Regular.woff) format('woff'),*/ url(../fsolauncher_fonts/MaterialIcons-Round.ttf)
-    format('truetype');
+  src: url(../fsolauncher_fonts/MaterialIcons-Round.otf)
+    format('opentype');
 }
 
 .material-icons {
