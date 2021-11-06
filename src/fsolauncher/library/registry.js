@@ -17,8 +17,8 @@ class Registry {
     if( process.platform != "win32" ) return Promise.resolve( false );
     const Registry = require( 'winreg' );
     const regKey = new Registry( {
-      hive: Registry.HKCU,
-      key:  '\\Software\\AAA_' + new Date().toISOString()
+      hive: Registry.HKLM,
+      key:  '\\SOFTWARE\\AAA_' + new Date().toISOString()
     } );
 
     return new Promise( ( resolve, _reject ) => {
@@ -32,6 +32,7 @@ class Registry {
             console.log( 'Registry access check failed:', err );
             return resolve( false );
           }
+          console.log( 'Registry access OK: This user can access the registry.' );
           resolve( true );
         } )
       } )
@@ -153,11 +154,7 @@ class Registry {
     }
     return new Promise( ( resolve, reject ) => {
       const Registry = require( 'winreg' );
-
-      const Key = new Registry( {
-        hive: Registry.HKLM,
-        key: p
-      } );
+      const Key = new Registry( { hive: Registry.HKLM, key: p } );
 
       if ( e === 'FSO' || e === 'TSO' || e === 'Simitone' ) {
         Key.get( 'InstallDir', async ( err, RegistryItem ) => {
@@ -245,8 +242,8 @@ class Registry {
    * @returns
    * @memberof Registry
    */
-  static createMaxisEntry( InstallDir ) {
-    if( process.platform === "darwin" ) {
+  static async createMaxisEntry( InstallDir ) {
+    if( ! await Registry.testWinAccess() ) {
       return Promise.resolve();
     }
 
@@ -314,8 +311,8 @@ class Registry {
    * @returns
    * @memberof Registry
    */
-  static createFreeSOEntry( InstallDir, KeyName = 'FreeSO' ) {
-    if( process.platform === "darwin" ) {
+  static async createFreeSOEntry( InstallDir, KeyName = 'FreeSO' ) {
+    if( ! await Registry.testWinAccess() ) {
       return Promise.resolve();
     }
     return new Promise( ( resolve, reject ) => {

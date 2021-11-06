@@ -716,7 +716,12 @@ class FSOLauncher {
               const InstallerInstance = new Installer( InstallDir, this );
               const isInstalled = await InstallerInstance.isInstalledInPath();
 
-              if ( isInstalled && !options.fullInstall && !options.dir && process.platform != 'darwin' ) {
+              if ( 
+                isInstalled && 
+                !options.fullInstall && 
+                !options.dir && 
+                await ( require( './library/registry' ).testWinAccess() ) 
+              ) {
                 return Modal.showAlreadyInstalled( this.getPrettyName( Component ), Component, InstallDir );
               }
 
