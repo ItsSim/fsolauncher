@@ -24,17 +24,23 @@ class Registry {
     return new Promise( ( resolve, _reject ) => {
       regKey.create( err => {
         if( err ) {
-          console.log( 'Registry access check failed:', err );
+          console.log( 'Registry access check failed (on create):', err );
           return resolve( false );
         }
-        regKey.destroy( function ( err ) {
-          if ( err ) {
-            console.log( 'Registry access check failed:', err );
+        regKey.keyExists( function( err, exists ) {
+          if( err || !exists ) {
+            console.log( 'Registry access check failed (on keyExists):', err );
             return resolve( false );
           }
-          console.log( 'Registry access OK: This user can access the registry.' );
-          resolve( true );
-        } )
+          regKey.destroy( function ( err ) {
+            if ( err ) {
+              console.log( 'Registry access check failed (on destroy):', err );
+              return resolve( false );
+            }
+            console.log( 'Registry access OK: This user can access the Windows registry.' );
+            resolve( true );
+          } )
+        } );
       } )
     } );
   }
