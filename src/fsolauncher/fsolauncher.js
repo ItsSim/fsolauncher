@@ -683,7 +683,7 @@ class FSOLauncher {
           if ( !options.override ) {
             let InstallDir;
             if( !options.dir ) {
-              if( process.platform === "win32" )  {
+              if( await ( require( './library/registry' ).testWinAccess() ) ) {
                 const Toast = new ToastComponent(
                   `Choose where to install ${this.getPrettyName( Component )}`,
                   this.View
@@ -697,8 +697,16 @@ class FSOLauncher {
                 }
                 Toast.destroy();
               } else {
-                // darwin doesnt get to choose
-                InstallDir = global.HOMEDIR + '/Documents/' + this.getPrettyName( Component );
+                if( process.platform != 'win32' ) {
+                  // darwin doesnt get to choose
+                  InstallDir = global.HOMEDIR + '/Documents/' + this.getPrettyName( Component );
+                } else {
+                  if ( Component == 'TSO' ) {
+                    InstallDir = 'C:/Program Files/Maxis/' + this.getPrettyName( Component );
+                  } else {
+                    InstallDir = 'C:/Program Files/' + this.getPrettyName( Component );
+                  }
+                }
               }
             } else {
               InstallDir = options.dir;

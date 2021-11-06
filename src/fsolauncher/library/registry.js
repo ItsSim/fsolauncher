@@ -5,6 +5,38 @@
  * @class Registry
  */
 class Registry {
+  /**
+   * Tests to see if the current user has access to the registry by
+   * creating and deleting a key.
+   * 
+   * https://github.com/fresc81/node-winreg#access-to-restricted-keys
+   * 
+   * @returns {Promise<boolean>}
+   */
+  static testWinAccess() {
+    if( process.platform != "win32" ) return Promise.resolve( false );
+    const Registry = require( 'winreg' );
+    const regKey = new Registry( {
+      hive: Registry.HKCU,
+      key:  '\\Software\\AAA_' + new Date().toISOString()
+    } );
+
+    return new Promise( ( resolve, _reject ) => {
+      regKey.create( err => {
+        if( err ) {
+          console.log( 'Registry access check failed:', err );
+          return resolve( false );
+        }
+        regKey.destroy( function ( err ) {
+          if ( err ) {
+            console.log( 'Registry access check failed:', err );
+            return resolve( false );
+          }
+          resolve( true );
+        } )
+      } )
+    } );
+  }
   static getOpenALPath() {
     return "\\SOFTWARE\\OpenAL";
   }
@@ -34,6 +66,16 @@ class Registry {
     return '/Library/Frameworks/SDL2.framework';
   }
 
+  /**
+   * Checks if the program is installed in several predefined local paths. 
+   * This is useful for those cases where the current user does not have access
+   * to the registry even in admin mode:
+   * 
+   * https://github.com/fresc81/node-winreg#access-to-restricted-keys
+   * 
+   * @param {string} program The program ID.
+   * @returns {string|boolean}
+   */
   static async win32LocalPathFallbacks( program ) {
     const locals = [];
     if( program == 'FSO' ) {
@@ -56,9 +98,9 @@ class Registry {
     if( locals.length > 0 ) {
       for ( let i = 0; i < locals.length; i++ ) {
         const local = locals[i];
-        console.log( 'Testing local', local );
+        console.log( 'Testing local:', local );
         const exists = await require( 'fs-extra' ).exists( local );
-        if( exists ) { return local; }
+        if( exists ) return local;
       }
     }
     return false;
@@ -67,7 +109,7 @@ class Registry {
    * Returns the status of all the required programs (Installed/not installed).
    *
    * @static
-   * @returns
+   * @returns {Promise}
    * @memberof Registry
    */
   static getInstalled() {
@@ -86,8 +128,8 @@ class Registry {
       }
 
       Promise.all( Promises )
-        .then( a => { resolve( a ); } )
-        .catch( err => { if ( err ) reject( err ); } );
+        .then( a => resolve( a ) )
+        .catch( err => reject( err ) );
     } );
   }
   /**
@@ -103,8 +145,8 @@ class Registry {
     if( process.platform === "darwin" ) {
       // when darwin directly test if file exists
       return new Promise( ( resolve, _reject ) => {
-        require( 'fs-extra' ).pathExists( p, ( err, exists ) => {
-          console.log( 'Mac Check:', e, p, exists );
+        require( 'fs-extra' ).pathExists( p, ( _err, exists ) => {
+          console.log( 'Testing Mac:', e, p, exists );
           resolve( { key: e, isInstalled: exists ? require( 'path' ).dirname( p ) : false } );
         } );
       } );
@@ -126,55 +168,33 @@ class Registry {
               isInstalled = await this.win32LocalPathFallbacks( e );
             } catch( err ) {/**/}
             return resolve( { key: e, isInstalled, error: err } );
-          } else {
-            return resolve( { key: e, isInstalled: RegistryItem.value } );
           }
+          return resolve( { key: e, isInstalled: RegistryItem.value } );
         } );
       } else if ( e === 'TS1' ) {
         Key.get( 'InstallPath', async ( err, _RegistryItem ) => {
           if ( err ) {
             console.log( err );
             if( await this.win32LocalPathFallbacks( e ) ) {
-              return resolve( {
-                key: e,
-                isInstalled: true
-              } );
+              return resolve( { key: e, isInstalled: true } );
             }
-            return resolve( {
-              key: e,
-              isInstalled: false,
-              error: err
-            } );
-          } else {
-            // SIMS_GAME_EDITION = 255 All EPs installed.
-            Key.get( 'SIMS_GAME_EDITION', async ( err, RegistryItem ) => {
-              if ( err ) {
-                console.log( err );
-                if( await this.win32LocalPathFallbacks( e ) ) {
-                  return resolve( {
-                    key: e,
-                    isInstalled: true
-                  } );
-                }
-                return reject( {
-                  key: e,
-                  isInstalled: false
-                } );
-              }
-
-              const TS1Edition = RegistryItem.value;
-              if ( TS1Edition == 255 ) {
-                return resolve( {
-                  key: e,
-                  isInstalled: true
-                } );
-              }
-              resolve( {
-                key: e,
-                isInstalled: false
-              } );
-            } );
+            return resolve( { key: e, isInstalled: false, error: err } );
           }
+          // SIMS_GAME_EDITION = 255 All EPs installed.
+          Key.get( 'SIMS_GAME_EDITION', async ( err, RegistryItem ) => {
+            if ( err ) {
+              console.log( err );
+              if( await this.win32LocalPathFallbacks( e ) ) {
+                return resolve( { key: e, isInstalled: true } );
+              }
+              return reject( { key: e, isInstalled: false } );
+            }
+
+            if ( RegistryItem.value == 255 ) {
+              return resolve( { key: e, isInstalled: true } );
+            }
+            resolve( { key: e, isInstalled: false } );
+          } );
         } );
       } else if ( e === 'NET' ) {
         Key.keys( ( err, Registries ) => {
@@ -182,17 +202,16 @@ class Registry {
             console.log( err );
             // Trust our galaxy and return that it’s installed...
             return resolve( { key: e, isInstalled: true, error: err } );
-          } else {
-            for ( let i = 0; i < Registries.length; i++ ) {
-              if (
-                Registries[i].key.indexOf( 'v4.0' ) > -1 ||
-                Registries[i].key.indexOf( 'v4' ) > -1
-              ) {
-                return resolve( { key: e, isInstalled: true } );
-              }
-            }
-            return resolve( { key: e, isInstalled: false } );
           }
+          for ( let i = 0; i < Registries.length; i++ ) {
+            if (
+              Registries[i].key.indexOf( 'v4.0' ) > -1 ||
+              Registries[i].key.indexOf( 'v4' ) > -1
+            ) {
+              return resolve( { key: e, isInstalled: true } );
+            }
+          }
+          return resolve( { key: e, isInstalled: false } );
         } );
       } else if ( e === 'OpenAL' ) {
         Key.keyExists( async( err, exists ) => {
@@ -203,17 +222,17 @@ class Registry {
               isInstalled = await this.win32LocalPathFallbacks( e );
             } catch( err ) {/**/}
             return resolve( { key: e, isInstalled, error: err } );
-          } else {
-            if ( exists ) {
-              return resolve( { key: e, isInstalled: true } );
-            } else {
-              let isInstalled = false;
-              try {
-                isInstalled = await this.win32LocalPathFallbacks( e );
-              } catch( err ) {/**/}
-              return resolve( { key: e, isInstalled } );
-            }
-          }
+          } 
+
+          if ( exists ) {
+            return resolve( { key: e, isInstalled: true } );
+          } 
+          let isInstalled = false;
+          try {
+            isInstalled = await this.win32LocalPathFallbacks( e );
+          } catch( err ) {/**/}
+
+          return resolve( { key: e, isInstalled } );
         } );
       }
     } );
@@ -233,7 +252,6 @@ class Registry {
 
     return new Promise( ( resolve, reject ) => {
       const Registry = require( 'winreg' );
-
       const Key = new Registry( {
         hive: Registry.HKLM,
         key: '\\SOFTWARE\\Maxis\\The Sims Online'
@@ -243,35 +261,18 @@ class Registry {
         if ( err ) {
           console.log( err );
           return reject( global.locale.TSO_REGISTRY_EDIT_FAIL );
-        } else {
-          if ( exists ) {
-            Key.destroy( err => {
-              if ( err ) {
-                console.log( err );
-                return reject( global.locale.TSO_INSTALLDIR_FAIL );
-              }
+        }
+        if ( exists ) {
+          Key.destroy( err => {
+            if ( err ) {
+              console.log( err );
+              return reject( global.locale.TSO_INSTALLDIR_FAIL );
+            }
 
-              Key.create( err => {
-                if ( err ) {
-                  console.log( err );
-                  return reject( global.locale.TSO_INSTALLDIR_FAIL );
-                }
-
-                Key.set( 'InstallDir', Registry.REG_SZ, InstallDir, err => {
-                  if ( err ) {
-                    console.log( err );
-                    return reject( global.locale.TSO_INSTALLDIR_FAIL );
-                  }
-
-                  return resolve();
-                } );
-              } );
-            } );
-          } else {
             Key.create( err => {
               if ( err ) {
                 console.log( err );
-                return reject( global.locale.TSO_REGISTRY_EDIT_FAIL );
+                return reject( global.locale.TSO_INSTALLDIR_FAIL );
               }
 
               Key.set( 'InstallDir', Registry.REG_SZ, InstallDir, err => {
@@ -283,7 +284,23 @@ class Registry {
                 return resolve();
               } );
             } );
-          }
+          } );
+        } else {
+          Key.create( err => {
+            if ( err ) {
+              console.log( err );
+              return reject( global.locale.TSO_REGISTRY_EDIT_FAIL );
+            }
+
+            Key.set( 'InstallDir', Registry.REG_SZ, InstallDir, err => {
+              if ( err ) {
+                console.log( err );
+                return reject( global.locale.TSO_INSTALLDIR_FAIL );
+              }
+
+              return resolve();
+            } );
+          } );
         }
       } );
     } );
@@ -312,35 +329,18 @@ class Registry {
         if ( err ) {
           console.log( err );
           return reject( global.locale.TSO_REGISTRY_EDIT_FAIL );
-        } else {
-          if ( exists ) {
-            Key.destroy( err => {
-              if ( err ) {
-                console.log( err );
-                return reject( global.locale.TSO_INSTALLDIR_FAIL );
-              }
+        }
+        if ( exists ) {
+          Key.destroy( err => {
+            if ( err ) {
+              console.log( err );
+              return reject( global.locale.TSO_INSTALLDIR_FAIL );
+            }
 
-              Key.create( err => {
-                if ( err ) {
-                  console.log( err );
-                  return reject( global.locale.TSO_INSTALLDIR_FAIL );
-                }
-
-                Key.set( 'InstallDir', Registry.REG_SZ, InstallDir, err => {
-                  if ( err ) {
-                    console.log( err );
-                    return reject( global.locale.TSO_INSTALLDIR_FAIL );
-                  }
-
-                  return resolve();
-                } );
-              } );
-            } );
-          } else {
             Key.create( err => {
               if ( err ) {
                 console.log( err );
-                return reject( global.locale.TSO_REGISTRY_EDIT_FAIL );
+                return reject( global.locale.TSO_INSTALLDIR_FAIL );
               }
 
               Key.set( 'InstallDir', Registry.REG_SZ, InstallDir, err => {
@@ -352,7 +352,23 @@ class Registry {
                 return resolve();
               } );
             } );
-          }
+          } );
+        } else {
+          Key.create( err => {
+            if ( err ) {
+              console.log( err );
+              return reject( global.locale.TSO_REGISTRY_EDIT_FAIL );
+            }
+
+            Key.set( 'InstallDir', Registry.REG_SZ, InstallDir, err => {
+              if ( err ) {
+                console.log( err );
+                return reject( global.locale.TSO_INSTALLDIR_FAIL );
+              }
+
+              return resolve();
+            } );
+          } );
         }
       } );
     } );
