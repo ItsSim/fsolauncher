@@ -674,6 +674,7 @@ button.blue:hover,
 }
 
 ::-webkit-scrollbar-thumb {
+  border-radius: 6px;
   background: rgba(0, 0, 0, 0.2);
 }
 
