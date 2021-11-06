@@ -161,7 +161,7 @@ class GitHubInstaller extends ServoInstaller {
    * @returns
    * @memberof GitHubInstaller
    */
-  async error( _ErrorMessage ) {
+  async error( ErrorMessage ) {
     if( this.dl ) this.dl.cleanup();
     this.FSOLauncher.setProgressBar( 1, { mode: 'error' } );
     this.haltProgress = true;
@@ -171,6 +171,7 @@ class GitHubInstaller extends ServoInstaller {
     this.FSOLauncher.View.stopProgressItem( 
       'FSOProgressItem' + this.id 
     );
+    require( '../modal' ).showFailedInstall( 'FreeSO', ErrorMessage );
     const secondaryInstaller = new ServoInstaller( this.path, this.FSOLauncher );
     await secondaryInstaller.install();
   }

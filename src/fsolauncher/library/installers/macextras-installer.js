@@ -108,7 +108,7 @@ class MacExtrasInstaller {
         }
         return this.updateDownloadProgress();
       }
-    }, 1000 );
+    }, 1 );
   }
 
   extract() {

@@ -280,7 +280,7 @@ class FilePlanetInstaller {
         p
       );
       return this.updateDownloadProgress();
-    }, 1000 );
+    }, 1 );
   }
 }
 
