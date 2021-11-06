@@ -219,3 +219,8 @@ rgba(255, 255, 255, 0.3) 66%,
 .summer2021 .hint h1 {
   color: #fff!important;
 }
+
+.summer2021 #launcher #sidebar li.active:after,
+.summer2021 #launcher #sidebar li:not(#logo):hover:after {
+  background: transparent!important;
+}

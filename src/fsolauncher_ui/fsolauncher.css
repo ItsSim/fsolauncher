@@ -1315,3 +1315,27 @@ a.twitter-timeline {
   padding-left: 8px;
   padding-right: 8px;
 }
+
+#launcher #sidebar li:not(#logo) {
+  position:relative!important;
+}
+
+#launcher #sidebar li:not(#logo):hover,
+#launcher #sidebar li:not(#logo).active
+ {
+  border:0!important;
+}
+
+#launcher #sidebar li.active:after,
+#launcher #sidebar li:not(#logo):hover:after {
+  height: 100%;
+  width:4px;
+  background: #4b88e4;
+  position:absolute;
+  content: '';
+  right: 0;
+  top: 0;
+  border-top-left-radius:6px;
+  border-bottom-left-radius:6px;
+}
+

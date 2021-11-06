@@ -446,3 +446,8 @@ background-image: url(../../fsolauncher_images/15xvbd5.png),
   background-image: none;
   background: #FF691F;
 }
+
+.halloween #launcher #sidebar li.active:after,
+.halloween #launcher #sidebar li:not(#logo):hover:after {
+  background: #FF691F!important;
+}

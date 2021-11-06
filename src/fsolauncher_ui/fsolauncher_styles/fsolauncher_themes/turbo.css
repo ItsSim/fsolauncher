@@ -101,3 +101,8 @@
 .turbo .button.turbo-transparent:hover {
   background: #7abceb;
 }
+
+.turbo #launcher #sidebar li.active:after,
+.turbo #launcher #sidebar li:not(#logo):hover:after {
+  background: #d33c97!important;
+}
