@@ -451,3 +451,8 @@ background-image: url(../../fsolauncher_images/15xvbd5.png),
 .halloween #launcher #sidebar li:not(#logo):hover:after {
   background: #FF691F!important;
 }
+
+
+.halloween #launcher #content #full-install {
+  background-image: url(../../fsolauncher_images/citydark.jpg);
+} 

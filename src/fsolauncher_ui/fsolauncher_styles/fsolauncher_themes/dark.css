@@ -327,3 +327,7 @@ background-image: url(../../fsolauncher_images/15xvbd5.png),
 .dark .modal h1 {
   text-shadow: 2px 2px rgba(0, 0, 0, 0.2) !important;
 }
+
+.dark #launcher #content #full-install {
+  background-image: url(../../fsolauncher_images/citydark.jpg);
+} 
