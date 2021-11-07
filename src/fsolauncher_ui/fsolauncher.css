@@ -642,6 +642,10 @@ button.blue:hover,
   background-color: #fff !important;
 }
 
+#downloads > div > .item[install='Mono']:hover {
+  background-size: 120% !important;
+}
+
 #downloads > div > .item > .new {
   float: left;
   color: #fff;
