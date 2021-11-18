@@ -7,7 +7,7 @@ const Modal = require( '../modal' ),
 // changed to beta.freeso.org redirect in case it needs to be changed
 const DOWNLOAD_URL_FILEPLANET = 'https://beta.freeso.org/LauncherResourceCentral/TheSimsOnline';
 //const MAX_RETRIES = 10;
-const TEMP_PATH = `${global.APPDATA}temp/FilePlanetInstaller/`;
+const TEMP_PATH = `${global.appData}temp/FilePlanetInstaller/`;
 const TEMP_FILE = 'FilePlanetTSOFiles.zip';
 /**
  * Introduced 09/16/2018

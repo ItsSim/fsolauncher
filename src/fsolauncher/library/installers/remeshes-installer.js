@@ -8,7 +8,7 @@ class RemeshesInstaller {
     this.id = Math.floor( Date.now() / 1000 );
     this.path = path;
     this.haltProgress = false;
-    this.tempPath = `${global.APPDATA}temp/artifacts-remeshes-${this.id}.zip`;
+    this.tempPath = `${global.appData}temp/artifacts-remeshes-${this.id}.zip`;
     this.parentComponent = parentComponent;
     const location = FSOLauncher.remeshInfo.location
       ? FSOLauncher.remeshInfo.location

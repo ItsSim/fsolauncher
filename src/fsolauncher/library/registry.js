@@ -49,22 +49,22 @@ class Registry {
   }
   static getFSOPath() {
     return process.platform === "win32" ? 
-      "\\SOFTWARE\\Rhys Simpson\\FreeSO" : `${global.HOMEDIR}/Documents/FreeSO/FreeSO.exe`;
+      "\\SOFTWARE\\Rhys Simpson\\FreeSO" : `${global.homeDir}/Documents/FreeSO/FreeSO.exe`;
   }
   static getTSOPath() {
     return process.platform === "win32" ? 
-      "\\SOFTWARE\\Maxis\\The Sims Online" : `${global.HOMEDIR}/Documents/The Sims Online/TSOClient/TSOClient.exe`;
+      "\\SOFTWARE\\Maxis\\The Sims Online" : `${global.homeDir}/Documents/The Sims Online/TSOClient/TSOClient.exe`;
   }
   static getNETPath() {
     return "\\SOFTWARE\\Microsoft\\NET Framework Setup\\NDP";
   }
   static getSimitonePath() {
     return process.platform === "win32" ?
-      "\\SOFTWARE\\Rhys Simpson\\Simitone" : `${global.HOMEDIR}/Documents/Simitone for Windows/Simitone.Windows.exe`;
+      "\\SOFTWARE\\Rhys Simpson\\Simitone" : `${global.homeDir}/Documents/Simitone for Windows/Simitone.Windows.exe`;
   }
   static getTS1Path() {
     return process.platform === "win32" ?
-      "\\SOFTWARE\\Maxis\\The Sims" : `${global.HOMEDIR}/Documents/The Sims/Sims.exe`;
+      "\\SOFTWARE\\Maxis\\The Sims" : `${global.homeDir}/Documents/The Sims/Sims.exe`;
   }
   static getMonoPath() {
     return '/Library/Frameworks/Mono.framework';

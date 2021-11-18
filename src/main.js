@@ -1,6 +1,8 @@
 require( 'fix-path' )(); // Fix $PATH on darwin
 require( 'v8-compile-cache' );
-const { app, BrowserWindow, shell, Tray, Menu, nativeImage, nativeTheme } = require( 'electron' );
+const { 
+  app, BrowserWindow, shell, Tray, Menu, nativeImage, nativeTheme 
+} = require( 'electron' );
 
 const oslocale = require( 'os-locale' ),
    fs = require( 'fs-extra' ),
@@ -13,28 +15,36 @@ const UIText = require( './fsolauncher_ui/uitext.json' ),
 global.normalizePathSlashes = ( d ) => d ? d.replace( /\\/g, '/' ) : d
 
 process.title = 'FreeSO Launcher';
-global.VERSION = package.version;
-global.WEBSERVICE = '173.212.246.204';
-
-global.HOMEDIR = require( "os" ).homedir();
 global.willQuit = false;
+global.launcherVersion = package.version;
+global.webService = 'beta.freeso.org';
+global.homeDir = require( "os" ).homedir();
+global.socketPort = 30001;
+global.remeshEndpoint = 'remeshpackage';
+global.updateEndpoint = 'updatecheck';
 
-global.SOCKET_ENDPOINT = 30001;
-global.REMESH_ENDPOINT = 'RemeshPackage';
-global.UPDATE_ENDPOINT = 'UpdateCheck';
+const prevOpenExternal = shell.openExternal
+  shell.openExternal = Object.freeze( url => {
+    if( url.startsWith( 'http' ) || url.startsWith( 'https' ) ) {
+      prevOpenExternal( url )
+    } else {
+      console.log( 'openExternal blocked', url )
+    }
+  } );
+  Object.freeze( shell );
 
 /**
  * On Windows, prefs and temps are written straight to the launcher folder.
  * On Mac, they are written in ~/Library/Application Support/FreeSO Launcher
  */
-global.APPDATA = process.platform == 'darwin' ? 
-  `${global.HOMEDIR}/Library/Application Support/FreeSO Launcher/` : '';
-if( process.platform == 'darwin' ) fs.ensureDirSync( global.APPDATA + 'temp' );
+global.appData = process.platform == 'darwin' ? 
+  `${global.homeDir}/Library/Application Support/FreeSO Launcher/` : '';
+if( process.platform == 'darwin' ) fs.ensureDirSync( global.appData + 'temp' );
 
 let Window, tray, launcher, trayIcon, conf;
 
 try {
-  conf = ini.parse( fs.readFileSync( global.APPDATA + 'FSOLauncher.ini', 'utf-8' ) );
+  conf = ini.parse( fs.readFileSync( global.appData + 'FSOLauncher.ini', 'utf-8' ) );
 } catch ( e ) {
   conf = {
     Launcher: {
@@ -51,7 +61,7 @@ try {
     }
   };
 
-  fs.writeFileSync( global.APPDATA + 'FSOLauncher.ini', ini.stringify( conf ), 'utf-8' );
+  fs.writeFileSync( global.appData + 'FSOLauncher.ini', ini.stringify( conf ), 'utf-8' );
 }
 
 const code = ( ! conf.Launcher.Language || conf.Launcher.Language == 'default' ) ? 
@@ -64,12 +74,13 @@ global.locale = Object.prototype.hasOwnProperty.call( UIText, code )
   ? UIText[code]
   : UIText.en;
 
-global.locale = Object.assign( UIText.en, global.locale );
-global.locale.LVERSION = global.VERSION;
+global.locale = Object.assign( UIText.en, global.locale ); // Merge EN strings with current language.
+global.locale.LVERSION = global.launcherVersion;
 global.locale.PLATFORM = process.platform;
 global.locale.LANGCODE = code;
-global.locale.WS_PORT  = global.SOCKET_ENDPOINT;
-global.locale.WS_URL   = global.WEBSERVICE;
+
+global.locale.WS_PORT = global.socketPort;
+global.locale.WS_URL  = global.webService;
 
 function CreateWindow() {
   require( 'electron-pug' )( { pretty: false }, global.locale );
@@ -98,8 +109,7 @@ function CreateWindow() {
   options.useContentSize = true;
   options.show = false;
   options.resizable = false;
-  options.title = 'FreeSO Launcher ' + global.VERSION;
-  //options.icon = process.platform == 'darwin' ? 'beta.icns' : 'beta.ico';
+  options.title = 'FreeSO Launcher ' + global.launcherVersion;
   options.webPreferences = {
     nodeIntegration: true,
     contextIsolation: false,
@@ -111,18 +121,15 @@ function CreateWindow() {
   Window.setMenu( null );
   // Window.openDevTools( { mode: 'detach' } );
   Window.loadURL( `file://${__dirname}/fsolauncher_ui/fsolauncher.pug` );
-
   Window.on( 'restore', _e => Window.setSize( width, height ) );
 
   launcher = new FSOLauncher( Window, conf );
 
-  tray.setToolTip( `FreeSO Launcher ${global.VERSION}` );
+  tray.setToolTip( `FreeSO Launcher ${global.launcherVersion}` );
   tray.setContextMenu( Menu.buildFromTemplate( [
     {
       label: global.locale.TRAY_LABEL_1,
-      click: () => {
-        launcher.events.onPlay();
-      }
+      click: () => launcher.events.onPlay()
     },
     {
       type: 'separator'

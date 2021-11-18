@@ -8,7 +8,7 @@ class MonoInstaller {
     this.id = Math.floor( Date.now() / 1000 );
     //this.path = path;
     this.haltProgress = false;
-    this.tempPath = `${global.APPDATA}temp/mono-${this.id}.pkg`;
+    this.tempPath = `${global.appData}temp/mono-${this.id}.pkg`;
     this.dl = download( { from: 'https://beta.freeso.org/LauncherResourceCentral/Mono', to: this.tempPath } );
   }
 
@@ -111,7 +111,7 @@ class MonoInstaller {
     );
     return new Promise( ( resolve, reject ) => {
       // headless install
-      sudo.exec( `installer -pkg ${global.APPDATA.replace( / /g, '\\ ' )}temp/mono-${this.id}.pkg -target /`, {}, 
+      sudo.exec( `installer -pkg ${global.appData.replace( / /g, '\\ ' )}temp/mono-${this.id}.pkg -target /`, {}, 
         ( err, stdout, stderr ) => {
           if( err ) return reject( err );
           console.log( 'Mono Installer:', stdout, stderr );

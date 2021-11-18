@@ -303,32 +303,31 @@ class FSOLauncher {
    */
   getRemeshData() {
     return new Promise( ( resolve, reject ) => {
-      const http = require( 'http' );
       const options = {
-        host: global.WEBSERVICE,
-        path: '/' + global.REMESH_ENDPOINT
+        host: global.webService,
+        path: '/' + global.remeshEndpoint
       };
       console.log( 'Getting remesh data from', options.path );
 
-      const request = http.request( options, res => {
+      const request = require( 'https' ).request( options, res => {
         let data = '';
 
-        res.on( 'data', chunk => { data += chunk; } );
+        res.on( 'data', chunk => data += chunk );
         res.on( 'end', () => {
           try {
-            const j = JSON.parse( data );
-            this.remeshInfo.location = j.Location;
-            this.remeshInfo.version = j.Version;
-            console.log( 'getRemeshData', j );
-            resolve( j );
+            const remeshData = JSON.parse( data );
+            this.remeshInfo.location = remeshData.Location;
+            this.remeshInfo.version  = remeshData.Version;
+            console.log( 'getRemeshData', remeshData );
+            resolve( remeshData );
           } catch ( e ) {
             reject( e );
           }
         } );
       } );
 
-      request.setTimeout( 30000, () => { reject( 'Timed out' ); } );
-      request.on( 'error', e => { reject( e ); } );
+      request.setTimeout( 30000, () => reject( 'Timed out' ) );
+      request.on( 'error', e => reject( e ) );
       request.end();
     } );
   }
@@ -340,32 +339,30 @@ class FSOLauncher {
    */
   getLauncherData() {
     return new Promise( ( resolve, reject ) => {
-      const http = require( 'http' );
-      const os = require( 'os' );
       const options = {
-        host: global.WEBSERVICE,
-        path: `/${global.UPDATE_ENDPOINT}?os=${os.release()}` + 
-        `&version=${global.VERSION}` + 
+        host: global.webService,
+        path: `/${global.updateEndpoint}?os=${require( 'os' ).release()}` + 
+        `&version=${global.launcherVersion}` + 
         `&fso=${( this.isInstalled && this.isInstalled.FSO ) ? '1' : '0'}`
       };
       console.log( 'Getting launcher data from', options.path );
 
-      const request = http.request( options, res => {
+      const request = require( 'https' ).request( options, res => {
         let data = '';
-        res.on( 'data', chunk => { data += chunk; } );
+        res.on( 'data', chunk => data += chunk );
         res.on( 'end', () => {
           try {
-            const j = JSON.parse( data );
-            this.updateLocation = j.Location;
-            console.log( 'getLauncherData', j );
-            resolve( j );
+            const updateData = JSON.parse( data );
+            this.updateLocation = updateData.Location;
+            console.log( 'getLauncherData', updateData );
+            resolve( updateData );
           } catch ( e ) {
             reject( e );
           }
         } );
       } );
-      request.setTimeout( 30000, () => { reject( 'Timed out' ); } );
-      request.on( 'error', e => { reject( e ); } );
+      request.setTimeout( 30000, () => reject( 'Timed out' ) );
+      request.on( 'error', e => reject( e ) );
       request.end();
     } );
   }
@@ -446,7 +443,7 @@ class FSOLauncher {
 
         Toast.destroy();
 
-        if ( data.Version !== global.VERSION ) {
+        if ( data.Version !== global.launcherVersion ) {
           if (
             this.lastUpdateNotification !== data.Version &&
             !this.Window.isVisible()
@@ -699,7 +696,7 @@ class FSOLauncher {
               } else {
                 if( process.platform != 'win32' ) {
                   // darwin doesnt get to choose
-                  InstallDir = global.HOMEDIR + '/Documents/' + this.getPrettyName( Component );
+                  InstallDir = global.homeDir + '/Documents/' + this.getPrettyName( Component );
                 } else {
                   if ( Component == 'TSO' ) {
                     InstallDir = 'C:/Program Files/Maxis/' + this.getPrettyName( Component );
@@ -1167,7 +1164,7 @@ class FSOLauncher {
     const Toast = new ToastComponent( global.locale.TOAST_SETTINGS, this.View );
     console.log( 'persist', this.conf );
     require( 'fs-extra' ).writeFile(
-      global.APPDATA + 'FSOLauncher.ini',
+      global.appData + 'FSOLauncher.ini',
       require( 'ini' ).stringify( this.conf ),
       _err => setTimeout( () => Toast.destroy(), 1500 )
     );
