@@ -5,8 +5,8 @@ Electron.contextBridge.exposeInMainWorld( 'shared', {
   on: ( event, callback ) => {
    Electron.ipcRenderer.on( event, callback )
   },
-  send: ( event, data ) => {
-    Electron.ipcRenderer.send( event, data );
+  send: ( event, ...data ) => {
+    Electron.ipcRenderer.send( event, ...data );
   },
   openExternal: url => {
     Electron.shell.openExternal( url )
