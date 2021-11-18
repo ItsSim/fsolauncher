@@ -184,7 +184,7 @@ function CreateWindow() {
 app.on( 'ready', CreateWindow );
 
 app.on( 'before-quit', function() {
-  tray.destroy();
+  if( tray ) tray.destroy();
 } );
 
 app.on( 'window-all-closed', () => {
