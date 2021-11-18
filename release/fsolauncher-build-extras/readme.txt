@@ -2,6 +2,7 @@ Version: 2021 1.8.x
 Author: Sim
 
 Changelog:
+- 2021.11.18: Security changes. Update to Electron 16.
 - 2021.10.26: Small tweaks and fixes. Update to Electron 15.3.0.
 - 2021.10.17: Fixed shortcut mode feature regression.
 - 2021.10.17: Halloween v2 and Open Beta Dark themes. Light/Dark Twitter widget.
