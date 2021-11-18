@@ -1,7 +1,5 @@
-/* global io Howl DOMPurify */
-var Electron = require( 'electron' );
-var Parser   = require( 'rss-parser' );
-var parser   = new Parser();
+/* global io Howl DOMPurify shared RSSParser */
+var parser = new RSSParser();
 
 var $  = q => document.querySelector( q );
 var $a = q => document.querySelectorAll( q );
@@ -24,7 +22,7 @@ var darkThemes = [ 'halloween', 'dark' ];
 var setCurrentPage;
 
 ( () => {
-  var sock = io( `http://${ $( 'body' ).getAttribute( 'wsUrl' ) }:${ $( 'body' ).getAttribute( 'wsPort' ) }` );
+  var sock = io( `https://${ $( 'body' ).getAttribute( 'wsUrl' ) }:${ $( 'body' ).getAttribute( 'wsPort' ) }` );
   var pageTriggerAudio = new Howl( { src: 'fsolauncher_sounds/click.wav', volume: 0.4 } );
   var yesNoAudio = new Howl( { src: 'fsolauncher_sounds/modal.wav', volume: 0.4 } );
   var hasAlreadyLoaded = false;
@@ -43,7 +41,7 @@ var setCurrentPage;
   var init = () => {
     ( sendToMain( 'INIT_DOM' ), setCurrentPage( 'home' ), fetchNews() )
     setInterval( updateTSOClock, 1000 );
-    setElectronVersion( process.versions.electron );
+    setElectronVersion( shared.electronVersion );
     sock.on( 'receive global message', data => 
       sendToMain( 'SOCKET_MESSAGE', [ data.Message, data.Url ] ) );
   };
@@ -53,14 +51,14 @@ var setCurrentPage;
    * @param {*} id 
    * @param {*} param 
    */
-  var sendToMain = ( id, param ) => Electron.ipcRenderer.send( id, param );
+  var sendToMain = ( id, param ) => shared.send( id, param );
 
   /**
    * Fires when a message has been received from the main process.
    * @param {string}   id 
    * @param {function} callback 
    */
-  var onMessage = ( id, callback ) => Electron.ipcRenderer.on( id, callback );
+  var onMessage = ( id, callback ) => shared.on( id, callback );
 
   /**
    * Adds an event listener.
@@ -495,7 +493,7 @@ var setCurrentPage;
         $logContainer.innerHTML = notification.outerHTML + $logContainer.innerHTML;
   
     $( `#FSONotification${id} p` ).addEventListener( 'click', e => {
-        Electron.shell.openExternal( e.target.getAttribute( 'data-url' ) );
+        shared.openExternal( e.target.getAttribute( 'data-url' ) );
       },
       false
     );
@@ -604,7 +602,7 @@ var setCurrentPage;
         $( '#overlay' ).style.display = 'none';
       }
   
-      f && Electron.ipcRenderer.send( f, !0, g );
+      f && shared.send( f, !0, g );
     } );
     b.appendChild( a );
     e
@@ -616,7 +614,7 @@ var setCurrentPage;
             $( '#overlay' ).style.display = 'none';
           }
           $( '#overlay' ).style.display = 'none';
-          f && Electron.ipcRenderer.send( f, !1, g );
+          f && shared.send( f, !1, g );
         } ),
         b.appendChild( c ) )
       : ( a.style.margin = '0px' );
@@ -646,6 +644,7 @@ var setCurrentPage;
   } );
   // REMESH_INFO
   onMessage( 'REMESH_INFO', ( a, v ) => {
+    $( '.new' ).style.display = 'none';
     if( ! v ) return;
 
     var i = parseInt( v );

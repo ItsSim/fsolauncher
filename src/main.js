@@ -111,10 +111,10 @@ function CreateWindow() {
   options.resizable = false;
   options.title = 'FreeSO Launcher ' + global.launcherVersion;
   options.webPreferences = {
-    nodeIntegration: true,
-    contextIsolation: false,
-  }; // Since we're not displaying untrusted content
-  // (all links are opened in a real browser window), we can enable this.
+    nodeIntegration: false,
+    contextIsolation: true,
+    preload: require( 'path' ).join( __dirname, './preload.js' )
+  };
 
   Window = new BrowserWindow( options );
 
