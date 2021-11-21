@@ -1200,14 +1200,6 @@ class FSOLauncher {
       }
     }
   }
-  stopBackgroundThrottle() {
-    console.log( 'Stopping background throttle' )
-    this.Window.webContents.setBackgroundThrottling( false );
-  }
-  startBackgroundThrottle() {
-    console.log( 'Starting background throttle' )
-    this.Window.webContents.setBackgroundThrottling( true );
-  }
 }
 
 module.exports = FSOLauncher;
