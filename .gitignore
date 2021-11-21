@@ -9,3 +9,4 @@
 .DS_Store
 tools/fsolauncher.exe
 tools/resource_hacker/
+src/package-lock.json

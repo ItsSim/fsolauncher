@@ -276,7 +276,7 @@ class SimitoneInstaller {
 
         return this.updateDownloadProgress();
       }
-    }, 1 );
+    }, 250 );
   }
 }
 

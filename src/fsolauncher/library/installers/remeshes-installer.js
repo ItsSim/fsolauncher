@@ -112,7 +112,7 @@ class RemeshesInstaller {
         }
         return this.updateDownloadProgress();
       }
-    }, 1 );
+    }, 250 );
   }
 
   extract() {

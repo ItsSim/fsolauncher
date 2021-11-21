@@ -102,7 +102,7 @@ class SDLInstaller {
         }
         return this.updateDownloadProgress();
       }
-    }, 1 );
+    }, 250 );
   }
 
   extract() {

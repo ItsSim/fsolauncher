@@ -255,7 +255,7 @@ class ServoInstaller {
 
         return this.updateDownloadProgress();
       }
-    }, 1 );
+    }, 250 );
   }
 }
 

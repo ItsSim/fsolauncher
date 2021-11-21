@@ -440,7 +440,7 @@ div.page p {
 }
 
 .loading .progress {
-  transition: width 1s ease-in-out;
+  transition: width .5s ease-in-out;
   float: left;
   width: 0%;
   height: 5px;

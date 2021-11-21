@@ -11,7 +11,7 @@ const ToastComponent = require( './library/toast' );
 class FSOLauncher {
   /**
    * Creates an instance of FSOLauncher.
-   * @param {any} Window
+   * @param {Electron.BrowserWindow} Window
    * @param {any} conf
    * @memberof FSOLauncher
    */
@@ -255,6 +255,7 @@ class FSOLauncher {
    * Modifies TTS Mode.
    * To do this it has to edit FreeSO's config.ini.
    *
+   * @deprecated
    * @param {any} value New TTS value.
    * @returns
    * @memberof FSOLauncher
@@ -432,8 +433,7 @@ class FSOLauncher {
       this.isSearchingForUpdates = true;
 
       const Toast = new ToastComponent(
-        global.locale.TOAST_CHECKING_UPDATES,
-        this.View
+        global.locale.TOAST_CHECKING_UPDATES, this.View
       );
 
       try {
@@ -545,14 +545,16 @@ class FSOLauncher {
         break;
     }
 
-    if (
-      ( Component === 'TSO' ||
-        Component === 'FSO' ||
-        Component === 'RMS' ||
-        Component === 'Simitone' ||
-        Component === 'Mono' ||
-        Component === 'MacExtras' ||
-        Component === 'SDL' ) &&
+    if ( [ // Components that require internet access.
+      'TSO',
+      'FSO',
+      'RMS',
+      'Simitone',
+      'Mono',
+      'MacExtras',
+      'SDL'
+    ].indexOf( Component ) > -1
+       &&
       !this.hasInternet
     ) {
       return Modal.showNoInternet();
@@ -1197,6 +1199,14 @@ class FSOLauncher {
         console.log( 'Failed setting ProgressBar' )
       }
     }
+  }
+  stopBackgroundThrottle() {
+    console.log( 'Stopping background throttle' )
+    this.Window.webContents.setBackgroundThrottling( false );
+  }
+  startBackgroundThrottle() {
+    console.log( 'Starting background throttle' )
+    this.Window.webContents.setBackgroundThrottling( true );
   }
 }
 
