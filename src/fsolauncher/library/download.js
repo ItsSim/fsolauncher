@@ -1,6 +1,10 @@
-const fs = require( 'fs-extra' ),
-  http = require( 'follow-redirects' ).http,
-  https = require( 'follow-redirects' ).https,
+const { net } = require('electron');
+const fs = require( 'fs-extra' );
+const { http, https } = require('follow-redirects').wrap({
+  http: net,
+  https: net,
+});
+
   path = require( 'path' );
 const { EventEmitter } = require( 'events' );
 /**
@@ -82,7 +86,7 @@ module.exports = function makeDownload() {
       r.on( 'error', _onError );
       r.on( 'end', _onEnd );
 
-      r.setTimeout( 30000, () => _onError( new Error( 'Download timed out.' ) ) );
+      //r.setTimeout( 30000, () => _onError( new Error( 'Download timed out.' ) ) );
     };
 
     const _onEnd = () => {
