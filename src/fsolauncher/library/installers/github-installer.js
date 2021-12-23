@@ -61,7 +61,12 @@ class GitHubInstaller extends ServoInstaller {
    */
   getFreeSOGitHubReleaseInfo() {
     return new Promise( ( resolve, reject ) => {
-      const https = require( 'https' );
+    const { net } = require('electron');
+    const { http, https } = require('follow-redirects').wrap({
+      http: net,
+      https: net,
+    });
+
       const options = {
         host: 'api.github.com',
         path: '/repos/riperiperi/FreeSO/releases/latest',
