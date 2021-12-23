@@ -132,7 +132,11 @@ class FSOLauncher {
    */
   getSimitoneReleaseInfo() {
     return new Promise( ( resolve, reject ) => {
-      const https = require( 'https' );
+      const { net } = require('electron');
+      const { http, https } = require('follow-redirects').wrap({
+        http: net,
+        https: net,
+      });
       const options = {
         host: 'api.github.com',
         path: '/repos/riperiperi/Simitone/releases/latest',
@@ -310,7 +314,12 @@ class FSOLauncher {
       };
       console.log( 'Getting remesh data from', options.path );
 
-      const request = require( 'https' ).request( options, res => {
+      const { net } = require('electron');
+      const { http, https } = require('follow-redirects').wrap({
+        http: net,
+        https: net,
+      });
+      const request = https.request( options, res => {
         let data = '';
 
         res.on( 'data', chunk => data += chunk );
@@ -347,8 +356,12 @@ class FSOLauncher {
         `&fso=${( this.isInstalled && this.isInstalled.FSO ) ? '1' : '0'}`
       };
       console.log( 'Getting launcher data from', options.path );
-
-      const request = require( 'https' ).request( options, res => {
+      const { net } = require('electron');
+      const { http, https } = require('follow-redirects').wrap({
+        http: net,
+        https: net,
+      });
+      const request = https.request( options, res => {
         let data = '';
         res.on( 'data', chunk => data += chunk );
         res.on( 'end', () => {
