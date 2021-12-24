@@ -88,8 +88,6 @@ module.exports = function makeDownload() {
       r.on( 'error', _onError );
       r.on( 'end', _onEnd );
 
-      setTimeout(() => _onError( new Error( 'Download timed out.' )), 30000);
-
     };
 
     const _onEnd = () => {
