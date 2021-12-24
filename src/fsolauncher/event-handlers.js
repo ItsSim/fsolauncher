@@ -40,6 +40,7 @@ class EventHandlers {
     const onFTPTSOResponse            = new RendererEvent( 'FTP_TSOResponse' );
     const onCheckSimitoneRequirements = new RendererEvent( 'CHECK_SIMITONE' );
     const onInstallSimitoneUpdate     = new RendererEvent( 'INSTALL_SIMITONE_UPDATE' );
+    const onShowDiagnostics           = new RendererEvent( 'SHOW_DIAGNOSTICS' );
 
     onInitDOM
       .onFire( this.onInitDOM.bind( this ) );
@@ -81,6 +82,8 @@ class EventHandlers {
       .onFire( this.onCheckSimitoneRequirements.bind( this ) );
     onInstallSimitoneUpdate
       .onFire( this.onInstallSimitoneUpdate.bind( this ) );
+    onShowDiagnostics
+      .onFire( this.onShowDiagnostics.bind( this ) );
   }
   /**
    * Received when the user request a Simitone update.
@@ -285,6 +288,14 @@ class EventHandlers {
     } else {
       Modal.showAlreadyInstalling();
     }
+  }
+  /**
+   * When the user clicks the Full Install button.
+   *
+   * @memberof Events
+   */
+  onShowDiagnostics() {
+    Modal.showDiagnostics();
   }
   /**
    * Full install dialog callback.

@@ -777,6 +777,8 @@ var setCurrentPage;
   addEventListener( '#update-check', 'click',               () => sendToMain( 'CHECK_UPDATES' ) );
   addEventListener( '#simitone-install-button', 'click',    () => sendToMain( 'INSTALL', 'Simitone' ) );
   addEventListener( '#simitone-should-update', 'click',     () => sendToMain( 'INSTALL_SIMITONE_UPDATE' ) );
+  addEventListener( '#show-diagnostics', 'click',           () => sendToMain( 'SHOW_DIAGNOSTICS' ) );
+
 
   addEventListenerAll( '[option-id]', 'change', ( a, _b ) => {
     var c = a.currentTarget.getAttribute( 'option-id' ),
