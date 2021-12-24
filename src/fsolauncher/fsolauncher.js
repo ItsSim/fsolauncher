@@ -2,6 +2,13 @@ const Modal = require( './library/modal' );
 const EventHandlers = require( './event-handlers' );
 const View = require( './library/ipc-bridge' );
 const ToastComponent = require( './library/toast' );
+
+const { net } = require('electron');
+const { http, https } = require('follow-redirects').wrap({
+  http: net,
+  https: net,
+});
+
 /**
  * Main launcher class.
  *
@@ -132,7 +139,7 @@ class FSOLauncher {
    */
   getSimitoneReleaseInfo() {
     return new Promise( ( resolve, reject ) => {
-      const https = require( 'https' );
+
       const options = {
         host: 'api.github.com',
         path: '/repos/riperiperi/Simitone/releases/latest',
@@ -310,7 +317,7 @@ class FSOLauncher {
       };
       console.log( 'Getting remesh data from', options.path );
 
-      const request = require( 'https' ).request( options, res => {
+      const request = https.request( options, res => {
         let data = '';
 
         res.on( 'data', chunk => data += chunk );
@@ -348,7 +355,7 @@ class FSOLauncher {
       };
       console.log( 'Getting launcher data from', options.path );
 
-      const request = require( 'https' ).request( options, res => {
+      const request = https.request( options, res => {
         let data = '';
         res.on( 'data', chunk => data += chunk );
         res.on( 'end', () => {

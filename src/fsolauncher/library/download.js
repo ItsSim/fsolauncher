@@ -1,6 +1,10 @@
-const fs = require( 'fs-extra' ),
-  http = require( 'follow-redirects' ).http,
-  https = require( 'follow-redirects' ).https,
+const { net } = require('electron');
+const fs = require( 'fs-extra' );
+const { http, https } = require('follow-redirects').wrap({
+  http: net,
+  https: net,
+});
+
   path = require( 'path' );
 const { EventEmitter } = require( 'events' );
 /**
@@ -38,7 +42,7 @@ module.exports = function makeDownload() {
       _error = null;
       await fs.ensureDir( path.dirname( to ) );
       _fileStream = fs.createWriteStream( to );
-      _request = httpModule.get( from, _onDownload );
+      _request = httpModule.get( from, { headers: { 'Pragma': 'no-cache' } }, _onDownload );
       _request.on( 'error', _onError );
     };
 
@@ -78,11 +82,12 @@ module.exports = function makeDownload() {
 
       _length = parseInt( r.headers['content-length'], 10 );
 
+      
+
       r.on( 'data', _onData );
       r.on( 'error', _onError );
       r.on( 'end', _onEnd );
 
-      r.setTimeout( 30000, () => _onError( new Error( 'Download timed out.' ) ) );
     };
 
     const _onEnd = () => {

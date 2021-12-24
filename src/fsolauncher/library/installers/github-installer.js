@@ -1,3 +1,9 @@
+const { net } = require('electron');
+const { http, https } = require('follow-redirects').wrap({
+  http: net,
+  https: net,
+});
+
 const ServoInstaller = require( './servo-installer' ),
   download = require( '../download' )();
 /**
@@ -61,7 +67,7 @@ class GitHubInstaller extends ServoInstaller {
    */
   getFreeSOGitHubReleaseInfo() {
     return new Promise( ( resolve, reject ) => {
-      const https = require( 'https' );
+
       const options = {
         host: 'api.github.com',
         path: '/repos/riperiperi/FreeSO/releases/latest',
@@ -93,7 +99,6 @@ class GitHubInstaller extends ServoInstaller {
    */
   getFreeSOApiReleaseInfo() {
     return new Promise( ( resolve, reject ) => {
-      const https = require( 'https' );
       const options = {
         host: 'api.freeso.org',
         path: '/userapi/update/beta',
