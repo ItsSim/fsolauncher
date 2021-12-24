@@ -1,30 +1,9 @@
-const { app } = require('electron');
-const os = require( 'os' );
-
 /**
  * Container class for all the Modal windows.
  *
  * @class Modal
  */
 class Modal {
-  
-  /**
-   * Show diagnostics modal
-   *
-   * @static
-   * @memberof Modal
-   */
-  static showDiagnostics() {
-    Modal.View.sendModal(
-      'Diagnostics',
-      '<p><span style="padding: 3px; background-color:rgba(1,1,1,0.1); font-size:12px; width:350px; height:100px; display: inline-block; -webkit-user-select:all; overflow-y:scroll">' +
-      'FSOLauncher Version: ' + app.getVersion() + '<br />' +
-      'OS Version: ' + os.version() + '<br />' +
-      'CPU: ' + os.cpus()[0].model + '<br />' +
-      '</span></p>',
-      'Close'
-    );
-  }
   /**
    * Dialog for the alternative TSO download.
    *
