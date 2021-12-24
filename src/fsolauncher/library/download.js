@@ -42,7 +42,7 @@ module.exports = function makeDownload() {
       _error = null;
       await fs.ensureDir( path.dirname( to ) );
       _fileStream = fs.createWriteStream( to );
-      _request = httpModule.get( from, _onDownload );
+      _request = httpModule.get( from, { headers: { 'Pragma': 'no-cache' } }, _onDownload );
       _request.on( 'error', _onError );
     };
 
