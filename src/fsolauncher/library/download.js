@@ -82,11 +82,14 @@ module.exports = function makeDownload() {
 
       _length = parseInt( r.headers['content-length'], 10 );
 
+      
+
       r.on( 'data', _onData );
       r.on( 'error', _onError );
       r.on( 'end', _onEnd );
 
-      //r.setTimeout( 30000, () => _onError( new Error( 'Download timed out.' ) ) );
+      setTimeout(() => _onError( new Error( 'Download timed out.' )), 30000);
+
     };
 
     const _onEnd = () => {
