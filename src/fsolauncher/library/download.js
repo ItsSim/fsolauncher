@@ -4,8 +4,7 @@ const { http, https } = require('follow-redirects').wrap({
   http: net,
   https: net,
 });
-
-  path = require( 'path' );
+const path = require( 'path' );
 const { EventEmitter } = require( 'events' );
 /**
  * makeDownload factory
