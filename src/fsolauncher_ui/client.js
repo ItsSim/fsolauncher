@@ -769,14 +769,14 @@ var setCurrentPage;
   /**
    * Renderer HTML event listeners.
    */
-  addEventListener( '.launch', 'click',                     () => sendToMain( 'PLAY' ) );
-  addEventListener( '.launch', 'contextmenu',               () => sendToMain( 'PLAY', true ) );
-  addEventListener( '#simitone-play-button', 'click',       () => sendToMain( 'PLAY_SIMITONE' ) );
-  addEventListener( '#simitone-play-button', 'contextmenu', () => sendToMain( 'PLAY_SIMITONE', true ) );
-  addEventListener( '#full-install-button', 'click',        () => sendToMain( 'FULL_INSTALL' ) );
-  addEventListener( '#update-check', 'click',               () => sendToMain( 'CHECK_UPDATES' ) );
-  addEventListener( '#simitone-install-button', 'click',    () => sendToMain( 'INSTALL', 'Simitone' ) );
-  addEventListener( '#simitone-should-update', 'click',     () => sendToMain( 'INSTALL_SIMITONE_UPDATE' ) );
+  addEventListener( '.launch',                  'click',       () => sendToMain( 'PLAY' ) );
+  addEventListener( '.launch',                  'contextmenu', () => sendToMain( 'PLAY', true ) );
+  addEventListener( '#simitone-play-button',    'click',       () => sendToMain( 'PLAY_SIMITONE' ) );
+  addEventListener( '#simitone-play-button',    'contextmenu', () => sendToMain( 'PLAY_SIMITONE', true ) );
+  addEventListener( '#full-install-button',     'click',       () => sendToMain( 'FULL_INSTALL' ) );
+  addEventListener( '#update-check',            'click',       () => sendToMain( 'CHECK_UPDATES' ) );
+  addEventListener( '#simitone-install-button', 'click',       () => sendToMain( 'INSTALL', 'Simitone' ) );
+  addEventListener( '#simitone-should-update',  'click',       () => sendToMain( 'INSTALL_SIMITONE_UPDATE' ) );
 
   addEventListenerAll( '[option-id]', 'change', ( a, _b ) => {
     var c = a.currentTarget.getAttribute( 'option-id' ),

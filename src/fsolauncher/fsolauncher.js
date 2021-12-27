@@ -3,11 +3,11 @@ const EventHandlers = require( './event-handlers' );
 const View = require( './library/ipc-bridge' );
 const ToastComponent = require( './library/toast' );
 
-const { net } = require('electron');
-const { http, https } = require('follow-redirects').wrap({
+const { net } = require( 'electron' );
+const { https } = require( 'follow-redirects' ).wrap( {
   http: net,
   https: net,
-});
+} );
 
 /**
  * Main launcher class.
@@ -19,12 +19,12 @@ class FSOLauncher {
   /**
    * Creates an instance of FSOLauncher.
    * @param {Electron.BrowserWindow} Window
-   * @param {any} conf
+   * @param {any} Configuration
    * @memberof FSOLauncher
    */
-  constructor( Window, conf ) {
+  constructor( Window, Configuration ) {
     this.Window = Window;
-    this.conf = conf;
+    this.conf = Configuration;
     this.minimizeReminder = false;
     this.lastUpdateNotification = false;
     this.isSearchingForUpdates = false;
@@ -51,7 +51,7 @@ class FSOLauncher {
 
     Modal.View = this.View = new View( this.Window );
 
-    this.ActiveTasks = [];
+    this.activeTasks = [];
     this.isInstalled = {};
 
     this.checkUpdatesRecursive();
@@ -208,7 +208,7 @@ class FSOLauncher {
    */
   addActiveTask( Name ) {
     if ( !this.isActiveTask( Name ) ) {
-      this.ActiveTasks.push( Name );
+      this.activeTasks.push( Name );
     }
   }
   /**
@@ -218,10 +218,10 @@ class FSOLauncher {
    */
   removeActiveTask( Name ) {
     if ( Name ) {
-      return this.ActiveTasks.splice( this.ActiveTasks.indexOf( Name ), 1 );
+      return this.activeTasks.splice( this.activeTasks.indexOf( Name ), 1 );
     }
 
-    this.ActiveTasks = [];
+    this.activeTasks = [];
   }
   /**
    * Checks if task is active.
@@ -229,7 +229,7 @@ class FSOLauncher {
    * @param {*} Name
    */
   isActiveTask( Name ) {
-    return this.ActiveTasks.indexOf( Name ) > -1;
+    return this.activeTasks.indexOf( Name ) > -1;
   }
   /**
    * Returns a component's hard-coded pretty name.
@@ -380,7 +380,11 @@ class FSOLauncher {
    * @memberof FSOLauncher
    */
   async checkRemeshInfo() {
-    await this.getRemeshData();
+    try {
+      await this.getRemeshData();
+    } catch( e ) {
+      console.log( e );
+    }
     if ( this.remeshInfo.version != null ) {
       this.View.setRemeshInfo( this.remeshInfo.version );
     }
@@ -407,8 +411,12 @@ class FSOLauncher {
       } else {
         this.View.setSimitoneVersion( null );
       }
-      simitoneUpdateStatus = await this.getSimitoneReleaseInfo();
-      if( this.conf.Game.SimitoneVersion != simitoneUpdateStatus.tag_name ) {
+      try {
+        simitoneUpdateStatus = await this.getSimitoneReleaseInfo();
+      } catch( e ) {
+        console.log( e );
+      }
+      if( simitoneUpdateStatus && ( this.conf.Game.SimitoneVersion != simitoneUpdateStatus.tag_name ) ) {
         this.View.sendSimitoneShouldUpdate( simitoneUpdateStatus.tag_name );
       } else {
         this.View.sendSimitoneShouldUpdate( false );
@@ -435,7 +443,7 @@ class FSOLauncher {
       !this.isSearchingForUpdates &&
       !this.isUpdating &&
       this.hasInternet &&
-      this.ActiveTasks.length === 0
+      this.activeTasks.length === 0
     ) {
       this.isSearchingForUpdates = true;
 
@@ -576,7 +584,11 @@ class FSOLauncher {
     } else {
       if ( Component == 'RMS' ) {
         if ( this.remeshInfo.version == null ) {
-          await this.getRemeshData();
+          try {
+            await this.getRemeshData();
+          } catch( e ) {
+            console.log( e );
+          }
           if ( this.remeshInfo.version == null ) {
             return Modal.showNoRemesh();
           } else {

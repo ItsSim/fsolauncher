@@ -36,6 +36,7 @@ InfoBeforeFile=.\fsolauncher-win32-ia32\readme.txt
 ;MinVersion=0,6.1
 WizardStyle=modern
 CloseApplications=force
+TimeStampsInUTC=yes
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -56,4 +57,3 @@ Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}"; Fil
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait skipifsilent
-

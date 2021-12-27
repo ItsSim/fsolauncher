@@ -1,4 +1,4 @@
-Version: 2021 1.8.x
+﻿Version: 2021 1.8.x
 Author: Sim
 
 Changelog:
@@ -24,7 +24,7 @@ Changelog:
 - 2019.06.12: Updated to Electron 5.0.3.
 - 2019.06.05: UI tweaks, re-added direct launch mode. Launcher can act as a FreeSO.exe shortcut.
 - 2019.31.03: Quick fix for the FilePlanet archive.org URL.
-- 2019.04.03: Quick fix for a very specific bug where download fileStreams weren’t closing when retrying. Also commented electron-notify again. Sigh...
+- 2019.04.03: Quick fix for a very specific bug where download fileStreams weren't closing when retrying. Also commented electron-notify again. Sigh...
 - 2019.03.03: Reworked download process, should make Archive.org downloads work most of the time.
 - 2018.18.10: Improved launcher loading time, overall performance improvement.
 - 2018.13.10: Updated Electron from 1.7.9 to 3.0.3 and some dependencies.
@@ -39,12 +39,12 @@ This program was made using:
 - Electron 16
 
 Upon installing this software, you understand and accept the following:
-* This program does not include a copy of The Sims Online or any other type of content of EA IP. It downloads everything needed from Archive.org upon the user’s request through the Installer tab.
-* FreeSO is downloaded from the official FreeSO GitHub releases.
-* OpenAL and .NET Framework are included in the launcher’s source files and do not need an active internet connection to be installed.
-* Remeshes are hosted compressed on a remote server and are downloaded upon user request.
-* This program periodically makes requests to a remote server in order to check for new updates. For statistics and better troubleshooting, your launcher version and FreeSO installation status (yes/no), are included in the request.
-* This program connects via socket to a remote server in order to receive live updates and news from FreeSO Administrators in the form of desktop notifications. The launcher is NOT able to perform any other remote task other than receiving desktop notifications.
+- This program does not include a copy of The Sims Online or any other type of content of EA IP. It downloads everything needed from Archive.org upon the user's request through the Installer tab.
+- FreeSO is downloaded from the official FreeSO GitHub releases.
+- OpenAL and .NET Framework are included in the launcher's source files and do not need an active internet connection to be installed.
+- Remeshes are hosted compressed on a remote server and are downloaded upon user request.
+- This program periodically makes requests to a remote server in order to check for new updates. For statistics and better troubleshooting, your launcher version and FreeSO installation status (yes/no), are included in the request.
+- This program connects via socket to a remote server in order to receive live updates and news from FreeSO Administrators in the form of desktop notifications. The launcher is NOT able to perform any other remote task other than receiving desktop notifications.
 
 Special Thanks to:
 - Womsy: Spanish Translator

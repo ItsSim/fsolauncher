@@ -1,8 +1,10 @@
 const Modal = require( '../modal' ),
   download = require( '../download' )(),
   unzip = require( '../unzip' )();
+
 const DOWNLOAD_URL_GITHUB =
   'https://beta.freeso.org/LauncherResourceCentral/Simitone';
+  
 /**
  * Downloads and installs Simitone.
  *
@@ -52,16 +54,19 @@ class SimitoneInstaller {
    * @returns
    * @memberof SimitoneInstaller
    */
-  install() {
-    return this.step1()
-      .then( () => this.step2() )
-      .then( () => this.step3() )
-      .then( () => this.step4() )
-      .then( () => this.step5() )
-      .then( () => this.step6() )
-      .then( () => this.step7() )
-      .then( () => this.end() )
-      .catch( ErrorMessage => this.error( ErrorMessage ) );
+  async install() {
+    try {
+      await this.step1();
+      await this.step2();
+      await this.step3();
+      await this.step4();
+      await this.step5();
+      await this.step6();
+      await this.step7();
+      return this.end();
+    } catch ( ErrorMessage ) {
+      return await this.error( ErrorMessage );
+    }
   }
   /**
    * Obtains GitHub release data.

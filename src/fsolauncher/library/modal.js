@@ -13,7 +13,8 @@ class Modal {
   static showFTPTSO() {
     Modal.View.sendModal(
       'Try alternative download?',
-      'This will try and download The Sims Online from an alternative source. This is useful if the primary download is not working for you.',
+      'This will try and download The Sims Online from an alternative source. ' + 
+      'This is useful if the primary download is not working for you.',
       'Continue',
       'Cancel',
       'FTP_TSOResponse'

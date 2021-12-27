@@ -10,7 +10,7 @@ module.exports = ( name ) => [
       },
       {
         label: 'GitHub Repository',
-        click: function() { shell.openExternal( 'https://github.com/ItsSim/fsolauncher' ); }
+        click: () => shell.openExternal( 'https://github.com/ItsSim/fsolauncher' )
       },
       {
         type: 'separator'
@@ -43,7 +43,9 @@ module.exports = ( name ) => [
       {
         label: 'Quit ' + name,
         accelerator: 'Command+Q',
-        click: function() { global.willQuit = true; app.quit(); }
+        click: () => { 
+          global.willQuit = true; app.quit(); 
+        }
       },
     ]
   }

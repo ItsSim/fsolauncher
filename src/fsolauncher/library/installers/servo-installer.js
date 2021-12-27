@@ -1,9 +1,11 @@
 const Modal = require( '../modal' ),
   download = require( '../download' )(),
   unzip = require( '../unzip' )();
+
 //servo is no more, so ServoInstaller serves as a backup.
 const DOWNLOAD_URL_SERVO =
   'https://beta.freeso.org/LauncherResourceCentral/FreeSO';
+
 /**
  * Installs FreeSO from servo.freeso.org.
  *
@@ -44,22 +46,23 @@ class ServoInstaller {
     );
   }
   /**
-   * Begins the installation.
+   * Executes all steps and returns a promise.
    *
    * @returns
    * @memberof ServoInstaller
    */
-  install() {
-    return (
-      this.step1()
-        .then( () => this.step2() )
-        .then( () => this.step3() )
-        .then( () => this.step4() )
-        .then( () => this.step5() )
-        .then( () => this.step6() )
-        .then( () => this.end() )
-        .catch( ErrorMessage => this.error( ErrorMessage ) )
-    );
+  async install() {
+    try {
+      await this.step1();
+      await this.step2();
+      await this.step3();
+      await this.step4();
+      await this.step5();
+      await this.step6();
+      return this.end();
+    } catch ( ErrorMessage ) {
+      return await this.error( ErrorMessage );
+    }
   }
   /**
    * Download all the files.

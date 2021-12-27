@@ -1,11 +1,11 @@
-const { net } = require('electron');
-const { http, https } = require('follow-redirects').wrap({
+const { net } = require( 'electron' );
+const { https } = require( 'follow-redirects' ).wrap( {
   http: net,
   https: net,
-});
-
+} );
 const ServoInstaller = require( './servo-installer' ),
   download = require( '../download' )();
+
 /**
  * Installs FreeSO from GitHub Releases.
  *

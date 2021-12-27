@@ -11,22 +11,22 @@ class Toast {
    * @param {number} [timeout=0]
    * @memberof Toast
    */
-  constructor( Message, View, timeout = 0 ) {
+  constructor( message, View, timeout = 0 ) {
     this.id = Math.floor( Date.now() / 1000 );
     this.View = View;
-    this.show( Message );
+    this.show( message );
     if( timeout > 0 ) {
-      setTimeout( () => { this.destroy(); }, timeout );
+      setTimeout( () => this.destroy(), timeout );
     }
   }
   /**
    * Shows the toast.
    *
-   * @param {any} Message
+   * @param {any} message
    * @memberof Toast
    */
-  show( Message ) {
-    this.View.toast( this.id, Message );
+  show( message ) {
+    this.View.toast( this.id, message );
   }
   /**
    * Destroys the toast and removes it from the view.

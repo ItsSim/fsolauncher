@@ -3,12 +3,14 @@ const Modal = require( '../modal' ),
   unzip = require( '../unzip' )(),
   extract = require( '../cabinet' )();
 
-// ORIGINAL: https://archive.org/download/Fileplanet_dd_042006/Fileplanet_dd_042006.tar/042006/TSO_Installer_v1.1239.1.0.zip'
-// changed to beta.freeso.org redirect in case it needs to be changed
+/**
+ * ORIGINAL: https://archive.org/download/Fileplanet_dd_042006/Fileplanet_dd_042006.tar/042006/TSO_Installer_v1.1239.1.0.zip'
+ * changed to beta.freeso.org redirect in case it needs to be changed
+ **/
 const DOWNLOAD_URL_FILEPLANET = 'https://beta.freeso.org/LauncherResourceCentral/TheSimsOnline';
-//const MAX_RETRIES = 10;
 const TEMP_PATH = `${global.appData}temp/FilePlanetInstaller/`;
 const TEMP_FILE = 'FilePlanetTSOFiles.zip';
+
 /**
  * Introduced 09/16/2018
  * Alternative TSO Installer pointing to archive.org FilePlanet.
@@ -55,15 +57,18 @@ class FilePlanetInstaller {
    * @returns
    * @memberof FilePlanetInstaller
    */
-  install() {
-    return this.step1()
-      .then( () => this.step2() )
-      .then( () => this.step3() )
-      .then( unzipgc => this.step4( unzipgc ) )
-      .then( () => this.step5() )
-      .then( () => this.step6() )
-      .then( () => this.end() )
-      .catch( ErrorMessage => this.error( ErrorMessage ) );
+  async install() {
+    try {
+      await this.step1();
+      await this.step2();
+      const unzipgc = await this.step3();
+      await this.step4( unzipgc );
+      await this.step5();
+      await this.step6();
+      return this.end();
+    } catch ( ErrorMessage ) {
+      return await this.error( ErrorMessage );
+    }
   }
   step1() {
     return this.download();

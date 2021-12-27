@@ -1,9 +1,9 @@
-const { net } = require('electron');
+const { net } = require( 'electron' );
 const fs = require( 'fs-extra' );
-const { http, https } = require('follow-redirects').wrap({
+const { http, https } = require( 'follow-redirects' ).wrap( {
   http: net,
   https: net,
-});
+} );
 const path = require( 'path' );
 const { EventEmitter } = require( 'events' );
 /**

@@ -27,12 +27,15 @@ class MacExtrasInstaller {
     );
   }
 
-  install() {
-    return this.step1()
-      .then( () => this.step2() )
-      .then( () => this.step3() )
-      .then( () => this.end() )
-      .catch( ErrorMessage => this.error( ErrorMessage ) );
+  async install() {
+    try {
+      await this.step1();
+      await this.step2();
+      await this.step3();
+      return this.end();
+    } catch ( ErrorMessage ) {
+      return await this.error( ErrorMessage );
+    }
   }
 
   step1() {

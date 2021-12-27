@@ -2,6 +2,7 @@
 const FSOLauncher = require( './fsolauncher' ),
   Modal = require( './library/modal' ),
   RendererEvent = require( './library/renderer-event' );
+
 /**
  * Handles all events from the client.
  *
@@ -10,15 +11,13 @@ const FSOLauncher = require( './fsolauncher' ),
 class EventHandlers {
   /**
    * Defines all the currently supported client events.
+   * 
+   * @param {FSOLauncher} FSOLauncher The FSOLauncher instance.
    *
    * @memberof Events
    */
-  defineEvents( fsolauncher ) {
-    /**
-     * The launcher instance.
-     * @type {FSOLauncher}
-     */
-    this.fsolauncher = fsolauncher;
+  defineEvents( FSOLauncher ) {
+    this.FSOLauncher = FSOLauncher;
 
     const onInitDOM                   = new RendererEvent( 'INIT_DOM' );
     const onInstall                   = new RendererEvent( 'INSTALL' );
@@ -88,7 +87,7 @@ class EventHandlers {
    * @memberof EventHandlers
    */
   onInstallSimitoneUpdate() {
-    this.fsolauncher.install( 'Simitone', { dir: this.fsolauncher.isInstalled.Simitone } )
+    this.FSOLauncher.install( 'Simitone', { dir: this.FSOLauncher.isInstalled.Simitone } )
       .catch( console.error );
   }
   /**
@@ -98,7 +97,7 @@ class EventHandlers {
    * @memberof EventHandlers
    */
   onCheckSimitoneRequirements() {
-    this.fsolauncher.checkSimitoneRequirements();
+    this.FSOLauncher.checkSimitoneRequirements();
   }
   /**
    * Fires when the user requests an alternative TSO installation source.
@@ -124,7 +123,7 @@ class EventHandlers {
         tsoInstaller: 'WebArchiveFTPInstaller',
         override: false
       };
-      this.fsolauncher.install( 'TSO', params )
+      this.FSOLauncher.install( 'TSO', params )
         .catch( console.error );
     }
   }
@@ -134,22 +133,12 @@ class EventHandlers {
    * @memberof Events
    */
   onInitDOM() {
-    this.fsolauncher.View.setTheme( this.fsolauncher.conf.Launcher.Theme );
-
-    this.fsolauncher.View.restoreConfiguration( this.fsolauncher.conf );
-
-    this.fsolauncher.checkRemeshInfo();
-
-    this.fsolauncher.updateNetRequiredUI( true );
-
-    //this.checkLauncherUpdates(true);
-    this.fsolauncher.Window.focus();
-    this.fsolauncher.updateInstalledPrograms();
-
-    if( process.platform == "win32" ) {
-      //this.FSODetector = new FSODetector( this.onDetectorResponse.bind( this ) );
-      //this.FSODetector.start();
-    }
+    this.FSOLauncher.View.setTheme( this.FSOLauncher.conf.Launcher.Theme );
+    this.FSOLauncher.View.restoreConfiguration( this.FSOLauncher.conf );
+    this.FSOLauncher.checkRemeshInfo();
+    this.FSOLauncher.updateNetRequiredUI( true );
+    this.FSOLauncher.Window.focus();
+    this.FSOLauncher.updateInstalledPrograms();
   }
 
   /**
@@ -160,7 +149,7 @@ class EventHandlers {
    * @memberof Events
    */
   onSocketMessage( e, Response ) {
-    if ( this.fsolauncher.conf.Launcher.DesktopNotifications === '1' ) {
+    if ( this.FSOLauncher.conf.Launcher.DesktopNotifications === '1' ) {
       Modal.sendNotification( 'FreeSO Announcement', Response[0], Response[1] );
     }
   }
@@ -172,7 +161,7 @@ class EventHandlers {
    * @memberof Events
    */
   onInstall( e, Component ) {
-    this.fsolauncher.fireInstallModal( Component );
+    this.FSOLauncher.fireInstallModal( Component );
   }
   /**
    * When the configuration settings are altered.
@@ -181,7 +170,7 @@ class EventHandlers {
    * @param {*} v 2D Array with key and value.
    */
   onSetConfiguration( e, v ) {
-    this.fsolauncher.setConfiguration( v );
+    this.FSOLauncher.setConfiguration( v );
   }
   /**
    * When the user needs to be redirected.
@@ -192,7 +181,7 @@ class EventHandlers {
    */
   onInstallerRedirect( e, yes ) {
     if ( yes ) {
-      this.fsolauncher.View.changePage( 'installer' );
+      this.FSOLauncher.View.changePage( 'installer' );
     }
   }
   /**
@@ -206,7 +195,7 @@ class EventHandlers {
    */
   onInstallComponent( e, yes, Component, options ) {
     if ( yes ) {
-      this.fsolauncher.install( Component, options )
+      this.FSOLauncher.install( Component, options )
         .catch( console.error );
     }
   }
@@ -228,7 +217,7 @@ class EventHandlers {
    * @memberof Events
    */
   onPlay( e, useVolcanic ) {
-    this.fsolauncher.play( useVolcanic );
+    this.FSOLauncher.play( useVolcanic );
   }
   /**
    * When the user wants to launch Volcanic.
@@ -238,15 +227,15 @@ class EventHandlers {
    */
   onPlayVolcanic( e, yes ) {
     if ( yes ) {
-      this.fsolauncher.launchGame( true );
+      this.FSOLauncher.launchGame( true );
     }
   }
   onPlaySimitone( e, useVolcanic ) {
-    this.fsolauncher.play( useVolcanic, true );
+    this.FSOLauncher.play( useVolcanic, true );
   }
   onPlayVolcanicSimitone( e, yes ) {
     if ( yes ) {
-      this.fsolauncher.launchGame( true, true );
+      this.FSOLauncher.launchGame( true, true );
     }
   }
   /**
@@ -256,10 +245,10 @@ class EventHandlers {
    * @memberof Events
    */
   onCheckUpdates() {
-    if ( this.fsolauncher.ActiveTasks.length > 0 ) {
+    if ( this.FSOLauncher.activeTasks.length > 0 ) {
       return Modal.showAlreadyInstalling();
     }
-    this.fsolauncher.checkLauncherUpdates();
+    this.FSOLauncher.checkLauncherUpdates();
   }
   /**
    * Update dialog callback.
@@ -270,7 +259,7 @@ class EventHandlers {
    */
   onInstallUpdate( e, yes ) {
     if ( yes ) {
-      this.fsolauncher.installLauncherUpdate();
+      this.FSOLauncher.installLauncherUpdate();
     }
   }
   /**
@@ -279,8 +268,8 @@ class EventHandlers {
    * @memberof Events
    */
   onFullInstall() {
-    if ( this.fsolauncher.ActiveTasks.length === 0 ) {
-      if ( this.fsolauncher.hasInternet ) Modal.showFullInstall();
+    if ( this.FSOLauncher.activeTasks.length === 0 ) {
+      if ( this.FSOLauncher.hasInternet ) Modal.showFullInstall();
       else Modal.showNoInternetFullInstall();
     } else {
       Modal.showAlreadyInstalling();
@@ -295,8 +284,8 @@ class EventHandlers {
    */
   onFullInstallConfirm( e, yes ) {
     if ( yes ) {
-      this.fsolauncher.addActiveTask( 'FULL' );
-      this.fsolauncher.runFullInstaller();
+      this.FSOLauncher.addActiveTask( 'FULL' );
+      this.FSOLauncher.runFullInstaller();
     }
   }
   /**
@@ -311,9 +300,9 @@ class EventHandlers {
     options = JSON.parse( options );
 
     if ( yes ) {
-      this.fsolauncher.changeGamePath( options );
+      this.FSOLauncher.changeGamePath( options );
     } else {
-      this.fsolauncher.removeActiveTask( options.component );
+      this.FSOLauncher.removeActiveTask( options.component );
     }
   }
 }
