@@ -11,4 +11,4 @@ Explain your changes here:
 
 # Code Checklist 
 - [ ] Tested on supported platforms (Windows, macOS).
-- [ ] Code properly documented via comments.
+- [ ] Code follows the [Code Style](https://github.com/ItsSim/fsolauncher/wiki/Code-Style) guidelines.
