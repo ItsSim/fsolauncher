@@ -2,7 +2,7 @@
 name: Bug report
 about: Create a report to help us improve
 title: "[Windows/macOS] "
-labels: need repro
+labels: bug, need repro
 assignees: ''
 
 ---
