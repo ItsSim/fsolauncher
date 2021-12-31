@@ -1,25 +1,24 @@
 # Contributing
 
-## How do I... <a name="toc"></a>
+<!--## How do I... <a name="toc"></a>
 
-* [Use This Guide](#introduction)?
-* Ask or Say Something? 🤔🐛😱
-  * [Request Support](#request-support)
-  * [Report an Error or Bug](#report-an-error-or-bug)
-  * [Request a Feature](#request-a-feature)
-* Make Something? 🤓👩🏽‍💻📜🍳
-  * [Project Setup](#project-setup)
-  * [Contribute Code](#contribute-code)
+* [Use this guide?](#introduction)
+* Ask or say something? 🤔🐛😱
+  * [Request support](#request-support)
+  * [Report an error or bug](#report-an-error-or-bug)
+  * [Request a feature](#request-a-feature)
+* Make something? 🤓👩🏽‍💻📜🍳
+  * [Contribute code](#contribute-code)-->
 
 ## Introduction
 
-Thank you so much for your interest in contributing!. All types of contributions are encouraged and valued. See the [table of contents](#toc) for different ways to help and details about how this project handles them!📝
+Thank you so much for your interest in contributing! All types of contributions are encouraged and valued. See the [table of contents](#toc) for different ways to help and details about how this project handles them!📝
 
 Please make sure to read the relevant section before making your contribution! It will make it a lot easier for us maintainers to make the most of it and smooth out the experience for all involved. 💚
 
 The Project Team looks forward to your contributions. 🙌🏾✨
 
-## Request Support
+## Request support
 
 If you have a question about this project, how to use it, or just need clarification about something:
 
@@ -31,7 +30,7 @@ If you have a question about this project, how to use it, or just need clarifica
 Once the discussion has been created, someone from the community will try
 to have a reponse soon.
 
-## Report an Error or Bug
+## Report an error or bug
 
 If you run into an error or bug with the project:
 
@@ -52,7 +51,7 @@ Once it's filed:
   of one you already made.
 * `critical` issues may be left open, depending on perceived immediacy and severity, even past the 30 day deadline.
 
-## Request a Feature
+## Request a feature
 
 If the project doesn't do something you need or want it to do:
 
@@ -68,7 +67,7 @@ Once it's filed:
 
 Note: The team is unlikely to be able to accept every single feature request that is filed. Please understand if they need to say no.
 
-## Contribute Code
+## Contribute code
 
 We like code commits a lot! They're super handy, and they keep the project going and doing the work it needs to do to be useful to others.
 
@@ -76,7 +75,7 @@ Code contributions of just about any size are acceptable!
 
 To contribute code:
 
-* [Set up the project](#project-setup).
+* [Set up the project](https://github.com/ItsSim/fsolauncher#prerequisites-for-development).
 * Make any necessary changes to the source code.
 * Go to https://github.com/ItsSim/fsolauncher/pulls and open a new pull
   request with your changes.
