@@ -1,18 +1,7 @@
 # Contributing
-
-<!--## How do I... <a name="toc"></a>
-
-* [Use this guide?](#introduction)
-* Ask or say something? 🤔🐛😱
-  * [Request support](#request-support)
-  * [Report an error or bug](#report-an-error-or-bug)
-  * [Request a feature](#request-a-feature)
-* Make something? 🤓👩🏽‍💻📜🍳
-  * [Contribute code](#contribute-code)-->
-
 ## Introduction
 
-Thank you so much for your interest in contributing! All types of contributions are encouraged and valued. See the [table of contents](#toc) for different ways to help and details about how this project handles them!📝
+Thank you so much for your interest in contributing! All types of contributions are encouraged and valued. 
 
 Please make sure to read the relevant section before making your contribution! It will make it a lot easier for us maintainers to make the most of it and smooth out the experience for all involved. 💚
 
