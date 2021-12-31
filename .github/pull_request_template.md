@@ -7,7 +7,7 @@ Explain your changes here:
 - Change 2
 
 # Additional Info
-- Any additional information or context
+- Any additional information or context.
 
 # Code Checklist 
 - [ ] Tested on supported platforms (Windows, macOS).
