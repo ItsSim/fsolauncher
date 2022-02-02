@@ -25,7 +25,6 @@ class FSOLauncher {
    * @param {string} Configuration.Game.GraphicsMode             The game graphics mode.
    * @param {string} Configuration.Game.Language                 The game language.
    * @param {string} Configuration.Game.TTS                      Whether to enable TTS
-   * @memberof FSOLauncher
    */
   constructor( Window, Configuration ) {
     this.conf = Configuration;
@@ -74,7 +73,6 @@ class FSOLauncher {
    *
    * @returns {Promise<void>} A promise that resolves when the programs
    *                          list and paths have been updated.
-   * @memberof FSOLauncher
    */
   updateInstalledPrograms() {
     // eslint-disable-next-line no-async-promise-executor
@@ -101,7 +99,6 @@ class FSOLauncher {
   /**
    * Update installer tips recursively, every 10 seconds.
    *
-   * @memberof FSOLauncher
    */
   updateTipRecursive() {
     const tips = [
@@ -132,7 +129,6 @@ class FSOLauncher {
    *
    * @returns {Promise<boolean>} A promise that resolves to the current
    *                             internet status.
-   * @memberof FSOLauncher
    */
   getInternetStatus() {
     return new Promise( ( resolve, _reject ) => {
@@ -147,7 +143,6 @@ class FSOLauncher {
    *
    * @returns {Promise<void>} A promise that resolves to the Simitone
    *                          release data.
-   * @memberof FSOLauncher
    */
   getSimitoneReleaseInfo() {
     return new Promise( ( resolve, reject ) => {
@@ -182,7 +177,6 @@ class FSOLauncher {
    * Hides all view elements that need internet connection.
    *
    * @param {boolean} _init Whether this is the initial call.
-   * @memberof FSOLauncher
    */
   async updateNetRequiredUI( _init ) {
     const hasInternet = await this.getInternetStatus();
@@ -195,7 +189,6 @@ class FSOLauncher {
   /**
    * Recursively updates the UI that needs internet.
    *
-   * @memberof FSOLauncher
    */
   updateNetRequiredUIRecursive() {
     setTimeout( () => {
@@ -207,7 +200,6 @@ class FSOLauncher {
    * Installs the game using the complete installer which installs FreeSO,
    * OpenAL, .NET, Mono, SDL, Mac-extras and The Sims Online.
    *
-   * @memberof FSOLauncher
    */
   runFullInstaller() {
     new ( require( './library/installers/complete-installer' ) )( this ).run();
@@ -215,8 +207,7 @@ class FSOLauncher {
   /**
    * Adds a task in progress.
    *
-   * @param {string} Name Name of the task in progress.
-   * @memberof FSOLauncher 
+   * @param {string} Name Name of the task in progress. 
    */
   addActiveTask( Name ) {
     if ( !this.isActiveTask( Name ) ) {
@@ -278,7 +269,6 @@ class FSOLauncher {
    * @deprecated It is now configurable in-game.
    * @param {string} value    New TTS value.
    * @returns {Promise<void>} Resolves when done.
-   * @memberof FSOLauncher
    */
   async editTTSMode( value ) {
     const fs = require( 'fs-extra' ), ini = require( 'ini' );
@@ -320,7 +310,6 @@ class FSOLauncher {
    * Obtains remesh package information.
    *
    * @returns {Promise<object>} A promise that resolves to the response.
-   * @memberof FSOLauncher
    */
   getRemeshData() {
     return new Promise( ( resolve, reject ) => {
@@ -356,7 +345,6 @@ class FSOLauncher {
    * Returns the launcher's update endpoint response.
    *
    * @returns {Promise<object>} A promise that resolves to the response.
-   * @memberof FSOLauncher
    */
   getLauncherData() {
     return new Promise( ( resolve, reject ) => {
@@ -391,7 +379,6 @@ class FSOLauncher {
    * Obtains remesh info and updates the renderer process.
    *
    * @returns {Promise<void>} A promise that resolves when the remesh info is obtained.
-   * @memberof FSOLauncher
    */
   async checkRemeshInfo() {
     try {
@@ -410,7 +397,6 @@ class FSOLauncher {
    * 3. If Simitone needs an update.
    *
    * @returns {Promise<void>} A promise that resolves when the check is complete.
-   * @memberof FSOLauncher
    */
   async checkSimitoneRequirements() {
     new ToastComponent(
@@ -452,7 +438,6 @@ class FSOLauncher {
    * @param {boolean} wasAutomatic Indicates if it has been requested by the recursive loop
    *                               to not spam the user with possible request error modals.
    * @returns {Promise<void>} A promise that resolves when the update check is complete.
-   * @memberof FSOLauncher
    */
   async checkLauncherUpdates( wasAutomatic ) {
     if (
@@ -510,7 +495,6 @@ class FSOLauncher {
    * Opens a new window with the launcher's update page.
    *
    * @returns {Promise<void>} A promise that resolves when the window is opened.
-   * @memberof FSOLauncher
    */
   async installLauncherUpdate() {
     return require( 'electron' ).shell.openExternal( 'https://beta.freeso.org/update' );
@@ -522,7 +506,6 @@ class FSOLauncher {
    * @param {string}         options.component The component to change the path for.
    * @param {string|boolean} options.override  The path to change to.
    * @returns {Promise<void>} A promise that resolves when the path is changed.
-   * @memberof FSOLauncher
    */
   async changeGamePath( options ) {
     const Toast = new ToastComponent( global.locale.TOAST_CHPATH, this.View );
@@ -550,7 +533,6 @@ class FSOLauncher {
    *
    * @param {string} Component The Component that is going to be installed.
    * @returns {Promise<void>} A promise that resolves when the Modal is shown.
-   * @memberof FSOLauncher
    */
   async fireInstallModal( Component ) {
     const missing = [];
@@ -647,7 +629,6 @@ class FSOLauncher {
    * @param {boolean}        options.fullInstall  Whether to do a full install.
    * @param {string}         options.dir          A predefined directory to install to.
    * @returns {Promise<void>} A promise that resolves when the Component is installed.
-   * @memberof FSOLauncher
    */
   install( Component, options = {
     fullInstall: false, override: false, tsoInstaller: 'FilePlanetInstaller', dir: false
@@ -848,7 +829,6 @@ class FSOLauncher {
   /**
    * Checks for all types of updates recursively.
    *
-   * @memberof FSOLauncher
    */
   checkUpdatesRecursive() {
     setTimeout( () => {
@@ -863,7 +843,6 @@ class FSOLauncher {
    *
    * @param {string} language The language to change to.
    * @returns {Promise<void>} A promise that resolves when the language is changed.
-   * @memberof FSOLauncher
    */
   async switchLanguage( language ) {
     if ( !this.isInstalled.TSO || !this.isInstalled.FSO ) {
@@ -936,7 +915,6 @@ class FSOLauncher {
    * Updates a configuration variable. Used after a user changes a setting.
    *
    * @param {object} newConfig The new configuration object.
-   * @memberof FSOLauncher
    */
   async setConfiguration( newConfig ) {
     switch ( true ) {
@@ -989,7 +967,6 @@ class FSOLauncher {
   /**
    * Disables Software Mode and removes dxtn.dll and opengl32.dll.
    * 
-   * @memberof FSOLauncher
    */
   disableSoftwareMode() {
     const fs = require( 'fs-extra' );
@@ -1015,7 +992,6 @@ class FSOLauncher {
    * Enables Software Mode and adds the needed files.
    * 
    * @returns {Promise<void>} A promise that resolves when the operation is complete.
-   * @memberof FSOLauncher
    */
   enableSoftwareMode() {
     const fs = require( 'fs-extra' );
@@ -1041,7 +1017,6 @@ class FSOLauncher {
    * Runs FreeSO or Simitone's executable.
    *
    * @param {boolean} useVolcanic If Volcanic.exe should be launched.
-   * @memberof FSOLauncher
    */
   play( useVolcanic, isSimitone = false ) {
     if ( process.platform === "darwin" ) {
@@ -1090,7 +1065,6 @@ class FSOLauncher {
    * @param {boolean} useVolcanic If Volcanic.exe should be launched.
    * @param {boolean} isSimitone  If Simitone should be launched.
    * @param {string}  subfolder   Subfolder if game is in subfolder.
-   * @memberof FSOLauncher
    */
   launchGame( useVolcanic, isSimitone = false, subfolder ) {
     const gameFilename = isSimitone ? 'Simitone.Windows.exe' : 'FreeSO.exe';
@@ -1152,7 +1126,6 @@ class FSOLauncher {
    * variables.
    *
    * @returns {Promise<object>} A promise that returns FreeSO configuration variables.
-   * @memberof FSOLauncher
    */
   getFSOConfig() {
     return new Promise( ( resolve, reject ) => {
@@ -1175,7 +1148,6 @@ class FSOLauncher {
    *
    * @param {string} lang The language string.
    * @returns {number} The language code.
-   * @memberof FSOLauncher
    */
   getLangCode( lang ) {
     const codes = {
@@ -1191,7 +1163,6 @@ class FSOLauncher {
    *
    * @param {number} code Language code (gettable from getLangCode).
    * @returns {string[]} The language strings.
-   * @memberof FSOLauncher
    */
   getLangString( code ) {
     const languageStrings = {
@@ -1207,7 +1178,6 @@ class FSOLauncher {
    * Save the current state of the configuration.
    *
    * @param {boolean} showToast Display a toast while it is saving.
-   * @memberof FSOLauncher
    */
   persist( _showToast ) {
     const Toast = new ToastComponent( global.locale.TOAST_SETTINGS, this.View );
@@ -1222,7 +1192,6 @@ class FSOLauncher {
    * Change FreeSO installation path.
    *
    * @param {string} dir The installation path.
-   * @memberof FSOLauncher
    */
   async changeFSOPath( dir ) {
     const Registry = require( './library/registry' );
