@@ -25,8 +25,8 @@ If applicable, add screenshots to help explain your problem.
 
 **Desktop (please complete the following information):**
  - OS: [e.g. Windows]
- - Version [e.g. 11]
- - Build [e.g. 22000.376]
+ - Version: [e.g. 11]
+ - Build: [e.g. 22000.376]
 
 **Additional context**
 Add any other context about the problem here.
