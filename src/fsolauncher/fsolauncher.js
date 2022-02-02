@@ -98,7 +98,6 @@ class FSOLauncher {
   }
   /**
    * Update installer tips recursively, every 10 seconds.
-   *
    */
   updateTipRecursive() {
     const tips = [
@@ -188,7 +187,6 @@ class FSOLauncher {
   }
   /**
    * Recursively updates the UI that needs internet.
-   *
    */
   updateNetRequiredUIRecursive() {
     setTimeout( () => {
@@ -199,7 +197,6 @@ class FSOLauncher {
   /**
    * Installs the game using the complete installer which installs FreeSO,
    * OpenAL, .NET, Mono, SDL, Mac-extras and The Sims Online.
-   *
    */
   runFullInstaller() {
     new ( require( './library/installers/complete-installer' ) )( this ).run();
@@ -828,7 +825,6 @@ class FSOLauncher {
   }
   /**
    * Checks for all types of updates recursively.
-   *
    */
   checkUpdatesRecursive() {
     setTimeout( () => {
@@ -966,7 +962,6 @@ class FSOLauncher {
   }
   /**
    * Disables Software Mode and removes dxtn.dll and opengl32.dll.
-   * 
    */
   disableSoftwareMode() {
     const fs = require( 'fs-extra' );
