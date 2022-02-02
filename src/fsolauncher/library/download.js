@@ -7,12 +7,11 @@ const { http, https } = require( 'follow-redirects' ).wrap( {
 const path = require( 'path' );
 const { EventEmitter } = require( 'events' );
 /**
- * makeDownload factory
+ * makeDownload factory.
  */
 module.exports = function makeDownload() {
   /**
-   * Custom HTTP download, with a few more failsafes for dealing
-   * with archive.org responses.
+   * Custom HTTP download, with a few more failsafes for dealing with archive.org responses.
    * Supports pause, resume, retry and abort (stop).
    */
   return function download( { from, to, immediate = false } ) {
@@ -46,7 +45,7 @@ module.exports = function makeDownload() {
     };
 
     /**
-     * @param {string} chunk
+     * @param {string} chunk The chunk of data to write to the file.
      */
     const _onData = chunk => {
       _fileStream.write( chunk );
@@ -56,7 +55,7 @@ module.exports = function makeDownload() {
     };
 
     /**
-     * @param {Error} e
+     * @param {Error} e The error that occurred.
      */
     const _onError = e => {
       _error = e;

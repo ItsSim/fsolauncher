@@ -1,13 +1,11 @@
 /**
- * Electron Client event handler.
- *
- * @class Event
+ * Wrapper for renderer events.
  */
 class RendererEvent {
   /**
    * Creates an instance of Event.
-   * @param {any} eventName
-   * @memberof Event
+   * 
+   * @param {string} eventName
    */
   constructor( eventName ) {
     this.eventName = eventName;
@@ -15,8 +13,7 @@ class RendererEvent {
   /**
    * Establishes the callback for the event.
    *
-   * @param {any} callback
-   * @memberof Event
+   * @param {Function} callback The callback to fire.
    */
   onFire( callback ) {
     require( 'electron' ).ipcMain.on( this.eventName, callback );

@@ -11,20 +11,26 @@ const { https } = require( 'follow-redirects' ).wrap( {
 
 /**
  * Main launcher class.
- *
- * @class FSOLauncher
- * @extends {Events}
  */
 class FSOLauncher {
   /**
-   * Creates an instance of FSOLauncher.
-   * @param {Electron.BrowserWindow} Window
-   * @param {any} Configuration
+   * @param {Electron.BrowserWindow} Window                      The main window.
+   * @param {object} Configuration                               The configuration object.
+   * @param {object} Configuration.Launcher                      The launcher configuration.
+   * @param {string} Configuration.Launcher.Theme                The launcher theme.
+   * @param {string} Configuration.Launcher.DesktopNotifications Whether to show desktop notifications.
+   * @param {string} Configuration.Launcher.DirectLaunch         Whether to launch the game directly.
+   * @param {string} Configuration.Launcher.Language             The launcher language.
+   * @param {object} Configuration.Game                          The game configuration.
+   * @param {string} Configuration.Game.GraphicsMode             The game graphics mode.
+   * @param {string} Configuration.Game.Language                 The game language.
+   * @param {string} Configuration.Game.TTS                      Whether to enable TTS
    * @memberof FSOLauncher
    */
   constructor( Window, Configuration ) {
-    this.Window = Window;
     this.conf = Configuration;
+    this.Window = Window;
+    this.View = new View( Window );
     this.minimizeReminder = false;
     this.lastUpdateNotification = false;
     this.isSearchingForUpdates = false;
@@ -41,7 +47,9 @@ class FSOLauncher {
       if ( !this.minimizeReminder ) {
         Modal.sendNotification(
           'FreeSO Launcher',
-          global.locale.MINIMIZE_REMINDER
+          global.locale.MINIMIZE_REMINDER,
+          null, null,
+          this.isDarkMode()
         );
 
         this.minimizeReminder = true;
@@ -49,7 +57,7 @@ class FSOLauncher {
       this.Window.hide();
     } );
 
-    Modal.View = this.View = new View( this.Window );
+    Modal.View = this.View;
 
     this.activeTasks = [];
     this.isInstalled = {};
@@ -64,7 +72,8 @@ class FSOLauncher {
   /**
    * Reads the registry and updates the programs list.
    *
-   * @returns
+   * @returns {Promise<void>} A promise that resolves when the programs
+   *                          list and paths have been updated.
    * @memberof FSOLauncher
    */
   updateInstalledPrograms() {
@@ -90,7 +99,7 @@ class FSOLauncher {
     } );
   }
   /**
-   * Update tips recursively.
+   * Update installer tips recursively, every 10 seconds.
    *
    * @memberof FSOLauncher
    */
@@ -118,9 +127,11 @@ class FSOLauncher {
     }, 10000 );
   }
   /**
-   * Gets the current internet status.
+   * Returns the current internet status, and updates the global
+   * this.hasInternet variable.
    *
-   * @returns
+   * @returns {Promise<boolean>} A promise that resolves to the current
+   *                             internet status.
    * @memberof FSOLauncher
    */
   getInternetStatus() {
@@ -134,7 +145,8 @@ class FSOLauncher {
   /**
    * Obtains Simitone release information from GitHub.
    *
-   * @returns
+   * @returns {Promise<void>} A promise that resolves to the Simitone
+   *                          release data.
    * @memberof FSOLauncher
    */
   getSimitoneReleaseInfo() {
@@ -169,7 +181,7 @@ class FSOLauncher {
   /**
    * Hides all view elements that need internet connection.
    *
-   * @param {any} init
+   * @param {boolean} _init Whether this is the initial call.
    * @memberof FSOLauncher
    */
   async updateNetRequiredUI( _init ) {
@@ -192,8 +204,8 @@ class FSOLauncher {
     }, 5000 );
   }
   /**
-   * Installs the game using the complete installer
-   * which installs OpenAL, .NET, TSO and FreeSO.
+   * Installs the game using the complete installer which installs FreeSO,
+   * OpenAL, .NET, Mono, SDL, Mac-extras and The Sims Online.
    *
    * @memberof FSOLauncher
    */
@@ -203,8 +215,8 @@ class FSOLauncher {
   /**
    * Adds a task in progress.
    *
-   * @param {any} Name
-   * @memberof FSOLauncher
+   * @param {string} Name Name of the task in progress.
+   * @memberof FSOLauncher 
    */
   addActiveTask( Name ) {
     if ( !this.isActiveTask( Name ) ) {
@@ -212,9 +224,9 @@ class FSOLauncher {
     }
   }
   /**
-   * Removes a task.
+   * Removes a task by name.
    *
-   * @param {*} Name
+   * @param {string} Name Name of the task to remove.
    */
   removeActiveTask( Name ) {
     if ( Name ) {
@@ -226,7 +238,7 @@ class FSOLauncher {
   /**
    * Checks if task is active.
    *
-   * @param {*} Name
+   * @param {string} Name Name of the task.
    */
   isActiveTask( Name ) {
     return this.activeTasks.indexOf( Name ) > -1;
@@ -234,7 +246,8 @@ class FSOLauncher {
   /**
    * Returns a component's hard-coded pretty name.
    *
-   * @param {*} Component
+   * @param {string} Component The component's name.
+   * @returns {string} The component's pretty name.
    */
   getPrettyName( Component ) {
     switch ( Component ) {
@@ -262,9 +275,9 @@ class FSOLauncher {
    * Modifies TTS Mode.
    * To do this it has to edit FreeSO's config.ini.
    *
-   * @deprecated
-   * @param {any} value New TTS value.
-   * @returns
+   * @deprecated It is now configurable in-game.
+   * @param {string} value    New TTS value.
+   * @returns {Promise<void>} Resolves when done.
    * @memberof FSOLauncher
    */
   async editTTSMode( value ) {
@@ -306,7 +319,7 @@ class FSOLauncher {
   /**
    * Obtains remesh package information.
    *
-   * @returns
+   * @returns {Promise<object>} A promise that resolves to the response.
    * @memberof FSOLauncher
    */
   getRemeshData() {
@@ -342,7 +355,7 @@ class FSOLauncher {
   /**
    * Returns the launcher's update endpoint response.
    *
-   * @returns
+   * @returns {Promise<object>} A promise that resolves to the response.
    * @memberof FSOLauncher
    */
   getLauncherData() {
@@ -377,6 +390,7 @@ class FSOLauncher {
   /**
    * Obtains remesh info and updates the renderer process.
    *
+   * @returns {Promise<void>} A promise that resolves when the remesh info is obtained.
    * @memberof FSOLauncher
    */
   async checkRemeshInfo() {
@@ -395,6 +409,7 @@ class FSOLauncher {
    * 2. If TS Complete Collection is installed.
    * 3. If Simitone needs an update.
    *
+   * @returns {Promise<void>} A promise that resolves when the check is complete.
    * @memberof FSOLauncher
    */
   async checkSimitoneRequirements() {
@@ -434,8 +449,9 @@ class FSOLauncher {
   /**
    * Checks if any updates are available.
    *
-   * @param {any} wasAutomatic Indicates if it has been requested by the recursive loop
-   * to not spam the user with possible request error modals.
+   * @param {boolean} wasAutomatic Indicates if it has been requested by the recursive loop
+   *                               to not spam the user with possible request error modals.
+   * @returns {Promise<void>} A promise that resolves when the update check is complete.
    * @memberof FSOLauncher
    */
   async checkLauncherUpdates( wasAutomatic ) {
@@ -469,7 +485,8 @@ class FSOLauncher {
                 data.Version +
                 ' ' +
                 global.locale.X_AVAILABLE,
-              global.locale.MODAL_UPDATE_DESCR
+              global.locale.MODAL_UPDATE_DESCR,
+              null, null, this.isDarkMode()
             );
           }
 
@@ -490,8 +507,9 @@ class FSOLauncher {
     }
   }
   /**
-   * Launcher update is downloaded from beta.freeso.org manually by the user.
+   * Opens a new window with the launcher's update page.
    *
+   * @returns {Promise<void>} A promise that resolves when the window is opened.
    * @memberof FSOLauncher
    */
   async installLauncherUpdate() {
@@ -500,7 +518,10 @@ class FSOLauncher {
   /**
    * Changes the game path in the registry.
    *
-   * @param {any} options
+   * @param {object}         options           The options object.
+   * @param {string}         options.component The component to change the path for.
+   * @param {string|boolean} options.override  The path to change to.
+   * @returns {Promise<void>} A promise that resolves when the path is changed.
    * @memberof FSOLauncher
    */
   async changeGamePath( options ) {
@@ -527,8 +548,8 @@ class FSOLauncher {
   /**
    * Shows the confirmation Modal right before installing.
    *
-   * @param {any} Component The Component that is going to be installed.
-   * @returns
+   * @param {string} Component The Component that is going to be installed.
+   * @returns {Promise<void>} A promise that resolves when the Modal is shown.
    * @memberof FSOLauncher
    */
   async fireInstallModal( Component ) {
@@ -538,15 +559,18 @@ class FSOLauncher {
 
     switch ( Component ) {
       case 'FSO':
-        if ( !this.isInstalled['TSO'] ) missing.push( this.getPrettyName( 'TSO' ) );
-        if ( !this.isInstalled['Mono'] && process.platform === "darwin" ) missing.push( this.getPrettyName( 'Mono' ) );
-        if ( !this.isInstalled['SDL'] && process.platform === "darwin" ) missing.push( this.getPrettyName( 'SDL' ) );
+        if ( !this.isInstalled['TSO'] ) 
+          missing.push( this.getPrettyName( 'TSO' ) );
+        if ( !this.isInstalled['Mono'] && process.platform === "darwin" ) 
+          missing.push( this.getPrettyName( 'Mono' ) );
+        if ( !this.isInstalled['SDL'] && process.platform === "darwin" ) 
+          missing.push( this.getPrettyName( 'SDL' ) );
         if ( !this.isInstalled['OpenAL'] && process.platform === "win32" )
           missing.push( this.getPrettyName( 'OpenAL' ) );
         break;
 
       case 'TSO':
-        //if ( !this.isInstalled['NET'] && process.platform === "win32" ) missing.push( this.getPrettyName( 'NET' ) );
+        // No requirements.
         break;
 
       case 'RMS':
@@ -555,8 +579,10 @@ class FSOLauncher {
         break;
 
       case 'Simitone': 
-        if ( !this.isInstalled['Mono'] && process.platform === "darwin" ) missing.push( this.getPrettyName( 'Mono' ) );
-        if ( !this.isInstalled['SDL'] && process.platform === "darwin" ) missing.push( this.getPrettyName( 'SDL' ) );
+        if ( !this.isInstalled['Mono'] && process.platform === "darwin" ) 
+          missing.push( this.getPrettyName( 'Mono' ) );
+        if ( !this.isInstalled['SDL'] && process.platform === "darwin" ) 
+          missing.push( this.getPrettyName( 'SDL' ) );
         break;
     }
 
@@ -614,16 +640,17 @@ class FSOLauncher {
    * 
    * If the installation goes OK, the Promise will resolve.
    *
-   * @param {any} Component The Component to install.
-   * @param {any} options Extra options like fullInstall or override.
-   * @returns
+   * @param {string}         Component            The Component to install.
+   * @param {object}         options              The options object.
+   * @param {string|boolean} options.override     The path to change to.
+   * @param {boolean}        options.tsoInstaller The TSO installer to use.
+   * @param {boolean}        options.fullInstall  Whether to do a full install.
+   * @param {string}         options.dir          A predefined directory to install to.
+   * @returns {Promise<void>} A promise that resolves when the Component is installed.
    * @memberof FSOLauncher
    */
   install( Component, options = {
-    fullInstall: false,
-    override: false,
-    tsoInstaller: 'FilePlanetInstaller',
-    dir: false
+    fullInstall: false, override: false, tsoInstaller: 'FilePlanetInstaller', dir: false
   } ) {
     console.log( 'Installing:', Component, options );
     this.addActiveTask( Component );
@@ -831,11 +858,11 @@ class FSOLauncher {
     }, 60000 );
   }
   /**
-   * Switches the game language. Copies the translation files and
-   * changes the current language in FreeSO's config.ini
+   * Switches the game language. 
+   * Copies the translation files and changes the current language in FreeSO.ini.
    *
-   * @param {any} language
-   * @returns
+   * @param {string} language The language to change to.
+   * @returns {Promise<void>} A promise that resolves when the language is changed.
    * @memberof FSOLauncher
    */
   async switchLanguage( language ) {
@@ -906,10 +933,9 @@ class FSOLauncher {
     }
   }
   /**
-   * Updates a configuration variable. Used after
-   * a users changes a setting.
+   * Updates a configuration variable. Used after a user changes a setting.
    *
-   * @param {any} newConfig
+   * @param {object} newConfig The new configuration object.
    * @memberof FSOLauncher
    */
   async setConfiguration( newConfig ) {
@@ -988,6 +1014,7 @@ class FSOLauncher {
   /**
    * Enables Software Mode and adds the needed files.
    * 
+   * @returns {Promise<void>} A promise that resolves when the operation is complete.
    * @memberof FSOLauncher
    */
   enableSoftwareMode() {
@@ -1013,8 +1040,7 @@ class FSOLauncher {
   /**
    * Runs FreeSO or Simitone's executable.
    *
-   * @param {any} useVolcanic If Volcanic.exe should be launched.
-   * @returns
+   * @param {boolean} useVolcanic If Volcanic.exe should be launched.
    * @memberof FSOLauncher
    */
   play( useVolcanic, isSimitone = false ) {
@@ -1061,7 +1087,9 @@ class FSOLauncher {
   /**
    * Launches the game with the user's configuration.
    *
-   * @param {any} useVolcanic If Volcanic.exe should be launched.
+   * @param {boolean} useVolcanic If Volcanic.exe should be launched.
+   * @param {boolean} isSimitone  If Simitone should be launched.
+   * @param {string}  subfolder   Subfolder if game is in subfolder.
    * @memberof FSOLauncher
    */
   launchGame( useVolcanic, isSimitone = false, subfolder ) {
@@ -1120,10 +1148,10 @@ class FSOLauncher {
     setTimeout( () => { Toast.destroy(); }, 4000 );
   }
   /**
-   * Promise that returns FreeSO's configuration
+   * Promise that returns FreeSO configuration
    * variables.
    *
-   * @returns
+   * @returns {Promise<object>} A promise that returns FreeSO configuration variables.
    * @memberof FSOLauncher
    */
   getFSOConfig() {
@@ -1145,8 +1173,8 @@ class FSOLauncher {
    * Returns hardcoded language integers from the language string.
    * Example: 'en', 'es'...
    *
-   * @param {any} lang
-   * @returns
+   * @param {string} lang The language string.
+   * @returns {number} The language code.
    * @memberof FSOLauncher
    */
   getLangCode( lang ) {
@@ -1161,8 +1189,8 @@ class FSOLauncher {
   /**
    * Returns the full language strings from the code.
    *
-   * @param {any} code Language code (gettable from getLangCode).
-   * @returns
+   * @param {number} code Language code (gettable from getLangCode).
+   * @returns {string[]} The language strings.
    * @memberof FSOLauncher
    */
   getLangString( code ) {
@@ -1178,7 +1206,7 @@ class FSOLauncher {
   /**
    * Save the current state of the configuration.
    *
-   * @param {any} showToast Display a toast while it is saving.
+   * @param {boolean} showToast Display a toast while it is saving.
    * @memberof FSOLauncher
    */
   persist( _showToast ) {
@@ -1192,9 +1220,8 @@ class FSOLauncher {
   }
   /**
    * Change FreeSO installation path.
-   * This fn is for the new FSODetector feature.
    *
-   * @param {*} dir
+   * @param {string} dir The installation path.
    * @memberof FSOLauncher
    */
   async changeFSOPath( dir ) {
@@ -1210,6 +1237,12 @@ class FSOLauncher {
         'Failed while trying to change the FreeSO installation directory: ' + e );
     }
   }
+  /**
+   * Sets the native progress bar to the given value.
+   * 
+   * @param {number} val The value to set.
+   * @param {Electron.ProgressBarOptions} options The options to use. 
+   */
   setProgressBar( val, options ) {
     if( this.Window ) {
       try {
@@ -1218,6 +1251,13 @@ class FSOLauncher {
         console.log( 'Failed setting ProgressBar' )
       }
     }
+  }
+  /**
+   * Returns if the current theme is considerd dark.
+   * @returns {boolean}
+   */
+  isDarkMode() {
+    return ['halloween', 'dark'].includes( this.conf.Launcher.Theme );
   }
 }
 

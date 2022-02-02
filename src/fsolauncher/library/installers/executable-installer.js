@@ -1,16 +1,10 @@
 /**
- * Launches external installer executables that are stored
- * in the bin folder of the launcher.
- *
- * @class ExecutableInstaller
+ * Launches executables located in the bin folder of the launcher, such as
+ * OpenAL and .NET Framework.
  */
 class ExecutableInstaller {
   /**
-   * Runs a child process.
-   *
-   * @param {any} file File to run.
-   * @returns
-   * @memberof ExecutableInstaller
+   * @param {string} file The file to launch.
    */
   run( file ) {
     return new Promise( ( resolve, _reject ) => {

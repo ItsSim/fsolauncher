@@ -1,8 +1,6 @@
 /**
  * Interacts with a Windows PC Registry to handle all the different
  * keys FreeSO and TSO need to function properly.
- *
- * @class Registry
  */
 class Registry {
   /**
@@ -11,7 +9,8 @@ class Registry {
    * 
    * https://github.com/fresc81/node-winreg#access-to-restricted-keys
    * 
-   * @returns {Promise<boolean>}
+   * @returns {Promise<boolean>} A promise that resolves to true if the
+   *                             user has access to the registry.
    */
   static testWinAccess() {
     if( process.platform != "win32" ) return Promise.resolve( false );
@@ -81,7 +80,7 @@ class Registry {
    * https://github.com/fresc81/node-winreg#access-to-restricted-keys
    * 
    * @param {string} program The program ID.
-   * @returns {string|boolean}
+   * @returns {string|boolean} The path to the program if it is installed,
    */
   static async win32LocalPathFallbacks( program ) {
     const locals = [];
@@ -115,9 +114,8 @@ class Registry {
   /**
    * Returns the status of all the required programs (Installed/not installed).
    *
-   * @static
-   * @returns {Promise}
-   * @memberof Registry
+   * @returns {Promise<object>} A promise that resolves to an object with
+   *                            the program names as keys and the status as values.
    */
   static getInstalled() {
     return new Promise( ( resolve, reject ) => {
@@ -140,13 +138,11 @@ class Registry {
     } );
   }
   /**
-   * Checks if a Registry Key exists and returns if it is installed or not.
+   * Checks if a registry key exists.
    *
-   * @static
-   * @param {any} e The Component to look for.
-   * @param {any} p The Registry Key to look in.
-   * @returns
-   * @memberof Registry
+   * @param {string} e The Component to look for.
+   * @param {string} p The Registry Key to look in.
+   * @returns {Promise<{key: string, isInstalled: string}>}
    */
   static get( e, p ) {
     if( process.platform === "darwin" ) {
@@ -241,12 +237,10 @@ class Registry {
     } );
   }
   /**
-   * Creates the default Maxis Registry Key.
+   * Creates the default Maxis registry key.
    *
-   * @static
-   * @param {any} InstallDir Where TSO was installed.
-   * @returns
-   * @memberof Registry
+   * @param {string} InstallDir Where TSO was installed.
+   * @returns {Promise<void>} A promise that resolves when the registry key is created.
    */
   static async createMaxisEntry( InstallDir ) {
     if( ! await Registry.testWinAccess() ) {
@@ -312,10 +306,9 @@ class Registry {
    * Creates the *new* default FreeSO Registry Key.
    * Reused for Simitone, second parameter as "Simitone".
    *
-   * @static
-   * @param {any} InstallDir Where FreeSO was installed.
-   * @returns
-   * @memberof Registry
+   * @param {string} InstallDir Where FreeSO was installed.
+   * @param {string} KeyName The name of the registry key.
+   * @returns {Promise<void>} A promise that resolves when the registry key is created.
    */
   static async createFreeSOEntry( InstallDir, KeyName = 'FreeSO' ) {
     if( ! await Registry.testWinAccess() ) {

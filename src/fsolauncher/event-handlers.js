@@ -5,16 +5,12 @@ const FSOLauncher = require( './fsolauncher' ),
 
 /**
  * Handles all events from the client.
- *
- * @class EventHandlers
  */
 class EventHandlers {
   /**
    * Defines all the currently supported client events.
    * 
    * @param {FSOLauncher} FSOLauncher The FSOLauncher instance.
-   *
-   * @memberof Events
    */
   defineEvents( FSOLauncher ) {
     this.FSOLauncher = FSOLauncher;
@@ -83,8 +79,6 @@ class EventHandlers {
   }
   /**
    * Received when the user request a Simitone update.
-   *
-   * @memberof EventHandlers
    */
   onInstallSimitoneUpdate() {
     this.FSOLauncher.install( 'Simitone', { dir: this.FSOLauncher.isInstalled.Simitone } )
@@ -93,8 +87,6 @@ class EventHandlers {
   /**
    * Received when the renderer process asks the main process to check for 
    * Simitone updates.
-   *
-   * @memberof EventHandlers
    */
   onCheckSimitoneRequirements() {
     this.FSOLauncher.checkSimitoneRequirements();
@@ -103,8 +95,6 @@ class EventHandlers {
    * Fires when the user requests an alternative TSO installation source.
    * @deprecated Not used since there's really only one source available right now
    *             since largedownloads went down.
-   *
-   * @memberof EventHandlers
    */
   onFTPTSO() {
     Modal.showFTPTSO();
@@ -113,8 +103,8 @@ class EventHandlers {
    * Fires as a user's response to showFTPTSO().
    * @deprecated Not used since there's really only one source available right now
    *             since largedownloads went down.
-   *
-   * @memberof EventHandlers
+   * @param {Electron.IpcMainEvent} e The event object.
+   * @param {boolean} yes If the user selected yes.
    */
   onFTPTSOResponse( e, yes ) {
     if ( yes ) {
@@ -129,8 +119,6 @@ class EventHandlers {
   }
   /**
    * Fires when the DOM is initialized.
-   *
-   * @memberof Events
    */
   onInitDOM() {
     this.FSOLauncher.View.setTheme( this.FSOLauncher.conf.Launcher.Theme );
@@ -144,21 +132,22 @@ class EventHandlers {
   /**
    * Fires when the client receives a Socket.io request.
    *
-   * @param {any} e Error (if any)
-   * @param {any} Response The actual response.
-   * @memberof Events
+   * @param {Electron.IpcMainEvent} e The event object.
+   * @param {string[]} Response The response from the client.
    */
   onSocketMessage( e, Response ) {
     if ( this.FSOLauncher.conf.Launcher.DesktopNotifications === '1' ) {
-      Modal.sendNotification( 'FreeSO Announcement', Response[0], Response[1] );
+      Modal.sendNotification( 'FreeSO Announcement', 
+        Response[0], 
+        Response[1], 
+        null, this.FSOLauncher.isDarkMode() );
     }
   }
   /**
    * When the user wants to install a Component.
    *
-   * @param {any} e Error (if any)
-   * @param {any} Component The Component to be installed.
-   * @memberof Events
+   * @param {Electron.IpcMainEvent} e The event object.
+   * @param {string} Component The Component to be installed.
    */
   onInstall( e, Component ) {
     this.FSOLauncher.fireInstallModal( Component );
@@ -166,8 +155,8 @@ class EventHandlers {
   /**
    * When the configuration settings are altered.
    *
-   * @param {*} e Error (if any)
-   * @param {*} v 2D Array with key and value.
+   * @param {Electron.IpcMainEvent} e The event object.
+   * @param {string[]} v [Config Key] - [Config Subkey] - [Config Value]
    */
   onSetConfiguration( e, v ) {
     this.FSOLauncher.setConfiguration( v );
@@ -175,9 +164,8 @@ class EventHandlers {
   /**
    * When the user needs to be redirected.
    *
-   * @param {any} e Error (if any)
-   * @param {any} yes The user clicked yes in the dialog.
-   * @memberof Events
+   * @param {Electron.IpcMainEvent} e The event object.
+   * @param {boolean} yes If the user selected yes.
    */
   onInstallerRedirect( e, yes ) {
     if ( yes ) {
@@ -187,11 +175,10 @@ class EventHandlers {
   /**
    * When the user wants to install a single Component.
    *
-   * @param {any} e Error (if any)
-   * @param {any} yes The user clicked yes in the dialog.
-   * @param {any} Component The Component to be installed.
-   * @param {any} options
-   * @memberof Events
+   * @param {Electron.IpcMainEvent} e The event object.
+   * @param {boolean} yes       The user clicked yes in the dialog.
+   * @param {string}  Component The Component to be installed.
+   * @param {object}  options   Options for the installer.
    */
   onInstallComponent( e, yes, Component, options ) {
     if ( yes ) {
@@ -202,19 +189,15 @@ class EventHandlers {
   /**
    * When the renderer process requests a main process console.log.
    *
-   * @param {*} e
-   * @param {*} v
-   * @memberof EventHandlers
+   * @param {Electron.IpcMainEvent} e The event object.
+   * @param {string} v The message to be logged.
    */
-  onConsoleLog( e, v ) {
-    console.log( v );
-  }
+  onConsoleLog( e, v ) { console.log( v ); }
   /**
    * When the user clicks the play button.
    *
    * @param {any} e Error (if any)
    * @param {any} useVolcanic Use Volcanic or not.
-   * @memberof Events
    */
   onPlay( e, useVolcanic ) {
     this.FSOLauncher.play( useVolcanic );
@@ -222,8 +205,8 @@ class EventHandlers {
   /**
    * When the user wants to launch Volcanic.
    *
-   * @param {*} e Error (if any)
-   * @param {*} yes The user clicked yes in the dialog.
+   * @param {Electron.IpcMainEvent} e The event object.
+   * @param {boolean} yes If the user selected yes.
    */
   onPlayVolcanic( e, yes ) {
     if ( yes ) {
@@ -241,8 +224,7 @@ class EventHandlers {
   /**
    * When the user requests a launcher update check.
    *
-   * @returns
-   * @memberof Events
+   * @returns {void}
    */
   onCheckUpdates() {
     if ( this.FSOLauncher.activeTasks.length > 0 ) {
@@ -253,9 +235,8 @@ class EventHandlers {
   /**
    * Update dialog callback.
    *
-   * @param {any} e Error (if any)
-   * @param {any} yes The user said yes.
-   * @memberof Events
+   * @param {Electron.IpcMainEvent} e The event object.
+   * @param {boolean} yes If the user selected yes.
    */
   onInstallUpdate( e, yes ) {
     if ( yes ) {
@@ -264,8 +245,6 @@ class EventHandlers {
   }
   /**
    * When the user clicks the Full Install button.
-   *
-   * @memberof Events
    */
   onFullInstall() {
     if ( this.FSOLauncher.activeTasks.length === 0 ) {
@@ -278,9 +257,8 @@ class EventHandlers {
   /**
    * Full install dialog callback.
    *
-   * @param {any} e Error (if any)
-   * @param {any} yes The user said yes.
-   * @memberof Events
+   * @param {Electron.IpcMainEvent} e The event object.
+   * @param {boolean} yes If the user selected yes.
    */
   onFullInstallConfirm( e, yes ) {
     if ( yes ) {
@@ -291,10 +269,9 @@ class EventHandlers {
   /**
    * When the user changes the game path.
    *
-   * @param {any} e Error (if any)
-   * @param {any} yes The user said yes.
-   * @param {any} options ??
-   * @memberof Events
+   * @param {Electron.IpcMainEvent} e The event object.
+   * @param {boolean} yes If the user selected yes.
+   * @param {object} options The options for the installer.
    */
   onChangeGamePath( e, yes, options ) {
     options = JSON.parse( options );

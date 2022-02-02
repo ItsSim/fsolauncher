@@ -4,19 +4,17 @@ const { https } = require( 'follow-redirects' ).wrap( {
   https: net,
 } );
 const ServoInstaller = require( './servo-installer' ),
-  download = require( '../download' )();
+  download = require( '../download' )(),
+  // eslint-disable-next-line no-unused-vars
+  FSOLauncher = require( '../../fsolauncher' );
 
 /**
  * Installs FreeSO from GitHub Releases.
- *
- * @class GitHubInstaller
  */
 class GitHubInstaller extends ServoInstaller {
   /**
-   * Creates an instance of ServoInstaller.
-   * @param {any} path Path to install FreeSO in.
-   * @param {any} FSOLauncher
-   * @memberof ServoInstaller
+   * @param {string} path The path to install to.
+   * @param {FSOLauncher} FSOLauncher The FSOLauncher instance.
    */
   constructor( path, FSOLauncher ) {
     super( path, FSOLauncher );
@@ -24,9 +22,8 @@ class GitHubInstaller extends ServoInstaller {
   /**
    * Create/Update the download progress item.
    *
-   * @param {any} Message
-   * @param {any} Percentage
-   * @memberof GitHubInstaller
+   * @param {string} Message    The message to display.
+   * @param {number} Percentage The percentage to display.
    */
   createProgressItem( Message, Percentage ) {
     this.FSOLauncher.View.addProgressItem(
@@ -40,10 +37,11 @@ class GitHubInstaller extends ServoInstaller {
     );
   }
   /**
-   * Override step1 to include the GitHub release download.
+   * Download all the files.
+   * 
+   * Overrides step1() from ServoInstaller.
    *
-   * @returns
-   * @memberof GitHubInstaller
+   * @returns {Promise<void>} A promise that resolves when the download is complete.
    */
   async step1() {
     this.dl = null;
@@ -61,9 +59,10 @@ class GitHubInstaller extends ServoInstaller {
   }
   /**
    * Obtain FreeSO release information from GitHub.
+   * 
+   * Used as a backup if the FreeSO API is down.
    *
-   * @returns
-   * @memberof GitHubInstaller
+   * @returns {Promise<object>} A promise that resolves with the release information.
    */
   getFreeSOGitHubReleaseInfo() {
     return new Promise( ( resolve, reject ) => {
@@ -92,10 +91,9 @@ class GitHubInstaller extends ServoInstaller {
     } );
   }
   /**
-   * Obtain FreeSO release information from the API.
+   * Obtain FreeSO release information from the FreeSO API.
    *
-   * @returns
-   * @memberof GitHubInstaller
+   * @returns {Promise<object>} A promise that resolves with the release information.
    */
   getFreeSOApiReleaseInfo() {
     return new Promise( ( resolve, reject ) => {
@@ -124,10 +122,10 @@ class GitHubInstaller extends ServoInstaller {
   }
   /**
    * Obtains the latest release zip either from api.freeso.org or GitHub directly.
+   * 
    * Use api.freeso.org first, fallback to GitHub.
    *
-   * @returns
-   * @memberof GitHubInstaller
+   * @returns {Promise<string>} A promise that resolves with the URL of the zip.
    */
   async getZipUrl() {
     let url;
@@ -161,10 +159,12 @@ class GitHubInstaller extends ServoInstaller {
   }
   /**
    * When the installation errors out.
+   * 
+   * Overrides error() from ServoInstaller.
    *
-   * @param {any} ErrorMessage
-   * @returns
-   * @memberof GitHubInstaller
+   * @param {string} ErrorMessage The error message.
+   * @returns {Promise<void>} A promise that resolves when the backup
+   *                          installer (ServoInstaller) finishes.
    */
   async error( ErrorMessage ) {
     if( this.dl ) this.dl.cleanup();

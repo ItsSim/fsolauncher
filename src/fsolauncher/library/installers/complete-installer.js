@@ -1,23 +1,19 @@
-const Modal = require( '../modal' );
+const Modal = require( '../modal' ),
+// eslint-disable-next-line no-unused-vars
+FSOLauncher = require( '../../fsolauncher' );
 
 /**
- * Installs OpenAL, .NET, TSO and FreeSO.
- *
- * @class CompleteInstaller
+ * Installs OpenAL, .NET, Mono, SDL, TSO and FreeSO.
  */
 class CompleteInstaller {
   /**
-   * Creates an instance of CompleteInstaller.
-   * @param {any} FSOLauncher
-   * @memberof CompleteInstaller
+   * @param {FSOLauncher} FSOLauncher The FSOLauncher instance.
    */
   constructor( FSOLauncher ) {
     this.FSOLauncher = FSOLauncher;
   }
   /**
    * Runs steps sequentially.
-   *
-   * @memberof CompleteInstaller
    */
   async run() {
     try {
@@ -33,8 +29,7 @@ class CompleteInstaller {
   /**
    * Install OpenAL.
    *
-   * @returns
-   * @memberof CompleteInstaller
+   * @returns {Promise<void>} A promise that resolves when the installation is finished.
    */
   step1() {
     this.FSOLauncher.View.fullInstallProgressItem(
@@ -58,8 +53,7 @@ class CompleteInstaller {
   /**
    * Install .NET Framework.
    *
-   * @returns
-   * @memberof CompleteInstaller
+   * @returns {Promise<void>} A promise that resolves when the installation is finished.
    */
   step2() {
     this.FSOLauncher.View.fullInstallProgressItem(
@@ -84,8 +78,7 @@ class CompleteInstaller {
   /**
    * Installs The Sims Online.
    *
-   * @returns
-   * @memberof CompleteInstaller
+   * @returns {Promise<void>} A promise that resolves when the installation is finished.
    */
   step3() {
     this.FSOLauncher.View.fullInstallProgressItem(
@@ -99,8 +92,7 @@ class CompleteInstaller {
   /**
    * Installs FreeSO.
    *
-   * @returns
-   * @memberof CompleteInstaller
+   * @returns {Promise<void>} A promise that resolves when the installation is finished.
    */
   step4() {
     this.FSOLauncher.View.fullInstallProgressItem(
@@ -113,8 +105,6 @@ class CompleteInstaller {
   }
   /**
    * When the installation finished.
-   *
-   * @memberof CompleteInstaller
    */
   end() {
     this.FSOLauncher.removeActiveTask( 'FULL' );
@@ -128,7 +118,8 @@ class CompleteInstaller {
       'FreeSO Launcher',
       global.locale.INS_FINISHED_LONG,
       null,
-      true
+      true,
+      this.FSOLauncher.isDarkMode()
     );
     setTimeout( () => {
       this.FSOLauncher.View.fullInstallProgressItem();
@@ -136,8 +127,6 @@ class CompleteInstaller {
   }
   /**
    * Communicates that an error happened.
-   *
-   * @memberof CompleteInstaller
    */
   error() {
     this.FSOLauncher.removeActiveTask( 'FULL' );

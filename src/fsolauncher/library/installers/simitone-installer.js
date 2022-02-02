@@ -1,21 +1,19 @@
 const Modal = require( '../modal' ),
   download = require( '../download' )(),
-  unzip = require( '../unzip' )();
+  unzip = require( '../unzip' )(),
+  // eslint-disable-next-line no-unused-vars
+  FSOLauncher = require( '../../fsolauncher' );
 
 const DOWNLOAD_URL_GITHUB =
   'https://beta.freeso.org/LauncherResourceCentral/Simitone';
   
 /**
  * Downloads and installs Simitone.
- *
- * @class SimitoneInstaller
  */
 class SimitoneInstaller {
   /**
-   * Creates an instance of SimitoneInstaller.
-   * @param {any} path Path to install FreeSO in.
-   * @param {any} FSOLauncher
-   * @memberof SimitoneInstaller
+   * @param {string} path The path to the directory to create.
+   * @param {FSOLauncher} FSOLauncher The FSOLauncher instance.
    */
   constructor( path, FSOLauncher ) {
     this.FSOLauncher = FSOLauncher;
@@ -32,9 +30,8 @@ class SimitoneInstaller {
   /**
    * Create/Update the download progress item.
    *
-   * @param {any} Message
-   * @param {any} Percentage
-   * @memberof SimitoneInstaller
+   * @param {string} Message    The message to display.
+   * @param {number} Percentage The percentage to display.
    */
   createProgressItem( Message, Percentage ) {
     this.FSOLauncher.View.addProgressItem(
@@ -49,10 +46,9 @@ class SimitoneInstaller {
     );
   }
   /**
-   * Begins the installation.
+   * Executes all installation steps in order and captures any errors.
    *
-   * @returns
-   * @memberof SimitoneInstaller
+   * @returns {Promise<void>} A promise that resolves when the installation ends.
    */
   async install() {
     try {
@@ -70,8 +66,6 @@ class SimitoneInstaller {
   }
   /**
    * Obtains GitHub release data.
-   *
-   * @memberof SimitoneInstaller
    */
   async step1() {
     const simitoneReleaseData = await this.FSOLauncher.getSimitoneReleaseInfo();
@@ -85,8 +79,7 @@ class SimitoneInstaller {
   /**
    * Download all the files.
    *
-   * @returns
-   * @memberof SimitoneInstaller
+   * @returns {Promise<void>} A promise that resolves when the download is complete.
    */
   step2() {
     return this.download();
@@ -94,8 +87,7 @@ class SimitoneInstaller {
   /**
    * Create the installation directory.
    *
-   * @returns
-   * @memberof SimitoneInstaller
+   * @returns {Promise<void>} A promise that resolves when the directory is created.
    */
   step3() {
     return this.setupDir( this.path );
@@ -103,8 +95,7 @@ class SimitoneInstaller {
   /**
    * Extract files into installation directory.
    *
-   * @returns
-   * @memberof SimitoneInstaller
+   * @returns {Promise<void>} A promise that resolves when the files are extracted.
    */
   step4() {
     return this.extract();
@@ -112,12 +103,16 @@ class SimitoneInstaller {
   /**
    * Create the FreeSO Registry Key.
    *
-   * @returns
-   * @memberof SimitoneInstaller
+   * @returns {Promise<void>} A promise that resolves when the registry key is created.
    */
   step5() {
     return require( '../registry' ).createFreeSOEntry( this.path, 'Simitone' );
   }
+  /**
+   * Downloads Mac-extras for Darwin.
+   * 
+   * @returns {Promise<void>} A promise that resolves when the download is complete.
+   */
   step6() {
     if( process.platform === "darwin" ) {
       console.log( 'Darwin:', 'Downloading MacExtras' );
@@ -129,6 +124,11 @@ class SimitoneInstaller {
     }
     return Promise.resolve();
   }
+  /**
+   * Installs Mac-extras for Darwin.
+   * 
+   * @returns {Promise<void>} A promise that resolves when the installation is complete.
+   */
   step7() {
     if( process.platform === "darwin" ) {
       console.log( 'Darwin:', 'Extracting MacExtras' );
@@ -146,8 +146,6 @@ class SimitoneInstaller {
   }
   /**
    * When the installation ends.
-   *
-   * @memberof SimitoneInstaller
    */
   end() {
     this.dl.cleanup();
@@ -168,9 +166,8 @@ class SimitoneInstaller {
   /**
    * When the installation errors out.
    *
-   * @param {any} ErrorMessage
-   * @returns
-   * @memberof SimitoneInstaller
+   * @param {string} ErrorMessage The error message.
+   * @returns {Promise<void>} A promise that resolves when the installation ends.
    */
   error( ErrorMessage ) {
     this.dl.cleanup();
@@ -187,8 +184,7 @@ class SimitoneInstaller {
   /**
    * Downloads the distribution file.
    *
-   * @returns
-   * @memberof SimitoneInstaller
+   * @returns {Promise<void>} A promise that resolves when the download is complete.
    */
   download() {
     return new Promise( ( resolve, reject ) => {
@@ -206,8 +202,7 @@ class SimitoneInstaller {
   /**
    * Extracts the zipped artifacts.
    *
-   * @returns
-   * @memberof SimitoneInstaller
+   * @returns {Promise<void>} A promise that resolves when the extraction is complete.
    */
   extract() {
     return unzip( { from: this.tempPath, to: this.path }, filename => {
@@ -219,8 +214,6 @@ class SimitoneInstaller {
   }
   /**
    * Deletes the downloaded artifacts file.
-   *
-   * @memberof SimitoneInstaller
    */
   cleanup() {
     const fs = require( 'fs-extra' );
@@ -232,11 +225,10 @@ class SimitoneInstaller {
     } );
   }
   /**
-   * Creates all the directories in a string.
+   * Creates all the directories and subfolders in a path.
    *
-   * @param {any} dir
-   * @returns
-   * @memberof SimitoneInstaller
+   * @param {string} dir The path to create.
+   * @returns {Promise<void>} A promise that resolves when the directory is created.
    */
   setupDir( dir ) {
     return new Promise( ( resolve, reject ) => {
@@ -248,9 +240,8 @@ class SimitoneInstaller {
   }
   /**
    * Checks if Simitone is already installed in a given path.
-   *
-   * @param {any} after What to do after (callback).
-   * @memberof SimitoneInstaller
+   * 
+   * @returns {Promise<boolean>} If Simitone is installed already.
    */
   isInstalledInPath() {
     return new Promise( ( resolve, _reject ) => {
@@ -261,8 +252,6 @@ class SimitoneInstaller {
   }
   /**
    * Updates the progress item with the download progress.
-   *
-   * @memberof SimitoneInstaller
    */
   updateDownloadProgress() {
     setTimeout( () => {

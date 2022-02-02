@@ -1,25 +1,26 @@
 const Modal = require( '../modal' ),
   download = require( '../download' )(),
   unzip = require( '../unzip' )(),
-  extract = require( '../cabinet' )();
+  extract = require( '../cabinet' )(),
+  // eslint-disable-next-line no-unused-vars
+  FSOLauncher = require( '../../fsolauncher' );
 
 /**
  * ORIGINAL: https://archive.org/download/Fileplanet_dd_042006/Fileplanet_dd_042006.tar/042006/TSO_Installer_v1.1239.1.0.zip'
- * changed to beta.freeso.org redirect in case it needs to be changed
+ * changed to beta.freeso.org redirect in case it needs to be changed.
  */
 const DOWNLOAD_URL_FILEPLANET = 'https://beta.freeso.org/LauncherResourceCentral/TheSimsOnline';
 const TEMP_PATH = `${global.appData}temp/FilePlanetInstaller/`;
 const TEMP_FILE = 'FilePlanetTSOFiles.zip';
 
 /**
- * Introduced 09/16/2018
- * Alternative TSO Installer pointing to archive.org FilePlanet.
- * Uses https://github.com/riperiperi/TSO-Version-Patcher to
- * patch it back to N&I.
- *
- * @class FilePlanetInstaller
+ * Installs The Sims Online.
  */
 class FilePlanetInstaller {
+  /**
+   * @param {string} path Path to install to.
+   * @param {FSOLauncher} FSOLauncher The FSOLauncher instance.
+   */
   constructor( path, FSOLauncher ) {
     this.FSOLauncher = FSOLauncher;
     this.id = Math.floor( Date.now() / 1000 );
@@ -34,9 +35,8 @@ class FilePlanetInstaller {
   /**
    * Create/Update the download progress item.
    *
-   * @param {any} Message
-   * @param {any} Percentage
-   * @memberof FilePlanetInstaller
+   * @param {string} Message    The message to display.
+   * @param {number} Percentage The percentage to display.
    */
   createProgressItem( Message, Percentage, Extraction ) {
     this.FSOLauncher.View.addProgressItem(
@@ -52,10 +52,9 @@ class FilePlanetInstaller {
     );
   }
   /**
-   * Executes every installation step in order.
+   * Executes all installation steps in order and captures any errors.
    *
-   * @returns
-   * @memberof FilePlanetInstaller
+   * @returns {Promise<void>} A promise that resolves when the installation ends.
    */
   async install() {
     try {
@@ -70,23 +69,48 @@ class FilePlanetInstaller {
       return await this.error( ErrorMessage );
     }
   }
+  /**
+   * Download all the files.
+   *
+   * @returns {Promise<void>} A promise that resolves when the download is complete.
+   */
   step1() {
     return this.download();
   }
+  /**
+   * Create the installation directory.
+   *
+   * @returns {Promise<void>} A promise that resolves when the directory is created.
+   */
   step2() {
     return this.setupDir( this.path );
   }
-
+  /**
+   * Extract files into a temp directory.
+   *
+   * @returns {Promise<void>} A promise that resolves when the files are extracted.
+   */
   step3() {
     // extract zip
     return this.extractZip();
   }
+  /**
+   * Extract cabinet files into the installation directory.
+   *
+   * @param {Functon} unzipgc The unzip cleaner callback.
+   * @returns {Promise<void>} A promise that resolves when the files are extracted.
+   */
   step4( unzipgc ) {
-    // extract cabs
     return this.extractCabs( unzipgc );
   }
+  /**
+   * Patches the game back to New and Improved.
+   * 
+   * @returns {Promise<void>} A promise that resolves when the game is patched.
+   */
   step5() {
-    // patch 1239toNI
+    // Uses https://github.com/riperiperi/TSO-Version-Patcher to
+    // patch it back to N&I.
     this.createProgressItem( 'Patching The Sims Online, please wait...', 100 );
     return new Promise( ( resolve, _reject ) => {
       const child = require( 'child_process' ).exec(
@@ -111,6 +135,11 @@ class FilePlanetInstaller {
       } );
     } );
   }
+  /**
+   * Create the Simitone Registry Key.
+   *
+   * @returns {Promise<void>} A promise that resolves when the key is created.
+   */
   step6() {
     // registry
     return require( '../registry' ).createMaxisEntry( this.path );
@@ -118,8 +147,7 @@ class FilePlanetInstaller {
   /**
    * Downloads the distribution file.
    *
-   * @returns
-   * @memberof FilePlanetInstaller
+   * @returns {Promise<void>} A promise that resolves when the download is complete.
    */
   download() {
     return new Promise( ( resolve, reject ) => {
@@ -139,10 +167,9 @@ class FilePlanetInstaller {
     } );
   }
   /**
-   * Extracts the downloaded zip file that includes the cabinets.
+   * Extracts the zipped artifacts.
    *
-   * @returns
-   * @memberof FilePlanetInstaller
+   * @returns {Promise<void>} A promise that resolves when the extraction is complete.
    */
   extractZip() {
     this.createProgressItem( 'Extracting client files, please wait...', 100 );
@@ -162,8 +189,7 @@ class FilePlanetInstaller {
   /**
    * Extracts the MSFT cabinets.
    *
-   * @returns
-   * @memberof FilePlanetInstaller
+   * @returns {Promise<Function>} A promise that resolves when the extraction is complete.
    */
   extractCabs( unzipgc ) {
     // eslint-disable-next-line no-async-promise-executor
@@ -194,11 +220,10 @@ class FilePlanetInstaller {
     } );
   }
   /**
-   * Prepare directories.
+   * Creates all the directories and subfolders in a path.
    *
-   * @param {any} dir
-   * @returns
-   * @memberof TSOInstaller
+   * @param {string} dir The path to create.
+   * @returns {Promise<void>} A promise that resolves when the directory is created.
    */
   setupDir( dir ) {
     return new Promise( ( resolve, reject ) => {
@@ -209,11 +234,9 @@ class FilePlanetInstaller {
     } );
   }
   /**
-   * Checks if TSO is already installed.
-   *
-   * @param {*} _after
-   * @returns
-   * @memberof FilePlanetInstaller
+   * Checks if The Sims Online is already installed in a given path.
+   * 
+   * @returns {Promise<boolean>} If FreeSO is installed already.
    */
   isInstalledInPath( _after ) {
     return new Promise( ( resolve, _reject ) => {
@@ -223,9 +246,7 @@ class FilePlanetInstaller {
     } );
   }
   /**
-   * Installation ending tasks.
-   *
-   * @memberof FilePlanetInstaller
+   * When the installation ends.
    */
   end() {
     // Successful installation
@@ -238,11 +259,10 @@ class FilePlanetInstaller {
     if( !this.isFullInstall ) Modal.showInstalled( 'The Sims Online' );
   }
   /**
-   * Installation error tasks.
+   * When the installation errors out.
    *
-   * @param {*} ErrorMessage
-   * @returns
-   * @memberof FilePlanetInstaller
+   * @param {string} ErrorMessage The error message.
+   * @returns {Promise<void>} A promise that resolves when the installation ends.
    */
   error( ErrorMessage ) {
     // Failed installation
@@ -258,21 +278,18 @@ class FilePlanetInstaller {
     return Promise.reject( ErrorMessage );
   }
   /**
-   * Cabinet extraction progress.
+   * Displays the extraction progress for a given cabinet object.
    *
-   * @param {*} d
-   * @memberof FilePlanetInstaller
+   * @param {object} cab The cabinet object.
    */
-  updateExtractionProgress( d ) {
+  updateExtractionProgress( cab ) {
     this.createProgressItem(
-      `Extracting ${d.file} (${require( 'path' ).basename( d.current )})`,
+      `Extracting ${cab.file} (${require( 'path' ).basename( cab.current )})`,
       100
     );
   }
   /**
-   * Update the download progress item.
-   *
-   * @memberof TSOInstaller
+   * Updates the progress item with the download progress.
    */
   updateDownloadProgress() {
     setTimeout( () => {

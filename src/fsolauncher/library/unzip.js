@@ -2,25 +2,18 @@ const yauzl = require( 'yauzl' ),
   path = require( 'path' ),
   fs = require( 'fs-extra' );
 /**
- * makeUnzip factory
- *
- * @summary Makes a generic unzip using yauzl.
- *
- * @since 1.6.5
+ * makeUnzip factory.
+ * Makes a generic unzip using yauzl.
  */
 module.exports = function makeUnzip() {
   /**
    * Extracts a zip file, recursively creates directories, once resolved
    * returns a cleanup function.
-   *
-   * @since 1.6.5
    */
   return ( { from, to, cpperm }, onEntry = () => {} ) =>
     new Promise( ( resolve, reject ) => {
       /**
        * Empties the folder it extracted to.
-       *
-       * @since 1.6.5
        */
       const cleanup = () =>
         !['.', './'].includes( to )
@@ -29,10 +22,8 @@ module.exports = function makeUnzip() {
       /**
        * Handles a yauzl.Entry extraction.
        *
-       * @param {yauzl.ZipFile} zipfile
-       * @param {yauzl.Entry} entry
-       *
-       * @since 1.6.5
+       * @param {yauzl.ZipFile} zipfile The zip file to extract.
+       * @param {yauzl.Entry} entry The entry to extract.
        */
       function handleEntry( zipfile, entry ) {
         if ( entry.fileName.endsWith( '/' ) ) return zipfile.readEntry();

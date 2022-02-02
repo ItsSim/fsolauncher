@@ -1,6 +1,8 @@
 const Modal = require( '../modal' ),
   download = require( '../download' )(),
-  unzip = require( '../unzip' )();
+  unzip = require( '../unzip' )(),
+  // eslint-disable-next-line no-unused-vars
+  FSOLauncher = require( '../../fsolauncher' );
 
 //servo is no more, so ServoInstaller serves as a backup.
 const DOWNLOAD_URL_SERVO =
@@ -8,15 +10,11 @@ const DOWNLOAD_URL_SERVO =
 
 /**
  * Installs FreeSO from servo.freeso.org.
- *
- * @class ServoInstaller
  */
 class ServoInstaller {
   /**
-   * Creates an instance of ServoInstaller.
-   * @param {any} path Path to install FreeSO in.
-   * @param {any} FSOLauncher
-   * @memberof ServoInstaller
+   * @param {string} path The path to the installation directory.
+   * @param {FSOLauncher} FSOLauncher The launcher instance.
    */
   constructor( path, FSOLauncher ) {
     this.FSOLauncher = FSOLauncher;
@@ -29,9 +27,8 @@ class ServoInstaller {
   /**
    * Create/Update the download progress item.
    *
-   * @param {any} Message
-   * @param {any} Percentage
-   * @memberof ServoInstaller
+   * @param {string} Message    The message to display.
+   * @param {number} Percentage The percentage to display.
    */
   createProgressItem( Message, Percentage ) {
     this.FSOLauncher.View.addProgressItem(
@@ -46,10 +43,9 @@ class ServoInstaller {
     );
   }
   /**
-   * Executes all steps and returns a promise.
+   * Executes all installation steps in order and captures any errors.
    *
-   * @returns
-   * @memberof ServoInstaller
+   * @returns {Promise<void>} A promise that resolves when the installation ends.
    */
   async install() {
     try {
@@ -67,8 +63,7 @@ class ServoInstaller {
   /**
    * Download all the files.
    *
-   * @returns
-   * @memberof ServoInstaller
+   * @returns {Promise<void>} A promise that resolves when the download is complete.
    */
   step1() {
     return this.download();
@@ -76,8 +71,7 @@ class ServoInstaller {
   /**
    * Create the installation directory.
    *
-   * @returns
-   * @memberof ServoInstaller
+   * @returns {Promise<void>} A promise that resolves when the directory is created.
    */
   step2() {
     return this.setupDir( this.path );
@@ -85,8 +79,7 @@ class ServoInstaller {
   /**
    * Extract files into installation directory.
    *
-   * @returns
-   * @memberof ServoInstaller
+   * @returns {Promise<void>} A promise that resolves when the files are extracted.
    */
   step3() {
     return this.extract();
@@ -94,13 +87,17 @@ class ServoInstaller {
   /**
    * Create the FreeSO Registry Key.
    *
-   * @returns
-   * @memberof ServoInstaller
+   * @returns {Promise<void>} A promise that resolves when the key is created.
    */
   step4() {
     if( process.platform === "darwin" ) return Promise.resolve(); 
     return require( '../registry' ).createFreeSOEntry( this.path );
   }
+  /**
+   * Downloads Mac-extras for Darwin.
+   * 
+   * @returns {Promise<void>} A promise that resolves when the download is complete.
+   */
   step5() {
     if( process.platform === "darwin" ) {
       console.log( 'Darwin:', 'Downloading MacExtras' );
@@ -112,6 +109,11 @@ class ServoInstaller {
     }
     return Promise.resolve();
   }
+  /**
+   * Installs Mac-extras for Darwin.
+   * 
+   * @returns {Promise<void>} A promise that resolves when the installation is complete.
+   */
   step6() {
     if( process.platform === "darwin" ) {
       console.log( 'Darwin:', 'Extracting MacExtras' );
@@ -129,8 +131,6 @@ class ServoInstaller {
   }
   /**
    * When the installation ends.
-   *
-   * @memberof ServoInstaller
    */
   end() {
     this.dl.cleanup();
@@ -144,9 +144,8 @@ class ServoInstaller {
   /**
    * When the installation errors out.
    *
-   * @param {any} ErrorMessage
-   * @returns
-   * @memberof ServoInstaller
+   * @param {string} ErrorMessage The error message.
+   * @returns {Promise<void>} A promise that resolves when the installation ends.
    */
   error( ErrorMessage ) {
     if( this.dl ) this.dl.cleanup();
@@ -164,8 +163,7 @@ class ServoInstaller {
   /**
    * Downloads the distribution file.
    *
-   * @returns
-   * @memberof ServoInstaller
+   * @returns {Promise<void>} A promise that resolves when the download is complete.
    */
   download() {
     return new Promise( ( resolve, reject ) => {
@@ -183,8 +181,7 @@ class ServoInstaller {
   /**
    * Extracts the zipped artifacts.
    *
-   * @returns
-   * @memberof ServoInstaller
+   * @returns {Promise<void>} A promise that resolves when the extraction is complete.
    */
   extract() {
     return unzip( { from: this.tempPath, to: this.path }, filename => {
@@ -196,8 +193,6 @@ class ServoInstaller {
   }
   /**
    * Deletes the downloaded artifacts file.
-   *
-   * @memberof ServoInstaller
    */
   cleanup() {
     const fs = require( 'fs-extra' );
@@ -209,11 +204,10 @@ class ServoInstaller {
     } );
   }
   /**
-   * Creates all the directories in a string.
+   * Creates all the directories and subfolders in a path.
    *
-   * @param {any} dir
-   * @returns
-   * @memberof ServoInstaller
+   * @param {string} dir The path to create.
+   * @returns {Promise<void>} A promise that resolves when the directory is created.
    */
   setupDir( dir ) {
     return new Promise( ( resolve, reject ) => {
@@ -225,9 +219,8 @@ class ServoInstaller {
   }
   /**
    * Checks if FreeSO is already installed in a given path.
-   *
-   * @param {any} after What to do after (callback).
-   * @memberof ServoInstaller
+   * 
+   * @returns {Promise<boolean>} If FreeSO is installed already.
    */
   isInstalledInPath() {
     return new Promise( ( resolve, _reject ) => {
@@ -238,8 +231,6 @@ class ServoInstaller {
   }
   /**
    * Updates the progress item with the download progress.
-   *
-   * @memberof ServoInstaller
    */
   updateDownloadProgress() {
     setTimeout( () => {

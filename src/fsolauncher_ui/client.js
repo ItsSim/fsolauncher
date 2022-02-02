@@ -48,6 +48,7 @@ var setCurrentPage;
 
   /**
    * Fires an event to the main process.
+   * 
    * @param {*} id 
    * @param {*} param 
    */
@@ -55,8 +56,9 @@ var setCurrentPage;
 
   /**
    * Fires when a message has been received from the main process.
-   * @param {string}   id 
-   * @param {function} callback 
+   * 
+   * @param {string} id 
+   * @param {Function} callback 
    */
   var onMessage = ( id, callback ) => shared.on( id, callback );
 

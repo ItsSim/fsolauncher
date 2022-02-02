@@ -3,18 +3,14 @@ const inflate = require( "deflate-js" ).inflate,
   fs = require( "fs-extra" ),
   path = require( "path" );
 /**
- * makeCabinetReader factory
- *
- * @since 2.0.0
+ * makeCabinetReader factory.
  */
 module.exports = function makeCabinetReader() {
   /**
    * Extracts cabinets to a destination.
    *
-   * @param {string} from
-   * @param {string} to
-   *
-   * @since 2.0.0
+   * @param {string} from The source cab.
+   * @param {string} to   The extraction dir.
    */
   return function extract(
     { from, to, purge = true },
@@ -35,11 +31,9 @@ module.exports = function makeCabinetReader() {
       _cabsRead = 0;
     /**
      * Uses Zlib.js to inflate (decompress).
-     *
-     * @param {*} data
-     * @param {*} uncompSize
-     *
-     * @since 2.0.0
+     * 
+     * @param {any} data The data to inflate.
+     * @param {any} _uncompSize The uncompressed size.
      */
     const _MSZipDecomp = ( data, _uncompSize ) => {
       if ( !( data[0] === 0x43 && data[1] === 0x4b ) ) console.log( "MSZIP fail" );
@@ -52,10 +46,8 @@ module.exports = function makeCabinetReader() {
      * Extracts files from a cabinet recursively.
      * Once it reaches the end, continues to the next cabinet.
      *
-     * @param {object} cab
-     * @param {ArrayBuffer} data
-     *
-     * @since 2.0.0
+     * @param {object} cab The cab metadata.
+     * @param {ArrayBuffer} data The cab data to extract.
      */
     const _extractNextFile = async ( cab, data ) => {
       const file = cab.files[_fileIndex];
@@ -144,10 +136,8 @@ module.exports = function makeCabinetReader() {
     };
     /**
      * Reads a cabinet file, requests extraction for files contained in it.
-     *
-     * @param {*} file File path
-     *
-     * @since 2.0.0
+     * 
+     * @param {string} file The file name to read.
      */
     const _readCabinet = async file => {
       _cabsRead++;

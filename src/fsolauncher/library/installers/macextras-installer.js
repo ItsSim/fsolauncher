@@ -1,8 +1,18 @@
 const Modal = require( '../modal' ),
   download = require( '../download' )(),
-  unzip = require( '../unzip' )();
+  unzip = require( '../unzip' )(),
+  // eslint-disable-next-line no-unused-vars
+  FSOLauncher = require( '../../fsolauncher' );
 
+/**
+ * Installs macOS Extras on macOS systems.
+ */
 class MacExtrasInstaller {
+  /**
+   * @param {FSOLauncher} FSOLauncher The FSOLauncher instance.
+   * @param {string} path The path to the installation directory.
+   * @param {string} parentComponent The name of the parent component.
+   */
   constructor( FSOLauncher, path, parentComponent = 'FreeSO' ) {
     this.FSOLauncher = FSOLauncher;
     this.id = Math.floor( Date.now() / 1000 );
@@ -13,7 +23,12 @@ class MacExtrasInstaller {
 
     this.dl = download( { from: 'https://beta.freeso.org/LauncherResourceCentral/MacExtras', to: this.tempPath } );
   }
-
+  /**
+   * Create/Update the download progress item.
+   *
+   * @param {string} Message    The message to display.
+   * @param {number} Percentage The percentage to display.
+   */
   createProgressItem( Message, Percentage ) {
     this.FSOLauncher.View.addProgressItem(
       'FSOProgressItem' + this.id,
@@ -26,7 +41,11 @@ class MacExtrasInstaller {
       Percentage == 100 ? 2 : Percentage / 100
     );
   }
-
+  /**
+   * Executes all installation steps in order and captures any errors.
+   *
+   * @returns {Promise<void>} A promise that resolves when the installation ends.
+   */
   async install() {
     try {
       await this.step1();
@@ -37,19 +56,36 @@ class MacExtrasInstaller {
       return await this.error( ErrorMessage );
     }
   }
-
+  /**
+   * Download all the files.
+   *
+   * @returns {Promise<void>} A promise that resolves when the download is complete.
+   */
   step1() {
     return this.download();
   }
-
+  /**
+   * Create the installation directory.
+   *
+   * @returns {Promise<void>} A promise that resolves when the directory is created.
+   */
   step2() {
     return this.setupDir( this.path );
   }
-
+  /**
+   * Extract files into installation directory.
+   *
+   * @returns {Promise<void>} A promise that resolves when the files are extracted.
+   */
   step3() {
     return this.extract();
   }
-
+  /**
+   * When the installation errors out.
+   *
+   * @param {string} ErrorMessage The error message.
+   * @returns {Promise<void>} A promise that resolves when the installation ends.
+   */
   error( ErrorMessage ) {
     this.dl.cleanup();
     this.FSOLauncher.setProgressBar( 1, {
@@ -62,7 +98,9 @@ class MacExtrasInstaller {
     Modal.showFailedInstall( 'FreeSO MacExtras', ErrorMessage );
     return Promise.reject( ErrorMessage );
   }
-
+  /**
+   * When the installation ends.
+   */
   end() {
     this.dl.cleanup();
     this.FSOLauncher.setProgressBar( -1 );
@@ -72,7 +110,11 @@ class MacExtrasInstaller {
     this.FSOLauncher.removeActiveTask( 'MacExtras' );
     Modal.showInstalled( 'FreeSO MacExtras' );
   }
-
+  /**
+   * Downloads the distribution file.
+   *
+   * @returns {Promise<void>} A promise that resolves when the download is complete.
+   */
   download() {
     return new Promise( ( resolve, reject ) => {
       this.dl.run();
@@ -86,7 +128,12 @@ class MacExtrasInstaller {
       this.updateDownloadProgress();
     } );
   }
-
+  /**
+   * Creates all the directories and subfolders in a path.
+   *
+   * @param {string} dir The path to create.
+   * @returns {Promise<void>} A promise that resolves when the directory is created.
+   */
   setupDir( dir ) {
     return new Promise( ( resolve, reject ) => {
       require( 'fs-extra' ).ensureDir( dir, err => {
@@ -95,7 +142,9 @@ class MacExtrasInstaller {
       } );
     } );
   }
-
+  /**
+   * Updates the progress item with the download progress.
+   */
   updateDownloadProgress() {
     setTimeout( () => {
       let p = this.dl.getProgress();
@@ -114,7 +163,11 @@ class MacExtrasInstaller {
       }
     }, 250 );
   }
-
+  /**
+   * Extracts the zipped artifacts.
+   *
+   * @returns {Promise<void>} A promise that resolves when the extraction is complete.
+   */
   extract() {
     return unzip( { 
       from: this.tempPath, 
@@ -127,7 +180,9 @@ class MacExtrasInstaller {
       );
     } );
   }
-
+  /**
+   * Deletes the downloaded artifacts file.
+   */
   cleanup() {
     const fs = require( 'fs-extra' );
     fs.stat( this.tempPath, ( err, _stats ) => {

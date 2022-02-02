@@ -1,14 +1,9 @@
 /**
  * Container class for all the Modal windows.
- *
- * @class Modal
  */
 class Modal {
   /**
    * Dialog for the alternative TSO download.
-   *
-   * @static
-   * @memberof Modal
    */
   static showFTPTSO() {
     Modal.View.sendModal(
@@ -21,12 +16,9 @@ class Modal {
     );
   }
   /**
-   * When a user is missing a program that is needed
-   * to install another.
+   * When a user is missing a program that is needed to install another.
    *
-   * @static
-   * @param {any} Missing An Array of strings of all the missing programs.
-   * @memberof Modal
+   * @param {string[]} Missing List of missing programs.
    */
   static showRequirementsNotMet( Missing ) {
     Modal.View.sendModal(
@@ -42,10 +34,8 @@ class Modal {
   /**
    * When a user installs a program for the first time.
    *
-   * @static
-   * @param {any} ComponentName The visual name of the Component.
-   * @param {any} ComponentID The Component ID to install if YES.
-   * @memberof Modal
+   * @param {string} ComponentName The visual name of the Component.
+   * @param {string} ComponentID   The Component ID to install if the user clicks YES.
    */
   static showFirstInstall( ComponentName, ComponentID ) {
     Modal.View.sendModal(
@@ -63,11 +53,9 @@ class Modal {
   }
   /**
    * When a user decides to reinstall a program.
-   *
-   * @static
-   * @param {any} ComponentName The visual name of the Component.
-   * @param {any} ComponentID The Component ID to install if YES.
-   * @memberof Modal
+   * 
+   * @param {string} ComponentName The visual name of the Component.
+   * @param {string} ComponentID   The Component ID to install if the user clicks YES.
    */
   static showReInstall( ComponentName, ComponentID ) {
     Modal.View.sendModal(
@@ -83,11 +71,8 @@ class Modal {
     );
   }
   /**
-   * When the user tries to do an action that requires an
-   * active internet connection.
-   *
-   * @static
-   * @memberof Modal
+   * When the user tries to do an action that requires an active 
+   * internet connection. 
    */
   static showNoInternet() {
     Modal.View.sendModal(
@@ -98,9 +83,6 @@ class Modal {
   }
   /**
    * When a user tries to do a full install with no internet.
-   *
-   * @static
-   * @memberof Modal
    */
   static showNoInternetFullInstall() {
     Modal.View.sendModal(
@@ -112,9 +94,7 @@ class Modal {
   /**
    * When a Component has been installed successfully.
    *
-   * @static
-   * @param {any} ComponentName Visual Component name.
-   * @memberof Modal
+   * @param {string} ComponentName The visual name of the Component.
    */
   static showInstalled( ComponentName ) {
     Modal.View.sendModal(
@@ -126,10 +106,8 @@ class Modal {
   /**
    * When a Component failed to install.
    *
-   * @static
-   * @param {any} ComponentName Visual Component name.
-   * @param {any} ErrorMessage Error message to display.
-   * @memberof Modal
+   * @param {string} ComponentName The visual name of the Component.
+   * @param {string} ErrorMessage  Error message to display.
    */
   static showFailedInstall( ComponentName, ErrorMessage ) {
     Modal.View.sendModal(
@@ -143,11 +121,8 @@ class Modal {
     );
   }
   /**
-   * When a user tries to install something else while
-   * already installing a program.
-   *
-   * @static
-   * @memberof Modal
+   * When a user tries to install something else while already installing 
+   * a program. 
    */
   static showAlreadyInstalling() {
     Modal.View.sendModal(
@@ -158,9 +133,6 @@ class Modal {
   }
   /**
    * When a user does a full install.
-   *
-   * @static
-   * @memberof Modal
    */
   static showFullInstall() {
     Modal.View.sendModal(
@@ -175,11 +147,9 @@ class Modal {
    * When a program the user wants to install is already installed.
    * This prompt will let users reinstall it if desired.
    *
-   * @static
-   * @param {any} ComponentName Visual Component name.
-   * @param {any} ComponentID The Component's Id.
-   * @param {any} path The path to install to.
-   * @memberof Modal
+   * @param {string} ComponentName The visual name of the Component.
+   * @param {string} ComponentID The Component ID to install if the user clicks YES.
+   * @param {string} path The path to the Component.
    */
   static showAlreadyInstalled( ComponentName, ComponentID, path ) {
     const options = {
@@ -202,9 +172,6 @@ class Modal {
   }
   /**
    * When the user has changed the game's path.
-   *
-   * @static
-   * @memberof Modal
    */
   static showChangedGamePath() {
     Modal.View.sendModal(
@@ -216,10 +183,9 @@ class Modal {
   /**
    * Shows a FilePicker to install the game.
    *
-   * @static
-   * @param {any} ComponentName Visual Component name.
-   * @returns
-   * @memberof Modal
+   * @param {string} ComponentName The visual name of the Component.
+   * @param {Electron.BrowserWindow} Window The window to show the FilePicker in.
+   * @returns {Promise<string>} The chosen path.
    */
   static showChooseDirectory( ComponentName, Window ) {
     // eslint-disable-next-line no-async-promise-executor
@@ -253,11 +219,7 @@ class Modal {
   }
 
   /**
-   * When the user tries to do an action that requires
-   * both FreeSO and TSO.
-   *
-   * @static
-   * @memberof Modal
+   * When the user tries to do an action that requires both FreeSO and TSO.
    */
   static showNeedFSOTSO() {
     Modal.View.sendModal(
@@ -269,9 +231,6 @@ class Modal {
 
   /**
    * When the user tried to play while updating.
-   *
-   * @static
-   * @memberof Modal
    */
   static showFailPlay() {
     Modal.View.sendModal(
@@ -282,11 +241,7 @@ class Modal {
   }
 
   /**
-   * When a user clicks play without installing
-   * FSO or TSO.
-   *
-   * @static
-   * @memberof Modal
+   * When a user clicks play without installing FSO or TSO.
    */
   static showNeedToPlay() {
     Modal.View.sendModal(
@@ -300,10 +255,8 @@ class Modal {
 
   /**
    * When a FreeSO process has been closed.
-   *
-   * @static
+   * 
    * @param {any} c Count of FreeSO processes that have been closed.
-   * @memberof Modal
    */
   static showKilled( c ) {
     Modal.View.sendModalNoFocus(
@@ -315,9 +268,6 @@ class Modal {
 
   /**
    * When the launcher failed to change language settings for TSO.
-   *
-   * @static
-   * @memberof Modal
    */
   static showTSOLangFail() {
     Modal.View.sendModal(
@@ -328,9 +278,6 @@ class Modal {
   }
   /**
    * When the launcher failed to change language settings for FSO.
-   *
-   * @static
-   * @memberof Modal
    */
   static showFSOLangFail() {
     Modal.View.sendModal(
@@ -342,9 +289,6 @@ class Modal {
 
   /**
    * When the language change was successful.
-   *
-   * @static
-   * @memberof Modal
    */
   static showCHLangComplete() {
     Modal.View.sendModal(
@@ -356,10 +300,8 @@ class Modal {
 
   /**
    * When the TTS settings change was successful.
-   *
-   * @static
-   * @param {any} value The new value.
-   * @memberof Modal
+   * 
+   * @param {string} value The new value.
    */
   static showCHTTSComplete( value ) {
     Modal.View.sendModal(
@@ -375,9 +317,6 @@ class Modal {
 
   /**
    * When the launcher could not access/write to INI file.
-   *
-   * @static
-   * @memberof Modal
    */
   static showIniFail() {
     Modal.View.sendModal(
@@ -388,13 +327,9 @@ class Modal {
   }
 
   /**
-   * When the user is required to launch the game
-   * at least once to do an action.
-   * This is because the launcher might need some files
-   * that FreeSO doesn't generate until it's launched for the first time.
-   *
-   * @static
-   * @memberof Modal
+   * When the user is required to launch the game at least once to do an action.
+   * This is because the launcher might need some files that FreeSO doesn't generate 
+   * until it's launched for the first time.
    */
   static showFirstRun() {
     Modal.View.sendModal(
@@ -404,6 +339,9 @@ class Modal {
     );
   }
 
+  /**
+   * Shows when there's no remesh available to download from the server.
+   */
   static showNoRemesh() {
     Modal.View.sendModal(
       global.locale.MODAL_RPU,
@@ -413,15 +351,14 @@ class Modal {
   }
 
   /**
-   * Sends a notification.
+   * Sends a desktop notification to the user.
    *
-   * @static
-   * @param {any} title Notification title.
-   * @param {any} message Notification message.
-   * @param {any} url Notification url.
-   * @memberof Modal
+   * @param {string} title   Notification title.
+   * @param {string} message Notification message.
+   * @param {string} url     Notification url.
+   * @return {Promise<void>} Promise that resolves when the notification is sent.
    */
-  static async sendNotification( title, message, url, ok = false ) {
+  static async sendNotification( title, message, url, ok = false, shouldBeDark ) {
     const {
       setGlobalStyles,
       createNotification,
@@ -452,8 +389,6 @@ class Modal {
         ),
         { encoding: 'base64' }
       );
-
-      const shouldBeDark = require( 'electron' ).nativeTheme.shouldUseDarkColors
 
       setContainerWidth( 360 );
       // Use the vscode extension es6-string-html to highlight
@@ -552,9 +487,6 @@ class Modal {
 
   /**
    * When a user tries to open FreeSO twice.
-   *
-   * @static
-   * @memberof Modal
    */
   static showAlreadyRunning() {
     Modal.View.sendModal(
@@ -565,11 +497,7 @@ class Modal {
   }
 
   /**
-   * When the update check failed due to some
-   * HTTP error.
-   *
-   * @static
-   * @memberof Modal
+   * When the update check failed due to some HTTP error.
    */
   static showFailedUpdateCheck() {
     Modal.View.sendModal(
@@ -582,9 +510,7 @@ class Modal {
   /**
    * To confirm a launcher update installation.
    *
-   * @static
-   * @param {any} v
-   * @memberof Modal
+   * @param {string} v Version to show in the modal.
    */
   static showInstallUpdate( v ) {
     Modal.View.sendModal(
@@ -600,9 +526,6 @@ class Modal {
 
   /**
    * When the launcher update failed to download.
-   *
-   * @static
-   * @memberof Modal
    */
   static showFailedUpdateDownload() {
     Modal.View.sendModal(
@@ -614,9 +537,6 @@ class Modal {
 
   /**
    * When the launcher failed to move the installer package.
-   *
-   * @static
-   * @memberof Modal
    */
   static showFailedUpdateMove() {
     Modal.View.sendModal(
@@ -628,9 +548,6 @@ class Modal {
 
   /**
    * When the launcher download completed.
-   *
-   * @static
-   * @memberof Modal
    */
   static showUpdateComplete() {
     Modal.View.sendModal(
@@ -642,9 +559,6 @@ class Modal {
 
   /**
    * When the user right-clicks the play button to use Volcanic.
-   *
-   * @static
-   * @memberof Modal
    */
   static showVolcanicPrompt() {
     Modal.View.sendModal(
@@ -655,6 +569,10 @@ class Modal {
       'PLAY_VOLCANIC'
     );
   }
+
+  /**
+   * When the user right-clicks the play button to use Volcanic, but for Simitone.
+   */
   static showVolcanicPromptSimitone() {
     Modal.View.sendModal(
       global.locale.MODAL_START_VOLCANIC,
@@ -666,11 +584,8 @@ class Modal {
   }
 
   /**
-   * When the launcher could not recover from not
-   * having a FreeSO.exe to run due to some user-generated error.
-   *
-   * @static
-   * @memberof Modal
+   * When the launcher could not recover from not having a FreeSO.exe to
+   * run due to some program removing the FreeSO/Simitone executables..
    */
   static showCouldNotRecover( isSimitone = false ) {
     let str2 = global.locale.MODAL_FAILED_LAUNCH_DESC;
@@ -688,9 +603,6 @@ class Modal {
 
   /**
    * When the launcher could find the game's .exe.bak to recover.
-   *
-   * @static
-   * @memberof Modal
    */
   static showRecovered() {
     Modal.View.sendModal(
@@ -702,9 +614,6 @@ class Modal {
 
   /**
    * Tells the user that Software Mode will be slower than the other options.
-   *
-   * @static
-   * @memberof Modal
    */
   static showSoftwareModeEnabled() {
     Modal.View.sendModal(
@@ -716,9 +625,6 @@ class Modal {
 
   /**
    * Language will be displayed on launcher restart.
-   *
-   * @static
-   * @memberof Modal
    */
      static showLanguageOnRestart() {
       Modal.View.sendModal( 
@@ -730,10 +636,8 @@ class Modal {
 
   /**
    * Used in generic error modal display.
-   *
-   * @static
-   * @param {*} error Error text.
-   * @memberof Modal
+   * 
+   * @param {string} error Error message to show.
    */
   static showGenericError( error ) {
     Modal.View.sendModal( 'Ooops!', error, global.locale.MODAL_OK );

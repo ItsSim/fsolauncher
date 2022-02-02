@@ -1,36 +1,27 @@
 /* eslint-disable no-empty */
 /**
  * IPCBridge used to control events sent to the renderer process.
- *
- * @class IPCBridge
  */
 class IPCBridge {
   /**
    * Creates an instance of IPCBridge.
-   * @param {any} Window
-   * @memberof IPCBridge
+   * @param {Electron.BrowserWindow} Window The window to send messages to.
    */
   constructor( Window ) { this.Window = Window; }
   /**
    * Loads the FreeSO blog RSS for the main page.
-   *
-   * @memberof IPCBridge
    */
   loadRss() {
     this.Window.webContents.send( 'LOAD_RSS' );
   }
   /**
    * Informs the renderer process that there is not internet connection.
-   *
-   * @memberof IPCBridge
    */
   hasNoInternet() {
     this.Window.webContents.send( 'NO_INTERNET' );
   }
   /**
    * Informs the renderer process that internet connection was restored.
-   *
-   * @memberof IPCBridge
    */
   hasInternet() {
     this.Window.webContents.send( 'HAS_INTERNET' );
@@ -39,8 +30,7 @@ class IPCBridge {
   /**
    * Tells the renderer process to change the active theme.
    *
-   * @param {any} Theme
-   * @memberof IPCBridge
+   * @param {string} Theme The name of the theme to change to.
    */
   setTheme( Theme ) {
     this.Window.webContents.send( 'SET_THEME', Theme );
@@ -50,8 +40,8 @@ class IPCBridge {
    * Tells the renderer process to repopulate the setting controls in
    * the settings tab.
    *
-   * @param {any} Configuration
-   * @memberof IPCBridge
+   * @param {object} Configuration The configuration object to set as
+   *                               values in the settings page.
    */
   restoreConfiguration( Configuration ) {
     this.Window.webContents.send( 'RESTORE_CONFIGURATION', Configuration );
@@ -59,8 +49,7 @@ class IPCBridge {
   /**
    * Tells the renderer process to go to another tab.
    *
-   * @param {any} page
-   * @memberof IPCBridge
+   * @param {string} page
    */
   changePage( page ) {
     this.Window.webContents.send( 'CHANGE_PAGE', page );
@@ -68,13 +57,12 @@ class IPCBridge {
   /**
    * Tells the renderer process to show a modal window.
    *
-   * @param {any} title The Modal window title.
-   * @param {any} text  The main Modal text.
-   * @param {any} yesText The text for an affirmative button.
-   * @param {any} noText The text for a negative response button.
-   * @param {any} modalRespId Unique Modal response ID if you want to receive the response in code.
-   * @param {any} extra Extra parameters.
-   * @memberof IPCBridge
+   * @param {string} title       The Modal window title.
+   * @param {string} text        The main Modal text.
+   * @param {string} yesText     The text for an affirmative button.
+   * @param {string} noText      The text for a negative response button.
+   * @param {string} modalRespId Unique Modal response ID if you want to receive the response in code.
+   * @param {string} extra       Extra parameters.
    */
   sendModal( title, text, yesText, noText, modalRespId, extra ) {
     this.Window.focus();
@@ -91,13 +79,12 @@ class IPCBridge {
   /**
    * Asks the renderer process to show a Modal window without focusing and getting the users attention.
    *
-   * @param {any} title
-   * @param {any} text
-   * @param {any} yesText
-   * @param {any} noText
-   * @param {any} modalRespId
-   * @param {any} extra
-   * @memberof IPCBridge
+   * @param {string} title       The Modal window title.
+   * @param {string} text        The main Modal text.
+   * @param {string} yesText     The text for an affirmative button.
+   * @param {string} noText      The text for a negative response button.
+   * @param {string} modalRespId Unique Modal response ID if you want to receive the response in code.
+   * @param {string} extra       Extra parameters.
    */
   sendModalNoFocus( title, text, yesText, noText, modalRespId, extra ) {
     this.Window.webContents.send(
@@ -113,13 +100,12 @@ class IPCBridge {
   /**
    * Adds a new progress item in the Downloads tab.
    *
-   * @param {any} elId Unique element ID.
-   * @param {any} filename Text to appear as the filename.
-   * @param {any} origin Text to appear as the file origin.
-   * @param {any} progress Progress text.
-   * @param {any} percentage Current progress percentage.
-   * @param {any} miniconsole Deprecated, leave as null.
-   * @memberof IPCBridge
+   * @param {string} elId        Unique element ID.
+   * @param {string} filename    Text to appear as the filename.
+   * @param {string} origin      Text to appear as the file origin.
+   * @param {string} progress    Progress text.
+   * @param {number} percentage  Current progress percentage.
+   * @param {string} miniconsole Deprecated, leave as null.
    */
   addProgressItem( elId, filename, origin, progress, percentage, miniconsole ) {
     try {
@@ -136,7 +122,8 @@ class IPCBridge {
   }
   /**
    * Stop progress animation.
-   * @param {*} elId
+   * 
+   * @param {string} elId Unique element ID.
    */
   stopProgressItem( elId ) {
     try {
@@ -146,11 +133,10 @@ class IPCBridge {
   /**
    * Asks the renderer process to show the Full Install progress Window.
    *
-   * @param {any} title Main progress title.
-   * @param {any} text1 Text to accompany the title.
-   * @param {any} text2 More text.
-   * @param {any} progress Progress percentage.
-   * @memberof IPCBridge
+   * @param {string} title Main progress title.
+   * @param {string} text1 Text to accompany the title.
+   * @param {string} text2 More text.
+   * @param {number} progress Progress percentage.
    */
   fullInstallProgressItem( title, text1, text2, progress ) {
     try {
@@ -166,9 +152,8 @@ class IPCBridge {
   /**
    * Asks the renderer process to visually show a toast.
    *
-   * @param {any} id Unique element ID.
-   * @param {any} text
-   * @memberof IPCBridge
+   * @param {string} id   Unique element ID.
+   * @param {string} text Text to appear in the toast.
    */
   toast( id, text ) {
     try {
@@ -178,8 +163,7 @@ class IPCBridge {
   /**
    * Tells the renderer process to remove a toast by ID.
    *
-   * @param {any} id
-   * @memberof IPCBridge
+   * @param {string} id Unique element ID.
    */
   removeToast( id ) {
     try {
@@ -189,8 +173,7 @@ class IPCBridge {
   /**
    * Sets the obtained remesh info for the renderer process.
    *
-   * @param {*} v
-   * @memberof IPCBridge
+   * @param {string} v Version of the remesh package.
    */
   setRemeshInfo( v ) {
     try {
@@ -200,8 +183,7 @@ class IPCBridge {
   /**
    * Updates the current installation tip.
    *
-   * @param {any} text
-   * @memberof IPCBridge
+   * @param {string} text The text to display.
    */
   setTip( text ) {
     try {
@@ -211,8 +193,7 @@ class IPCBridge {
   /**
    * Plays a sound file on the renderer process.
    *
-   * @param {*} sound
-   * @memberof IPCBridge
+   * @param {string} sound The sound file to play.
    */
   sendSound( sound ) {
     try {
@@ -220,35 +201,32 @@ class IPCBridge {
     } catch ( e ) {}
   }
   /**
-   * Displays a notification in the renderer.
+   * Adds a notification item to the notification log tab.
    *
-   * @param {*} t
-   * @param {*} l
-   * @param {*} c
-   * @memberof IPCBridge
+   * @param {string} title The title of the notification.
+   * @param {string} body  The log text of the notification.
+   * @param {string} url   The optional URL to open when the notification button is clicked.
    */
-  sendNotifLog( t, l, c ) {
+  sendNotifLog( title, body, url ) {
     try {
-      this.Window.webContents.send( 'NOTIFLOG', t, l, c );
+      this.Window.webContents.send( 'NOTIFLOG', title, body, url );
     } catch ( e ) {}
   }
   /**
-   * Sends a list of installed programs. This is used to display
-   * which programs are installed in the installer screen.
+   * Sends a list of installed programs. This is used to display which programs are 
+   * installed in the installer screen.
    *
-   * @param {*} i
-   * @memberof IPCBridge
+   * @param {string} list The list of installed programs.
    */
-  sendInstalledPrograms( i ) {
+  sendInstalledPrograms( list ) {
     try {
-      this.Window.webContents.send( 'INSPROG', i );
+      this.Window.webContents.send( 'INSPROG', list );
     } catch ( e ) {}
   }
   /**
    * Makes the renderer process show that a Simitone update is available.
    *
-   * @param {*} v
-   * @memberof IPCBridge
+   * @param {string} v The version of the update.
    */
   sendSimitoneShouldUpdate( v ) {
     try {
@@ -258,8 +236,8 @@ class IPCBridge {
   /**
    * Response of a FSODetector run.
    *
-   * @param {*} dir
-   * @memberof IPCBridge
+   * @deprecated
+   * @param {string} dir The directory that was scanned.
    */
   sendDetectorResponse( dir ) {
     try {
@@ -268,7 +246,8 @@ class IPCBridge {
   }
   /**
    * Useful for debugging with a production build.
-   * @param {*} str 
+   * 
+   * @param {string} str The string to log.
    */
   sendConsoleLog( str ) {
     try {
@@ -277,7 +256,8 @@ class IPCBridge {
   }
   /**
    * Sets the Simitone Version for the UI.
-   * @param {*} v Simitone version
+   * 
+   * @param {string} v Simitone version
    */
   setSimitoneVersion( v ) {
     try {

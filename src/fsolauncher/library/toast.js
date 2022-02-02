@@ -1,15 +1,16 @@
+// eslint-disable-next-line no-unused-vars
+const IPCBridge = require( "./ipc-bridge" );
+
 /**
  * Utility class to display little toasts in the bottom right corner of the launcher.
- *
- * @class Toast
  */
 class Toast {
   /**
    * Creates an instance of Toast.
-   * @param {*} Message
-   * @param {*} View
-   * @param {number} [timeout=0]
-   * @memberof Toast
+   * 
+   * @param {string}    Message The message to display.
+   * @param {IPCBridge} View    The IPCBridge instance.
+   * @param {number}    timeout Timeout in seconds.
    */
   constructor( message, View, timeout = 0 ) {
     this.id = Math.floor( Date.now() / 1000 );
@@ -20,18 +21,15 @@ class Toast {
     }
   }
   /**
-   * Shows the toast.
+   * Instructs the renderer to display the toast.
    *
-   * @param {any} message
-   * @memberof Toast
+   * @param {string} message
    */
   show( message ) {
     this.View.toast( this.id, message );
   }
   /**
-   * Destroys the toast and removes it from the view.
-   *
-   * @memberof Toast
+   * Instructs the renderer to remove the toast by id.
    */
   destroy() {
     this.View.removeToast( this.id );
