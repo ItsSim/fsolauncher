@@ -10,5 +10,6 @@ Explain your changes here:
 - Any additional information or context.
 
 # Code Checklist 
+(Not applicable to language updates)
 - [ ] Tested on supported platforms (Windows, macOS).
 - [ ] Code follows the [Code Style](https://github.com/ItsSim/fsolauncher/wiki/Code-Style) guidelines.
