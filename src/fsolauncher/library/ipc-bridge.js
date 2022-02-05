@@ -4,7 +4,6 @@
  */
 class IPCBridge {
   /**
-   * Creates an instance of IPCBridge.
    * @param {Electron.BrowserWindow} Window The window to send messages to.
    */
   constructor( Window ) { this.Window = Window; }

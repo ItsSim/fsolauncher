@@ -24,24 +24,52 @@ global.remeshEndpoint = 'remeshpackage';
 global.updateEndpoint = 'updatecheck';
 
 const prevOpenExternal = shell.openExternal
-  shell.openExternal = Object.freeze( url => {
-    if( url.startsWith( 'http' ) || url.startsWith( 'https' ) ) {
-      prevOpenExternal( url )
-    } else {
-      console.log( 'openExternal blocked', url )
-    }
-  } );
-  Object.freeze( shell );
+shell.openExternal = Object.freeze( url => {
+  if ( url.startsWith( 'http' ) || url.startsWith( 'https' ) ) {
+    prevOpenExternal( url )
+  } else {
+    console.log( 'openExternal blocked', url )
+  }
+} );
+Object.freeze( shell );
 
 /**
  * On Windows, prefs and temps are written straight to the launcher folder.
  * On Mac, they are written in ~/Library/Application Support/FreeSO Launcher
  */
-global.appData = process.platform == 'darwin' ? 
+global.appData = process.platform == 'darwin' ?
   `${global.homeDir}/Library/Application Support/FreeSO Launcher/` : '';
-if( process.platform == 'darwin' ) fs.ensureDirSync( global.appData + 'temp' );
+if ( process.platform == 'darwin' ) fs.ensureDirSync( global.appData + 'temp' );
 
-let Window, tray, launcher, trayIcon, conf;
+/** @type {Electron.BrowserWindow} */
+let Window;
+
+/** @type {Electron.Tray} */
+let tray;
+
+/** @type {FSOLauncher} */
+let launcher;
+
+/** @type {string} */
+let trayIcon;
+
+/**
+ * @typedef  {object} UserSettings
+ * @property {object} Launcher                      The launcher configuration.
+ * @property {string} Launcher.Theme                The launcher theme.
+ * @property {string} Launcher.DesktopNotifications Whether to show desktop notifications.
+ * @property {string} Launcher.DirectLaunch         Whether to launch the game directly.
+ * @property {string} Launcher.Language             The launcher language.
+ * @property {object} Game                          The game configuration.
+ * @property {string} Game.GraphicsMode             The game graphics mode.
+ * @property {string} Game.Language                 The game language.
+ * @property {string} Game.TTS                      Whether to enable TTS
+ */
+
+/**
+ * @type {UserSettings}
+ */
+let conf;
 
 try {
   conf = ini.parse( fs.readFileSync( global.appData + 'FSOLauncher.ini', 'utf-8' ) );
@@ -64,9 +92,9 @@ try {
   fs.writeFileSync( global.appData + 'FSOLauncher.ini', ini.stringify( conf ), 'utf-8' );
 }
 
-const code = ( ! conf.Launcher.Language || conf.Launcher.Language == 'default' ) ? 
+const code = ( !conf.Launcher.Language || conf.Launcher.Language == 'default' ) ?
   oslocale.sync().substring( 0, 2 ) : conf.Launcher.Language;
-   
+
 /** @type {Electron.BrowserWindowConstructorOptions} */
 const options = {};
 
@@ -80,18 +108,18 @@ global.locale.PLATFORM = process.platform;
 global.locale.LANGCODE = code;
 
 global.locale.WS_PORT = global.socketPort;
-global.locale.WS_URL  = global.webService;
+global.locale.WS_URL = global.webService;
 
 function CreateWindow() {
   require( 'electron-pug' )( { pretty: false }, global.locale );
-  if( process.platform == 'darwin' ) {
+  if ( process.platform == 'darwin' ) {
     const darwinAppMenu = require( './darwin-app-menu' );
     Menu.setApplicationMenu( Menu.buildFromTemplate( darwinAppMenu( app.getName() ) ) );
   }
   trayIcon = nativeImage.createFromPath(
     require( 'path' ).join( __dirname, process.platform == 'darwin' ? 'beta.png' : 'beta.ico' )
   );
-  if( process.platform == 'darwin' ) {
+  if ( process.platform == 'darwin' ) {
     trayIcon = trayIcon.resize( { width: 16, height: 16 } );
   }
   tray = new Tray( trayIcon );
@@ -156,7 +184,7 @@ function CreateWindow() {
       .then( () => {
         if ( conf.Launcher.DirectLaunch === '1' && launcher.isInstalled.FSO ) {
           launcher.events.onPlay();
-          if( process.platform == 'darwin' ) {
+          if ( process.platform == 'darwin' ) {
             Window.show();
           }
         } else {
@@ -184,8 +212,8 @@ function CreateWindow() {
 
 app.on( 'ready', CreateWindow );
 
-app.on( 'before-quit', function() {
-  if( tray ) tray.destroy();
+app.on( 'before-quit', function () {
+  if ( tray ) tray.destroy();
 } );
 
 app.on( 'window-all-closed', () => {

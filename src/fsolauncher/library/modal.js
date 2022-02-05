@@ -15,6 +15,7 @@ class Modal {
       'FTP_TSOResponse'
     );
   }
+
   /**
    * When a user is missing a program that is needed to install another.
    *
@@ -31,6 +32,7 @@ class Modal {
       global.locale.MODAL_OK2
     );
   }
+
   /**
    * When a user installs a program for the first time.
    *
@@ -51,6 +53,7 @@ class Modal {
       ComponentID
     );
   }
+
   /**
    * When a user decides to reinstall a program.
    * 
@@ -70,6 +73,7 @@ class Modal {
       ComponentID
     );
   }
+
   /**
    * When the user tries to do an action that requires an active 
    * internet connection. 
@@ -81,6 +85,7 @@ class Modal {
       global.locale.MODAL_OK
     );
   }
+
   /**
    * When a user tries to do a full install with no internet.
    */
@@ -91,6 +96,7 @@ class Modal {
       global.locale.MODAL_OK
     );
   }
+
   /**
    * When a Component has been installed successfully.
    *
@@ -103,6 +109,7 @@ class Modal {
       global.locale.MODAL_OK2
     );
   }
+
   /**
    * When a Component failed to install.
    *
@@ -120,6 +127,7 @@ class Modal {
       global.locale.MODAL_OK2
     );
   }
+
   /**
    * When a user tries to install something else while already installing 
    * a program. 
@@ -131,6 +139,7 @@ class Modal {
       global.locale.MODAL_OK
     );
   }
+
   /**
    * When a user does a full install.
    */
@@ -143,6 +152,7 @@ class Modal {
       'FULL_INSTALL_CONFIRM'
     );
   }
+
   /**
    * When a program the user wants to install is already installed.
    * This prompt will let users reinstall it if desired.
@@ -170,6 +180,7 @@ class Modal {
       JSON.stringify( options )
     );
   }
+
   /**
    * When the user has changed the game's path.
    */
@@ -180,6 +191,7 @@ class Modal {
       global.locale.MODAL_OK2
     );
   }
+
   /**
    * Shows a FilePicker to install the game.
    *
@@ -276,6 +288,7 @@ class Modal {
       global.locale.MODAL_OK
     );
   }
+
   /**
    * When the launcher failed to change language settings for FSO.
    */

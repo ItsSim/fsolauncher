@@ -6,11 +6,9 @@ const IPCBridge = require( "./ipc-bridge" );
  */
 class Toast {
   /**
-   * Creates an instance of Toast.
-   * 
-   * @param {string}    Message The message to display.
-   * @param {IPCBridge} View    The IPCBridge instance.
-   * @param {number}    timeout Timeout in seconds.
+   * @param {string} Message The message to display.
+   * @param {IPCBridge} View The IPCBridge instance.
+   * @param {number} timeout Timeout in seconds.
    */
   constructor( message, View, timeout = 0 ) {
     this.id = Math.floor( Date.now() / 1000 );
@@ -23,7 +21,7 @@ class Toast {
   /**
    * Instructs the renderer to display the toast.
    *
-   * @param {string} message
+   * @param {string} message The message to display.
    */
   show( message ) {
     this.View.toast( this.id, message );

@@ -14,17 +14,8 @@ const { https } = require( 'follow-redirects' ).wrap( {
  */
 class FSOLauncher {
   /**
-   * @param {Electron.BrowserWindow} Window                      The main window.
-   * @param {object} Configuration                               The configuration object.
-   * @param {object} Configuration.Launcher                      The launcher configuration.
-   * @param {string} Configuration.Launcher.Theme                The launcher theme.
-   * @param {string} Configuration.Launcher.DesktopNotifications Whether to show desktop notifications.
-   * @param {string} Configuration.Launcher.DirectLaunch         Whether to launch the game directly.
-   * @param {string} Configuration.Launcher.Language             The launcher language.
-   * @param {object} Configuration.Game                          The game configuration.
-   * @param {string} Configuration.Game.GraphicsMode             The game graphics mode.
-   * @param {string} Configuration.Game.Language                 The game language.
-   * @param {string} Configuration.Game.TTS                      Whether to enable TTS
+   * @param {Electron.BrowserWindow} Window The main window.
+   * @param {import('../main').UserSettings} Configuration The configuration object.
    */
   constructor( Window, Configuration ) {
     this.conf = Configuration;
@@ -264,7 +255,7 @@ class FSOLauncher {
    * To do this it has to edit FreeSO's config.ini.
    *
    * @deprecated It is now configurable in-game.
-   * @param {string} value    New TTS value.
+   * @param {string} value New TTS value.
    * @returns {Promise<void>} Resolves when done.
    */
   async editTTSMode( value ) {
@@ -1218,7 +1209,8 @@ class FSOLauncher {
   }
   /**
    * Returns if the current theme is considerd dark.
-   * @returns {boolean}
+   * 
+   * @returns {boolean} If the theme is dark.
    */
   isDarkMode() {
     return ['halloween', 'dark'].includes( this.conf.Launcher.Theme );
