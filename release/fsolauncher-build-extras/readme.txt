@@ -1,7 +1,8 @@
-﻿Version: 2021 1.8.x
-Author: Sim
+﻿Version: 2022 1.8.x
+Author: Sim <dbhdane@outlook.com>
 
 Changelog:
+- 2022.02.05: Polish language tweaks. Desktop notifications now match launcher theme.
 - 2021.12.24: Downloads are now more reliable (GitHub PR #25).
 - 2021.11.18: Security changes. Update to Electron 16.
 - 2021.10.26: Small tweaks and fixes. Update to Electron 15.3.0.
@@ -36,7 +37,7 @@ Changelog:
 
 Thank you for downloading the official FreeSO Launcher.
 This program was made using:
-- Electron 16
+- Electron 17
 
 Upon installing this software, you understand and accept the following:
 - This program does not include a copy of The Sims Online or any other type of content of EA IP. It downloads everything needed from Archive.org upon the user's request through the Installer tab.
@@ -53,9 +54,12 @@ Special Thanks to:
 - Alven: Russian Translator
 - Emiloowski: Polish Translator
 - Seger: Dutch Translator
+- LucasRK: Portuguese Translator
+- nikok558: Polish Translator
 
 Contact:
-- Discord: Sim#0046 
+- Discord: Sim#0046
+- Email: dbhdane@outlook.com
 
 GitHub repository: https://github.com/ItsSim/fsolauncher 
 For launcher issues please submit a GitHub issue to https://github.com/ItsSim/fsolauncher/issues
