@@ -468,11 +468,10 @@ class FSOLauncher {
 
       this.updateInstalledPrograms();
       this.removeActiveTask( options.component );
-
-      toast.destroy();
     } catch ( e ) {
       Modal.showFailedInstall( this.getPrettyName( options.component ), e );
       this.removeActiveTask( options.component );
+    } finally {
       toast.destroy();
     }
   }
