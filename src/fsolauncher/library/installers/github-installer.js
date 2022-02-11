@@ -162,11 +162,11 @@ class GitHubInstaller extends ServoInstaller {
    * 
    * Overrides error() from ServoInstaller.
    *
-   * @param {string} ErrorMessage The error message.
+   * @param {string} errorMessage The error message.
    * @returns {Promise<void>} A promise that resolves when the backup
    *                          installer (ServoInstaller) finishes.
    */
-  async error( ErrorMessage ) {
+  async error( errorMessage ) {
     if( this.dl ) this.dl.cleanup();
     this.FSOLauncher.setProgressBar( 1, { mode: 'error' } );
     this.haltProgress = true;
@@ -176,7 +176,7 @@ class GitHubInstaller extends ServoInstaller {
     this.FSOLauncher.IPC.stopProgressItem( 
       'FSOProgressItem' + this.id 
     );
-    require( '../modal' ).showFailedInstall( 'FreeSO', ErrorMessage );
+    require( '../modal' ).showFailedInstall( 'FreeSO', errorMessage );
     const secondaryInstaller = new ServoInstaller( this.path, this.FSOLauncher );
     await secondaryInstaller.install();
   }

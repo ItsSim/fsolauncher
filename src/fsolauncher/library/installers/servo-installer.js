@@ -56,8 +56,8 @@ class ServoInstaller {
       await this.step5();
       await this.step6();
       return this.end();
-    } catch ( ErrorMessage ) {
-      return await this.error( ErrorMessage );
+    } catch ( errorMessage ) {
+      return await this.error( errorMessage );
     }
   }
   /**
@@ -144,10 +144,10 @@ class ServoInstaller {
   /**
    * When the installation errors out.
    *
-   * @param {string} ErrorMessage The error message.
+   * @param {string} errorMessage The error message.
    * @returns {Promise<void>} A promise that resolves when the installation ends.
    */
-  error( ErrorMessage ) {
+  error( errorMessage ) {
     if( this.dl ) this.dl.cleanup();
     this.FSOLauncher.setProgressBar( 1, {
       mode: 'error'
@@ -156,9 +156,9 @@ class ServoInstaller {
     this.createProgressItem( global.locale.FSO_FAILED_INSTALLATION, 100 );
     this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
     this.FSOLauncher.removeActiveTask( 'FSO' );
-    Modal.showFailedInstall( 'FreeSO', ErrorMessage );
-    console.log( ErrorMessage );
-    return Promise.reject( ErrorMessage );
+    Modal.showFailedInstall( 'FreeSO', errorMessage );
+    console.log( errorMessage );
+    return Promise.reject( errorMessage );
   }
   /**
    * Downloads the distribution file.

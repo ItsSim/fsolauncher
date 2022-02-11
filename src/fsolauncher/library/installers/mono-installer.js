@@ -46,8 +46,8 @@ class MonoInstaller {
       await this.step1();
       await this.step2();
       return this.end();
-    } catch ( ErrorMessage ) {
-      return await this.error( ErrorMessage );
+    } catch ( errorMessage ) {
+      return await this.error( errorMessage );
     }
   }
   /**
@@ -69,10 +69,10 @@ class MonoInstaller {
   /**
    * When the installation errors out.
    *
-   * @param {string} ErrorMessage The error message.
+   * @param {string} errorMessage The error message.
    * @returns {Promise<void>} A promise that resolves when the installation ends.
    */
-  error( ErrorMessage ) {
+  error( errorMessage ) {
     this.dl.cleanup();
     this.FSOLauncher.setProgressBar( 1, {
       mode: 'error'
@@ -81,8 +81,8 @@ class MonoInstaller {
     this.createProgressItem( global.locale.FSO_FAILED_INSTALLATION, 100 );
     this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
     this.FSOLauncher.removeActiveTask( 'Mono' );
-    Modal.showFailedInstall( 'Mono', ErrorMessage );
-    return Promise.reject( ErrorMessage );
+    Modal.showFailedInstall( 'Mono', errorMessage );
+    return Promise.reject( errorMessage );
   }
   /**
    * When the installation ends.

@@ -47,8 +47,8 @@ class SDLInstaller {
       await this.step1();
       await this.step2();
       return this.end();
-    } catch ( ErrorMessage ) {
-      return await this.error( ErrorMessage );
+    } catch ( errorMessage ) {
+      return await this.error( errorMessage );
     }
   }
 
@@ -72,10 +72,10 @@ class SDLInstaller {
   /**
    * When the installation errors out.
    *
-   * @param {string} ErrorMessage The error message.
+   * @param {string} errorMessage The error message.
    * @returns {Promise<void>} A promise that resolves when the installation ends.
    */
-  error( ErrorMessage ) {
+  error( errorMessage ) {
     this.dl.cleanup();
     this.FSOLauncher.setProgressBar( 1, {
       mode: 'error'
@@ -84,8 +84,8 @@ class SDLInstaller {
     this.createProgressItem( global.locale.FSO_FAILED_INSTALLATION, 100 );
     this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
     this.FSOLauncher.removeActiveTask( 'SDL' );
-    Modal.showFailedInstall( 'SDL2', ErrorMessage );
-    return Promise.reject( ErrorMessage );
+    Modal.showFailedInstall( 'SDL2', errorMessage );
+    return Promise.reject( errorMessage );
   }
   /**
    * When the installation ends.

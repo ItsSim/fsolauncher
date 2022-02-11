@@ -65,8 +65,8 @@ class FilePlanetInstaller {
       await this.step5();
       await this.step6();
       return this.end();
-    } catch ( ErrorMessage ) {
-      return await this.error( ErrorMessage );
+    } catch ( errorMessage ) {
+      return await this.error( errorMessage );
     }
   }
   /**
@@ -255,10 +255,10 @@ class FilePlanetInstaller {
   /**
    * When the installation errors out.
    *
-   * @param {string} ErrorMessage The error message.
+   * @param {string} errorMessage The error message.
    * @returns {Promise<void>} A promise that resolves when the installation ends.
    */
-  error( ErrorMessage ) {
+  error( errorMessage ) {
     // Failed installation
     this.dl.cleanup();
     this.FSOLauncher.setProgressBar( 1, {
@@ -268,8 +268,8 @@ class FilePlanetInstaller {
     this.haltProgress = true;
     this.createProgressItem( global.locale.TSO_FAILED_INSTALLATION, 100 );
     this.FSOLauncher.IPC.stopProgressItem( 'TSOProgressItem' + this.id );
-    Modal.showFailedInstall( 'The Sims Online', ErrorMessage );
-    return Promise.reject( ErrorMessage );
+    Modal.showFailedInstall( 'The Sims Online', errorMessage );
+    return Promise.reject( errorMessage );
   }
   /**
    * Displays the extraction progress for a given cabinet object.

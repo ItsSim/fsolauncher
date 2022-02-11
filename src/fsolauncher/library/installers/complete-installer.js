@@ -22,7 +22,7 @@ class CompleteInstaller {
       await this.step3();
       await this.step4();
       this.end();
-    } catch( ErrorMessage ) {
+    } catch( errorMessage ) {
       this.error();
     }
   }
@@ -121,9 +121,8 @@ class CompleteInstaller {
       true,
       this.FSOLauncher.isDarkMode()
     );
-    setTimeout( () => {
-      this.FSOLauncher.IPC.fullInstallProgressItem();
-    }, 5000 );
+    setTimeout( () => 
+      this.FSOLauncher.IPC.fullInstallProgressItem(), 5000 );
   }
   /**
    * Communicates that an error happened.
@@ -136,9 +135,8 @@ class CompleteInstaller {
       global.locale.INS_CLOSE,
       100
     );
-    setTimeout( () => {
-      this.FSOLauncher.IPC.fullInstallProgressItem();
-    }, 5000 );
+    setTimeout( () => 
+      this.FSOLauncher.IPC.fullInstallProgressItem(), 5000 );
   }
 }
 
