@@ -4,11 +4,8 @@ const inflate = require( "deflate-js" ).inflate,
   path = require( "path" );
 /**
  * Extracts cabinets to a destination.
- *
- * @param {string} from The source cab.
- * @param {string} to   The extraction dir.
  */
-return function extract( { from, to, purge = true },
+module.exports = function( { from, to, purge = true },
   onProgress = () => {},
   onEnd = () => {}
 ) {
