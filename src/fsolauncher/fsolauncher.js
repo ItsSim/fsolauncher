@@ -967,7 +967,7 @@ class FSOLauncher {
     const toastText = isSimitone
       ? global.locale.TOAST_LAUNCHING.replace( 'FreeSO', 'Simitone' )
       : global.locale.TOAST_LAUNCHING;
-    const toast = new Toast( ToastText, this.IPC );
+    const toast = new Toast( toastText, this.IPC );
     const args = [];
 
     // windowed by default
