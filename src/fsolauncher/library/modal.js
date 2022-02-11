@@ -6,7 +6,7 @@ class Modal {
    * Dialog for the alternative TSO download.
    */
   static showFTPTSO() {
-    Modal.View.sendModal(
+    Modal.IPC.sendModal(
       'Try alternative download?',
       'This will try and download The Sims Online from an alternative source. ' + 
       'This is useful if the primary download is not working for you.',
@@ -22,7 +22,7 @@ class Modal {
    * @param {string[]} Missing List of missing programs.
    */
   static showRequirementsNotMet( Missing ) {
-    Modal.View.sendModal(
+    Modal.IPC.sendModal(
       global.locale.MODAL_NOT_AVAILABLE,
       global.locale.MODAL_NOT_AVAILABLE_DESCR_1 +
         ' <strong>' +
@@ -36,41 +36,41 @@ class Modal {
   /**
    * When a user installs a program for the first time.
    *
-   * @param {string} ComponentName The visual name of the Component.
-   * @param {string} ComponentID   The Component ID to install if the user clicks YES.
+   * @param {string} componentName The visual name of the Component.
+   * @param {string} componentCode The Component ID to install if the user clicks YES.
    */
-  static showFirstInstall( ComponentName, ComponentID ) {
-    Modal.View.sendModal(
-      ComponentName,
+  static showFirstInstall( componentName, componentCode ) {
+    Modal.IPC.sendModal(
+      componentName,
       global.locale.MODAL_INSTALL_DESCR_1 +
         ' <strong>' +
-        ComponentName +
+        componentName +
         '</strong> ' +
         global.locale.MODAL_INSTALL_DESCR_2,
       global.locale.MODAL_INSTALL,
       global.locale.MODAL_CANCEL,
       'INSTALL_COMPONENT',
-      ComponentID
+      componentCode
     );
   }
 
   /**
    * When a user decides to reinstall a program.
    * 
-   * @param {string} ComponentName The visual name of the Component.
-   * @param {string} ComponentID   The Component ID to install if the user clicks YES.
+   * @param {string} componentName The visual name of the Component.
+   * @param {string} componentCode The Component ID to install if the user clicks YES.
    */
-  static showReInstall( ComponentName, ComponentID ) {
-    Modal.View.sendModal(
-      ComponentName,
+  static showReInstall( componentName, componentCode ) {
+    Modal.IPC.sendModal(
+      componentName,
       global.locale.MODAL_REINSTALL_DESCR_X +
         ' <strong>' +
-        ComponentName +
+        componentName +
         '</strong>?',
       global.locale.MODAL_CONTINUE,
       global.locale.MODAL_CANCEL,
       'INSTALL_COMPONENT',
-      ComponentID
+      componentCode
     );
   }
 
@@ -79,7 +79,7 @@ class Modal {
    * internet connection. 
    */
   static showNoInternet() {
-    Modal.View.sendModal(
+    Modal.IPC.sendModal(
       global.locale.MODAL_NO_INTERNET,
       global.locale.MODAL_NEED_INTERNET_SINGLE,
       global.locale.MODAL_OK
@@ -90,7 +90,7 @@ class Modal {
    * When a user tries to do a full install with no internet.
    */
   static showNoInternetFullInstall() {
-    Modal.View.sendModal(
+    Modal.IPC.sendModal(
       global.locale.MODAL_NO_INTERNET,
       global.locale.MODAL_NEED_INTERNET_FULL,
       global.locale.MODAL_OK
@@ -100,12 +100,12 @@ class Modal {
   /**
    * When a Component has been installed successfully.
    *
-   * @param {string} ComponentName The visual name of the Component.
+   * @param {string} componentName The visual name of the Component.
    */
-  static showInstalled( ComponentName ) {
-    Modal.View.sendModal(
+  static showInstalled( componentName ) {
+    Modal.IPC.sendModal(
       global.locale.MODAL_INS_COMPLETE,
-      ComponentName + ' ' + global.locale.MODAL_INS_COMPLETE_DESCR,
+      componentName + ' ' + global.locale.MODAL_INS_COMPLETE_DESCR,
       global.locale.MODAL_OK2
     );
   }
@@ -113,17 +113,17 @@ class Modal {
   /**
    * When a Component failed to install.
    *
-   * @param {string} ComponentName The visual name of the Component.
-   * @param {string} ErrorMessage  Error message to display.
+   * @param {string} componentName The visual name of the Component.
+   * @param {string} errorMessage  Error message to display.
    */
-  static showFailedInstall( ComponentName, ErrorMessage ) {
-    Modal.View.sendModal(
+  static showFailedInstall( componentName, errorMessage ) {
+    Modal.IPC.sendModal(
       global.locale.MODAL_INS_FAILED,
-      ComponentName +
+      componentName +
         ' ' +
         global.locale.MODAL_INS_FAILED_DESCR_1 +
         ' ' +
-        ErrorMessage,
+        errorMessage,
       global.locale.MODAL_OK2
     );
   }
@@ -133,7 +133,7 @@ class Modal {
    * a program. 
    */
   static showAlreadyInstalling() {
-    Modal.View.sendModal(
+    Modal.IPC.sendModal(
       global.locale.MODAL_NOT_AVAILABLE2,
       global.locale.MODAL_INS_PROGRESS,
       global.locale.MODAL_OK
@@ -144,7 +144,7 @@ class Modal {
    * When a user does a full install.
    */
   static showFullInstall() {
-    Modal.View.sendModal(
+    Modal.IPC.sendModal(
       global.locale.MODAL_INSTALLATION,
       global.locale.MODAL_INSTALLATION_DESCR,
       global.locale.MODAL_START,
@@ -157,21 +157,21 @@ class Modal {
    * When a program the user wants to install is already installed.
    * This prompt will let users reinstall it if desired.
    *
-   * @param {string} ComponentName The visual name of the Component.
-   * @param {string} ComponentID The Component ID to install if the user clicks YES.
+   * @param {string} componentName The visual name of the Component.
+   * @param {string} componentCode The Component ID to install if the user clicks YES.
    * @param {string} path The path to the Component.
    */
-  static showAlreadyInstalled( ComponentName, ComponentID, path ) {
+  static showAlreadyInstalled( componentName, componentCode, path ) {
     const options = {
-      component: ComponentID,
+      component: componentCode,
       override: path
     };
 
-    Modal.View.sendModal(
+    Modal.IPC.sendModal(
       global.locale.MODAL_NOT_AVAILABLE2,
       global.locale.MODAL_DETECTED_THAT_1 +
         ' <strong>' +
-        ComponentName +
+        componentName +
         '</strong> ' +
         global.locale.MODAL_DETECTED_THAT_2,
       global.locale.MODAL_USE_IT,
@@ -185,7 +185,7 @@ class Modal {
    * When the user has changed the game's path.
    */
   static showChangedGamePath() {
-    Modal.View.sendModal(
+    Modal.IPC.sendModal(
       global.locale.MODAL_MODIFIED_PATH,
       global.locale.MODAL_MODIFIED_PATH_DESCR,
       global.locale.MODAL_OK2
@@ -195,46 +195,43 @@ class Modal {
   /**
    * Shows a FilePicker to install the game.
    *
-   * @param {string} ComponentName The visual name of the Component.
+   * @param {string} componentName The visual name of the Component.
    * @param {Electron.BrowserWindow} Window The window to show the FilePicker in.
    * @returns {Promise<string>} The chosen path.
    */
-  static showChooseDirectory( ComponentName, Window ) {
-    // eslint-disable-next-line no-async-promise-executor
-    return new Promise( async( resolve, _reject ) => {
-      let defaultPath = null;
-      if( process.platform === "win32" ){
-        try {
-          const winDefaultPath = await require( 'fs-extra' ).stat( 'C:\\Program Files' );
-          if( winDefaultPath.isDirectory() ) {
-            defaultPath = 'C:\\Program Files';
-          }
-        } catch( err ) {
-          console.log( err );
+  static async showChooseDirectory( componentName, Window ) {
+    let defaultPath = null;
+    if( process.platform === "win32" ){
+      try {
+        const winDefaultPath = await require( 'fs-extra' )
+          .stat( 'C:\\Program Files' );
+        if( winDefaultPath.isDirectory() ) {
+          defaultPath = 'C:\\Program Files';
         }
+      } catch( err ) {
+        console.log( err );
       }
-      if( process.platform === "darwin" ) {
-        defaultPath = "~/Documents";
+    }
+    if( process.platform === "darwin" ) {
+      defaultPath = "~/Documents";
+    }
+    const response = await require( 'electron' )
+      .dialog.showOpenDialog( Window,
+      {
+        properties: ['openDirectory'],
+        title: `${global.locale.MODAL_INSTALL} ${componentName}`,
+        defaultPath: defaultPath,
+        buttonLabel: global.locale.MODAL_INSTALL_FOLDER
       }
-
-      const response = await require( 'electron' ).dialog.showOpenDialog(
-        Window,
-        {
-          properties: ['openDirectory'],
-          title: `${global.locale.MODAL_INSTALL} ${ComponentName}`,
-          defaultPath: defaultPath,
-          buttonLabel: global.locale.MODAL_INSTALL_FOLDER
-        }
-      );
-        resolve( response.canceled ? [] : response.filePaths );
-    } );
+    );
+    return response.canceled ? [] : response.filePaths;
   }
 
   /**
    * When the user tries to do an action that requires both FreeSO and TSO.
    */
   static showNeedFSOTSO() {
-    Modal.View.sendModal(
+    Modal.IPC.sendModal(
       global.locale.MODAL_NEGATIVE,
       global.locale.MODAL_NEED_FSOTSO,
       global.locale.MODAL_OK2
@@ -245,7 +242,7 @@ class Modal {
    * When the user tried to play while updating.
    */
   static showFailPlay() {
-    Modal.View.sendModal(
+    Modal.IPC.sendModal(
       global.locale.MODAL_NEGATIVE,
       global.locale.MODAL_LAUNCH_UPDATING,
       global.locale.MODAL_OK
@@ -256,7 +253,7 @@ class Modal {
    * When a user clicks play without installing FSO or TSO.
    */
   static showNeedToPlay() {
-    Modal.View.sendModal(
+    Modal.IPC.sendModal(
       global.locale.MODAL_NEGATIVE,
       global.locale.MODAL_NEED_FSOTSO_PLAY,
       global.locale.MODAL_GOTO_INSTALLER,
@@ -271,7 +268,7 @@ class Modal {
    * @param {any} c Count of FreeSO processes that have been closed.
    */
   static showKilled( c ) {
-    Modal.View.sendModalNoFocus(
+    Modal.IPC.sendModalNoFocus(
       global.locale.MODAL_CLOSED_FREESO,
       global.locale.MODAL_CLOSED + ' ' + c + ' ' + global.locale.MODAL_CLOSED_2,
       global.locale.MODAL_OK2
@@ -282,7 +279,7 @@ class Modal {
    * When the launcher failed to change language settings for TSO.
    */
   static showTSOLangFail() {
-    Modal.View.sendModal(
+    Modal.IPC.sendModal(
       global.locale.MODAL_NOT_COMPLETE,
       global.locale.MODAL_TSO_LANG_ERR,
       global.locale.MODAL_OK
@@ -293,7 +290,7 @@ class Modal {
    * When the launcher failed to change language settings for FSO.
    */
   static showFSOLangFail() {
-    Modal.View.sendModal(
+    Modal.IPC.sendModal(
       global.locale.MODAL_NOT_COMPLETE,
       global.locale.MODAL_FSO_LANG_ERR,
       global.locale.MODAL_OK
@@ -304,7 +301,7 @@ class Modal {
    * When the language change was successful.
    */
   static showCHLangComplete() {
-    Modal.View.sendModal(
+    Modal.IPC.sendModal(
       global.locale.MODAL_SUCCESS,
       global.locale.MODAL_LANG_SUCCESS,
       global.locale.MODAL_OK2
@@ -317,7 +314,7 @@ class Modal {
    * @param {string} value The new value.
    */
   static showCHTTSComplete( value ) {
-    Modal.View.sendModal(
+    Modal.IPC.sendModal(
       value === '1'
         ? global.locale.MODAL_SUCCESS
         : global.locale.MODAL_TTS_DISABLED,
@@ -332,7 +329,7 @@ class Modal {
    * When the launcher could not access/write to INI file.
    */
   static showIniFail() {
-    Modal.View.sendModal(
+    Modal.IPC.sendModal(
       global.locale.MODAL_NOT_COMPLETE,
       global.locale.MODAL_INI_ERR,
       global.locale.MODAL_OK
@@ -345,7 +342,7 @@ class Modal {
    * until it's launched for the first time.
    */
   static showFirstRun() {
-    Modal.View.sendModal(
+    Modal.IPC.sendModal(
       global.locale.MODAL_NOT_AVAILABLE,
       global.locale.MODAL_FIRSTTIME,
       global.locale.MODAL_OK2
@@ -356,7 +353,7 @@ class Modal {
    * Shows when there's no remesh available to download from the server.
    */
   static showNoRemesh() {
-    Modal.View.sendModal(
+    Modal.IPC.sendModal(
       global.locale.MODAL_RPU,
       global.locale.MODAL_RPU_DESCR,
       global.locale.MODAL_OK
@@ -483,8 +480,8 @@ class Modal {
       } );
 
       notification.on( 'display', () => {
-        Modal.View.sendSound( ok ? 'ok' : 'notification' );
-        Modal.View.sendNotifLog( title, message, url );
+        Modal.IPC.sendSound( ok ? 'ok' : 'notification' );
+        Modal.IPC.sendNotifLog( title, message, url );
       } );
 
       notification.on( 'click', () => {
@@ -502,7 +499,7 @@ class Modal {
    * When a user tries to open FreeSO twice.
    */
   static showAlreadyRunning() {
-    Modal.View.sendModal(
+    Modal.IPC.sendModal(
       global.locale.MODAL_RUNNING,
       global.locale.MODAL_RUNNING_DESC,
       global.locale.MODAL_OK2
@@ -513,7 +510,7 @@ class Modal {
    * When the update check failed due to some HTTP error.
    */
   static showFailedUpdateCheck() {
-    Modal.View.sendModal(
+    Modal.IPC.sendModal(
       global.locale.MODAL_UPDATE_CHECK_FAILED,
       global.locale.MODAL_UPDATE_CHECK_FAILED_DESCR,
       global.locale.MODAL_OK2
@@ -526,7 +523,7 @@ class Modal {
    * @param {string} v Version to show in the modal.
    */
   static showInstallUpdate( v ) {
-    Modal.View.sendModal(
+    Modal.IPC.sendModal(
       global.locale.MODAL_INSTALL_UPDATE,
       global.locale.MODAL_INSTALL_UPDATE_DESCR_1 +
         v +
@@ -541,7 +538,7 @@ class Modal {
    * When the launcher update failed to download.
    */
   static showFailedUpdateDownload() {
-    Modal.View.sendModal(
+    Modal.IPC.sendModal(
       global.locale.MODAL_UPDATE_FAILED,
       global.locale.MODAL_UPDATE_FAILED_DESCR,
       global.locale.MODAL_OK2
@@ -552,7 +549,7 @@ class Modal {
    * When the launcher failed to move the installer package.
    */
   static showFailedUpdateMove() {
-    Modal.View.sendModal(
+    Modal.IPC.sendModal(
       global.locale.MODAL_UPDATE_FAILED,
       global.locale.MODAL_UPDATE_FAILED_MOVE_DESCR,
       global.locale.MODAL_OK2
@@ -563,7 +560,7 @@ class Modal {
    * When the launcher download completed.
    */
   static showUpdateComplete() {
-    Modal.View.sendModal(
+    Modal.IPC.sendModal(
       global.locale.MODAL_UPDATE_COMPLETE,
       global.locale.MODAL_UPDATE_COMPLETE_DESCR,
       global.locale.MODAL_OK2
@@ -574,7 +571,7 @@ class Modal {
    * When the user right-clicks the play button to use Volcanic.
    */
   static showVolcanicPrompt() {
-    Modal.View.sendModal(
+    Modal.IPC.sendModal(
       global.locale.MODAL_START_VOLCANIC,
       global.locale.MODAL_START_VOLCANIC_DESC,
       global.locale.MODAL_START_VOLCANIC_OK,
@@ -587,7 +584,7 @@ class Modal {
    * When the user right-clicks the play button to use Volcanic, but for Simitone.
    */
   static showVolcanicPromptSimitone() {
-    Modal.View.sendModal(
+    Modal.IPC.sendModal(
       global.locale.MODAL_START_VOLCANIC,
       global.locale.MODAL_START_VOLCANIC_DESC,
       global.locale.MODAL_START_VOLCANIC_OK,
@@ -607,7 +604,7 @@ class Modal {
         .replace( 'FreeSO.exe', 'Simitone.Windows.exe' )
         .replace( 'FreeSO', 'Simitone' ); 
     }
-    Modal.View.sendModal(
+    Modal.IPC.sendModal(
       global.locale.MODAL_FAILED_LAUNCH,
       str2,
       global.locale.MODAL_OK2
@@ -618,7 +615,7 @@ class Modal {
    * When the launcher could find the game's .exe.bak to recover.
    */
   static showRecovered() {
-    Modal.View.sendModal(
+    Modal.IPC.sendModal(
       global.locale.MODAL_GAME_AUTORECOVERED,
       global.locale.MODAL_GAME_AUTORECOVERED_DESC,
       global.locale.MODAL_OK
@@ -629,7 +626,7 @@ class Modal {
    * Tells the user that Software Mode will be slower than the other options.
    */
   static showSoftwareModeEnabled() {
-    Modal.View.sendModal(
+    Modal.IPC.sendModal(
       global.locale.MODAL_SWM,
       global.locale.MODAL_SWM_DESCR,
       global.locale.MODAL_OK
@@ -640,7 +637,7 @@ class Modal {
    * Language will be displayed on launcher restart.
    */
      static showLanguageOnRestart() {
-      Modal.View.sendModal( 
+      Modal.IPC.sendModal( 
         global.locale.MODAL_REQUIRES_RESTART, 
         global.locale.MODAL_REQUIRES_RESTART_DESC, 
         global.locale.MODAL_OK 
@@ -653,7 +650,7 @@ class Modal {
    * @param {string} error Error message to show.
    */
   static showGenericError( error ) {
-    Modal.View.sendModal( 'Ooops!', error, global.locale.MODAL_OK );
+    Modal.IPC.sendModal( 'Ooops!', error, global.locale.MODAL_OK );
   }
 }
 

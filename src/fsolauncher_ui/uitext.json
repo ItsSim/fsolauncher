@@ -64,6 +64,7 @@
     "INS_WINDOW": "Please follow the instructions in the window.",
     "INSTALLATION_FINISHED": "Installation has finished successfully.",
     "INSTALLER": "INSTALLER",
+    "INSTALLER_CHOOSE_WHERE_X": "Choose where to install",
     "INSTALLER_DESCR": "Click on an item to install it",
     "INSTALLER_FSO_DESCR": "Free Simulator Online",
     "INSTALLER_FSO_TITLE": "FreeSO Game",

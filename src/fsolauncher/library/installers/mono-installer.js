@@ -1,5 +1,5 @@
 const Modal = require( '../modal' ),
-  download = require( '../download' )(),
+  download = require( '../download' ),
   sudo = require( 'sudo-prompt' ),
   // eslint-disable-next-line no-unused-vars
   FSOLauncher = require( '../../fsolauncher' );
@@ -25,7 +25,7 @@ class MonoInstaller {
    * @param {number} Percentage The percentage to display.
    */
   createProgressItem( Message, Percentage ) {
-    this.FSOLauncher.View.addProgressItem(
+    this.FSOLauncher.IPC.addProgressItem(
       'FSOProgressItem' + this.id,
       global.locale.INSTALLER_MONO_DESCR,
       global.locale.INS_DOWNLOADING_FROM + ' mono-project.com',
@@ -79,7 +79,7 @@ class MonoInstaller {
     } );
     this.haltProgress = true;
     this.createProgressItem( global.locale.FSO_FAILED_INSTALLATION, 100 );
-    this.FSOLauncher.View.stopProgressItem( 'FSOProgressItem' + this.id );
+    this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
     this.FSOLauncher.removeActiveTask( 'Mono' );
     Modal.showFailedInstall( 'Mono', ErrorMessage );
     return Promise.reject( ErrorMessage );
@@ -91,7 +91,7 @@ class MonoInstaller {
     this.dl.cleanup();
     this.FSOLauncher.setProgressBar( -1 );
     this.createProgressItem( global.locale.INSTALLATION_FINISHED, 100 );
-    this.FSOLauncher.View.stopProgressItem( 'FSOProgressItem' + this.id );
+    this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
     this.FSOLauncher.updateInstalledPrograms();
     this.FSOLauncher.removeActiveTask( 'Mono' );
     if( !this.isFullInstall ) Modal.showInstalled( 'Mono' );

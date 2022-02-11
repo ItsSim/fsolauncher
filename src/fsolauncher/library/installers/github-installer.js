@@ -4,7 +4,7 @@ const { https } = require( 'follow-redirects' ).wrap( {
   https: net,
 } );
 const ServoInstaller = require( './servo-installer' ),
-  download = require( '../download' )(),
+  download = require( '../download' ),
   // eslint-disable-next-line no-unused-vars
   FSOLauncher = require( '../../fsolauncher' );
 
@@ -26,7 +26,7 @@ class GitHubInstaller extends ServoInstaller {
    * @param {number} Percentage The percentage to display.
    */
   createProgressItem( Message, Percentage ) {
-    this.FSOLauncher.View.addProgressItem(
+    this.FSOLauncher.IPC.addProgressItem(
       `FSOProgressItem${this.id}`,
       'FreeSO Client (from GitHub)',
       `${global.locale.INS_IN} ${this.path}`,
@@ -173,7 +173,7 @@ class GitHubInstaller extends ServoInstaller {
     this.createProgressItem( 
       global.locale.FSO_FAILED_INSTALLATION, 100 
     );
-    this.FSOLauncher.View.stopProgressItem( 
+    this.FSOLauncher.IPC.stopProgressItem( 
       'FSOProgressItem' + this.id 
     );
     require( '../modal' ).showFailedInstall( 'FreeSO', ErrorMessage );

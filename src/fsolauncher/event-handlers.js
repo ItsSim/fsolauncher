@@ -8,13 +8,15 @@ const FSOLauncher = require( './fsolauncher' ),
  */
 class EventHandlers {
   /**
-   * Defines all the currently supported client events.
-   * 
    * @param {FSOLauncher} FSOLauncher The FSOLauncher instance.
    */
-  defineEvents( FSOLauncher ) {
+  constructor( FSOLauncher ) {
     this.FSOLauncher = FSOLauncher;
-
+  }
+  /**
+   * Defines all the currently supported client events.
+   */
+  defineEvents() {
     const onInitDOM                   = new RendererEvent( 'INIT_DOM' );
     const onInstall                   = new RendererEvent( 'INSTALL' );
     const onSetConfiguration          = new RendererEvent( 'SET_CONFIGURATION' );
@@ -121,8 +123,8 @@ class EventHandlers {
    * Fires when the DOM is initialized.
    */
   onInitDOM() {
-    this.FSOLauncher.View.setTheme( this.FSOLauncher.conf.Launcher.Theme );
-    this.FSOLauncher.View.restoreConfiguration( this.FSOLauncher.conf );
+    this.FSOLauncher.IPC.setTheme( this.FSOLauncher.conf.Launcher.Theme );
+    this.FSOLauncher.IPC.restoreConfiguration( this.FSOLauncher.conf );
     this.FSOLauncher.checkRemeshInfo();
     this.FSOLauncher.updateNetRequiredUI( true );
     this.FSOLauncher.Window.focus();
@@ -133,13 +135,13 @@ class EventHandlers {
    * Fires when the client receives a Socket.io request.
    *
    * @param {Electron.IpcMainEvent} e The event object.
-   * @param {string[]} Response The response from the client.
+   * @param {string[]} response The response from the client.
    */
-  onSocketMessage( e, Response ) {
+  onSocketMessage( e, response ) {
     if ( this.FSOLauncher.conf.Launcher.DesktopNotifications === '1' ) {
       Modal.sendNotification( 'FreeSO Announcement', 
-        Response[0], 
-        Response[1], 
+        response[0], 
+        response[1], 
         null, this.FSOLauncher.isDarkMode() );
     }
   }
@@ -147,10 +149,10 @@ class EventHandlers {
    * When the user wants to install a Component.
    *
    * @param {Electron.IpcMainEvent} e The event object.
-   * @param {string} Component The Component to be installed.
+   * @param {string} componentCode The Component to be installed.
    */
-  onInstall( e, Component ) {
-    this.FSOLauncher.fireInstallModal( Component );
+  onInstall( e, componentCode ) {
+    this.FSOLauncher.fireInstallModal( componentCode );
   }
   /**
    * When the configuration settings are altered.
@@ -169,20 +171,20 @@ class EventHandlers {
    */
   onInstallerRedirect( e, yes ) {
     if ( yes ) {
-      this.FSOLauncher.View.changePage( 'installer' );
+      this.FSOLauncher.IPC.changePage( 'installer' );
     }
   }
   /**
    * When the user wants to install a single Component.
    *
    * @param {Electron.IpcMainEvent} e The event object.
-   * @param {boolean} yes       The user clicked yes in the dialog.
-   * @param {string}  Component The Component to be installed.
-   * @param {object}  options   Options for the installer.
+   * @param {boolean} yes The user clicked yes in the dialog.
+   * @param {string} componentCode The Component to be installed.
+   * @param {object} options Options for the installer.
    */
-  onInstallComponent( e, yes, Component, options ) {
+  onInstallComponent( e, yes, componentCode, options ) {
     if ( yes ) {
-      this.FSOLauncher.install( Component, options )
+      this.FSOLauncher.install( componentCode, options )
         .catch( console.error );
     }
   }

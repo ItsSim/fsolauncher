@@ -158,7 +158,7 @@ function CreateWindow() {
   tray.setContextMenu( Menu.buildFromTemplate( [
     {
       label: global.locale.TRAY_LABEL_1,
-      click: () => launcher.events.onPlay()
+      click: () => launcher.launchGame()
     },
     {
       type: 'separator'
@@ -183,7 +183,7 @@ function CreateWindow() {
       .updateInstalledPrograms()
       .then( () => {
         if ( conf.Launcher.DirectLaunch === '1' && launcher.isInstalled.FSO ) {
-          launcher.events.onPlay();
+          launcher.launchGame()
           if ( process.platform == 'darwin' ) {
             Window.show();
           }
@@ -191,8 +191,8 @@ function CreateWindow() {
           Window.show();
         }
       } )
-      .catch( _err => {
-        console.log( _err );
+      .catch( err => {
+        console.log( err );
         Window.show();
       } );
   } );

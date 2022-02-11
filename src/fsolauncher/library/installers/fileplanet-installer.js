@@ -1,7 +1,7 @@
 const Modal = require( '../modal' ),
-  download = require( '../download' )(),
-  unzip = require( '../unzip' )(),
-  extract = require( '../cabinet' )(),
+  download = require( '../download' ),
+  unzip = require( '../unzip' ),
+  extract = require( '../cabinet' ),
   // eslint-disable-next-line no-unused-vars
   FSOLauncher = require( '../../fsolauncher' );
 
@@ -39,7 +39,7 @@ class FilePlanetInstaller {
    * @param {number} Percentage The percentage to display.
    */
   createProgressItem( Message, Percentage, Extraction ) {
-    this.FSOLauncher.View.addProgressItem(
+    this.FSOLauncher.IPC.addProgressItem(
       'TSOProgressItem' + this.id,
       'The Sims Online (FilePlanet)',
       global.locale.INS_IN + ' ' + this.path,
@@ -191,27 +191,21 @@ class FilePlanetInstaller {
    *
    * @returns {Promise<Function>} A promise that resolves when the extraction is complete.
    */
-  extractCabs( unzipgc ) {
-    // eslint-disable-next-line no-async-promise-executor
-    return new Promise( async( resolve, reject ) => {
-      let from = `${TEMP_PATH}FilePlanetTSOFiles/TSO_Installer_v1.1239.1.0/Data1.cab`;
-      try {
-        // support cabs in root
-        if( !await require( 'fs-extra' ).exists( from ) ) {
-          from = `${TEMP_PATH}FilePlanetTSOFiles/Data1.cab`;
-        }
-      } catch( err ) {
-        console.log( err );
+  async extractCabs( cleanUnzip ) {
+    let from = `${TEMP_PATH}FilePlanetTSOFiles/TSO_Installer_v1.1239.1.0/Data1.cab`;
+    try {
+      // Support cabs in root
+      if( !await require( 'fs-extra' ).exists( from ) ) {
+        from = `${TEMP_PATH}FilePlanetTSOFiles/Data1.cab`;
       }
-      extract(
-        {
-          from,
-          to: this.path,
-          purge: true
-        },
-        d => this.updateExtractionProgress( d ),
+    } catch( err ) {
+      console.log( err );
+    }
+    return new Promise( ( resolve, reject ) => {
+      extract( { from, to: this.path, purge: true },
+        cabInfo => this.updateExtractionProgress( cabInfo ),
         err => {
-          unzipgc();
+          cleanUnzip();
           this.dl.cleanup();
           if ( err ) return reject( `The Sims Online extraction failed: ${err}` );
           resolve();
@@ -254,7 +248,7 @@ class FilePlanetInstaller {
     this.FSOLauncher.setProgressBar( -1 );
     this.FSOLauncher.removeActiveTask( 'TSO' );
     this.createProgressItem( global.locale.INSTALLATION_FINISHED, 100 );
-    this.FSOLauncher.View.stopProgressItem( 'TSOProgressItem' + this.id );
+    this.FSOLauncher.IPC.stopProgressItem( 'TSOProgressItem' + this.id );
     this.FSOLauncher.updateInstalledPrograms();
     if( !this.isFullInstall ) Modal.showInstalled( 'The Sims Online' );
   }
@@ -273,7 +267,7 @@ class FilePlanetInstaller {
     this.FSOLauncher.removeActiveTask( 'TSO' );
     this.haltProgress = true;
     this.createProgressItem( global.locale.TSO_FAILED_INSTALLATION, 100 );
-    this.FSOLauncher.View.stopProgressItem( 'TSOProgressItem' + this.id );
+    this.FSOLauncher.IPC.stopProgressItem( 'TSOProgressItem' + this.id );
     Modal.showFailedInstall( 'The Sims Online', ErrorMessage );
     return Promise.reject( ErrorMessage );
   }

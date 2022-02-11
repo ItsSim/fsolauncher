@@ -32,7 +32,7 @@ class CompleteInstaller {
    * @returns {Promise<void>} A promise that resolves when the installation is finished.
    */
   step1() {
-    this.FSOLauncher.View.fullInstallProgressItem(
+    this.FSOLauncher.IPC.fullInstallProgressItem(
       process.platform === "win32" ? global.locale.INS_OAL : global.locale.INS_SDL,
       global.locale.INS_WINDOW,
       process.platform === "win32" ? global.locale.INS_OAL_WINDOW : global.locale.INS_SDL_WINDOW,
@@ -56,7 +56,7 @@ class CompleteInstaller {
    * @returns {Promise<void>} A promise that resolves when the installation is finished.
    */
   step2() {
-    this.FSOLauncher.View.fullInstallProgressItem(
+    this.FSOLauncher.IPC.fullInstallProgressItem(
       process.platform === "win32" ? global.locale.INS_NET : global.locale.INS_MONO,
       global.locale.INS_WINDOW,
       process.platform === "win32" ? global.locale.INS_NET_WINDOW : global.locale.INS_MONO_WINDOW,
@@ -81,7 +81,7 @@ class CompleteInstaller {
    * @returns {Promise<void>} A promise that resolves when the installation is finished.
    */
   step3() {
-    this.FSOLauncher.View.fullInstallProgressItem(
+    this.FSOLauncher.IPC.fullInstallProgressItem(
       global.locale.INS_TSO,
       global.locale.INS_DLEX,
       global.locale.INS_INFO,
@@ -95,7 +95,7 @@ class CompleteInstaller {
    * @returns {Promise<void>} A promise that resolves when the installation is finished.
    */
   step4() {
-    this.FSOLauncher.View.fullInstallProgressItem(
+    this.FSOLauncher.IPC.fullInstallProgressItem(
       global.locale.INS_FSO,
       global.locale.INS_DLEX,
       global.locale.INS_INFO,
@@ -108,7 +108,7 @@ class CompleteInstaller {
    */
   end() {
     this.FSOLauncher.removeActiveTask( 'FULL' );
-    this.FSOLauncher.View.fullInstallProgressItem(
+    this.FSOLauncher.IPC.fullInstallProgressItem(
       global.locale.INS_FINISHED,
       global.locale.INS_PLAY,
       global.locale.INS_PLAY_CLICK,
@@ -122,7 +122,7 @@ class CompleteInstaller {
       this.FSOLauncher.isDarkMode()
     );
     setTimeout( () => {
-      this.FSOLauncher.View.fullInstallProgressItem();
+      this.FSOLauncher.IPC.fullInstallProgressItem();
     }, 5000 );
   }
   /**
@@ -130,14 +130,14 @@ class CompleteInstaller {
    */
   error() {
     this.FSOLauncher.removeActiveTask( 'FULL' );
-    this.FSOLauncher.View.fullInstallProgressItem(
+    this.FSOLauncher.IPC.fullInstallProgressItem(
       global.locale.INS_ERROR,
       global.locale.INS_ERROR_DESCR,
       global.locale.INS_CLOSE,
       100
     );
     setTimeout( () => {
-      this.FSOLauncher.View.fullInstallProgressItem();
+      this.FSOLauncher.IPC.fullInstallProgressItem();
     }, 5000 );
   }
 }

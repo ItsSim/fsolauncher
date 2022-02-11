@@ -4,9 +4,11 @@
  */
 class IPCBridge {
   /**
-   * @param {Electron.BrowserWindow} Window The window to send messages to.
+   * @param {Electron.BrowserWindow} BrowserWindow The window to send messages to.
    */
-  constructor( Window ) { this.Window = Window; }
+  constructor( BrowserWindow ) { 
+    this.Window = BrowserWindow; 
+  }
   /**
    * Loads the FreeSO blog RSS for the main page.
    */

@@ -1,6 +1,6 @@
 const Modal = require( '../modal' ),
-  download = require( '../download' )(),
-  unzip = require( '../unzip' )(),
+  download = require( '../download' ),
+  unzip = require( '../unzip' ),
   // eslint-disable-next-line no-unused-vars
   FSOLauncher = require( '../../fsolauncher' );
 
@@ -34,7 +34,7 @@ class SimitoneInstaller {
    * @param {number} Percentage The percentage to display.
    */
   createProgressItem( Message, Percentage ) {
-    this.FSOLauncher.View.addProgressItem(
+    this.FSOLauncher.IPC.addProgressItem(
       'FSOProgressItem' + this.id,
       'Simitone Client ' + this.simitoneVersion,
       global.locale.INS_IN + ' ' + this.path,
@@ -151,7 +151,7 @@ class SimitoneInstaller {
     this.dl.cleanup();
     this.FSOLauncher.setProgressBar( -1 );
     this.createProgressItem( global.locale.INSTALLATION_FINISHED, 100 );
-    this.FSOLauncher.View.stopProgressItem( 'FSOProgressItem' + this.id );
+    this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
     this.FSOLauncher.updateInstalledPrograms();
     this.FSOLauncher.removeActiveTask( 'Simitone' );
     if ( this.simitoneVersion ) {
@@ -176,7 +176,7 @@ class SimitoneInstaller {
     } );
     this.haltProgress = true;
     this.createProgressItem( global.locale.FSO_FAILED_INSTALLATION.replace( /freeso/ig, 'Simitone' ), 100 );
-    this.FSOLauncher.View.stopProgressItem( 'FSOProgressItem' + this.id );
+    this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
     this.FSOLauncher.removeActiveTask( 'Simitone' );
     Modal.showFailedInstall( 'Simitone', ErrorMessage );
     return Promise.reject( ErrorMessage );
