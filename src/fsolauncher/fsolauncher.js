@@ -62,7 +62,7 @@ class FSOLauncher {
    *                          list and paths have been updated.
    */
   async updateInstalledPrograms() {
-    const Toast = new Toast( global.locale.TOAST_REGISTRY, this.IPC );
+    const toast = new Toast( global.locale.TOAST_REGISTRY, this.IPC );
     try {
       const Registry = require( './library/registry' ),
         programs = await Registry.getInstalled();
@@ -73,7 +73,7 @@ class FSOLauncher {
       console.log( 'updateInstalledPrograms', this.isInstalled );
       this.IPC.sendInstalledPrograms( this.isInstalled );
     } finally {
-      Toast.destroy();
+      toast.destroy();
     }
   }
   /**
@@ -239,13 +239,13 @@ class FSOLauncher {
    */
   async editTTSMode( value ) {
     const fs = require( 'fs-extra' ), ini = require( 'ini' );
-    const Toast = new Toast( global.locale.TOAST_TTS_MODE, this.IPC );
+    const toast = new Toast( global.locale.TOAST_TTS_MODE, this.IPC );
 
     this.addActiveTask( 'CHTTS' );
 
     if ( !this.isInstalled.FSO ) {
       this.removeActiveTask( 'CHTTS' );
-      Toast.destroy();
+      toast.destroy();
       return Modal.showNeedFSOTSO();
     }
     try {
@@ -255,7 +255,7 @@ class FSOLauncher {
         this.isInstalled.FSO + '/Content/config.ini',
         ini.stringify( data ), err => {
           this.removeActiveTask( 'CHTTS' );
-          Toast.destroy();
+          toast.destroy();
           if ( err ) {
             return Modal.showErrorIni();
           }
@@ -265,7 +265,7 @@ class FSOLauncher {
       );
     } catch ( e ) {
       this.removeActiveTask( 'CHTTS' );
-      Toast.destroy();
+      toast.destroy();
       Modal.showFirstRun();
     }
   }
@@ -387,7 +387,7 @@ class FSOLauncher {
     this.isInstalled['Simitone'] = simitoneStatus.isInstalled;
     this.isInstalled['TS1'] = ts1ccStatus.isInstalled;
     this.IPC.sendInstalledPrograms( this.isInstalled );
-    //Toast.destroy();
+    //toast.destroy();
   }
   /**
    * Checks if any updates are available.
@@ -403,14 +403,12 @@ class FSOLauncher {
       this.hasInternet &&
       this.activeTasks.length === 0
     ) {
-      const Toast = new Toast( global.locale.TOAST_CHECKING_UPDATES, this.IPC );
+      const toast = new Toast( global.locale.TOAST_CHECKING_UPDATES, this.IPC );
       this.isSearchingForUpdates = true;
       try {
         const data = await this.getLauncherData();
-
         this.isSearchingForUpdates = false;
-
-        Toast.destroy();
+        toast.destroy();
 
         if ( data.Version !== global.launcherVersion ) {
           if (
@@ -427,7 +425,6 @@ class FSOLauncher {
               null, null, this.isDarkMode()
             );
           }
-
           if ( this.lastUpdateNotification !== data.Version ) {
             this.lastUpdateNotification = data.Version;
             Modal.showInstallUpdate( data.Version );
@@ -439,7 +436,7 @@ class FSOLauncher {
         }
       } catch ( e ) {
         this.isSearchingForUpdates = false;
-        Toast.destroy();
+        toast.destroy();
         if ( !wasAutomatic ) Modal.showFailedUpdateCheck();
       }
     }
@@ -461,7 +458,7 @@ class FSOLauncher {
    * @returns {Promise<void>} A promise that resolves when the path is changed.
    */
   async changeGamePath( options ) {
-    const Toast = new Toast( global.locale.TOAST_CHPATH, this.IPC );
+    const toast = new Toast( global.locale.TOAST_CHPATH, this.IPC );
     try {
       await this.install( options.component, {
         fullInstall: false,
@@ -472,11 +469,11 @@ class FSOLauncher {
       this.updateInstalledPrograms();
       this.removeActiveTask( options.component );
 
-      Toast.destroy();
+      toast.destroy();
     } catch ( e ) {
       Modal.showFailedInstall( this.getPrettyName( options.component ), e );
       this.removeActiveTask( options.component );
-      Toast.destroy();
+      toast.destroy();
     }
   }
   /**
@@ -644,7 +641,7 @@ class FSOLauncher {
           let InstallDir;
           if( !options.dir ) {
             if( await ( require( './library/registry' ).testWinAccess() ) ) {
-              const Toast = new Toast(
+              const toast = new Toast(
                 `${global.locale.INSTALLER_CHOOSE_WHERE_X} ${this.getPrettyName( componentCode )}`,
                 this.IPC
               );
@@ -654,7 +651,7 @@ class FSOLauncher {
               if( folders && folders.length > 0 ) {
                 InstallDir = folders[0] + '/' + this.getPrettyName( componentCode );
               }
-              Toast.destroy();
+              toast.destroy();
             } else {
               if( process.platform != 'win32' ) {
                 // darwin doesnt get to choose
@@ -765,7 +762,7 @@ class FSOLauncher {
     const fs = require( 'fs-extra' ),
       ini = require( 'ini' ),
       path = require( 'path' );
-    const Toast = new Toast( global.locale.TOAST_LANGUAGE, this.IPC );
+    const toast = new Toast( global.locale.TOAST_LANGUAGE, this.IPC );
     try {
       try {
         if( process.platform == 'darwin' || process.platform == 'win32' ) {
@@ -792,7 +789,7 @@ class FSOLauncher {
       } catch( err ) {
         console.log( err );
         this.removeActiveTask( 'CHLANG' );
-        Toast.destroy();
+        toast.destroy();
         return Modal.showFSOLangFail();
       }
 
@@ -803,7 +800,7 @@ class FSOLauncher {
       } catch( err ) {
         console.log( err );
         this.removeActiveTask( 'CHLANG' );
-        Toast.destroy();
+        toast.destroy();
         return Modal.showFirstRun();
       }
       try {
@@ -813,11 +810,11 @@ class FSOLauncher {
         );
       } catch( err ) {
         this.removeActiveTask( 'CHLANG' );
-        Toast.destroy();
+        toast.destroy();
         return Modal.showIniFail();
       }
       this.removeActiveTask( 'CHLANG' );
-      Toast.destroy();
+      toast.destroy();
       this.conf.Game.Language = this.getLangString( this.getLangCode( language ) )[1];
       this.persist( true );
     } catch( err ) {
@@ -882,13 +879,13 @@ class FSOLauncher {
    * Disables Software Mode and removes dxtn.dll and opengl32.dll.
    */
   async disableSoftwareMode() {
-    const Toast = new Toast( global.locale.TOAST_DISABLING_SWM, this.IPC );
+    const toast = new Toast( global.locale.TOAST_DISABLING_SWM, this.IPC );
     this.addActiveTask( 'CHSWM' );
     try {
       await require( 'fs-extra' ).remove( this.isInstalled.FSO + '/dxtn.dll' );
       await require( 'fs-extra' ).remove( this.isInstalled.FSO + '/opengl32.dll' );
     } finally {
-      Toast.destroy();
+      toast.destroy();
       this.removeActiveTask( 'CHSWM' );
     }
   }
@@ -898,13 +895,13 @@ class FSOLauncher {
    * @returns {Promise<void>} A promise that resolves when the operation is complete.
    */
   async enableSoftwareMode() {
-    const Toast = new Toast( global.locale.TOAST_ENABLING_SWM, this.IPC );
+    const toast = new Toast( global.locale.TOAST_ENABLING_SWM, this.IPC );
     this.addActiveTask( 'CHSWM' );
     try {
       await require( 'fs-extra' ).copy( 'bin/dxtn.dll', this.isInstalled.FSO + '/dxtn.dll' );
       await require( 'fs-extra' ).copy( 'bin/opengl32.dll', this.isInstalled.FSO + '/opengl32.dll' );
     } finally {
-      Toast.destroy();
+      toast.destroy();
       this.removeActiveTask( 'CHSWM' );
     }
   }
@@ -967,10 +964,10 @@ class FSOLauncher {
       ? this.isInstalled.Simitone
       : this.isInstalled.FSO;
 
-    const ToastText = isSimitone
+    const toastText = isSimitone
       ? global.locale.TOAST_LAUNCHING.replace( 'FreeSO', 'Simitone' )
       : global.locale.TOAST_LAUNCHING;
-    const Toast = new Toast( ToastText, this.IPC );
+    const toast = new Toast( ToastText, this.IPC );
     const args = [];
 
     // windowed by default
@@ -1013,7 +1010,7 @@ class FSOLauncher {
     console.log( 'Running', file + ' ' + args.join( ' ' ), cwd );
     ( require( 'child_process' ).spawn( file, args, { cwd, detached: true, stdio: 'ignore' } ) ).unref();
 
-    setTimeout( () => { Toast.destroy(); }, 4000 );
+    setTimeout( () => { toast.destroy(); }, 4000 );
   }
   /**
    * Promise that returns FreeSO configuration
@@ -1074,12 +1071,12 @@ class FSOLauncher {
    * @param {boolean} showToast Display a toast while it is saving.
    */
   persist( _showToast ) {
-    const Toast = new Toast( global.locale.TOAST_SETTINGS, this.IPC );
+    const toast = new Toast( global.locale.TOAST_SETTINGS, this.IPC );
     console.log( 'persist', this.conf );
     require( 'fs-extra' ).writeFile(
       global.appData + 'FSOLauncher.ini',
       require( 'ini' ).stringify( this.conf ),
-      _err => setTimeout( () => Toast.destroy(), 1500 )
+      _err => setTimeout( () => toast.destroy(), 1500 )
     );
   }
   /**
