@@ -105,8 +105,9 @@ class Registry {
       for ( let i = 0; i < locals.length; i++ ) {
         const local = locals[i];
         console.log( 'Testing local:', local );
-        const exists = await require( 'fs-extra' ).exists( local );
-        if( exists ) return local;
+        if( await require( 'fs-extra' ).pathExists( local ) ) {
+          return local;
+        }
       }
     }
     return false;

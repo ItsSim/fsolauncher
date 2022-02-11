@@ -74,7 +74,7 @@ module.exports = function( { from, to, purge = true },
       const comb = new Uint8Array( view.length + _prevData.length );
       comb.set( _prevData );
       comb.subarray( _prevData.length ).set( view );
-      _uncompressed = await _MSZipDecomp( comb, chunk.ucBytes );
+      _uncompressed = _MSZipDecomp( comb, chunk.ucBytes );
       const toCopy = Math.min( _uncompressed.length, _dataLeftToFill );
       new Uint8Array( _fileBuffer, _fileOffset, toCopy ).set(
         _uncompressed.subarray( 0, toCopy )
@@ -89,7 +89,7 @@ module.exports = function( { from, to, purge = true },
       const chunk = chunks[_dc[folder]++];
       const view = new Uint8Array( data, chunk.offset, chunk.cBytes );
       if ( chunk.ucBytes !== 0 ) {
-        _uncompressed = await _MSZipDecomp( view, chunk.ucBytes );
+        _uncompressed = _MSZipDecomp( view, chunk.ucBytes );
         const toCopy = Math.min( _uncompressed.length, _dataLeftToFill );
         new Uint8Array( _fileBuffer, _fileOffset, toCopy ).set(
           _uncompressed.subarray( 0, toCopy )

@@ -195,7 +195,7 @@ class FilePlanetInstaller {
     let from = `${TEMP_PATH}FilePlanetTSOFiles/TSO_Installer_v1.1239.1.0/Data1.cab`;
     try {
       // Support cabs in root
-      if( !await require( 'fs-extra' ).exists( from ) ) {
+      if( !await require( 'fs-extra' ).pathExists( from ) ) {
         from = `${TEMP_PATH}FilePlanetTSOFiles/Data1.cab`;
       }
     } catch( err ) {
