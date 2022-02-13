@@ -179,6 +179,11 @@ block {
   margin-top: -5px;
 }
 
+#sidebar svg[class$="-icon"] {
+  margin-left: 6px;
+  margin-right: 7px;
+}
+
 div#splash {
   position: fixed;
   top: 0;
