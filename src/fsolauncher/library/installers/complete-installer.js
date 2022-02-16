@@ -107,7 +107,6 @@ class CompleteInstaller {
    * When the installation finished.
    */
   end() {
-    this.FSOLauncher.removeActiveTask( 'FULL' );
     this.FSOLauncher.IPC.fullInstallProgressItem(
       global.locale.INS_FINISHED,
       global.locale.INS_PLAY,
@@ -121,22 +120,25 @@ class CompleteInstaller {
       true,
       this.FSOLauncher.isDarkMode()
     );
-    setTimeout( () => 
-      this.FSOLauncher.IPC.fullInstallProgressItem(), 5000 );
+    setTimeout( () => {
+      this.FSOLauncher.removeActiveTask( 'FULL' );
+      this.FSOLauncher.IPC.fullInstallProgressItem();
+    }, 5000 );
   }
   /**
    * Communicates that an error happened.
    */
   error( errorMessage ) {
-    this.FSOLauncher.removeActiveTask( 'FULL' );
     this.FSOLauncher.IPC.fullInstallProgressItem(
       global.locale.INS_ERROR,
       global.locale.INS_ERROR_DESCR + " " + errorMessage,
       global.locale.INS_CLOSE,
       100
     );
-    setTimeout( () => 
-      this.FSOLauncher.IPC.fullInstallProgressItem(), 5000 );
+    setTimeout( () => {
+      this.FSOLauncher.removeActiveTask( 'FULL' );
+      this.FSOLauncher.IPC.fullInstallProgressItem();
+    }, 5000 );
   }
 }
 
