@@ -23,7 +23,7 @@ class CompleteInstaller {
       await this.step4();
       this.end();
     } catch( errorMessage ) {
-      this.error();
+      this.error( errorMessage );
     }
   }
   /**
@@ -127,11 +127,11 @@ class CompleteInstaller {
   /**
    * Communicates that an error happened.
    */
-  error() {
+  error( errorMessage ) {
     this.FSOLauncher.removeActiveTask( 'FULL' );
     this.FSOLauncher.IPC.fullInstallProgressItem(
       global.locale.INS_ERROR,
-      global.locale.INS_ERROR_DESCR,
+      global.locale.INS_ERROR_DESCR + " " + errorMessage,
       global.locale.INS_CLOSE,
       100
     );
