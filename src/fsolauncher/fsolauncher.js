@@ -693,7 +693,6 @@ class FSOLauncher {
               this.removeActiveTask( componentCode );
             } else {
               this.removeActiveTask();
-              this.IPC.fullInstallProgressItem();
               return Promise.reject( new Error( "User canceled the installation." ) );
             }
           }
