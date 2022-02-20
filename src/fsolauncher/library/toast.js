@@ -3,7 +3,7 @@
  */
 class Toast {
   /**
-   * @param {string} Message The message to display.
+   * @param {string} message The message to display.
    * @param {import('./ipc-bridge')} IPC The IPCBridge instance.
    * @param {number} timeout Timeout in seconds.
    */

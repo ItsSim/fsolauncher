@@ -33,20 +33,20 @@ class FilePlanetInstaller {
   /**
    * Create/Update the download progress item.
    *
-   * @param {string} Message    The message to display.
-   * @param {number} Percentage The percentage to display.
+   * @param {string} message    The message to display.
+   * @param {number} percentage The percentage to display.
    */
-  createProgressItem( Message, Percentage, Extraction ) {
+  createProgressItem( message, percentage, extraction ) {
     this.FSOLauncher.IPC.addProgressItem(
       'TSOProgressItem' + this.id,
       'The Sims Online (FilePlanet)',
       global.locale.INS_IN + ' ' + this.path,
-      Message,
-      Percentage,
-      Extraction
+      message,
+      percentage,
+      extraction
     );
     this.FSOLauncher.setProgressBar(
-      Percentage == 100 ? 2 : Percentage / 100
+      percentage == 100 ? 2 : percentage / 100
     );
   }
   /**

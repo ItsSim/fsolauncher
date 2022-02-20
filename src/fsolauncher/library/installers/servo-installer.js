@@ -26,19 +26,19 @@ class ServoInstaller {
   /**
    * Create/Update the download progress item.
    *
-   * @param {string} Message    The message to display.
-   * @param {number} Percentage The percentage to display.
+   * @param {string} message    The message to display.
+   * @param {number} percentage The percentage to display.
    */
-  createProgressItem( Message, Percentage ) {
+  createProgressItem( message, percentage ) {
     this.FSOLauncher.IPC.addProgressItem(
       `FSOProgressItem${this.id}`,
       'FreeSO Client (Alternative Source)',
       `Installing in ${this.path}`,
-      Message,
-      Percentage
+      message,
+      percentage
     );
     this.FSOLauncher.setProgressBar(
-      Percentage == 100 ? 2 : Percentage / 100
+      percentage == 100 ? 2 : percentage / 100
     );
   }
   /**
