@@ -1,15 +1,14 @@
-const Modal = require( '../modal' ),
-  download = require( '../download' ),
-  sudo = require( 'sudo-prompt' ),
-  // eslint-disable-next-line no-unused-vars
-  FSOLauncher = require( '../../fsolauncher' );
+const Modal = require( '../modal' );
+const download = require( '../download' );
+const sudo = require( 'sudo-prompt' );
+const { strFormat } = require( '../utils' );
 
 /**
  * Installs Mono on macOS systems.
  */
 class MonoInstaller {
   /**
-   * @param {FSOLauncher} FSOLauncher The launcher instance.
+   * @param {import('../../fsolauncher')} FSOLauncher The launcher instance.
    */
   constructor( FSOLauncher ) {
     this.FSOLauncher = FSOLauncher;
@@ -78,7 +77,7 @@ class MonoInstaller {
       mode: 'error'
     } );
     this.haltProgress = true;
-    this.createProgressItem( global.locale.FSO_FAILED_INSTALLATION, 100 );
+    this.createProgressItem( strFormat( global.locale.FSO_FAILED_INSTALLATION, 'Mono' ), 100 );
     this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
     this.FSOLauncher.removeActiveTask( 'Mono' );
     Modal.showFailedInstall( 'Mono', errorMessage );

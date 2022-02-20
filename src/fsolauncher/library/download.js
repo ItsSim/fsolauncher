@@ -6,6 +6,7 @@ const { http, https } = require( 'follow-redirects' ).wrap( {
 } );
 const path = require( 'path' );
 const { EventEmitter } = require( 'events' );
+
 /**
  * Custom HTTP download, with a few more failsafes for dealing with archive.org responses.
  * Supports pause, resume, retry and abort (stop).

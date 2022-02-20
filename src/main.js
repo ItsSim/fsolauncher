@@ -3,16 +3,12 @@ require( 'v8-compile-cache' );
 const { 
   app, BrowserWindow, shell, Tray, Menu, nativeImage, nativeTheme 
 } = require( 'electron' );
-
-const oslocale = require( 'os-locale' ),
-   fs = require( 'fs-extra' ),
-  ini = require( 'ini' );
-
-const UIText = require( './fsolauncher_ui/uitext.json' ),
- FSOLauncher = require( './fsolauncher/fsolauncher' ),
-     package = require( './package.json' );
-
-global.normalizePathSlashes = d => d ? d.replace( /\\/g, '/' ) : d
+const oslocale = require( 'os-locale' );
+const fs = require( 'fs-extra' );
+const ini = require( 'ini' );
+const UIText = require( './fsolauncher_ui/uitext.json' );
+const FSOLauncher = require( './fsolauncher/fsolauncher' );
+const package = require( './package.json' );
 
 process.title = 'FreeSO Launcher';
 global.willQuit = false;
@@ -23,7 +19,7 @@ global.socketPort = 30001;
 global.remeshEndpoint = 'remeshpackage';
 global.updateEndpoint = 'updatecheck';
 
-const prevOpenExternal = shell.openExternal
+const prevOpenExternal = shell.openExternal;
 shell.openExternal = Object.freeze( url => {
   if ( url.startsWith( 'http' ) || url.startsWith( 'https' ) ) {
     prevOpenExternal( url )
@@ -88,7 +84,6 @@ try {
       TTS: '0'
     }
   };
-
   fs.writeFileSync( global.appData + 'FSOLauncher.ini', ini.stringify( conf ), 'utf-8' );
 }
 

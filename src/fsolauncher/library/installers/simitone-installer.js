@@ -1,8 +1,6 @@
-const Modal = require( '../modal' ),
-  download = require( '../download' ),
-  unzip = require( '../unzip' ),
-  // eslint-disable-next-line no-unused-vars
-  FSOLauncher = require( '../../fsolauncher' );
+const Modal = require( '../modal' );
+const download = require( '../download' );
+const unzip = require( '../unzip' );
 
 const DOWNLOAD_URL_GITHUB =
   'https://beta.freeso.org/LauncherResourceCentral/Simitone';
@@ -13,7 +11,7 @@ const DOWNLOAD_URL_GITHUB =
 class SimitoneInstaller {
   /**
    * @param {string} path The path to the directory to create.
-   * @param {FSOLauncher} FSOLauncher The FSOLauncher instance.
+   * @param {import('../../fsolauncher')} FSOLauncher The FSOLauncher instance.
    */
   constructor( path, FSOLauncher ) {
     this.FSOLauncher = FSOLauncher;

@@ -1,9 +1,7 @@
-const Modal = require( '../modal' ),
-  download = require( '../download' ),
-  unzip = require( '../unzip' ),
-  extract = require( '../cabinet' ),
-  // eslint-disable-next-line no-unused-vars
-  FSOLauncher = require( '../../fsolauncher' );
+const Modal = require( '../modal' );
+const download = require( '../download' );
+const unzip = require( '../unzip' );
+const extract = require( '../cabinet' );
 
 /**
  * ORIGINAL: https://archive.org/download/Fileplanet_dd_042006/Fileplanet_dd_042006.tar/042006/TSO_Installer_v1.1239.1.0.zip'
@@ -19,7 +17,7 @@ const TEMP_FILE = 'FilePlanetTSOFiles.zip';
 class FilePlanetInstaller {
   /**
    * @param {string} path Path to install to.
-   * @param {FSOLauncher} FSOLauncher The FSOLauncher instance.
+   * @param {import('../../fsolauncher')} FSOLauncher The FSOLauncher instance.
    */
   constructor( path, FSOLauncher ) {
     this.FSOLauncher = FSOLauncher;

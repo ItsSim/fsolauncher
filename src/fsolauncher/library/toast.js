@@ -1,13 +1,10 @@
-// eslint-disable-next-line no-unused-vars
-const IPCBridge = require( "./ipc-bridge" );
-
 /**
  * Utility class to display little toasts in the bottom right corner of the launcher.
  */
 class Toast {
   /**
    * @param {string} Message The message to display.
-   * @param {IPCBridge} IPC The IPCBridge instance.
+   * @param {import('./ipc-bridge')} IPC The IPCBridge instance.
    * @param {number} timeout Timeout in seconds.
    */
   constructor( message, IPC, timeout = 0 ) {

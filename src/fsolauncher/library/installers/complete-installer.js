@@ -1,13 +1,11 @@
-const Modal = require( '../modal' ),
-// eslint-disable-next-line no-unused-vars
-FSOLauncher = require( '../../fsolauncher' );
+const Modal = require( '../modal' );
 
 /**
  * Installs OpenAL, .NET, Mono, SDL, TSO and FreeSO.
  */
 class CompleteInstaller {
   /**
-   * @param {FSOLauncher} FSOLauncher The FSOLauncher instance.
+   * @param {import('../../fsolauncher')} FSOLauncher The FSOLauncher instance.
    */
   constructor( FSOLauncher ) {
     this.FSOLauncher = FSOLauncher;

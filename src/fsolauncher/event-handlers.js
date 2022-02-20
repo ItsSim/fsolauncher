@@ -1,14 +1,12 @@
-// eslint-disable-next-line no-unused-vars
-const FSOLauncher = require( './fsolauncher' ),
-  Modal = require( './library/modal' ),
-  RendererEvent = require( './library/renderer-event' );
+const Modal = require( './library/modal' );
+const RendererEvent = require( './library/renderer-event' );
 
 /**
  * Handles all events from the client.
  */
 class EventHandlers {
   /**
-   * @param {FSOLauncher} FSOLauncher The FSOLauncher instance.
+   * @param {import('./fsolauncher')} FSOLauncher The FSOLauncher instance.
    */
   constructor( FSOLauncher ) {
     this.FSOLauncher = FSOLauncher;

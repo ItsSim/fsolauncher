@@ -1,4 +1,5 @@
 /* eslint-disable no-empty */
+const { normalizePathSlashes } = require( './utils' );
 /**
  * IPCBridge used to control events sent to the renderer process.
  */
@@ -109,12 +110,14 @@ class IPCBridge {
    * @param {string} miniconsole Deprecated, leave as null.
    */
   addProgressItem( elId, filename, origin, progress, percentage, miniconsole ) {
+    filename = normalizePathSlashes( filename );
+    origin = normalizePathSlashes( origin );
     try {
       this.Window.webContents.send(
         'CREATE_PROGRESS_ITEM',
         elId,
-        global.normalizePathSlashes( filename ),
-        global.normalizePathSlashes( origin ),
+        filename,
+        origin,
         progress,
         percentage,
         miniconsole

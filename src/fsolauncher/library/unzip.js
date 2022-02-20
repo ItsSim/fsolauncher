@@ -1,10 +1,9 @@
-const yauzl = require( 'yauzl' ),
-  path = require( 'path' ),
-  fs = require( 'fs-extra' );
-  /**
-   * Extracts a zip file, recursively creates directories, once resolved
-   * returns a cleanup function.
-   */
+const yauzl = require( 'yauzl' ), fs = require( 'fs-extra' );
+
+/**
+ * Extracts a zip file, recursively creates directories, once resolved
+ * returns a cleanup function.
+ */
 module.exports = ( { from, to, cpperm }, onEntry = () => {} ) =>
   new Promise( ( resolve, reject ) => {
     /**
@@ -32,7 +31,7 @@ module.exports = ( { from, to, cpperm }, onEntry = () => {} ) =>
         const destination =
           ( to.endsWith( '/' ) ? to : to + '/' ) + entry.fileName;
         try {
-          await fs.ensureDir( path.dirname( destination ) );
+          await fs.ensureDir( require( 'path' ).dirname( destination ) );
           const file = fs.createWriteStream( destination, options );
           file.on( 'error', reject );
           readStream.pipe( file );

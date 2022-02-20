@@ -1,15 +1,14 @@
-const Modal = require( '../modal' ),
-  download = require( '../download' ),
-  unzip = require( '../unzip' ),
-  // eslint-disable-next-line no-unused-vars
-  FSOLauncher = require( '../../fsolauncher' );
+const Modal = require( '../modal' );
+const download = require( '../download' );
+const unzip = require( '../unzip' );
+const { strFormat } = require( '../utils' );
 
 /**
  * Installs macOS Extras on macOS systems.
  */
 class MacExtrasInstaller {
   /**
-   * @param {FSOLauncher} FSOLauncher The FSOLauncher instance.
+   * @param {import('../../fsolauncher')} FSOLauncher The FSOLauncher instance.
    * @param {string} path The path to the installation directory.
    * @param {string} parentComponent The name of the parent component.
    */
@@ -92,7 +91,7 @@ class MacExtrasInstaller {
       mode: 'error'
     } );
     this.haltProgress = true;
-    this.createProgressItem( global.locale.FSO_FAILED_INSTALLATION, 100 );
+    this.createProgressItem( strFormat( global.locale.FSO_FAILED_INSTALLATION, 'macOS Extras' ), 100 );
     this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
     this.FSOLauncher.removeActiveTask( 'MacExtras' );
     Modal.showFailedInstall( 'FreeSO MacExtras', errorMessage );

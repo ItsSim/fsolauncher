@@ -2,7 +2,6 @@ const Modal = require( './library/modal' );
 const EventHandlers = require( './event-handlers' );
 const IPCBridge = require( './library/ipc-bridge' );
 const Toast = require( './library/toast' );
-
 const { net } = require( 'electron' );
 const { https } = require( 'follow-redirects' ).wrap( {
   http: net,

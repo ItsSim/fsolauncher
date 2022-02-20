@@ -1,7 +1,8 @@
 /* eslint-disable require-atomic-updates */
-const inflate = require( "deflate-js" ).inflate,
-  fs = require( "fs-extra" ),
-  path = require( "path" );
+const inflate = require( "deflate-js" ).inflate;
+const fs = require( "fs-extra" );
+const path = require( "path" );
+
 /**
  * Extracts cabinets to a destination.
  */

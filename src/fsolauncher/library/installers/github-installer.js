@@ -5,8 +5,7 @@ const { https } = require( 'follow-redirects' ).wrap( {
 } );
 const ServoInstaller = require( './servo-installer' ),
   download = require( '../download' ),
-  // eslint-disable-next-line no-unused-vars
-  FSOLauncher = require( '../../fsolauncher' );
+  { strFormat } = require( '../utils' );
 
 /**
  * Installs FreeSO from GitHub Releases.
@@ -14,7 +13,7 @@ const ServoInstaller = require( './servo-installer' ),
 class GitHubInstaller extends ServoInstaller {
   /**
    * @param {string} path The path to install to.
-   * @param {FSOLauncher} FSOLauncher The FSOLauncher instance.
+   * @param {import('../../fsolauncher')} FSOLauncher The FSOLauncher instance.
    */
   constructor( path, FSOLauncher ) {
     super( path, FSOLauncher );
@@ -171,7 +170,7 @@ class GitHubInstaller extends ServoInstaller {
     this.FSOLauncher.setProgressBar( 1, { mode: 'error' } );
     this.haltProgress = true;
     this.createProgressItem( 
-      global.locale.FSO_FAILED_INSTALLATION, 100 
+      strFormat( global.locale.FSO_FAILED_INSTALLATION, 'FreeSO' ), 100 
     );
     this.FSOLauncher.IPC.stopProgressItem( 
       'FSOProgressItem' + this.id 

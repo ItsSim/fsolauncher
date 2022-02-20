@@ -1,8 +1,7 @@
-const Modal = require( '../modal' ),
-  download = require( '../download' ),
-  unzip = require( '../unzip' ),
-  // eslint-disable-next-line no-unused-vars
-  FSOLauncher = require( '../../fsolauncher' );
+const Modal = require( '../modal' );
+const download = require( '../download' );
+const unzip = require( '../unzip' );
+const { strFormat } = require( '../utils' );
 
 //servo is no more, so ServoInstaller serves as a backup.
 const DOWNLOAD_URL_SERVO =
@@ -14,7 +13,7 @@ const DOWNLOAD_URL_SERVO =
 class ServoInstaller {
   /**
    * @param {string} path The path to the installation directory.
-   * @param {FSOLauncher} FSOLauncher The launcher instance.
+   * @param {import('../../fsolauncher')} FSOLauncher The launcher instance.
    */
   constructor( path, FSOLauncher ) {
     this.FSOLauncher = FSOLauncher;
@@ -153,7 +152,7 @@ class ServoInstaller {
       mode: 'error'
     } );
     this.haltProgress = true;
-    this.createProgressItem( global.locale.FSO_FAILED_INSTALLATION, 100 );
+    this.createProgressItem( strFormat( global.locale.FSO_FAILED_INSTALLATION, 'FreeSO' ), 100 );
     this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
     this.FSOLauncher.removeActiveTask( 'FSO' );
     Modal.showFailedInstall( 'FreeSO', errorMessage );

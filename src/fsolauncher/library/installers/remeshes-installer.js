@@ -1,8 +1,7 @@
-const Modal = require( '../modal' ),
-  download = require( '../download' ),
-  unzip = require( '../unzip' ),
-  // eslint-disable-next-line no-unused-vars
-  FSOLauncher = require( '../../fsolauncher' );
+const Modal = require( '../modal' );
+const download = require( '../download' );
+const unzip = require( '../unzip' );
+const { strFormat } = require( '../utils' );
 
 /**
  * Installs remeshes for FreeSO and Simitone.
@@ -10,7 +9,7 @@ const Modal = require( '../modal' ),
 class RemeshesInstaller {
   /**
    * @param {string} path The path to install to.
-   * @param {FSOLauncher} FSOLauncher The launcher instance.
+   * @param {import('../../fsolauncher')} FSOLauncher The launcher instance.
    * @param {string} parentComponent The name of the parent component.
    */
   constructor( path, FSOLauncher, parentComponent = 'FreeSO' ) {
@@ -95,7 +94,7 @@ class RemeshesInstaller {
       mode: 'error'
     } );
     this.haltProgress = true;
-    this.createProgressItem( global.locale.FSO_FAILED_INSTALLATION, 100 );
+    this.createProgressItem( strFormat( global.locale.FSO_FAILED_INSTALLATION, 'Remesh Pack' ), 100 );
     this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
     this.FSOLauncher.removeActiveTask( 'RMS' );
     Modal.showFailedInstall( 'Remesh Package', errorMessage );
