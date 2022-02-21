@@ -3,10 +3,19 @@
  */
 class Modal {
   /**
+   * Returns the Modal IPC object.
+   * 
+   * @returns {import('./ipc-bridge')} The IPC object.
+   */
+  static getIPC() {
+    return Modal.IPC;
+  }
+
+  /**
    * Dialog for the alternative TSO download.
    */
   static showFTPTSO() {
-    Modal.IPC.sendModal(
+    Modal.getIPC().sendModal(
       'Try alternative download?',
       'This will try and download The Sims Online from an alternative source. ' + 
       'This is useful if the primary download is not working for you.',
@@ -22,7 +31,7 @@ class Modal {
    * @param {string[]} Missing List of missing programs.
    */
   static showRequirementsNotMet( Missing ) {
-    Modal.IPC.sendModal(
+    Modal.getIPC().sendErrorModal(
       global.locale.MODAL_NOT_AVAILABLE,
       global.locale.MODAL_NOT_AVAILABLE_DESCR_1 +
         ' <strong>' +
@@ -40,7 +49,7 @@ class Modal {
    * @param {string} componentCode The Component ID to install if the user clicks YES.
    */
   static showFirstInstall( componentName, componentCode ) {
-    Modal.IPC.sendModal(
+    Modal.getIPC().sendModal(
       componentName,
       global.locale.MODAL_INSTALL_DESCR_1 +
         ' <strong>' +
@@ -61,7 +70,7 @@ class Modal {
    * @param {string} componentCode The Component ID to install if the user clicks YES.
    */
   static showReInstall( componentName, componentCode ) {
-    Modal.IPC.sendModal(
+    Modal.getIPC().sendModal(
       componentName,
       global.locale.MODAL_REINSTALL_DESCR_X +
         ' <strong>' +
@@ -79,7 +88,7 @@ class Modal {
    * internet connection. 
    */
   static showNoInternet() {
-    Modal.IPC.sendModal(
+    Modal.getIPC().sendErrorModal(
       global.locale.MODAL_NO_INTERNET,
       global.locale.MODAL_NEED_INTERNET_SINGLE,
       global.locale.MODAL_OK
@@ -90,7 +99,7 @@ class Modal {
    * When a user tries to do a full install with no internet.
    */
   static showNoInternetFullInstall() {
-    Modal.IPC.sendModal(
+    Modal.getIPC().sendErrorModal(
       global.locale.MODAL_NO_INTERNET,
       global.locale.MODAL_NEED_INTERNET_FULL,
       global.locale.MODAL_OK
@@ -103,7 +112,7 @@ class Modal {
    * @param {string} componentName The visual name of the Component.
    */
   static showInstalled( componentName ) {
-    Modal.IPC.sendModal(
+    Modal.getIPC().sendSuccessModal(
       global.locale.MODAL_INS_COMPLETE,
       componentName + ' ' + global.locale.MODAL_INS_COMPLETE_DESCR,
       global.locale.MODAL_OK2
@@ -117,7 +126,7 @@ class Modal {
    * @param {string} errorMessage  Error message to display.
    */
   static showFailedInstall( componentName, errorMessage ) {
-    Modal.IPC.sendModal(
+    Modal.getIPC().sendErrorModal(
       global.locale.MODAL_INS_FAILED,
       componentName +
         ' ' +
@@ -133,7 +142,7 @@ class Modal {
    * a program. 
    */
   static showAlreadyInstalling() {
-    Modal.IPC.sendModal(
+    Modal.getIPC().sendErrorModal(
       global.locale.MODAL_NOT_AVAILABLE2,
       global.locale.MODAL_INS_PROGRESS,
       global.locale.MODAL_OK
@@ -144,7 +153,7 @@ class Modal {
    * When a user does a full install.
    */
   static showFullInstall() {
-    Modal.IPC.sendModal(
+    Modal.getIPC().sendModal(
       global.locale.MODAL_INSTALLATION,
       global.locale.MODAL_INSTALLATION_DESCR,
       global.locale.MODAL_START,
@@ -167,7 +176,7 @@ class Modal {
       override: path
     };
 
-    Modal.IPC.sendModal(
+    Modal.getIPC().sendModal(
       global.locale.MODAL_NOT_AVAILABLE2,
       global.locale.MODAL_DETECTED_THAT_1 +
         ' <strong>' +
@@ -185,7 +194,7 @@ class Modal {
    * When the user has changed the game's path.
    */
   static showChangedGamePath() {
-    Modal.IPC.sendModal(
+    Modal.getIPC().sendSuccessModal(
       global.locale.MODAL_MODIFIED_PATH,
       global.locale.MODAL_MODIFIED_PATH_DESCR,
       global.locale.MODAL_OK2
@@ -231,7 +240,7 @@ class Modal {
    * When the user tries to do an action that requires both FreeSO and TSO.
    */
   static showNeedFSOTSO() {
-    Modal.IPC.sendModal(
+    Modal.getIPC().sendErrorModal(
       global.locale.MODAL_NEGATIVE,
       global.locale.MODAL_NEED_FSOTSO,
       global.locale.MODAL_OK2
@@ -242,7 +251,7 @@ class Modal {
    * When the user tried to play while updating.
    */
   static showFailPlay() {
-    Modal.IPC.sendModal(
+    Modal.getIPC().sendErrorModal(
       global.locale.MODAL_NEGATIVE,
       global.locale.MODAL_LAUNCH_UPDATING,
       global.locale.MODAL_OK
@@ -253,7 +262,7 @@ class Modal {
    * When a user clicks play without installing FSO or TSO.
    */
   static showNeedToPlay() {
-    Modal.IPC.sendModal(
+    Modal.getIPC().sendErrorModal(
       global.locale.MODAL_NEGATIVE,
       global.locale.MODAL_NEED_FSOTSO_PLAY,
       global.locale.MODAL_GOTO_INSTALLER,
@@ -268,7 +277,7 @@ class Modal {
    * @param {any} c Count of FreeSO processes that have been closed.
    */
   static showKilled( c ) {
-    Modal.IPC.sendModalNoFocus(
+    Modal.getIPC().sendSuccessModalNoFocus(
       global.locale.MODAL_CLOSED_FREESO,
       global.locale.MODAL_CLOSED + ' ' + c + ' ' + global.locale.MODAL_CLOSED_2,
       global.locale.MODAL_OK2
@@ -279,7 +288,7 @@ class Modal {
    * When the launcher failed to change language settings for TSO.
    */
   static showTSOLangFail() {
-    Modal.IPC.sendModal(
+    Modal.getIPC().sendErrorModal(
       global.locale.MODAL_NOT_COMPLETE,
       global.locale.MODAL_TSO_LANG_ERR,
       global.locale.MODAL_OK
@@ -290,7 +299,7 @@ class Modal {
    * When the launcher failed to change language settings for FSO.
    */
   static showFSOLangFail() {
-    Modal.IPC.sendModal(
+    Modal.getIPC().sendErrorModal(
       global.locale.MODAL_NOT_COMPLETE,
       global.locale.MODAL_FSO_LANG_ERR,
       global.locale.MODAL_OK
@@ -301,7 +310,7 @@ class Modal {
    * When the language change was successful.
    */
   static showCHLangComplete() {
-    Modal.IPC.sendModal(
+    Modal.getIPC().sendSuccessModal(
       global.locale.MODAL_SUCCESS,
       global.locale.MODAL_LANG_SUCCESS,
       global.locale.MODAL_OK2
@@ -314,7 +323,7 @@ class Modal {
    * @param {string} value The new value.
    */
   static showCHTTSComplete( value ) {
-    Modal.IPC.sendModal(
+    Modal.getIPC().sendSuccessModal(
       value === '1'
         ? global.locale.MODAL_SUCCESS
         : global.locale.MODAL_TTS_DISABLED,
@@ -329,7 +338,7 @@ class Modal {
    * When the launcher could not access/write to INI file.
    */
   static showIniFail() {
-    Modal.IPC.sendModal(
+    Modal.getIPC().sendErrorModal(
       global.locale.MODAL_NOT_COMPLETE,
       global.locale.MODAL_INI_ERR,
       global.locale.MODAL_OK
@@ -342,7 +351,7 @@ class Modal {
    * until it's launched for the first time.
    */
   static showFirstRun() {
-    Modal.IPC.sendModal(
+    Modal.getIPC().sendErrorModal(
       global.locale.MODAL_NOT_AVAILABLE,
       global.locale.MODAL_FIRSTTIME,
       global.locale.MODAL_OK2
@@ -353,7 +362,7 @@ class Modal {
    * Shows when there's no remesh available to download from the server.
    */
   static showNoRemesh() {
-    Modal.IPC.sendModal(
+    Modal.getIPC().sendErrorModal(
       global.locale.MODAL_RPU,
       global.locale.MODAL_RPU_DESCR,
       global.locale.MODAL_OK
@@ -480,8 +489,8 @@ class Modal {
       } );
 
       notification.on( 'display', () => {
-        Modal.IPC.sendSound( ok ? 'ok' : 'notification' );
-        Modal.IPC.sendNotifLog( title, message, url );
+        Modal.getIPC().sendSound( ok ? 'ok' : 'notification' );
+        Modal.getIPC().sendNotifLog( title, message, url );
       } );
 
       notification.on( 'click', () => {
@@ -499,7 +508,7 @@ class Modal {
    * When a user tries to open FreeSO twice.
    */
   static showAlreadyRunning() {
-    Modal.IPC.sendModal(
+    Modal.getIPC().sendErrorModal(
       global.locale.MODAL_RUNNING,
       global.locale.MODAL_RUNNING_DESC,
       global.locale.MODAL_OK2
@@ -510,7 +519,7 @@ class Modal {
    * When the update check failed due to some HTTP error.
    */
   static showFailedUpdateCheck() {
-    Modal.IPC.sendModal(
+    Modal.getIPC().sendErrorModal(
       global.locale.MODAL_UPDATE_CHECK_FAILED,
       global.locale.MODAL_UPDATE_CHECK_FAILED_DESCR,
       global.locale.MODAL_OK2
@@ -523,7 +532,7 @@ class Modal {
    * @param {string} v Version to show in the modal.
    */
   static showInstallUpdate( v ) {
-    Modal.IPC.sendModal(
+    Modal.getIPC().sendModal(
       global.locale.MODAL_INSTALL_UPDATE,
       global.locale.MODAL_INSTALL_UPDATE_DESCR_1 +
         v +
@@ -538,7 +547,7 @@ class Modal {
    * When the launcher update failed to download.
    */
   static showFailedUpdateDownload() {
-    Modal.IPC.sendModal(
+    Modal.getIPC().sendErrorModal(
       global.locale.MODAL_UPDATE_FAILED,
       global.locale.MODAL_UPDATE_FAILED_DESCR,
       global.locale.MODAL_OK2
@@ -549,7 +558,7 @@ class Modal {
    * When the launcher failed to move the installer package.
    */
   static showFailedUpdateMove() {
-    Modal.IPC.sendModal(
+    Modal.getIPC().sendErrorModal(
       global.locale.MODAL_UPDATE_FAILED,
       global.locale.MODAL_UPDATE_FAILED_MOVE_DESCR,
       global.locale.MODAL_OK2
@@ -560,7 +569,7 @@ class Modal {
    * When the launcher download completed.
    */
   static showUpdateComplete() {
-    Modal.IPC.sendModal(
+    Modal.getIPC().sendSuccessModal(
       global.locale.MODAL_UPDATE_COMPLETE,
       global.locale.MODAL_UPDATE_COMPLETE_DESCR,
       global.locale.MODAL_OK2
@@ -571,7 +580,7 @@ class Modal {
    * When the user right-clicks the play button to use Volcanic.
    */
   static showVolcanicPrompt() {
-    Modal.IPC.sendModal(
+    Modal.getIPC().sendModal(
       global.locale.MODAL_START_VOLCANIC,
       global.locale.MODAL_START_VOLCANIC_DESC,
       global.locale.MODAL_START_VOLCANIC_OK,
@@ -584,7 +593,7 @@ class Modal {
    * When the user right-clicks the play button to use Volcanic, but for Simitone.
    */
   static showVolcanicPromptSimitone() {
-    Modal.IPC.sendModal(
+    Modal.getIPC().sendModal(
       global.locale.MODAL_START_VOLCANIC,
       global.locale.MODAL_START_VOLCANIC_DESC,
       global.locale.MODAL_START_VOLCANIC_OK,
@@ -604,7 +613,7 @@ class Modal {
         .replace( 'FreeSO.exe', 'Simitone.Windows.exe' )
         .replace( 'FreeSO', 'Simitone' ); 
     }
-    Modal.IPC.sendModal(
+    Modal.getIPC().sendErrorModal(
       global.locale.MODAL_FAILED_LAUNCH,
       str2,
       global.locale.MODAL_OK2
@@ -615,7 +624,7 @@ class Modal {
    * When the launcher could find the game's .exe.bak to recover.
    */
   static showRecovered() {
-    Modal.IPC.sendModal(
+    Modal.getIPC().sendSuccessModal(
       global.locale.MODAL_GAME_AUTORECOVERED,
       global.locale.MODAL_GAME_AUTORECOVERED_DESC,
       global.locale.MODAL_OK
@@ -626,7 +635,7 @@ class Modal {
    * Tells the user that Software Mode will be slower than the other options.
    */
   static showSoftwareModeEnabled() {
-    Modal.IPC.sendModal(
+    Modal.getIPC().sendSuccessModal(
       global.locale.MODAL_SWM,
       global.locale.MODAL_SWM_DESCR,
       global.locale.MODAL_OK
@@ -637,7 +646,7 @@ class Modal {
    * Language will be displayed on launcher restart.
    */
      static showLanguageOnRestart() {
-      Modal.IPC.sendModal( 
+      Modal.getIPC().sendSuccessModal( 
         global.locale.MODAL_REQUIRES_RESTART, 
         global.locale.MODAL_REQUIRES_RESTART_DESC, 
         global.locale.MODAL_OK 
@@ -650,7 +659,7 @@ class Modal {
    * @param {string} error Error message to show.
    */
   static showGenericError( error ) {
-    Modal.IPC.sendModal( 'Ooops!', error, global.locale.MODAL_OK );
+    Modal.getIPC().sendErrorModal( 'Ooops!', error, global.locale.MODAL_OK );
   }
 }
 

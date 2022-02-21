@@ -449,9 +449,9 @@ var setCurrentPage;
 
   /**
    * Creates a notification item in the notification log.
-   * @param {*} title Notification title.
-   * @param {*} body  Notification text.
-   * @param {*} url   Notification url (optional).
+   * @param {string} title Notification title.
+   * @param {string} body  Notification text.
+   * @param {string} url   Notification url (optional).
    */
   var createNotificationItem = ( title, body, url ) => {
     $( '#notifications-page .alt-content' ).style.display = 'none';
@@ -503,66 +503,66 @@ var setCurrentPage;
 
   /**
    * Creates or modifies a progress item.
-   * @param {string} a Progress item id.
-   * @param {string} b Progress item title.
-   * @param {string} c Progress item span text.
-   * @param {string} e Progress item info text.
-   * @param {number} f Progress item percentage.
-   * @param {string} g Miniconsole (deprecated, use null).
+   * @param {string} elId         Progress item id.
+   * @param {string} title        Progress item title.
+   * @param {string} subtitle     Progress item span text.
+   * @param {string} progressText Progress item info text.
+   * @param {number} percentage   Progress item percentage.
+   * @param {string} miniconsole  Miniconsole (deprecated, use null).
    */
-  var createOrModifyProgressItem = ( a, b, c, e, f, g ) => {
+  var createOrModifyProgressItem = ( elId, title, subtitle, progressText, percentage, miniconsole ) => {
     document.querySelector( '#downloads-page .alt-content' ).style.display = 'none';
-    var d = document.getElementById( a );
+    var d = document.getElementById( elId );
     if ( d )
-      ( d.querySelector( 'h1' ).innerHTML = b ),
-        ( d.querySelector( 'span' ).innerHTML = c ),
-        ( d.querySelector( '.info' ).innerHTML = e ),
-        ( d.querySelector( '.progress' ).style.width = f + '%' ),
-        g
+      ( d.querySelector( 'h1' ).innerHTML = title ),
+        ( d.querySelector( 'span' ).innerHTML = subtitle ),
+        ( d.querySelector( '.info' ).innerHTML = progressText ),
+        ( d.querySelector( '.progress' ).style.width = percentage + '%' ),
+        miniconsole
           ? ( ( d.querySelector( '.loading' ).style.display = 'none' ),
-            ( f = d.querySelector( '.miniconsole' ) ),
-            ( f.innerHTML += g ),
-            ( f.style.display = 'block' ),
-            ( f.scrollTop = f.scrollHeight ) )
+            ( percentage = d.querySelector( '.miniconsole' ) ),
+            ( percentage.innerHTML += miniconsole ),
+            ( percentage.style.display = 'block' ),
+            ( percentage.scrollTop = percentage.scrollHeight ) )
           : ( ( d.querySelector( '.loading' ).style.display = 'block' ),
             ( d.querySelector( '.miniconsole' ).style.display = 'none' ) );
     else {
       d = $c( 'div' );
       d.className = 'download';
-      d.setAttribute( 'id', a );
+      d.setAttribute( 'id', elId );
 
-      a = $c( 'h1' );
-      a.innerHTML = b;
+      elId = $c( 'h1' );
+      elId.innerHTML = title;
 
-      b = $c( 'span' );
-      b.innerHTML = c;
+      title = $c( 'span' );
+      title.innerHTML = subtitle;
 
-      c = $c( 'div' );
-      c.className = 'info';
-      c.innerHTML = e;
+      subtitle = $c( 'div' );
+      subtitle.className = 'info';
+      subtitle.innerHTML = progressText;
 
-      e = $c( 'div' );
-      e.className = 'loading';
+      progressText = $c( 'div' );
+      progressText.className = 'loading';
 
       var h = $c( 'div' );
           h.className = 'miniconsole';
       
-          g
-        ? ( ( e.style.display = 'none' ),
-          ( h.innerHTML += g ),
+          miniconsole
+        ? ( ( progressText.style.display = 'none' ),
+          ( h.innerHTML += miniconsole ),
           ( h.style.display = 'block' ),
           ( h.scrollTop = h.scrollHeight ) )
-        : ( ( e.style.display = 'block' ), ( h.style.display = 'none' ) );
+        : ( ( progressText.style.display = 'block' ), ( h.style.display = 'none' ) );
 
-      g = $c( 'div' );
-      g.className = 'progress';
-      g.style.width = f + '%';
-      e.appendChild( g );
-      d.appendChild( a );
-      d.appendChild( b );
-      d.appendChild( c );
+      miniconsole = $c( 'div' );
+      miniconsole.className = 'progress';
+      miniconsole.style.width = percentage + '%';
+      progressText.appendChild( miniconsole );
+      d.appendChild( elId );
+      d.appendChild( title );
+      d.appendChild( subtitle );
       d.appendChild( h );
-      d.appendChild( e );
+      d.appendChild( progressText );
 
       $( '#downloads-page .page-content' ).innerHTML =
         d.outerHTML + $( '#downloads-page .page-content' ).innerHTML;
@@ -571,56 +571,61 @@ var setCurrentPage;
 
   /**
    * Creates a modal.
-   * @param {string} a 
-   * @param {string} b 
-   * @param {string} c 
-   * @param {string} e 
-   * @param {string} f 
-   * @param {string} g 
+   * @param {string} title       The Modal window title.
+   * @param {string} text        The main Modal text.
+   * @param {string} yesText     The text for an affirmative button.
+   * @param {string} noText      The text for a negative response button.
+   * @param {string} modalRespId Unique Modal response ID if you want to receive the response in code.
+   * @param {string} extra       Extra parameters.
+   * @param {string} type        Modal type.
    */
-  var yesNo = ( a, b, c, e, f, g ) => {
+  var yesNo = ( title, text, yesText, noText, modalRespId, extra, type ) => {
     yesNoAudio.play();
 
     var d = $c( 'div' );
         d.className = 'modal';
 
+    if( type ) {
+      d.className += ' modal-' + type;
+    }
+
     var h = $c( 'h1' );
-        h.innerHTML = a;
+        h.innerHTML = title;
 
     d.appendChild( h );
 
-    a = $c( 'p' );
-    a.innerHTML = b;
+    title = $c( 'p' );
+    title.innerHTML = text;
 
-    d.appendChild( a );
-    b = $c( 'div' );
+    d.appendChild( title );
+    text = $c( 'div' );
 
-    a = $c( 'button' );
-    a.innerHTML = c;
-    a.addEventListener( 'click', function() {
+    title = $c( 'button' );
+    title.innerHTML = yesText;
+    title.addEventListener( 'click', function() {
       d.parentNode.removeChild( d );
   
       if ( $a( '.modal' ).length == 0 ) {
         $( '#overlay' ).style.display = 'none';
       }
   
-      f && shared.send( f, !0, g );
+      modalRespId && shared.send( modalRespId, !0, extra );
     } );
-    b.appendChild( a );
-    e
-      ? ( ( c = $c( 'span' ) ),
-        ( c.innerHTML = e ),
-        c.addEventListener( 'click', function() {
+    text.appendChild( title );
+    noText
+      ? ( ( yesText = $c( 'span' ) ),
+        ( yesText.innerHTML = noText ),
+        yesText.addEventListener( 'click', function() {
           d.parentNode.removeChild( d );
           if ( $a( '.modal' ).length == 0 ) {
             $( '#overlay' ).style.display = 'none';
           }
           $( '#overlay' ).style.display = 'none';
-          f && shared.send( f, !1, g );
+          modalRespId && shared.send( modalRespId, !1, extra );
         } ),
-        b.appendChild( c ) )
-      : ( a.style.margin = '0px' );
-    d.appendChild( b );
+        text.appendChild( yesText ) )
+      : ( title.style.margin = '0px' );
+    d.appendChild( text );
     $( '#launcher' ).appendChild( d );
     $( '#overlay' ).style.display = 'block';
   }
@@ -697,7 +702,7 @@ var setCurrentPage;
   // REMOVE_TOAST
   onMessage( 'REMOVE_TOAST', ( a, t ) => removeToast( t ) );
   // POPUP
-  onMessage( 'POPUP', ( a, b, c, e, f, g, d ) => yesNo( b, c, e, f, g, d ) );
+  onMessage( 'POPUP', ( a, b, c, e, f, g, d, h ) => yesNo( b, c, e, f, g, d, h ) );
   // RESTORE_CONFIGURATION
   onMessage( 'RESTORE_CONFIGURATION', ( a, b ) => restoreConfiguration( b ) );
   // CHANGE_PAGE

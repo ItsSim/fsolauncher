@@ -15,11 +15,11 @@ module.exports = {
         "ecmaVersion": 12
     },
     "rules": {
-        "no-unused-vars": [2, {"args": "after-used", "argsIgnorePattern": "^_"}],
+        "no-unused-vars": ["warn", {"args": "after-used", "argsIgnorePattern": "^_"}],
         "prefer-const": ["error", {
             "destructuring": "any",
             "ignoreReadBeforeAssign": false
         }],
-        "space-in-parens": ["error", "always"],
+        "space-in-parens": ["error", "always"]
     }
 };

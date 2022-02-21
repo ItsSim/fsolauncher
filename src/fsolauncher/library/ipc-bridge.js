@@ -65,8 +65,9 @@ class IPCBridge {
    * @param {string} noText      The text for a negative response button.
    * @param {string} modalRespId Unique Modal response ID if you want to receive the response in code.
    * @param {string} extra       Extra parameters.
+   * @param {string} type        The type of modal to show.
    */
-  sendModal( title, text, yesText, noText, modalRespId, extra ) {
+  sendModal( title, text, yesText, noText, modalRespId, extra, type ) {
     this.Window.focus();
     this.Window.webContents.send(
       'POPUP',
@@ -75,11 +76,36 @@ class IPCBridge {
       yesText,
       noText,
       modalRespId,
-      extra
+      extra,
+      type
     );
   }
   /**
-   * Asks the renderer process to show a Modal window without focusing and getting the users attention.
+   * Asks the renderer process to show a Modal window without forcing
+   * window focus.
+   *
+   * @param {string} title       The Modal window title.
+   * @param {string} text        The main Modal text.
+   * @param {string} yesText     The text for an affirmative button.
+   * @param {string} noText      The text for a negative response button.
+   * @param {string} modalRespId Unique Modal response ID if you want to receive the response in code.
+   * @param {string} extra       Extra parameters.
+   * @param {string} type        The type of modal to show.
+   */
+  sendModalNoFocus( title, text, yesText, noText, modalRespId, extra, type ) {
+    this.Window.webContents.send(
+      'POPUP',
+      title,
+      text,
+      yesText,
+      noText,
+      modalRespId,
+      extra,
+      type
+    );
+  }
+  /**
+   * Tells the renderer process to show a success modal window.
    *
    * @param {string} title       The Modal window title.
    * @param {string} text        The main Modal text.
@@ -88,16 +114,49 @@ class IPCBridge {
    * @param {string} modalRespId Unique Modal response ID if you want to receive the response in code.
    * @param {string} extra       Extra parameters.
    */
-  sendModalNoFocus( title, text, yesText, noText, modalRespId, extra ) {
-    this.Window.webContents.send(
-      'POPUP',
-      title,
-      text,
-      yesText,
-      noText,
-      modalRespId,
-      extra
-    );
+  sendSuccessModal( title, text, yesText, noText, modalRespId, extra ) {
+    this.sendModal( title, text, yesText, noText, modalRespId, extra, 'success' );
+  }
+  /**
+   * Tells the renderer process to show a success modal window without forcing
+   * window focus.
+   *
+   * @param {string} title       The Modal window title.
+   * @param {string} text        The main Modal text.
+   * @param {string} yesText     The text for an affirmative button.
+   * @param {string} noText      The text for a negative response button.
+   * @param {string} modalRespId Unique Modal response ID if you want to receive the response in code.
+   * @param {string} extra       Extra parameters.
+   */
+   sendSuccessModalNoFocus( title, text, yesText, noText, modalRespId, extra ) {
+    this.sendModalNoFocus( title, text, yesText, noText, modalRespId, extra, 'success' );
+  }
+  /**
+   * Tells the renderer process to show an error modal window.
+   *
+   * @param {string} title       The Modal window title.
+   * @param {string} text        The main Modal text.
+   * @param {string} yesText     The text for an affirmative button.
+   * @param {string} noText      The text for a negative response button.
+   * @param {string} modalRespId Unique Modal response ID if you want to receive the response in code.
+   * @param {string} extra       Extra parameters.
+   */
+  sendErrorModal( title, text, yesText, noText, modalRespId, extra ) {
+    this.sendModal( title, text, yesText, noText, modalRespId, extra, 'error' );
+  }
+  /**
+   * Tells the renderer process to show an error modal window without forcing
+   * window focus.
+   *
+   * @param {string} title       The Modal window title.
+   * @param {string} text        The main Modal text.
+   * @param {string} yesText     The text for an affirmative button.
+   * @param {string} noText      The text for a negative response button.
+   * @param {string} modalRespId Unique Modal response ID if you want to receive the response in code.
+   * @param {string} extra       Extra parameters.
+   */
+   sendErrorModalNoFocus( title, text, yesText, noText, modalRespId, extra ) {
+    this.sendModalNoFocus( title, text, yesText, noText, modalRespId, extra, 'error' );
   }
   /**
    * Adds a new progress item in the Downloads tab.

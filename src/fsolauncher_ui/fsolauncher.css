@@ -1079,6 +1079,23 @@ select {
   /*text-shadow: 0px 3px 0px rgba(0,0,0,0.075);*/
 }
 
+.modal.modal-success h1:before {
+  content: "";
+  width: 30px;
+  height: 30px;
+  background-image:url(fsolauncher_images/icon_success.svg);
+  float:left;
+  margin-right: 10px;
+}
+.modal.modal-error h1:before {
+  content: "";
+  width: 30px;
+  height: 30px;
+  background-image:url(fsolauncher_images/icon_error.svg);
+  float:left;
+  margin-right: 10px;
+}
+
 .modal p {
   font-family: 'Munged';
   line-height: 21px;
