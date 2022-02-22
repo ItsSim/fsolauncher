@@ -618,7 +618,7 @@
     "MODAL_INS_COMPLETE": "¡Instalación completada!",
     "MODAL_INS_COMPLETE_DESCR": "ha finalizado se instalarse con éxito.",
     "MODAL_INS_FAILED": "¡Instalación fallida!",
-    "MODAL_INS_FAILED_DESCR_1": "no se puede instalar..",
+    "MODAL_INS_FAILED_DESCR_1": "no se puede instalar.",
     "MODAL_INS_PROGRESS": "Ya hay una actualización en curso. Espera a que finalice para continuar.",
     "MODAL_INSTALL": "Instalar",
     "MODAL_INSTALL_DESCR_1": "Esto instalará",
