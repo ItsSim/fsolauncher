@@ -248,9 +248,9 @@ background-image: url(../../fsolauncher_images/15xvbd5.png),
   color:rgba(255,255,255,0.75)!important
 }
 
-.halloween .tag .tick.installed {
+/*.halloween .tag .tick.installed {
   color:#10171e!important;
-}
+}*/
 
 .halloween #remeshinfo {
   color:rgba(255,255,255,0.6)!important

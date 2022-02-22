@@ -150,10 +150,10 @@
   color:#D7647F;
 }
 
-.summer2021 .tick.installed {
+/*.summer2021 .tick.installed {
   color:#ffffd6 !important;
   background-image: linear-gradient(#D7647F, #F29CA5 10%, #c15366)!important;
-}
+}*/
 
 .summer2021 #downloads > div .tag h1 {
   color: #D7647F!important;

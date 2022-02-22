@@ -28,14 +28,14 @@ class Modal {
   /**
    * When a user is missing a program that is needed to install another.
    *
-   * @param {string[]} Missing List of missing programs.
+   * @param {string[]} missing List of missing programs.
    */
-  static showRequirementsNotMet( Missing ) {
+  static showRequirementsNotMet( missing ) {
     Modal.getIPC().sendErrorModal(
       global.locale.MODAL_NOT_AVAILABLE,
       global.locale.MODAL_NOT_AVAILABLE_DESCR_1 +
         ' <strong>' +
-        Missing.join( ', ' ) +
+        missing.join( ', ' ) +
         '</strong> ' +
         global.locale.MODAL_NOT_AVAILABLE_DESCR_2,
       global.locale.MODAL_OK2

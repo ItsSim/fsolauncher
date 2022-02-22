@@ -245,9 +245,9 @@ background-image: url(../../fsolauncher_images/15xvbd5.png),
   color:rgba(255,255,255,0.75)!important
 }
 
-.dark .tag .tick.installed {
+/*.dark .tag .tick.installed {
   color:#10171e!important;
-}
+}*/
 
 .dark #remeshinfo {
   color:rgba(255,255,255,0.6)!important

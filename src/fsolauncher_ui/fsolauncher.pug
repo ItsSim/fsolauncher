@@ -127,44 +127,37 @@ html(class=PLATFORM + ' ' + LANGCODE)
                                     .tag
                                         h1 #{INSTALLER_FSO_TITLE}
                                         span #{INSTALLER_FSO_DESCR}
-                                        .tick.installed
-                                            i.material-icons done                                        
-
+                                        .tick.installed                                        
                             div
                                 .item(install='TSO', style='background:url(fsolauncher_images/tsologo.png) #fff; background-position:center center;background-size:80%;background-repeat:no-repeat;')
                                     .tag(style='z-index:1')
                                         h1 #{INSTALLER_TSO_TITLE}
                                         span #{INSTALLER_TSO_DESCR}
-                                        .tick.installed
-                                            i.material-icons done                                             
+                                        .tick.installed                                           
                             div.win32-only
                                 .item(install='OpenAL', style='background:url(fsolauncher_images/openal.png) #fff; background-position:center center; background-size:80%;background-repeat:no-repeat;')
                                     .tag
                                         h1 #{INSTALLER_OAL_TITLE}
                                         span #{INSTALLER_OAL_DESCR}
-                                        .tick.installed
-                                            i.material-icons done     
+                                        .tick.installed   
                             div.win32-only
                                 .item(install='NET', style='background:url(fsolauncher_images/netframework.png) #fff; background-position:center center; background-size:80%;background-repeat:no-repeat;')
                                     .tag
                                         h1 #{INSTALLER_NET_TITLE}
                                         span #{INSTALLER_NET_DESCR}
-                                        .tick.installed
-                                            i.material-icons done     
+                                        .tick.installed     
                             div.darwin-only
                                 .item(install='Mono', style='border-bottom:0;background-image:url(fsolauncher_images/mono.png); background-color:#fff; background-size:100%;background-position:center center;background-repeat:no-repeat;')
                                     .tag
                                         h1 #{INSTALLER_MONO_TITLE}
                                         span #{INSTALLER_MONO_DESCR}
                                         .tick.installed
-                                            i.material-icons done  
                             div.darwin-only
                                 .item(install='SDL', style='border-bottom: 1px solid #f0f0f0;background-image:url(fsolauncher_images/sdl.png); background-color:#fff; background-size:80%;background-position:center center;background-repeat:no-repeat;')
                                     .tag
                                         h1 #{INSTALLER_SDL_TITLE}
                                         span #{INSTALLER_SDL_DESCR}
                                         .tick.installed
-                                            i.material-icons done  
                             div.darwin-only
                                 .item(install='MacExtras', style='border-bottom:0;background-image:url(fsolauncher_images/macos.png); background-color:#fff; background-size:60%;background-position:center center;background-repeat:no-repeat;')
                                     .stag.orange #{INSTALLER_OPTIONAL}
@@ -172,7 +165,6 @@ html(class=PLATFORM + ' ' + LANGCODE)
                                         h1 #{INSTALLER_MACEXTRAS_TITLE}
                                         span #{INSTALLER_MACEXTRAS_DESCR}
                                         .tick.installed
-                                            i.material-icons done  
                 #settings-page.page(style='display:none')
                     h1.jumbotron
                         span #{SETTINGS}

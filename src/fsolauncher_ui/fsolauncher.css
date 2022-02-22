@@ -572,27 +572,9 @@ button.blue:hover,
 }*/
 
 #downloads div.item div.tick {
-  padding: 10px;
-  padding-left: 12px;
-  padding-right: 12px;
-  border-radius: 50%;
   position: absolute;
-  font-weight: 700;
   right: -10px;
   top: -10px;
-  color: #fff;
-  transition: background-color 0.6s;
-  box-shadow: inset 8px 8px 8px rgba(255, 255, 255, 0.2),
-    inset -2px -2px 2px rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.12),
-    0 1px 2px rgba(0, 0, 0, 0.24);
-}
-
-#downloads div.item div.tick:hover {
-  background-color: #52cc00 !important;
-}
-
-#downloads div.item div.tick.missing {
-  background-color: #c93507;
 }
 
 #downloads div.item div.tick.installed {
@@ -600,12 +582,13 @@ button.blue:hover,
 }
 
 #downloads div.installed.item div.tick.installed {
-  background-color: #43a900 !important;
+  /*background-color: #43a900 !important;*/
+  width: 45px;
+  height: 45px;
+  background-image: url(fsolauncher_images/icon_installed.png);
+  background-repeat: no-repeat;
+  background-size: contain;
   display: block !important;
-}
-
-#downloads div.item.installed div.tick.missing {
-  display: none;
 }
 
 #downloads > div > .item {
@@ -1083,17 +1066,23 @@ select {
   content: "";
   width: 30px;
   height: 30px;
-  background-image:url(fsolauncher_images/icon_success.svg);
+  background-image:url(fsolauncher_images/icon_success.png);
+  background-repeat: no-repeat;
+  background-size:contain;
   float:left;
   margin-right: 10px;
+  margin-top:-2px;
 }
 .modal.modal-error h1:before {
   content: "";
   width: 30px;
   height: 30px;
-  background-image:url(fsolauncher_images/icon_error.svg);
+  background-image:url(fsolauncher_images/icon_error.png);
+  background-repeat: no-repeat;
+  background-size:contain;
   float:left;
   margin-right: 10px;
+  margin-top:-2px;
 }
 
 .modal p {
