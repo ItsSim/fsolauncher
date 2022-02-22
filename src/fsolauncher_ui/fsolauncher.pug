@@ -14,7 +14,7 @@ html(class=PLATFORM + ' ' + LANGCODE)
         link(rel='stylesheet', href='./fsolauncher_styles/fsolauncher_themes/halloween.css')
         link(rel='stylesheet', href='./fsolauncher_styles/fsolauncher_themes/simitone.css')
         link(rel='stylesheet', href='./fsolauncher_styles/fsolauncher_themes/summer2021.css')
-    body(readMoreString=READ_MORE, rss=RSS_URL, wsUrl=WS_URL, wsPort=WS_PORT, twUrl=TW_URL)
+    body(monthString=MONTHS, readMoreString=READ_MORE, rss=RSS_URL, wsUrl=WS_URL, wsPort=WS_PORT, twUrl=TW_URL)
         #launcher.not-installed
             .hint.arrow-left(hint-page='home', style='top:245px;left:255px')
                 h1 #{TOOLTIP_TITLE_1}

@@ -7,23 +7,7 @@ class Modal {
    * 
    * @returns {import('./ipc-bridge')} The IPC object.
    */
-  static getIPC() {
-    return Modal.IPC;
-  }
-
-  /**
-   * Dialog for the alternative TSO download.
-   */
-  static showFTPTSO() {
-    Modal.getIPC().sendModal(
-      'Try alternative download?',
-      'This will try and download The Sims Online from an alternative source. ' + 
-      'This is useful if the primary download is not working for you.',
-      'Continue',
-      'Cancel',
-      'FTP_TSOResponse'
-    );
-  }
+  static getIPC() { return Modal.IPC; }
 
   /**
    * When a user is missing a program that is needed to install another.
@@ -645,13 +629,27 @@ class Modal {
   /**
    * Language will be displayed on launcher restart.
    */
-     static showLanguageOnRestart() {
-      Modal.getIPC().sendSuccessModal( 
-        global.locale.MODAL_REQUIRES_RESTART, 
-        global.locale.MODAL_REQUIRES_RESTART_DESC, 
-        global.locale.MODAL_OK 
-      );
-    }
+  static showLanguageOnRestart() {
+    Modal.getIPC().sendSuccessModal( 
+      global.locale.MODAL_REQUIRES_RESTART, 
+      global.locale.MODAL_REQUIRES_RESTART_DESC, 
+      global.locale.MODAL_OK 
+    );
+  }
+
+  /**
+   * Dialog for the alternative TSO download.
+   */
+   static showFTPTSO() {
+    Modal.getIPC().sendModal(
+      'Try alternative download?',
+      'This will try and download The Sims Online from an alternative source. ' + 
+      'This is useful if the primary download is not working for you.',
+      'Continue',
+      'Cancel',
+      'FTP_TSOResponse'
+    );
+  }
 
   /**
    * Used in generic error modal display.

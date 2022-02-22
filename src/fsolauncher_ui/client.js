@@ -161,8 +161,8 @@ var setCurrentPage;
       172800 > b ? ( date = Math.floor( b / 86400 ), 
         1 < date ? date + ' days ago' : '1 day ago' )  : 
       date.getDate().toString() + ' ' + 
-        'January February March April May June July August September October November December'
-      .split( ' ' )[ date.getMonth() ] + ', ' + date.getFullYear();
+        $( 'body' ).getAttribute( 'monthString' )
+          .split( ' ' )[ date.getMonth() ] + ', ' + date.getFullYear();
   }
 
   /**
