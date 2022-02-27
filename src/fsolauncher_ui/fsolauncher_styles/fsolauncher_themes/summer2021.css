@@ -2,11 +2,11 @@
 }
 
 .summer2021 #sidebar {
-    background-image: url(../../fsolauncher_images/sidebar-nologo.png)!important
+    background-image: url(../../fsolauncher_images/sidebar_nologo.png)!important
 }
 
 .summer2021 li#logo {
-    background-image: url(../../fsolauncher_images/freeso-summer.gif)!important;
+    background-image: url(../../fsolauncher_images/freeso_summer.gif)!important;
     background-size: contain!important;
     width: 100%!important;
     height: 200px!important;
@@ -23,7 +23,7 @@
 .summer2021 #sidebar li:not(#logo):hover {
     color:#6D4B22!important;
     border: 0!important;
-    background-image:url(../../fsolauncher_images/button-on-summer.png)!important;
+    background-image:url(../../fsolauncher_images/button_on_summer.png)!important;
     background-position: 16px 4px!important;
     background-repeat: no-repeat
 }
@@ -45,21 +45,21 @@
 .summer2021 button.launch {
     background: none!important;
     box-shadow: none!important;
-    background-image: url(../../fsolauncher_images/play-summer.gif)!important;
+    background-image: url(../../fsolauncher_images/play_summer.gif)!important;
     background-position:-5px -5px!important;
     text-indent: -9999px; 
 }
 
 .summer2021 .jumbotron {
     background: none!important;
-    background: url(../../fsolauncher_images/dark-dotted-2.png), url(../../fsolauncher_images/header-summer.png)!important;
+    background: url(../../fsolauncher_images/dark_dotted_2.png), url(../../fsolauncher_images/header_summer.png)!important;
     color: #F5EDD0 !important;
     text-shadow: 0 0 8px #804900;
 }
 
 .summer2021 #launcher {
     background:none !important;
-    background-image: url(../../fsolauncher_images/body-summer.png)!important;
+    background-image: url(../../fsolauncher_images/body_summer.png)!important;
     background-size:cover!important;
 }
 
@@ -208,7 +208,7 @@ rgba(255, 255, 255, 0.3) 66%,
 
 .summer2021 #launcher #content #full-install {
   background: none!important;
-  background: url(../../fsolauncher_images/fso-summer-castle.png) no-repeat!important;
+  background: url(../../fsolauncher_images/fso_summer_castle.png) no-repeat!important;
   background-position:-300px!important;
 } 
 
