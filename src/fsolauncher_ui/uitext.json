@@ -148,7 +148,7 @@
     "MODAL_START_VOLCANIC_DESC": "By right clicking the Play button FSO.IDE will start. Only use this if you are a developer.",
     "MODAL_START_VOLCANIC_OK": "Start Volcanic",
     "MODAL_SUCCESS": "Hurray!",
-    "MODAL_SWM": "Software Mode",
+    "MODAL_SWM": "Enabled Software Mode",
     "MODAL_SWM_DESCR": "Software Mode is notably slower than graphics accelerated modes like OpenGL and DirectX. 3D Mode will be disabled while on Software Mode.",
     "MODAL_TSO_LANG_ERR": "Couldn’t move the necessary language files to the Sims Online directory.",
     "MODAL_TTS_DISABLED": "Too much...?",
