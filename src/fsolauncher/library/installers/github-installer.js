@@ -66,7 +66,6 @@ class GitHubInstaller extends ServoInstaller {
    */
   getFreeSOGitHubReleaseInfo() {
     return new Promise( ( resolve, reject ) => {
-
       const options = {
         host: 'api.github.com',
         path: '/repos/riperiperi/FreeSO/releases/latest',
