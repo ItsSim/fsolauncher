@@ -143,7 +143,9 @@ function CreateWindow() {
   Window = new BrowserWindow( options );
 
   Window.setMenu( null );
-  // Window.openDevTools( { mode: 'detach' } );
+  if( conf.Launcher.Debug == '1' ) {
+    Window.openDevTools( { mode: 'detach' } );
+  }
   Window.loadURL( `file://${__dirname}/fsolauncher_ui/fsolauncher.pug` );
   Window.on( 'restore', _e => Window.setSize( width, height ) );
 
