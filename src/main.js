@@ -56,6 +56,7 @@ let trayIcon;
  * @property {string} Launcher.DesktopNotifications Whether to show desktop notifications.
  * @property {string} Launcher.DirectLaunch         Whether to launch the game directly.
  * @property {string} Launcher.Language             The launcher language.
+ * @property {string} Launcher.Debug                Whether to enable debug mode.
  * @property {object} Game                          The game configuration.
  * @property {string} Game.GraphicsMode             The game graphics mode.
  * @property {string} Game.Language                 The game language.
