@@ -91,12 +91,12 @@
 
 .simitone #launcher #sidebar li.active,
 .simitone #launcher #sidebar li:not(#logo):hover {
-  color: #328b96;
+  color: #258f80;
   border-right-color: #1fae86;
 }
 .simitone #launcher #sidebar li:not(#logo):hover path,
 .simitone #launcher #sidebar li.active path {
-  fill: #328b96;
+  fill: #258f80;
 }
 
 .simitone button:hover,

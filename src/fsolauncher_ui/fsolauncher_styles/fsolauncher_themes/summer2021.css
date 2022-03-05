@@ -21,7 +21,7 @@
 
 .summer2021 #sidebar li:not(#logo).active,
 .summer2021 #sidebar li:not(#logo):hover {
-    /*color:#6D4B22!important;*/
+    color:#6D4B22!important;
     border: 0!important;
     background-image:url(../../fsolauncher_images/button_on_summer.png)!important;
     background-position: 16px 4px!important;
