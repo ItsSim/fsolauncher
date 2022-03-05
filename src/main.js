@@ -145,6 +145,7 @@ function CreateWindow() {
 
   Window.setMenu( null );
   if( conf.Launcher.Debug == '1' ) {
+    console.log( 'Debug mode enabled' );
     Window.openDevTools( { mode: 'detach' } );
   }
   Window.loadURL( `file://${__dirname}/fsolauncher_ui/fsolauncher.pug` );
