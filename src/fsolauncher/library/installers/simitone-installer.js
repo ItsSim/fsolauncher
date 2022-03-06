@@ -1,6 +1,7 @@
 const Modal = require( '../modal' );
 const download = require( '../download' );
 const unzip = require( '../unzip' );
+const { strFormat } = require( '../utils' );
 
 const DOWNLOAD_URL_GITHUB =
   'https://beta.freeso.org/LauncherResourceCentral/Simitone';
@@ -173,7 +174,7 @@ class SimitoneInstaller {
       mode: 'error'
     } );
     this.haltProgress = true;
-    this.createProgressItem( global.locale.FSO_FAILED_INSTALLATION.replace( /freeso/ig, 'Simitone' ), 100 );
+    this.createProgressItem( strFormat( global.locale.FSO_FAILED_INSTALLATION, 'Simitone' ), 100 );
     this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
     this.FSOLauncher.removeActiveTask( 'Simitone' );
     Modal.showFailedInstall( 'Simitone', errorMessage );

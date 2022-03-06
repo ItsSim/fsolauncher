@@ -85,15 +85,15 @@ class Registry {
   static async win32LocalPathFallbacks( program ) {
     const locals = [];
     if( program == 'FSO' ) {
-      locals.push( 'C:/Program Files/FreeSO' );
+      locals.push( 'C:/Program Files/FreeSO/FreeSO.exe' );
     }
     if( program == 'TSO' ) {
-      locals.push( 'C:/Program Files/Maxis/The Sims Online' );
-      locals.push( 'C:/Program Files/The Sims Online' ); 
+      locals.push( 'C:/Program Files/Maxis/The Sims Online/TSOClient/TSOClient.exe' );
+      locals.push( 'C:/Program Files/The Sims Online/TSOClient/TSOClient.exe' ); 
     }
     if( program == 'Simitone' ) {
-      locals.push( 'C:/Program Files/Simitone for Windows' );
-      locals.push( 'C:/Program Files (x86)/Simitone for Windows' );
+      locals.push( 'C:/Program Files/Simitone for Windows/Simitone.Windows.exe' );
+      locals.push( 'C:/Program Files (x86)/Simitone for Windows/Simitone.Windows.exe' );
     }
     if( program == 'OpenAL' ) {
       locals.push( 'C:/Program Files (x86)/OpenAL' );
