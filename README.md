@@ -1,15 +1,20 @@
 # FreeSO Launcher
 The official FreeSO Launcher available for Windows and Mac OS X.
 
-
-![image](https://i.imgur.com/hWXan8k.png)
+![image](https://i.imgur.com/1bwlURh.png)
+![image](https://i.imgur.com/7teAdLL.png)
+![image](https://i.imgur.com/7WWBpbW.png)
+![image](https://i.imgur.com/FvYgpHk.png)
+![image](https://i.imgur.com/u5iJ0qD.png)
+![image](https://i.imgur.com/lh5xDig.png)
+<!--![image](https://i.imgur.com/hWXan8k.png)
 ![image](https://i.imgur.com/UPqQgBZ.png)
 ![image](https://i.imgur.com/JLznCnv.png)
-![image](https://i.imgur.com/cEV2qqs.png)
+![image](https://i.imgur.com/cEV2qqs.png)-->
 <!--![image](https://i.imgur.com/yCUFHhE.png)-->
-![image](https://i.imgur.com/86vaK8l.png)
+<!--![image](https://i.imgur.com/86vaK8l.png)-->
 <!--![image](https://i.imgur.com/1h6OPE2.png)-->
-![image](https://i.imgur.com/aF5RX5n.png)<!-- ![image](https://i.imgur.com/dPRDgHh.jpg) -->
+<!--![image](https://i.imgur.com/aF5RX5n.png)--><!-- ![image](https://i.imgur.com/dPRDgHh.jpg) -->
 
 ### Prerequisites for development
 * You must have `Node 14.16` installed on your system.
