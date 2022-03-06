@@ -1,7 +1,7 @@
 require( 'fix-path' )(); // Fix $PATH on darwin
 require( 'v8-compile-cache' );
 const { 
-  app, BrowserWindow, shell, Tray, Menu, nativeImage, nativeTheme 
+  app, BrowserWindow, shell, Tray, Menu, nativeImage
 } = require( 'electron' );
 const oslocale = require( 'os-locale' );
 const fs = require( 'fs-extra' );
@@ -73,7 +73,7 @@ try {
 } catch ( e ) {
   conf = {
     Launcher: {
-      Theme: nativeTheme.shouldUseDarkColors ? 'dark' : 'open_beta',
+      Theme: 'open_beta',
       DesktopNotifications: '1',
       Persistence: process.platform == 'darwin' ? '0' : '1',
       DirectLaunch: '0',

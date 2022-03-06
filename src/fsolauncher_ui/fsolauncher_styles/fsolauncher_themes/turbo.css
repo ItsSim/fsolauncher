@@ -48,11 +48,11 @@
 }
 
 .turbo .hint.arrow-left:before {
-  border-right-color: #9d43b3;
+  border-right-color: #843697;
 }
 
 .turbo .hint.arrow-top:before {
-  border-bottom-color: #9d43b3;
+  border-bottom-color: #843697;
 }
 
 .turbo .hint.arrow-top:after {
@@ -104,5 +104,5 @@
 
 .turbo #launcher #sidebar li.active:after,
 .turbo #launcher #sidebar li:not(#logo):hover:after {
-  background: #d33c97!important;
+  background: #725dd2!important;
 }
