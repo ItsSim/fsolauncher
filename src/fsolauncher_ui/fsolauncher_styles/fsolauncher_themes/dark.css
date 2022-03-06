@@ -304,8 +304,8 @@ background-image: url(../../fsolauncher_images/15xvbd5.png),
   border-left: 1px solid #414141;
 }
 
-.dark #sidebar div.bottom li:last-child {
-  border-top: 1px solid #414141;
+.dark #sidebar div.bottom li:last-child:before {
+  background-color:#414141;
 }
 
 .dark .hint {
