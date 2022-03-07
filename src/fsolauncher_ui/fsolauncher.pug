@@ -7,7 +7,6 @@ html(class=PLATFORM + ' ' + LANGCODE)
         link(rel='stylesheet', href='./fsolauncher_styles/reset.css')
         link(rel='stylesheet', href='./fsolauncher.css')
         link(rel='stylesheet', href='./fsolauncher_styles/responsive.css')
-        link(rel='stylesheet', href='./fsolauncher_styles/font-awesome.min.css')
         link(rel='stylesheet', href='./fsolauncher_styles/material-icons.css')
         link(rel='stylesheet', href='./fsolauncher_styles/fsolauncher_themes/turbo.css')
         link(rel='stylesheet', href='./fsolauncher_styles/fsolauncher_themes/dark.css')
@@ -73,7 +72,7 @@ html(class=PLATFORM + ' ' + LANGCODE)
                         small #{HOME_DESCR}
                     .page-content(style='position:relative')
                         #rss-loading(style='font-size:20px;margin-top:20px;display:block;text-align:center')
-                            i.fa.fa-hourglass-half.fa-spin(style='margin-bottom:15px')
+                            i.material-icons.spin(style='margin-bottom:10px;font-size:1.5em') loop
                             br
                             |  #{RETICULATING}
                         #rss

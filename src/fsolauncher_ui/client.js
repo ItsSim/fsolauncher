@@ -208,7 +208,8 @@ var setCurrentPage;
         div.id = id;
   
     var i = $c( 'i' );
-        i.className = 'fa fa-refresh fa-spin';
+        i.className = 'material-icons spin';
+        i.innerHTML = 'loop';
   
     var span = $c( 'span' );
         span.className = 'toast-message';

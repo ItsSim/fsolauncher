@@ -3,14 +3,19 @@
  */
 class Toast {
   /**
+   * Returns the Modal IPC object.
+   * 
+   * @returns {import('./ipc-bridge')} The IPC object.
+   */
+  static getIPC() { return Toast.IPC; }
+  /**
    * @param {string} message The message to display.
    * @param {import('./ipc-bridge')} IPC The IPCBridge instance.
    * @param {number} timeout Timeout in seconds.
    */
-  constructor( message, IPC, timeout = 0 ) {
+  constructor( message, timeout = 0 ) {
     this.id = Math.floor( Date.now() / 1000 );
-    this.IPC = IPC;
-    this.IPC.toast( this.id, message );
+    Toast.getIPC().toast( this.id, message );
     if( timeout > 0 ) {
       setTimeout( () => this.destroy(), timeout );
     }
@@ -19,7 +24,7 @@ class Toast {
    * Instructs the renderer to remove the toast by id.
    */
   destroy() {
-    this.IPC.removeToast( this.id );
+    Toast.getIPC().removeToast( this.id );
   }
 }
 
