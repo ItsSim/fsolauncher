@@ -10,7 +10,6 @@ class Toast {
   static getIPC() { return Toast.IPC; }
   /**
    * @param {string} message The message to display.
-   * @param {import('./ipc-bridge')} IPC The IPCBridge instance.
    * @param {number} timeout Timeout in seconds.
    */
   constructor( message, timeout = 0 ) {
