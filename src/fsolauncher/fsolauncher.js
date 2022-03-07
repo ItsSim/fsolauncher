@@ -636,7 +636,7 @@ class FSOLauncher {
         } )();
         
         if ( !options.override ) {
-          let InstallDir;
+          let installDir;
           if( !options.dir ) {
             if( await ( require( './library/registry' ).testWinAccess() ) ) {
               const toast = new Toast(
@@ -647,33 +647,33 @@ class FSOLauncher {
                 this.getPrettyName( componentCode ), this.Window
               );
               if( folders && folders.length > 0 ) {
-                InstallDir = folders[0] + '/' + this.getPrettyName( componentCode );
+                installDir = folders[0] + '/' + this.getPrettyName( componentCode );
               }
               toast.destroy();
             } else {
               if( process.platform != 'win32' ) {
                 // darwin doesnt get to choose
-                InstallDir = global.homeDir + '/Documents/' + this.getPrettyName( componentCode );
+                installDir = global.homeDir + '/Documents/' + this.getPrettyName( componentCode );
               } else {
                 if ( componentCode == 'TSO' ) {
-                  InstallDir = 'C:/Program Files/Maxis/' + this.getPrettyName( componentCode );
+                  installDir = 'C:/Program Files/Maxis/' + this.getPrettyName( componentCode );
                 } else {
-                  InstallDir = 'C:/Program Files/' + this.getPrettyName( componentCode );
+                  installDir = 'C:/Program Files/' + this.getPrettyName( componentCode );
                 }
               }
             }
           } else {
-            InstallDir = options.dir;
+            installDir = options.dir;
           }
 
-          if ( InstallDir ) {
-            const singleInstaller = new Installer( InstallDir, this );
+          if ( installDir ) {
+            const singleInstaller = new Installer( installDir, this );
             const isInstalled = await singleInstaller.isInstalledInPath();
 
             if ( isInstalled && !options.fullInstall && !options.dir && 
               await ( require( './library/registry' ).testWinAccess() ) 
             ) {
-              return Modal.showAlreadyInstalled( this.getPrettyName( componentCode ), componentCode, InstallDir );
+              return Modal.showAlreadyInstalled( this.getPrettyName( componentCode ), componentCode, installDir );
             }
 
             if ( !options.fullInstall ) {

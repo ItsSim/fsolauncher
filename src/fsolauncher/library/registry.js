@@ -197,16 +197,16 @@ class Registry {
           } );
         } );
       } else if ( e === 'NET' ) {
-        Key.keys( ( err, Registries ) => {
+        Key.keys( ( err, registries ) => {
           if ( err ) {
             console.log( err );
             // Trust our galaxy and return that it’s installed...
             return resolve( { key: e, isInstalled: true, error: err } );
           }
-          for ( let i = 0; i < Registries.length; i++ ) {
+          for ( let i = 0; i < registries.length; i++ ) {
             if (
-              Registries[i].key.indexOf( 'v4.0' ) > -1 ||
-              Registries[i].key.indexOf( 'v4' ) > -1
+              registries[i].key.indexOf( 'v4.0' ) > -1 ||
+              registries[i].key.indexOf( 'v4' ) > -1
             ) {
               return resolve( { key: e, isInstalled: true } );
             }
@@ -240,10 +240,10 @@ class Registry {
   /**
    * Creates the default Maxis registry key.
    *
-   * @param {string} InstallDir Where TSO was installed.
+   * @param {string} installDir Where TSO was installed.
    * @returns {Promise<void>} A promise that resolves when the registry key is created.
    */
-  static async createMaxisEntry( InstallDir ) {
+  static async createMaxisEntry( installDir ) {
     if( ! await Registry.testWinAccess() ) {
       return Promise.resolve();
     }
@@ -273,7 +273,7 @@ class Registry {
                 return reject( global.locale.TSO_INSTALLDIR_FAIL );
               }
 
-              Key.set( 'InstallDir', Registry.REG_SZ, InstallDir, err => {
+              Key.set( 'InstallDir', Registry.REG_SZ, installDir, err => {
                 if ( err ) {
                   console.log( err );
                   return reject( global.locale.TSO_INSTALLDIR_FAIL );
@@ -290,7 +290,7 @@ class Registry {
               return reject( global.locale.TSO_REGISTRY_EDIT_FAIL );
             }
 
-            Key.set( 'InstallDir', Registry.REG_SZ, InstallDir, err => {
+            Key.set( 'InstallDir', Registry.REG_SZ, installDir, err => {
               if ( err ) {
                 console.log( err );
                 return reject( global.locale.TSO_INSTALLDIR_FAIL );
@@ -307,11 +307,11 @@ class Registry {
    * Creates the *new* default FreeSO Registry Key.
    * Reused for Simitone, second parameter as "Simitone".
    *
-   * @param {string} InstallDir Where FreeSO was installed.
-   * @param {string} KeyName The name of the registry key.
+   * @param {string} installDir Where FreeSO was installed.
+   * @param {string} keyName The name of the registry key.
    * @returns {Promise<void>} A promise that resolves when the registry key is created.
    */
-  static async createFreeSOEntry( InstallDir, KeyName = 'FreeSO' ) {
+  static async createFreeSOEntry( installDir, keyName = 'FreeSO' ) {
     if( ! await Registry.testWinAccess() ) {
       return Promise.resolve();
     }
@@ -319,7 +319,7 @@ class Registry {
       const Registry = require( 'winreg' );
       const Key = new Registry( {
         hive: Registry.HKLM,
-        key: '\\SOFTWARE\\Rhys Simpson\\' + KeyName
+        key: '\\SOFTWARE\\Rhys Simpson\\' + keyName
       } );
 
       Key.keyExists( ( err, exists ) => {
@@ -340,7 +340,7 @@ class Registry {
                 return reject( global.locale.TSO_INSTALLDIR_FAIL );
               }
 
-              Key.set( 'InstallDir', Registry.REG_SZ, InstallDir, err => {
+              Key.set( 'InstallDir', Registry.REG_SZ, installDir, err => {
                 if ( err ) {
                   console.log( err );
                   return reject( global.locale.TSO_INSTALLDIR_FAIL );
@@ -357,7 +357,7 @@ class Registry {
               return reject( global.locale.TSO_REGISTRY_EDIT_FAIL );
             }
 
-            Key.set( 'InstallDir', Registry.REG_SZ, InstallDir, err => {
+            Key.set( 'InstallDir', Registry.REG_SZ, installDir, err => {
               if ( err ) {
                 console.log( err );
                 return reject( global.locale.TSO_INSTALLDIR_FAIL );
