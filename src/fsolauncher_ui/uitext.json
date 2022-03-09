@@ -38,7 +38,7 @@
     "INS_CLOSE": "This window will close in 5 seconds.",
     "INS_DLEX": "Downloading and extracting necessary files.",
     "INS_DOWNLOADING_FROM": "Downloading from",
-    "INS_ERROR": "Installation error",
+    "INS_ERROR": "Installation Error",
     "INS_ERROR_DESCR": "There was a problem installing the game.",
     "INS_EXTRACTING_ME": "Extracting MacExtras...",
     "INS_FINISHED": "Installation finished!",

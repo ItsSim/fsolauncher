@@ -6,6 +6,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
+    "debug": "electron --inspect=5858 .",
     "startiss": "cmd /K \"../release/FreeSO Launcher Setup.exe\"",
     "compileiss": "node build_scripts/update-iss-version.js && innosetup-compiler --verbose ../release/win32-ia32.iss && npm run startiss",
     "copywin": "cpy \"./**/*\" ../fsolauncher-win32-ia32 --cwd=../release/fsolauncher-build-extras --parents",

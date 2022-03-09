@@ -1,4 +1,3 @@
-/* eslint-disable require-atomic-updates */
 const inflate = require( "deflate-js" ).inflate;
 const fs = require( "fs-extra" );
 const path = require( "path" );
@@ -12,7 +11,6 @@ module.exports = function( { from, to, purge = true },
 ) {
   const _dir = from.substring( 0, from.lastIndexOf( "/" ) + 1 );
   const _ucp = [];
-
   let _fileBuffer = [],
     _fileIndex = 0,
     _fileOffset = 0,
@@ -22,6 +20,7 @@ module.exports = function( { from, to, purge = true },
     _dc = [],
     _uncompressed = null,
     _cabsRead = 0;
+
   /**
    * Uses Zlib.js to inflate (decompress).
    * 
