@@ -763,10 +763,8 @@ class FSOLauncher {
     const toast = new Toast( global.locale.TOAST_LANGUAGE );
     try {
       try {
-        if( process.platform == 'darwin' || process.platform == 'win32' ) {
-          // why is this necessary? we will never know...
-          process.noAsar = true;
-        }
+        // why is this necessary? we will never know...
+        process.noAsar = true;
         let exportTSODir = `../export/language_packs/${language.toUpperCase()}/TSO`;
           exportTSODir = path.join( __dirname, exportTSODir );
         if( process.platform == 'darwin' || process.platform == 'win32' ) {
@@ -781,14 +779,14 @@ class FSOLauncher {
           process.platform == 'win32' ? this.isInstalled.TSO + '/TSOClient' : this.isInstalled.TSO
         );
         await fs.copy( exportFSODir, this.isInstalled.FSO );
-        if( process.platform == 'darwin' || process.platform == 'win32' ) {
-          process.noAsar = false;
-        }
       } catch( err ) {
+        process.noAsar = false;
         console.log( err );
         this.removeActiveTask( 'CHLANG' );
         toast.destroy();
         return Modal.showFSOLangFail();
+      } finally {
+        process.noAsar = false;
       }
 
       let data;
