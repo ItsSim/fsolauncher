@@ -763,7 +763,6 @@ class FSOLauncher {
     const toast = new Toast( global.locale.TOAST_LANGUAGE );
     try {
       try {
-        // why is this necessary? we will never know...
         process.noAsar = true;
         let exportTSODir = `../export/language_packs/${language.toUpperCase()}/TSO`;
           exportTSODir = path.join( __dirname, exportTSODir );
@@ -780,7 +779,6 @@ class FSOLauncher {
         );
         await fs.copy( exportFSODir, this.isInstalled.FSO );
       } catch( err ) {
-        process.noAsar = false;
         console.log( err );
         this.removeActiveTask( 'CHLANG' );
         toast.destroy();
