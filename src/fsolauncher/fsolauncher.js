@@ -32,27 +32,23 @@ class FSOLauncher {
     this.lastDetected = null;
     this.activeTasks = [];
     this.isInstalled = {};
-
     this.Window.on( 'minimize', () => {
       if ( !this.minimizeReminder ) {
         Modal.sendNotification(
-          'FreeSO Launcher',
+          'FreeSO Launcher', 
           global.locale.MINIMIZE_REMINDER,
-          null, null,
-          this.isDarkMode()
+          null, null, this.isDarkMode()
         );
         this.minimizeReminder = true;
       }
       this.Window.hide();
     } );
-
     this.IPC = Toast.IPC = Modal.IPC = new IPCBridge( BrowserWindow );
+    this.eventHandlers = new EventHandlers( this );
     this.checkUpdatesRecursive();
     this.updateTipRecursive();
     this.updateNetRequiredUIRecursive( true );
-
-    // Init renderer -> main process communication.
-    new EventHandlers( this ).defineEvents();
+    this.eventHandlers.defineEvents();
   }
   /**
    * Reads the registry and updates the programs list.
