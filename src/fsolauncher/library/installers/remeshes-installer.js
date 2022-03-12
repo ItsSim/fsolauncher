@@ -1,3 +1,4 @@
+const fs = require( 'fs-extra' );
 const Modal = require( '../modal' );
 const download = require( '../download' );
 const unzip = require( '../unzip' );
@@ -138,9 +139,13 @@ class RemeshesInstaller {
    */
   setupDir( dir ) {
     return new Promise( ( resolve, reject ) => {
-      require( 'fs-extra' ).ensureDir( dir, err => {
+      // Clear remesh dir before copying to avoid conflicts.
+      fs.remove( this.path, err => {
         if ( err ) return reject( err );
-        resolve();
+        fs.ensureDir( dir, err => {
+          if ( err ) return reject( err );
+          resolve();
+        } );
       } );
     } );
   }
@@ -182,7 +187,6 @@ class RemeshesInstaller {
    * Deletes the downloaded artifacts file.
    */
   cleanup() {
-    const fs = require( 'fs-extra' );
     fs.stat( this.tempPath, ( err, _stats ) => {
       if ( err ) {
         return;
