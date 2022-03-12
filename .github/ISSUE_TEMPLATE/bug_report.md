@@ -10,6 +10,9 @@ assignees: ''
 **Describe the bug**
 A clear and concise description of what the bug is.
 
+**Launcher Version**
+The version where you've encountered the bug, and other versions that may be affected (if known).
+
 **To Reproduce**
 Steps to reproduce the behavior:
 1. Go to '...'
