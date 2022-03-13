@@ -127,7 +127,7 @@ class Modal {
    */
   static showAlreadyInstalling() {
     Modal.getIPC().sendErrorModal(
-      global.locale.MODAL_NOT_AVAILABLE2,
+      global.locale.MODAL_NEGATIVE,
       global.locale.MODAL_INS_PROGRESS,
       global.locale.MODAL_OK
     );
