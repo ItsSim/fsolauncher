@@ -632,8 +632,8 @@ class FSOLauncher {
         } )();
         
         if ( !options.override ) {
-          let installDir;
-          if( !options.dir ) {
+          let installDir = options.dir;
+          if( !installDir ) {
             if( await ( require( './library/registry' ).testWinAccess() ) ) {
               const toast = new Toast(
                 `${global.locale.INSTALLER_CHOOSE_WHERE_X} ${this.getPrettyName( componentCode )}`
@@ -657,8 +657,6 @@ class FSOLauncher {
                 }
               }
             }
-          } else {
-            installDir = options.dir;
           }
 
           if ( installDir ) {

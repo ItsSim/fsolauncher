@@ -120,7 +120,7 @@ function CreateWindow() {
   }
   tray = new Tray( trayIcon );
 
-  const width = 1100, height = process.platform == 'darwin' ? 646 : 664;
+  const width = 1090, height = process.platform == 'darwin' ? 646 : 664;
 
   options.minWidth = width;
   options.minHeight = height;
