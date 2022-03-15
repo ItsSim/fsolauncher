@@ -82,12 +82,12 @@
 }
 
 .turbo h1.jumbotron {
-  background: linear-gradient(
-    45deg,
-    #3bade3 0%,
-    #576fe6 25%,
-    #9844b7 51%,
-    #ff357f 100%
+  background: linear-gradient( 
+    150deg, 
+    #3bade3 0%, 
+    #576fe6 25%, 
+    #9844b7 51%, 
+    #ff357f 125% 
   ) !important;
 }
 
