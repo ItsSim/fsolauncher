@@ -393,7 +393,7 @@ class Modal {
         { encoding: 'base64' }
       );
 
-      setContainerWidth( 360 );
+      setContainerWidth( 350 );
       // Use the vscode extension es6-string-html to highlight
       // the syntax for this CSS.
       setGlobalStyles( /* css */`
@@ -413,7 +413,7 @@ class Modal {
           font-weight: normal;
           font-style: normal;
         }
-        notification {
+        .notification {
           -webkit-user-select: none;
           cursor:pointer;
           overflow:hidden;
@@ -429,14 +429,14 @@ class Modal {
           ${process.platform == 'darwin' ? 'margin-bottom:40px;' : ''}
           ${shouldBeDark ? 'border: 1px solid #414141;' : ''}
         }
-        notification h1 {
+        .notification h1 {
           font-family:'Fredoka One';
           margin-bottom:8px;
           font-size:18px;
           font-weight:200!important;
           color:#4B88E4;
         }
-        notification p {
+        .notification p {
           font-family:'Munged';
           font-size:14px;
           font-weight:normal!important;
@@ -444,7 +444,7 @@ class Modal {
           letter-spacing:-0.02em;
           ${shouldBeDark ? 'color: rgba(255, 255, 255, 0.65);' : 'color:#595959;'}
         }
-        notification #logo {
+        .notification #logo {
           background-image:url("data:image/png;base64,${b64icon}");
           background-size:contain;
           background-position:center center;
@@ -454,20 +454,20 @@ class Modal {
           margin-right:10px;
           flex:0.2;
         }
-        notification #content {
+        .notification #content {
           flex:0.8;
         }
         ` );
 
       const notification = createNotification( {
         content: /* html */`
-          <notification class="animate__animated animate__fadeInUp animate__faster">
+          <div class="notification animate__animated animate__fadeInUp animate__faster">
             <div id="logo"></div>
             <div id="content">
               <h1>${title}</h1>
               <p>${message}</p>
             </div>
-          </notification> 
+          </div> 
           `,
         timeout: 10000
       } );

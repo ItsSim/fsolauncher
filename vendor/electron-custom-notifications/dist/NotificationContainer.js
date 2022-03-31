@@ -90,6 +90,7 @@ var NotificationContainer = /** @class */ (function () {
         // (all links are opened in a real browser window), we can enable this.
         this.window = new electron_1.BrowserWindow(options);
         this.window.setVisibleOnAllWorkspaces(true);
+        this.window.setAlwaysOnTop(true, "normal");
         this.window.loadURL(path.join("file://", __dirname, "/container.html"));
         this.window.setIgnoreMouseEvents(true, { forward: true });
         this.window.showInactive();
