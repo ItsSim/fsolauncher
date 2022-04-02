@@ -237,7 +237,14 @@ var setCurrentPage;
     console.log( 'Fetching news...' );
     var $rssUrl     = $( 'body' ).getAttribute( 'rss' );
     var $didYouKnow = $( '#did-you-know' );
+    var $rss        = $( '#rss' );
     var $spinner    = $( '#rss-loading' );
+
+    $( '#refresh-home-button' ).setAttribute( 'disabled', true );
+    $( '#refresh-home-button' ).style.filter = 'brightness(0.5)';
+    $didYouKnow.style.display = 'none';
+    $rss.style.display = 'none';
+    $spinner.style.display = 'block';
 
     try {
       await loadTwitter();
@@ -249,10 +256,16 @@ var setCurrentPage;
       if( ! errors ) {
         hasAlreadyLoaded = true;
       }
-      $didYouKnow.style.display = 'block';
-      $spinner.style.display    = 'none';
 
-     $( '#rss .alt-content' ).style.display = errors ? 'block' : 'none';
+      // Short pause before displaying feed to allow display to render correctly.
+
+      setTimeout( () => {
+        $didYouKnow.style.display = 'block';
+        $rss.style.display = 'block';
+        $spinner.style.display    = 'none';
+      }, 500 );
+
+      $( '#rss .alt-content' ).style.display = errors ? 'block' : 'none';
 
       if( errors || ! response ) {
         return console.log( 'RSS Failed:', errors, response );
@@ -302,6 +315,9 @@ var setCurrentPage;
         console.error( 'An error ocurred getting news:', error );
         parseRss( error, null )
       } );
+
+      // Re-enable refresh button after 3 seconds.
+      setTimeout( () => { $( '#refresh-home-button' ).removeAttribute( 'disabled' ), $( '#refresh-home-button' ).style.filter = 'brightness(1)' }, 3000 );
   }
 
   /**
@@ -779,6 +795,7 @@ var setCurrentPage;
    */
   addEventListener( '.launch',                  'click',       () => sendToMain( 'PLAY' ) );
   addEventListener( '.launch',                  'contextmenu', () => sendToMain( 'PLAY', true ) );
+  addEventListener( '#refresh-home-button',     'click',       () => fetchNews() );
   addEventListener( '#simitone-play-button',    'click',       () => sendToMain( 'PLAY_SIMITONE' ) );
   addEventListener( '#simitone-play-button',    'contextmenu', () => sendToMain( 'PLAY_SIMITONE', true ) );
   addEventListener( '#full-install-button',     'click',       () => sendToMain( 'FULL_INSTALL' ) );
