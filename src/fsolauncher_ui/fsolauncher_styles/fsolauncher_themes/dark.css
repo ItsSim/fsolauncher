@@ -75,7 +75,7 @@
 }
 
 .dark .download h1 {
-  color: #4B88E4 !important;
+  color: #4C8DEE !important;
 }
 
 .dark .download .loading {
@@ -181,7 +181,7 @@
 
 .dark .notification h1,
 .dark .notification i {
-  color: #4B88E4 !important;
+  color: #4C8DEE !important;
 }
 .dark .notification p {
   color: rgba(255, 255, 255, 0.75) !important;
@@ -199,7 +199,7 @@
   color:rgba(255,255,255,0.6);
 }
 .dark h1.jumbotron span {
-  color: #4b88e4;
+  color: #4C8DEE;
   text-shadow: 2px 2px rgba(0, 0, 0, 0.2) !important;
 }
 .dark h1.jumbotron small {
@@ -254,7 +254,7 @@ background-image: url(../../fsolauncher_images/15xvbd5.png),
 }
 
 .dark ::-webkit-scrollbar-thumb {
-  background: #4B88E4;
+  background: #4C8DEE;
 }
 
 .dark ::-webkit-scrollbar-thumb:active {

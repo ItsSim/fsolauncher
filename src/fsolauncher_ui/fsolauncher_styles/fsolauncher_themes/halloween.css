@@ -78,7 +78,7 @@
 }
 
 .halloween .download h1 {
-  color: #4B88E4 !important;
+  color: #4C8DEE !important;
 }
 
 .halloween .download .loading {
@@ -184,7 +184,7 @@
 
 .halloween .notification h1,
 .halloween .notification i {
-  color: #4B88E4 !important;
+  color: #4C8DEE !important;
 }
 .halloween .notification p {
   color: rgba(255, 255, 255, 0.75) !important;
@@ -202,7 +202,7 @@
   color:rgba(255,255,255,0.6);
 }
 .halloween h1.jumbotron span {
-  color: #4b88e4;
+  color: #4C8DEE;
   text-shadow: 2px 2px rgba(0, 0, 0, 0.2) !important;
 }
 .halloween h1.jumbotron small {
@@ -257,7 +257,7 @@ background-image: url(../../fsolauncher_images/15xvbd5.png),
 }
 
 .halloween ::-webkit-scrollbar-thumb {
-  background: #4B88E4;
+  background: #4C8DEE;
 }
 
 .halloween ::-webkit-scrollbar-thumb:active {

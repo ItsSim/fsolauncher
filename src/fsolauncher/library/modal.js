@@ -434,7 +434,7 @@ class Modal {
           margin-bottom:8px;
           font-size:18px;
           font-weight:200!important;
-          color:#4B88E4;
+          color:#4C8DEE;
         }
         .notification p {
           font-family:'Munged';

@@ -236,7 +236,7 @@ div.page > h1.jumbotron {
   font-size: 22px;
   padding: 40px;
   color: #fff;
-  background: #4b88e4;
+  background: linear-gradient( 180deg, #4e90f3 0%, #3877d8 100% );
   /*font-weight:700;*/
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   /*text-shadow: 0px 3px 0px rgba(0,0,0,0.075);*/
@@ -365,9 +365,9 @@ div.page p {
 
 #launcher #sidebar li.active,
 #launcher #sidebar li:not(#logo):hover {
-  border-right: 4px solid #4b88e4;
+  border-right: 4px solid #4C8DEE;
   background-color: rgba(0, 0, 0, 0.035);
-  color: #4b88e4;
+  color: #4C8DEE;
   cursor: pointer;
   padding-left: 20px!important;
 }
@@ -377,7 +377,7 @@ div.page p {
 }
 #launcher #sidebar li:not(#logo):hover path,
 #launcher #sidebar li.active path {
-  fill: #4b88e4;
+  fill: #4C8DEE;
 }
 #launcher #sidebar li {
   text-transform: uppercase;
@@ -458,7 +458,7 @@ div.page p {
 
 .download.stopped .loading .progress {
   background-image: none;
-  background: #4b88e4;
+  background: #4C8DEE;
 }
 
 .loading .progress {
@@ -466,7 +466,7 @@ div.page p {
   float: left;
   width: 0%;
   height: 5px;
-  /*background:#4B88E4;*/
+  /*background:#4C8DEE;*/
   overflow: hidden;
   background-image: -webkit-linear-gradient(
       -45deg,
@@ -476,7 +476,7 @@ div.page p {
       transparent 66%
     ),
     -webkit-linear-gradient(top, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)),
-    -webkit-linear-gradient(left, #4b88e4, #4b88e4);
+    -webkit-linear-gradient(left, #4C8DEE, #4C8DEE);
   border-radius: 999px;
   background-size: 35px 20px, 100% 100%, 100% 100%;
   -webkit-animation: animate-stripes 5s linear infinite;
@@ -575,7 +575,7 @@ button.launch,
 
 button.blue,
 .button.blue {
-  background-color: #4b88e4;
+  background-color: #4C8DEE;
 }
 
 button.blue:hover,
@@ -717,7 +717,7 @@ button.blue:hover,
 #downloads > div .tag h1 {
   /*font-weight:700;*/
   font-size: 20px;
-  color: #4b88e4;
+  color: #4C8DEE;
   margin-bottom: 10px;
   transition: color 0.2s;
   /*text-shadow: 0px 3px 0px rgba(0,0,0,0.075);*/
@@ -730,7 +730,7 @@ button.blue:hover,
 }
 
 #downloads > div:hover .tag h1 {
-  color: #6595dd;
+  color: #5298ff;
 }
 
 input.error,
@@ -776,11 +776,11 @@ select {
 
 #settings-page .form h1 {
   padding: 10px;
-  color: #4b88e4;
+  color: #4C8DEE;
   letter-spacing: 2px;
   text-transform: uppercase;
   /*font-weight:700;*/
-  /*color:#4B88E4;*/
+  /*color:#4C8DEE;*/
   margin-bottom: 20px;
   padding-left: 0;
   font-size: 16px;
@@ -895,7 +895,7 @@ select {
 #rss .rss-entry > h1 {
   font-size: 25px;
   margin-bottom: 20px;
-  color: #4b88e4;
+  color: #4C8DEE;
   line-height: 30px;
   text-align: center;
   /*font-weight:700;*/
@@ -1079,7 +1079,7 @@ select {
 .modal h1 {
   font-size: 24px;
   /*font-weight:bold;*/
-  color: #4b88e4;
+  color: #4C8DEE;
   /*text-transform: uppercase;*/
   margin-bottom: 20px;
   /*text-shadow: 0px 3px 0px rgba(0,0,0,0.075);*/
@@ -1369,7 +1369,7 @@ a.twitter-timeline {
 #launcher #sidebar li:not(#logo):hover:after {
   height: 50%;
   width:4px;
-  background: #4b88e4;
+  background: #4C8DEE;
   position: absolute;
   content: '';
   left: 0;
