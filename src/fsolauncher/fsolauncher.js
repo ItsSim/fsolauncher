@@ -1000,7 +1000,7 @@ class FSOLauncher {
     };
     if( process.platform === "darwin" ) { 
       spawnOptions.shell = true;
-    };
+    }
     console.log( 'Running', file + ' ' + args.join( ' ' ), cwd );
     ( require( 'child_process' ).spawn( file, args, spawnOptions ) ).unref();
 
