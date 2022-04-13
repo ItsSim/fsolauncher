@@ -1,6 +1,6 @@
 {
-  "name": "sudo-prompt",
-  "version": "9.2.1",
+  "name": "@vscode/sudo-prompt",
+  "version": "9.3.1",
   "description": "Run a command using sudo, prompting the user with an OS dialog if necessary",
   "main": "index.js",
   "types": "index.d.ts",
@@ -15,7 +15,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jorangreef/sudo-prompt.git"
+    "url": "git+https://github.com/bpasero/sudo-prompt.git"
   },
   "keywords": [
     "sudo",
@@ -34,8 +34,8 @@
   "author": "Joran Dirk Greef",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jorangreef/sudo-prompt/issues"
+    "url": "https://github.com/bpasero/sudo-prompt/issues"
   },
-  "homepage": "https://github.com/jorangreef/sudo-prompt#readme",
+  "homepage": "https://github.com/bpasero/sudo-prompt#readme",
   "scripts": {}
 }

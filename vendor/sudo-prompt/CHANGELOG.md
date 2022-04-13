@@ -1,3 +1,17 @@
+## [9.3.1] 2021-11-19
+
+### Changed
+
+- Updated package.json metadata.
+
+## [9.3.0] 2021-11-17
+
+### Changed
+
+- Convert the macOS applet to be universal so that it can run without Rosetta 2 installed.
+
+- Add instructions how to update the macOS applet that is included in this library.
+
 ## [9.2.0] 2020-04-29
 
 ### Fixed
