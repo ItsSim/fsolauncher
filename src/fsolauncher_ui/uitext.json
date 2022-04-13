@@ -65,7 +65,7 @@
     "INSTALLATION_FINISHED": "Installation has finished successfully.",
     "INSTALLER": "INSTALLER",
     "INSTALLER_CHOOSE_WHERE_X": "Choose where to install",
-    "INSTALLER_DESCR": "Click on an item to install it, or use the \"Complete Installation\" button",
+    "INSTALLER_DESCR": "Install FreeSO and its dependencies",
     "INSTALLER_FSO_DESCR": "Free Simulator Online",
     "INSTALLER_FSO_TITLE": "FreeSO Game",
     "INSTALLER_MACEXTRAS_DESCR": "Redownload the MacExtras",
