@@ -38,7 +38,7 @@
     "fs-extra": "^10.0.0",
     "ini": "^2.0.0",
     "os-locale": "^5.0.0",
-    "sudo-prompt": "^9.2.1",
+    "sudo-prompt": "file:../vendor/sudo-prompt",
     "v8-compile-cache": "^2.3.0",
     "winreg": "^1.2.4",
     "yauzl": "^2.10.0"

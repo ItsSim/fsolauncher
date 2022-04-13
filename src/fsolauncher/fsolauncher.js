@@ -995,9 +995,15 @@ class FSOLauncher {
         file = "./freeso.command";
       }
     }
+    const spawnOptions = { 
+      cwd, detached: true, stdio: 'ignore' 
+    };
+    if( process.platform === "darwin" ) { 
+      spawnOptions.shell = true;
+    };
     console.log( 'Running', file + ' ' + args.join( ' ' ), cwd );
     ( require( 'child_process' ).spawn( 
-      file, args, { cwd, detached: true, stdio: 'ignore' } ) ).unref();
+      file, args, spawnOptions ) ).unref();
 
     setTimeout( () => { toast.destroy(); }, 4000 );
   }
