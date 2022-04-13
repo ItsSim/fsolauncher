@@ -1002,8 +1002,7 @@ class FSOLauncher {
       spawnOptions.shell = true;
     };
     console.log( 'Running', file + ' ' + args.join( ' ' ), cwd );
-    ( require( 'child_process' ).spawn( 
-      file, args, spawnOptions ) ).unref();
+    ( require( 'child_process' ).spawn( file, args, spawnOptions ) ).unref();
 
     setTimeout( () => { toast.destroy(); }, 4000 );
   }
