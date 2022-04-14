@@ -68,9 +68,8 @@ html(class=PLATFORM + ' ' + LANGCODE)
             #content
                 #home-page.page(style='display:none')
                     h1.jumbotron
-                        button#refresh-home-button.turbo-transparent(style='margin-top:-10px;float:right')
-                            i.material-icons.left(style='margin-top:-2px') refresh
-                            |  #{REFRESH_HOME_BTN}
+                        button#refresh-home-button.icon-only(style='float:right')
+                            i.material-icons.left refresh
                         span #{HOME}
                         small #{HOME_DESCR}
                     .page-content(style='position:relative')

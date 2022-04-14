@@ -241,7 +241,7 @@ var setCurrentPage;
     var $spinner    = $( '#rss-loading' );
 
     $( '#refresh-home-button' ).setAttribute( 'disabled', true );
-    $( '#refresh-home-button' ).style.filter = 'brightness(0.5)';
+    $( '#refresh-home-button' ).style.cursor = 'not-allowed';
     $didYouKnow.style.display = 'none';
     $rss.style.display = 'none';
     $spinner.style.display = 'block';
@@ -317,7 +317,7 @@ var setCurrentPage;
       } );
 
       // Re-enable refresh button after 3 seconds.
-      setTimeout( () => { $( '#refresh-home-button' ).removeAttribute( 'disabled' ), $( '#refresh-home-button' ).style.filter = 'brightness(1)' }, 3000 );
+      setTimeout( () => { $( '#refresh-home-button' ).removeAttribute( 'disabled' ), $( '#refresh-home-button' ).style.cursor = 'pointer' }, 3000 );
   }
 
   /**
