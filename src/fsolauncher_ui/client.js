@@ -26,6 +26,7 @@ var setCurrentPage;
   var pageTriggerAudio = new Howl( { src: 'fsolauncher_sounds/click.wav', volume: 0.4 } );
   var yesNoAudio = new Howl( { src: 'fsolauncher_sounds/modal.wav', volume: 0.4 } );
   var hasAlreadyLoaded = false;
+  var twitterHasAlreadyLoaded = false;
   var simitoneRequirementsCheckInterval;
   var simitoneSuggestedUpdate;
   var platform = $( 'html' ).className;
@@ -233,7 +234,7 @@ var setCurrentPage;
   /**
    * Obtains and displays blog articles from the official blog.
    */
-  var fetchNews = async () => {
+  var fetchNews = async userRequested => {
     console.log( 'Fetching news...' );
     var $rssUrl     = $( 'body' ).getAttribute( 'rss' );
     var $didYouKnow = $( '#did-you-know' );
@@ -246,12 +247,14 @@ var setCurrentPage;
     $rss.style.display = 'none';
     $spinner.style.display = 'block';
 
-    try {
-      await loadTwitter();
-    } catch( terr ) {
-      console.log( 'Error loading Twitter:', terr );
+    if( userRequested || !twitterHasAlreadyLoaded ) {
+      try {
+        await loadTwitter();
+      } catch( terr ) {
+        console.log( 'Error loading Twitter:', terr );
+      }
     }
-  
+
     var parseRss = ( errors, response ) => {
       if( ! errors ) {
         hasAlreadyLoaded = true;
@@ -372,6 +375,7 @@ var setCurrentPage;
           $script.src = 'https://platform.twitter.com/widgets.js';
           
       $script.addEventListener( 'load', () => {
+        twitterHasAlreadyLoaded = true;
         resolve();
         // twttr.events.bind( 'rendered', resolve );
       } );
@@ -795,7 +799,7 @@ var setCurrentPage;
    */
   addEventListener( '.launch',                  'click',       () => sendToMain( 'PLAY' ) );
   addEventListener( '.launch',                  'contextmenu', () => sendToMain( 'PLAY', true ) );
-  addEventListener( '#refresh-home-button',     'click',       () => fetchNews() );
+  addEventListener( '#refresh-home-button',     'click',       () => fetchNews( true ) );
   addEventListener( '#simitone-play-button',    'click',       () => sendToMain( 'PLAY_SIMITONE' ) );
   addEventListener( '#simitone-play-button',    'contextmenu', () => sendToMain( 'PLAY_SIMITONE', true ) );
   addEventListener( '#full-install-button',     'click',       () => sendToMain( 'FULL_INSTALL' ) );
