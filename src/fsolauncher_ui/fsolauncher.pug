@@ -70,7 +70,7 @@ html(class=PLATFORM + ' ' + LANGCODE)
                     h1.jumbotron
                         
                         span #{HOME} 
-                            button#refresh-home-button.icon-only
+                            button#refresh-home-button.icon-only(title=REFRESH_HOME_BTN_TITLE)
                                 i.material-icons.left refresh
                         small #{HOME_DESCR}
                     .page-content(style='position:relative')
