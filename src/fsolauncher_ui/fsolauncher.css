@@ -1407,3 +1407,9 @@ i.spin {
   -webkit-animation: spin 2s infinite linear;
   animation: spin 2s infinite linear;
 }
+
+#refresh-home-button i {
+  font-size: 21px;
+  margin-bottom: -2px;
+  transition: 1s ease-in-out;
+}

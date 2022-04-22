@@ -231,6 +231,8 @@ var setCurrentPage;
         $toast?.parentNode?.removeChild( $toast );
   }
 
+  var spinDegrees = 0;
+
   /**
    * Obtains and displays blog articles from the official blog.
    */
@@ -241,11 +243,19 @@ var setCurrentPage;
     var $rss        = $( '#rss' );
     var $spinner    = $( '#rss-loading' );
 
-    $( '#refresh-home-button' ).setAttribute( 'disabled', true );
-    $( '#refresh-home-button' ).style.cursor = 'not-allowed';
+    var $homeRefreshBtn = $( '#refresh-home-button' );
+    var $homeRefreshBtnIcon = $homeRefreshBtn.querySelector( 'i' );
+
+    $homeRefreshBtn.setAttribute( 'disabled', true );
+    $homeRefreshBtn.style.cursor = 'not-allowed';
     $didYouKnow.style.display = 'none';
     $rss.style.display = 'none';
     $spinner.style.display = 'block';
+
+    if( userRequested ) {
+      spinDegrees += 360;
+      $homeRefreshBtnIcon.style.transform = `rotate(${spinDegrees}deg)`;
+    }
 
     if( userRequested || !twitterHasAlreadyLoaded ) {
       try {
@@ -320,7 +330,10 @@ var setCurrentPage;
       } );
 
       // Re-enable refresh button after 3 seconds.
-      setTimeout( () => { $( '#refresh-home-button' ).removeAttribute( 'disabled' ), $( '#refresh-home-button' ).style.cursor = 'pointer' }, 3000 );
+      setTimeout( () => { 
+        $homeRefreshBtn.removeAttribute( 'disabled' ), 
+        $homeRefreshBtn.style.cursor = 'pointer' 
+      }, 3000 );
   }
 
   /**

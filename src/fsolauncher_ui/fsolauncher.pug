@@ -68,9 +68,10 @@ html(class=PLATFORM + ' ' + LANGCODE)
             #content
                 #home-page.page(style='display:none')
                     h1.jumbotron
-                        button#refresh-home-button.icon-only(style='float:right')
-                            i.material-icons.left refresh
-                        span #{HOME}
+                        
+                        span #{HOME} 
+                            button#refresh-home-button.icon-only
+                                i.material-icons.left refresh
                         small #{HOME_DESCR}
                     .page-content(style='position:relative')
                         #rss-loading(style='font-size:20px;margin-top:20px;display:block;text-align:center')
