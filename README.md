@@ -1,12 +1,18 @@
 # FreeSO Launcher
 The official FreeSO Launcher available for Windows and Mac OS X.
 
-![image](https://i.imgur.com/1bwlURh.png)
-![image](https://i.imgur.com/7teAdLL.png)
-![image](https://i.imgur.com/7WWBpbW.png)
-![image](https://i.imgur.com/FvYgpHk.png)
+<img width="1202" alt="Screenshot 2022-04-26 at 14 43 19" src="https://user-images.githubusercontent.com/35347872/165303049-e2176513-7ce0-4279-bd40-62d1bd571f61.png">
+
+<img width="1202" alt="Screenshot 2022-04-26 at 14 43 37" src="https://user-images.githubusercontent.com/35347872/165303098-1cfbae44-2227-4d30-ab39-3537e0229a37.png">
+
+<img width="1202" alt="Screenshot 2022-04-26 at 14 44 04" src="https://user-images.githubusercontent.com/35347872/165303154-a0b65f66-d88d-42fd-8355-66e371ea8f8d.png">
+
+<img width="1202" alt="Screenshot 2022-04-26 at 14 44 47" src="https://user-images.githubusercontent.com/35347872/165303234-5a2bef9a-ba10-4b05-963f-9482a177992b.png">
+
 ![image](https://i.imgur.com/u5iJ0qD.png)
-![image](https://i.imgur.com/lh5xDig.png)
+
+<img width="1202" alt="Screenshot 2022-04-26 at 14 46 41" src="https://user-images.githubusercontent.com/35347872/165303264-02c54e3c-fd11-4ec3-9886-3ef907876ad7.png">
+
 <!--![image](https://i.imgur.com/hWXan8k.png)
 ![image](https://i.imgur.com/UPqQgBZ.png)
 ![image](https://i.imgur.com/JLznCnv.png)
