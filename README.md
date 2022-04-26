@@ -7,7 +7,7 @@ The official FreeSO Launcher available for Windows and Mac OS X.
 
 <img width="1202" alt="Screenshot 2022-04-26 at 14 44 04" src="https://user-images.githubusercontent.com/35347872/165303154-a0b65f66-d88d-42fd-8355-66e371ea8f8d.png">
 
-<img width="1202" alt="Screenshot 2022-04-26 at 14 44 47" src="https://user-images.githubusercontent.com/35347872/165303234-5a2bef9a-ba10-4b05-963f-9482a177992b.png">
+<img width="1202" alt="Screenshot 2022-04-26 at 16 36 33" src="https://user-images.githubusercontent.com/35347872/165325139-82fe05be-62a7-4603-ab03-bcef9a2ad66c.png">
 
 ![image](https://i.imgur.com/u5iJ0qD.png)
 
