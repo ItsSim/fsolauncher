@@ -672,16 +672,16 @@ var setCurrentPage;
     console.log( 'HAS_INTERNET' );
     document.body.classList.remove( 'no-internet' );
 
-    if( ! hasAlreadyLoaded ) {
-      fetchNews();
-    }
+    //if( ! hasAlreadyLoaded ) {
+    //  fetchNews();
+    //}
   } );
   // NO_INTERNET
   onMessage( 'NO_INTERNET', () => {
     console.log( 'NO_INTERNET' );
     document.body.classList.remove( 'no-internet' );
     document.body.classList.add( 'no-internet' );
-    hasAlreadyLoaded = false;
+    //hasAlreadyLoaded = false;
   } );
   // REMESH_INFO
   onMessage( 'REMESH_INFO', ( a, v ) => {
