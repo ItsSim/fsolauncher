@@ -337,6 +337,36 @@ var setCurrentPage;
   }
 
   /**
+   * Logic for full installer background slideshow.
+   */
+
+  var slideImageArray = [ "slide1.png", "slide2.png", "slide3.jpg" ]; // Array of slideshow images to be shown.
+  var slideBasePath = "fsolauncher_images/slideshow/"; // Slideshow image location.
+  var slideTransitionSecs = 8; // Transition speed in seconds. Should be longer than the transition time in fsolauncher.css to avoid skipping.
+  var slideElement = document.getElementById( "full-install" );
+
+  var slideSequence = () => {
+    var k = 0;
+    for ( i = 0; i < slideImageArray.length; i++ ) {
+      setTimeout(() => {
+        slideElement.style.background = "url(" + slideBasePath + slideImageArray[k] + ") no-repeat";
+        slideElement.style.backgroundSize = "cover";
+        if ( ( k + 1 ) === slideImageArray.length ) {
+          if ( slideElement.style.display != 'none' ) { // Restart the slideshow only if the full-install page is visible.
+            setTimeout( () => {
+              slideSequence();
+            }, ( slideTransitionSecs * 1000 ) );
+          }
+
+        } else {
+          k++;
+        }
+      }, ( slideTransitionSecs * 1000 ) * i );
+    }
+  }
+
+
+  /**
    * Show hints of `pageId`.
    * @param {string} pageId The page id.
    */
@@ -479,6 +509,7 @@ var setCurrentPage;
     } else {
       $fullInstall.style.display = 'none';
     }
+    slideSequence(); // Start the background slideshow.
   }
 
   /**
@@ -836,4 +867,5 @@ var setCurrentPage;
     sendToMain( 'INSTALL', a.currentTarget.getAttribute( 'install' ) ) );
 
   init(); // Init client code.
+
 } )();

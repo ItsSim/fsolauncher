@@ -393,6 +393,8 @@ div.page p {
   background-size: cover;
   z-index: 10;
   display: none;
+  background-blend-mode: darken;
+  transition: 5s;
 }
 
 #launcher #content #full-install .bottom {
