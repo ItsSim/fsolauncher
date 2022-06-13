@@ -340,12 +340,12 @@ var setCurrentPage;
    * Logic for full installer background slideshow.
    */
 
-  var slideImageArray = [ "slide1.png", "slide2.png", "slide3.jpg" ]; // Array of slideshow images to be shown.
-  var slideBasePath = "fsolauncher_images/slideshow/"; // Slideshow image location.
-  var slideTransitionSecs = 8; // Transition speed in seconds. Should be longer than the transition time in fsolauncher.css to avoid skipping.
-  var slideElement = document.getElementById( "full-install" );
+  const slideImageArray = [ "slide1.png", "slide2.png", "slide3.jpg" ]; // Array of slideshow images to be shown.
+  const slideBasePath = "fsolauncher_images/slideshow/"; // Slideshow image location.
+  const slideTransitionSecs = 6; // Transition speed in seconds. Should be longer than the transition time in fsolauncher.css to avoid skipping.
+  const slideElement = document.getElementById( "full-install" );
 
-  var slideSequence = () => {
+  const slideSequence = () => {
     var k = 0;
     for ( i = 0; i < slideImageArray.length; i++ ) {
       setTimeout(() => {
