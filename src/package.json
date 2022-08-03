@@ -1,7 +1,7 @@
 {
   "name": "fsolauncher",
   "productName": "FreeSO Launcher",
-  "version": "1.8.12",
+  "version": "1.8.13",
   "description": "Install, play, and configure FreeSO easily",
   "main": "main.js",
   "scripts": {
@@ -22,8 +22,8 @@
   "devDependencies": {
     "babel-eslint": "^10.1.0",
     "cpy-cli": "^3.1.1",
-    "electron": "^18.2.0",
-    "electron-installer-dmg": "^3.0.0",
+    "electron": "^20.0.0",
+    "electron-installer-dmg": "^4.0.0",
     "electron-packager": "^15.5.1",
     "electron-reload": "^1.5.0",
     "eslint": "^7.32.0",
@@ -34,8 +34,8 @@
     "electron-custom-notifications": "file:../vendor/electron-custom-notifications",
     "electron-pug": "^2.0.0",
     "fix-path": "^3.0.0",
-    "follow-redirects": "^1.14.8",
-    "fs-extra": "^10.0.0",
+    "follow-redirects": "^1.15.0",
+    "fs-extra": "^10.1.0",
     "ini": "^2.0.0",
     "os-locale": "^5.0.0",
     "sudo-prompt": "file:../vendor/sudo-prompt",
