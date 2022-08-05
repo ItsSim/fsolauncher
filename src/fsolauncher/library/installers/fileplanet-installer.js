@@ -61,7 +61,6 @@ class FilePlanetInstaller {
       const unzipgc = await this.step3();
       await this.step4( unzipgc );
       await this.step5();
-      await this.step6();
       return this.end();
     } catch ( errorMessage ) {
       return await this.error( errorMessage );
@@ -102,43 +101,11 @@ class FilePlanetInstaller {
     return this.extractCabs( unzipgc );
   }
   /**
-   * Patches the game back to New and Improved.
-   * 
-   * @returns {Promise<void>} A promise that resolves when the game is patched.
-   */
-  step5() {
-    // Uses https://github.com/riperiperi/TSO-Version-Patcher to
-    // patch it back to N&I.
-    this.createProgressItem( 'Patching The Sims Online, please wait...', 100 );
-    return new Promise( ( resolve, _reject ) => {
-      const child = require( 'child_process' ).exec(
-        'TSOVersionPatcherF.exe 1239toNI.tsop "' + this.path + '"',
-        {
-          cwd: 'bin/TSOVersionPatcherF'
-        }
-      );
-
-      child.on( 'close', _code => {
-        // make it not care if it fails. FreeSO can patch this on its own.
-        // got reports that this was showing up as an error to some, making it impossible to finish
-        // installing, when it doesn't even matter.
-        //return code == 1
-        //  ? reject('Error while patching The Sims Online.')
-        //  : resolve();
-        resolve();
-      } );
-
-      child.stderr.on( 'data', data => {
-        console.log( 'stdout: ' + data );
-      } );
-    } );
-  }
-  /**
    * Create the Simitone Registry Key.
    *
    * @returns {Promise<void>} A promise that resolves when the key is created.
    */
-  step6() {
+  step5() {
     // registry
     return require( '../registry' ).createMaxisEntry( this.path );
   }
