@@ -126,6 +126,7 @@
 }
 
 .dark #sidebar {
+  border-top: 1px solid #414141;
   background: #10171e !important;
   color: rgba(255, 255, 255, 0.75) !important;
   text-shadow: 2px 2px rgba(0, 0, 0, 0.2) !important;
