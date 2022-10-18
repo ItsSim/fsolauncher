@@ -3,6 +3,15 @@ require( 'v8-compile-cache' );
 const { 
   app, BrowserWindow, shell, Tray, Menu, nativeImage
 } = require( 'electron' );
+// Switches for https://github.com/ItsSim/fsolauncher/issues/47
+//app.commandLine.appendSwitch( 'no-sandbox' );
+//app.commandLine.appendSwitch( 'disable-gpu' );
+//app.commandLine.appendSwitch( 'disable-software-rasterizer' );
+//app.commandLine.appendSwitch( 'disable-gpu-compositing' );
+//app.commandLine.appendSwitch( 'disable-gpu-rasterization' );
+//app.commandLine.appendSwitch( 'disable-gpu-sandbox' );
+//app.commandLine.appendSwitch( '--no-sandbox' );
+//app.disableHardwareAcceleration();
 const oslocale = require( 'os-locale' );
 const fs = require( 'fs-extra' );
 const ini = require( 'ini' );
