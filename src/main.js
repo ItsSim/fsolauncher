@@ -212,9 +212,9 @@ function CreateWindow() {
     }
   } );
 
-  Window.webContents.on( 'new-window', ( e, url ) => {
-    e.preventDefault();
+  Window.webContents.setWindowOpenHandler( ( { url } ) => {
     shell.openExternal( url );
+    return { action: 'deny' };
   } );
 }
 
