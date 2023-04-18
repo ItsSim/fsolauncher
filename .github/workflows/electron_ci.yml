@@ -103,7 +103,7 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: release/win/FreeSO Launcher Setup.exe
-        asset_name: FreeSO_Launcher_Setup.exe
+        asset_name: FreeSO Launcher Setup.exe
         asset_content_type: application/octet-stream
     - name: Upload Release Assets (macOS)
       uses: actions/upload-release-asset@v1
@@ -112,5 +112,5 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: release/mac/FreeSO Launcher.dmg
-        asset_name: FreeSO_Launcher_Setup.dmg
+        asset_name: FreeSO Launcher Setup.dmg
         asset_content_type: application/octet-stream
