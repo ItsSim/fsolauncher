@@ -39,12 +39,16 @@ jobs:
       if: matrix.os == 'windows-latest'
       shell: powershell
       run: |
-        Get-FileHash -Path "release/FreeSO Launcher Setup.exe" -Algorithm SHA256 | Format-List | Tee-Object -FilePath "release/sha256_win32.txt"
+        $hash = (Get-FileHash -Path "release/FreeSO Launcher Setup.exe" -Algorithm SHA256).Hash
+        echo "Windows hash: $hash"
+        Set-Content -Path "release/sha256_win32.txt" -Value $hash
 
     - name: Calculate hashes and save to files (macOS)
       if: matrix.os == 'macos-latest'
       run: |
-        shasum -a 256 release/FreeSO\ Launcher.dmg | awk '{print $1}' > release/sha256_darwin.txt
+        hash=$(shasum -a 256 release/FreeSO\ Launcher.dmg | awk '{print $1}')
+        echo "macOS hash: $hash"
+        echo $hash > release/sha256_darwin.txt
       
     - name: List contents of the release directory (Windows)
       if: matrix.os == 'windows-latest'
@@ -128,7 +132,7 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: release/win/sha256_win32.txt
-        asset_name: sha256_win32.txt
+        asset_name: sha256-win32.txt
         asset_content_type: text/plain
         
     - name: Upload Release Assets (macOS)
@@ -148,5 +152,5 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: release/mac/sha256_darwin.txt
-        asset_name: sha256_darwin.txt
+        asset_name: sha256-darwin.txt
         asset_content_type: text/plain
