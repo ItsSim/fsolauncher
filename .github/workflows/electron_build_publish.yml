@@ -1,0 +1,96 @@
+name: Electron Build and Publish
+
+on:
+  push:
+    branches:
+      - main # Change this to your default branch, if it's not "main"
+
+jobs:
+  build-and-publish:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest]
+        include:
+          - os: windows-latest
+            build_command: "buildwin"
+            artifact_name: "fsolauncher-win"
+          - os: macos-latest
+            build_command: "builddarwin"
+            artifact_name: "fsolauncher-mac"
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 16 # Set the desired Node.js version (recommended is v16 or higher for Electron)
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build
+      run: npm run ${{ matrix.build_command }}
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ matrix.artifact_name }}
+        path: ../release/FreeSO Launcher Setup.exe
+        if: matrix.os == 'windows-latest'
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ matrix.artifact_name }}
+        path: ../release/FreeSO\ Launcher.dmg
+        if: matrix.os == 'macos-latest'
+
+  create-release:
+    needs: build-and-publish
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+
+    - name: Download artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: fsolauncher-win
+        path: release/win
+    - name: Download artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: fsolauncher-mac
+        path: release/mac
+
+    - name: Upload Release Assets
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: release/win/FreeSO Launcher Setup.exe
+        asset_name: FreeSO Launcher Setup.exe
+        asset_content_type: application/octet-stream
+    - name: Upload Release Assets
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: release/mac/FreeSO Launcher.dmg
+        asset_name: FreeSO Launcher.dmg
+        asset_content_type: application/octet-stream
