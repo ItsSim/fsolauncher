@@ -125,7 +125,7 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: release/win/FreeSO Launcher Setup.exe
-        asset_name: FreeSO Launcher Setup.exe
+        asset_name: fsolauncher-${{ env.PACKAGE_VERSION }}-${{ env.TIMESTAMP }}.exe
         asset_content_type: application/octet-stream
         
     - name: Upload Release Assets (Windows Hash)
@@ -135,7 +135,7 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: release/win/sha256_win32.txt
-        asset_name: sha256-win32.txt
+        asset_name: sha256-win32-${{ env.PACKAGE_VERSION }}-${{ env.TIMESTAMP }}.txt
         asset_content_type: text/plain
         
     - name: Upload Release Assets (macOS)
@@ -145,7 +145,7 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: release/mac/FreeSO Launcher.dmg
-        asset_name: FreeSO Launcher Setup.dmg
+        asset_name: fsolauncher-${{ env.PACKAGE_VERSION }}-${{ env.TIMESTAMP }}.dmg
         asset_content_type: application/octet-stream
         
     - name: Upload Release Assets (macOS Hash)
@@ -155,5 +155,5 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: release/mac/sha256_darwin.txt
-        asset_name: sha256-darwin.txt
+        asset_name: sha256-darwin-${{ env.PACKAGE_VERSION }}-${{ env.TIMESTAMP }}.txt
         asset_content_type: text/plain
