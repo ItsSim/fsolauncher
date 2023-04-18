@@ -39,7 +39,7 @@ jobs:
       if: matrix.os == 'windows-latest'
       shell: powershell
       run: |
-        $hash = (Get-FileHash -Path "release/FreeSO Launcher Setup.exe" -Algorithm SHA256).Hash
+        $hash = (Get-FileHash -Path "release/FreeSO Launcher Setup.exe" -Algorithm SHA256).Hash.ToLower()
         echo "Windows hash: $hash"
         Set-Content -Path "release/sha256_win32.txt" -Value $hash
 
