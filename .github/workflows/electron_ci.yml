@@ -3,7 +3,7 @@ name: electron-ci
 on:
   push:
     branches:
-      - main # Change this to your default branch, if it's not "main"
+      - main
 
 jobs:
   build-and-publish:
@@ -25,15 +25,24 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: 16 # Set the desired Node.js version (recommended is v16 or higher for Electron)
+        node-version: 16
 
     - name: Install dependencies
-      run: npm ci # change to npm ci when package-lock is in order
+      run: npm ci
       working-directory: src
 
     - name: Build
       run: npm run ${{ matrix.build_command }}
       working-directory: src
+      
+    - name: Calculate hashes and save to files
+      run: |
+        echo "Calculating hashes and saving to files"
+        if [ "${{ matrix.os }}" == "windows-latest" ]; then
+          sha256sum release/FreeSO\ Launcher\ Setup.exe > release/win_sha256.txt
+        else
+          shasum -a 256 release/FreeSO\ Launcher.dmg > release/darwin_sha256.txt
+        fi
       
     - name: List contents of the release directory (Windows)
       if: matrix.os == 'windows-latest'
@@ -50,14 +59,18 @@ jobs:
       if: matrix.os == 'windows-latest'
       with:
         name: ${{ matrix.artifact_name }}
-        path: release/FreeSO Launcher Setup.exe
+        path: |
+          release/FreeSO Launcher Setup.exe
+          release/win_sha256.txt
 
     - name: Upload artifacts (macOS)
       uses: actions/upload-artifact@v2
       if: matrix.os == 'macos-latest'
       with:
         name: ${{ matrix.artifact_name }}
-        path: release/FreeSO Launcher.dmg
+        path: |
+          release/FreeSO Launcher.dmg
+          release/darwin_sha256.txt
 
   create-release:
     needs: build-and-publish
@@ -71,8 +84,8 @@ jobs:
     - name: Get version
       uses: nyaa8/package-version@v1
       with:
-        path: 'src/package.json' # Optional
-        follow-symlinks: 'false' # Optional
+        path: 'src/package.json'
+        follow-symlinks: 'false'
 
     - name: Create Release
       id: create_release
@@ -105,6 +118,17 @@ jobs:
         asset_path: release/win/FreeSO Launcher Setup.exe
         asset_name: FreeSO Launcher Setup.exe
         asset_content_type: application/octet-stream
+        
+    - name: Upload Release Assets (Windows Hash)
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: release/win/win_sha256.txt
+        asset_name: win_sha256.txt
+        asset_content_type: text/plain
+        
     - name: Upload Release Assets (macOS)
       uses: actions/upload-release-asset@v1
       env:
@@ -114,3 +138,13 @@ jobs:
         asset_path: release/mac/FreeSO Launcher.dmg
         asset_name: FreeSO Launcher Setup.dmg
         asset_content_type: application/octet-stream
+        
+    - name: Upload Release Assets (macOS Hash)
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: release/mac/darwin_sha256.txt
+        asset_name: darwin_sha256.txt
+        asset_content_type: text/plain
