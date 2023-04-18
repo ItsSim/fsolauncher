@@ -1,4 +1,4 @@
-name: Build and Publish
+name: Build and Publish (Windows & macOS)
 
 on:
   push:
@@ -28,25 +28,25 @@ jobs:
         node-version: 16 # Set the desired Node.js version (recommended is v16 or higher for Electron)
 
     - name: Install dependencies
-      run: npm i # change to npm ci when package-lock is in order
+      run: npm ci # change to npm ci when package-lock is in order
       working-directory: src
 
     - name: Build
       run: npm run ${{ matrix.build_command }}
       working-directory: src
 
-    - name: Upload artifacts
+    - name: Upload artifacts (Windows)
       uses: actions/upload-artifact@v2
       with:
         name: ${{ matrix.artifact_name }}
-        path: ../release/FreeSO Launcher Setup.exe
+        path: ${{ env.PROJECT_ROOT }}/release/FreeSO Launcher Setup.exe
         if: matrix.os == 'windows-latest'
 
-    - name: Upload artifacts
+    - name: Upload artifacts (macOS)
       uses: actions/upload-artifact@v2
       with:
         name: ${{ matrix.artifact_name }}
-        path: ../release/FreeSO\ Launcher.dmg
+        path: ${{ env.PROJECT_ROOT }}/release/FreeSO\ Launcher.dmg
         if: matrix.os == 'macos-latest'
 
   create-release:
