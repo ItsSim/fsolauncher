@@ -1,4 +1,4 @@
-name: ci
+name: electron-ci
 
 on:
   push:
