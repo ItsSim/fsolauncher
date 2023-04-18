@@ -34,6 +34,16 @@ jobs:
     - name: Build
       run: npm run ${{ matrix.build_command }}
       working-directory: src
+      
+    - name: List contents of the release directory (Windows)
+      if: matrix.os == 'windows-latest'
+      run: |
+        dir "..\release"
+
+    - name: List contents of the release directory (macOS)
+      if: matrix.os == 'macos-latest'
+      run: |
+        ls -la ../release
 
     - name: Upload artifacts (Windows)
       uses: actions/upload-artifact@v2
@@ -67,18 +77,18 @@ jobs:
         draft: false
         prerelease: false
 
-    - name: Download artifacts
+    - name: Download artifacts (Windows)
       uses: actions/download-artifact@v2
       with:
         name: fsolauncher-win
         path: release/win
-    - name: Download artifacts
+    - name: Download artifacts (macOS)
       uses: actions/download-artifact@v2
       with:
         name: fsolauncher-mac
         path: release/mac
 
-    - name: Upload Release Assets
+    - name: Upload Release Assets (Windows)
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -87,7 +97,7 @@ jobs:
         asset_path: release/FreeSO Launcher Setup.exe
         asset_name: FreeSO Launcher Setup.exe
         asset_content_type: application/octet-stream
-    - name: Upload Release Assets
+    - name: Upload Release Assets (macOS)
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
