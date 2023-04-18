@@ -38,12 +38,12 @@ jobs:
     - name: List contents of the release directory (Windows)
       if: matrix.os == 'windows-latest'
       run: |
-        dir "..\release"
+        dir "release"
 
     - name: List contents of the release directory (macOS)
       if: matrix.os == 'macos-latest'
       run: |
-        ls -la ../release
+        ls -la release
 
     - name: Upload artifacts (Windows)
       uses: actions/upload-artifact@v2
