@@ -82,7 +82,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: release/win/FreeSO Launcher Setup.exe
+        asset_path: release/FreeSO Launcher Setup.exe
         asset_name: FreeSO Launcher Setup.exe
         asset_content_type: application/octet-stream
     - name: Upload Release Assets
@@ -91,6 +91,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: release/mac/FreeSO Launcher.dmg
+        asset_path: release/FreeSO Launcher.dmg
         asset_name: FreeSO Launcher.dmg
         asset_content_type: application/octet-stream
