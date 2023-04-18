@@ -28,10 +28,12 @@ jobs:
         node-version: 16 # Set the desired Node.js version (recommended is v16 or higher for Electron)
 
     - name: Install dependencies
-      run: npm ci
+      run: npm i # change to npm ci when package-lock is in order
+      working-directory: src
 
     - name: Build
       run: npm run ${{ matrix.build_command }}
+      working-directory: src
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
