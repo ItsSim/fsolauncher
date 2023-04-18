@@ -1,3 +1,5 @@
+[![Build and Publish](https://github.com/ItsSim/fsolauncher/actions/workflows/electron_build_publish.yml/badge.svg)](https://github.com/ItsSim/fsolauncher/actions/workflows/electron_build_publish.yml)
+
 # FreeSO Launcher
 The official FreeSO Launcher available for Windows and Mac OS X.
 
