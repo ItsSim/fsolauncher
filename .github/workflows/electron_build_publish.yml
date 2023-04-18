@@ -69,7 +69,10 @@ jobs:
       uses: actions/checkout@v2
       
     - name: Get version
-      run: echo 'VERSION=$(node -p "require(\"./src/package.json\").version")' >> $GITHUB_ENV
+      uses: nyaa8/package-version@v1
+      with:
+        path: 'src/package.json' # Optional
+        follow-symlinks: 'false' # Optional
 
     - name: Create Release
       id: create_release
@@ -77,8 +80,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ env.VERSION }}-${{ env.TIMESTAMP }}
-        release_name: Release ${{ env.VERSION }}-${{ env.TIMESTAMP }} (${{ github.ref }})
+        tag_name: ${{ env.PACKAGE_VERSION }}-${{ env.TIMESTAMP }}
+        release_name: Release ${{ env.PACKAGE_VERSION }}-${{ env.TIMESTAMP }} (${{ github.ref }})
         draft: false
         prerelease: false
 
