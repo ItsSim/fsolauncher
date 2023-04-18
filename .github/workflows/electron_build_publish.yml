@@ -62,9 +62,14 @@ jobs:
   create-release:
     needs: build-and-publish
     runs-on: ubuntu-latest
+    env:
+      TIMESTAMP: ${{ github.run_number }}
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+      
+    - name: Get version
+      run: echo "VERSION=$(node -p -e \"require('./src/package.json').version\")" >> $GITHUB_ENV
 
     - name: Create Release
       id: create_release
@@ -72,8 +77,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        tag_name: ${{ env.VERSION }}-${{ env.TIMESTAMP }}
+        release_name: Release ${{ env.VERSION }}-${{ env.TIMESTAMP }} (${{ github.ref }})
         draft: false
         prerelease: false
 
