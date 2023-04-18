@@ -1,4 +1,4 @@
-name: Build and Publish (Windows & macOS)
+name: Build and Publish
 
 on:
   push:
