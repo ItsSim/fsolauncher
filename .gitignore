@@ -1,4 +1,4 @@
-**/node_modules
+/src/node_modules
 /src/FSOLauncher.ini
 /src/bin/
 /src/temp/
@@ -9,4 +9,3 @@
 .DS_Store
 tools/fsolauncher.exe
 tools/resource_hacker/
-src/package-lock.json
