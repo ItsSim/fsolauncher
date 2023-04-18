@@ -1,4 +1,4 @@
-[![ci](https://github.com/ItsSim/fsolauncher/actions/workflows/ci_build_publish.yml/badge.svg)](https://github.com/ItsSim/fsolauncher/actions/workflows/ci_build_publish.yml)
+[![ci](https://github.com/ItsSim/fsolauncher/actions/workflows/electron_ci_build_publish.yml/badge.svg)](https://github.com/ItsSim/fsolauncher/actions/workflows/electron_ci_build_publish.yml)
 
 # FreeSO Launcher
 The official FreeSO Launcher available for Windows and Mac OS X.
