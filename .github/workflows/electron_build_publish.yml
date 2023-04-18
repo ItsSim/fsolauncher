@@ -81,7 +81,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ env.PACKAGE_VERSION }}-${{ env.TIMESTAMP }}
-        release_name: Release ${{ env.PACKAGE_VERSION }}-${{ env.TIMESTAMP }} (${{ github.ref }})
+        release_name: Release ${{ env.PACKAGE_VERSION }}-${{ env.TIMESTAMP }}
         draft: false
         prerelease: false
 
