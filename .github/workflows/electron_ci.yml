@@ -35,14 +35,16 @@ jobs:
       run: npm run ${{ matrix.build_command }}
       working-directory: src
       
-    - name: Calculate hashes and save to files
+    - name: Calculate hashes and save to files (Windows)
+      if: matrix.os == 'windows-latest'
+      shell: powershell
       run: |
-        echo "Calculating hashes and saving to files"
-        if [ "${{ matrix.os }}" == "windows-latest" ]; then
-          sha256sum release/FreeSO\ Launcher\ Setup.exe > release/win_sha256.txt
-        else
-          shasum -a 256 release/FreeSO\ Launcher.dmg > release/darwin_sha256.txt
-        fi
+        Get-FileHash -Path "release/FreeSO Launcher Setup.exe" -Algorithm SHA256 | Format-List | Tee-Object -FilePath "release/sha256_win32.txt"
+
+    - name: Calculate hashes and save to files (macOS)
+      if: matrix.os == 'macos-latest'
+      run: |
+        shasum -a 256 release/FreeSO\ Launcher.dmg | awk '{print $1}' > release/sha256_darwin.txt
       
     - name: List contents of the release directory (Windows)
       if: matrix.os == 'windows-latest'
@@ -61,7 +63,7 @@ jobs:
         name: ${{ matrix.artifact_name }}
         path: |
           release/FreeSO Launcher Setup.exe
-          release/win_sha256.txt
+          release/sha256_win32.txt
 
     - name: Upload artifacts (macOS)
       uses: actions/upload-artifact@v2
@@ -70,7 +72,7 @@ jobs:
         name: ${{ matrix.artifact_name }}
         path: |
           release/FreeSO Launcher.dmg
-          release/darwin_sha256.txt
+          release/sha256_darwin.txt
 
   create-release:
     needs: build-and-publish
@@ -125,8 +127,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: release/win/win_sha256.txt
-        asset_name: win_sha256.txt
+        asset_path: release/win/sha256_win32.txt
+        asset_name: sha256_win32.txt
         asset_content_type: text/plain
         
     - name: Upload Release Assets (macOS)
@@ -145,6 +147,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: release/mac/darwin_sha256.txt
-        asset_name: darwin_sha256.txt
+        asset_path: release/mac/sha256_darwin.txt
+        asset_name: sha256_darwin.txt
         asset_content_type: text/plain
