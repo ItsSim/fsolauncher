@@ -3,6 +3,10 @@ require( 'v8-compile-cache' );
 const { 
   app, BrowserWindow, shell, Tray, Menu, nativeImage
 } = require( 'electron' );
+const isTestMode = process.argv.includes( '--test-mode' );
+if ( isTestMode ) {
+  console.log( 'CI: Test mode enabled' );
+}
 // Switches for https://github.com/ItsSim/fsolauncher/issues/47
 //app.commandLine.appendSwitch( 'no-sandbox' );
 //app.commandLine.appendSwitch( 'disable-gpu' );
@@ -216,6 +220,13 @@ function CreateWindow() {
     shell.openExternal( url );
     return { action: 'deny' };
   } );
+
+  if ( isTestMode ) {
+    global.willQuit = true;
+    Window.webContents.on( 'did-finish-load', () => {
+      app.quit();
+    } );
+  }
 }
 
 app.on( 'ready', CreateWindow );

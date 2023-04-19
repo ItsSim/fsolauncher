@@ -6,6 +6,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
+    "test-start": "electron . --test-mode",
     "debug": "electron --inspect=5858 .",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "startiss": "cmd /K \"../release/FreeSO Launcher Setup.exe\"",

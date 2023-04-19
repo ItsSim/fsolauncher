@@ -35,6 +35,10 @@ jobs:
       run: npm run lint
       working-directory: src
 
+    - name: Check if application boots
+      run: npm run test-start
+      working-directory: src
+
     - name: Build
       run: npm run ${{ matrix.build_command }}
       working-directory: src
