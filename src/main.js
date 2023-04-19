@@ -1,7 +1,6 @@
 require( 'fix-path' )(); // Fix $PATH on darwin
 require( 'v8-compile-cache' ); // test more
 
-==((($$))aaaa
 const { 
   app, BrowserWindow, shell, Tray, Menu, nativeImage
 } = require( 'electron' );
