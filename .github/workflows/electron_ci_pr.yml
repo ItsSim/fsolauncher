@@ -29,6 +29,10 @@ jobs:
       run: npm ci
       working-directory: src
 
+    - name: Run ESLint
+      run: npm run lint
+      working-directory: src
+
     - name: Build
       run: npm run ${{ matrix.build_command }}
       working-directory: src

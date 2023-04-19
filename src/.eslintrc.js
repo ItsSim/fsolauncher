@@ -14,6 +14,7 @@ module.exports = {
     "parserOptions": {
         "ecmaVersion": 12
     },
+    "ignorePatterns": ["**/vendor/*.js"],
     "rules": {
         "no-unused-vars": ["warn", {"args": "after-used", "argsIgnorePattern": "^_"}],
         "prefer-const": ["error", {
