@@ -38,6 +38,7 @@ jobs:
     - name: Check if application boots
       run: npm run test-start
       working-directory: src
+      timeout-minutes: 1
 
     - name: Build
       run: npm run ${{ matrix.build_command }}
