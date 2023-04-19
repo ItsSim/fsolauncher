@@ -1,5 +1,5 @@
 const Modal = require( './library/modal' );
-const RendererEvent = require( './library/renderer-event' );
+const { ipcMain } = require( 'electron' );
 
 /**
  * Handles all events from the client.
@@ -15,67 +15,26 @@ class EventHandlers {
    * Defines all the currently supported client events.
    */
   defineEvents() {
-    const onInitDOM                   = new RendererEvent( 'INIT_DOM' );
-    const onInstall                   = new RendererEvent( 'INSTALL' );
-    const onSetConfiguration          = new RendererEvent( 'SET_CONFIGURATION' );
-    const onInstallerRedirect         = new RendererEvent( 'INSTALLER_REDIRECT' );
-    const onInstallComponent          = new RendererEvent( 'INSTALL_COMPONENT' );
-    const onPlay                      = new RendererEvent( 'PLAY' );
-    const onPlaySimitone              = new RendererEvent( 'PLAY_SIMITONE' );
-    const onFullInstall               = new RendererEvent( 'FULL_INSTALL' );
-    const onFullInstallConfirm        = new RendererEvent( 'FULL_INSTALL_CONFIRM' );
-    const onChangeGamePath            = new RendererEvent( 'CHANGE_GAME_PATH' );
-    const onCheckUpdates              = new RendererEvent( 'CHECK_UPDATES' );
-    const onInstallUpdate             = new RendererEvent( 'INSTALL_UPDATE' );
-    const onPlayVolcanic              = new RendererEvent( 'PLAY_VOLCANIC' );
-    const onPlayVolcanicSimitone      = new RendererEvent( 'PLAY_VOLCANIC_SIMITONE' );
-    const onSocketMessage             = new RendererEvent( 'SOCKET_MESSAGE' );
-    const onConsoleLog                = new RendererEvent( 'CONSOLE_LOG' );
-    const onFTPTSO                    = new RendererEvent( 'FTP_TSO' );
-    const onFTPTSOResponse            = new RendererEvent( 'FTP_TSOResponse' );
-    const onCheckSimitoneRequirements = new RendererEvent( 'CHECK_SIMITONE' );
-    const onInstallSimitoneUpdate     = new RendererEvent( 'INSTALL_SIMITONE_UPDATE' );
-
-    onInitDOM
-      .onFire( this.onInitDOM.bind( this ) );
-    onSetConfiguration
-      .onFire( this.onSetConfiguration.bind( this ) );
-    onInstallerRedirect
-      .onFire( this.onInstallerRedirect.bind( this ) );
-    onInstallComponent
-      .onFire( this.onInstallComponent.bind( this ) );
-    onInstall
-      .onFire( this.onInstall.bind( this ) );
-    onPlay
-      .onFire( this.onPlay.bind( this ) );
-    onPlaySimitone
-      .onFire( this.onPlaySimitone.bind( this ) );
-    onFullInstall
-      .onFire( this.onFullInstall.bind( this ) );
-    onFullInstallConfirm
-      .onFire( this.onFullInstallConfirm.bind( this ) );
-    onChangeGamePath
-      .onFire( this.onChangeGamePath.bind( this ) );
-    onCheckUpdates
-      .onFire( this.onCheckUpdates.bind( this ) );
-    onInstallUpdate
-      .onFire( this.onInstallUpdate.bind( this ) );
-    onPlayVolcanic
-      .onFire( this.onPlayVolcanic.bind( this ) );
-    onPlayVolcanicSimitone
-      .onFire( this.onPlayVolcanicSimitone.bind( this ) );
-    onSocketMessage
-      .onFire( this.onSocketMessage.bind( this ) );
-    onConsoleLog
-      .onFire( this.onConsoleLog.bind( this ) );
-    onFTPTSO
-      .onFire( this.onFTPTSO.bind( this ) );
-    onFTPTSOResponse
-      .onFire( this.onFTPTSOResponse.bind( this ) );
-    onCheckSimitoneRequirements
-      .onFire( this.onCheckSimitoneRequirements.bind( this ) );
-    onInstallSimitoneUpdate
-      .onFire( this.onInstallSimitoneUpdate.bind( this ) );
+    ipcMain.on( 'INIT_DOM',                this.onInitDOM.bind( this ) );
+    ipcMain.on( 'INSTALL',                 this.onInstall.bind( this ) );
+    ipcMain.on( 'SET_CONFIGURATION',       this.onSetConfiguration.bind( this ) );
+    ipcMain.on( 'INSTALLER_REDIRECT',      this.onInstallerRedirect.bind( this ) );
+    ipcMain.on( 'INSTALL_COMPONENT',       this.onInstallComponent.bind( this ) );
+    ipcMain.on( 'PLAY',                    this.onPlay.bind( this ) );
+    ipcMain.on( 'PLAY_SIMITONE',           this.onPlaySimitone.bind( this ) );
+    ipcMain.on( 'FULL_INSTALL',            this.onFullInstall.bind( this ) );
+    ipcMain.on( 'FULL_INSTALL_CONFIRM',    this.onFullInstallConfirm.bind( this ) );
+    ipcMain.on( 'CHANGE_GAME_PATH',        this.onChangeGamePath.bind( this ) );
+    ipcMain.on( 'CHECK_UPDATES',           this.onCheckUpdates.bind( this ) );
+    ipcMain.on( 'INSTALL_UPDATE',          this.onInstallUpdate.bind( this ) );
+    ipcMain.on( 'PLAY_VOLCANIC',           this.onPlayVolcanic.bind( this ) );
+    ipcMain.on( 'PLAY_VOLCANIC_SIMITONE',  this.onPlayVolcanicSimitone.bind( this ) );
+    ipcMain.on( 'SOCKET_MESSAGE',          this.onSocketMessage.bind( this ) );
+    ipcMain.on( 'CONSOLE_LOG',             this.onConsoleLog.bind( this ) );
+    ipcMain.on( 'FTP_TSO',                 this.onFTPTSO.bind( this ) );
+    ipcMain.on( 'FTP_TSOResponse',         this.onFTPTSOResponse.bind( this ) );
+    ipcMain.on( 'CHECK_SIMITONE',          this.onCheckSimitoneRequirements.bind( this ) );
+    ipcMain.on( 'INSTALL_SIMITONE_UPDATE', this.onInstallSimitoneUpdate.bind( this ) );
   }
   /**
    * Received when the user request a Simitone update.
