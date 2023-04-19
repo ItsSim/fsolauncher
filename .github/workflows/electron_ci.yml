@@ -115,7 +115,7 @@ jobs:
         count=$(git tag --list | grep -E "^${release_type}-${{ env.PACKAGE_VERSION }}\." | wc -l)
         counter=$((count + 1))
         echo "COUNTER=$counter" >> $GITHUB_ENV
-        full_release_name="${{ env.PACKAGE_VERSION }}-$RELEASE_TYPE.$counter"
+        full_release_name="${{ env.PACKAGE_VERSION }}-$release_type.$counter"
         echo "FULL_RELEASE_NAME=$full_release_name" >> $GITHUB_ENV
 
     - name: Create Release
