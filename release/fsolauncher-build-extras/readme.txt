@@ -1,7 +1,8 @@
-﻿Version: 2022 1.8.x
+﻿Version: 2023 1.8.x
 Author: Sim <dbhdane@outlook.com>
 
 Changelog:
+- 2023.04.18: Updated Electron to 22.3.6, enabled CI builds.
 - 2022.02.05: Polish language tweaks. Desktop notifications now match launcher theme.
 - 2021.12.24: Downloads are now more reliable (GitHub PR #25).
 - 2021.11.18: Security changes. Update to Electron 16.
@@ -37,7 +38,7 @@ Changelog:
 
 Thank you for downloading the official FreeSO Launcher.
 This program was made using:
-- Electron 17
+- Electron 22
 
 Upon installing this software, you understand and accept the following:
 - This program does not include a copy of The Sims Online or any other type of content of EA IP. It downloads everything needed from Archive.org upon the user's request through the Installer tab.
