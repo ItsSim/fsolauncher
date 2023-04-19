@@ -3,7 +3,7 @@ name: electron-ci-pr
 on:
   pull_request:
     branches:
-      - main
+      - develop
 
 jobs:
   build:
