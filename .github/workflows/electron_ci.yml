@@ -125,7 +125,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ env.FULL_RELEASE_NAME }}
-        release_name: FreeSO Launcher ${{ env.FULL_RELEASE_NAME }}
+        release_name: ${{ env.RELEASE_TYPE == 'release' && 'Release' || 'Pre-release' }} ${{ env.FULL_RELEASE_NAME }}
         draft: false
         prerelease: ${{ github.ref != 'refs/heads/main' }}
 
