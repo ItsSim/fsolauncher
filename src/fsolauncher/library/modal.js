@@ -1,4 +1,4 @@
-const { captureWithSentry } = require('./utils');
+const { captureWithSentry } = require( './utils' );
 
 /**
  * Container class for all the Modal windows.
