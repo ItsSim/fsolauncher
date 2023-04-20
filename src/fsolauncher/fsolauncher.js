@@ -3,6 +3,7 @@ const EventHandlers = require( './event-handlers' );
 const IPCBridge = require( './library/ipc-bridge' );
 const Toast = require( './library/toast' );
 const { net } = require( 'electron' );
+const { captureWithSentry } = require( './library/utils' );
 const { https } = require( 'follow-redirects' ).wrap( {
   http: net,
   https: net,
@@ -338,6 +339,7 @@ class FSOLauncher {
     try {
       await this.getRemeshData();
     } catch( e ) {
+      captureWithSentry( e );
       console.log( e );
     }
     if ( this.remeshInfo.version != null ) {
@@ -367,6 +369,7 @@ class FSOLauncher {
       try {
         simitoneUpdateStatus = await this.getSimitoneReleaseInfo();
       } catch( e ) {
+        captureWithSentry( e );
         console.log( e );
       }
       if( simitoneUpdateStatus && 
@@ -430,6 +433,7 @@ class FSOLauncher {
           }
         }
       } catch ( e ) {
+        captureWithSentry( e, { wasAutomatic } );
         this.isSearchingForUpdates = false;
         toast.destroy();
         if ( !wasAutomatic ) Modal.showFailedUpdateCheck();
@@ -464,6 +468,7 @@ class FSOLauncher {
       this.updateInstalledPrograms();
       this.removeActiveTask( options.component );
     } catch ( e ) {
+      captureWithSentry( e, { component: options.component } );
       Modal.showFailedInstall( this.getPrettyName( options.component ), e );
       this.removeActiveTask( options.component );
     } finally {
@@ -536,6 +541,7 @@ class FSOLauncher {
           try {
             await this.getRemeshData();
           } catch( e ) {
+            captureWithSentry( e );
             console.log( e );
           }
           if ( this.remeshInfo.version == null ) {
@@ -773,6 +779,7 @@ class FSOLauncher {
         );
         await fs.copy( exportFSODir, this.isInstalled.FSO );
       } catch( err ) {
+        captureWithSentry( err, { language } );
         console.log( err );
         this.removeActiveTask( 'CHLANG' );
         toast.destroy();
@@ -786,6 +793,7 @@ class FSOLauncher {
         data = await this.getFSOConfig();
         data.CurrentLang = this.getLangString( this.getLangCode( language ) )[0];
       } catch( err ) {
+        captureWithSentry( err, { language } );
         console.log( err );
         this.removeActiveTask( 'CHLANG' );
         toast.destroy();
@@ -797,6 +805,7 @@ class FSOLauncher {
           ini.stringify( data )
         );
       } catch( err ) {
+        captureWithSentry( err, { language } );
         this.removeActiveTask( 'CHLANG' );
         toast.destroy();
         return Modal.showIniFail();
@@ -806,6 +815,7 @@ class FSOLauncher {
       this.conf.Game.Language = this.getLangString( this.getLangCode( language ) )[1];
       this.persist( true );
     } catch( err ) {
+      captureWithSentry( err, { language } );
       return Modal.showGenericError( "An error ocurred: " + err );
     }
   }
@@ -834,6 +844,7 @@ class FSOLauncher {
             this.conf[newConfig[0]][newConfig[1]] = newConfig[2];
             this.persist( true );
           } catch ( e ) {
+            captureWithSentry( e, { newConfig } );
             //Modal.showFailedUpdateMove()
             Modal.showGenericError( e.message );
           }
@@ -848,6 +859,7 @@ class FSOLauncher {
           this.conf[newConfig[0]][newConfig[1]] = newConfig[2];
           this.persist( true );
         } catch ( e ) {
+          captureWithSentry( e, { newConfig } );
           Modal.showGenericError( e.message );
         }
         break;
@@ -1087,6 +1099,7 @@ class FSOLauncher {
       this.IPC.sendDetectorResponse();
       this.updateInstalledPrograms();
     } catch( e ) {
+      captureWithSentry( e );
       Modal.showGenericError( 
         'Failed while trying to change the FreeSO installation directory: ' + e );
     }
@@ -1102,6 +1115,7 @@ class FSOLauncher {
       try {
         this.Window.setProgressBar( val, options );
       } catch( err ) {
+        captureWithSentry( err );
         console.log( 'Failed setting ProgressBar' )
       }
     }

@@ -1,7 +1,7 @@
 const Modal = require( '../modal' );
 const download = require( '../download' );
 const sudo = require( 'sudo-prompt' );
-const { strFormat } = require( '../utils' );
+const { strFormat, captureWithSentry } = require( '../utils' );
 
 /**
  * Installs Mono on macOS systems.
@@ -46,6 +46,7 @@ class MonoInstaller {
       await this.step2();
       return this.end();
     } catch ( errorMessage ) {
+      captureWithSentry( errorMessage, { installer: 'mono' } );
       return await this.error( errorMessage );
     }
   }

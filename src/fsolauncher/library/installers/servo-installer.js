@@ -1,7 +1,7 @@
 const Modal = require( '../modal' );
 const download = require( '../download' );
 const unzip = require( '../unzip' );
-const { strFormat } = require( '../utils' );
+const { strFormat, captureWithSentry } = require( '../utils' );
 
 //servo is no more, so ServoInstaller serves as a backup.
 const DOWNLOAD_URL_SERVO =
@@ -56,6 +56,7 @@ class ServoInstaller {
       await this.step6();
       return this.end();
     } catch ( errorMessage ) {
+      captureWithSentry( errorMessage, { installer: 'freeso' } );
       return await this.error( errorMessage );
     }
   }

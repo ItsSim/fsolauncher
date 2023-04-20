@@ -1,7 +1,7 @@
 const Modal = require( '../modal' );
 const download = require( '../download' );
 const unzip = require( '../unzip' );
-const { strFormat } = require( '../utils' );
+const { strFormat, captureWithSentry } = require( '../utils' );
 
 const DOWNLOAD_URL_GITHUB =
   'https://beta.freeso.org/LauncherResourceCentral/Simitone';
@@ -60,6 +60,7 @@ class SimitoneInstaller {
       await this.step7();
       return this.end();
     } catch ( errorMessage ) {
+      captureWithSentry( errorMessage, { installer: 'simitone' } );
       return await this.error( errorMessage );
     }
   }

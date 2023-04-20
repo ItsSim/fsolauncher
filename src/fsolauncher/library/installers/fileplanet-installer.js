@@ -2,6 +2,7 @@ const Modal = require( '../modal' );
 const download = require( '../download' );
 const unzip = require( '../unzip' );
 const extract = require( '../cabinet' );
+const { captureWithSentry } = require( '../utils' );
 
 /**
  * ORIGINAL: https://archive.org/download/Fileplanet_dd_042006/Fileplanet_dd_042006.tar/042006/TSO_Installer_v1.1239.1.0.zip'
@@ -63,6 +64,7 @@ class FilePlanetInstaller {
       await this.step5();
       return this.end();
     } catch ( errorMessage ) {
+      captureWithSentry( errorMessage, { installer: 'tso' } )
       return await this.error( errorMessage );
     }
   }

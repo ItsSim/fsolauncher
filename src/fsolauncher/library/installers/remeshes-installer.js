@@ -2,7 +2,7 @@ const fs = require( 'fs-extra' );
 const Modal = require( '../modal' );
 const download = require( '../download' );
 const unzip = require( '../unzip' );
-const { strFormat } = require( '../utils' );
+const { strFormat, captureWithSentry } = require( '../utils' );
 
 /**
  * Installs remeshes for FreeSO and Simitone.
@@ -56,6 +56,7 @@ class RemeshesInstaller {
       await this.step3();
       return this.end();
     } catch ( errorMessage ) {
+      captureWithSentry( errorMessage, { installer: 'remeshes' } );
       return await this.error( errorMessage );
     }
   }

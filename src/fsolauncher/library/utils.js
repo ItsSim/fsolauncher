@@ -122,6 +122,19 @@ function obfuscatePossibleKeys( data ) {
   return obfuscatedData;
 }
 
+/**
+ * Captures an error with Sentry.
+ * 
+ * @param {Error} error The error to capture.
+ * @param {Object} extra Extra data to send with the error.
+ */
+function captureWithSentry( error, extra ) {
+  const { captureException } = require( '@sentry/electron' );
+  if ( ! global.isTestMode ) {
+    captureException( error, { extra } );
+  }
+}
+
 module.exports = {
-  normalizePathSlashes, strFormat, initSentry
+  normalizePathSlashes, strFormat, initSentry, captureWithSentry
 };

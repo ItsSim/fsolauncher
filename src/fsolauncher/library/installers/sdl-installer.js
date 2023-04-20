@@ -1,7 +1,7 @@
 const Modal = require( '../modal' );
 const download = require( '../download' );
 const sudo = require( 'sudo-prompt' );
-const { strFormat } = require( '../utils' );
+const { strFormat, captureWithSentry } = require( '../utils' );
 
 /**
  * Installs SDL on macOS systems.
@@ -47,6 +47,7 @@ class SDLInstaller {
       await this.step2();
       return this.end();
     } catch ( errorMessage ) {
+      captureWithSentry( errorMessage, { installer: 'sdl' } );
       return await this.error( errorMessage );
     }
   }

@@ -5,7 +5,7 @@ const { https } = require( 'follow-redirects' ).wrap( {
 } );
 const ServoInstaller = require( './servo-installer' ),
   download = require( '../download' ),
-  { strFormat } = require( '../utils' );
+  { strFormat, captureWithSentry } = require( '../utils' );
 
 /**
  * Installs FreeSO from GitHub Releases.
@@ -133,6 +133,7 @@ class GitHubInstaller extends ServoInstaller {
       if( !Array.isArray( apiReleaseInfo ) || apiReleaseInfo.length == 0 ) throw new Error( "Wrong response" );
       url = apiReleaseInfo[0].full_zip; // Latest version
     } catch( err ) {
+      captureWithSentry( err );
       console.log( 'Failed getting apiReleaseInfo', err );
     }
     
@@ -150,6 +151,7 @@ class GitHubInstaller extends ServoInstaller {
           }
         }
       } catch( err ) {
+        captureWithSentry( err );
         console.log( 'Failed getting githubReleaseInfo', err );
       }
     }

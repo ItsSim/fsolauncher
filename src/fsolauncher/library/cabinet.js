@@ -1,6 +1,7 @@
 const inflate = require( "deflate-js" ).inflate;
 const fs = require( "fs-extra" );
 const path = require( "path" );
+const { captureWithSentry } = require( './utils' );
 
 /**
  * Extracts cabinets to a destination.
@@ -250,6 +251,7 @@ module.exports = function( { from, to, purge = true },
       }
       await _extractNextFile( cab, data );
     } catch ( err ) {
+      captureWithSentry( err, { file } );
       onEnd( err );
     }
   }; _readCabinet( from );

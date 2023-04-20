@@ -1,7 +1,7 @@
 const Modal = require( '../modal' );
 const download = require( '../download' );
 const unzip = require( '../unzip' );
-const { strFormat } = require( '../utils' );
+const { strFormat, captureWithSentry } = require( '../utils' );
 
 /**
  * Installs macOS Extras on macOS systems.
@@ -52,6 +52,7 @@ class MacExtrasInstaller {
       await this.step3();
       return this.end();
     } catch ( errorMessage ) {
+      captureWithSentry( errorMessage, { installer: 'macextras' } );
       return await this.error( errorMessage );
     }
   }

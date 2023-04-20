@@ -1,4 +1,5 @@
 const Modal = require( '../modal' );
+const { captureWithSentry } = require( '../utils' );
 
 /**
  * Installs OpenAL, .NET, Mono, SDL, TSO and FreeSO.
@@ -21,6 +22,7 @@ class CompleteInstaller {
       await this.step4();
       this.end();
     } catch( errorMessage ) {
+      captureWithSentry( errorMessage, { installer: 'complete' } );
       this.error( errorMessage );
     }
   }

@@ -1,3 +1,5 @@
+const { captureWithSentry } = require('./utils');
+
 /**
  * Container class for all the Modal windows.
  */
@@ -202,6 +204,7 @@ class Modal {
           defaultPath = 'C:\\Program Files';
         }
       } catch( err ) {
+        captureWithSentry( err, { componentName } );
         console.log( err );
       }
     }
@@ -484,6 +487,7 @@ class Modal {
         notification.close();
       } );
     } catch ( e ) {
+      captureWithSentry( e, { title, message, url } );
       console.log( 'Notification broke:', e );
     }
   }
