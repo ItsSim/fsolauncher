@@ -112,7 +112,7 @@ jobs:
           release_type="alpha"
         fi
         echo "RELEASE_TYPE=$release_type" >> $GITHUB_ENV
-        count=$(git tag --list | grep -E "^${release_type}-${{ env.PACKAGE_VERSION }}\." | wc -l)
+        count=$(git tag --list | grep -E "^${{ env.PACKAGE_VERSION }}-${release_type}\." | wc -l)
         counter=$((count + 1))
         echo "COUNTER=$counter" >> $GITHUB_ENV
         full_release_name="${{ env.PACKAGE_VERSION }}-$release_type.$counter"
