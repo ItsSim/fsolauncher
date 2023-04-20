@@ -27,7 +27,7 @@ jobs:
       working-directory: src
       run: |
         sed "s#SENTRY_CI_DSN#${{ secrets.SENTRY_CI_DSN }}#g" sentry.config.js > sentry.config.temp.js
-        mv sentry.config.temp.js sentry.config.js
+        mv -f sentry.config.temp.js sentry.config.js
       
     - name: Set up Node.js
       uses: actions/setup-node@v2
