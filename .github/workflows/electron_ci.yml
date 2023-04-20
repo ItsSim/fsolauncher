@@ -114,19 +114,21 @@ jobs:
         fi
         echo "Determined release type: $release_type"
         echo "RELEASE_TYPE=$release_type" >> $GITHUB_ENV
-        tags_with_counter=$(git tag --list | grep -E "^${{ env.PACKAGE_VERSION }}-${release_type}\.[0-9]+$")
-        echo "tags_with_counter: $tags_with_counter"
-        max_counter=0
-        for tag in $tags_with_counter; do
-          current_counter=$(echo $tag | sed -E "s/^${{ env.PACKAGE_VERSION }}-${release_type}\.([0-9]+)$/\1/")
-          echo "current_counter: $current_counter"
-          if [[ $current_counter -gt $max_counter ]]; then
-            max_counter=$current_counter
-          fi
-        done
-        echo "Found max counter: $max_counter"
+        git_tags=$(git tag --list)
+        if [ -z "$git_tags" ]; then
+          echo "No tags found"
+          max_counter=0
+        else
+          tags_with_counter=$(echo "$git_tags" | grep -E "^${{ env.PACKAGE_VERSION }}-${release_type}\.[0-9]+$")
+          max_counter=0
+          for tag in $tags_with_counter; do
+            current_counter=$(echo $tag | sed -E "s/^${{ env.PACKAGE_VERSION }}-${release_type}\.([0-9]+)$/\1/")
+            if [[ $current_counter -gt $max_counter ]]; then
+              max_counter=$current_counter
+            fi
+          done
+        fi
         counter=$((max_counter + 1))
-        echo "Calculated counter: $counter"
         echo "COUNTER=$counter" >> $GITHUB_ENV
         full_version_name="${{ env.PACKAGE_VERSION }}-$release_type.$counter"
         echo "FULL_VERSION_NAME=$full_version_name" >> $GITHUB_ENV
