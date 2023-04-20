@@ -113,7 +113,7 @@ jobs:
         fi
         echo "RELEASE_TYPE=$release_type" >> $GITHUB_ENV
 
-        tags_with_counter=$(git tag --list | grep -E "^${{ env.PACKAGE_VERSION }}-${release_type}\.[0-9]+$")
+        tags_with_counter=$(git tag --list | grep -E "^${{ env.PACKAGE_VERSION }}-${release_type}\.[0-9]+$" || true)
         max_counter=0
         for tag in $tags_with_counter; do
           current_counter=$(echo $tag | sed -E "s/^${{ env.PACKAGE_VERSION }}-${release_type}\.([0-9]+)$/\1/")
