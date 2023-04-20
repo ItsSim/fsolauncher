@@ -5,7 +5,7 @@ Thank you so much for your interest in contributing! All types of contributions 
 
 Please make sure to read the relevant section before making your contribution! It will make it a lot easier for us maintainers to make the most of it and smooth out the experience for all involved. 💚
 
-The Project Team looks forward to your contributions. 🙌🏾✨
+We look forward to your contributions. 🙌🏾✨
 
 ## Request support
 
@@ -67,16 +67,16 @@ To contribute code:
 * [Set up the project](https://github.com/ItsSim/fsolauncher#prerequisites-for-development).
 * Make any necessary changes to the source code.
 * Go to https://github.com/ItsSim/fsolauncher/pulls and open a new pull
-  request with your changes.
+  request with your changes targeting the `develop` branch.
 * Fill in the [pull request
   template](https://github.com/ItsSim/fsolauncher/blob/master/.github/pull_request_template.md).
 * If your PR is connected to an open issue, add a line in your PR's description that says `Fixes: #123`, where `#123` is the number of the issue you're fixing.
 
 Once you've filed the PR:
 
+* The `electron-ci-pr` CI workflow will run to evaluate your code. If any checks (linter, run, build...) fail, you will have to fix your code and push the fixes to your branch so that the PR reflects your changes.
 * One or more maintainers will use GitHub's review feature to review your PR.
 * If the maintainer asks for any changes, edit your changes, push, and ask for another review.
 * If the maintainer decides to pass on your PR, they will thank you for the contribution and explain why they won't be accepting the changes. That's ok! We still really appreciate you taking the time to do it, and we don't take that lightly. 💚
-* If your PR gets accepted, it will be marked as such, and merged into the
-  `main` branch soon after. Your contribution will be distributed to the
-  masses next time the maintainers release a new version.
+* If your PR gets accepted, it will be marked as such, and merged into the `develop` branch soon after. An alpha release with your changes will be automatically published to https://github.com/ItsSim/fsolauncher/releases
+* Once the maintainers decide to release a new version, your changes will be merged into the `main` branch and will be distributed to the masses! A proper release will be published to https://github.com/ItsSim/fsolauncher/releases
