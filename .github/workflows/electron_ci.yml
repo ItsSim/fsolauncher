@@ -23,11 +23,18 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Replace Sentry DSN
+    - name: Replace Sentry DSN (Windows)
+      if: matrix.os == 'windows-latest'
+      working-directory: src
+      run: |
+        (Get-Content sentry.config.js) -replace "SENTRY_CI_DSN", "${{ secrets.SENTRY_CI_DSN }}" | Set-Content sentry.config.js
+        
+    - name: Replace Sentry DSN (macOS)
+      if: matrix.os == 'macos-latest'
       working-directory: src
       run: |
         sed "s#SENTRY_CI_DSN#${{ secrets.SENTRY_CI_DSN }}#g" sentry.config.js > sentry.config.temp.js
-        mv -f sentry.config.temp.js sentry.config.js
+        mv sentry.config.temp.js sentry.config.js
       
     - name: Set up Node.js
       uses: actions/setup-node@v2
