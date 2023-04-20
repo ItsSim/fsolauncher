@@ -120,13 +120,18 @@ jobs:
           max_counter=0
         else
           tags_with_counter=$(echo "$git_tags" | grep -E "^${{ env.PACKAGE_VERSION }}-${release_type}\.[0-9]+$")
-          max_counter=0
-          for tag in $tags_with_counter; do
-            current_counter=$(echo $tag | sed -E "s/^${{ env.PACKAGE_VERSION }}-${release_type}\.([0-9]+)$/\1/")
-            if [[ $current_counter -gt $max_counter ]]; then
-              max_counter=$current_counter
-            fi
-          done
+          if [ -z "$tags_with_counter" ]; then
+            echo "No tags found for release type: $release_type"
+            max_counter=0
+          else
+            max_counter=0
+            for tag in $tags_with_counter; do
+              current_counter=$(echo $tag | sed -E "s/^${{ env.PACKAGE_VERSION }}-${release_type}\.([0-9]+)$/\1/")
+              if [[ $current_counter -gt $max_counter ]]; then
+                max_counter=$current_counter
+              fi
+            done
+          fi
         fi
         counter=$((max_counter + 1))
         echo "COUNTER=$counter" >> $GITHUB_ENV
