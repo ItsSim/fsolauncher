@@ -128,21 +128,11 @@ jobs:
     - name: Generate release notes
       id: release_notes
       run: |
-        latest_tag=$(git tag --list | grep -E "^${{ env.PACKAGE_VERSION }}-${{ env.RELEASE_TYPE }}" | sort -V | tail -n 1)
-
-        if [ -n "$latest_tag" ]; then
-          release_notes=$(git log --pretty=format:"- %s" $latest_tag..HEAD)
-        else
-          release_notes="Initial release"
-        fi
-
         if [ "${{ env.RELEASE_TYPE }}" == "alpha" ]; then
-          release_notes="**This is a pre-release version meant for development and testing. Features may be incomplete.**\n\n$release_notes"
+          release_notes="**This is a pre-release version meant for development and testing.**"
+        else
+          release_notes="**This is a stable release.**"
         fi
-
-        release_notes="${release_notes//'%'/'%25'}"
-        release_notes="${release_notes//$'\n'/'%0A'}"
-        release_notes="${release_notes//$'\r'/'%0D'}"
 
         echo "RELEASE_NOTES=$release_notes" >> $GITHUB_ENV
 
