@@ -107,7 +107,7 @@ jobs:
       run: |
         git fetch --prune --unshallow --tags
         if [ "${{ github.ref }}" == "refs/heads/main" ]; then
-          release_type="release"
+          release_type="prod"
         else
           release_type="alpha"
         fi
