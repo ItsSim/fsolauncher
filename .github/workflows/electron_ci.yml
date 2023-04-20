@@ -136,6 +136,10 @@ jobs:
           release_notes="Initial release"
         fi
 
+        if [ "${{ env.RELEASE_TYPE }}" == "alpha" ]; then
+          release_notes="**This is a pre-release version meant for development and testing. Features may be incomplete.**\n\n$release_notes"
+        fi
+
         echo "RELEASE_NOTES=$release_notes" >> $GITHUB_ENV
         echo "RELEASE_NOTES=${{ env.RELEASE_NOTES }}" >> $GITHUB_ENV
 
