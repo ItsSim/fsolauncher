@@ -141,7 +141,6 @@ jobs:
         fi
 
         echo "RELEASE_NOTES=$release_notes" >> $GITHUB_ENV
-        echo "RELEASE_NOTES=${{ env.RELEASE_NOTES }}" >> $GITHUB_ENV
 
     - name: Create Release
       id: create_release
