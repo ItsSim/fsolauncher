@@ -1,6 +1,11 @@
 require( 'fix-path' )(); // Fix $PATH on darwin
 require( 'v8-compile-cache' );
 
+global.isTestMode = process.argv.includes( '--test-mode' );
+if ( global.isTestMode ) {
+  console.log( 'CI: Test mode enabled' );
+}
+
 // Init Sentry error logging
 const { initSentry } = require( './fsolauncher/library/utils' );
 initSentry();
@@ -8,10 +13,6 @@ initSentry();
 const { 
   app, BrowserWindow, shell, Tray, Menu, nativeImage
 } = require( 'electron' );
-const isTestMode = process.argv.includes( '--test-mode' );
-if ( isTestMode ) {
-  console.log( 'CI: Test mode enabled' );
-}
 // Switches for https://github.com/ItsSim/fsolauncher/issues/47
 //app.commandLine.appendSwitch( 'no-sandbox' );
 //app.commandLine.appendSwitch( 'disable-gpu' );
@@ -226,7 +227,7 @@ function CreateWindow() {
     return { action: 'deny' };
   } );
 
-  if ( isTestMode ) {
+  if ( global.isTestMode ) {
     global.willQuit = true;
     Window.webContents.on( 'did-finish-load', () => {
       app.quit();

@@ -22,13 +22,18 @@ function strFormat( str, ...args ) {
 function initSentry() {
   const { init } = require( '@sentry/electron' );
   const { dsn } = require( '../../sentry.config' );
-  init( {
-    dsn,
-    beforeSend( event ) {
-      // Remove all possible PII from the event
-      return sanitizeEvent( event );
-    },
-  } );
+  if ( ! dsn.startsWith( 'SENTRY' ) ) {
+    init( {
+      dsn,
+      beforeSend( event ) {
+        if ( global.isTestMode ) {
+          return null;
+        }
+        // Remove all possible PII from the event
+        return sanitizeEvent( event );
+      },
+    } );
+  }
 }
 
 function sanitizeEvent( event ) {
