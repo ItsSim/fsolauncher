@@ -115,8 +115,8 @@ jobs:
         count=$(git tag --list | grep -E "^${{ env.PACKAGE_VERSION }}-${release_type}\." | wc -l)
         counter=$((count + 1))
         echo "COUNTER=$counter" >> $GITHUB_ENV
-        full_release_name="${{ env.PACKAGE_VERSION }}-$release_type.$counter"
-        echo "FULL_RELEASE_NAME=$full_release_name" >> $GITHUB_ENV
+        full_version_name="${{ env.PACKAGE_VERSION }}-$release_type.$counter"
+        echo "FULL_VERSION_NAME=$full_version_name" >> $GITHUB_ENV
 
     - name: Create Release
       id: create_release
@@ -124,8 +124,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ env.FULL_RELEASE_NAME }}
-        release_name: ${{ env.RELEASE_TYPE == 'release' && 'Release' || 'Pre-release' }} ${{ env.FULL_RELEASE_NAME }}
+        tag_name: ${{ env.FULL_VERSION_NAME }}
+        release_name: ${{ env.RELEASE_TYPE == 'release' && 'Release' || 'Pre-release' }} ${{ env.FULL_VERSION_NAME }}
         draft: false
         prerelease: ${{ github.ref != 'refs/heads/main' }}
 
@@ -147,7 +147,7 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: release/win/FreeSO Launcher Setup.exe
-        asset_name: fsolauncher-${{ env.FULL_RELEASE_NAME }}.exe
+        asset_name: fsolauncher-${{ env.FULL_VERSION_NAME }}.exe
         asset_content_type: application/octet-stream
         
     - name: Upload Release Assets (Windows Hash)
@@ -157,7 +157,7 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: release/win/sha256_win32.txt
-        asset_name: sha256-win32-${{ env.FULL_RELEASE_NAME }}.txt
+        asset_name: sha256-win32-${{ env.FULL_VERSION_NAME }}.txt
         asset_content_type: text/plain
         
     - name: Upload Release Assets (macOS)
@@ -167,7 +167,7 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: release/mac/FreeSO Launcher.dmg
-        asset_name: fsolauncher-${{ env.FULL_RELEASE_NAME }}.dmg
+        asset_name: fsolauncher-${{ env.FULL_VERSION_NAME }}.dmg
         asset_content_type: application/octet-stream
         
     - name: Upload Release Assets (macOS Hash)
@@ -177,5 +177,5 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: release/mac/sha256_darwin.txt
-        asset_name: sha256-darwin-${{ env.FULL_RELEASE_NAME }}.txt
+        asset_name: sha256-darwin-${{ env.FULL_VERSION_NAME }}.txt
         asset_content_type: text/plain
