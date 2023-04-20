@@ -104,6 +104,7 @@ jobs:
 
     - name: Calculate release type counter
       id: release_type_counter
+      shell: /usr/bin/bash -e -x {0}
       run: |
         git fetch --prune --unshallow --tags
         release_type="alpha"
