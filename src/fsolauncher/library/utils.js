@@ -25,6 +25,9 @@ function initSentry() {
   if ( ! dsn.startsWith( 'SENTRY' ) ) {
     init( {
       dsn,
+      integrations: defaultIntegrations => defaultIntegrations.filter(
+        integration => integration.name !== 'Net'
+      ),
       beforeSend( event ) {
         if ( global.isTestMode ) {
           return null;
