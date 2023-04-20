@@ -118,6 +118,21 @@ jobs:
         full_version_name="${{ env.PACKAGE_VERSION }}-$release_type.$counter"
         echo "FULL_VERSION_NAME=$full_version_name" >> $GITHUB_ENV
 
+    - name: Generate release notes
+      id: release_notes
+      run: |
+        latest_tag=$(git tag --list | grep -E "^${{ env.PACKAGE_VERSION }}-${{ env.RELEASE_TYPE }}" | sort -V | tail -n 1)
+
+        if [ -n "$latest_tag" ]; then
+          release_notes=$(git log --pretty=format:"- %s" $latest_tag..HEAD)
+        else
+          release_notes="Initial release"
+        fi
+
+        release_notes="${release_notes//$'\n'/'%0A'}"
+        release_notes="${release_notes//$'\r'/'%0D'}"
+        echo "::set-output name=notes::$release_notes"
+        
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
