@@ -32,6 +32,7 @@
     "innosetup-compiler": "^6.2.0"
   },
   "dependencies": {
+    "@sentry/electron": "^4.4.0",
     "deflate-js": "^0.2.3",
     "electron-custom-notifications": "file:../vendor/electron-custom-notifications",
     "electron-pug": "^2.0.0",

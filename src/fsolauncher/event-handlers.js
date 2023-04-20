@@ -1,5 +1,6 @@
 const Modal = require( './library/modal' );
 const { ipcMain } = require( 'electron' );
+const { captureException } = require( '@sentry/electron' );
 
 /**
  * Handles all events from the client.
@@ -35,6 +36,7 @@ class EventHandlers {
     ipcMain.on( 'FTP_TSOResponse',         this.onFTPTSOResponse.bind( this ) );
     ipcMain.on( 'CHECK_SIMITONE',          this.onCheckSimitoneRequirements.bind( this ) );
     ipcMain.on( 'INSTALL_SIMITONE_UPDATE', this.onInstallSimitoneUpdate.bind( this ) );
+    ipcMain.on( 'RENDERER_ERROR',          this.onRendererError.bind( this ) );
   }
   /**
    * Received when the user request a Simitone update.
@@ -240,6 +242,18 @@ class EventHandlers {
     } else {
       this.FSOLauncher.removeActiveTask( options.component );
     }
+  }
+  /**
+   * Receives an error object from the client and captures it with Sentry.
+   * 
+   * @param {Electron.IpcMainEvent} e The event object.
+   * @param {object} error The error details object.
+   */
+  onRendererError( e, error ) {
+    const deserializedError = new Error( error.message );
+    deserializedError.name = error.name;
+    deserializedError.stack = error.stack;
+    captureException( deserializedError );
   }
 }
 

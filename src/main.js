@@ -1,5 +1,10 @@
 require( 'fix-path' )(); // Fix $PATH on darwin
 require( 'v8-compile-cache' );
+
+// Init Sentry error logging
+const { initSentry } = require( './fsolauncher/library/utils' );
+initSentry();
+
 const { 
   app, BrowserWindow, shell, Tray, Menu, nativeImage
 } = require( 'electron' );
