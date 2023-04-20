@@ -106,33 +106,21 @@ jobs:
       id: release_type_counter
       run: |
         git fetch --prune --unshallow --tags
-        echo "Fetched repository"
+        release_type="alpha"
         if [ "${{ github.ref }}" == "refs/heads/main" ]; then
           release_type="prod"
-        else
-          release_type="alpha"
         fi
-        echo "Determined release type: $release_type"
         echo "RELEASE_TYPE=$release_type" >> $GITHUB_ENV
-        git_tags=$(git tag --list)
-        if [ -z "$git_tags" ]; then
-          echo "No tags found"
-          max_counter=0
-        else
-          tags_with_counter=$(echo "$git_tags" | grep -E "^${{ env.PACKAGE_VERSION }}-${release_type}\.[0-9]+$")
-          if [ -z "$tags_with_counter" ]; then
-            echo "No tags found for release type: $release_type"
-            max_counter=0
-          else
-            max_counter=0
-            for tag in $tags_with_counter; do
-              current_counter=$(echo $tag | sed -E "s/^${{ env.PACKAGE_VERSION }}-${release_type}\.([0-9]+)$/\1/")
-              if [[ $current_counter -gt $max_counter ]]; then
-                max_counter=$current_counter
-              fi
-            done
+
+        tags_with_counter=$(git tag --list | grep -E "^${{ env.PACKAGE_VERSION }}-${release_type}\.[0-9]+$")
+        max_counter=0
+        for tag in $tags_with_counter; do
+          current_counter=$(echo $tag | sed -E "s/^${{ env.PACKAGE_VERSION }}-${release_type}\.([0-9]+)$/\1/")
+          if [[ $current_counter -gt $max_counter ]]; then
+            max_counter=$current_counter
           fi
-        fi
+        done
+
         counter=$((max_counter + 1))
         echo "COUNTER=$counter" >> $GITHUB_ENV
         full_version_name="${{ env.PACKAGE_VERSION }}-$release_type.$counter"
