@@ -141,6 +141,7 @@ jobs:
       with:
         tag_name: ${{ env.FULL_VERSION_NAME }}
         release_name: Release ${{ env.FULL_VERSION_NAME }}
+        body: ${{ steps.release_notes.outputs.notes }}
         draft: false
         prerelease: ${{ github.ref != 'refs/heads/main' }}
 
