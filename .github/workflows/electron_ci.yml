@@ -115,9 +115,11 @@ jobs:
         echo "Determined release type: $release_type"
         echo "RELEASE_TYPE=$release_type" >> $GITHUB_ENV
         tags_with_counter=$(git tag --list | grep -E "^${{ env.PACKAGE_VERSION }}-${release_type}\.[0-9]+$")
+        echo "tags_with_counter: $tags_with_counter"
         max_counter=0
         for tag in $tags_with_counter; do
           current_counter=$(echo $tag | sed -E "s/^${{ env.PACKAGE_VERSION }}-${release_type}\.([0-9]+)$/\1/")
+          echo "current_counter: $current_counter"
           if [[ $current_counter -gt $max_counter ]]; then
             max_counter=$current_counter
           fi
