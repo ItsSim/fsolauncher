@@ -105,12 +105,14 @@ jobs:
     - name: Calculate release type counter
       id: release_type_counter
       run: |
-        git fetch --prune --tags --verbose
+        git fetch --prune --unshallow --tags
+        echo "Fetched repository"
         if [ "${{ github.ref }}" == "refs/heads/main" ]; then
           release_type="prod"
         else
           release_type="alpha"
         fi
+        echo "Determined release type: $release_type"
         echo "RELEASE_TYPE=$release_type" >> $GITHUB_ENV
         tags_with_counter=$(git tag --list | grep -E "^${{ env.PACKAGE_VERSION }}-${release_type}\.[0-9]+$")
         max_counter=0
@@ -120,7 +122,9 @@ jobs:
             max_counter=$current_counter
           fi
         done
+        echo "Found max counter: $max_counter"
         counter=$((max_counter + 1))
+        echo "Calculated counter: $counter"
         echo "COUNTER=$counter" >> $GITHUB_ENV
         full_version_name="${{ env.PACKAGE_VERSION }}-$release_type.$counter"
         echo "FULL_VERSION_NAME=$full_version_name" >> $GITHUB_ENV
