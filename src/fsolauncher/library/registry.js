@@ -13,7 +13,7 @@ class Registry {
    *                             user has access to the registry.
    */
   static testWinAccess() {
-    if ( process.platform != "win32" ) return Promise.resolve( false );
+    if ( process.platform != 'win32' ) return Promise.resolve( false );
     const Registry = require( 'winreg' );
     const regKey = new Registry( {
       hive: Registry.HKLM,
@@ -44,26 +44,26 @@ class Registry {
     } );
   }
   static getOpenALPath() {
-    return "\\SOFTWARE\\OpenAL";
+    return '\\SOFTWARE\\OpenAL';
   }
   static getFSOPath() {
-    return process.platform === "win32" ? 
-      "\\SOFTWARE\\Rhys Simpson\\FreeSO" : `${global.homeDir}/Documents/FreeSO/FreeSO.exe`;
+    return process.platform === 'win32' ? 
+      '\\SOFTWARE\\Rhys Simpson\\FreeSO' : `${global.homeDir}/Documents/FreeSO/FreeSO.exe`;
   }
   static getTSOPath() {
-    return process.platform === "win32" ? 
-      "\\SOFTWARE\\Maxis\\The Sims Online" : `${global.homeDir}/Documents/The Sims Online/TSOClient/TSOClient.exe`;
+    return process.platform === 'win32' ? 
+      '\\SOFTWARE\\Maxis\\The Sims Online' : `${global.homeDir}/Documents/The Sims Online/TSOClient/TSOClient.exe`;
   }
   static getNETPath() {
-    return "\\SOFTWARE\\Microsoft\\NET Framework Setup\\NDP";
+    return '\\SOFTWARE\\Microsoft\\NET Framework Setup\\NDP';
   }
   static getSimitonePath() {
-    return process.platform === "win32" ?
-      "\\SOFTWARE\\Rhys Simpson\\Simitone" : `${global.homeDir}/Documents/Simitone for Windows/Simitone.Windows.exe`;
+    return process.platform === 'win32' ?
+      '\\SOFTWARE\\Rhys Simpson\\Simitone' : `${global.homeDir}/Documents/Simitone for Windows/Simitone.Windows.exe`;
   }
   static getTS1Path() {
-    return process.platform === "win32" ?
-      "\\SOFTWARE\\Maxis\\The Sims" : `${global.homeDir}/Documents/The Sims/Sims.exe`;
+    return process.platform === 'win32' ?
+      '\\SOFTWARE\\Maxis\\The Sims' : `${global.homeDir}/Documents/The Sims/Sims.exe`;
   }
   static getMonoPath() {
     return '/Library/Frameworks/Mono.framework';
@@ -148,7 +148,7 @@ class Registry {
    * @returns {Promise<{key: string, isInstalled: string}>}
    */
   static get( e, p ) {
-    if ( process.platform === "darwin" ) {
+    if ( process.platform === 'darwin' ) {
       // when darwin directly test if file exists
       return new Promise( ( resolve, _reject ) => {
         require( 'fs-extra' ).pathExists( p, ( _err, exists ) => {

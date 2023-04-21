@@ -52,7 +52,7 @@ class GitHubInstaller extends ServoInstaller {
 
     const from = await this.getZipUrl();
     if ( ! from ) {
-      throw new Error( "Could not obtain FreeSO release information..." );
+      throw new Error( 'Could not obtain FreeSO release information...' );
     }
 
     this.dl = download( { from, to: this.tempPath } );
@@ -135,7 +135,7 @@ class GitHubInstaller extends ServoInstaller {
     let url;
     try {
       const apiReleaseInfo = await this.getFreeSOApiReleaseInfo();
-      if ( ! Array.isArray( apiReleaseInfo ) || apiReleaseInfo.length == 0 ) throw new Error( "Wrong response" );
+      if ( ! Array.isArray( apiReleaseInfo ) || apiReleaseInfo.length == 0 ) throw new Error( 'Wrong response' );
       url = apiReleaseInfo[0].full_zip; // Latest version
     } catch ( err ) {
       captureWithSentry( err );
@@ -146,13 +146,13 @@ class GitHubInstaller extends ServoInstaller {
       try {
         const githubReleaseInfo = await this.getFreeSOGitHubReleaseInfo();
         if ( ! Array.isArray( githubReleaseInfo.assets ) ) {
-          throw new Error( "Invalid response when trying to obtain FreeSO release information from GitHub." );
+          throw new Error( 'Invalid response when trying to obtain FreeSO release information from GitHub.' );
         }
         for ( let i = 0; i < githubReleaseInfo.assets.length; i++ ) {
           const asset = githubReleaseInfo.assets[i];
-          if ( asset["name"].indexOf( "client" ) > -1 ) {
+          if ( asset['name'].indexOf( 'client' ) > -1 ) {
             // This asset contains the full client.
-            url = asset["browser_download_url"];
+            url = asset['browser_download_url'];
           }
         }
       } catch ( err ) {

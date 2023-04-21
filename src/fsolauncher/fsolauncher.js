@@ -509,11 +509,11 @@ class FSOLauncher {
       case 'FSO':
         if ( ! this.isInstalled['TSO'] ) 
           missing.push( this.getPrettyName( 'TSO' ) );
-        if ( ! this.isInstalled['Mono'] && process.platform === "darwin" ) 
+        if ( ! this.isInstalled['Mono'] && process.platform === 'darwin' ) 
           missing.push( this.getPrettyName( 'Mono' ) );
-        if ( ! this.isInstalled['SDL'] && process.platform === "darwin" ) 
+        if ( ! this.isInstalled['SDL'] && process.platform === 'darwin' ) 
           missing.push( this.getPrettyName( 'SDL' ) );
-        if ( ! this.isInstalled['OpenAL'] && process.platform === "win32" )
+        if ( ! this.isInstalled['OpenAL'] && process.platform === 'win32' )
           missing.push( this.getPrettyName( 'OpenAL' ) );
         break;
 
@@ -527,9 +527,9 @@ class FSOLauncher {
         break;
 
       case 'Simitone': 
-        if ( ! this.isInstalled['Mono'] && process.platform === "darwin" ) 
+        if ( ! this.isInstalled['Mono'] && process.platform === 'darwin' ) 
           missing.push( this.getPrettyName( 'Mono' ) );
-        if ( ! this.isInstalled['SDL'] && process.platform === "darwin" ) 
+        if ( ! this.isInstalled['SDL'] && process.platform === 'darwin' ) 
           missing.push( this.getPrettyName( 'SDL' ) );
         break;
     }
@@ -616,7 +616,7 @@ class FSOLauncher {
           await singleInstaller.install();
           if ( componentCode == 'MacExtras' && this.isInstalled.Simitone ) {
             // Do an install for Simitone as well.
-            const simitoneInstaller = new Installer( this, this.isInstalled.Simitone, "Simitone" );
+            const simitoneInstaller = new Installer( this, this.isInstalled.Simitone, 'Simitone' );
             await simitoneInstaller.install();
           }
         } finally {
@@ -713,7 +713,7 @@ class FSOLauncher {
               this.removeActiveTask( componentCode );
             } else {
               this.removeActiveTask();
-              return Promise.reject( new Error( "User canceled the installation." ) );
+              return Promise.reject( new Error( 'User canceled the installation.' ) );
             }
           }
         } else {
@@ -839,7 +839,7 @@ class FSOLauncher {
       this.persist( true );
     } catch ( err ) {
       captureWithSentry( err, { language } );
-      return Modal.showGenericError( "An error ocurred: " + err );
+      return Modal.showGenericError( 'An error ocurred: ' + err );
     }
   }
 
@@ -938,7 +938,7 @@ class FSOLauncher {
    * @param {boolean} useVolcanic If Volcanic.exe should be launched.
    */
   play( useVolcanic, isSimitone = false ) {
-    if ( process.platform === "darwin" ) {
+    if ( process.platform === 'darwin' ) {
       // no volcanic for darwin
       useVolcanic = false;
     }
@@ -1008,7 +1008,7 @@ class FSOLauncher {
     // SW only allows ogl
     let graphicsMode = this.conf.Game.GraphicsMode != 'sw'
       ? this.conf.Game.GraphicsMode : 'ogl';
-    if ( process.platform === "darwin" ) graphicsMode = "ogl";
+    if ( process.platform === 'darwin' ) graphicsMode = 'ogl';
     args.push( `-${graphicsMode}` );
     // 3d is forced off when in SW
     if ( this.conf.Game['3DMode'] === '1' && ( this.conf.Game.GraphicsMode != 'sw' || isSimitone ) ) {
@@ -1027,18 +1027,18 @@ class FSOLauncher {
       cwd += subfolder;
     }
 
-    if ( process.platform === "darwin" ) {
+    if ( process.platform === 'darwin' ) {
       if ( isSimitone ) {
-        file = "/Library/Frameworks/Mono.framework/Commands/mono";
-        args.unshift( "Simitone.Windows.exe" );
+        file = '/Library/Frameworks/Mono.framework/Commands/mono';
+        args.unshift( 'Simitone.Windows.exe' );
       } else {
-        file = "./freeso.command";
+        file = './freeso.command';
       }
     }
     const spawnOptions = { 
       cwd, detached: true, stdio: 'ignore' 
     };
-    if ( process.platform === "darwin" ) { 
+    if ( process.platform === 'darwin' ) { 
       spawnOptions.shell = true;
     }
     console.log( 'Running', file + ' ' + args.join( ' ' ), cwd );
@@ -1094,10 +1094,10 @@ class FSOLauncher {
    */
   getLangString( code ) {
     const languageStrings = {
-      0: ['English', 'en'], // default
-      6: ['Spanish', 'es'],
-      5: ['Italian', 'it'],
-      14: ['Portuguese', 'pt']
+      0: [ 'English', 'en' ], // default
+      6: [ 'Spanish', 'es' ],
+      5: [ 'Italian', 'it' ],
+      14: [ 'Portuguese', 'pt' ]
     };
 
     return languageStrings[code];
@@ -1161,7 +1161,7 @@ class FSOLauncher {
    * @returns {boolean} If the theme is dark.
    */
   isDarkMode() {
-    return ['halloween', 'dark'].includes( this.conf.Launcher.Theme );
+    return [ 'halloween', 'dark' ].includes( this.conf.Launcher.Theme );
   }
 }
 

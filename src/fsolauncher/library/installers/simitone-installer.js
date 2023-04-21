@@ -122,7 +122,7 @@ class SimitoneInstaller {
    * @returns {Promise<void>} A promise that resolves when the download is complete.
    */
   step6() {
-    if ( process.platform === "darwin" ) {
+    if ( process.platform === 'darwin' ) {
       console.log( 'Darwin:', 'Downloading MacExtras' );
       this.dl = download( { 
         from: 'https://beta.freeso.org/LauncherResourceCentral/MacExtras', 
@@ -139,7 +139,7 @@ class SimitoneInstaller {
    * @returns {Promise<void>} A promise that resolves when the installation is complete.
    */
   step7() {
-    if ( process.platform === "darwin" ) {
+    if ( process.platform === 'darwin' ) {
       console.log( 'Darwin:', 'Extracting MacExtras' );
       return unzip( { 
         from: `${global.appData}temp/macextras-${this.id}.zip`, 

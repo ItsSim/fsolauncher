@@ -2,7 +2,7 @@ const fs = require( 'fs-extra' )
 const version = require( '../package.json' ).version
 
 try {
-  const iss = fs.readFileSync( '../release/win32-ia32.iss', { encoding: "utf8" } )
+  const iss = fs.readFileSync( '../release/win32-ia32.iss', { encoding: 'utf8' } )
   const newString = `#define MyAppVersion "${version}"`
   const matches = iss.match( /#define MyAppVersion "\d+.\d+.\d+"/gm )
   if ( matches && matches[0] ) {

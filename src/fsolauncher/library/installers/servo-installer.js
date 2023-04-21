@@ -96,7 +96,7 @@ class ServoInstaller {
    * @returns {Promise<void>} A promise that resolves when the key is created.
    */
   step4() {
-    if ( process.platform === "darwin" ) return Promise.resolve(); 
+    if ( process.platform === 'darwin' ) return Promise.resolve(); 
     return require( '../registry' ).createFreeSOEntry( this.path );
   }
 
@@ -106,7 +106,7 @@ class ServoInstaller {
    * @returns {Promise<void>} A promise that resolves when the download is complete.
    */
   step5() {
-    if ( process.platform === "darwin" ) {
+    if ( process.platform === 'darwin' ) {
       console.log( 'Darwin:', 'Downloading MacExtras' );
       this.dl = download( { 
         from: 'https://beta.freeso.org/LauncherResourceCentral/MacExtras', 
@@ -123,7 +123,7 @@ class ServoInstaller {
    * @returns {Promise<void>} A promise that resolves when the installation is complete.
    */
   step6() {
-    if ( process.platform === "darwin" ) {
+    if ( process.platform === 'darwin' ) {
       console.log( 'Darwin:', 'Extracting MacExtras' );
       return unzip( { 
         from: `${global.appData}temp/macextras-${this.id}.zip`, 

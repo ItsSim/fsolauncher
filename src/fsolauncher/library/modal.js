@@ -196,7 +196,7 @@ class Modal {
    */
   static async showChooseDirectory( componentName, Window ) {
     let defaultPath = null;
-    if ( process.platform === "win32" ) {
+    if ( process.platform === 'win32' ) {
       try {
         const winDefaultPath = await require( 'fs-extra' )
           .stat( 'C:\\Program Files' );
@@ -208,13 +208,13 @@ class Modal {
         console.log( err );
       }
     }
-    if ( process.platform === "darwin" ) {
-      defaultPath = "~/Documents";
+    if ( process.platform === 'darwin' ) {
+      defaultPath = '~/Documents';
     }
     const response = await require( 'electron' )
       .dialog.showOpenDialog( Window,
       {
-        properties: ['openDirectory'],
+        properties: [ 'openDirectory' ],
         title: `${global.locale.MODAL_INSTALL} ${componentName}`,
         defaultPath: defaultPath,
         buttonLabel: global.locale.MODAL_INSTALL_FOLDER

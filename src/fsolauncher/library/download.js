@@ -87,7 +87,7 @@ module.exports = function( { from, to, immediate = false } ) {
       // Archive.org downloads fail silently when x-page-cache is MISS or EXPIRED.
       if ( _response.headers['x-page-cache'] ) {
         if (
-          ['MISS', 'EXPIRED'].includes(
+          [ 'MISS', 'EXPIRED' ].includes(
             _response.headers['x-page-cache'].trim()
           )
         ) {

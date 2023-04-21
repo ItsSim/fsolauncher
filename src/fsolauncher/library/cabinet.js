@@ -1,6 +1,6 @@
-const inflate = require( "deflate-js" ).inflate;
-const fs = require( "fs-extra" );
-const path = require( "path" );
+const inflate = require( 'deflate-js' ).inflate;
+const fs = require( 'fs-extra' );
+const path = require( 'path' );
 const { captureWithSentry } = require( './utils' );
 
 /**
@@ -10,7 +10,7 @@ module.exports = function( { from, to, purge = true },
   onProgress = () => {},
   onEnd = () => {}
 ) {
-  const _dir = from.substring( 0, from.lastIndexOf( "/" ) + 1 );
+  const _dir = from.substring( 0, from.lastIndexOf( '/' ) + 1 );
   const _ucp = [];
   let _fileBuffer = [],
     _fileIndex = 0,
@@ -29,7 +29,7 @@ module.exports = function( { from, to, purge = true },
    * @param {any} _uncompSize The uncompressed size.
    */
   const _MSZipDecomp = ( data, _uncompSize ) => {
-    if ( ! ( data[0] === 0x43 && data[1] === 0x4b ) ) console.log( "MSZIP fail" );
+    if ( ! ( data[0] === 0x43 && data[1] === 0x4b ) ) console.log( 'MSZIP fail' );
     const temp = inflate( data.subarray( 2 ) );
     const view = new Uint8Array( new ArrayBuffer( temp.length ) );
     view.set( temp );
@@ -67,7 +67,7 @@ module.exports = function( { from, to, purge = true },
 
         _dataLeftToFill -= toCopy;
       } else if ( file.uOff > _ucp[folder] ) {
-        throw "Not implemented.";
+        throw 'Not implemented.';
       }
     } else {
       const chunk = chunks[0];
@@ -109,7 +109,7 @@ module.exports = function( { from, to, purge = true },
 
     if ( _dataLeftToFill === 0 ) {
       await fs.ensureDir( path.join( to, path.dirname( file.name ) ) );
-      await fs.writeFile( to + "/" + file.name, Buffer.from( _fileBuffer ) );
+      await fs.writeFile( to + '/' + file.name, Buffer.from( _fileBuffer ) );
 
       if ( _fileIndex !== 0 ) {
         await _extractNextFile( cab, data );
@@ -164,31 +164,31 @@ module.exports = function( { from, to, purge = true },
         cab.cabResBytes  = view.getUint16( read, true ); read += 2;
         cab.folResBytes  = view.getUint8( read++ );
         cab.dataResBytes = view.getUint8( read++ );
-        let string = "";
+        let string = '';
         for ( let i = 0; i < cab.cabResBytes; i++ ) {
           string += String.fromCharCode( view.getUint8( read++ ) );
         }
         cab.cabReserve = string;
       }
       if ( cab.flags & 0x0001 ) {
-        let string = "";
+        let string = '';
         while ( view.getUint8( read ) !== 0 ) {
           string += String.fromCharCode( view.getUint8( read++ ) );
         }
         cab.prevCab = string; read++;
-        string = "";
+        string = '';
         while ( view.getUint8( read ) !== 0 ) {
           string += String.fromCharCode( view.getUint8( read++ ) );
         }
         cab.prevDisk = string; read++;
       }
       if ( cab.flags & 0x0002 ) {
-        let string = "";
+        let string = '';
         while ( view.getUint8( read ) !== 0 ) {
           string += String.fromCharCode( view.getUint8( read++ ) );
         }
         cab.nextCab = string; read++;
-        string = "";
+        string = '';
         while ( view.getUint8( read ) !== 0 ) {
           string += String.fromCharCode( view.getUint8( read++ ) );
         }
@@ -203,7 +203,7 @@ module.exports = function( { from, to, purge = true },
         f.cfBlocks = view.getUint16( read, true ); read += 2;
         f.typeCompress = view.getUint16( read, true ); read += 2;
         if ( cab.flags & 0x0004 ) {
-          let string = "";
+          let string = '';
           for ( let i = 0; i < cab.folResBytes; i++ ) {
             string += String.fromCharCode( view.getUint8( read++ ) );
           }
@@ -240,13 +240,13 @@ module.exports = function( { from, to, purge = true },
         f.uOff    = view.getUint32( read, true ); read += 4;
         f.iFolder = view.getUint16( read, true ); read += 2;
         read += 6;
-        let string = "";
+        let string = '';
         while ( view.getUint8( read ) !== 0 ) {
           string += String.fromCharCode( view.getUint8( read++ ) );
         }
         read++;
         f.name = string;
-        f.name = f.name.replace( /\\/g, "/" );
+        f.name = f.name.replace( /\\/g, '/' );
         cab.files.push( f );
       }
       await _extractNextFile( cab, data );

@@ -35,12 +35,12 @@ class CompleteInstaller {
    */
   step1() {
     this.FSOLauncher.IPC.fullInstallProgressItem(
-      process.platform === "win32" ? global.locale.INS_OAL : global.locale.INS_SDL,
+      process.platform === 'win32' ? global.locale.INS_OAL : global.locale.INS_SDL,
       global.locale.INS_WINDOW,
-      process.platform === "win32" ? global.locale.INS_OAL_WINDOW : global.locale.INS_SDL_WINDOW,
+      process.platform === 'win32' ? global.locale.INS_OAL_WINDOW : global.locale.INS_SDL_WINDOW,
       10
     );
-    if ( process.platform === "darwin" ) {
+    if ( process.platform === 'darwin' ) {
       // Skip SDL if already installed.
       if ( this.FSOLauncher.isInstalled['SDL'] ) {
         return Promise.resolve();
@@ -60,12 +60,12 @@ class CompleteInstaller {
    */
   step2() {
     this.FSOLauncher.IPC.fullInstallProgressItem(
-      process.platform === "win32" ? global.locale.INS_NET : global.locale.INS_MONO,
+      process.platform === 'win32' ? global.locale.INS_NET : global.locale.INS_MONO,
       global.locale.INS_WINDOW,
-      process.platform === "win32" ? global.locale.INS_NET_WINDOW : global.locale.INS_MONO_WINDOW,
+      process.platform === 'win32' ? global.locale.INS_NET_WINDOW : global.locale.INS_MONO_WINDOW,
       25
     );
-    if ( process.platform === "darwin" ) {
+    if ( process.platform === 'darwin' ) {
       // Skip Mono if already installed.
       if ( this.FSOLauncher.isInstalled['Mono'] ) {
         return Promise.resolve();
@@ -138,7 +138,7 @@ class CompleteInstaller {
   error( errorMessage ) {
     this.FSOLauncher.IPC.fullInstallProgressItem(
       global.locale.INS_ERROR,
-      global.locale.INS_ERROR_DESCR + " " + errorMessage,
+      global.locale.INS_ERROR_DESCR + ' ' + errorMessage,
       global.locale.INS_CLOSE,
       100
     );
