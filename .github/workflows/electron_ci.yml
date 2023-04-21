@@ -142,6 +142,16 @@ jobs:
         full_version_name="${{ env.PACKAGE_VERSION }}-$release_type.$counter"
         echo "FULL_VERSION_NAME=$full_version_name" >> $GITHUB_ENV
 
+    - name: Get latest release tag
+      id: latest_release_tag
+      run: |
+        if [ "${{ env.RELEASE_TYPE }}" == "alpha" ]; then
+          latest_release_tag=$(git tag --sort=committerdate | grep -E "alpha\.[0-9]+$" | tail -1)
+        else
+          latest_release_tag=$(git tag --sort=committerdate | grep -E "prod\.[0-9]+$" | tail -1)
+        fi
+        echo "LATEST_RELEASE_TAG=$latest_release_tag" >> $GITHUB_ENV
+
     - name: Generate release notes
       id: release_notes
       run: |
@@ -151,16 +161,24 @@ jobs:
           release_notes="This is a stable release suitable for reliable end-user experience and optimized for production use."
         fi
 
-        echo "RELEASE_NOTES=$release_notes" >> $GITHUB_ENV
+        commit_messages=$(git log ${{ env.LATEST_RELEASE_TAG }}..HEAD --pretty=format:"- %s")
+        if [ -n "$commit_messages" ]; then
+          release_notes+="
 
-    - name: Create Release
+List of changes since the last release:
+$commit_messages"
+        fi
+
+        echo "$release_notes" > release_notes.txt
+
+    - name: Create release
       id: create_release
       uses: softprops/action-gh-release@v1
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         tag_name: ${{ env.FULL_VERSION_NAME }}
         name: Release ${{ env.FULL_VERSION_NAME }}
-        body: ${{ env.RELEASE_NOTES }}
+        body_path: release_notes.txt
         draft: false
         prerelease: ${{ github.ref != 'refs/heads/main' }}
 
@@ -176,7 +194,7 @@ jobs:
         name: fsolauncher-mac
         path: release/mac
 
-    - name: Upload Release Assets
+    - name: Upload release assets
       uses: actions/github-script@v5
       with:
         script: |
