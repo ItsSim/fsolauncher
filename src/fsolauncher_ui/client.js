@@ -64,6 +64,7 @@ var setCurrentPage;
 
   /**
    * Adds an event listener.
+   * 
    * @param {*} a 
    * @param {*} b 
    * @param {*} c 
@@ -76,6 +77,7 @@ var setCurrentPage;
 
   /**
    * Adds multiple event listeners.
+   * 
    * @param {*} a 
    * @param {*} b 
    * @param {*} c 
@@ -104,6 +106,7 @@ var setCurrentPage;
 
   /**
    * Sets the electron version.
+   * 
    * @param {string} v The version.
    */
   var setElectronVersion = v => $( '#electron-version' ).textContent = v;
@@ -167,6 +170,7 @@ var setCurrentPage;
 
   /**
    * Changes the launcher theme.
+   * 
    * @param {string} theme The theme id.
    */
   var setTheme = async ( theme, forced ) => {
@@ -198,6 +202,7 @@ var setCurrentPage;
 
   /**
    * Creates a new toast.
+   * 
    * @param {string} id      The toast id.
    * @param {string} message The toast body.
    */
@@ -223,6 +228,7 @@ var setCurrentPage;
 
   /**
    * Removes a toast by id.
+   * 
    * @param {string} id The toast id.
    */
   var removeToast = id => {
@@ -332,6 +338,7 @@ var setCurrentPage;
 
   /**
    * Show hints of `pageId`.
+   * 
    * @param {string} pageId The page id.
    */
   var showHints = pageId => {
@@ -393,7 +400,8 @@ var setCurrentPage;
   };
 
   /**
-   * Sets the current page to `pageId`. 
+   * Sets the current page to `pageId`.
+   *  
    * @param {string} pageId The page id.
    */
   setCurrentPage = pageId => {
@@ -439,6 +447,7 @@ var setCurrentPage;
 
   /**
    * Restores configuration values into their respective option controls.
+   * 
    * @param {array} vars Array of unserialized configuration variables. 
    */
   var restoreConfiguration = vars => {
@@ -452,6 +461,7 @@ var setCurrentPage;
 
   /**
    * Creates or updates a full install progress item.
+   * 
    * @param {string} title    The title.
    * @param {string} text1    The text 1.
    * @param {string} text2    The text 2.
@@ -477,6 +487,7 @@ var setCurrentPage;
 
   /**
    * Creates a notification item in the notification log.
+   * 
    * @param {string} title Notification title.
    * @param {string} body  Notification text.
    * @param {string} url   Notification url (optional).
@@ -531,6 +542,7 @@ var setCurrentPage;
 
   /**
    * Creates or modifies a progress item.
+   * 
    * @param {string} elId         Progress item id.
    * @param {string} title        Progress item title.
    * @param {string} subtitle     Progress item span text.
@@ -599,6 +611,7 @@ var setCurrentPage;
 
   /**
    * Creates a modal.
+   * 
    * @param {string} title       The Modal window title.
    * @param {string} text        The main Modal text.
    * @param {string} yesText     The text for an affirmative button.
