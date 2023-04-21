@@ -161,9 +161,9 @@ jobs:
           release_notes="This is a stable release suitable for reliable end-user experience and optimized for production use."
         fi
 
-        commit_messages=$(git log ${{ env.LATEST_RELEASE_TAG }}..HEAD --pretty=format:"- %s")
+        commit_messages=$(git log ${{ env.LATEST_RELEASE_TAG }}..HEAD --pretty=format:"- [%h](https://github.com/${{ github.repository }}/commit/%H) %s")
         if [ -n "$commit_messages" ]; then
-          release_notes=$(printf "%s\n\nList of changes since the last release:\n%s" "$release_notes" "$commit_messages")
+          release_notes=$(printf "%s\n\n### List of changes since the last release:\n%s" "$release_notes" "$commit_messages")
         fi
 
         echo "$release_notes" > release_notes.txt
