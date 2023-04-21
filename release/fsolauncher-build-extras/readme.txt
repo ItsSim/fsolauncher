@@ -1,4 +1,4 @@
-﻿Thank you for downloading official FreeSO Launcher.
+﻿Thank you for downloading the official FreeSO Launcher!
 
 This program is designed to make it easier to install and play FreeSO, the free and open source reimplementation of The Sims Online. It is not affiliated with EA or Maxis in any way.
 
@@ -30,4 +30,5 @@ Get in touch:
 
 FreeSO Terms and Conditions: https://beta.freeso.org/terms
 GitHub repository: https://github.com/ItsSim/fsolauncher
+
 For issues related to the launcher, please submit a GitHub issue at https://github.com/ItsSim/fsolauncher/issues/new/choose
