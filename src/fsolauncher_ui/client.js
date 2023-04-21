@@ -1,17 +1,15 @@
-/* global io Howl DOMPurify shared RSSParser */
-var parser = new RSSParser();
-
-var $  = q => document.querySelector( q );
-var $a = q => document.querySelectorAll( q );
-var $c = q => document.createElement( q );
+var parser = new window.RSSParser();
+var querySelector = q => document.querySelector( q );
+var querySelectorAll = q => document.querySelectorAll( q );
+var createElement = q => document.createElement( q );
 
 // Add a hook to make all links open a new window.
-DOMPurify.addHook( 'afterSanitizeAttributes', node => {
+window.DOMPurify.addHook( 'afterSanitizeAttributes', node => {
   // set all elements owning target to target=_blank.
   if ( 'target' in node ) { node.setAttribute( 'target', '_blank' ); }
   // set non-HTML/MathML links to xlink:show=new.
-  if ( ! node.hasAttribute( 'target' ) && 
-     ( node.hasAttribute( 'xlink:href' ) || node.hasAttribute( 'href' ) ) ) {
+  if ( ! node.hasAttribute( 'target' ) &&
+    ( node.hasAttribute( 'xlink:href' ) || node.hasAttribute( 'href' ) ) ) {
     node.setAttribute( 'xlink:show', 'new' );
   }
 } );
@@ -22,13 +20,13 @@ var darkThemes = [ 'halloween', 'dark' ];
 var setCurrentPage;
 
 ( () => {
-  var sock = io( `https://${ $( 'body' ).getAttribute( 'wsUrl' ) }:${ $( 'body' ).getAttribute( 'wsPort' ) }` );
-  var pageTriggerAudio = new Howl( { src: 'fsolauncher_sounds/click.wav', volume: 0.4 } );
-  var yesNoAudio = new Howl( { src: 'fsolauncher_sounds/modal.wav', volume: 0.4 } );
+  var socket = window.io( `https://${querySelector( 'body' ).getAttribute( 'wsUrl' )}:${querySelector( 'body' ).getAttribute( 'wsPort' )}` );
+  var pageTriggerAudio = new window.Howl( { src: 'fsolauncher_sounds/click.wav', volume: 0.4 } );
+  var yesNoAudio = new window.Howl( { src: 'fsolauncher_sounds/modal.wav', volume: 0.4 } );
   var twitterHasAlreadyLoaded = false;
   var simitoneRequirementsCheckInterval;
   var simitoneSuggestedUpdate;
-  var platform = $( 'html' ).className;
+  var platform = querySelector( 'html' ).className;
   var prevTheme;
   var timeout = ( promise, milliseconds = 5000 ) => {
     return new Promise( ( resolve, reject ) => {
@@ -39,20 +37,19 @@ var setCurrentPage;
     } )
   };
   var init = () => {
-    ( sendToMain( 'INIT_DOM' ), setCurrentPage( 'home' ), fetchNews() )
+    sendToMain( 'INIT_DOM' );
+    setCurrentPage( 'home' );
+    fetchNews();
     setInterval( updateTSOClock, 1000 );
-    setElectronVersion( shared.electronVersion );
-    sock.on( 'receive global message', data => 
+    setElectronVersion( window.shared.electronVersion );
+    socket.on( 'receive global message', data =>
       sendToMain( 'SOCKET_MESSAGE', [ data.Message, data.Url ] ) );
   };
 
   /**
    * Fires an event to the main process.
-   * 
-   * @param {*} id 
-   * @param {*} param 
    */
-  var sendToMain = ( id, param ) => shared.send( id, param );
+  var sendToMain = ( id, param ) => window.shared.send( id, param );
 
   /**
    * Fires when a message has been received from the main process.
@@ -60,30 +57,22 @@ var setCurrentPage;
    * @param {string} id 
    * @param {Function} callback 
    */
-  var onMessage = ( id, callback ) => shared.on( id, callback );
+  var onMessage = ( id, callback ) => window.shared.on( id, callback );
 
   /**
    * Adds an event listener.
-   * 
-   * @param {*} a 
-   * @param {*} b 
-   * @param {*} c 
    */
   var addEventListener = ( a, b, c ) => {
     a.tagName
       ? a.addEventListener( b, c )
-        : $( a ).addEventListener( b, c );
+      : querySelector( a ).addEventListener( b, c );
   };
 
   /**
    * Adds multiple event listeners.
-   * 
-   * @param {*} a 
-   * @param {*} b 
-   * @param {*} c 
    */
   var addEventListenerAll = ( a, b, c ) => {
-    var e = $a( a );
+    var e = querySelectorAll( a );
     for ( a = 0; a < e.length; a++ )
       e[a].addEventListener( b, a => c( a, e ) );
   };
@@ -100,7 +89,7 @@ var setCurrentPage;
     0 == f && ( f = 12 );
     var g = Math.floor( e % 300 / 5 );
     10 > g && ( g = '0' + g );
-    var h = $( '#simtime' );
+    var h = querySelector( '#simtime' );
     h && ( h.textContent = f + ':' + g + ' ' + d );
   }
 
@@ -109,44 +98,44 @@ var setCurrentPage;
    * 
    * @param {string} v The version.
    */
-  var setElectronVersion = v => $( '#electron-version' ).textContent = v;
+  var setElectronVersion = v => querySelector( '#electron-version' ).textContent = v;
 
   /**
    * Marks Simitone as installed.
    */
-  var simitoneInstalled = () => $( '#simitone-page' )
+  var simitoneInstalled = () => querySelector( '#simitone-page' )
     .classList.add( 'simitone-installed' );
 
   /**
    * Marks Simitone as not installed.
    */
-  var simitoneNotInstalled = () => $( '#simitone-page' )
+  var simitoneNotInstalled = () => querySelector( '#simitone-page' )
     .classList.remove( 'simitone-installed' );
 
   /**
    * Marks TS1 as installed.
    */
-  var simsInstalled = () => $( '#simitone-page' )
+  var simsInstalled = () => querySelector( '#simitone-page' )
     .classList.add( 'ts1cc-installed' );
 
   /**
    * Marks TS1 as not installed.
    */
-  var simsNotInstalled = () => $( '#simitone-page' )
+  var simsNotInstalled = () => querySelector( '#simitone-page' )
     .classList.remove( 'ts1cc-installed' );
 
   /**
    * Shows the Simitone updater.
    */
   var simitoneShouldUpdate = () => {
-    $( '#simitone-page' ).classList.add( 'simitone-should-update' );
-    $( '#simitone-update-version' ).textContent = simitoneSuggestedUpdate;
+    querySelector( '#simitone-page' ).classList.add( 'simitone-should-update' );
+    querySelector( '#simitone-update-version' ).textContent = simitoneSuggestedUpdate;
   }
 
   /**
    * Hides the Simitone updater.
    */
-  var simitoneShouldntUpdate = () => $( '#simitone-page' )
+  var simitoneShouldntUpdate = () => querySelector( '#simitone-page' )
     .classList.remove( 'simitone-should-update' );
 
   /**
@@ -156,17 +145,17 @@ var setCurrentPage;
    */
   var ago = date => {
     var b = Math.floor( ( new Date - date ) / 1000 );
-    return 5 > b ? 'just now' : 
-      60 > b ? b + ' seconds ago' : 
-      3600 > b ? ( date = Math.floor( b / 60 ), 
-        1 < date ? date + ' minutes ago' : '1 minute ago' ) : 
-      86400 > b ? ( date = Math.floor( b / 3600 ), 
-        1 < date ? date + ' hours ago' : '1 hour ago' )  : 
-      172800 > b ? ( date = Math.floor( b / 86400 ), 
-        1 < date ? date + ' days ago' : '1 day ago' )  : 
-      date.getDate().toString() + ' ' + 
-        $( 'body' ).getAttribute( 'monthString' )
-          .split( ' ' )[ date.getMonth() ] + ', ' + date.getFullYear();
+    return 5 > b ? 'just now' :
+      60 > b ? b + ' seconds ago' :
+        3600 > b ? ( date = Math.floor( b / 60 ),
+          1 < date ? date + ' minutes ago' : '1 minute ago' ) :
+          86400 > b ? ( date = Math.floor( b / 3600 ),
+            1 < date ? date + ' hours ago' : '1 hour ago' ) :
+            172800 > b ? ( date = Math.floor( b / 86400 ),
+              1 < date ? date + ' days ago' : '1 day ago' ) :
+              date.getDate().toString() + ' ' +
+              querySelector( 'body' ).getAttribute( 'monthString' )
+                .split( ' ' )[date.getMonth()] + ', ' + date.getFullYear();
   }
 
   /**
@@ -177,7 +166,7 @@ var setCurrentPage;
   var setTheme = async ( theme, forced ) => {
     var date = new Date();
     var m = date.getMonth();
-    var d = date.getDate(); 
+    var d = date.getDate();
     var y = date.getFullYear();
 
     if ( ! forced ) {
@@ -185,14 +174,9 @@ var setCurrentPage;
       if ( ( m == 9 && d >= 15 && d <= 31 ) || ( m == 10 && d == 1 ) ) {
         theme = 'halloween';
       }
-
-      // Summer 2021 theme.
-      if ( y == 2021 && ( ( m == 8 && d >= 12 && d <= 31 ) || ( m == 9 && d >= 1 && d <= 10 ) ) ) {
-        theme = 'summer2021';
-      }
     }
 
-    $( 'body' ).className = theme;
+    querySelector( 'body' ).className = theme;
 
     try {
       await loadTwitter();
@@ -204,27 +188,27 @@ var setCurrentPage;
   /**
    * Creates a new toast.
    * 
-   * @param {string} id      The toast id.
+   * @param {string} id The toast id.
    * @param {string} message The toast body.
    */
   var toast = ( id, message ) => {
-    var div = $c( 'div' );
-        div.style.display = 'block';
-        div.className = 'toast';
-        div.id = id;
-  
-    var i = $c( 'i' );
-        i.className = 'material-icons spin';
-        i.innerHTML = 'loop';
-  
-    var span = $c( 'span' );
-        span.className = 'toast-message';
-        span.textContent = message;
-  
+    var div = createElement( 'div' );
+    div.style.display = 'block';
+    div.className = 'toast';
+    div.id = id;
+
+    var i = createElement( 'i' );
+    i.className = 'material-icons spin';
+    i.innerHTML = 'loop';
+
+    var span = createElement( 'span' );
+    span.className = 'toast-message';
+    span.textContent = message;
+
     div.appendChild( i );
     div.appendChild( span );
-  
-    $( '#debug' ).appendChild( div );
+
+    querySelector( '#debug' ).appendChild( div );
   }
 
   /**
@@ -234,7 +218,7 @@ var setCurrentPage;
    */
   var removeToast = id => {
     var $toast = document.getElementById( id );
-        $toast?.parentNode?.removeChild( $toast );
+    $toast?.parentNode?.removeChild( $toast );
   }
 
   var spinDegrees = 0;
@@ -244,12 +228,12 @@ var setCurrentPage;
    */
   var fetchNews = async userRequested => {
     console.log( 'Fetching news...' );
-    var $rssUrl     = $( 'body' ).getAttribute( 'rss' );
-    var $didYouKnow = $( '#did-you-know' );
-    var $rss        = $( '#rss' );
-    var $spinner    = $( '#rss-loading' );
+    var $rssUrl = querySelector( 'body' ).getAttribute( 'rss' );
+    var $didYouKnow = querySelector( '#did-you-know' );
+    var $rss = querySelector( '#rss' );
+    var $spinner = querySelector( '#rss-loading' );
 
-    var $homeRefreshBtn = $( '#refresh-home-button' );
+    var $homeRefreshBtn = querySelector( '#refresh-home-button' );
     var $homeRefreshBtnIcon = $homeRefreshBtn.querySelector( 'i' );
 
     $homeRefreshBtn.setAttribute( 'disabled', true );
@@ -276,24 +260,25 @@ var setCurrentPage;
       setTimeout( () => {
         $didYouKnow.style.display = 'block';
         $rss.style.display = 'block';
-        $spinner.style.display    = 'none';
+        $spinner.style.display = 'none';
       }, 500 );
 
-      $( '#rss .alt-content' ).style.display = errors ? 'block' : 'none';
+      querySelector( '#rss .alt-content' ).style.display = errors ? 'block' : 'none';
 
       if ( errors || ! response ) {
         return console.log( 'RSS Failed:', errors, response );
       }
+      console.log( response ? 'Articles received successfully.' : 'Failed to receive articles' );
 
       // Clear the rss container for the new articles.
-      $( '#rss-root' ).innerHTML = '';
-      console.log( response ? 'Articles received successfully.' : 'Failed to receive articles' );
-      response?.items?.forEach( function( entry ) {
-        var articleContainer = $c( 'div' ),
-        articleTitle     = $c( 'h1' ),
-        articleSpan      = $c( 'span' ),
-        articleDiv       = $c( 'div' ),
-        articleLink      = $c( 'a' );
+      querySelector( '#rss-root' ).innerHTML = '';
+      
+      response?.items?.forEach( function ( entry ) {
+        var articleContainer = createElement( 'div' ),
+          articleTitle = createElement( 'h1' ),
+          articleSpan = createElement( 'span' ),
+          articleDiv = createElement( 'div' ),
+          articleLink = createElement( 'a' );
         articleContainer.className = 'rss-entry';
         articleTitle.textContent = entry.title;
         articleSpan.textContent = entry.pubDate
@@ -305,7 +290,7 @@ var setCurrentPage;
           .replace( /\s{2,}/g, ' ' )
           .replace( /\n/g, '' );
 
-        articleDiv.innerHTML = DOMPurify.sanitize( articleContent );
+        articleDiv.innerHTML = window.DOMPurify.sanitize( articleContent );
         articleLink.textContent = document
           .querySelector( 'body' )
           .getAttribute( 'readMoreString' );
@@ -317,7 +302,7 @@ var setCurrentPage;
         articleContainer.appendChild( articleDiv );
         articleContainer.appendChild( articleLink );
 
-        $( '#rss-root' ).appendChild( articleContainer );
+        querySelector( '#rss-root' ).appendChild( articleContainer );
       } );
     };
 
@@ -330,11 +315,11 @@ var setCurrentPage;
         parseRss( error, null )
       } );
 
-      // Re-enable refresh button after 3 seconds.
-      setTimeout( () => { 
-        $homeRefreshBtn.removeAttribute( 'disabled' ), 
-        $homeRefreshBtn.style.cursor = 'pointer' 
-      }, 3000 );
+    // Re-enable refresh button after 3 seconds.
+    setTimeout( () => {
+      $homeRefreshBtn.removeAttribute( 'disabled' ),
+        $homeRefreshBtn.style.cursor = 'pointer'
+    }, 3000 );
   }
 
   /**
@@ -343,13 +328,13 @@ var setCurrentPage;
    * @param {string} pageId The page id.
    */
   var showHints = pageId => {
-    for ( var hints = $a( '[hint-page]' ), i = 0; i < hints.length; i++ ) {
+    for ( var hints = querySelectorAll( '[hint-page]' ), i = 0; i < hints.length; i++ ) {
       hints[i].style.display = 'none';
     }
     var hintId = 'HINT_' + pageId;
 
     if ( ! localStorage[hintId] ) {
-      hints = $a( `[hint-page="${ pageId }"]` );
+      hints = querySelectorAll( `[hint-page="${pageId}"]` );
       for ( var j = 0; j < hints.length; j++ ) {
         hints[j].style.display = 'block';
         hints[j].addEventListener( 'click', e => {
@@ -366,29 +351,26 @@ var setCurrentPage;
   var loadTwitter = () => {
     console.log( 'Loading Twitter...' );
     return new Promise( ( resolve, reject ) => {
-      $( '#did-you-know' ).innerHTML = '';
-      var currentTheme = $( 'body' ).className;
+      querySelector( '#did-you-know' ).innerHTML = '';
+      var currentTheme = querySelector( 'body' ).className;
       var twitterTheme = darkThemes.includes( currentTheme ) ? 'dark' : 'light';
-      var $preloadElement = $c( 'a' );
-        $preloadElement.className = 'twitter-timeline';
-        $preloadElement.style = 'text-decoration:none;';
-        $preloadElement.setAttribute( 'data-height', '490' );
-        if ( currentTheme != 'summer2021' ) {
-          $preloadElement.setAttribute( 'data-chrome', 'transparent' );
-        }
-        $preloadElement.setAttribute( 'data-theme', twitterTheme );
-        $preloadElement.setAttribute( 'href', $( 'body' ).getAttribute( 'twUrl' ) );
-        $preloadElement.innerHTML = '@FreeSOGame on Twitter';
-        $( '#did-you-know' ).append( $preloadElement );
-      var $prevWidget = $( '#tw' );
+      var $preloadElement = createElement( 'a' );
+      $preloadElement.className = 'twitter-timeline';
+      $preloadElement.style = 'text-decoration:none;';
+      $preloadElement.setAttribute( 'data-height', '490' );
+      $preloadElement.setAttribute( 'data-theme', twitterTheme );
+      $preloadElement.setAttribute( 'href', querySelector( 'body' ).getAttribute( 'twUrl' ) );
+      $preloadElement.innerHTML = '@FreeSOGame on Twitter';
+      querySelector( '#did-you-know' ).append( $preloadElement );
+      var $prevWidget = querySelector( '#tw' );
       if ( $prevWidget ) {
         $prevWidget.parentNode.removeChild( $prevWidget );
       }
-      var $head = $( 'head' );
-      var $script = $c( 'script' );
-          $script.setAttribute( 'id', 'tw' );
-          $script.src = 'https://platform.twitter.com/widgets.js';
-          
+      var $head = querySelector( 'head' );
+      var $script = createElement( 'script' );
+      $script.setAttribute( 'id', 'tw' );
+      $script.src = 'https://platform.twitter.com/widgets.js';
+
       $script.addEventListener( 'load', () => {
         twitterHasAlreadyLoaded = true;
         resolve();
@@ -407,41 +389,38 @@ var setCurrentPage;
    */
   setCurrentPage = pageId => {
     if ( pageId == 'simitone' ) {
-      if ( $( 'body' ).className != 'simitone' ) {
-        prevTheme = $( 'body' ).className;
+      if ( querySelector( 'body' ).className != 'simitone' ) {
+        prevTheme = querySelector( 'body' ).className;
       }
-      
       if ( ! darkThemes.includes( prevTheme ) ) { // Stay in dark theme.
         setTheme( 'simitone', true );
       }
-      
       sendToMain( 'CHECK_SIMITONE' );
 
       simitoneRequirementsCheckInterval && clearInterval( simitoneRequirementsCheckInterval );
-      simitoneRequirementsCheckInterval = setInterval( 
+      simitoneRequirementsCheckInterval = setInterval(
         () => sendToMain( 'CHECK_SIMITONE' ), 60000 );
     } else {
       if ( prevTheme ) {
         setTheme( prevTheme );
         prevTheme = null;
       }
-
       if ( simitoneRequirementsCheckInterval ) {
         clearInterval( simitoneRequirementsCheckInterval );
         simitoneRequirementsCheckInterval = null;
       }
     }
 
-    for ( var menuItems = $a( 'li[page-trigger]' ), i = 0; i < menuItems.length; i++ ) {
+    for ( var menuItems = querySelectorAll( 'li[page-trigger]' ), i = 0; i < menuItems.length; i++ ) {
       menuItems[i].classList.remove( 'active' );
     }
 
-    $( `li[page-trigger="${pageId}"]` ).classList.add( 'active' );
+    querySelector( `li[page-trigger="${pageId}"]` ).classList.add( 'active' );
 
-    for ( var pages = $a( 'div.page' ), j = pages.length - 1; 0 <= j; j-- ) {
+    for ( var pages = querySelectorAll( 'div.page' ), j = pages.length - 1; 0 <= j; j-- ) {
       pages[j].style.display = 'none';
     }
-    $( `#${pageId}-page` ).style.display = 'block';
+    querySelector( `#${pageId}-page` ).style.display = 'block';
 
     showHints( pageId );
   }
@@ -453,11 +432,11 @@ var setCurrentPage;
    */
   var restoreConfiguration = vars => {
     for ( var Section in vars )
-    for ( var Item in vars[Section] ) {
-      var $option = $( `[option-id="${Section}.${Item}"]` );
-      if ( platform == 'darwin' && Item == 'GraphicsMode' ) continue;
-      $option && ( $option.value = vars[Section][Item] );
-    }
+      for ( var Item in vars[Section] ) {
+        var $option = querySelector( `[option-id="${Section}.${Item}"]` );
+        if ( platform == 'darwin' && Item == 'GraphicsMode' ) continue;
+        $option && ( $option.value = vars[Section][Item] );
+      }
   }
 
   /**
@@ -469,12 +448,12 @@ var setCurrentPage;
    * @param {number} progress The progress percentage number.
    */
   var updateFullInstallProgressItem = ( title, text1, text2, _progress ) => {
-    var $fullInstall = $( '#full-install' );
+    var $fullInstall = querySelector( '#full-install' );
     if ( title && text1 && text2 ) {
-      var $title    = $( '#full-install-title' );
-      var $text1    = $( '#full-install-text1' );
-      var $text2    = $( '#full-install-text2' );
-      var $progress = $( '#full-install-progress' );
+      var $title = querySelector( '#full-install-title' );
+      var $text1 = querySelector( '#full-install-text1' );
+      var $text2 = querySelector( '#full-install-text2' );
+      var $progress = querySelector( '#full-install-progress' );
 
       $title.textContent = title;
       $text1.textContent = text1;
@@ -494,35 +473,35 @@ var setCurrentPage;
    * @param {string} url   Notification url (optional).
    */
   var createNotificationItem = ( title, body, url ) => {
-    $( '#notifications-page .alt-content' ).style.display = 'none';
+    querySelector( '#notifications-page .alt-content' ).style.display = 'none';
 
     var id = Math.floor( Date.now() / 1000 );
-    var notification = $c( 'div' );
-        notification.className = 'notification';
-        notification.setAttribute( 'data-url', url );
-        notification.id = `FSONotification${id}`;
+    var notification = createElement( 'div' );
+    notification.className = 'notification';
+    notification.setAttribute( 'data-url', url );
+    notification.id = `FSONotification${id}`;
 
-    var icon = $c( 'i' );
-        icon.className = 'material-icons';
-        icon.innerHTML = 'notifications_empty';
+    var icon = createElement( 'i' );
+    icon.className = 'material-icons';
+    icon.innerHTML = 'notifications_empty';
 
-    var h1 = $c( 'h1' );
-        h1.textContent = title;
+    var h1 = createElement( 'h1' );
+    h1.textContent = title;
 
-    var span = $c( 'span' );
-        span.innerHTML = new Date().toLocaleString();
+    var span = createElement( 'span' );
+    span.innerHTML = new Date().toLocaleString();
 
-    var p = $c( 'p' );
-        p.textContent = DOMPurify.sanitize( body );
+    var p = createElement( 'p' );
+    p.textContent = window.DOMPurify.sanitize( body );
 
     if ( url ) {
       var btn = document.createElement( 'a' );
-          btn.className = 'button material-icons';
-          btn.target    = '_blank';
-          btn.style     = 'float:right;margin-top:-15px;border-radius:50%';
-          btn.innerHTML = 'link';
-          btn.href      = url;
-    }   
+      btn.className = 'button material-icons';
+      btn.target = '_blank';
+      btn.style = 'float:right;margin-top:-15px;border-radius:50%';
+      btn.innerHTML = 'link';
+      btn.href = url;
+    }
 
     notification.appendChild( icon );
     notification.appendChild( h1 );
@@ -531,12 +510,14 @@ var setCurrentPage;
 
     if ( url ) notification.appendChild( btn );
 
-    var $logContainer = $( '#notifications-page .page-content' );
-        $logContainer.innerHTML = notification.outerHTML + $logContainer.innerHTML;
-  
-    $( `#FSONotification${id} p` ).addEventListener( 'click', e => {
-        shared.openExternal( e.target.getAttribute( 'data-url' ) );
-      },
+    var $logContainer = querySelector( '#notifications-page .page-content' );
+    $logContainer.innerHTML = notification.outerHTML + $logContainer.innerHTML;
+
+    querySelector( `#FSONotification${id} p` ).addEventListener( 'click', _e => {
+      if ( url ) {
+        window.open( url, '_blank' );
+      }
+    },
       false
     );
   }
@@ -568,34 +549,34 @@ var setCurrentPage;
           : ( ( d.querySelector( '.loading' ).style.display = 'block' ),
             ( d.querySelector( '.miniconsole' ).style.display = 'none' ) );
     else {
-      d = $c( 'div' );
+      d = createElement( 'div' );
       d.className = 'download';
       d.setAttribute( 'id', elId );
 
-      elId = $c( 'h1' );
+      elId = createElement( 'h1' );
       elId.innerHTML = title;
 
-      title = $c( 'span' );
+      title = createElement( 'span' );
       title.innerHTML = subtitle;
 
-      subtitle = $c( 'div' );
+      subtitle = createElement( 'div' );
       subtitle.className = 'info';
       subtitle.innerHTML = progressText;
 
-      progressText = $c( 'div' );
+      progressText = createElement( 'div' );
       progressText.className = 'loading';
 
-      var h = $c( 'div' );
-          h.className = 'miniconsole';
-      
-          miniconsole
+      var h = createElement( 'div' );
+      h.className = 'miniconsole';
+
+      miniconsole
         ? ( ( progressText.style.display = 'none' ),
           ( h.innerHTML += miniconsole ),
           ( h.style.display = 'block' ),
           ( h.scrollTop = h.scrollHeight ) )
         : ( ( progressText.style.display = 'block' ), ( h.style.display = 'none' ) );
 
-      miniconsole = $c( 'div' );
+      miniconsole = createElement( 'div' );
       miniconsole.className = 'progress';
       miniconsole.style.width = percentage + '%';
       progressText.appendChild( miniconsole );
@@ -605,8 +586,8 @@ var setCurrentPage;
       d.appendChild( h );
       d.appendChild( progressText );
 
-      $( '#downloads-page .page-content' ).innerHTML =
-        d.outerHTML + $( '#downloads-page .page-content' ).innerHTML;
+      querySelector( '#downloads-page .page-content' ).innerHTML =
+        d.outerHTML + querySelector( '#downloads-page .page-content' ).innerHTML;
     }
   }
 
@@ -624,52 +605,51 @@ var setCurrentPage;
   var yesNo = ( title, text, yesText, noText, modalRespId, extra, type ) => {
     yesNoAudio.play();
 
-    var d = $c( 'div' );
-        d.className = 'modal';
+    var d = createElement( 'div' );
+    d.className = 'modal';
 
     if ( type ) {
       d.className += ' modal-' + type;
     }
 
-    var h = $c( 'h1' );
-        h.innerHTML = title;
+    var h = createElement( 'h1' );
+    h.innerHTML = title;
 
     d.appendChild( h );
 
-    title = $c( 'p' );
+    title = createElement( 'p' );
     title.innerHTML = text;
 
     d.appendChild( title );
-    text = $c( 'div' );
+    text = createElement( 'div' );
 
-    title = $c( 'button' );
+    title = createElement( 'button' );
     title.innerHTML = yesText;
-    title.addEventListener( 'click', function() {
+    title.addEventListener( 'click', function () {
       d.parentNode.removeChild( d );
-  
-      if ( $a( '.modal' ).length == 0 ) {
-        $( '#overlay' ).style.display = 'none';
+
+      if ( querySelectorAll( '.modal' ).length == 0 ) {
+        querySelector( '#overlay' ).style.display = 'none';
       }
-  
-      modalRespId && shared.send( modalRespId, ! 0, extra );
+      modalRespId && window.shared.send( modalRespId, ! 0, extra );
     } );
     text.appendChild( title );
     noText
-      ? ( ( yesText = $c( 'span' ) ),
+      ? ( ( yesText = createElement( 'span' ) ),
         ( yesText.innerHTML = noText ),
-        yesText.addEventListener( 'click', function() {
+        yesText.addEventListener( 'click', function () {
           d.parentNode.removeChild( d );
-          if ( $a( '.modal' ).length == 0 ) {
-            $( '#overlay' ).style.display = 'none';
+          if ( querySelectorAll( '.modal' ).length == 0 ) {
+            querySelector( '#overlay' ).style.display = 'none';
           }
-          $( '#overlay' ).style.display = 'none';
-          modalRespId && shared.send( modalRespId, ! 1, extra );
+          querySelector( '#overlay' ).style.display = 'none';
+          modalRespId && window.shared.send( modalRespId, ! 1, extra );
         } ),
         text.appendChild( yesText ) )
       : ( title.style.margin = '0px' );
     d.appendChild( text );
-    $( '#launcher' ).appendChild( d );
-    $( '#overlay' ).style.display = 'block';
+    querySelector( '#launcher' ).appendChild( d );
+    querySelector( '#overlay' ).style.display = 'block';
   }
 
   // Events received from the main process.
@@ -686,7 +666,7 @@ var setCurrentPage;
   } );
   // REMESH_INFO
   onMessage( 'REMESH_INFO', ( a, v ) => {
-    $( '.new' ).style.display = 'none';
+    querySelector( '.new' ).style.display = 'none';
     if ( ! v ) return;
 
     var i = parseInt( v );
@@ -695,16 +675,16 @@ var setCurrentPage;
 
     if ( seconds < 172800 ) {
       if ( Math.floor( seconds / 86400 ) <= 1 ) {
-        $( '.new' ).style.display = 'block';
+        querySelector( '.new' ).style.display = 'block';
       } else {
-        $( '.new' ).style.display = 'none';
+        querySelector( '.new' ).style.display = 'none';
       }
     } else {
-      $( '.new' ).style.display = 'none';
+      querySelector( '.new' ).style.display = 'none';
     }
 
-    $( '#remeshinfo' ).style.display = 'block';
-    $( '#remeshinfo' ).innerHTML =
+    querySelector( '#remeshinfo' ).style.display = 'block';
+    querySelector( '#remeshinfo' ).innerHTML =
       `<i style="vertical-align:middle;float:left;margin-right:5px" class="material-icons">access_time</i> 
       <span style="line-height:25px">${f}</span>`;
   } );
@@ -719,16 +699,16 @@ var setCurrentPage;
   } );
   onMessage( 'SIMITONE_SET_VER', ( a, b ) => {
     if ( b ) {
-      $( '#simitone-ver' ).textContent = `(Installed: ${b})`;
+      querySelector( '#simitone-ver' ).textContent = `(Installed: ${b})`;
     } else {
-      $( '#simitone-ver' ).textContent = "";
+      querySelector( '#simitone-ver' ).textContent = "";
     }
   } );
   // SET_THEME
   onMessage( 'SET_THEME', ( a, themeId ) => setTheme( themeId ) );
   // SET_TIP
   onMessage( 'SET_TIP', ( a, tipText ) => {
-    $( '#tip-text' ).innerHTML = DOMPurify.sanitize( tipText );
+    querySelector( '#tip-text' ).innerHTML = window.DOMPurify.sanitize( tipText );
   } );
   // TOAST
   onMessage( 'TOAST', ( a, t, c ) => toast( t, c ) );
@@ -747,24 +727,24 @@ var setCurrentPage;
     if ( ! b ) return;
 
     if ( b.FSO ) {
-      $( '.item[install=FSO]' ).className = 'item installed';
+      querySelector( '.item[install=FSO]' ).className = 'item installed';
     } else {
-      $( '.item[install=FSO]' ).className = 'item';
+      querySelector( '.item[install=FSO]' ).className = 'item';
     }
     if ( b.TSO ) {
-      $( '.item[install=TSO]' ).className = 'item installed';
+      querySelector( '.item[install=TSO]' ).className = 'item installed';
     } else {
-      $( '.item[install=TSO]' ).className = 'item';
+      querySelector( '.item[install=TSO]' ).className = 'item';
     }
     if ( b.NET ) {
-      $( '.item[install=NET]' ).className = 'item installed';
+      querySelector( '.item[install=NET]' ).className = 'item installed';
     } else {
-      $( '.item[install=NET]' ).className = 'item';
+      querySelector( '.item[install=NET]' ).className = 'item';
     }
     if ( b.OpenAL ) {
-      $( '.item[install=OpenAL]' ).className = 'item installed';
+      querySelector( '.item[install=OpenAL]' ).className = 'item installed';
     } else {
-      $( '.item[install=OpenAL]' ).className = 'item';
+      querySelector( '.item[install=OpenAL]' ).className = 'item';
     }
     if ( b.TS1 ) {
       simsInstalled();
@@ -777,37 +757,37 @@ var setCurrentPage;
       simitoneNotInstalled();
     }
     if ( b.Mono ) {
-      $( '.item[install=Mono]' ).className = 'item installed';
+      querySelector( '.item[install=Mono]' ).className = 'item installed';
     } else {
-      $( '.item[install=Mono]' ).className = 'item';
+      querySelector( '.item[install=Mono]' ).className = 'item';
     }
     if ( b.SDL ) {
-      $( '.item[install=SDL]' ).className = 'item installed';
+      querySelector( '.item[install=SDL]' ).className = 'item installed';
     } else {
-      $( '.item[install=SDL]' ).className = 'item';
+      querySelector( '.item[install=SDL]' ).className = 'item';
     }
   } );
   // STOP_PROGRESS_ITEM
   onMessage( 'STOP_PROGRESS_ITEM', ( a, b ) => {
-    var $progressItem = $( `#${b}` );
+    var $progressItem = querySelector( `#${b}` );
     if ( $progressItem ) {
       $progressItem.className = 'download stopped';
     }
   } );
   // PLAY_SOUND
   onMessage( 'PLAY_SOUND', ( a, b ) => {
-    var audio = new Howl( { src: `fsolauncher_sounds/${b}.wav`, volume: 0.4 } );
-        audio.play();
+    var audio = new window.Howl( { src: `fsolauncher_sounds/${b}.wav`, volume: 0.4 } );
+    audio.play();
   } );
   // CONSOLE_LOG
   onMessage( 'CONSOLE_LOG', ( a, b ) => console.log( b ) );
   // CREATE_PROGRESS_ITEM
-  onMessage( 'CREATE_PROGRESS_ITEM', ( a, b, c, e, f, g, d ) => 
+  onMessage( 'CREATE_PROGRESS_ITEM', ( a, b, c, e, f, g, d ) =>
     createOrModifyProgressItem( b, c, e, f, g, d ) );
   // FULL_INSTALL_PROGRESS_ITEM
-  onMessage( 'FULL_INSTALL_PROGRESS_ITEM', ( a, b, c, e, f ) => 
+  onMessage( 'FULL_INSTALL_PROGRESS_ITEM', ( a, b, c, e, f ) =>
     updateFullInstallProgressItem( b, c, e, f ) );
-  
+
   // Renderer HTML event listeners.
   addEventListener( '.launch',                  'click',       () => sendToMain( 'PLAY' ) );
   addEventListener( '.launch',                  'contextmenu', () => sendToMain( 'PLAY', true ) );
@@ -821,17 +801,17 @@ var setCurrentPage;
 
   addEventListenerAll( '[option-id]', 'change', ( a, _b ) => {
     var c = a.currentTarget.getAttribute( 'option-id' ),
-        e = a.currentTarget.value;
+      e = a.currentTarget.value;
 
     'Launcher.Theme' === c && setTheme( e );
     c = c.split( '.' );
-    sendToMain( 'SET_CONFIGURATION', [c[0], c[1], e] );
+    sendToMain( 'SET_CONFIGURATION', [ c[0], c[1], e ] );
   } );
   addEventListenerAll( '[page-trigger]', 'click', ( a, _b ) => {
     pageTriggerAudio.play();
     setCurrentPage( a.currentTarget.getAttribute( 'page-trigger' ) );
   } );
-  addEventListenerAll( '[install]', 'click', ( a, _b ) => 
+  addEventListenerAll( '[install]', 'click', ( a, _b ) =>
     sendToMain( 'INSTALL', a.currentTarget.getAttribute( 'install' ) ) );
 
   init(); // Init client code.

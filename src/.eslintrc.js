@@ -14,15 +14,16 @@ module.exports = {
     "parserOptions": {
         "ecmaVersion": 12
     },
-    "ignorePatterns": ["**/vendor/*.js"],
+    "ignorePatterns": [ "**/vendor/*.js" ],
     "rules": {
-        "no-unused-vars": ["warn", { "args": "after-used", "argsIgnorePattern": "^_" }],
-        "prefer-const": ["error", {
+        "no-unused-vars": [ "warn", { "args": "after-used", "argsIgnorePattern": "^_" } ],
+        "prefer-const": [ "error", {
             "destructuring": "any",
             "ignoreReadBeforeAssign": false
-        }],
-        "space-in-parens": ["error", "always"],
-        "space-before-blocks": ["error", "always"],
+        } ],
+        "space-in-parens": [ "error", "always" ],
+        "space-before-blocks": [ "error", "always" ],
+        "array-bracket-spacing": [ "error", "always" ],
         "keyword-spacing": [
             "error", { "before": true, "after": true }
         ],
