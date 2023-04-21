@@ -77,7 +77,7 @@ function obfuscatePath( filePath ) {
 
 function obfuscatePossibleKeys( data ) {
   // Define keys that may exist in the data object and should be removed
-  const sensitiveKeys = ['password', 'apiKey', 'accessToken', 'secret'];
+  const sensitiveKeys = [ 'password', 'apiKey', 'accessToken', 'secret' ];
 
   const obfuscatedData = {};
 

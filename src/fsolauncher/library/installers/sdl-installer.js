@@ -171,9 +171,9 @@ class SDLInstaller {
     return new Promise( ( resolve, reject ) => {
       // headless install
       let cmd = `hdiutil attach ${global.appData.replace( / /g, '\\ ' )}temp/sdl2-${this.id}.dmg && `; // mount SDL dmg
-      cmd += `sudo rm -rf /Library/Frameworks/SDL2.framework && `; // delete in case it exists to avoid errors
-      cmd += `sudo cp -R /Volumes/SDL2/SDL2.framework /Library/Frameworks && `; // move SDL2.framework to /Library/Frameworks
-      cmd += `hdiutil unmount /Volumes/SDL2`; // unmount SDL dmg
+      cmd += 'sudo rm -rf /Library/Frameworks/SDL2.framework && '; // delete in case it exists to avoid errors
+      cmd += 'sudo cp -R /Volumes/SDL2/SDL2.framework /Library/Frameworks && '; // move SDL2.framework to /Library/Frameworks
+      cmd += 'hdiutil unmount /Volumes/SDL2'; // unmount SDL dmg
       sudo.exec( cmd, {}, 
         ( err, stdout, stderr ) => {
           if ( err ) return reject( err );

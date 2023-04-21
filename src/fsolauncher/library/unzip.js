@@ -10,7 +10,7 @@ module.exports = ( { from, to, cpperm }, onEntry = () => {} ) =>
      * Empties the folder it extracted to.
      */
     const cleanup = () =>
-      ! ['.', './'].includes( to )
+      ! [ '.', './' ].includes( to )
         ? fs.remove( to )
         : Promise.reject( 'Cannot delete current directory.' );
     /**
