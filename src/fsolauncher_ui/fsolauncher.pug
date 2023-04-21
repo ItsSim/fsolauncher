@@ -12,6 +12,8 @@ html(class=PLATFORM + ' ' + LANGCODE)
         link(rel='stylesheet', href='./fsolauncher_styles/fsolauncher_themes/dark.css')
         link(rel='stylesheet', href='./fsolauncher_styles/fsolauncher_themes/halloween.css')
         link(rel='stylesheet', href='./fsolauncher_styles/fsolauncher_themes/simitone.css')
+        script(src=SENTRY, crossorigin="anonymous")
+        script(src='sentry-onload.js')        
     body(monthString=MONTHS, readMoreString=READ_MORE, rss=RSS_URL, wsUrl=WS_URL, wsPort=WS_PORT, twUrl=TW_URL)
         #launcher.not-installed
             .hint.arrow-left(hint-page='home', style='top:245px;left:255px')
@@ -332,8 +334,7 @@ html(class=PLATFORM + ' ' + LANGCODE)
                             div.simitone-image(style='background-image:url(./fsolauncher_images/simitone_gameplay.png);')
                         div.simitone-column
                             h1 #{SIMITONE_FEATURES_2_H1}
-                            p !{SIMITONE_FEATURES_2_DESCR}
-        script(src=SENTRY, crossorigin="anonymous")                    
+                            p !{SIMITONE_FEATURES_2_DESCR}            
         script(src='vendor/socket.io.min.js')
         script(src='vendor/howler.min.js')
         script(src='vendor/purify.min.js')

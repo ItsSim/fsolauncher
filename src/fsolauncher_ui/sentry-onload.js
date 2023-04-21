@@ -1,42 +1,14 @@
-/**
- * Returns the path with backslashes converted to forward slashes.
- * 
- * @param {string} dir The path to convert.
- * @return {string} The converted path.
- */
-function normalizePathSlashes( dir ) {
-  return dir ? dir.replace( /\\/g, '/' ) : dir
-}
-
-/**
- * Formats a string with unlimited arguments.
- * 
- * @param {string} str The string to format.
- * @param {...any} args Values to replace.
- * @returns {string} The formatted string.
- */
-function strFormat( str, ...args ) {
-  return args.reduce( ( s, v ) => s.replace( '%s', v ), str );
-}
-
-function initSentry() {
-  const { dsn } = require( '../../sentry.config' );
-  if ( ! dsn.startsWith( 'SENTRY' ) ) {
-    require( '@sentry/electron' ).init( {
-      dsn,
-      integrations: defaultIntegrations => defaultIntegrations.filter(
-        integration => integration.name !== 'Net'
-      ),
+/* global Sentry */
+( () => {
+  Sentry.onLoad( function() {
+    Sentry.init( {
       beforeSend( event ) {
-        if ( global.isTestMode ) {
-          return null;
-        }
         // Remove all possible PII from the event
         return sanitizeEvent( event );
       },
     } );
-  }
-}
+  } );
+} )();
 
 function sanitizeEvent( event ) {
   // Resulting log is only OS, stacktrace, launcher version
@@ -119,20 +91,3 @@ function obfuscatePossibleKeys( data ) {
 
   return obfuscatedData;
 }
-
-/**
- * Captures an error with Sentry.
- * 
- * @param {Error} error The error to capture.
- * @param {Object} extra Extra data to send with the error.
- */
-function captureWithSentry( error, extra ) {
-  const { captureException } = require( '@sentry/electron' );
-  if ( ! global.isTestMode ) {
-    captureException( error, { extra } );
-  }
-}
-
-module.exports = {
-  normalizePathSlashes, strFormat, initSentry, captureWithSentry
-};
