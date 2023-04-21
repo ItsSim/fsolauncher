@@ -151,6 +151,7 @@ var setCurrentPage;
 
   /**
    * @param {*} date 
+   * 
    * @returns string
    */
   var ago = date => {
@@ -671,9 +672,7 @@ var setCurrentPage;
     $( '#overlay' ).style.display = 'block';
   }
 
-  /**
-   * Events received from the main process.
-   */
+  // Events received from the main process.
   // HAS_INTERNET
   onMessage( 'HAS_INTERNET', () => {
     console.log( 'HAS_INTERNET' );
@@ -809,9 +808,7 @@ var setCurrentPage;
   onMessage( 'FULL_INSTALL_PROGRESS_ITEM', ( a, b, c, e, f ) => 
     updateFullInstallProgressItem( b, c, e, f ) );
   
-  /**
-   * Renderer HTML event listeners.
-   */
+  // Renderer HTML event listeners.
   addEventListener( '.launch',                  'click',       () => sendToMain( 'PLAY' ) );
   addEventListener( '.launch',                  'contextmenu', () => sendToMain( 'PLAY', true ) );
   addEventListener( '#refresh-home-button',     'click',       () => fetchNews( true ) );

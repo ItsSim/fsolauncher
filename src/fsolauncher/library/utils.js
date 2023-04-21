@@ -28,9 +28,6 @@ function initSentry() {
         integration => integration.name !== 'Net'
       ),
       beforeSend( event ) {
-        if ( global.isTestMode ) {
-          return null;
-        }
         // Remove all possible PII from the event
         return sanitizeEvent( event );
       },
@@ -128,9 +125,7 @@ function obfuscatePossibleKeys( data ) {
  */
 function captureWithSentry( error, extra ) {
   const { captureException } = require( '@sentry/electron' );
-  if ( ! global.isTestMode ) {
-    captureException( error, { extra } );
-  }
+  captureException( error, { extra } );
 }
 
 module.exports = {
