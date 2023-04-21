@@ -21,7 +21,7 @@ function strFormat( str, ...args ) {
 
 function initSentry() {
   const { dsn } = require( '../../sentry.config' );
-  if ( ! dsn.startsWith( 'SENTRY' ) ) {
+  if ( dsn !== 'SENTRY_CI_DSN' ) {
     require( '@sentry/electron' ).init( {
       dsn,
       integrations: defaultIntegrations => defaultIntegrations.filter(
