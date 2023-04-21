@@ -155,12 +155,11 @@ jobs:
 
     - name: Create Release
       id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: softprops/action-gh-release@v1
       with:
+        token: ${{ secrets.GITHUB_TOKEN }}
         tag_name: ${{ env.FULL_VERSION_NAME }}
-        release_name: Release ${{ env.FULL_VERSION_NAME }}
+        name: Release ${{ env.FULL_VERSION_NAME }}
         body: ${{ env.RELEASE_NOTES }}
         draft: false
         prerelease: ${{ github.ref != 'refs/heads/main' }}
@@ -176,42 +175,38 @@ jobs:
         name: fsolauncher-mac
         path: release/mac
 
-    - name: Upload Release Assets (Windows)
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Upload Release Assets
+      uses: actions/github-script@v5
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: release/win/FreeSO Launcher Setup.exe
-        asset_name: fsolauncher-${{ env.FULL_VERSION_NAME }}.exe
-        asset_content_type: application/octet-stream
-        
-    - name: Upload Release Assets (Windows Hash)
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: release/win/sha256_win32.txt
-        asset_name: sha256-win32-${{ env.FULL_VERSION_NAME }}.txt
-        asset_content_type: text/plain
-        
-    - name: Upload Release Assets (macOS)
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: release/mac/FreeSO Launcher.dmg
-        asset_name: fsolauncher-${{ env.FULL_VERSION_NAME }}.dmg
-        asset_content_type: application/octet-stream
-        
-    - name: Upload Release Assets (macOS Hash)
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: release/mac/sha256_darwin.txt
-        asset_name: sha256-darwin-${{ env.FULL_VERSION_NAME }}.txt
-        asset_content_type: text/plain
+        script: |
+          const fs = require('fs');
+          const { github, context } = require('@actions/github');
+          
+          const assetPaths = [
+            {path: 'release/win/FreeSO Launcher Setup.exe', name: `fsolauncher-${process.env.FULL_VERSION_NAME}.exe`, contentType: 'application/octet-stream'},
+            {path: 'release/win/sha256_win32.txt', name: `sha256-win32-${process.env.FULL_VERSION_NAME}.txt`, contentType: 'text/plain'},
+            {path: 'release/mac/FreeSO Launcher.dmg', name: `fsolauncher-${process.env.FULL_VERSION_NAME}.dmg`, contentType: 'application/octet-stream'},
+            {path: 'release/mac/sha256_darwin.txt', name: `sha256-darwin-${process.env.FULL_VERSION_NAME}.txt`, contentType: 'text/plain'}
+          ];
+          
+          const release = await github.rest.repos.getReleaseByTag({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            tag: process.env.FULL_VERSION_NAME,
+          });
+
+          for (const asset of assetPaths) {
+            const content = fs.readFileSync(asset.path);
+            await github.rest.repos.uploadReleaseAsset({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: release.data.id,
+              name: asset.name,
+              data: content,
+              headers: {
+                'content-type': asset.contentType,
+                'content-length': content.length
+              }
+            });
+          }
+        github-token: ${{ secrets.GITHUB_TOKEN }}
