@@ -1,10 +1,5 @@
 name: electron-ci-pr
 
-# Use concurrency to ensure only the latest workflow runs and previous ones are cancelled
-concurrency:
-  group: ${{ github.repository }}-${{ github.event.number }}
-  cancel-in-progress: true
-
 on:
   pull_request:
     branches:

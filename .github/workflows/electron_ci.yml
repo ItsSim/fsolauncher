@@ -8,10 +8,6 @@ on:
 
 jobs:
   build-and-publish:
-    # Use concurrency to ensure only the latest build-and-publish job runs and previous ones are cancelled
-    concurrency:
-      group: ${{ github.repository }}-${{ github.ref }}
-      cancel-in-progress: true
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
