@@ -2,6 +2,7 @@
  * Returns the path with backslashes converted to forward slashes.
  * 
  * @param {string} dir The path to convert.
+ * 
  * @return {string} The converted path.
  */
 function normalizePathSlashes( dir ) {
@@ -13,6 +14,7 @@ function normalizePathSlashes( dir ) {
  * 
  * @param {string} str The string to format.
  * @param {...any} args Values to replace.
+ * 
  * @returns {string} The formatted string.
  */
 function strFormat( str, ...args ) {
