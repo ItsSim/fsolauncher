@@ -124,6 +124,7 @@ global.locale.LANGCODE = code;
 
 global.locale.WS_PORT = global.socketPort;
 global.locale.WS_URL = global.webService;
+global.locale.SENTRY = require( './sentry.config' ).browserLoader;
 
 function CreateWindow() {
   require( 'electron-pug' )( { pretty: false }, global.locale );

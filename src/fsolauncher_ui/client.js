@@ -1,14 +1,4 @@
 /* global io Howl DOMPurify shared RSSParser */
-
-// for Sentry error logs
-window.addEventListener( 'error', ( errorEvent ) => 
-  shared.send( 'RENDERER_ERROR', {
-    message: errorEvent.error.message,
-    name:    errorEvent.error.name,
-    stack:   errorEvent.error.stack,
-  } ) 
-);
-
 var parser = new RSSParser();
 
 var $  = q => document.querySelector( q );

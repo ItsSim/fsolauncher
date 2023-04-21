@@ -20,10 +20,9 @@ function strFormat( str, ...args ) {
 }
 
 function initSentry() {
-  const { init } = require( '@sentry/electron' );
   const { dsn } = require( '../../sentry.config' );
   if ( ! dsn.startsWith( 'SENTRY' ) ) {
-    init( {
+    require( '@sentry/electron' ).init( {
       dsn,
       integrations: defaultIntegrations => defaultIntegrations.filter(
         integration => integration.name !== 'Net'
