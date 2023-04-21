@@ -1,6 +1,6 @@
 [![Build Status](https://github.com/ItsSim/fsolauncher/actions/workflows/electron_ci.yml/badge.svg)](https://github.com/ItsSim/fsolauncher/actions/workflows/electron_ci.yml)
 
-# FreeSO Launcher  
+# FreeSO Launcher   
 
 The official FreeSO Launcher for Windows and macOS.
 
