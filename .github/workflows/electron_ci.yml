@@ -169,7 +169,7 @@ jobs:
       with:
         name: fsolauncher-win
         path: release/win
-        
+
     - name: Download artifacts (macOS)
       uses: actions/download-artifact@v2
       with:
@@ -181,7 +181,6 @@ jobs:
       with:
         script: |
           const fs = require('fs');
-          const { context } = require('@actions/github');
           
           const assetPaths = [
             {path: 'release/win/FreeSO Launcher Setup.exe', name: `fsolauncher-${process.env.FULL_VERSION_NAME}.exe`, contentType: 'application/octet-stream'},
