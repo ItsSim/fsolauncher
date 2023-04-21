@@ -163,10 +163,7 @@ jobs:
 
         commit_messages=$(git log ${{ env.LATEST_RELEASE_TAG }}..HEAD --pretty=format:"- %s")
         if [ -n "$commit_messages" ]; then
-          release_notes+="
-
-List of changes since the last release:
-$commit_messages"
+          release_notes=$(printf "%s\n\nList of changes since the last release:\n%s" "$release_notes" "$commit_messages")
         fi
 
         echo "$release_notes" > release_notes.txt
