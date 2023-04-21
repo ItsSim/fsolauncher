@@ -10,7 +10,7 @@ DOMPurify.addHook( 'afterSanitizeAttributes', node => {
   // set all elements owning target to target=_blank.
   if ( 'target' in node ) { node.setAttribute( 'target', '_blank' ); }
   // set non-HTML/MathML links to xlink:show=new.
-  if ( !node.hasAttribute( 'target' ) && 
+  if ( ! node.hasAttribute( 'target' ) && 
      ( node.hasAttribute( 'xlink:href' ) || node.hasAttribute( 'href' ) ) ) {
     node.setAttribute( 'xlink:show', 'new' );
   }
@@ -25,7 +25,6 @@ var setCurrentPage;
   var sock = io( `https://${ $( 'body' ).getAttribute( 'wsUrl' ) }:${ $( 'body' ).getAttribute( 'wsPort' ) }` );
   var pageTriggerAudio = new Howl( { src: 'fsolauncher_sounds/click.wav', volume: 0.4 } );
   var yesNoAudio = new Howl( { src: 'fsolauncher_sounds/modal.wav', volume: 0.4 } );
-  var hasAlreadyLoaded = false;
   var twitterHasAlreadyLoaded = false;
   var simitoneRequirementsCheckInterval;
   var simitoneSuggestedUpdate;
@@ -176,7 +175,7 @@ var setCurrentPage;
     var d = date.getDate(); 
     var y = date.getFullYear();
 
-    if( ! forced ) {
+    if ( ! forced ) {
       // Halloween theme activates in October.
       if ( ( m == 9 && d >= 15 && d <= 31 ) || ( m == 10 && d == 1 ) ) {
         theme = 'halloween';
@@ -192,7 +191,7 @@ var setCurrentPage;
 
     try {
       await loadTwitter();
-    } catch( terr ) {
+    } catch ( terr ) {
       console.log( 'Error loading Twitter:', terr );
     }
   }
@@ -252,26 +251,21 @@ var setCurrentPage;
     $rss.style.display = 'none';
     $spinner.style.display = 'block';
 
-    if( userRequested ) {
+    if ( userRequested ) {
       spinDegrees += 360;
       $homeRefreshBtnIcon.style.transform = `rotate(${spinDegrees}deg)`;
     }
 
-    if( userRequested || !twitterHasAlreadyLoaded ) {
+    if ( userRequested || ! twitterHasAlreadyLoaded ) {
       try {
         await loadTwitter();
-      } catch( terr ) {
+      } catch ( terr ) {
         console.log( 'Error loading Twitter:', terr );
       }
     }
 
     var parseRss = ( errors, response ) => {
-      if( ! errors ) {
-        hasAlreadyLoaded = true;
-      }
-
       // Short pause before displaying feed to allow display to render correctly.
-
       setTimeout( () => {
         $didYouKnow.style.display = 'block';
         $rss.style.display = 'block';
@@ -280,7 +274,7 @@ var setCurrentPage;
 
       $( '#rss .alt-content' ).style.display = errors ? 'block' : 'none';
 
-      if( errors || ! response ) {
+      if ( errors || ! response ) {
         return console.log( 'RSS Failed:', errors, response );
       }
 
@@ -346,7 +340,7 @@ var setCurrentPage;
     }
     var hintId = 'HINT_' + pageId;
 
-    if( ! localStorage[hintId] ) {
+    if ( ! localStorage[hintId] ) {
       hints = $a( `[hint-page="${ pageId }"]` );
       for ( var j = 0; j < hints.length; j++ ) {
         hints[j].style.display = 'block';
@@ -371,7 +365,7 @@ var setCurrentPage;
         $preloadElement.className = 'twitter-timeline';
         $preloadElement.style = 'text-decoration:none;';
         $preloadElement.setAttribute( 'data-height', '490' );
-        if( currentTheme != 'summer2021' ) {
+        if ( currentTheme != 'summer2021' ) {
           $preloadElement.setAttribute( 'data-chrome', 'transparent' );
         }
         $preloadElement.setAttribute( 'data-theme', twitterTheme );
@@ -379,7 +373,7 @@ var setCurrentPage;
         $preloadElement.innerHTML = '@FreeSOGame on Twitter';
         $( '#did-you-know' ).append( $preloadElement );
       var $prevWidget = $( '#tw' );
-      if( $prevWidget ) {
+      if ( $prevWidget ) {
         $prevWidget.parentNode.removeChild( $prevWidget );
       }
       var $head = $( 'head' );
@@ -403,12 +397,12 @@ var setCurrentPage;
    * @param {string} pageId The page id.
    */
   setCurrentPage = pageId => {
-    if( pageId == 'simitone' ) {
-      if( $( 'body' ).className != 'simitone' ) {
+    if ( pageId == 'simitone' ) {
+      if ( $( 'body' ).className != 'simitone' ) {
         prevTheme = $( 'body' ).className;
       }
       
-      if( ! darkThemes.includes( prevTheme ) ) { // Stay in dark theme.
+      if ( ! darkThemes.includes( prevTheme ) ) { // Stay in dark theme.
         setTheme( 'simitone', true );
       }
       
@@ -418,24 +412,24 @@ var setCurrentPage;
       simitoneRequirementsCheckInterval = setInterval( 
         () => sendToMain( 'CHECK_SIMITONE' ), 60000 );
     } else {
-      if( prevTheme ) {
+      if ( prevTheme ) {
         setTheme( prevTheme );
         prevTheme = null;
       }
 
-      if( simitoneRequirementsCheckInterval ) {
+      if ( simitoneRequirementsCheckInterval ) {
         clearInterval( simitoneRequirementsCheckInterval );
         simitoneRequirementsCheckInterval = null;
       }
     }
 
-    for( var menuItems = $a( 'li[page-trigger]' ), i = 0; i < menuItems.length; i++ ) {
+    for ( var menuItems = $a( 'li[page-trigger]' ), i = 0; i < menuItems.length; i++ ) {
       menuItems[i].classList.remove( 'active' );
     }
 
     $( `li[page-trigger="${pageId}"]` ).classList.add( 'active' );
 
-    for( var pages = $a( 'div.page' ), j = pages.length - 1; 0 <= j; j-- ) {
+    for ( var pages = $a( 'div.page' ), j = pages.length - 1; 0 <= j; j-- ) {
       pages[j].style.display = 'none';
     }
     $( `#${pageId}-page` ).style.display = 'block';
@@ -448,10 +442,10 @@ var setCurrentPage;
    * @param {array} vars Array of unserialized configuration variables. 
    */
   var restoreConfiguration = vars => {
-    for( var Section in vars )
-    for( var Item in vars[Section] ) {
+    for ( var Section in vars )
+    for ( var Item in vars[Section] ) {
       var $option = $( `[option-id="${Section}.${Item}"]` );
-      if( platform == 'darwin' && Item == 'GraphicsMode' ) continue;
+      if ( platform == 'darwin' && Item == 'GraphicsMode' ) continue;
       $option && ( $option.value = vars[Section][Item] );
     }
   }
@@ -465,7 +459,7 @@ var setCurrentPage;
    */
   var updateFullInstallProgressItem = ( title, text1, text2, _progress ) => {
     var $fullInstall = $( '#full-install' );
-    if( title && text1 && text2 ) {
+    if ( title && text1 && text2 ) {
       var $title    = $( '#full-install-title' );
       var $text1    = $( '#full-install-text1' );
       var $text2    = $( '#full-install-text2' );
@@ -619,7 +613,7 @@ var setCurrentPage;
     var d = $c( 'div' );
         d.className = 'modal';
 
-    if( type ) {
+    if ( type ) {
       d.className += ' modal-' + type;
     }
 
@@ -643,7 +637,7 @@ var setCurrentPage;
         $( '#overlay' ).style.display = 'none';
       }
   
-      modalRespId && shared.send( modalRespId, !0, extra );
+      modalRespId && shared.send( modalRespId, ! 0, extra );
     } );
     text.appendChild( title );
     noText
@@ -655,7 +649,7 @@ var setCurrentPage;
             $( '#overlay' ).style.display = 'none';
           }
           $( '#overlay' ).style.display = 'none';
-          modalRespId && shared.send( modalRespId, !1, extra );
+          modalRespId && shared.send( modalRespId, ! 1, extra );
         } ),
         text.appendChild( yesText ) )
       : ( title.style.margin = '0px' );
@@ -671,22 +665,17 @@ var setCurrentPage;
   onMessage( 'HAS_INTERNET', () => {
     console.log( 'HAS_INTERNET' );
     document.body.classList.remove( 'no-internet' );
-
-    //if( ! hasAlreadyLoaded ) {
-    //  fetchNews();
-    //}
   } );
   // NO_INTERNET
   onMessage( 'NO_INTERNET', () => {
     console.log( 'NO_INTERNET' );
     document.body.classList.remove( 'no-internet' );
     document.body.classList.add( 'no-internet' );
-    //hasAlreadyLoaded = false;
   } );
   // REMESH_INFO
   onMessage( 'REMESH_INFO', ( a, v ) => {
     $( '.new' ).style.display = 'none';
-    if( ! v ) return;
+    if ( ! v ) return;
 
     var i = parseInt( v );
     var f = ago( new Date( i * 1000 ) );
@@ -717,7 +706,7 @@ var setCurrentPage;
     simitoneShouldUpdate();
   } );
   onMessage( 'SIMITONE_SET_VER', ( a, b ) => {
-    if( b ) {
+    if ( b ) {
       $( '#simitone-ver' ).textContent = `(Installed: ${b})`;
     } else {
       $( '#simitone-ver' ).textContent = "";
@@ -743,7 +732,7 @@ var setCurrentPage;
   onMessage( 'CHANGE_PAGE', ( a, b ) => setCurrentPage( b ) );
   // INSPROG
   onMessage( 'INSPROG', ( a, b ) => {
-    if( ! b ) return;
+    if ( ! b ) return;
 
     if ( b.FSO ) {
       $( '.item[install=FSO]' ).className = 'item installed';
@@ -789,7 +778,7 @@ var setCurrentPage;
   // STOP_PROGRESS_ITEM
   onMessage( 'STOP_PROGRESS_ITEM', ( a, b ) => {
     var $progressItem = $( `#${b}` );
-    if( $progressItem ) {
+    if ( $progressItem ) {
       $progressItem.className = 'download stopped';
     }
   } );

@@ -8,6 +8,7 @@ class Toast {
    * @returns {import('./ipc-bridge')} The IPC object.
    */
   static getIPC() { return Toast.IPC; }
+
   /**
    * @param {string} message The message to display.
    * @param {number} timeout Timeout in seconds.
@@ -15,10 +16,11 @@ class Toast {
   constructor( message, timeout = 0 ) {
     this.id = Math.floor( Date.now() / 1000 );
     Toast.getIPC().toast( this.id, message );
-    if( timeout > 0 ) {
+    if ( timeout > 0 ) {
       setTimeout( () => this.destroy(), timeout );
     }
   }
+  
   /**
    * Instructs the renderer to remove the toast by id.
    */

@@ -1,6 +1,5 @@
 const Modal = require( './library/modal' );
 const { ipcMain } = require( 'electron' );
-const { captureException } = require( '@sentry/electron' );
 
 /**
  * Handles all events from the client.
@@ -12,6 +11,7 @@ class EventHandlers {
   constructor( FSOLauncher ) {
     this.FSOLauncher = FSOLauncher;
   }
+
   /**
    * Defines all the currently supported client events.
    */
@@ -32,11 +32,10 @@ class EventHandlers {
     ipcMain.on( 'PLAY_VOLCANIC_SIMITONE',  this.onPlayVolcanicSimitone.bind( this ) );
     ipcMain.on( 'SOCKET_MESSAGE',          this.onSocketMessage.bind( this ) );
     ipcMain.on( 'CONSOLE_LOG',             this.onConsoleLog.bind( this ) );
-    ipcMain.on( 'FTP_TSO',                 this.onFTPTSO.bind( this ) );
-    ipcMain.on( 'FTP_TSOResponse',         this.onFTPTSOResponse.bind( this ) );
     ipcMain.on( 'CHECK_SIMITONE',          this.onCheckSimitoneRequirements.bind( this ) );
     ipcMain.on( 'INSTALL_SIMITONE_UPDATE', this.onInstallSimitoneUpdate.bind( this ) );
   }
+
   /**
    * Received when the user request a Simitone update.
    */
@@ -44,6 +43,7 @@ class EventHandlers {
     this.FSOLauncher.install( 'Simitone', { dir: this.FSOLauncher.isInstalled.Simitone } )
       .catch( console.error );
   }
+
   /**
    * Received when the renderer process asks the main process to check for 
    * Simitone updates.
@@ -51,32 +51,7 @@ class EventHandlers {
   onCheckSimitoneRequirements() {
     this.FSOLauncher.checkSimitoneRequirements();
   }
-  /**
-   * Fires when the user requests an alternative TSO installation source.
-   * @deprecated Not used since there's really only one source available right now
-   *             since largedownloads went down.
-   */
-  onFTPTSO() {
-    Modal.showFTPTSO();
-  }
-  /**
-   * Fires as a user's response to showFTPTSO().
-   * @deprecated Not used since there's really only one source available right now
-   *             since largedownloads went down.
-   * @param {Electron.IpcMainEvent} e The event object.
-   * @param {boolean} yes If the user selected yes.
-   */
-  onFTPTSOResponse( e, yes ) {
-    if ( yes ) {
-      const params = {
-        fullInstall: false,
-        tsoInstaller: 'WebArchiveFTPInstaller',
-        override: false
-      };
-      this.FSOLauncher.install( 'TSO', params )
-        .catch( console.error );
-    }
-  }
+
   /**
    * Fires when the DOM is initialized.
    */
@@ -103,6 +78,7 @@ class EventHandlers {
         null, this.FSOLauncher.isDarkMode() );
     }
   }
+
   /**
    * When the user wants to install a Component.
    *
@@ -112,6 +88,7 @@ class EventHandlers {
   onInstall( e, componentCode ) {
     this.FSOLauncher.fireInstallModal( componentCode );
   }
+
   /**
    * When the configuration settings are altered.
    *
@@ -121,6 +98,7 @@ class EventHandlers {
   onSetConfiguration( e, v ) {
     this.FSOLauncher.setConfiguration( v );
   }
+
   /**
    * When the user needs to be redirected.
    *
@@ -132,6 +110,7 @@ class EventHandlers {
       this.FSOLauncher.IPC.changePage( 'installer' );
     }
   }
+
   /**
    * When the user wants to install a single Component.
    *
@@ -146,6 +125,7 @@ class EventHandlers {
         .catch( console.error );
     }
   }
+
   /**
    * When the renderer process requests a main process console.log.
    *
@@ -153,6 +133,7 @@ class EventHandlers {
    * @param {string} v The message to be logged.
    */
   onConsoleLog( e, v ) { console.log( v ); }
+
   /**
    * When the user clicks the play button.
    *
@@ -162,6 +143,7 @@ class EventHandlers {
   onPlay( e, useVolcanic ) {
     this.FSOLauncher.play( useVolcanic );
   }
+
   /**
    * When the user wants to launch Volcanic.
    *
@@ -181,6 +163,7 @@ class EventHandlers {
       this.FSOLauncher.launchGame( true, true );
     }
   }
+
   /**
    * When the user requests a launcher update check.
    *
@@ -192,6 +175,7 @@ class EventHandlers {
     }
     this.FSOLauncher.checkLauncherUpdates();
   }
+
   /**
    * Update dialog callback.
    *
@@ -203,6 +187,7 @@ class EventHandlers {
       this.FSOLauncher.installLauncherUpdate();
     }
   }
+
   /**
    * When the user clicks the Full Install button.
    */
@@ -214,6 +199,7 @@ class EventHandlers {
       Modal.showAlreadyInstalling();
     }
   }
+
   /**
    * Full install dialog callback.
    *
@@ -226,6 +212,7 @@ class EventHandlers {
       this.FSOLauncher.runFullInstaller();
     }
   }
+
   /**
    * When the user changes the game path.
    *

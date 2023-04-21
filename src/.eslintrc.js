@@ -16,11 +16,25 @@ module.exports = {
     },
     "ignorePatterns": ["**/vendor/*.js"],
     "rules": {
-        "no-unused-vars": ["warn", {"args": "after-used", "argsIgnorePattern": "^_"}],
+        "no-unused-vars": ["warn", { "args": "after-used", "argsIgnorePattern": "^_" }],
         "prefer-const": ["error", {
             "destructuring": "any",
             "ignoreReadBeforeAssign": false
         }],
-        "space-in-parens": ["error", "always"]
+        "space-in-parens": ["error", "always"],
+        "space-before-blocks": ["error", "always"],
+        "keyword-spacing": [
+            "error", { "before": true, "after": true }
+        ],
+        "space-unary-ops": [
+            "error",
+            {
+                "words": true,
+                "nonwords": false,
+                "overrides": {
+                    "!": true
+                }
+            }
+        ]
     }
 };

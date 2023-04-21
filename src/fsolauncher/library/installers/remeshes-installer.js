@@ -26,6 +26,7 @@ class RemeshesInstaller {
 
     this.dl = download( { from: location, to: this.tempPath } );
   }
+
   /**
    * Create/Update the download progress item.
    *
@@ -44,6 +45,7 @@ class RemeshesInstaller {
       percentage == 100 ? 2 : percentage / 100
     );
   }
+
   /**
    * Executes all installation steps in order and captures any errors.
    *
@@ -60,6 +62,7 @@ class RemeshesInstaller {
       return await this.error( errorMessage );
     }
   }
+
   /**
    * Download all the files.
    *
@@ -68,6 +71,7 @@ class RemeshesInstaller {
   step1() {
     return this.download();
   }
+
   /**
    * Create the installation directory.
    *
@@ -76,6 +80,7 @@ class RemeshesInstaller {
   step2() {
     return this.setupDir( this.path );
   }
+
   /**
    * Extract files into installation directory.
    *
@@ -84,6 +89,7 @@ class RemeshesInstaller {
   step3() {
     return this.extract();
   }
+
   /**
    * When the installation errors out.
    *
@@ -102,6 +108,7 @@ class RemeshesInstaller {
     Modal.showFailedInstall( 'Remesh Package', errorMessage );
     return Promise.reject( errorMessage );
   }
+
   /**
    * When the installation ends.
    */
@@ -114,6 +121,7 @@ class RemeshesInstaller {
     this.FSOLauncher.removeActiveTask( 'RMS' );
     Modal.showInstalled( 'Remesh Package' );
   }
+
   /**
    * Downloads the distribution file.
    *
@@ -132,6 +140,7 @@ class RemeshesInstaller {
       this.updateDownloadProgress();
     } );
   }
+
   /**
    * Creates all the directories and subfolders in a path.
    *
@@ -150,6 +159,7 @@ class RemeshesInstaller {
       } );
     } );
   }
+
   /**
    * Updates the progress item with the download progress.
    */
@@ -161,7 +171,7 @@ class RemeshesInstaller {
 
       if ( isNaN( p ) ) p = 0;
       if ( p < 100 ) {
-        if ( !this.haltProgress ) {
+        if ( ! this.haltProgress ) {
           this.createProgressItem(
             `${global.locale.DL_CLIENT_FILES} ${mb} MB ${global.locale.X_OUT_OF_X} ${size} MB (${p}%)`,
             p
@@ -171,6 +181,7 @@ class RemeshesInstaller {
       }
     }, 250 );
   }
+
   /**
    * Extracts the zipped artifacts.
    *
@@ -184,6 +195,7 @@ class RemeshesInstaller {
       );
     } );
   }
+
   /**
    * Deletes the downloaded artifacts file.
    */

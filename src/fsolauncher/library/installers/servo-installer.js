@@ -23,6 +23,7 @@ class ServoInstaller {
     this.tempPath = `${global.appData}temp/artifacts-freeso-${this.id}.zip`;
     this.dl = download( { from: DOWNLOAD_URL_SERVO, to: this.tempPath } );
   }
+
   /**
    * Create/Update the download progress item.
    *
@@ -41,6 +42,7 @@ class ServoInstaller {
       percentage == 100 ? 2 : percentage / 100
     );
   }
+
   /**
    * Executes all installation steps in order and captures any errors.
    *
@@ -60,6 +62,7 @@ class ServoInstaller {
       return await this.error( errorMessage );
     }
   }
+
   /**
    * Download all the files.
    *
@@ -68,6 +71,7 @@ class ServoInstaller {
   step1() {
     return this.download();
   }
+
   /**
    * Create the installation directory.
    *
@@ -76,6 +80,7 @@ class ServoInstaller {
   step2() {
     return this.setupDir( this.path );
   }
+
   /**
    * Extract files into installation directory.
    *
@@ -84,22 +89,24 @@ class ServoInstaller {
   step3() {
     return this.extract();
   }
+
   /**
    * Create the FreeSO Registry Key.
    *
    * @returns {Promise<void>} A promise that resolves when the key is created.
    */
   step4() {
-    if( process.platform === "darwin" ) return Promise.resolve(); 
+    if ( process.platform === "darwin" ) return Promise.resolve(); 
     return require( '../registry' ).createFreeSOEntry( this.path );
   }
+
   /**
    * Downloads Mac-extras for Darwin.
    * 
    * @returns {Promise<void>} A promise that resolves when the download is complete.
    */
   step5() {
-    if( process.platform === "darwin" ) {
+    if ( process.platform === "darwin" ) {
       console.log( 'Darwin:', 'Downloading MacExtras' );
       this.dl = download( { 
         from: 'https://beta.freeso.org/LauncherResourceCentral/MacExtras', 
@@ -109,13 +116,14 @@ class ServoInstaller {
     }
     return Promise.resolve();
   }
+
   /**
    * Installs Mac-extras for Darwin.
    * 
    * @returns {Promise<void>} A promise that resolves when the installation is complete.
    */
   step6() {
-    if( process.platform === "darwin" ) {
+    if ( process.platform === "darwin" ) {
       console.log( 'Darwin:', 'Extracting MacExtras' );
       return unzip( { 
         from: `${global.appData}temp/macextras-${this.id}.zip`, 
@@ -129,6 +137,7 @@ class ServoInstaller {
     }
     return Promise.resolve();
   }
+
   /**
    * When the installation ends.
    */
@@ -139,8 +148,9 @@ class ServoInstaller {
     this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
     this.FSOLauncher.updateInstalledPrograms();
     this.FSOLauncher.removeActiveTask( 'FSO' );
-    if( !this.isFullInstall ) Modal.showInstalled( 'FreeSO' );
+    if ( ! this.isFullInstall ) Modal.showInstalled( 'FreeSO' );
   }
+
   /**
    * When the installation errors out.
    *
@@ -148,7 +158,7 @@ class ServoInstaller {
    * @returns {Promise<void>} A promise that resolves when the installation ends.
    */
   error( errorMessage ) {
-    if( this.dl ) this.dl.cleanup();
+    if ( this.dl ) this.dl.cleanup();
     this.FSOLauncher.setProgressBar( 1, {
       mode: 'error'
     } );
@@ -160,6 +170,7 @@ class ServoInstaller {
     console.log( errorMessage );
     return Promise.reject( errorMessage );
   }
+
   /**
    * Downloads the distribution file.
    *
@@ -178,6 +189,7 @@ class ServoInstaller {
       this.updateDownloadProgress();
     } );
   }
+
   /**
    * Extracts the zipped artifacts.
    *
@@ -191,6 +203,7 @@ class ServoInstaller {
       );
     } );
   }
+
   /**
    * Deletes the downloaded artifacts file.
    */
@@ -203,6 +216,7 @@ class ServoInstaller {
       } );
     } );
   }
+
   /**
    * Creates all the directories and subfolders in a path.
    *
@@ -217,6 +231,7 @@ class ServoInstaller {
       } );
     } );
   }
+
   /**
    * Checks if FreeSO is already installed in a given path.
    * 
@@ -229,6 +244,7 @@ class ServoInstaller {
       } );
     } );
   }
+
   /**
    * Updates the progress item with the download progress.
    */
@@ -240,7 +256,7 @@ class ServoInstaller {
 
       if ( isNaN( p ) ) p = 0;
       if ( p < 100 ) {
-        if ( !this.haltProgress ) {
+        if ( ! this.haltProgress ) {
           this.createProgressItem(
             `${global.locale.DL_CLIENT_FILES} ${mb} MB ${global.locale.X_OUT_OF_X} ${size} MB (${p}%)`,
             p

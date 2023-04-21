@@ -34,7 +34,7 @@ class FSOLauncher {
     this.activeTasks = [];
     this.isInstalled = {};
     this.Window.on( 'minimize', () => {
-      if ( !this.minimizeReminder ) {
+      if ( ! this.minimizeReminder ) {
         Modal.sendNotification(
           'FreeSO Launcher', 
           global.locale.MINIMIZE_REMINDER,
@@ -51,6 +51,7 @@ class FSOLauncher {
     this.updateNetRequiredUIRecursive( true );
     this.eventHandlers.defineEvents();
   }
+
   /**
    * Reads the registry and updates the programs list.
    *
@@ -72,6 +73,7 @@ class FSOLauncher {
       toast.destroy();
     }
   }
+
   /**
    * Update installer tips recursively, every 10 seconds.
    */
@@ -94,6 +96,7 @@ class FSOLauncher {
     this.IPC.setTip( tips[Math.floor( Math.random() * tips.length )] );
     setTimeout( () => this.updateTipRecursive(), 10000 );
   }
+
   /**
    * Returns the current internet status, and updates the global
    * this.hasInternet variable.
@@ -104,11 +107,12 @@ class FSOLauncher {
   getInternetStatus() {
     return new Promise( ( resolve, _reject ) => {
       require( 'dns' ).lookup( 'google.com', err => {
-        this.hasInternet = !( err && err.code === 'ENOTFOUND' );
+        this.hasInternet = ! ( err && err.code === 'ENOTFOUND' );
         return resolve( this.hasInternet );
       } );
     } );
   }
+
   /**
    * Obtains Simitone release information from GitHub.
    *
@@ -138,6 +142,7 @@ class FSOLauncher {
       request.end();
     } );
   }
+
   /**
    * Hides all view elements that need internet connection.
    *
@@ -146,11 +151,12 @@ class FSOLauncher {
   async updateNetRequiredUI( _init ) {
     const hasInternet = await this.getInternetStatus();
 
-    if ( !hasInternet ) {
+    if ( ! hasInternet ) {
       return this.IPC.hasNoInternet();
     }
     return this.IPC.hasInternet();
   }
+
   /**
    * Recursively updates the UI that needs internet.
    */
@@ -160,6 +166,7 @@ class FSOLauncher {
       this.updateNetRequiredUIRecursive();
     }, 5000 );
   }
+
   /**
    * Installs the game using the complete installer which installs FreeSO,
    * OpenAL, .NET, Mono, SDL, Mac-extras and The Sims Online.
@@ -167,16 +174,18 @@ class FSOLauncher {
   runFullInstaller() {
     new ( require( './library/installers/complete-installer' ) )( this ).run();
   }
+
   /**
    * Adds a task in progress.
    *
    * @param {string} name Name of the task in progress. 
    */
   addActiveTask( name ) {
-    if ( !this.isActiveTask( name ) ) {
+    if ( ! this.isActiveTask( name ) ) {
       this.activeTasks.push( name );
     }
   }
+
   /**
    * Removes a task by name.
    *
@@ -189,6 +198,7 @@ class FSOLauncher {
 
     this.activeTasks = [];
   }
+
   /**
    * Checks if task is active.
    *
@@ -197,6 +207,7 @@ class FSOLauncher {
   isActiveTask( name ) {
     return this.activeTasks.indexOf( name ) > -1;
   }
+
   /**
    * Returns a component's hard-coded pretty name.
    *
@@ -225,6 +236,7 @@ class FSOLauncher {
         return 'SDL2';
     }
   }
+
   /**
    * Modifies TTS Mode.
    * To do this it has to edit FreeSO's config.ini.
@@ -239,7 +251,7 @@ class FSOLauncher {
 
     this.addActiveTask( 'CHTTS' );
 
-    if ( !this.isInstalled.FSO ) {
+    if ( ! this.isInstalled.FSO ) {
       this.removeActiveTask( 'CHTTS' );
       toast.destroy();
       return Modal.showNeedFSOTSO();
@@ -265,6 +277,7 @@ class FSOLauncher {
       Modal.showFirstRun();
     }
   }
+
   /**
    * Obtains remesh package information.
    *
@@ -297,6 +310,7 @@ class FSOLauncher {
       request.end();
     } );
   }
+
   /**
    * Returns the launcher's update endpoint response.
    *
@@ -330,6 +344,7 @@ class FSOLauncher {
       request.end();
     } );
   }
+
   /**
    * Obtains remesh info and updates the renderer process.
    *
@@ -338,7 +353,7 @@ class FSOLauncher {
   async checkRemeshInfo() {
     try {
       await this.getRemeshData();
-    } catch( e ) {
+    } catch ( e ) {
       captureWithSentry( e );
       console.log( e );
     }
@@ -346,6 +361,7 @@ class FSOLauncher {
       this.IPC.setRemeshInfo( this.remeshInfo.version );
     }
   }
+
   /**
    * Checks Simitone requirements:
    * 1. If Simitone is installed
@@ -360,19 +376,19 @@ class FSOLauncher {
     const simitoneStatus = await Registry.get( 'Simitone', Registry.getSimitonePath() );
     const ts1ccStatus = await Registry.get( 'TS1', Registry.getTS1Path() );
     let simitoneUpdateStatus = null;
-    if( simitoneStatus.isInstalled ) {
-      if( this.conf.Game && this.conf.Game.SimitoneVersion ) {
+    if ( simitoneStatus.isInstalled ) {
+      if ( this.conf.Game && this.conf.Game.SimitoneVersion ) {
         this.IPC.setSimitoneVersion( this.conf.Game.SimitoneVersion );
       } else {
         this.IPC.setSimitoneVersion( null );
       }
       try {
         simitoneUpdateStatus = await this.getSimitoneReleaseInfo();
-      } catch( e ) {
+      } catch ( e ) {
         captureWithSentry( e );
         console.log( e );
       }
-      if( simitoneUpdateStatus && 
+      if ( simitoneUpdateStatus && 
         ( this.conf.Game.SimitoneVersion != simitoneUpdateStatus.tag_name ) ) {
         this.IPC.sendSimitoneShouldUpdate( simitoneUpdateStatus.tag_name );
       } else {
@@ -387,6 +403,7 @@ class FSOLauncher {
     this.IPC.sendInstalledPrograms( this.isInstalled );
     //toast.destroy();
   }
+
   /**
    * Checks if any updates are available.
    *
@@ -396,8 +413,8 @@ class FSOLauncher {
    */
   async checkLauncherUpdates( wasAutomatic ) {
     if (
-      !this.isSearchingForUpdates &&
-      !this.isUpdating &&
+      ! this.isSearchingForUpdates &&
+      ! this.isUpdating &&
       this.hasInternet &&
       this.activeTasks.length === 0
     ) {
@@ -411,7 +428,7 @@ class FSOLauncher {
         if ( data.Version !== global.launcherVersion ) {
           if (
             this.lastUpdateNotification !== data.Version &&
-            !this.Window.isVisible()
+            ! this.Window.isVisible()
           ) {
             Modal.sendNotification(
               global.locale.MODAL_UPDATE_X +
@@ -427,7 +444,7 @@ class FSOLauncher {
             this.lastUpdateNotification = data.Version;
             Modal.showInstallUpdate( data.Version );
           } else {
-            if ( !wasAutomatic ) {
+            if ( ! wasAutomatic ) {
               Modal.showInstallUpdate( data.Version );
             }
           }
@@ -436,10 +453,11 @@ class FSOLauncher {
         captureWithSentry( e, { wasAutomatic } );
         this.isSearchingForUpdates = false;
         toast.destroy();
-        if ( !wasAutomatic ) Modal.showFailedUpdateCheck();
+        if ( ! wasAutomatic ) Modal.showFailedUpdateCheck();
       }
     }
   }
+
   /**
    * Opens a new window with the launcher's update page.
    *
@@ -448,6 +466,7 @@ class FSOLauncher {
   async installLauncherUpdate() {
     return require( 'electron' ).shell.openExternal( 'https://beta.freeso.org/update' );
   }
+
   /**
    * Changes the game path in the registry.
    *
@@ -475,6 +494,7 @@ class FSOLauncher {
       toast.destroy();
     }
   }
+
   /**
    * Shows the confirmation Modal right before installing.
    *
@@ -487,13 +507,13 @@ class FSOLauncher {
 
     switch ( componentCode ) {
       case 'FSO':
-        if ( !this.isInstalled['TSO'] ) 
+        if ( ! this.isInstalled['TSO'] ) 
           missing.push( this.getPrettyName( 'TSO' ) );
-        if ( !this.isInstalled['Mono'] && process.platform === "darwin" ) 
+        if ( ! this.isInstalled['Mono'] && process.platform === "darwin" ) 
           missing.push( this.getPrettyName( 'Mono' ) );
-        if ( !this.isInstalled['SDL'] && process.platform === "darwin" ) 
+        if ( ! this.isInstalled['SDL'] && process.platform === "darwin" ) 
           missing.push( this.getPrettyName( 'SDL' ) );
-        if ( !this.isInstalled['OpenAL'] && process.platform === "win32" )
+        if ( ! this.isInstalled['OpenAL'] && process.platform === "win32" )
           missing.push( this.getPrettyName( 'OpenAL' ) );
         break;
 
@@ -503,13 +523,13 @@ class FSOLauncher {
 
       case 'RMS':
       case 'MacExtras':
-        if ( !this.isInstalled['FSO'] ) missing.push( this.getPrettyName( 'FSO' ) );
+        if ( ! this.isInstalled['FSO'] ) missing.push( this.getPrettyName( 'FSO' ) );
         break;
 
       case 'Simitone': 
-        if ( !this.isInstalled['Mono'] && process.platform === "darwin" ) 
+        if ( ! this.isInstalled['Mono'] && process.platform === "darwin" ) 
           missing.push( this.getPrettyName( 'Mono' ) );
-        if ( !this.isInstalled['SDL'] && process.platform === "darwin" ) 
+        if ( ! this.isInstalled['SDL'] && process.platform === "darwin" ) 
           missing.push( this.getPrettyName( 'SDL' ) );
         break;
     }
@@ -524,7 +544,7 @@ class FSOLauncher {
       'SDL'
     ].indexOf( componentCode ) > -1
        &&
-      !this.hasInternet
+      ! this.hasInternet
     ) {
       return Modal.showNoInternet();
     }
@@ -540,7 +560,7 @@ class FSOLauncher {
         if ( this.remeshInfo.version == null ) {
           try {
             await this.getRemeshData();
-          } catch( e ) {
+          } catch ( e ) {
             captureWithSentry( e );
             console.log( e );
           }
@@ -553,13 +573,14 @@ class FSOLauncher {
         return Modal.showFirstInstall( prettyName, componentCode );
       }
 
-      if ( !this.isInstalled[componentCode] ) {
+      if ( ! this.isInstalled[componentCode] ) {
         Modal.showFirstInstall( prettyName, componentCode );
       } else {
         Modal.showReInstall( prettyName, componentCode );
       }
     }
   }
+
   /**
    * Installs a single Component.
    * 
@@ -586,14 +607,14 @@ class FSOLauncher {
       case 'SDL': {
         const Installer = require( `./library/installers/${componentCode.toLowerCase()}-installer` );
         const singleInstaller = new Installer( this, this.isInstalled.FSO );
-        if ( !options.fullInstall ) {
+        if ( ! options.fullInstall ) {
           this.IPC.changePage( 'downloads' );
         } else {
           singleInstaller.isFullInstall = true;
         }
         try {
           await singleInstaller.install();
-          if( componentCode == 'MacExtras' && this.isInstalled.Simitone ) {
+          if ( componentCode == 'MacExtras' && this.isInstalled.Simitone ) {
             // Do an install for Simitone as well.
             const simitoneInstaller = new Installer( this, this.isInstalled.Simitone, "Simitone" );
             await simitoneInstaller.install();
@@ -611,7 +632,7 @@ class FSOLauncher {
         this.IPC.changePage( 'downloads' );
         try {
           await singleInstaller.install();
-          if( this.isInstalled.Simitone ) {
+          if ( this.isInstalled.Simitone ) {
             // Do an install for Simitone as well.
             const simitoneInstaller = new RemeshesInstaller(
               this.isInstalled.Simitone + '/Content/MeshReplace', this, 'Simitone' );
@@ -637,22 +658,22 @@ class FSOLauncher {
           }
         } )();
         
-        if ( !options.override ) {
+        if ( ! options.override ) {
           let installDir = options.dir;
-          if( !installDir ) {
-            if( await ( require( './library/registry' ).testWinAccess() ) ) {
+          if ( ! installDir ) {
+            if ( await ( require( './library/registry' ).testWinAccess() ) ) {
               const toast = new Toast(
                 `${global.locale.INSTALLER_CHOOSE_WHERE_X} ${this.getPrettyName( componentCode )}`
               );
               const folders = await Modal.showChooseDirectory(
                 this.getPrettyName( componentCode ), this.Window
               );
-              if( folders && folders.length > 0 ) {
+              if ( folders && folders.length > 0 ) {
                 installDir = folders[0] + '/' + this.getPrettyName( componentCode );
               }
               toast.destroy();
             } else {
-              if( process.platform != 'win32' ) {
+              if ( process.platform != 'win32' ) {
                 // darwin doesnt get to choose
                 installDir = global.homeDir + '/Documents/' + this.getPrettyName( componentCode );
               } else {
@@ -669,14 +690,14 @@ class FSOLauncher {
             const singleInstaller = new Installer( installDir, this );
             const isInstalled = await singleInstaller.isInstalledInPath();
 
-            if ( isInstalled && !options.fullInstall && !options.dir && 
+            if ( isInstalled && ! options.fullInstall && ! options.dir && 
               await ( require( './library/registry' ).testWinAccess() ) 
             ) {
               return Modal.showAlreadyInstalled( 
                 this.getPrettyName( componentCode ), componentCode, installDir );
             }
 
-            if ( !options.fullInstall ) {
+            if ( ! options.fullInstall ) {
               this.IPC.changePage( 'downloads' );
             } else {
               singleInstaller.isFullInstall = true;
@@ -688,7 +709,7 @@ class FSOLauncher {
               setTimeout( () => this.setProgressBar( -1 ), 5000 );
             }
           } else {
-            if ( !options.fullInstall ) {
+            if ( ! options.fullInstall ) {
               this.removeActiveTask( componentCode );
             } else {
               this.removeActiveTask();
@@ -735,6 +756,7 @@ class FSOLauncher {
       }
     }
   }
+
   /**
    * Checks for all types of updates recursively.
    */
@@ -745,6 +767,7 @@ class FSOLauncher {
       this.checkUpdatesRecursive();
     }, 60000 );
   }
+
   /**
    * Switches the game language. 
    * Copies the translation files and changes the current language in FreeSO.ini.
@@ -753,7 +776,7 @@ class FSOLauncher {
    * @returns {Promise<void>} A promise that resolves when the language is changed.
    */
   async switchLanguage( language ) {
-    if ( !this.isInstalled.TSO || !this.isInstalled.FSO ) {
+    if ( ! this.isInstalled.TSO || ! this.isInstalled.FSO ) {
       return Modal.showNeedFSOTSO();
     }
     this.addActiveTask( 'CHLANG' );
@@ -766,19 +789,19 @@ class FSOLauncher {
         process.noAsar = true;
         let exportTSODir = `../export/language_packs/${language.toUpperCase()}/TSO`;
           exportTSODir = path.join( __dirname, exportTSODir );
-        if( process.platform == 'darwin' || process.platform == 'win32' ) {
+        if ( process.platform == 'darwin' || process.platform == 'win32' ) {
           exportTSODir = exportTSODir.replace( 'app.asar', 'app.asar.unpacked' );
         }
         let exportFSODir = `../export/language_packs/${language.toUpperCase()}/FSO`;
           exportFSODir = path.join( __dirname, exportFSODir );
-        if( process.platform == 'darwin' || process.platform == 'win32' ) {
+        if ( process.platform == 'darwin' || process.platform == 'win32' ) {
           exportFSODir = exportFSODir.replace( 'app.asar', 'app.asar.unpacked' );
         }
         await fs.copy( exportTSODir, 
           process.platform == 'win32' ? this.isInstalled.TSO + '/TSOClient' : this.isInstalled.TSO
         );
         await fs.copy( exportFSODir, this.isInstalled.FSO );
-      } catch( err ) {
+      } catch ( err ) {
         captureWithSentry( err, { language } );
         console.log( err );
         this.removeActiveTask( 'CHLANG' );
@@ -792,7 +815,7 @@ class FSOLauncher {
       try {
         data = await this.getFSOConfig();
         data.CurrentLang = this.getLangString( this.getLangCode( language ) )[0];
-      } catch( err ) {
+      } catch ( err ) {
         captureWithSentry( err, { language } );
         console.log( err );
         this.removeActiveTask( 'CHLANG' );
@@ -804,7 +827,7 @@ class FSOLauncher {
           this.isInstalled.FSO + '/Content/config.ini',
           ini.stringify( data )
         );
-      } catch( err ) {
+      } catch ( err ) {
         captureWithSentry( err, { language } );
         this.removeActiveTask( 'CHLANG' );
         toast.destroy();
@@ -814,11 +837,12 @@ class FSOLauncher {
       toast.destroy();
       this.conf.Game.Language = this.getLangString( this.getLangCode( language ) )[1];
       this.persist( true );
-    } catch( err ) {
+    } catch ( err ) {
       captureWithSentry( err, { language } );
       return Modal.showGenericError( "An error ocurred: " + err );
     }
   }
+
   /**
    * Updates a configuration variable. Used after a user changes a setting.
    *
@@ -836,7 +860,7 @@ class FSOLauncher {
 
       case newConfig[1] == 'GraphicsMode' && newConfig[2] == 'sw' 
         && this.conf.Game.GraphicsMode != 'sw':
-        if ( !this.isInstalled.FSO ) Modal.showNeedFSOTSO();
+        if ( ! this.isInstalled.FSO ) Modal.showNeedFSOTSO();
         else {
           try {
             await this.enableSoftwareMode();
@@ -875,6 +899,7 @@ class FSOLauncher {
         this.persist( newConfig[1] !== 'Language' );
     }
   }
+
   /**
    * Disables Software Mode and removes dxtn.dll and opengl32.dll.
    */
@@ -889,6 +914,7 @@ class FSOLauncher {
       this.removeActiveTask( 'CHSWM' );
     }
   }
+
   /**
    * Enables Software Mode and adds the needed files.
    * 
@@ -905,6 +931,7 @@ class FSOLauncher {
       this.removeActiveTask( 'CHSWM' );
     }
   }
+
   /**
    * Runs FreeSO or Simitone's executable.
    *
@@ -916,7 +943,7 @@ class FSOLauncher {
       useVolcanic = false;
     }
 
-    if ( !this.isInstalled.FSO && !isSimitone ) {
+    if ( ! this.isInstalled.FSO && ! isSimitone ) {
       return Modal.showNeedToPlay();
     }
 
@@ -943,13 +970,14 @@ class FSOLauncher {
         : this.isInstalled.FSO + '/FreeSOClient/FreeSO.exe';
 
         return fs.stat( altExeLocation, ( err, _stat ) => {
-          if( err ) return Modal.showCouldNotRecover( isSimitone );
+          if ( err ) return Modal.showCouldNotRecover( isSimitone );
           this.launchGame( false, isSimitone, '/FreeSOClient' );
         } );
       }
       this.launchGame( false, isSimitone );
     } );
   }
+
   /**
    * Launches the game with the user's configuration.
    *
@@ -973,34 +1001,34 @@ class FSOLauncher {
     // windowed by default
     args.push( 'w' );
     // game language, by default english
-    if( !isSimitone ) {
+    if ( ! isSimitone ) {
       // for now disable this for Simitone
       args.push( `-lang${this.getLangCode( this.conf.Game.Language )}` );
     }
     // SW only allows ogl
     let graphicsMode = this.conf.Game.GraphicsMode != 'sw'
       ? this.conf.Game.GraphicsMode : 'ogl';
-    if( process.platform === "darwin" ) graphicsMode = "ogl";
+    if ( process.platform === "darwin" ) graphicsMode = "ogl";
     args.push( `-${graphicsMode}` );
     // 3d is forced off when in SW
-    if( this.conf.Game['3DMode'] === '1' && ( this.conf.Game.GraphicsMode != 'sw' || isSimitone ) ) {
+    if ( this.conf.Game['3DMode'] === '1' && ( this.conf.Game.GraphicsMode != 'sw' || isSimitone ) ) {
       args.push( '-3d' );
     }
-    if( isSimitone && useVolcanic ) {
+    if ( isSimitone && useVolcanic ) {
       // w Simitone you need to launch Simitone.Windows.exe with the -ide flag
       args.push( '-ide' );
       file = 'Simitone.Windows.exe';
     }
-    if( isSimitone && this.conf.Game.SimitoneAA === '1' ) {
+    if ( isSimitone && this.conf.Game.SimitoneAA === '1' ) {
       args.push( '-aa' );
     }
 
-    if( subfolder ) {
+    if ( subfolder ) {
       cwd += subfolder;
     }
 
-    if( process.platform === "darwin" ) {
-      if( isSimitone ) {
+    if ( process.platform === "darwin" ) {
+      if ( isSimitone ) {
         file = "/Library/Frameworks/Mono.framework/Commands/mono";
         args.unshift( "Simitone.Windows.exe" );
       } else {
@@ -1010,7 +1038,7 @@ class FSOLauncher {
     const spawnOptions = { 
       cwd, detached: true, stdio: 'ignore' 
     };
-    if( process.platform === "darwin" ) { 
+    if ( process.platform === "darwin" ) { 
       spawnOptions.shell = true;
     }
     console.log( 'Running', file + ' ' + args.join( ' ' ), cwd );
@@ -1018,6 +1046,7 @@ class FSOLauncher {
 
     setTimeout( () => { toast.destroy(); }, 4000 );
   }
+
   /**
    * Promise that returns FreeSO configuration
    * variables.
@@ -1039,6 +1068,7 @@ class FSOLauncher {
       );
     } );
   }
+
   /**
    * Returns hardcoded language integers from the language string.
    * Example: 'en', 'es'...
@@ -1055,6 +1085,7 @@ class FSOLauncher {
     };
     return codes[lang];
   }
+
   /**
    * Returns the full language strings from the code.
    *
@@ -1071,6 +1102,7 @@ class FSOLauncher {
 
     return languageStrings[code];
   }
+
   /**
    * Save the current state of the configuration.
    *
@@ -1085,6 +1117,7 @@ class FSOLauncher {
       _err => setTimeout( () => toast.destroy(), 1500 )
     );
   }
+
   /**
    * Change FreeSO installation path.
    *
@@ -1098,12 +1131,13 @@ class FSOLauncher {
       Modal.showChangedGamePath();
       this.IPC.sendDetectorResponse();
       this.updateInstalledPrograms();
-    } catch( e ) {
+    } catch ( e ) {
       captureWithSentry( e );
       Modal.showGenericError( 
         'Failed while trying to change the FreeSO installation directory: ' + e );
     }
   }
+
   /**
    * Sets the native progress bar to the given value.
    * 
@@ -1111,15 +1145,16 @@ class FSOLauncher {
    * @param {Electron.ProgressBarOptions} options The options to use. 
    */
   setProgressBar( val, options ) {
-    if( this.Window ) {
+    if ( this.Window ) {
       try {
         this.Window.setProgressBar( val, options );
-      } catch( err ) {
+      } catch ( err ) {
         captureWithSentry( err );
         console.log( 'Failed setting ProgressBar' )
       }
     }
   }
+
   /**
    * Returns if the current theme is considerd dark.
    * 

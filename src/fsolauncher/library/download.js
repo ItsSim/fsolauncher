@@ -68,7 +68,7 @@ module.exports = function( { from, to, immediate = false } ) {
    */
   const _onDownload = r => {
     console.log( from, r.headers );
-    if ( !r ) return _onError( new Error( 'Server did not return a response.' ) );
+    if ( ! r ) return _onError( new Error( 'Server did not return a response.' ) );
 
     if ( r.statusCode < 200 || r.statusCode > 299 )
       return _onError( new Error( 'Received status code ' + r.statusCode ) );
@@ -83,7 +83,7 @@ module.exports = function( { from, to, immediate = false } ) {
   };
 
   const _onEnd = () => {
-    if ( !_failed ) {
+    if ( ! _failed ) {
       // Archive.org downloads fail silently when x-page-cache is MISS or EXPIRED.
       if ( _response.headers['x-page-cache'] ) {
         if (

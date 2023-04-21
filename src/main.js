@@ -6,22 +6,13 @@ if ( global.isTestMode ) {
   console.log( 'CI: Test mode enabled' );
 }
 
-// Init Sentry error logging
 const { initSentry } = require( './fsolauncher/library/utils' );
+// init Sentry error logging
 initSentry();
 
 const { 
   app, BrowserWindow, shell, Tray, Menu, nativeImage
 } = require( 'electron' );
-// Switches for https://github.com/ItsSim/fsolauncher/issues/47
-//app.commandLine.appendSwitch( 'no-sandbox' );
-//app.commandLine.appendSwitch( 'disable-gpu' );
-//app.commandLine.appendSwitch( 'disable-software-rasterizer' );
-//app.commandLine.appendSwitch( 'disable-gpu-compositing' );
-//app.commandLine.appendSwitch( 'disable-gpu-rasterization' );
-//app.commandLine.appendSwitch( 'disable-gpu-sandbox' );
-//app.commandLine.appendSwitch( '--no-sandbox' );
-//app.disableHardwareAcceleration();
 const oslocale = require( 'os-locale' );
 const fs = require( 'fs-extra' );
 const ini = require( 'ini' );
@@ -107,7 +98,7 @@ try {
   fs.writeFileSync( global.appData + 'FSOLauncher.ini', ini.stringify( conf ), 'utf-8' );
 }
 
-const code = ( !conf.Launcher.Language || conf.Launcher.Language == 'default' ) ?
+const code = ( ! conf.Launcher.Language || conf.Launcher.Language == 'default' ) ?
   oslocale.sync().substring( 0, 2 ) : conf.Launcher.Language;
 
 /** @type {Electron.BrowserWindowConstructorOptions} */
@@ -164,7 +155,7 @@ function CreateWindow() {
   Window = new BrowserWindow( options );
 
   Window.setMenu( null );
-  if( conf.Launcher.Debug == '1' ) {
+  if ( conf.Launcher.Debug == '1' ) {
     console.log( 'Debug mode enabled' );
     Window.openDevTools( { mode: 'detach' } );
   }
@@ -217,7 +208,7 @@ function CreateWindow() {
   } );
 
   Window.on( 'close', e => {
-    if ( !global.willQuit && launcher.conf.Launcher.Persistence === '1' ) {
+    if ( ! global.willQuit && launcher.conf.Launcher.Persistence === '1' ) {
       e.preventDefault();
       Window.minimize();
     }
@@ -252,7 +243,7 @@ app.on( 'activate', () => {
 
 const gotTheLock = app.requestSingleInstanceLock();
 
-if ( !gotTheLock ) {
+if ( ! gotTheLock ) {
   app.quit();
 } else {
   app.on( 'second-instance', ( _event, _commandLine, _workingDirectory ) => {

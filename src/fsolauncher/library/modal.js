@@ -196,19 +196,19 @@ class Modal {
    */
   static async showChooseDirectory( componentName, Window ) {
     let defaultPath = null;
-    if( process.platform === "win32" ){
+    if ( process.platform === "win32" ) {
       try {
         const winDefaultPath = await require( 'fs-extra' )
           .stat( 'C:\\Program Files' );
-        if( winDefaultPath.isDirectory() ) {
+        if ( winDefaultPath.isDirectory() ) {
           defaultPath = 'C:\\Program Files';
         }
-      } catch( err ) {
+      } catch ( err ) {
         captureWithSentry( err, { componentName } );
         console.log( err );
       }
     }
-    if( process.platform === "darwin" ) {
+    if ( process.platform === "darwin" ) {
       defaultPath = "~/Documents";
     }
     const response = await require( 'electron' )
@@ -596,7 +596,7 @@ class Modal {
    */
   static showCouldNotRecover( isSimitone = false ) {
     let str2 = global.locale.MODAL_FAILED_LAUNCH_DESC;
-    if( isSimitone ) {
+    if ( isSimitone ) {
       str2 = str2
         .replace( 'FreeSO.exe', 'Simitone.Windows.exe' )
         .replace( 'FreeSO', 'Simitone' ); 
@@ -638,20 +638,6 @@ class Modal {
       global.locale.MODAL_REQUIRES_RESTART, 
       global.locale.MODAL_REQUIRES_RESTART_DESC, 
       global.locale.MODAL_OK 
-    );
-  }
-
-  /**
-   * Dialog for the alternative TSO download.
-   */
-   static showFTPTSO() {
-    Modal.getIPC().sendModal(
-      'Try alternative download?',
-      'This will try and download The Sims Online from an alternative source. ' + 
-      'This is useful if the primary download is not working for you.',
-      'Continue',
-      'Cancel',
-      'FTP_TSOResponse'
     );
   }
 

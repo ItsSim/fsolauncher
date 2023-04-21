@@ -10,7 +10,7 @@ module.exports = ( { from, to, cpperm }, onEntry = () => {} ) =>
      * Empties the folder it extracted to.
      */
     const cleanup = () =>
-      !['.', './'].includes( to )
+      ! ['.', './'].includes( to )
         ? fs.remove( to )
         : Promise.reject( 'Cannot delete current directory.' );
     /**
@@ -27,7 +27,7 @@ module.exports = ( { from, to, cpperm }, onEntry = () => {} ) =>
       zipfile.openReadStream( entry, async function( err, readStream ) {
         if ( err ) return reject( err );
         let options = null;
-        if( cpperm ) options = { mode: entry.externalFileAttributes >>> 16 };
+        if ( cpperm ) options = { mode: entry.externalFileAttributes >>> 16 };
         const destination =
           ( to.endsWith( '/' ) ? to : to + '/' ) + entry.fileName;
         try {

@@ -10,18 +10,21 @@ class IPCBridge {
   constructor( BrowserWindow ) { 
     this.Window = BrowserWindow; 
   }
+
   /**
    * Loads the FreeSO blog RSS for the main page.
    */
   loadRss() {
     this.Window.webContents.send( 'LOAD_RSS' );
   }
+
   /**
    * Informs the renderer process that there is not internet connection.
    */
   hasNoInternet() {
     this.Window.webContents.send( 'NO_INTERNET' );
   }
+
   /**
    * Informs the renderer process that internet connection was restored.
    */
@@ -48,6 +51,7 @@ class IPCBridge {
   restoreConfiguration( Configuration ) {
     this.Window.webContents.send( 'RESTORE_CONFIGURATION', Configuration );
   }
+
   /**
    * Tells the renderer process to go to another tab.
    *
@@ -56,6 +60,7 @@ class IPCBridge {
   changePage( page ) {
     this.Window.webContents.send( 'CHANGE_PAGE', page );
   }
+
   /**
    * Tells the renderer process to show a modal window.
    *
@@ -80,6 +85,7 @@ class IPCBridge {
       type
     );
   }
+
   /**
    * Asks the renderer process to show a Modal window without forcing
    * window focus.
@@ -104,6 +110,7 @@ class IPCBridge {
       type
     );
   }
+
   /**
    * Tells the renderer process to show a success modal window.
    *
@@ -117,6 +124,7 @@ class IPCBridge {
   sendSuccessModal( title, text, yesText, noText, modalRespId, extra ) {
     this.sendModal( title, text, yesText, noText, modalRespId, extra, 'success' );
   }
+
   /**
    * Tells the renderer process to show a success modal window without forcing
    * window focus.
@@ -131,6 +139,7 @@ class IPCBridge {
    sendSuccessModalNoFocus( title, text, yesText, noText, modalRespId, extra ) {
     this.sendModalNoFocus( title, text, yesText, noText, modalRespId, extra, 'success' );
   }
+
   /**
    * Tells the renderer process to show an error modal window.
    *
@@ -144,6 +153,7 @@ class IPCBridge {
   sendErrorModal( title, text, yesText, noText, modalRespId, extra ) {
     this.sendModal( title, text, yesText, noText, modalRespId, extra, 'error' );
   }
+
   /**
    * Tells the renderer process to show an error modal window without forcing
    * window focus.
@@ -158,6 +168,7 @@ class IPCBridge {
    sendErrorModalNoFocus( title, text, yesText, noText, modalRespId, extra ) {
     this.sendModalNoFocus( title, text, yesText, noText, modalRespId, extra, 'error' );
   }
+
   /**
    * Adds a new progress item in the Downloads tab.
    *
@@ -183,6 +194,7 @@ class IPCBridge {
       );
     } catch ( e ) {}
   }
+
   /**
    * Stop progress animation.
    * 
@@ -193,6 +205,7 @@ class IPCBridge {
       this.Window.webContents.send( 'STOP_PROGRESS_ITEM', elId );
     } catch ( e ) {}
   }
+
   /**
    * Asks the renderer process to show the Full Install progress Window.
    *
@@ -212,6 +225,7 @@ class IPCBridge {
       );
     } catch ( e ) {}
   }
+
   /**
    * Asks the renderer process to visually show a toast.
    *
@@ -223,6 +237,7 @@ class IPCBridge {
       this.Window.webContents.send( 'TOAST', id, text );
     } catch ( e ) {}
   }
+
   /**
    * Tells the renderer process to remove a toast by ID.
    *
@@ -233,6 +248,7 @@ class IPCBridge {
       this.Window.webContents.send( 'REMOVE_TOAST', id );
     } catch ( e ) {}
   }
+
   /**
    * Sets the obtained remesh info for the renderer process.
    *
@@ -243,6 +259,7 @@ class IPCBridge {
       this.Window.webContents.send( 'REMESH_INFO', v );
     } catch ( e ) {}
   }
+
   /**
    * Updates the current installation tip.
    *
@@ -253,6 +270,7 @@ class IPCBridge {
       this.Window.webContents.send( 'SET_TIP', text );
     } catch ( e ) {}
   }
+
   /**
    * Plays a sound file on the renderer process.
    *
@@ -263,6 +281,7 @@ class IPCBridge {
       this.Window.webContents.send( 'PLAY_SOUND', sound );
     } catch ( e ) {}
   }
+
   /**
    * Adds a notification item to the notification log tab.
    *
@@ -275,6 +294,7 @@ class IPCBridge {
       this.Window.webContents.send( 'NOTIFLOG', title, body, url );
     } catch ( e ) {}
   }
+
   /**
    * Sends a list of installed programs. This is used to display which programs are 
    * installed in the installer screen.
@@ -286,6 +306,7 @@ class IPCBridge {
       this.Window.webContents.send( 'INSPROG', list );
     } catch ( e ) {}
   }
+
   /**
    * Makes the renderer process show that a Simitone update is available.
    *
@@ -296,6 +317,7 @@ class IPCBridge {
       this.Window.webContents.send( 'SIMITONE_SHOULD_UPDATE', v );
     } catch ( e ) {}    
   }
+
   /**
    * Response of a FSODetector run.
    *
@@ -307,6 +329,7 @@ class IPCBridge {
       this.Window.webContents.send( 'FSODETECTOR_RESPONSE', dir );
     } catch ( e ) {}   
   }
+
   /**
    * Useful for debugging with a production build.
    * 
@@ -317,6 +340,7 @@ class IPCBridge {
       this.Window.webContents.send( 'CONSOLE_LOG', str );
     } catch ( e ) {}
   }
+
   /**
    * Sets the Simitone Version for the UI.
    * 

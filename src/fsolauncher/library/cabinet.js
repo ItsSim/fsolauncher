@@ -29,7 +29,7 @@ module.exports = function( { from, to, purge = true },
    * @param {any} _uncompSize The uncompressed size.
    */
   const _MSZipDecomp = ( data, _uncompSize ) => {
-    if ( !( data[0] === 0x43 && data[1] === 0x4b ) ) console.log( "MSZIP fail" );
+    if ( ! ( data[0] === 0x43 && data[1] === 0x4b ) ) console.log( "MSZIP fail" );
     const temp = inflate( data.subarray( 2 ) );
     const view = new Uint8Array( new ArrayBuffer( temp.length ) );
     view.set( temp );
@@ -52,7 +52,7 @@ module.exports = function( { from, to, purge = true },
     else if ( folder === 0xfffe ) folder = cab.folderN - 1;
     const chunks = cab.folders[folder].chunks;
 
-    if ( !( file.iFolder === 0xfffd || file.iFolder === 0xffff ) || ofi !== 0 ) {
+    if ( ! ( file.iFolder === 0xfffd || file.iFolder === 0xffff ) || ofi !== 0 ) {
       _fileOffset = 0;
       _fileBuffer = new ArrayBuffer( file.uSize );
       _dataLeftToFill = file.uSize;
@@ -196,7 +196,7 @@ module.exports = function( { from, to, purge = true },
       }
       cab.folders = [];
       for ( let i = 0; i < cab.folderN; i++ ) {
-        if ( !_continued || i !== 0 ) _ucp[i] = 0;
+        if ( ! _continued || i !== 0 ) _ucp[i] = 0;
         _dc[i] = 0;
         const f = {};
         f.cfOffset = view.getUint32( read, true ); read += 4;

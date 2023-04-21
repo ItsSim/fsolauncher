@@ -31,6 +31,7 @@ class FilePlanetInstaller {
       to: this.tempFilePath
     } );
   }
+
   /**
    * Create/Update the download progress item.
    *
@@ -50,6 +51,7 @@ class FilePlanetInstaller {
       percentage == 100 ? 2 : percentage / 100
     );
   }
+
   /**
    * Executes all installation steps in order and captures any errors.
    *
@@ -68,6 +70,7 @@ class FilePlanetInstaller {
       return await this.error( errorMessage );
     }
   }
+
   /**
    * Download all the files.
    *
@@ -76,6 +79,7 @@ class FilePlanetInstaller {
   step1() {
     return this.download();
   }
+
   /**
    * Create the installation directory.
    *
@@ -84,6 +88,7 @@ class FilePlanetInstaller {
   step2() {
     return this.setupDir( this.path );
   }
+
   /**
    * Extract files into a temp directory.
    *
@@ -93,6 +98,7 @@ class FilePlanetInstaller {
     // extract zip
     return this.extractZip();
   }
+
   /**
    * Extract cabinet files into the installation directory.
    *
@@ -102,6 +108,7 @@ class FilePlanetInstaller {
   step4( unzipgc ) {
     return this.extractCabs( unzipgc );
   }
+
   /**
    * Create the Simitone Registry Key.
    *
@@ -111,6 +118,7 @@ class FilePlanetInstaller {
     // registry
     return require( '../registry' ).createMaxisEntry( this.path );
   }
+
   /**
    * Downloads the distribution file.
    *
@@ -133,6 +141,7 @@ class FilePlanetInstaller {
       this.updateDownloadProgress();
     } );
   }
+
   /**
    * Extracts the zipped artifacts.
    *
@@ -153,6 +162,7 @@ class FilePlanetInstaller {
       }
     );
   }
+
   /**
    * Extracts the MSFT cabinets.
    *
@@ -162,10 +172,10 @@ class FilePlanetInstaller {
     let from = `${TEMP_PATH}FilePlanetTSOFiles/TSO_Installer_v1.1239.1.0/Data1.cab`;
     try {
       // Support cabs in root
-      if( !await require( 'fs-extra' ).pathExists( from ) ) {
+      if ( ! await require( 'fs-extra' ).pathExists( from ) ) {
         from = `${TEMP_PATH}FilePlanetTSOFiles/Data1.cab`;
       }
-    } catch( err ) {
+    } catch ( err ) {
       console.log( err );
     }
     return new Promise( ( resolve, reject ) => {
@@ -180,6 +190,7 @@ class FilePlanetInstaller {
       );
     } );
   }
+
   /**
    * Creates all the directories and subfolders in a path.
    *
@@ -194,6 +205,7 @@ class FilePlanetInstaller {
       } );
     } );
   }
+
   /**
    * Checks if The Sims Online is already installed in a given path.
    * 
@@ -206,6 +218,7 @@ class FilePlanetInstaller {
       } );
     } );
   }
+
   /**
    * When the installation ends.
    */
@@ -217,8 +230,9 @@ class FilePlanetInstaller {
     this.createProgressItem( global.locale.INSTALLATION_FINISHED, 100 );
     this.FSOLauncher.IPC.stopProgressItem( 'TSOProgressItem' + this.id );
     this.FSOLauncher.updateInstalledPrograms();
-    if( !this.isFullInstall ) Modal.showInstalled( 'The Sims Online' );
+    if ( ! this.isFullInstall ) Modal.showInstalled( 'The Sims Online' );
   }
+
   /**
    * When the installation errors out.
    *
@@ -238,6 +252,7 @@ class FilePlanetInstaller {
     Modal.showFailedInstall( 'The Sims Online', errorMessage );
     return Promise.reject( errorMessage );
   }
+
   /**
    * Displays the extraction progress for a given cabinet object.
    *
@@ -249,6 +264,7 @@ class FilePlanetInstaller {
       100
     );
   }
+
   /**
    * Updates the progress item with the download progress.
    */

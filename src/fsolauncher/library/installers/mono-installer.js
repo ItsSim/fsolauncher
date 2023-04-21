@@ -17,6 +17,7 @@ class MonoInstaller {
     this.tempPath = `${global.appData}temp/mono-${this.id}.pkg`;
     this.dl = download( { from: 'https://beta.freeso.org/LauncherResourceCentral/Mono', to: this.tempPath } );
   }
+
   /**
    * Create/Update the download progress item.
    *
@@ -35,6 +36,7 @@ class MonoInstaller {
       percentage == 100 ? 2 : percentage / 100
     );
   }
+
   /**
    * Executes all installation steps in order and captures any errors.
    *
@@ -50,6 +52,7 @@ class MonoInstaller {
       return await this.error( errorMessage );
     }
   }
+
   /**
    * Download all the files.
    *
@@ -58,6 +61,7 @@ class MonoInstaller {
   step1() {
     return this.download();
   }
+
   /**
    * Extract files PKG to the destination.
    *
@@ -66,6 +70,7 @@ class MonoInstaller {
   step2() {
     return this.extract();
   }
+
   /**
    * When the installation errors out.
    *
@@ -84,6 +89,7 @@ class MonoInstaller {
     Modal.showFailedInstall( 'Mono', errorMessage );
     return Promise.reject( errorMessage );
   }
+
   /**
    * When the installation ends.
    */
@@ -94,8 +100,9 @@ class MonoInstaller {
     this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
     this.FSOLauncher.updateInstalledPrograms();
     this.FSOLauncher.removeActiveTask( 'Mono' );
-    if( !this.isFullInstall ) Modal.showInstalled( 'Mono' );
+    if ( ! this.isFullInstall ) Modal.showInstalled( 'Mono' );
   }
+
   /**
    * Downloads the distribution file.
    *
@@ -114,6 +121,7 @@ class MonoInstaller {
       this.updateDownloadProgress();
     } );
   }
+
   /**
    * Creates all the directories and subfolders in a path.
    *
@@ -128,6 +136,7 @@ class MonoInstaller {
       } );
     } );
   }
+
   /**
    * Updates the progress item with the download progress.
    */
@@ -139,7 +148,7 @@ class MonoInstaller {
 
       if ( isNaN( p ) ) p = 0;
       if ( p < 100 ) {
-        if ( !this.haltProgress ) {
+        if ( ! this.haltProgress ) {
           this.createProgressItem(
             `${global.locale.DL_CLIENT_FILES} ${mb} MB ${global.locale.X_OUT_OF_X} ${size} MB (${p}%)`,
             p
@@ -149,6 +158,7 @@ class MonoInstaller {
       }
     }, 250 );
   }
+
   /**
    * Extracts the PKG file.
    *
@@ -162,12 +172,13 @@ class MonoInstaller {
       // headless install
       sudo.exec( `installer -pkg ${global.appData.replace( / /g, '\\ ' )}temp/mono-${this.id}.pkg -target /`, {}, 
         ( err, stdout, stderr ) => {
-          if( err ) return reject( err );
+          if ( err ) return reject( err );
           console.log( 'Mono Installer:', stdout, stderr );
           resolve();
       } );
     } );
   }
+
   /**
    * Deletes the downloaded artifacts file.
    */

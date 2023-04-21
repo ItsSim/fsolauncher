@@ -11,6 +11,7 @@ class CompleteInstaller {
   constructor( FSOLauncher ) {
     this.FSOLauncher = FSOLauncher;
   }
+
   /**
    * Runs steps sequentially.
    */
@@ -21,11 +22,12 @@ class CompleteInstaller {
       await this.step3();
       await this.step4();
       this.end();
-    } catch( errorMessage ) {
+    } catch ( errorMessage ) {
       captureWithSentry( errorMessage, { installer: 'complete' } );
       this.error( errorMessage );
     }
   }
+
   /**
    * Install OpenAL.
    *
@@ -38,7 +40,7 @@ class CompleteInstaller {
       process.platform === "win32" ? global.locale.INS_OAL_WINDOW : global.locale.INS_SDL_WINDOW,
       10
     );
-    if( process.platform === "darwin" ) {
+    if ( process.platform === "darwin" ) {
       // Skip SDL if already installed.
       if ( this.FSOLauncher.isInstalled['SDL'] ) {
         return Promise.resolve();
@@ -50,6 +52,7 @@ class CompleteInstaller {
     }
     return this.FSOLauncher.install( 'OpenAL' );
   }
+
   /**
    * Install .NET Framework.
    *
@@ -62,7 +65,7 @@ class CompleteInstaller {
       process.platform === "win32" ? global.locale.INS_NET_WINDOW : global.locale.INS_MONO_WINDOW,
       25
     );
-    if( process.platform === "darwin" ) {
+    if ( process.platform === "darwin" ) {
       // Skip Mono if already installed.
       if ( this.FSOLauncher.isInstalled['Mono'] ) {
         return Promise.resolve();
@@ -75,6 +78,7 @@ class CompleteInstaller {
     }
     return this.FSOLauncher.install( 'NET' );
   }
+
   /**
    * Installs The Sims Online.
    *
@@ -89,6 +93,7 @@ class CompleteInstaller {
     );
     return this.FSOLauncher.install( 'TSO', { fullInstall: true } );
   }
+
   /**
    * Installs FreeSO.
    *
@@ -103,6 +108,7 @@ class CompleteInstaller {
     );
     return this.FSOLauncher.install( 'FSO', { fullInstall: true } );
   }
+
   /**
    * When the installation finished.
    */
@@ -125,6 +131,7 @@ class CompleteInstaller {
       this.FSOLauncher.IPC.fullInstallProgressItem();
     }, 5000 );
   }
+
   /**
    * Communicates that an error happened.
    */

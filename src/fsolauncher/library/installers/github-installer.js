@@ -18,6 +18,7 @@ class GitHubInstaller extends ServoInstaller {
   constructor( path, FSOLauncher ) {
     super( path, FSOLauncher );
   }
+
   /**
    * Create/Update the download progress item.
    *
@@ -36,6 +37,7 @@ class GitHubInstaller extends ServoInstaller {
       percentage == 100 ? 2 : percentage / 100
     );
   }
+
   /**
    * Download all the files.
    * 
@@ -49,7 +51,7 @@ class GitHubInstaller extends ServoInstaller {
     this.createProgressItem( global.locale.INS_SOURCES, 0 );
 
     const from = await this.getZipUrl();
-    if( !from ) {
+    if ( ! from ) {
       throw new Error( "Could not obtain FreeSO release information..." );
     }
 
@@ -57,6 +59,7 @@ class GitHubInstaller extends ServoInstaller {
 
     return this.download();
   }
+
   /**
    * Obtain FreeSO release information from GitHub.
    * 
@@ -89,6 +92,7 @@ class GitHubInstaller extends ServoInstaller {
       request.end();
     } );
   }
+
   /**
    * Obtain FreeSO release information from the FreeSO API.
    *
@@ -119,6 +123,7 @@ class GitHubInstaller extends ServoInstaller {
       request.end();
     } );
   }
+
   /**
    * Obtains the latest release zip either from api.freeso.org or GitHub directly.
    * 
@@ -130,27 +135,27 @@ class GitHubInstaller extends ServoInstaller {
     let url;
     try {
       const apiReleaseInfo = await this.getFreeSOApiReleaseInfo();
-      if( !Array.isArray( apiReleaseInfo ) || apiReleaseInfo.length == 0 ) throw new Error( "Wrong response" );
+      if ( ! Array.isArray( apiReleaseInfo ) || apiReleaseInfo.length == 0 ) throw new Error( "Wrong response" );
       url = apiReleaseInfo[0].full_zip; // Latest version
-    } catch( err ) {
+    } catch ( err ) {
       captureWithSentry( err );
       console.log( 'Failed getting apiReleaseInfo', err );
     }
     
-    if( !url ) {
+    if ( ! url ) {
       try {
         const githubReleaseInfo = await this.getFreeSOGitHubReleaseInfo();
-        if( !Array.isArray( githubReleaseInfo.assets ) ) {
+        if ( ! Array.isArray( githubReleaseInfo.assets ) ) {
           throw new Error( "Invalid response when trying to obtain FreeSO release information from GitHub." );
         }
         for ( let i = 0; i < githubReleaseInfo.assets.length; i++ ) {
           const asset = githubReleaseInfo.assets[i];
-          if( asset["name"].indexOf( "client" ) > -1 ) {
+          if ( asset["name"].indexOf( "client" ) > -1 ) {
             // This asset contains the full client.
             url = asset["browser_download_url"];
           }
         }
-      } catch( err ) {
+      } catch ( err ) {
         captureWithSentry( err );
         console.log( 'Failed getting githubReleaseInfo', err );
       }
@@ -158,6 +163,7 @@ class GitHubInstaller extends ServoInstaller {
 
     return url;
   }
+
   /**
    * When the installation errors out.
    * 
@@ -168,7 +174,7 @@ class GitHubInstaller extends ServoInstaller {
    *                          installer (ServoInstaller) finishes.
    */
   async error( errorMessage ) {
-    if( this.dl ) this.dl.cleanup();
+    if ( this.dl ) this.dl.cleanup();
     this.FSOLauncher.setProgressBar( 1, { mode: 'error' } );
     this.haltProgress = true;
     this.createProgressItem( 

@@ -13,7 +13,7 @@ class Registry {
    *                             user has access to the registry.
    */
   static testWinAccess() {
-    if( process.platform != "win32" ) return Promise.resolve( false );
+    if ( process.platform != "win32" ) return Promise.resolve( false );
     const Registry = require( 'winreg' );
     const regKey = new Registry( {
       hive: Registry.HKLM,
@@ -22,12 +22,12 @@ class Registry {
 
     return new Promise( ( resolve, _reject ) => {
       regKey.create( err => {
-        if( err ) {
+        if ( err ) {
           console.log( 'Registry access check failed (on create):', err );
           return resolve( false );
         }
         regKey.keyExists( function( err, exists ) {
-          if( err || !exists ) {
+          if ( err || ! exists ) {
             console.log( 'Registry access check failed (on keyExists):', err );
             return resolve( false );
           }
@@ -84,34 +84,35 @@ class Registry {
    */
   static async win32LocalPathFallbacks( program ) {
     const locals = [];
-    if( program == 'FSO' ) {
+    if ( program == 'FSO' ) {
       locals.push( 'C:/Program Files/FreeSO/FreeSO.exe' );
     }
-    if( program == 'TSO' ) {
+    if ( program == 'TSO' ) {
       locals.push( 'C:/Program Files/Maxis/The Sims Online/TSOClient/TSOClient.exe' );
       locals.push( 'C:/Program Files/The Sims Online/TSOClient/TSOClient.exe' ); 
     }
-    if( program == 'Simitone' ) {
+    if ( program == 'Simitone' ) {
       locals.push( 'C:/Program Files/Simitone for Windows/Simitone.Windows.exe' );
       locals.push( 'C:/Program Files (x86)/Simitone for Windows/Simitone.Windows.exe' );
     }
-    if( program == 'OpenAL' ) {
+    if ( program == 'OpenAL' ) {
       locals.push( 'C:/Program Files (x86)/OpenAL' );
     }
-    if( program == 'TS1' ) {
+    if ( program == 'TS1' ) {
       locals.push( 'C:/Program Files (x86)/Maxis/The Sims' );
     }
-    if( locals.length > 0 ) {
+    if ( locals.length > 0 ) {
       for ( let i = 0; i < locals.length; i++ ) {
         const local = locals[i];
         console.log( 'Testing local:', local );
-        if( await require( 'fs-extra' ).pathExists( local ) ) {
+        if ( await require( 'fs-extra' ).pathExists( local ) ) {
           return local;
         }
       }
     }
     return false;
   }
+
   /**
    * Returns the status of all the required programs (Installed/not installed).
    *
@@ -128,7 +129,7 @@ class Registry {
       Promises.push( Registry.get( 'NET', Registry.getNETPath() ) );
       Promises.push( Registry.get( 'Simitone', Registry.getSimitonePath() ) );
       Promises.push( Registry.get( 'TS1', Registry.getTS1Path() ) );
-      if( process.platform == 'darwin' ) {
+      if ( process.platform == 'darwin' ) {
         Promises.push( Registry.get( 'Mono', Registry.getMonoPath() ) );
         Promises.push( Registry.get( 'SDL', Registry.getSDLPath() ) );
       }
@@ -138,6 +139,7 @@ class Registry {
         .catch( err => reject( err ) );
     } );
   }
+
   /**
    * Checks if a registry key exists.
    *
@@ -146,7 +148,7 @@ class Registry {
    * @returns {Promise<{key: string, isInstalled: string}>}
    */
   static get( e, p ) {
-    if( process.platform === "darwin" ) {
+    if ( process.platform === "darwin" ) {
       // when darwin directly test if file exists
       return new Promise( ( resolve, _reject ) => {
         require( 'fs-extra' ).pathExists( p, ( _err, exists ) => {
@@ -166,7 +168,7 @@ class Registry {
             let isInstalled = false;
             try {
               isInstalled = await this.win32LocalPathFallbacks( e );
-            } catch( err ) {/**/}
+            } catch ( err ) {/**/}
             return resolve( { key: e, isInstalled, error: err } );
           }
           return resolve( { key: e, isInstalled: RegistryItem.value } );
@@ -175,7 +177,7 @@ class Registry {
         Key.get( 'InstallPath', async ( err, _RegistryItem ) => {
           if ( err ) {
             console.log( err );
-            if( await this.win32LocalPathFallbacks( e ) ) {
+            if ( await this.win32LocalPathFallbacks( e ) ) {
               return resolve( { key: e, isInstalled: true } );
             }
             return resolve( { key: e, isInstalled: false, error: err } );
@@ -184,7 +186,7 @@ class Registry {
           Key.get( 'SIMS_GAME_EDITION', async ( err, RegistryItem ) => {
             if ( err ) {
               console.log( err );
-              if( await this.win32LocalPathFallbacks( e ) ) {
+              if ( await this.win32LocalPathFallbacks( e ) ) {
                 return resolve( { key: e, isInstalled: true } );
               }
               return reject( { key: e, isInstalled: false } );
@@ -220,7 +222,7 @@ class Registry {
             let isInstalled = false;
             try {
               isInstalled = await this.win32LocalPathFallbacks( e );
-            } catch( err ) {/**/}
+            } catch ( err ) {/**/}
             return resolve( { key: e, isInstalled, error: err } );
           } 
 
@@ -230,13 +232,14 @@ class Registry {
           let isInstalled = false;
           try {
             isInstalled = await this.win32LocalPathFallbacks( e );
-          } catch( err ) {/**/}
+          } catch ( err ) {/**/}
 
           return resolve( { key: e, isInstalled } );
         } );
       }
     } );
   }
+
   /**
    * Creates the default Maxis registry key.
    *
@@ -244,7 +247,7 @@ class Registry {
    * @returns {Promise<void>} A promise that resolves when the registry key is created.
    */
   static async createMaxisEntry( installDir ) {
-    if( ! await Registry.testWinAccess() ) {
+    if ( ! await Registry.testWinAccess() ) {
       return Promise.resolve();
     }
 
@@ -303,6 +306,7 @@ class Registry {
       } );
     } );
   }
+
   /**
    * Creates the *new* default FreeSO Registry Key.
    * Reused for Simitone, second parameter as "Simitone".
@@ -312,7 +316,7 @@ class Registry {
    * @returns {Promise<void>} A promise that resolves when the registry key is created.
    */
   static async createFreeSOEntry( installDir, keyName = 'FreeSO' ) {
-    if( ! await Registry.testWinAccess() ) {
+    if ( ! await Registry.testWinAccess() ) {
       return Promise.resolve();
     }
     return new Promise( ( resolve, reject ) => {

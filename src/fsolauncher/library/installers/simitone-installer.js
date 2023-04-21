@@ -26,6 +26,7 @@ class SimitoneInstaller {
     } );
     this.simitoneVersion = '';
   }
+
   /**
    * Create/Update the download progress item.
    *
@@ -44,6 +45,7 @@ class SimitoneInstaller {
       percentage == 100 ? 2 : percentage / 100
     );
   }
+
   /**
    * Executes all installation steps in order and captures any errors.
    *
@@ -64,6 +66,7 @@ class SimitoneInstaller {
       return await this.error( errorMessage );
     }
   }
+
   /**
    * Obtains GitHub release data.
    */
@@ -76,6 +79,7 @@ class SimitoneInstaller {
 
     return Promise.resolve();
   }
+
   /**
    * Download all the files.
    *
@@ -84,6 +88,7 @@ class SimitoneInstaller {
   step2() {
     return this.download();
   }
+
   /**
    * Create the installation directory.
    *
@@ -92,6 +97,7 @@ class SimitoneInstaller {
   step3() {
     return this.setupDir( this.path );
   }
+
   /**
    * Extract files into installation directory.
    *
@@ -100,6 +106,7 @@ class SimitoneInstaller {
   step4() {
     return this.extract();
   }
+
   /**
    * Create the FreeSO Registry Key.
    *
@@ -108,13 +115,14 @@ class SimitoneInstaller {
   step5() {
     return require( '../registry' ).createFreeSOEntry( this.path, 'Simitone' );
   }
+
   /**
    * Downloads Mac-extras for Darwin.
    * 
    * @returns {Promise<void>} A promise that resolves when the download is complete.
    */
   step6() {
-    if( process.platform === "darwin" ) {
+    if ( process.platform === "darwin" ) {
       console.log( 'Darwin:', 'Downloading MacExtras' );
       this.dl = download( { 
         from: 'https://beta.freeso.org/LauncherResourceCentral/MacExtras', 
@@ -124,13 +132,14 @@ class SimitoneInstaller {
     }
     return Promise.resolve();
   }
+
   /**
    * Installs Mac-extras for Darwin.
    * 
    * @returns {Promise<void>} A promise that resolves when the installation is complete.
    */
   step7() {
-    if( process.platform === "darwin" ) {
+    if ( process.platform === "darwin" ) {
       console.log( 'Darwin:', 'Extracting MacExtras' );
       return unzip( { 
         from: `${global.appData}temp/macextras-${this.id}.zip`, 
@@ -144,6 +153,7 @@ class SimitoneInstaller {
     }
     return Promise.resolve();
   }
+
   /**
    * When the installation ends.
    */
@@ -161,8 +171,9 @@ class SimitoneInstaller {
         this.simitoneVersion
       ] );
     }
-    if( !this.isFullInstall ) Modal.showInstalled( 'Simitone' );
+    if ( ! this.isFullInstall ) Modal.showInstalled( 'Simitone' );
   }
+
   /**
    * When the installation errors out.
    *
@@ -181,6 +192,7 @@ class SimitoneInstaller {
     Modal.showFailedInstall( 'Simitone', errorMessage );
     return Promise.reject( errorMessage );
   }
+
   /**
    * Downloads the distribution file.
    *
@@ -199,6 +211,7 @@ class SimitoneInstaller {
       this.updateDownloadProgress();
     } );
   }
+
   /**
    * Extracts the zipped artifacts.
    *
@@ -212,6 +225,7 @@ class SimitoneInstaller {
       );
     } );
   }
+
   /**
    * Deletes the downloaded artifacts file.
    */
@@ -224,6 +238,7 @@ class SimitoneInstaller {
       } );
     } );
   }
+
   /**
    * Creates all the directories and subfolders in a path.
    *
@@ -238,6 +253,7 @@ class SimitoneInstaller {
       } );
     } );
   }
+
   /**
    * Checks if Simitone is already installed in a given path.
    * 
@@ -250,6 +266,7 @@ class SimitoneInstaller {
       } );
     } );
   }
+
   /**
    * Updates the progress item with the download progress.
    */
@@ -261,7 +278,7 @@ class SimitoneInstaller {
 
       if ( isNaN( p ) ) p = 0;
       if ( p < 100 ) {
-        if ( !this.haltProgress ) {
+        if ( ! this.haltProgress ) {
           this.createProgressItem(
             `${global.locale.DL_CLIENT_FILES} ${mb} MB ${global.locale.X_OUT_OF_X} ${size} MB (${p}%)`,
             p

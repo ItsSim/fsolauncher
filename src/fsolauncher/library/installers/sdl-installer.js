@@ -17,6 +17,7 @@ class SDLInstaller {
     this.tempPath = `${global.appData}temp/sdl2-${this.id}.dmg`;
     this.dl = download( { from: 'https://beta.freeso.org/LauncherResourceCentral/SDL', to: this.tempPath } );
   }
+
   /**
    * Create/Update the download progress item.
    *
@@ -60,6 +61,7 @@ class SDLInstaller {
   step1() {
     return this.download();
   }
+
   /**
    * Extract the DMG to the destination.
    *
@@ -87,6 +89,7 @@ class SDLInstaller {
     Modal.showFailedInstall( 'SDL2', errorMessage );
     return Promise.reject( errorMessage );
   }
+
   /**
    * When the installation ends.
    */
@@ -97,8 +100,9 @@ class SDLInstaller {
     this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
     this.FSOLauncher.updateInstalledPrograms();
     this.FSOLauncher.removeActiveTask( 'SDL' );
-    if( !this.isFullInstall ) Modal.showInstalled( 'SDL2' );
+    if ( ! this.isFullInstall ) Modal.showInstalled( 'SDL2' );
   }
+
   /**
    * Downloads the distribution file.
    *
@@ -117,6 +121,7 @@ class SDLInstaller {
       this.updateDownloadProgress();
     } );
   }
+
   /**
    * Creates all the directories and subfolders in a path.
    *
@@ -131,6 +136,7 @@ class SDLInstaller {
       } );
     } );
   }
+
   /**
    * Updates the progress item with the download progress.
    */
@@ -142,7 +148,7 @@ class SDLInstaller {
 
       if ( isNaN( p ) ) p = 0;
       if ( p < 100 ) {
-        if ( !this.haltProgress ) {
+        if ( ! this.haltProgress ) {
           this.createProgressItem(
             `${global.locale.DL_CLIENT_FILES} ${mb} MB ${global.locale.X_OUT_OF_X} ${size} MB (${p}%)`,
             p
@@ -152,6 +158,7 @@ class SDLInstaller {
       }
     }, 250 );
   }
+
   /**
    * Extracts the DMG file.
    *
@@ -169,12 +176,13 @@ class SDLInstaller {
       cmd += `hdiutil unmount /Volumes/SDL2`; // unmount SDL dmg
       sudo.exec( cmd, {}, 
         ( err, stdout, stderr ) => {
-          if( err ) return reject( err );
+          if ( err ) return reject( err );
           console.log( 'SDL2 Installer:', stdout, stderr );
           resolve();
       } );
     } );
   }
+
   /**
    * Deletes the downloaded artifacts file.
    */
