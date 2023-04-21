@@ -31,7 +31,7 @@ var setCurrentPage;
   var timeout = ( promise, milliseconds = 5000 ) => {
     return new Promise( ( resolve, reject ) => {
       setTimeout( () => {
-        reject( new Error( "Timeout exceeded" ) )
+        reject( new Error( 'Timeout exceeded' ) )
       }, milliseconds )
       promise.then( resolve, reject )
     } )
@@ -701,7 +701,7 @@ var setCurrentPage;
     if ( b ) {
       querySelector( '#simitone-ver' ).textContent = `(Installed: ${b})`;
     } else {
-      querySelector( '#simitone-ver' ).textContent = "";
+      querySelector( '#simitone-ver' ).textContent = '';
     }
   } );
   // SET_THEME
