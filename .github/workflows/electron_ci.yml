@@ -1,5 +1,5 @@
 # The purpose of this workflow is to fully publish new releases.
-# It builds, tests, and publishes a new release along with a changelog.
+# It builds, tests, and publishes a new release along with its changelog.
 
 name: electron-ci
 
