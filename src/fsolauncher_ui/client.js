@@ -606,50 +606,50 @@ var setCurrentPage;
   var yesNo = ( title, text, yesText, noText, modalRespId, extra, type ) => {
     yesNoAudio.play();
 
-    var d = createElement( 'div' );
-    d.className = 'modal';
-
+    var modalDiv = createElement( 'div' );
+    modalDiv.className = 'modal';
+  
     if ( type ) {
-      d.className += ' modal-' + type;
+      modalDiv.className += ' modal-' + type;
     }
-
-    var h = createElement( 'h1' );
-    h.innerHTML = title;
-
-    d.appendChild( h );
-
-    title = createElement( 'p' );
-    title.innerHTML = text;
-
-    d.appendChild( title );
-    text = createElement( 'div' );
-
-    title = createElement( 'button' );
-    title.innerHTML = yesText;
-    title.addEventListener( 'click', function () {
-      d.parentNode.removeChild( d );
-
-      if ( querySelectorAll( '.modal' ).length == 0 ) {
+    var header = createElement( 'h1' );
+    header.innerHTML = title;
+  
+    modalDiv.appendChild( header );
+  
+    var textParagraph = createElement( 'p' );
+    textParagraph.innerHTML = text;
+  
+    modalDiv.appendChild( textParagraph );
+    var buttonContainer = createElement( 'div' );
+  
+    var yesButton = createElement( 'button' );
+    yesButton.innerHTML = yesText;
+    yesButton.addEventListener( 'click', function () {
+      modalDiv.parentNode.removeChild( modalDiv );
+      if ( querySelectorAll( '.modal' ).length === 0 ) {
         querySelector( '#overlay' ).style.display = 'none';
       }
       modalRespId && window.shared.send( modalRespId, ! 0, extra );
     } );
-    text.appendChild( title );
-    noText
-      ? ( ( yesText = createElement( 'span' ) ),
-        ( yesText.innerHTML = noText ),
-        yesText.addEventListener( 'click', function () {
-          d.parentNode.removeChild( d );
-          if ( querySelectorAll( '.modal' ).length == 0 ) {
-            querySelector( '#overlay' ).style.display = 'none';
-          }
+    buttonContainer.appendChild( yesButton );
+  
+    if ( noText ) {
+      var noButton = createElement( 'span' );
+      noButton.innerHTML = noText;
+      noButton.addEventListener( 'click', function () {
+        modalDiv.parentNode.removeChild( modalDiv );
+        if ( querySelectorAll( '.modal' ).length === 0 ) {
           querySelector( '#overlay' ).style.display = 'none';
-          modalRespId && window.shared.send( modalRespId, ! 1, extra );
-        } ),
-        text.appendChild( yesText ) )
-      : ( title.style.margin = '0px' );
-    d.appendChild( text );
-    querySelector( '#launcher' ).appendChild( d );
+        }
+        modalRespId && window.shared.send( modalRespId, ! 1, extra );
+      } );
+      buttonContainer.appendChild( noButton );
+    } else {
+      yesButton.style.margin = '0px';
+    }
+    modalDiv.appendChild( buttonContainer );
+    querySelector( '#launcher' ).appendChild( modalDiv );
     querySelector( '#overlay' ).style.display = 'block';
   }
 
