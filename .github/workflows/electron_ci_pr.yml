@@ -37,7 +37,7 @@ jobs:
           ${{ runner.os }}-node-modules-
 
     - name: Install dependencies
-      run: npm ci
+      run: npm install
       working-directory: src
 
     - name: Run ESLint
