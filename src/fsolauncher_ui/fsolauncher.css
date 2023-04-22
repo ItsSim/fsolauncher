@@ -308,7 +308,7 @@ div.page p {
   margin: 0 auto;
   margin-top: 20px;
   /*font-weight:700;*/
-  background: url(fsolauncher_images/logo.png) no-repeat;
+  background: url(images/logo.png) no-repeat;
   margin-bottom: 40px;
   border-bottom: 1px solid rgba(0, 0, 0, 0);
   padding-top: 70px;
@@ -388,7 +388,7 @@ div.page p {
   width: 100%;
   top: -20px;
   height: calc(100% + 20px);
-  background: url(fsolauncher_images/city.jpg) no-repeat;
+  background: url(images/city.jpg) no-repeat;
   background-position: center center;
   background-size: cover;
   z-index: 10;
@@ -425,7 +425,7 @@ div.page p {
 .backdrop {
   height: 215px;
   width: 100%;
-  background-image: url(fsolauncher_images/backdrop.png);
+  background-image: url(images/backdrop.png);
   background-position: center center;
   background-size: cover;
 }
@@ -619,7 +619,7 @@ button.blue:hover,
   /*background-color: #43a900 !important;*/
   width: 45px;
   height: 45px;
-  background-image: url(fsolauncher_images/icon_installed.png);
+  background-image: url(images/icon_installed.png);
   background-repeat: no-repeat;
   background-size: contain;
   display: block !important;
@@ -780,7 +780,7 @@ select {
 
 select {
   -webkit-appearance: none;
-  background-image: url(fsolauncher_images/15xvbd5.png),
+  background-image: url(images/15xvbd5.png),
     -webkit-linear-gradient(#fafafa, #f4f4f4 40%, #e5e5e5);
 }
 
@@ -1107,7 +1107,7 @@ select {
   content: "";
   width: 30px;
   height: 30px;
-  background-image:url(fsolauncher_images/icon_success.png);
+  background-image:url(images/icon_success.png);
   background-repeat: no-repeat;
   background-size:contain;
   float:left;
@@ -1118,7 +1118,7 @@ select {
   content: "";
   width: 30px;
   height: 30px;
-  background-image:url(fsolauncher_images/icon_error.png);
+  background-image:url(images/icon_error.png);
   background-repeat: no-repeat;
   background-size:contain;
   float:left;

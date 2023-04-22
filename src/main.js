@@ -6,7 +6,7 @@ if ( global.isTestMode ) {
   console.log( 'CI: Test mode enabled' );
 }
 
-const { initSentry } = require( './fsolauncher/library/utils' );
+const { initSentry } = require( './fsolauncher/lib/utils' );
 // init Sentry error logging
 initSentry();
 

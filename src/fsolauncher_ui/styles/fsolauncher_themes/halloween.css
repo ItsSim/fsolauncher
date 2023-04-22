@@ -15,7 +15,7 @@
 }
 
 .halloween #logo {
-  /*background-image: url(../../fsolauncher_images/logo_turbo.png) !important;*/
+  /*background-image: url(../../images/logo_turbo.png) !important;*/
 }
 
 /*.halloween #launcher #sidebar li.active,
@@ -98,7 +98,7 @@
   border-color: transparent !important;
   font-weight: bold;
   color: #15202b !important;
-  background: url(../../fsolauncher_images/15xvbd5.png), #ff691f;
+  background: url(../../images/15xvbd5.png), #ff691f;
   background-position: 97% center;
   background-repeat: no-repeat;
 }*/
@@ -108,7 +108,7 @@
 }
 
 .halloween .item[install='FSO'] {
-  background-image: url(../../fsolauncher_images/freeso_logo.png) !important;
+  background-image: url(../../images/freeso_logo.png) !important;
 }
 
 .halloween #did-you-know {
@@ -228,7 +228,7 @@
 
 .halloween input,
 .halloween select {
-background-image: url(../../fsolauncher_images/15xvbd5.png), 
+background-image: url(../../images/15xvbd5.png), 
 -webkit-linear-gradient(#15202b, #10171e 95%, #15202b);
   font-weight: bold;
   color:rgba(255,255,255,0.7) !important;
@@ -373,7 +373,7 @@ background-image: url(../../fsolauncher_images/15xvbd5.png),
   font-weight: bold;
   color: #10171E !important;
   border-color: #0B1015;
-  background-image: url(../../fsolauncher_images/15xvbd5.png),-webkit-linear-gradient(#ff5400, #ff5600 90%, #b03d04)!important;
+  background-image: url(../../images/15xvbd5.png),-webkit-linear-gradient(#ff5400, #ff5600 90%, #b03d04)!important;
   background-position: 97% center;
   background-repeat: no-repeat;
 }
@@ -453,5 +453,5 @@ background-image: url(../../fsolauncher_images/15xvbd5.png),
 
 
 .halloween #launcher #content #full-install {
-  background-image: url(../../fsolauncher_images/citydark.jpg);
+  background-image: url(../../images/citydark.jpg);
 } 

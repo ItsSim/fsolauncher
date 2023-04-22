@@ -21,8 +21,8 @@ var setCurrentPage;
 
 ( () => {
   var socket = window.io( `https://${querySelector( 'body' ).getAttribute( 'wsUrl' )}:${querySelector( 'body' ).getAttribute( 'wsPort' )}` );
-  var pageTriggerAudio = new window.Howl( { src: 'fsolauncher_sounds/click.wav', volume: 0.4 } );
-  var yesNoAudio = new window.Howl( { src: 'fsolauncher_sounds/modal.wav', volume: 0.4 } );
+  var pageTriggerAudio = new window.Howl( { src: 'sounds/click.wav', volume: 0.4 } );
+  var yesNoAudio = new window.Howl( { src: 'sounds/modal.wav', volume: 0.4 } );
   var twitterHasAlreadyLoaded = false;
   var simitoneRequirementsCheckInterval;
   var simitoneSuggestedUpdate;
@@ -782,7 +782,7 @@ var setCurrentPage;
   } );
   // PLAY_SOUND
   onMessage( 'PLAY_SOUND', ( a, b ) => {
-    var audio = new window.Howl( { src: `fsolauncher_sounds/${b}.wav`, volume: 0.4 } );
+    var audio = new window.Howl( { src: `sounds/${b}.wav`, volume: 0.4 } );
     audio.play();
   } );
   // CONSOLE_LOG

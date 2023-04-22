@@ -142,7 +142,7 @@ html {
 
 @font-face {
   font-family: 'Munged';
-  src: url('../fsolauncher_fonts/hinted-Munged-embOpitJmj.ttf')
+  src: url('../fonts/hinted-Munged-embOpitJmj.ttf')
     format('truetype');
   font-weight: bold;
   font-style: normal;
@@ -150,7 +150,7 @@ html {
 
 @font-face {
   font-family: 'Munged';
-  src: url('../fsolauncher_fonts/hinted-Munged-otVXWjH6W8.ttf')
+  src: url('../fonts/hinted-Munged-otVXWjH6W8.ttf')
     format('truetype');
   font-weight: 500;
   font-style: normal;
@@ -158,13 +158,13 @@ html {
 
 @font-face {
   font-family: 'Fredoka One';
-  src: url('../fsolauncher_fonts/FredokaOne-Regular.ttf') format('truetype');
+  src: url('../fonts/FredokaOne-Regular.ttf') format('truetype');
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Balsamiq';
-  src: url('../fsolauncher_fonts/BalsamiqSans-Bold.ttf') format('truetype');
+  src: url('../fonts/BalsamiqSans-Bold.ttf') format('truetype');
   font-style: normal;
 }
 

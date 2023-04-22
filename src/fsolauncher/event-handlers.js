@@ -1,4 +1,4 @@
-const Modal = require( './library/modal' );
+const Modal = require( './lib/modal' );
 const { ipcMain } = require( 'electron' );
 
 /**

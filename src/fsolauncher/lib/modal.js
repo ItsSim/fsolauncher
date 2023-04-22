@@ -382,7 +382,7 @@ class Modal {
       const b64fontMunged = await fs.readFile(
         path.join(
           __dirname,
-          '../../fsolauncher_ui/fsolauncher_fonts',
+          '../../fsolauncher_ui/fonts',
           'hinted-Munged-otVXWjH6W8.ttf'
         ),
         { encoding: 'base64' }
@@ -390,7 +390,7 @@ class Modal {
       const b64fontFredokaOne = await fs.readFile(
         path.join(
           __dirname,
-          '../../fsolauncher_ui/fsolauncher_fonts',
+          '../../fsolauncher_ui/fonts',
           'FredokaOne-Regular.ttf'
         ),
         { encoding: 'base64' }

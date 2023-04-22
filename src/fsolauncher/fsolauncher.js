@@ -1,9 +1,9 @@
-const Modal = require( './library/modal' );
+const Modal = require( './lib/modal' );
 const EventHandlers = require( './event-handlers' );
-const IPCBridge = require( './library/ipc-bridge' );
-const Toast = require( './library/toast' );
+const IPCBridge = require( './lib/ipc-bridge' );
+const Toast = require( './lib/toast' );
 const { net } = require( 'electron' );
-const { captureWithSentry } = require( './library/utils' );
+const { captureWithSentry } = require( './lib/utils' );
 const { https } = require( 'follow-redirects' ).wrap( {
   http: net,
   https: net,
@@ -61,7 +61,7 @@ class FSOLauncher {
   async updateInstalledPrograms() {
     const toast = new Toast( global.locale.TOAST_REGISTRY );
     try {
-      const Registry = require( './library/registry' ),
+      const Registry = require( './lib/registry' ),
         programs = await Registry.getInstalled();
 
       for ( let i = 0; i < programs.length; i++ ) {
@@ -172,7 +172,7 @@ class FSOLauncher {
    * OpenAL, .NET, Mono, SDL, Mac-extras and The Sims Online.
    */
   runFullInstaller() {
-    new ( require( './library/installers/complete-installer' ) )( this ).run();
+    new ( require( './lib/installers/complete-installer' ) )( this ).run();
   }
 
   /**
@@ -372,7 +372,7 @@ class FSOLauncher {
    */
   async checkSimitoneRequirements() {
     new Toast( global.locale.TOAST_CHECKING_UPDATES, 1500 );
-    const Registry = require( './library/registry' );
+    const Registry = require( './lib/registry' );
     const simitoneStatus = await Registry.get( 'Simitone', Registry.getSimitonePath() );
     const ts1ccStatus = await Registry.get( 'TS1', Registry.getTS1Path() );
     let simitoneUpdateStatus = null;
@@ -605,7 +605,7 @@ class FSOLauncher {
       case 'Mono':
       case 'MacExtras':
       case 'SDL': {
-        const Installer = require( `./library/installers/${componentCode.toLowerCase()}-installer` );
+        const Installer = require( `./lib/installers/${componentCode.toLowerCase()}-installer` );
         const singleInstaller = new Installer( this, this.isInstalled.FSO );
         if ( ! options.fullInstall ) {
           this.IPC.changePage( 'downloads' );
@@ -625,7 +625,7 @@ class FSOLauncher {
         break;
       }
       case 'RMS': {
-        const RemeshesInstaller = require( './library/installers/remeshes-installer' );
+        const RemeshesInstaller = require( './lib/installers/remeshes-installer' );
         const singleInstaller = new RemeshesInstaller(
           this.isInstalled.FSO + '/Content/MeshReplace', this
         );
@@ -648,20 +648,20 @@ class FSOLauncher {
       case 'Simitone': {
         const Installer = ( () => {
           if ( componentCode == 'TSO' ) {
-            return require( './library/installers/fileplanet-installer' );
+            return require( './lib/installers/fileplanet-installer' );
           }
           if ( componentCode == 'FSO' ) {
-            return require( './library/installers/github-installer' );
+            return require( './lib/installers/github-installer' );
           }
           if ( componentCode == 'Simitone' ) {
-            return require( './library/installers/simitone-installer' );
+            return require( './lib/installers/simitone-installer' );
           }
         } )();
         
         if ( ! options.override ) {
           let installDir = options.dir;
           if ( ! installDir ) {
-            if ( await ( require( './library/registry' ).testWinAccess() ) ) {
+            if ( await ( require( './lib/registry' ).testWinAccess() ) ) {
               const toast = new Toast(
                 `${global.locale.INSTALLER_CHOOSE_WHERE_X} ${this.getPrettyName( componentCode )}`
               );
@@ -691,7 +691,7 @@ class FSOLauncher {
             const isInstalled = await singleInstaller.isInstalledInPath();
 
             if ( isInstalled && ! options.fullInstall && ! options.dir && 
-              await ( require( './library/registry' ).testWinAccess() ) 
+              await ( require( './lib/registry' ).testWinAccess() ) 
             ) {
               return Modal.showAlreadyInstalled( 
                 this.getPrettyName( componentCode ), componentCode, installDir );
@@ -717,7 +717,7 @@ class FSOLauncher {
             }
           }
         } else {
-          const Registry = require( './library/registry' );
+          const Registry = require( './lib/registry' );
           try {
             if ( componentCode === 'TSO' ) {
               await Registry.createMaxisEntry( options.override );
@@ -736,7 +736,7 @@ class FSOLauncher {
       }
       case 'OpenAL':
       case 'NET': {
-        const Installer = require( './library/installers/executable-installer' );
+        const Installer = require( './lib/installers/executable-installer' );
         const file = componentCode === 'NET' ? 'NDP46-KB3045560-Web.exe' : 'oalinst.exe';
         const singleInstaller = new Installer();
         try {
@@ -1124,7 +1124,7 @@ class FSOLauncher {
    * @param {string} dir The installation path.
    */
   async changeFSOPath( dir ) {
-    const Registry = require( './library/registry' );
+    const Registry = require( './lib/registry' );
     try {
       console.log( dir );
       await Registry.createFreeSOEntry( dir );
