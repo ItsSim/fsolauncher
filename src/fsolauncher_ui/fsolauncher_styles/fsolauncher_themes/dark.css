@@ -203,7 +203,7 @@
   color: #4C8DEE;
   text-shadow: 2px 2px rgba(0, 0, 0, 0.2) !important;
 }
-.dark h1.jumbotron small {
+.dark h1.jumbotron > small {
   color:rgba(255,255,255,0.6)
 }
 
