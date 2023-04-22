@@ -663,12 +663,10 @@ var setCurrentPage;
   // Events received from the main process.
   // HAS_INTERNET
   onMessage( 'HAS_INTERNET', () => {
-    console.log( 'HAS_INTERNET' );
     document.body.classList.remove( 'no-internet' );
   } );
   // NO_INTERNET
   onMessage( 'NO_INTERNET', () => {
-    console.log( 'NO_INTERNET' );
     document.body.classList.remove( 'no-internet' );
     document.body.classList.add( 'no-internet' );
   } );
