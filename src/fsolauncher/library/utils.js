@@ -30,7 +30,6 @@ function initSentry() {
         integration => integration.name !== 'Net'
       ),
       beforeSend( event ) {
-        // Remove all possible PII from the event
         return sanitizeEvent( event );
       },
     } );
@@ -38,34 +37,9 @@ function initSentry() {
 }
 
 function sanitizeEvent( event ) {
-  // Resulting log is only OS, stacktrace, launcher version
-  event = removePII( event );
   event = sanitizeExceptions( event );
   event = sanitizeBreadcrumbs( event );
-  event = keepOnlyOSData( event );
 
-  return event;
-}
-
-function removePII( event ) {
-  if ( event.user ) {
-    event.user = {
-      id: event.user.id, // Keep the user ID for error tracking purposes
-    };
-  }
-  return event;
-}
-
-function keepOnlyOSData( event ) {
-  if ( event.contexts ) {
-    const osData = event.contexts.os; // Save OS data
-
-    // Remove all device context data
-    event.contexts = {
-      os: osData, // Keep only OS data
-    };
-  }
-  
   return event;
 }
 
