@@ -344,7 +344,7 @@ div.page p {
   position: absolute;
   content: '';
   left: -8px;
-  top: -8px;
+  top: -7.5px;
   border-radius: 6px;
 }
 
@@ -381,6 +381,7 @@ div.page p {
 }
 #launcher #sidebar li {
   text-transform: uppercase;
+  font-size: 17px;
 }
 
 #launcher #content #full-install {
@@ -527,7 +528,7 @@ button,
   cursor: pointer;
   outline: 0;
   transition: background-color 0.4s;
-  font-size: 16px !important;
+  font-size: 17px !important;
   box-shadow: inset 8px 8px 8px rgba(255, 255, 255, 0.2),
     inset -2px -2px 2px rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.12),
     0 1px 2px rgba(0, 0, 0, 0.24);
