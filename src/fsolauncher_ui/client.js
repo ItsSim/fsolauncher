@@ -653,6 +653,13 @@ var setCurrentPage;
     querySelector( '#overlay' ).style.display = 'block';
   }
 
+  var clearInstallerHints = () => {
+    var hints = querySelectorAll( '[hint-page="installer"]' );
+    for ( var j = 0; j < hints.length; j++ ) {
+      hints[j].style.display = 'none';
+    }
+  };
+
   // Events received from the main process.
   // HAS_INTERNET
   onMessage( 'HAS_INTERNET', () => {
@@ -796,6 +803,7 @@ var setCurrentPage;
   addEventListener( '#simitone-play-button',    'click',       () => sendToMain( 'PLAY_SIMITONE' ) );
   addEventListener( '#simitone-play-button',    'contextmenu', () => sendToMain( 'PLAY_SIMITONE', true ) );
   addEventListener( '#full-install-button',     'click',       () => sendToMain( 'FULL_INSTALL' ) );
+  addEventListener( '#full-install-button',     'click',       () => clearInstallerHints() );
   addEventListener( '#update-check',            'click',       () => sendToMain( 'CHECK_UPDATES' ) );
   addEventListener( '#simitone-install-button', 'click',       () => sendToMain( 'INSTALL', 'Simitone' ) );
   addEventListener( '#simitone-should-update',  'click',       () => sendToMain( 'INSTALL_SIMITONE_UPDATE' ) );

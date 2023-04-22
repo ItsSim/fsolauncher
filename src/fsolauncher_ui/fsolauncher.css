@@ -586,6 +586,7 @@ button.launch,
 #downloads > div {
   width: 100%;
   float: left;
+  position: relative;
   /*padding:10px*/
 }
 
@@ -1005,10 +1006,11 @@ select {
   margin-bottom: 5px;
 }
 
-.hint span {
+.hint small {
   font-family: 'Munged';
   line-height: 17px;
-  display: inline-block
+  display: inline-block;
+  font-size: 12px !important;
 }
 
 .hint.arrow-top {

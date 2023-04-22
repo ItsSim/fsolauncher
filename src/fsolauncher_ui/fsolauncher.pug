@@ -19,7 +19,7 @@ html(class=PLATFORM + ' ' + LANGCODE)
         #launcher.not-installed
             .hint.arrow-left(hint-page='home', style='top:245px;left:255px')
                 h1 #{TOOLTIP_TITLE_1}
-                span #{TOOLTIP_DESCR_1}
+                small #{TOOLTIP_DESCR_1}
             #debug
                 #no-internet-notice
                     i.material-icons(style='margin-top:-5px') wifi_off
@@ -89,15 +89,15 @@ html(class=PLATFORM + ' ' + LANGCODE)
                             #rss-root
                         #did-you-know(style='display:none')
                 #installer-page.page(style='display:none;background-color:#fff')
-                    .hint.arrow-left(hint-page='installer', style='top:110px;left:375px')
-                        h1 #{TOOLTIP_REMESH_TITLE}
-                        span #{TOOLTIP_REMESH_DESCR}
                     h1.jumbotron
                         button#full-install-button.turbo-transparent(style='margin-top:-10px;float:right')
                             i.material-icons.left(style='margin-top:-2px') get_app
                             |  #{FULL_INSTALL_BTN}
                         span #{INSTALLER}
                         small #{INSTALLER_DESCR}
+                        .hint.arrow-top(hint-page='installer', style='top:100px;right:65px')
+                            h1 #{TOOLTIP_TITLE_2}
+                            small #{TOOLTIP_DESCR_2}
                     .page-content
                         #full-install(style='padding:30px')
                             #tip
@@ -111,13 +111,13 @@ html(class=PLATFORM + ' ' + LANGCODE)
                                     #full-install-progress.progress
                                 p#full-install-text2.small Reticulating splines... 20% @ 1MB/s
                         #downloads
-                            .hint.arrow-top(hint-page='installer', style='top:0px;right:60px')
-                                h1 #{TOOLTIP_TITLE_2}
-                                span #{TOOLTIP_DESCR_2}
                             span#detector-response
                                 p #{AUTODETECT_TEXT} (<strong id="detector-response-path"></strong>). 
                                 span#detector-confirm.button(style='float:right') #{AUTODETECT_BTN}
                             div.block
+                                .hint.arrow-left(hint-page='installer', style='top:90px;left:370px')
+                                    h1 #{TOOLTIP_REMESH_TITLE}
+                                    small #{TOOLTIP_REMESH_DESCR}
                                 .item(install='RMS', style='border-top:0;background-image:url(fsolauncher_images/volcanic.png); background-color:#fff; background-size:30%;background-position:center center;background-repeat:no-repeat;')
                                     .new <i style="vertical-align:middle;" class="material-icons">new_releases</i> #{INSTALLER_RP_ALERT}
                                     .stag.orange #{INSTALLER_OPTIONAL}
