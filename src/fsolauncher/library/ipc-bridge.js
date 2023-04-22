@@ -22,14 +22,18 @@ class IPCBridge {
    * Informs the renderer process that there is not internet connection.
    */
   hasNoInternet() {
-    this.Window.webContents.send( 'NO_INTERNET' );
+    try {
+      this.Window.webContents.send( 'NO_INTERNET' );
+    } catch ( e ) {}
   }
 
   /**
    * Informs the renderer process that internet connection was restored.
    */
   hasInternet() {
-    this.Window.webContents.send( 'HAS_INTERNET' );
+    try {
+      this.Window.webContents.send( 'HAS_INTERNET' );
+    } catch ( e ) {}
   }
 
   /**
