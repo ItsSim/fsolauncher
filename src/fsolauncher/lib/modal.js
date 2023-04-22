@@ -391,7 +391,7 @@ class Modal {
         path.join(
           __dirname,
           '../../fsolauncher_ui/fonts',
-          'FredokaOne-Regular.ttf'
+          'Fredoka.ttf'
         ),
         { encoding: 'base64' }
       );
@@ -413,7 +413,7 @@ class Modal {
         @font-face {
           font-family: 'Fredoka One';
           src: url(data:font/truetype;charset=utf-8;base64,${b64fontFredokaOne}) format('truetype');
-          font-weight: normal;
+          font-weight: 650;
           font-style: normal;
         }
         .notification {
