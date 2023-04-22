@@ -11,7 +11,7 @@ const { initSentry } = require( './fsolauncher/library/utils' );
 initSentry();
 
 const { 
-  app, BrowserWindow, shell, Tray, Menu, nativeImage
+  app, BrowserWindow, shell, Tray, Menu, nativeImage, nativeTheme
 } = require( 'electron' );
 const oslocale = require( 'os-locale' );
 const fs = require( 'fs-extra' );
@@ -83,7 +83,7 @@ try {
 } catch ( e ) {
   conf = {
     Launcher: {
-      Theme: 'open_beta',
+      Theme: nativeTheme.shouldUseDarkColors ? 'dark' : 'open_beta',
       DesktopNotifications: '1',
       Persistence: process.platform == 'darwin' ? '0' : '1',
       DirectLaunch: '0',
