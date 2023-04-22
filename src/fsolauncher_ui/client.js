@@ -359,6 +359,7 @@ var setCurrentPage;
       $preloadElement.style = 'text-decoration:none;';
       $preloadElement.setAttribute( 'data-height', '490' );
       $preloadElement.setAttribute( 'data-theme', twitterTheme );
+      $preloadElement.setAttribute( 'data-chrome', 'transparent' );
       $preloadElement.setAttribute( 'href', querySelector( 'body' ).getAttribute( 'twUrl' ) );
       $preloadElement.innerHTML = '@FreeSOGame on Twitter';
       querySelector( '#did-you-know' ).append( $preloadElement );
