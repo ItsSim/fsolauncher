@@ -6,7 +6,7 @@ const { strFormat } = require( '../utils' );
 /**
  * Installs remeshes for FreeSO and Simitone.
  */
-class RemeshesInstaller {
+class RMSInstaller {
   /**
    * @param {import('../../fsolauncher')} FSOLauncher The launcher instance.
    * @param {string} path The path to install to.
@@ -200,4 +200,4 @@ class RemeshesInstaller {
   }
 }
 
-module.exports = RemeshesInstaller;
+module.exports = RMSInstaller;

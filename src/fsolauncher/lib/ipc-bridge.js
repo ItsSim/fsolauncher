@@ -25,7 +25,7 @@ class IPCBridge {
   hasNoInternet() {
     try {
       this.Window.webContents.send( 'NO_INTERNET' );
-    } catch ( e ) {}
+    } catch ( err ) {}
   }
 
   /**
@@ -34,7 +34,7 @@ class IPCBridge {
   hasInternet() {
     try {
       this.Window.webContents.send( 'HAS_INTERNET' );
-    } catch ( e ) {}
+    } catch ( err ) {}
   }
 
   /**
@@ -197,7 +197,7 @@ class IPCBridge {
         percentage,
         miniconsole
       );
-    } catch ( e ) {}
+    } catch ( err ) {}
   }
 
   /**
@@ -208,7 +208,7 @@ class IPCBridge {
   stopProgressItem( elId ) {
     try {
       this.Window.webContents.send( 'STOP_PROGRESS_ITEM', elId );
-    } catch ( e ) {}
+    } catch ( err ) {}
   }
 
   /**
@@ -228,7 +228,7 @@ class IPCBridge {
         text2,
         progress
       );
-    } catch ( e ) {}
+    } catch ( err ) {}
   }
 
   /**
@@ -240,7 +240,7 @@ class IPCBridge {
   toast( id, text ) {
     try {
       this.Window.webContents.send( 'TOAST', id, text );
-    } catch ( e ) {}
+    } catch ( err ) {}
   }
 
   /**
@@ -251,7 +251,7 @@ class IPCBridge {
   removeToast( id ) {
     try {
       this.Window.webContents.send( 'REMOVE_TOAST', id );
-    } catch ( e ) {}
+    } catch ( err ) {}
   }
 
   /**
@@ -262,7 +262,7 @@ class IPCBridge {
   setRemeshInfo( v ) {
     try {
       this.Window.webContents.send( 'REMESH_INFO', v );
-    } catch ( e ) {}
+    } catch ( err ) {}
   }
 
   /**
@@ -273,7 +273,7 @@ class IPCBridge {
   setTip( text ) {
     try {
       this.Window.webContents.send( 'SET_TIP', text );
-    } catch ( e ) {}
+    } catch ( err ) {}
   }
 
   /**
@@ -284,7 +284,7 @@ class IPCBridge {
   sendSound( sound ) {
     try {
       this.Window.webContents.send( 'PLAY_SOUND', sound );
-    } catch ( e ) {}
+    } catch ( err ) {}
   }
 
   /**
@@ -297,7 +297,7 @@ class IPCBridge {
   sendNotifLog( title, body, url ) {
     try {
       this.Window.webContents.send( 'NOTIFLOG', title, body, url );
-    } catch ( e ) {}
+    } catch ( err ) {}
   }
 
   /**
@@ -309,7 +309,7 @@ class IPCBridge {
   sendInstalledPrograms( list ) {
     try {
       this.Window.webContents.send( 'INSPROG', list );
-    } catch ( e ) {}
+    } catch ( err ) {}
   }
 
   /**
@@ -320,7 +320,7 @@ class IPCBridge {
   sendSimitoneShouldUpdate( v ) {
     try {
       this.Window.webContents.send( 'SIMITONE_SHOULD_UPDATE', v );
-    } catch ( e ) {}    
+    } catch ( err ) {}    
   }
 
   /**
@@ -331,7 +331,7 @@ class IPCBridge {
   sendConsoleLog( str ) {
     try {
       this.Window.webContents.send( 'CONSOLE_LOG', str );
-    } catch ( e ) {}
+    } catch ( err ) {}
   }
 
   /**
@@ -342,7 +342,7 @@ class IPCBridge {
   setSimitoneVersion( v ) {
     try {
       this.Window.webContents.send( 'SIMITONE_SET_VER', v );
-    } catch ( e ) {}
+    } catch ( err ) {}
   }
 
   /**
@@ -351,7 +351,7 @@ class IPCBridge {
   ociPickedFolder( folder ) {
     try {
       this.Window.webContents.send( 'OCI_PICKED_FOLDER', normalizePathSlashes( folder ) );
-    } catch ( e ) {}
+    } catch ( err ) {}
   }
 }
 

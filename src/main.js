@@ -79,7 +79,7 @@ let conf;
 
 try {
   conf = ini.parse( fs.readFileSync( global.appData + 'FSOLauncher.ini', 'utf-8' ) );
-} catch ( e ) {
+} catch ( err ) {
   conf = {
     Launcher: {
       Theme: nativeTheme.shouldUseDarkColors ? 'dark' : 'open_beta',

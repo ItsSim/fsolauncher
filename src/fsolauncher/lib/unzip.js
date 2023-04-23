@@ -1,8 +1,20 @@
 const yauzl = require( 'yauzl' ), fs = require( 'fs-extra' );
 
 /**
- * Extracts a zip file, recursively creates directories, once resolved
+ * Extracts a zip file, recursively creates directories, and once resolved,
  * returns a cleanup function.
+ *
+ * @param {Object}   options        The options object.
+ * @param {string}   options.from   The path of the zip file to be extracted.
+ * @param {string}   options.to     The destination path where the zip file will 
+ *                                  be extracted.
+ * @param {boolean}  options.cpperm If true, preserves the permissions of 
+ *                                  extracted files.
+ * @param {Function} onEntry        Optional callback function called for each 
+ *                                  entry being extracted.
+ *
+ * @returns {Promise<Function>} A Promise that resolves to a cleanup function that
+ *                              empties the extracted folder.
  */
 module.exports = ( { from, to, cpperm }, onEntry = () => {} ) =>
   new Promise( ( resolve, reject ) => {
@@ -13,6 +25,7 @@ module.exports = ( { from, to, cpperm }, onEntry = () => {} ) =>
       ! [ '.', './' ].includes( to )
         ? fs.remove( to )
         : Promise.reject( 'Cannot delete current directory.' );
+        
     /**
      * Handles a yauzl.Entry extraction.
      *
@@ -36,8 +49,8 @@ module.exports = ( { from, to, cpperm }, onEntry = () => {} ) =>
           file.on( 'error', reject );
           readStream.pipe( file );
           readStream.on( 'end', () => zipfile.readEntry() );
-        } catch ( e ) {
-          reject( e );
+        } catch ( err ) {
+          reject( err );
         }
       } );
     }

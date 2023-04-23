@@ -1091,7 +1091,10 @@ select {
   transform: translate(-50%, -50%);
   padding: 20px;
   padding-top: 30px;
-  height: 250px;
+  min-height: 250px;
+  max-height: 400px;
+  display: flex;
+  flex-direction: column;
 }
 
 .modal h1 {
@@ -1129,13 +1132,15 @@ select {
 .modal p {
   font-family: 'Munged';
   line-height: 21px;
+  word-break: break-word;
+  flex: 1;
 }
 
 .modal div {
-  position: absolute;
-  bottom: 30px;
-  right: 40px;
-  font-size: 16px;
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+  padding-top: 0;
 }
 
 .modal div button {
@@ -1146,8 +1151,8 @@ select {
 }
 
 .modal div span {
-  /*font-weight:bold;*/
   cursor: pointer;
+  align-self: center;
 }
 
 #overlay {
@@ -1503,7 +1508,7 @@ i.spin {
 }
 
 .oneclick-install .oneclick-install-select button {
-  letter-spacing: normal!important;
+  letter-spacing: normal;
   margin: 0 auto;
   width: 150px;
   text-transform: uppercase;
@@ -1512,7 +1517,6 @@ i.spin {
   font-size: 16px;
   line-height: 19px;
   text-align: center;
-  letter-spacing: -0.035em;
   text-shadow: none!important;
   color: #FFFFFF;
   background: linear-gradient(90deg, #3288C3 0%, #44ABED 50.31%, #5BD536 100%)!important;
@@ -1520,7 +1524,7 @@ i.spin {
 }
 
 .oneclick-install-select:hover p {
-  
+  color: #a3a1a1;
 }
 
 .oneclick-install-selected .oneclick-install-confirm,

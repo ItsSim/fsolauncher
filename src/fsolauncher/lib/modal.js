@@ -345,7 +345,8 @@ class Modal {
    * @param {string} title   Notification title.
    * @param {string} message Notification message.
    * @param {string} url     Notification url.
-   * @return {Promise<void>} Promise that resolves when the notification is sent.
+   * 
+   * @returns {Promise<void>} Promise that resolves when the notification is sent.
    */
   static async sendNotification( title, message, url, ok = false, shouldBeDark ) {
     const {
@@ -469,9 +470,9 @@ class Modal {
         }
         notification.close();
       } );
-    } catch ( e ) {
-      captureWithSentry( e, { title, message, url } );
-      console.log( 'Notification broke:', e );
+    } catch ( err ) {
+      captureWithSentry( err, { title, message, url } );
+      console.log( 'Notification broke:', err );
     }
   }
 

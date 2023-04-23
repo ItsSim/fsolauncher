@@ -3,7 +3,7 @@
  * 
  * @param {string} dir The path to convert.
  * 
- * @return {string} The converted path.
+ * @returns {string} The converted path.
  */
 function normalizePathSlashes( dir ) {
   return dir ? dir.replace( /\\/g, '/' ) : dir
@@ -111,7 +111,7 @@ function getJSON( options ) {
     https: net,
   } );
   return new Promise( ( resolve, reject ) => {
-    console.log( 'HTTP JSON request:', options );
+    console.log( 'getJSON:', options );
     const request = https.request( options, res => {
       let data = '';
       res.on( 'data', chunk => data += chunk );
@@ -130,5 +130,9 @@ function getJSON( options ) {
 }
 
 module.exports = {
-  normalizePathSlashes, strFormat, initSentry, captureWithSentry, getJSON
+  normalizePathSlashes, 
+  strFormat, 
+  initSentry, 
+  captureWithSentry, 
+  getJSON
 };

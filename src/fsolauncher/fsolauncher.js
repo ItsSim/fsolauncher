@@ -2,7 +2,7 @@ const Modal = require( './lib/modal' );
 const Events = require( './events' );
 const IPCBridge = require( './lib/ipc-bridge' );
 const Toast = require( './lib/toast' );
-const { captureWithSentry, getJSON } = require( './lib/utils' );
+const { captureWithSentry, getJSON, strFormat } = require( './lib/utils' );
 
 /**
  * Main launcher class.
@@ -279,9 +279,9 @@ class FSOLauncher {
   async checkRemeshInfo() {
     try {
       await this.getRemeshData();
-    } catch ( e ) {
-      captureWithSentry( e );
-      console.log( e );
+    } catch ( err ) {
+      captureWithSentry( err );
+      console.log( err );
     }
     if ( this.remeshInfo.version != null ) {
       this.IPC.setRemeshInfo( this.remeshInfo.version );
@@ -310,9 +310,9 @@ class FSOLauncher {
       }
       try {
         simitoneUpdateStatus = await this.getSimitoneReleaseInfo();
-      } catch ( e ) {
-        captureWithSentry( e );
-        console.log( e );
+      } catch ( err ) {
+        captureWithSentry( err );
+        console.log( err );
       }
       if ( simitoneUpdateStatus && 
         ( this.conf.Game.SimitoneVersion != simitoneUpdateStatus.tag_name ) ) {
@@ -355,8 +355,9 @@ class FSOLauncher {
           }
           this.lastUpdateNotification = data.Version;
         }
-      } catch ( e ) {
-        captureWithSentry( e, { wasAutomatic } );
+      } catch ( err ) {
+        captureWithSentry( err, { wasAutomatic } );
+        console.log( err );
         if ( ! wasAutomatic ) Modal.showFailedUpdateCheck();
       } finally {
         toast.destroy();
@@ -394,9 +395,10 @@ class FSOLauncher {
 
       this.updateInstalledPrograms();
       this.removeActiveTask( options.component );
-    } catch ( e ) {
-      captureWithSentry( e, { component: options.component } );
-      Modal.showFailedInstall( this.getPrettyName( options.component ), e );
+    } catch ( err ) {
+      captureWithSentry( err, { options } );
+      console.log( err );
+      Modal.showFailedInstall( this.getPrettyName( options.component ), err );
       this.removeActiveTask( options.component );
     } finally {
       toast.destroy();
@@ -404,89 +406,92 @@ class FSOLauncher {
   }
 
   /**
-   * Shows the confirmation Modal right before installing.
+   * Displays the appropriate installation confirmation Modal.
    *
-   * @param {string} componentCode The Component that is going to be installed.
-   * 
-   * @returns {Promise<void>} A promise that resolves when the Modal is shown.
+   * @param {string} componentCode The Component to be installed.
    */
   async fireInstallModal( componentCode ) {
-    const missing = [];
-    const prettyName = this.getPrettyName( componentCode );
+    const missing = this.getMissingDependencies( componentCode );
 
-    switch ( componentCode ) {
-      case 'FSO':
-        if ( ! this.isInstalled['TSO'] ) 
-          missing.push( this.getPrettyName( 'TSO' ) );
-        if ( ! this.isInstalled['Mono'] && process.platform === 'darwin' ) 
-          missing.push( this.getPrettyName( 'Mono' ) );
-        if ( ! this.isInstalled['SDL'] && process.platform === 'darwin' ) 
-          missing.push( this.getPrettyName( 'SDL' ) );
-        if ( ! this.isInstalled['OpenAL'] && process.platform === 'win32' )
-          missing.push( this.getPrettyName( 'OpenAL' ) );
-        break;
-
-      case 'TSO':
-        // No requirements.
-        break;
-
-      case 'RMS':
-      case 'MacExtras':
-        if ( ! this.isInstalled['FSO'] ) missing.push( this.getPrettyName( 'FSO' ) );
-        break;
-
-      case 'Simitone': 
-        if ( ! this.isInstalled['Mono'] && process.platform === 'darwin' ) 
-          missing.push( this.getPrettyName( 'Mono' ) );
-        if ( ! this.isInstalled['SDL'] && process.platform === 'darwin' ) 
-          missing.push( this.getPrettyName( 'SDL' ) );
-        break;
-    }
-
-    if ( [ // Components that require internet access.
-      'TSO',
-      'FSO',
-      'RMS',
-      'Simitone',
-      'Mono',
-      'MacExtras',
-      'SDL'
-    ].indexOf( componentCode ) > -1
-       &&
-      ! this.hasInternet
-    ) {
+    if ( this.requiresInternet( componentCode ) && ! this.hasInternet ) {
       return Modal.showNoInternet();
     }
-
     if ( this.isActiveTask( componentCode ) ) {
       return Modal.showAlreadyInstalling();
     }
-
     if ( missing.length > 0 ) {
       Modal.showRequirementsNotMet( missing );
     } else {
-      if ( componentCode == 'RMS' ) {
-        if ( this.remeshInfo.version == null ) {
-          try {
-            await this.getRemeshData();
-          } catch ( e ) {
-            captureWithSentry( e );
-            console.log( e );
-          }
-          if ( this.remeshInfo.version == null ) {
-            return Modal.showNoRemesh();
-          } else {
-            return Modal.showFirstInstall( prettyName, componentCode );
-          }
-        }
-        return Modal.showFirstInstall( prettyName, componentCode );
-      }
+      await this.handleInstallationModal( componentCode );
+    }
+  }
 
-      if ( ! this.isInstalled[componentCode] ) {
-        Modal.showFirstInstall( prettyName, componentCode );
-      } else {
-        Modal.showReInstall( prettyName, componentCode );
+  /**
+   * Returns an array of missing dependencies for a given component.
+   *
+   * @param {string} componentCode The Component for which dependencies
+   *                               should be checked.
+   * 
+   * @returns {Array<string>} An array of missing dependencies' pretty names.
+   */
+  getMissingDependencies( componentCode ) {
+    const dependencies = {
+      'FSO': [ 'TSO', ...( process.platform === 'darwin' ? [ 'Mono', 'SDL' ] : [ 'OpenAL' ] ) ],
+      'RMS': [ 'FSO' ],
+      'MacExtras': [ 'FSO' ],
+      'Simitone': ( process.platform === 'darwin' ) ? [ 'Mono', 'SDL' ] : []
+    };
+    return ( dependencies[componentCode] || [] )
+      .filter( dependency => ! this.isInstalled[dependency] )
+      .map( dependency => this.getPrettyName( dependency ) );
+  }
+
+  /**
+   * Checks if a component requires an internet connection for installation.
+   *
+   * @param {string} componentCode The Component to be checked.
+   * 
+   * @returns {boolean} True if the component requires internet access,
+   *                    false otherwise.
+   */
+  requiresInternet( componentCode ) {
+    return [ 
+      'TSO', 
+      'FSO', 
+      'RMS', 
+      'Simitone', 
+      'Mono', 
+      'MacExtras', 
+      'SDL' 
+    ].includes( componentCode );
+  }
+
+  /**
+   * Handles the installation Modal display based on the component's
+   * current installation status.
+   *
+   * @param {string} componentCode The Component to be installed.
+   */
+  async handleInstallationModal( componentCode ) {
+    const prettyName = this.getPrettyName( componentCode );
+
+    if ( componentCode === 'RMS' ) {
+      if ( this.remeshInfo.version == null ) {
+        try {
+          await this.getRemeshData();
+        } catch ( err ) {
+          captureWithSentry( err );
+          console.log( err );
+        }
+        if ( this.remeshInfo.version == null ) {
+          return Modal.showNoRemesh();
+        }
       }
+    }
+    if ( ! this.isInstalled[componentCode] ) {
+      Modal.showFirstInstall( prettyName, componentCode );
+    } else {
+      Modal.showReInstall( prettyName, componentCode );
     }
   }
 
@@ -494,7 +499,7 @@ class FSOLauncher {
    * Installs a single Component.
    * 
    * Each switch case instantiates and runs a different installer.
-   * Any errors should be thrown and handled by the caller.
+   * Any errors that are thrown should be handled by the caller.
    *
    * @param {string}         componentCode       The Component to install.
    * @param {object}         options             The options object.
@@ -508,28 +513,29 @@ class FSOLauncher {
     this.addActiveTask( componentCode );
     console.log( 'Installing', componentCode, options );
     try {
+      let display = false;
       switch ( componentCode ) {
         case 'Mono':
         case 'MacExtras':
         case 'SDL':
         case 'RMS':
-          await this.handleGameDependentInstall( componentCode, options );
+          display = await this.handleGameDependentInstall( componentCode, options );
           break;
         case 'TSO':
         case 'FSO':
         case 'Simitone':
-          await this.handleStandardInstall( componentCode, options );
+          display = await this.handleStandardInstall( componentCode, options );
           break;
         case 'OpenAL':
         case 'NET':
-          await this.handleExecutableInstall( componentCode, options );
+          display = await this.handleExecutableInstall( componentCode, options );
           break;
         default:
           console.error( 'Component not found:', componentCode );
           this.removeActiveTask( componentCode );
-          return Promise.reject( new Error( 'Component not found' ) );
+          throw new Error( strFormat( 'Component %s not found', componentCode ) );
       }
-      if ( ! options.fullInstall ) {
+      if ( ! options.fullInstall && display ) {
         Modal.showInstalled( this.getPrettyName( componentCode ) );
       }
     } catch ( err ) {
@@ -556,6 +562,8 @@ class FSOLauncher {
    * @param {boolean}        options.fullInstall Whether to do a full install.
    * @param {string|boolean} options.override    The path to change to.
    * @param {string}         options.dir         A predefined directory to install to.
+   * 
+   * @returns {Promise<boolean>}
    */
   async handleGameDependentInstall( componentCode, options ) {
     const runner = require( `./lib/installers/${componentCode.toLowerCase()}-installer` );
@@ -570,6 +578,7 @@ class FSOLauncher {
       const simitoneInstaller = new runner( this, this.isInstalled.Simitone, 'Simitone' );
       await simitoneInstaller.install();
     }
+    return true;
   }
   
   /**
@@ -578,7 +587,7 @@ class FSOLauncher {
    * @param {string} componentCode The code for the component being installed.
    * @param {Object} options Options for the installation process.
    * 
-   * @returns {Promise<void>}
+   * @returns {Promise<boolean>}
    */
   async handleStandardInstall( componentCode, options ) {
     const runner = require( `./lib/installers/${componentCode.toLowerCase()}-installer` );
@@ -595,7 +604,7 @@ class FSOLauncher {
       if ( componentCode === 'Simitone' ) {
         await registry.createFreeSOEntry( options.override, 'Simitone' );
       }
-      return;
+      return false;
     }
 
     // No override, so we need to get the install path.
@@ -612,13 +621,16 @@ class FSOLauncher {
     if ( isInstalled && ! options.fullInstall && ! options.dir && 
       await ( require( './lib/registry' ).testWinAccess() ) ) {
         // Already installed in the given path, let the user know.
-        return Modal.showAlreadyInstalled( this.getPrettyName( componentCode ), 
+        Modal.showAlreadyInstalled( this.getPrettyName( componentCode ), 
           componentCode, installDir );
+        return false;
     }
     if ( ! options.fullInstall ) {
       this.IPC.changePage( 'downloads' );
     }
     await installer.install();
+
+    return true;
   }
 
   /**
@@ -627,15 +639,19 @@ class FSOLauncher {
    * @param {string} componentCode The code for the component being installed.
    * @param {Object} options Options for the installation process.
    * 
-   * @returns {Promise<void>}
+   * @returns {Promise<boolean>}
    */
   async handleExecutableInstall( componentCode, options ) {
     const runner = require( './lib/installers/executable-installer' );
     const installer = new runner();
     const file = componentCode === 'NET' ? 'NDP46-KB3045560-Web.exe' : 'oalinst.exe';
-    const cmdOptions = componentCode === 'NET' ? [ '/q', '/norestart' ]  : [ '/SILENT' ];
-
+    let cmdOptions;
+    if ( options.fullInstall ) {
+      cmdOptions = componentCode === 'NET' ? [ '/q', '/norestart' ]  : [ '/SILENT' ];
+    }
     await installer.run( file, cmdOptions );
+
+    return true;
   }
 
   /**
@@ -759,56 +775,85 @@ class FSOLauncher {
   }
 
   /**
-   * Updates a configuration variable. Used after a user changes a setting.
+   * Updates a configuration variable based on user input.
    *
    * @param {object} newConfig The new configuration object.
    */
   async setConfiguration( newConfig ) {
-    switch ( true ) {
-      case newConfig[0] == 'Game' && newConfig[1] == 'Language':
-        this.switchLanguage( newConfig[2] );
-        break;
+    const [ category, key, value ] = newConfig;
 
-      case newConfig[1] == 'GraphicsMode' && newConfig[2] == 'sw' 
-        && this.conf.Game.GraphicsMode != 'sw':
-        if ( ! this.isInstalled.FSO ) Modal.showNeedFSOTSO();
-        else {
-          try {
-            await this.enableSoftwareMode();
-            Modal.showSoftwareModeEnabled();
-            this.conf[newConfig[0]][newConfig[1]] = newConfig[2];
-            this.persist( true );
-          } catch ( e ) {
-            captureWithSentry( e, { newConfig } );
-            //Modal.showFailedUpdateMove()
-            Modal.showGenericError( e.message );
-          }
-        }
-        break;
-
-      case newConfig[1] == 'GraphicsMode' &&
-        newConfig[2] != 'sw' &&
-        this.conf.Game.GraphicsMode == 'sw':
-        try {
-          await this.disableSoftwareMode();
-          this.conf[newConfig[0]][newConfig[1]] = newConfig[2];
-          this.persist( true );
-        } catch ( e ) {
-          captureWithSentry( e, { newConfig } );
-          Modal.showGenericError( e.message );
-        }
-        break;
-
-      case newConfig[0] == 'Launcher' && newConfig[1] == 'Language':
-        this.conf[newConfig[0]][newConfig[1]] = newConfig[2];
-        this.persist( true );
-        Modal.showLanguageOnRestart();
-        break;
-
-      default:
-        this.conf[newConfig[0]][newConfig[1]] = newConfig[2];
-        this.persist( newConfig[1] !== 'Language' );
+    if ( category === 'Game' && key === 'Language' ) {
+      this.switchLanguage( value );
+    } else if ( key === 'GraphicsMode' ) {
+      await this.handleGraphicsModeChange( value );
+    } else if ( category === 'Launcher' && key === 'Language' ) {
+      this.setLauncherLanguage( value );
+    } else {
+      this.updateAndPersistConfig( category, key, value );
     }
+  }
+
+  /**
+   * Handles changes to the graphics mode setting.
+   *
+   * @param {string} newValue The new graphics mode value.
+   */
+  async handleGraphicsModeChange( newValue ) {
+    const oldGraphicsMode = this.conf.Game.GraphicsMode;
+
+    if ( newValue === 'sw' && oldGraphicsMode !== 'sw' ) {
+      if ( ! this.isInstalled.FSO ) {
+        Modal.showNeedFSOTSO();
+      } else {
+        await this.toggleSoftwareMode( true );
+      }
+    } else if ( newValue !== 'sw' && oldGraphicsMode === 'sw' ) {
+      await this.toggleSoftwareMode( false );
+    }
+  }
+
+  /**
+   * Toggles software mode on or off.
+   *
+   * @param {boolean} enable If true, enable software mode, otherwise
+   *                         disable it. 
+   */
+  async toggleSoftwareMode( enable ) {
+    try {
+      if ( enable ) {
+        await this.enableSoftwareMode();
+        Modal.showSoftwareModeEnabled();
+      } else {
+        await this.disableSoftwareMode();
+      }
+      this.updateAndPersistConfig( 'Game', 'GraphicsMode', enable ? 'sw' : 'hw' );
+    } catch ( err ) {
+      captureWithSentry( err );
+      console.log( err );
+      Modal.showGenericError( err.message );
+    }
+  }
+
+  /**
+   * Sets the launcher language and shows a language change modal.
+   *
+   * @param {string} value The new language value.
+   */
+  setLauncherLanguage( value ) {
+    this.updateAndPersistConfig( 'Launcher', 'Language', value );
+    Modal.showLanguageOnRestart();
+  }
+
+  /**
+   * Updates a configuration variable and persists it if necessary.
+   *
+   * @param {string} category The configuration category.
+   * @param {string} key      The configuration key.
+   * @param {*}      value    The new configuration value.
+   */
+  updateAndPersistConfig( category, key, value ) {
+    this.conf[category][key] = value;
+    this.persist( key !== 'Language' );
   }
 
   /**
@@ -955,7 +1000,7 @@ class FSOLauncher {
     console.log( 'Running', file + ' ' + args.join( ' ' ), cwd );
     ( require( 'child_process' ).spawn( file, args, spawnOptions ) ).unref();
 
-    setTimeout( () => { toast.destroy(); }, 4000 );
+    setTimeout( () => { toast.destroy(); }, 5000 );
   }
 
   /**
@@ -967,7 +1012,7 @@ class FSOLauncher {
   getFSOConfig() {
     return new Promise( ( resolve, reject ) => {
       const ini = require( 'ini' );
-      const fs = require( 'fs-extra' );
+      const fs  = require( 'fs-extra' );
 
       fs.readFile(
         this.isInstalled.FSO + '/Content/config.ini',
@@ -1007,19 +1052,18 @@ class FSOLauncher {
    */
   getLangString( code ) {
     const languageStrings = {
-      0: [ 'English', 'en' ], // default
-      6: [ 'Spanish', 'es' ],
-      5: [ 'Italian', 'it' ],
+      0:  [ 'English',    'en' ], // default
+      6:  [ 'Spanish',    'es' ],
+      5:  [ 'Italian',    'it' ],
       14: [ 'Portuguese', 'pt' ]
     };
-
     return languageStrings[code];
   }
 
   /**
    * Save the current state of the configuration.
    *
-   * @param {boolean} showToast Display a toast while it is saving.
+   * @param {boolean} _showToast Display a toast while it is saving.
    */
   persist( _showToast ) {
     const toast = new Toast( global.locale.TOAST_SETTINGS );
@@ -1039,14 +1083,15 @@ class FSOLauncher {
   async changeFSOPath( dir ) {
     const reg = require( './lib/registry' );
     try {
-      console.log( dir );
+      console.log( 'Changing FSO path:', dir );
       await reg.createFreeSOEntry( dir );
       Modal.showChangedGamePath();
       this.updateInstalledPrograms();
-    } catch ( e ) {
-      captureWithSentry( e );
+    } catch ( err ) {
+      captureWithSentry( err );
+      console.log( err );
       Modal.showGenericError( 
-        'Failed while trying to change the FreeSO installation directory: ' + e );
+        'Failed while trying to change the FreeSO installation directory: ' + err );
     }
   }
 
@@ -1062,7 +1107,7 @@ class FSOLauncher {
         this.Window.setProgressBar( val, options );
       } catch ( err ) {
         captureWithSentry( err );
-        console.log( 'Failed setting ProgressBar' )
+        console.log( 'Failed setting ProgressBar', err )
       }
     }
   }
@@ -1076,6 +1121,9 @@ class FSOLauncher {
     return [ 'halloween', 'dark' ].includes( this.conf.Launcher.Theme );
   }
 
+  /**
+   * Picks a folder for the OCI (one-click installer) flow.
+   */
   async ociPickFolder() {
     const folders = await Modal.showChooseDirectory( 'FreeSO Game', this.Window );
     if ( folders && folders.length > 0 ) {
