@@ -338,8 +338,8 @@ html(class=PLATFORM + ' ' + LANGCODE)
             div.oneclick-install.overlay-closeable(style='display: none')
                 div.oneclick-install-content
                     div.oneclick-install-text
-                        h1 Choose a folder
-                        p Pick a folder to install the game in &ndash; we'll take care of the rest.
+                        h1 #{OCI_TITLE}
+                        p !{OCI_TEXT}
                     div.oneclick-install-select(onclick="ociPickFolder()")
                         <svg width="111" height="93" viewBox="0 0 111 93" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M4.625 32.375V0H32.375C40.2144 8.98175 43.3409 13.875 50.875 13.875H106.375V32.375H4.625ZM0 41.625L9.25 92.5H101.75L111 41.625H0Z" fill="url(#paint0_linear_1_14)"/>
@@ -352,7 +352,7 @@ html(class=PLATFORM + ' ' + LANGCODE)
                             </defs>
                         </svg>
                         p.oneclick-install-folder(style='display: none') 
-                        p.oneclick-install-help Click to select a folder
+                        p.oneclick-install-help #{OCI_HELP}
                         <svg class="oneclick-install-plus" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M12 2C17.514 2 22 6.486 22 12C22 17.514 17.514 22 12 22C6.486 22 2 17.514 2 12C2 6.486 6.486 2 12 2ZM12 0C5.373 0 0 5.373 0 12C0 18.627 5.373 24 12 24C18.627 24 24 18.627 24 12C24 5.373 18.627 0 12 0ZM18 13H13V18H11V13H6V11H11V6H13V11H18V13Z" fill="url(#paint0_linear_1_20)"/>
                             <defs>
@@ -363,11 +363,11 @@ html(class=PLATFORM + ' ' + LANGCODE)
                                 </linearGradient>
                             </defs>
                         </svg>
-                        button.oneclick-install-confirm(style='display: none', onclick="ociConfirm(event)") Confirm
+                        button.oneclick-install-confirm(style='display: none', onclick="ociConfirm(event)") #{OCI_HELP}
                     div.oneclick-install-close(onclick="closeOneClickInstall()")
                         i.material-icons(style="font-size:16px;vertical-align:middle;margin-right:5px")
                             | arrow_back
-                        | I've changed my mind
+                        #{OCI_CANCEL}
                     </div>  
         script(src='vendor/socket.io.min.js')
         script(src='vendor/howler.min.js')
