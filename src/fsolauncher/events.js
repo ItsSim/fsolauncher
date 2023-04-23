@@ -4,7 +4,7 @@ const { ipcMain } = require( 'electron' );
 /**
  * Handles all events from the client.
  */
-class EventHandlers {
+class Events {
   /**
    * @param {import('./fsolauncher')} FSOLauncher The FSOLauncher instance.
    */
@@ -15,7 +15,7 @@ class EventHandlers {
   /**
    * Defines all the currently supported client events.
    */
-  defineEvents() {
+  listen() {
     ipcMain.on( 'INIT_DOM',                this.onInitDOM.bind( this ) );
     ipcMain.on( 'INSTALL',                 this.onInstall.bind( this ) );
     ipcMain.on( 'SET_CONFIGURATION',       this.onSetConfiguration.bind( this ) );
@@ -238,4 +238,4 @@ class EventHandlers {
   }
 }
 
-module.exports = EventHandlers;
+module.exports = Events;

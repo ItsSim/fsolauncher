@@ -101,6 +101,7 @@ class TSOInstaller {
    * Extract cabinet files into the installation directory.
    *
    * @param {Functon} unzipgc The unzip cleaner callback.
+   * 
    * @returns {Promise<void>} A promise that resolves when the files are extracted.
    */
   step4( unzipgc ) {
@@ -163,10 +164,12 @@ class TSOInstaller {
 
   /**
    * Extracts the MSFT cabinets.
+   * 
+   * @param {Function} unzipgc The unzip cleaner callback.
    *
    * @returns {Promise<Function>} A promise that resolves when the extraction is complete.
    */
-  async extractCabs( cleanUnzip ) {
+  async extractCabs( unzipgc ) {
     let from = `${TEMP_PATH}FilePlanetTSOFiles/TSO_Installer_v1.1239.1.0/Data1.cab`;
     try {
       // Support cabs in root
@@ -180,7 +183,7 @@ class TSOInstaller {
       extract( { from, to: this.path, purge: true },
         cabInfo => this.updateExtractionProgress( cabInfo ),
         err => {
-          cleanUnzip();
+          unzipgc();
           this.dl.cleanup();
           if ( err ) return reject( `The Sims Online extraction failed: ${err}` );
           resolve();
@@ -193,6 +196,7 @@ class TSOInstaller {
    * Creates all the directories and subfolders in a path.
    *
    * @param {string} dir The path to create.
+   * 
    * @returns {Promise<void>} A promise that resolves when the directory is created.
    */
   setupDir( dir ) {

@@ -1,5 +1,6 @@
 /* eslint-disable no-empty */
 const { normalizePathSlashes } = require( './utils' );
+
 /**
  * IPCBridge used to control events sent to the renderer process.
  */

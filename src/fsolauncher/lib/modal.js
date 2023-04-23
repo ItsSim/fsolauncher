@@ -192,6 +192,7 @@ class Modal {
    *
    * @param {string} componentName The visual name of the Component.
    * @param {Electron.BrowserWindow} Window The window to show the FilePicker in.
+   * 
    * @returns {Promise<string>} The chosen path.
    */
   static async showChooseDirectory( componentName, Window ) {

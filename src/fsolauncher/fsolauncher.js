@@ -1,5 +1,5 @@
 const Modal = require( './lib/modal' );
-const EventHandlers = require( './event-handlers' );
+const Events = require( './events' );
 const IPCBridge = require( './lib/ipc-bridge' );
 const Toast = require( './lib/toast' );
 const { captureWithSentry, getJSON } = require( './lib/utils' );
@@ -49,11 +49,11 @@ class FSOLauncher {
       this.Window.hide();
     } );
     this.IPC = Toast.IPC = Modal.IPC = new IPCBridge( BrowserWindow );
-    this.eventHandlers = new EventHandlers( this );
+    this.events = new Events( this );
     this.checkUpdatesRecursive();
     this.updateTipRecursive();
     this.updateNetRequiredUIRecursive( true );
-    this.eventHandlers.defineEvents();
+    this.events.listen();
   }
 
   /**
@@ -172,7 +172,7 @@ class FSOLauncher {
     } finally {
       setTimeout( () => {
         this.removeActiveTask( 'FULL' );
-        this.FSOLauncher.IPC.fullInstallProgressItem();
+        this.IPC.fullInstallProgressItem();
       }, 5000 );
     }
   }
@@ -214,6 +214,7 @@ class FSOLauncher {
    * Returns a component's hard-coded pretty name.
    *
    * @param {string} componentCode The component's name.
+   * 
    * @returns {string} The component's pretty name.
    */
   getPrettyName( componentCode ) {
@@ -334,6 +335,7 @@ class FSOLauncher {
    *
    * @param {boolean} wasAutomatic Indicates if it has been requested by the recursive loop
    *                               to not spam the user with possible request error modals.
+   * 
    * @returns {Promise<void>} A promise that resolves when the update check is complete.
    */
   async checkLauncherUpdates( wasAutomatic ) {
@@ -392,6 +394,7 @@ class FSOLauncher {
    * @param {object}         options           The options object.
    * @param {string}         options.component The component to change the path for.
    * @param {string|boolean} options.override  The path to change to.
+   * 
    * @returns {Promise<void>} A promise that resolves when the path is changed.
    */
   async changeGamePath( options ) {
@@ -418,6 +421,7 @@ class FSOLauncher {
    * Shows the confirmation Modal right before installing.
    *
    * @param {string} componentCode The Component that is going to be installed.
+   * 
    * @returns {Promise<void>} A promise that resolves when the Modal is shown.
    */
   async fireInstallModal( componentCode ) {
@@ -704,68 +708,69 @@ class FSOLauncher {
     }, 60000 );
   }
 
-/**
- * Switches the game language.
- * Copies the translation files and changes the current language in FreeSO.ini.
- *
- * @param {string} language The language to change to.
- * @returns {Promise<void>} A promise that resolves when the language is changed.
- */
-async switchLanguage( language ) {
-  if ( ! this.isInstalled.TSO || ! this.isInstalled.FSO ) {
-    return Modal.showNeedFSOTSO();
-  }
-  this.addActiveTask( 'CHLANG' );
-  const fs = require( 'fs-extra' ), 
-    ini = require( 'ini' ), 
-    path = require( 'path' );
-  const toast = new Toast( global.locale.TOAST_LANGUAGE );
+  /**
+   * Switches the game language.
+   * Copies the translation files and changes the current language in FreeSO.ini.
+   *
+   * @param {string} language The language to change to.
+   * 
+   * @returns {Promise<void>} A promise that resolves when the language is changed.
+   */
+  async switchLanguage( language ) {
+    if ( ! this.isInstalled.TSO || ! this.isInstalled.FSO ) {
+      return Modal.showNeedFSOTSO();
+    }
+    this.addActiveTask( 'CHLANG' );
+    const fs = require( 'fs-extra' ), 
+      ini = require( 'ini' ), 
+      path = require( 'path' );
+    const toast = new Toast( global.locale.TOAST_LANGUAGE );
 
-  try {
-    process.noAsar = true;
-    const exportTSODir = path.join( __dirname, `../export/language_packs/${language.toUpperCase()}/TSO` )
-      .replace( 'app.asar', 'app.asar.unpacked' );
-    const exportFSODir = path.join( __dirname, `../export/language_packs/${language.toUpperCase()}/FSO` )
-      .replace( 'app.asar', 'app.asar.unpacked' );
-    await fs.copy( exportTSODir, process.platform == 'win32' ? this.isInstalled.TSO + '/TSOClient' : this.isInstalled.TSO );
-    await fs.copy( exportFSODir, this.isInstalled.FSO );
-  } catch ( err ) {
-    captureWithSentry( err, { language } );
-    console.log( err );
+    try {
+      process.noAsar = true;
+      const exportTSODir = path.join( __dirname, `../export/language_packs/${language.toUpperCase()}/TSO` )
+        .replace( 'app.asar', 'app.asar.unpacked' );
+      const exportFSODir = path.join( __dirname, `../export/language_packs/${language.toUpperCase()}/FSO` )
+        .replace( 'app.asar', 'app.asar.unpacked' );
+      await fs.copy( exportTSODir, process.platform == 'win32' ? this.isInstalled.TSO + '/TSOClient' : this.isInstalled.TSO );
+      await fs.copy( exportFSODir, this.isInstalled.FSO );
+    } catch ( err ) {
+      captureWithSentry( err, { language } );
+      console.log( err );
+      this.removeActiveTask( 'CHLANG' );
+      toast.destroy();
+      return Modal.showFSOLangFail();
+    } finally {
+      process.noAsar = false;
+    }
+
+    let data;
+    try {
+      data = await this.getFSOConfig();
+    } catch ( err ) {
+      captureWithSentry( err, { language } );
+      console.log( err );
+      this.removeActiveTask( 'CHLANG' );
+      toast.destroy();
+      return Modal.showFirstRun();
+    }
+
+    data.CurrentLang = this.getLangString( this.getLangCode( language ) )[0];
+
+    try {
+      await fs.writeFile( this.isInstalled.FSO + '/Content/config.ini', ini.stringify( data ) );
+    } catch ( err ) {
+      captureWithSentry( err, { language } );
+      this.removeActiveTask( 'CHLANG' );
+      toast.destroy();
+      return Modal.showIniFail();
+    }
+
     this.removeActiveTask( 'CHLANG' );
     toast.destroy();
-    return Modal.showFSOLangFail();
-  } finally {
-    process.noAsar = false;
+    this.conf.Game.Language = this.getLangString( this.getLangCode( language ) )[1];
+    this.persist( true );
   }
-
-  let data;
-  try {
-    data = await this.getFSOConfig();
-  } catch ( err ) {
-    captureWithSentry( err, { language } );
-    console.log( err );
-    this.removeActiveTask( 'CHLANG' );
-    toast.destroy();
-    return Modal.showFirstRun();
-  }
-
-  data.CurrentLang = this.getLangString( this.getLangCode( language ) )[0];
-
-  try {
-    await fs.writeFile( this.isInstalled.FSO + '/Content/config.ini', ini.stringify( data ) );
-  } catch ( err ) {
-    captureWithSentry( err, { language } );
-    this.removeActiveTask( 'CHLANG' );
-    toast.destroy();
-    return Modal.showIniFail();
-  }
-
-  this.removeActiveTask( 'CHLANG' );
-  toast.destroy();
-  this.conf.Game.Language = this.getLangString( this.getLangCode( language ) )[1];
-  this.persist( true );
-}
 
   /**
    * Updates a configuration variable. Used after a user changes a setting.
@@ -994,6 +999,7 @@ async switchLanguage( language ) {
    * Example: 'en', 'es'...
    *
    * @param {string} lang The language string.
+   * 
    * @returns {number} The language code.
    */
   getLangCode( lang ) {
@@ -1010,6 +1016,7 @@ async switchLanguage( language ) {
    * Returns the full language strings from the code.
    *
    * @param {number} code Language code (gettable from getLangCode).
+   * 
    * @returns {string[]} The language strings.
    */
   getLangString( code ) {

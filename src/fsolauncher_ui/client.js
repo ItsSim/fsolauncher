@@ -143,9 +143,7 @@ var ociConfirm;
     .classList.remove( 'simitone-should-update' );
 
   /**
-   * @param {*} date 
-   * 
-   * @returns string
+   * Returns the date as x time ago.
    */
   var ago = date => {
     var b = Math.floor( ( new Date - date ) / 1000 );
@@ -179,7 +177,6 @@ var ociConfirm;
         theme = 'halloween';
       }
     }
-
     querySelector( 'body' ).className = theme;
 
     try {
