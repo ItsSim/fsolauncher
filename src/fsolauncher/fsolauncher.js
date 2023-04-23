@@ -815,17 +815,18 @@ class FSOLauncher {
         await this.toggleSoftwareMode( true );
       }
     } else if ( newValue !== 'sw' && oldGraphicsMode === 'sw' ) {
-      await this.toggleSoftwareMode( false );
+      await this.toggleSoftwareMode( false, newValue );
     }
   }
 
   /**
    * Toggles software mode on or off.
    *
-   * @param {boolean} enable If true, enable software mode, otherwise
-   *                         disable it. 
+   * @param {boolean} enable   If true, enable software mode, otherwise
+   *                           disable it. 
+   * @param {string}  newValue The new graphics mode value.
    */
-  async toggleSoftwareMode( enable ) {
+  async toggleSoftwareMode( enable, newValue ) {
     try {
       if ( enable ) {
         await this.enableSoftwareMode();
@@ -833,7 +834,7 @@ class FSOLauncher {
       } else {
         await this.disableSoftwareMode();
       }
-      this.updateAndPersistConfig( 'Game', 'GraphicsMode', enable ? 'sw' : 'hw' );
+      this.updateAndPersistConfig( 'Game', 'GraphicsMode', enable ? 'sw' : newValue );
     } catch ( err ) {
       captureWithSentry( err );
       console.log( err );
