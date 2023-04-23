@@ -14,13 +14,15 @@ class CompleteInstaller {
 
   /**
    * Runs steps sequentially.
+   * 
+   * @param {string} folder The folder to install everything to.
    */
-  async run() {
+  async run( folder ) {
     try {
       await this.step1();
       await this.step2();
-      await this.step3();
-      await this.step4();
+      await this.step3( folder );
+      await this.step4( folder );
       this.end();
     } catch ( errorMessage ) {
       captureWithSentry( errorMessage, { installer: 'complete' } );
@@ -81,32 +83,38 @@ class CompleteInstaller {
 
   /**
    * Installs The Sims Online.
+   * 
+   * @param {string} folder The folder to install TSO to.
    *
    * @returns {Promise<void>} A promise that resolves when the installation is finished.
    */
-  step3() {
+  step3( folder ) {
     this.FSOLauncher.IPC.fullInstallProgressItem(
       global.locale.INS_TSO,
       global.locale.INS_DLEX,
       global.locale.INS_INFO,
       50
     );
-    return this.FSOLauncher.install( 'TSO', { fullInstall: true } );
+    folder = folder + '/' + this.FSOLauncher.getPrettyName( 'TSO' );
+    return this.FSOLauncher.install( 'TSO', { fullInstall: true, dir: folder } );
   }
 
   /**
    * Installs FreeSO.
+   * 
+   * @param {string} folder The folder to install FreeSO to.
    *
    * @returns {Promise<void>} A promise that resolves when the installation is finished.
    */
-  step4() {
+  step4( folder ) {
     this.FSOLauncher.IPC.fullInstallProgressItem(
       global.locale.INS_FSO,
       global.locale.INS_DLEX,
       global.locale.INS_INFO,
       75
     );
-    return this.FSOLauncher.install( 'FSO', { fullInstall: true } );
+    folder = folder + '/' + this.FSOLauncher.getPrettyName( 'FSO' );
+    return this.FSOLauncher.install( 'FSO', { fullInstall: true, dir: folder } );
   }
 
   /**

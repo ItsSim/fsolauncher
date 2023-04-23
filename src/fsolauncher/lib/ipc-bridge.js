@@ -355,6 +355,15 @@ class IPCBridge {
       this.Window.webContents.send( 'SIMITONE_SET_VER', v );
     } catch ( e ) {}
   }
+
+  /**
+   * @param {string} folder 
+   */
+  ociPickedFolder( folder ) {
+    try {
+      this.Window.webContents.send( 'OCI_PICKED_FOLDER', normalizePathSlashes( folder ) );
+    } catch ( e ) {}
+  }
 }
 
 module.exports = IPCBridge;

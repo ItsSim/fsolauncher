@@ -843,7 +843,7 @@ select {
 }
 
 #did-you-know {
-  background: #fff;
+  /*background: #fff;*/
   /*box-shadow:0 1px 3px rgba(0,0,0,0.12),0 1px 2px rgba(0,0,0,0.24);*/
 }
 
@@ -1129,7 +1129,6 @@ select {
 .modal p {
   font-family: 'Munged';
   line-height: 21px;
-  font-size: 16px;
 }
 
 .modal div {
@@ -1160,6 +1159,7 @@ select {
   height: 100%;
   z-index: 12;
   display: none;
+  cursor: pointer;
 }
 
 #downloads-page div.download {
@@ -1414,4 +1414,123 @@ i.spin {
   font-size: 21px;
   margin-bottom: -2px;
   transition: 1s ease-in-out;
+}
+
+.oneclick-install {
+  width: 403px;
+  height: 504px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  box-shadow: 1px 7px 4px rgba(0, 0, 0, 0.25);
+  z-index: 12;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 1), rgba(255, 255, 255, 0)), 
+    linear-gradient(90deg, rgb(50 136 195 / 1) 0%, #44ABED 50.31%, #5BD536 100%);
+  border-radius: 16px;
+  padding: 6px;
+    -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.oneclick-install-content {
+  background: linear-gradient(180deg, #FFFFFF 0%, #EEEEEE 100%);
+  border-radius: 12px;
+  padding: 35px;
+  display: flex;
+  flex-direction:column;
+  width: 100%;
+  height: 100%;
+}
+
+.oneclick-install-text {
+  text-align: center;
+  flex: 1;
+}
+.oneclick-install-text h1 {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 26px;
+  line-height: 31px;
+  letter-spacing: -0.02em;
+  font-family: 'Fredoka One';
+  background: linear-gradient(90deg, #3288C3 0%, #44ABED 50.31%, #5BD536 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+}
+
+.oneclick-install-text p, .oneclick-install-select p, .oneclick-install-close {
+  font-family: 'Munged';
+  margin-top: 10px;
+  color: #7f7f7f;
+  font-size: 14px;
+  line-height: 16px;
+}
+
+.oneclick-install-close {
+  text-align: center;
+  cursor: pointer;
+}
+.oneclick-install-close:hover {
+  color: #a3a1a1;
+}
+
+.oneclick-install-select {
+  text-align: center;
+  border: 1px dashed rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+  height: 256px;
+  width: 256px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  padding: 20px;
+  gap: 15px;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.oneclick-install-select svg {
+  margin: 0 auto;
+}
+
+.oneclick-install .oneclick-install-select button {
+  letter-spacing: normal!important;
+  margin: 0 auto;
+  width: 150px;
+  text-transform: uppercase;
+  font-family: 'Fredoka One';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  text-align: center;
+  letter-spacing: -0.035em;
+  text-shadow: none!important;
+  color: #FFFFFF;
+  background: linear-gradient(90deg, #3288C3 0%, #44ABED 50.31%, #5BD536 100%)!important;
+  box-shadow: none;
+}
+
+.oneclick-install-select:hover p {
+  
+}
+
+.oneclick-install-selected .oneclick-install-confirm,
+.oneclick-install-selected .oneclick-install-folder {
+  display: block!important;
+}
+
+.oneclick-install-selected .oneclick-install-help,
+.oneclick-install-selected .oneclick-install-plus {
+  display: none!important;
 }

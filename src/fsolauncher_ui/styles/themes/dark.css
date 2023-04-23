@@ -109,7 +109,7 @@
 }
 
 .dark #did-you-know {
-  background: #10171e !important;
+  /*background: #10171e !important;*/
 }
 
 .dark .modal {
@@ -331,3 +331,27 @@ background-image: url(../../images/15xvbd5.png),
 .dark #launcher #content #full-install {
   background-image: url(../../images/citydark.jpg);
 } 
+
+.dark .oneclick-install {
+  background-image: linear-gradient(90deg, rgb(50 136 195 / 1) 0%, #44ABED 50.31%, #5BD536 100%);
+}
+.dark .oneclick-install-content {
+  background: -webkit-linear-gradient(#15202b, #10171e 5%, #0e1216) !important;
+}
+.dark .oneclick-install-content p {
+  text-shadow:  2px rgb(0 0 0 / 20%);
+    color: rgba(255, 255, 255, 0.5);
+}
+.dark .oneclick-install-select {
+  border-color: rgba(255, 255, 255, 0.5) !important;
+}
+.dark .oneclick-install-select svg {
+  filter: drop-shadow( 1px 1px 1px rgba(0, 0, 0, .5));
+}
+.dark .oneclick-install-select:hover p {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.dark .oneclick-install .oneclick-install-select button {
+  color: #10171E;
+}

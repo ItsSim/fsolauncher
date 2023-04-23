@@ -1,5 +1,5 @@
 // preload.js
-const { contextBridge, ipcRenderer, shell } = require( 'electron' );
+const { contextBridge, ipcRenderer, shell, dialog } = require( 'electron' );
 
 contextBridge.exposeInMainWorld( 'shared', {
   on: ( event, callback ) => {

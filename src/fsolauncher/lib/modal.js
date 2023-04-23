@@ -216,8 +216,7 @@ class Modal {
       {
         properties: [ 'openDirectory' ],
         title: `${global.locale.MODAL_INSTALL} ${componentName}`,
-        defaultPath: defaultPath,
-        buttonLabel: global.locale.MODAL_INSTALL_FOLDER
+        defaultPath: defaultPath
       }
     );
     return response.canceled ? [] : response.filePaths;

@@ -170,9 +170,11 @@ class FSOLauncher {
   /**
    * Installs the game using the complete installer which installs FreeSO,
    * OpenAL, .NET, Mono, SDL, Mac-extras and The Sims Online.
+   * 
+   * @param {string} folder Folder to install the game to.
    */
-  runFullInstaller() {
-    new ( require( './lib/installers/complete-installer' ) )( this ).run();
+  runFullInstaller( folder ) {
+    new ( require( './lib/installers/complete-installer' ) )( this ).run( folder );
   }
 
   /**
@@ -738,9 +740,10 @@ class FSOLauncher {
       case 'NET': {
         const Installer = require( './lib/installers/executable-installer' );
         const file = componentCode === 'NET' ? 'NDP46-KB3045560-Web.exe' : 'oalinst.exe';
+        const cmdOptions = componentCode === 'NET' ? [ '/q', '/norestart' ]  : [ '/SILENT' ];
         const singleInstaller = new Installer();
         try {
-          await singleInstaller.run( file );
+          await singleInstaller.run( file, cmdOptions );
           this.removeActiveTask( componentCode );
           this.updateInstalledPrograms();
         } finally {
@@ -1162,6 +1165,13 @@ class FSOLauncher {
    */
   isDarkMode() {
     return [ 'halloween', 'dark' ].includes( this.conf.Launcher.Theme );
+  }
+
+  async ociPickFolder() {
+    const folders = await Modal.showChooseDirectory( 'FreeSO Game', this.Window );
+    if ( folders && folders.length > 0 ) {
+      this.IPC.ociPickedFolder( folders[0] + '/FreeSO Game' );
+    }
   }
 }
 

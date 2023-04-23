@@ -16,13 +16,17 @@ window.DOMPurify.addHook( 'afterSanitizeAttributes', node => {
 
 var darkThemes = [ 'halloween', 'dark' ];
 
-// Expose setCurrentPage to the DOM.
+// Expose functions to the DOM
 var setCurrentPage;
+var closeOneClickInstall;
+var ociPickFolder;
+var ociConfirm;
 
 ( () => {
   var socket = window.io( `https://${querySelector( 'body' ).getAttribute( 'wsUrl' )}:${querySelector( 'body' ).getAttribute( 'wsPort' )}` );
   var pageTriggerAudio = new window.Howl( { src: 'sounds/click.wav', volume: 0.4 } );
   var yesNoAudio = new window.Howl( { src: 'sounds/modal.wav', volume: 0.4 } );
+  var okAudio = new window.Howl( { src: 'sounds/ok.wav', volume: 0.4 } );
   var twitterHasAlreadyLoaded = false;
   var simitoneRequirementsCheckInterval;
   var simitoneSuggestedUpdate;
@@ -604,10 +608,18 @@ var setCurrentPage;
    * @param {string} type        Modal type.
    */
   var yesNo = ( title, text, yesText, noText, modalRespId, extra, type ) => {
-    yesNoAudio.play();
+    if ( type == 'success' ) {
+      okAudio.play();
+    } else {
+      yesNoAudio.play();
+    }
+
+    if ( modalRespId == 'FULL_INSTALL_CONFIRM' ) {
+      return openOneClickInstall(); // Has its custom modal
+    }
 
     var modalDiv = createElement( 'div' );
-    modalDiv.className = 'modal';
+    modalDiv.className = 'modal overlay-closeable';
   
     if ( type ) {
       modalDiv.className += ' modal-' + type;
@@ -626,10 +638,7 @@ var setCurrentPage;
     var yesButton = createElement( 'button' );
     yesButton.innerHTML = yesText;
     yesButton.addEventListener( 'click', function () {
-      modalDiv.parentNode.removeChild( modalDiv );
-      if ( querySelectorAll( '.modal' ).length === 0 ) {
-        querySelector( '#overlay' ).style.display = 'none';
-      }
+      closeModal( modalDiv );
       modalRespId && window.shared.send( modalRespId, ! 0, extra );
     } );
     buttonContainer.appendChild( yesButton );
@@ -638,10 +647,7 @@ var setCurrentPage;
       var noButton = createElement( 'span' );
       noButton.innerHTML = noText;
       noButton.addEventListener( 'click', function () {
-        modalDiv.parentNode.removeChild( modalDiv );
-        if ( querySelectorAll( '.modal' ).length === 0 ) {
-          querySelector( '#overlay' ).style.display = 'none';
-        }
+        closeModal( modalDiv );
         modalRespId && window.shared.send( modalRespId, ! 1, extra );
       } );
       buttonContainer.appendChild( noButton );
@@ -650,7 +656,7 @@ var setCurrentPage;
     }
     modalDiv.appendChild( buttonContainer );
     querySelector( '#launcher' ).appendChild( modalDiv );
-    querySelector( '#overlay' ).style.display = 'block';
+    showModal( modalDiv );
   }
 
   var clearInstallerHints = () => {
@@ -658,6 +664,78 @@ var setCurrentPage;
     for ( var j = 0; j < hints.length; j++ ) {
       hints[j].style.display = 'none';
     }
+  };
+
+  var clearModals = () => {
+    var modals = querySelectorAll( '.overlay-closeable' );
+    for ( var j = 0; j < modals.length; j++ ) {
+      closeModal( modals[j] );
+    }
+  }
+
+  var closeModal = ( element ) => {
+    if ( element.classList.contains( 'modal' ) ) {
+      element.parentNode.removeChild( element ); 
+    } else {
+      element.style.display = 'none';
+    }
+    hideOverlay();
+  }
+
+  var showModal = ( element ) => {
+    if ( ! element.classList.contains( 'modal' ) ) {
+      element.style.display = 'block';
+    }
+    showOverlay();
+  }
+
+  var hideOverlay = () => {
+    var overlayUsing = querySelectorAll( '.overlay-closeable' );
+    if ( overlayUsing.length === 0 || ( ! Array.from( overlayUsing ).some( isVisible ) ) ) {
+      querySelector( '#overlay' ).style.display = 'none';
+    }
+  }
+
+  var showOverlay = () => {
+    querySelector( '#overlay' ).style.display = 'block';
+  }
+
+  var ociFolder;
+
+  var openOneClickInstall = () => {
+    var oci = querySelector( '.oneclick-install' );
+    oci.classList.remove( 'oneclick-install-selected' );
+    showModal( oci );
+  }
+
+  closeOneClickInstall = () => {
+    closeModal( querySelector( '.oneclick-install' ) );
+  }
+
+  ociPickFolder = () => {
+    sendToMain( 'OCI_PICK_FOLDER' );
+  }
+
+  ociConfirm = e => {
+    e.stopPropagation();
+    if ( ociFolder ) {
+      sendToMain( 'FULL_INSTALL_CONFIRM', ociFolder );
+      closeModal( querySelector( '.oneclick-install' ) );
+    }
+  }
+
+  var ociPickedFolder = folder => {
+    ociFolder = folder;
+    var oci = querySelector( '.oneclick-install' );
+    oci.classList.add( 'oneclick-install-selected' );
+    var ociFolderElement = querySelector( '.oneclick-install-folder' );
+    ociFolderElement.innerHTML = folder;
+    ociFolder = folder;
+  }
+
+  var isVisible = ( element ) => {
+    const style = window.getComputedStyle( element );
+    return style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0';
   };
 
   // Events received from the main process.
@@ -693,6 +771,11 @@ var setCurrentPage;
     querySelector( '#remeshinfo' ).innerHTML =
       `<i style="vertical-align:middle;float:left;margin-right:5px" class="material-icons">access_time</i> 
       <span style="line-height:25px">${f}</span>`;
+  } );
+  // OCI_PICKED_FOLDER
+  onMessage( 'OCI_PICKED_FOLDER', ( a, folder ) => {
+    if ( ! folder ) return;
+    ociPickedFolder( folder );
   } );
   // SIMITONE_SHOULD_UPDATE
   onMessage( 'SIMITONE_SHOULD_UPDATE', ( a, b ) => {
@@ -805,6 +888,7 @@ var setCurrentPage;
   addEventListener( '#update-check',            'click',       () => sendToMain( 'CHECK_UPDATES' ) );
   addEventListener( '#simitone-install-button', 'click',       () => sendToMain( 'INSTALL', 'Simitone' ) );
   addEventListener( '#simitone-should-update',  'click',       () => sendToMain( 'INSTALL_SIMITONE_UPDATE' ) );
+  addEventListener( '#overlay',                 'click',       () => clearModals() );
 
   addEventListenerAll( '[option-id]', 'change', ( a, _b ) => {
     var c = a.currentTarget.getAttribute( 'option-id' ),

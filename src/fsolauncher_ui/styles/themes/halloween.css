@@ -112,7 +112,7 @@
 }
 
 .halloween #did-you-know {
-  background: #10171e !important;
+  /*background: #10171e !important;*/
 }
 
 .halloween .modal {
@@ -129,6 +129,7 @@
 }
 
 .halloween #sidebar {
+  border-top: 1px solid #414141;
   background: #10171e !important;
   color: rgba(255, 255, 255, 0.75) !important;
   text-shadow: 2px 2px rgba(0, 0, 0, 0.2) !important;
@@ -455,3 +456,28 @@ background-image: url(../../images/15xvbd5.png),
 .halloween #launcher #content #full-install {
   background-image: url(../../images/citydark.jpg);
 } 
+
+
+.halloween .oneclick-install {
+  background-image: linear-gradient(90deg, rgb(50 136 195 / 1) 0%, #44ABED 50.31%, #5BD536 100%);
+}
+.halloween .oneclick-install-content {
+  background: -webkit-linear-gradient(#15202b, #10171e 5%, #0e1216) !important;
+}
+.halloween .oneclick-install-content p {
+  text-shadow:  2px rgb(0 0 0 / 20%);
+    color: rgba(255, 255, 255, 0.5);
+}
+.halloween .oneclick-install-select {
+  border-color: rgba(255, 255, 255, 0.5) !important;
+}
+.halloween .oneclick-install-select svg {
+  filter: drop-shadow( 1px 1px 1px rgba(0, 0, 0, .5));
+}
+.halloween .oneclick-install-select:hover p {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.halloween .oneclick-install .oneclick-install-select button {
+  color: #10171E;
+}

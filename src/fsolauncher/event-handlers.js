@@ -34,6 +34,7 @@ class EventHandlers {
     ipcMain.on( 'CONSOLE_LOG',             this.onConsoleLog.bind( this ) );
     ipcMain.on( 'CHECK_SIMITONE',          this.onCheckSimitoneRequirements.bind( this ) );
     ipcMain.on( 'INSTALL_SIMITONE_UPDATE', this.onInstallSimitoneUpdate.bind( this ) );
+    ipcMain.on( 'OCI_PICK_FOLDER',         this.onOCIPickFolder.bind( this ) );
   }
 
   /**
@@ -58,10 +59,10 @@ class EventHandlers {
   onInitDOM() {
     this.FSOLauncher.IPC.setTheme( this.FSOLauncher.conf.Launcher.Theme );
     this.FSOLauncher.IPC.restoreConfiguration( this.FSOLauncher.conf );
-    this.FSOLauncher.checkRemeshInfo();
+    this.FSOLauncher.checkRemeshInfo( true );
     this.FSOLauncher.updateNetRequiredUI( true );
     this.FSOLauncher.Window.focus();
-    this.FSOLauncher.updateInstalledPrograms();
+    this.FSOLauncher.updateInstalledPrograms( true );
   }
 
   /**
@@ -204,12 +205,12 @@ class EventHandlers {
    * Full install dialog callback.
    *
    * @param {Electron.IpcMainEvent} e The event object.
-   * @param {boolean} yes If the user selected yes.
+   * @param {string} folder The folder to install to.
    */
-  onFullInstallConfirm( e, yes ) {
-    if ( yes ) {
+  onFullInstallConfirm( e, folder ) {
+    if ( folder ) {
       this.FSOLauncher.addActiveTask( 'FULL' );
-      this.FSOLauncher.runFullInstaller();
+      this.FSOLauncher.runFullInstaller( folder );
     }
   }
 
@@ -228,6 +229,13 @@ class EventHandlers {
     } else {
       this.FSOLauncher.removeActiveTask( options.component );
     }
+  }
+
+  /**
+   * @param {Electron.IpcMainEvent} e The event object.
+   */
+  onOCIPickFolder( e ) {
+    this.FSOLauncher.ociPickFolder();
   }
 }
 
