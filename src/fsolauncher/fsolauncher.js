@@ -350,24 +350,10 @@ class FSOLauncher {
       try {
         const data = await this.getLauncherData();
         if ( data.Version !== global.launcherVersion ) {
-          if (
-            this.lastUpdateNotification !== data.Version &&
-            ! this.Window.isVisible()
-          ) {
-            Modal.sendNotification(
-              `${global.locale.MODAL_UPDATE_X} ${data.Version} ${global.locale.X_AVAILABLE}`,
-              global.locale.MODAL_UPDATE_DESCR,
-              null, null, this.isDarkMode()
-            );
-          }
-          if ( this.lastUpdateNotification !== data.Version ) {
-            this.lastUpdateNotification = data.Version;
+          if ( this.lastUpdateNotification !== data.Version || ( ! wasAutomatic ) ) {
             Modal.showInstallUpdate( data.Version );
-          } else {
-            if ( ! wasAutomatic ) {
-              Modal.showInstallUpdate( data.Version );
-            }
           }
+          this.lastUpdateNotification = data.Version;
         }
       } catch ( e ) {
         captureWithSentry( e, { wasAutomatic } );
