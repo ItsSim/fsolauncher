@@ -613,7 +613,7 @@ class FSOLauncher {
       installDir = await this.obtainInstallDirectory( componentCode );
     }
     if ( ! installDir ) {
-      throw new Error( 'User canceled the installation.' );
+      return false;
     }
     const installer = new runner( this, installDir );
     const isInstalled = await installer.isInstalledInPath();
