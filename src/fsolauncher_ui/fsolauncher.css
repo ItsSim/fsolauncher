@@ -1459,7 +1459,6 @@ i.spin {
   font-size: 26px;
   line-height: 31px;
   letter-spacing: -0.02em;
-  font-family: 'Fredoka One';
   background: linear-gradient(90deg, #3288C3 0%, #44ABED 50.31%, #5BD536 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -1508,7 +1507,6 @@ i.spin {
   margin: 0 auto;
   width: 150px;
   text-transform: uppercase;
-  font-family: 'Fredoka One';
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
