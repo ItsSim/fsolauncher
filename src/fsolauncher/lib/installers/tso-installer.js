@@ -233,9 +233,9 @@ class TSOInstaller {
   /**
    * When the installation errors out.
    *
-   * @param {Error} error The error object.
+   * @param {Error} err The error object.
    */
-  error( error ) {
+  error( err ) {
     this.dl.cleanup();
     this.haltProgress = true;
     this.createProgressItem( global.locale.TSO_FAILED_INSTALLATION, 100 );
