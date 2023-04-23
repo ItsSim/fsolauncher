@@ -49,7 +49,7 @@ class CompleteInstaller {
     if ( this.FSOLauncher.isInstalled['OpenAL'] ) {
       return Promise.resolve();
     }
-    return this.FSOLauncher.install( 'OpenAL' );
+    return this.FSOLauncher.install( 'OpenAL', { fullInstall: true } );
   }
 
   /**
@@ -75,7 +75,7 @@ class CompleteInstaller {
     if ( this.FSOLauncher.isInstalled['NET'] ) {
       return Promise.resolve();
     }
-    return this.FSOLauncher.install( 'NET' );
+    return this.FSOLauncher.install( 'NET', { fullInstall: true } );
   }
 
   /**
