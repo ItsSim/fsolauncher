@@ -1,6 +1,3 @@
-const Modal = require( '../modal' );
-const { captureWithSentry } = require( '../utils' );
-
 /**
  * Installs OpenAL, .NET, Mono, SDL, TSO and FreeSO.
  */
@@ -17,16 +14,16 @@ class CompleteInstaller {
    * 
    * @param {string} folder The folder to install everything to.
    */
-  async run( folder ) {
+  async install( folder ) {
     try {
       await this.step1();
       await this.step2();
       await this.step3( folder );
       await this.step4( folder );
       this.end();
-    } catch ( errorMessage ) {
-      captureWithSentry( errorMessage, { installer: 'complete' } );
-      this.error( errorMessage );
+    } catch ( err ) {
+      this.error( err );
+      throw err; // Send it back to the caller.
     }
   }
 
@@ -127,33 +124,20 @@ class CompleteInstaller {
       global.locale.INS_PLAY_CLICK,
       100
     );
-    Modal.sendNotification(
-      'FreeSO Launcher',
-      global.locale.INS_FINISHED_LONG,
-      null,
-      true,
-      this.FSOLauncher.isDarkMode()
-    );
-    setTimeout( () => {
-      this.FSOLauncher.removeActiveTask( 'FULL' );
-      this.FSOLauncher.IPC.fullInstallProgressItem();
-    }, 5000 );
   }
 
   /**
-   * Communicates that an error happened.
+   * When the installation errors out.
+   *
+   * @param {Error} err The error object.
    */
-  error( errorMessage ) {
+  error( err ) {
     this.FSOLauncher.IPC.fullInstallProgressItem(
       global.locale.INS_ERROR,
-      global.locale.INS_ERROR_DESCR + ' ' + errorMessage,
+      global.locale.INS_ERROR_DESCR + ' ' + err,
       global.locale.INS_CLOSE,
       100
     );
-    setTimeout( () => {
-      this.FSOLauncher.removeActiveTask( 'FULL' );
-      this.FSOLauncher.IPC.fullInstallProgressItem();
-    }, 5000 );
   }
 }
 

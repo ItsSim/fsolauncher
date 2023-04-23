@@ -1,7 +1,6 @@
-const Modal = require( '../modal' );
 const download = require( '../download' );
 const unzip = require( '../unzip' );
-const { strFormat, captureWithSentry } = require( '../utils' );
+const { strFormat } = require( '../utils' );
 
 /**
  * Installs macOS Extras on macOS systems.
@@ -19,7 +18,6 @@ class MacExtrasInstaller {
     this.haltProgress = false;
     this.parentComponent = parentComponent;
     this.tempPath = `${global.appData}temp/macextras-${this.id}.zip`;
-
     this.dl = download( { from: 'https://beta.freeso.org/LauncherResourceCentral/MacExtras', to: this.tempPath } );
   }
 
@@ -52,10 +50,10 @@ class MacExtrasInstaller {
       await this.step1();
       await this.step2();
       await this.step3();
-      return this.end();
-    } catch ( errorMessage ) {
-      captureWithSentry( errorMessage, { installer: 'macextras' } );
-      return await this.error( errorMessage );
+      this.end();
+    } catch ( err ) {
+      this.error( err );
+      throw err; // Send it back to the caller.
     }
   }
 
@@ -89,20 +87,13 @@ class MacExtrasInstaller {
   /**
    * When the installation errors out.
    *
-   * @param {string} errorMessage The error message.
-   * @returns {Promise<void>} A promise that resolves when the installation ends.
+   * @param {Error} err The error object.
    */
-  error( errorMessage ) {
+  error( err ) {
     this.dl.cleanup();
-    this.FSOLauncher.setProgressBar( 1, {
-      mode: 'error'
-    } );
     this.haltProgress = true;
     this.createProgressItem( strFormat( global.locale.FSO_FAILED_INSTALLATION, 'macOS Extras' ), 100 );
     this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
-    this.FSOLauncher.removeActiveTask( 'MacExtras' );
-    Modal.showFailedInstall( 'FreeSO MacExtras', errorMessage );
-    return Promise.reject( errorMessage );
   }
 
   /**
@@ -110,12 +101,8 @@ class MacExtrasInstaller {
    */
   end() {
     this.dl.cleanup();
-    this.FSOLauncher.setProgressBar( -1 );
     this.createProgressItem( global.locale.INSTALLATION_FINISHED, 100 );
     this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
-    this.FSOLauncher.updateInstalledPrograms();
-    this.FSOLauncher.removeActiveTask( 'MacExtras' );
-    Modal.showInstalled( 'FreeSO MacExtras' );
   }
 
   /**

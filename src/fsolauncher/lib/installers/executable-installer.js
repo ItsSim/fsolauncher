@@ -13,13 +13,16 @@ class ExecutableInstaller {
       const args = options || [];
       const child = require( 'child_process' ).spawn( file, args, spawnOptions );
       
-      child.on( 'close', _code => resolve() );
+      child.on( 'close', code => {
+        console.log( file, args, spawnOptions, code );
+        resolve();
+      } );
       child.on( 'error', err => {
-        console.log( err );
+        console.log( file, args, spawnOptions, err );
         reject( err );
       } );
-      child.stderr.on( 'data', data => console.log( 'stderr: ' + data ) );
-      child.stdout.on( 'data', data => console.log( 'stdout: ' + data ) );
+      child.stderr.on( 'data', data => console.log( file, args, spawnOptions, data ) );
+      child.stdout.on( 'data', data => console.log( file, args, spawnOptions, data ) );
     } );
 }
 }

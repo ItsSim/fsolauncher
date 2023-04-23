@@ -1,21 +1,17 @@
-const Modal = require( '../modal' );
-const download = require( '../download' );
-const unzip = require( '../unzip' );
-const { strFormat, captureWithSentry } = require( '../utils' );
-
-//servo is no more, so ServoInstaller serves as a backup.
-const DOWNLOAD_URL_SERVO =
-  'https://beta.freeso.org/LauncherResourceCentral/FreeSO';
+const { strFormat, captureWithSentry, getJSON } = require( '../utils' );
+const download = require( '../download' ),
+  unzip = require( '../unzip' );
+const DOWNLOAD_URL_SERVO = 'https://beta.freeso.org/LauncherResourceCentral/FreeSO';
 
 /**
- * Installs FreeSO from servo.freeso.org.
+ * Installs FreeSO from GitHub Releases.
  */
-class ServoInstaller {
+class FSOInstaller {
   /**
-   * @param {string} path The path to the installation directory.
-   * @param {import('../../fsolauncher')} FSOLauncher The launcher instance.
+   * @param {import('../../fsolauncher')} FSOLauncher The FSOLauncher instance.
+   * @param {string} path The path to install to.
    */
-  constructor( path, FSOLauncher ) {
+  constructor( FSOLauncher, path ) {
     this.FSOLauncher = FSOLauncher;
     this.id = Math.floor( Date.now() / 1000 );
     this.path = path;
@@ -33,9 +29,9 @@ class ServoInstaller {
   createProgressItem( message, percentage ) {
     this.FSOLauncher.IPC.addProgressItem(
       `FSOProgressItem${this.id}`,
-      'FreeSO Client (Alternative Source)',
-      `Installing in ${this.path}`,
-      message,
+      'FreeSO Client (from GitHub)',
+      `${global.locale.INS_IN} ${this.path}`,
+      message, 
       percentage
     );
     this.FSOLauncher.setProgressBar(
@@ -56,10 +52,10 @@ class ServoInstaller {
       await this.step4();
       await this.step5();
       await this.step6();
-      return this.end();
-    } catch ( errorMessage ) {
-      captureWithSentry( errorMessage, { installer: 'freeso' } );
-      return await this.error( errorMessage );
+      this.end();
+    } catch ( error ) {
+      this.error( error );
+      throw error; // Send it back to the caller.
     }
   }
 
@@ -68,7 +64,15 @@ class ServoInstaller {
    *
    * @returns {Promise<void>} A promise that resolves when the download is complete.
    */
-  step1() {
+  async step1() {
+    this.dl = null;
+    this.createProgressItem( global.locale.INS_SOURCES, 0 );
+    const from = await this.getZipUrl();
+    if ( ! from ) {
+      throw new Error( 'Could not obtain FreeSO release information...' );
+    }
+    this.dl = download( { from, to: this.tempPath } );
+
     return this.download();
   }
 
@@ -139,36 +143,94 @@ class ServoInstaller {
   }
 
   /**
+   * Obtain FreeSO release information from GitHub.
+   * 
+   * Used as a backup if the FreeSO API is down.
+   *
+   * @returns {Promise<object>} A promise that resolves with the release information.
+   */
+  getFreeSOGitHubReleaseInfo() {
+    return getJSON( {
+      host: 'api.github.com',
+      path: '/repos/riperiperi/FreeSO/releases/latest',
+      headers: { 'user-agent': 'node.js' }
+    } );
+  }
+
+  /**
+   * Obtain FreeSO release information from the FreeSO API.
+   *
+   * @returns {Promise<object>} A promise that resolves with the release information.
+   */
+  getFreeSOApiReleaseInfo() {
+    return getJSON( {
+      host: 'api.freeso.org',
+      path: '/userapi/update/beta',
+      headers: { 'user-agent': 'node.js' }
+    } );
+  }
+
+  /**
+   * Obtains the latest release zip either from api.freeso.org or GitHub directly.
+   * 
+   * Use api.freeso.org first, fallback to GitHub.
+   *
+   * @returns {Promise<string>} A promise that resolves with the URL of the zip.
+   */
+  async getZipUrl() {
+    let url;
+    try {
+      const apiReleaseInfo = await this.getFreeSOApiReleaseInfo();
+      if ( ! Array.isArray( apiReleaseInfo ) || apiReleaseInfo.length == 0 ) throw new Error( 'Wrong response' );
+      url = apiReleaseInfo[0].full_zip; // Latest version
+    } catch ( err ) {
+      captureWithSentry( err );
+      console.log( 'Failed getting apiReleaseInfo', err );
+    }
+    
+    if ( ! url ) {
+      try {
+        const githubReleaseInfo = await this.getFreeSOGitHubReleaseInfo();
+        if ( ! Array.isArray( githubReleaseInfo.assets ) ) {
+          throw new Error( 'Invalid response when trying to obtain FreeSO release information from GitHub.' );
+        }
+        for ( let i = 0; i < githubReleaseInfo.assets.length; i++ ) {
+          const asset = githubReleaseInfo.assets[i];
+          if ( asset['name'].indexOf( 'client' ) > -1 ) {
+            // This asset contains the full client.
+            url = asset['browser_download_url'];
+          }
+        }
+      } catch ( err ) {
+        captureWithSentry( err );
+        console.log( 'Failed getting githubReleaseInfo', err );
+      }
+    }
+
+    return url;
+  }
+
+  /**
    * When the installation ends.
    */
   end() {
     this.dl.cleanup();
-    this.FSOLauncher.setProgressBar( -1 );
     this.createProgressItem( global.locale.INSTALLATION_FINISHED, 100 );
     this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
-    this.FSOLauncher.updateInstalledPrograms();
-    this.FSOLauncher.removeActiveTask( 'FSO' );
-    if ( ! this.isFullInstall ) Modal.showInstalled( 'FreeSO' );
   }
 
   /**
    * When the installation errors out.
    *
-   * @param {string} errorMessage The error message.
-   * @returns {Promise<void>} A promise that resolves when the installation ends.
+   * @param {Error} err The error object.
    */
-  error( errorMessage ) {
+  error( err ) {
     if ( this.dl ) this.dl.cleanup();
-    this.FSOLauncher.setProgressBar( 1, {
-      mode: 'error'
-    } );
     this.haltProgress = true;
-    this.createProgressItem( strFormat( global.locale.FSO_FAILED_INSTALLATION, 'FreeSO' ), 100 );
     this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
-    this.FSOLauncher.removeActiveTask( 'FSO' );
-    Modal.showFailedInstall( 'FreeSO', errorMessage );
-    console.log( errorMessage );
-    return Promise.reject( errorMessage );
+    this.createProgressItem( 
+      strFormat( global.locale.FSO_FAILED_INSTALLATION, 'FreeSO' ), 100 
+    );
   }
 
   /**
@@ -253,7 +315,6 @@ class ServoInstaller {
       let p = this.dl.getProgress();
       const mb = this.dl.getProgressMB(),
         size = this.dl.getSizeMB();
-
       if ( isNaN( p ) ) p = 0;
       if ( p < 100 ) {
         if ( ! this.haltProgress ) {
@@ -262,11 +323,10 @@ class ServoInstaller {
             p
           );
         }
-
         return this.updateDownloadProgress();
       }
     }, 250 );
   }
 }
 
-module.exports = ServoInstaller;
+module.exports = FSOInstaller;

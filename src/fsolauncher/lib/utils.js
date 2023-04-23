@@ -104,6 +104,31 @@ function captureWithSentry( error, extra ) {
   captureException( error, { extra } );
 }
 
+function getJSON( options ) {
+  const { net } = require( 'electron' );
+  const { https } = require( 'follow-redirects' ).wrap( {
+    http: net,
+    https: net,
+  } );
+  return new Promise( ( resolve, reject ) => {
+    console.log( 'HTTP JSON request:', options );
+    const request = https.request( options, res => {
+      let data = '';
+      res.on( 'data', chunk => data += chunk );
+      res.on( 'end', () => {
+        try {
+          resolve( JSON.parse( data ) );
+        } catch ( err ) {
+          reject( err );
+        }
+      } );
+    } );
+    request.setTimeout( 30000, () => reject( 'Timed out' ) );
+    request.on( 'error', err => reject( err ) );
+    request.end();
+  } );
+}
+
 module.exports = {
-  normalizePathSlashes, strFormat, initSentry, captureWithSentry
+  normalizePathSlashes, strFormat, initSentry, captureWithSentry, getJSON
 };

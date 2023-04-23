@@ -1,8 +1,6 @@
-const Modal = require( '../modal' );
 const download = require( '../download' );
 const unzip = require( '../unzip' );
 const extract = require( '../cabinet' );
-const { captureWithSentry } = require( '../utils' );
 
 /**
  * ORIGINAL: https://archive.org/download/Fileplanet_dd_042006/Fileplanet_dd_042006.tar/042006/TSO_Installer_v1.1239.1.0.zip'
@@ -15,12 +13,12 @@ const TEMP_FILE = 'FilePlanetTSOFiles.zip';
 /**
  * Installs The Sims Online.
  */
-class FilePlanetInstaller {
+class TSOInstaller {
   /**
-   * @param {string} path Path to install to.
    * @param {import('../../fsolauncher')} FSOLauncher The FSOLauncher instance.
+   * @param {string} path Path to install to.
    */
-  constructor( path, FSOLauncher ) {
+  constructor( FSOLauncher, path ) {
     this.FSOLauncher = FSOLauncher;
     this.id = Math.floor( Date.now() / 1000 );
     this.path = path;
@@ -64,10 +62,10 @@ class FilePlanetInstaller {
       const unzipgc = await this.step3();
       await this.step4( unzipgc );
       await this.step5();
-      return this.end();
-    } catch ( errorMessage ) {
-      captureWithSentry( errorMessage, { installer: 'tso' } )
-      return await this.error( errorMessage );
+      this.end();
+    } catch ( err ) {
+      this.error( err );
+      throw err; // Send it back to the caller.
     }
   }
 
@@ -223,34 +221,21 @@ class FilePlanetInstaller {
    * When the installation ends.
    */
   end() {
-    // Successful installation
     this.dl.cleanup();
-    this.FSOLauncher.setProgressBar( -1 );
-    this.FSOLauncher.removeActiveTask( 'TSO' );
     this.createProgressItem( global.locale.INSTALLATION_FINISHED, 100 );
     this.FSOLauncher.IPC.stopProgressItem( 'TSOProgressItem' + this.id );
-    this.FSOLauncher.updateInstalledPrograms();
-    if ( ! this.isFullInstall ) Modal.showInstalled( 'The Sims Online' );
   }
 
   /**
    * When the installation errors out.
    *
-   * @param {string} errorMessage The error message.
-   * @returns {Promise<void>} A promise that resolves when the installation ends.
+   * @param {Error} error The error object.
    */
-  error( errorMessage ) {
-    // Failed installation
+  error( error ) {
     this.dl.cleanup();
-    this.FSOLauncher.setProgressBar( 1, {
-      mode: 'error'
-    } );
-    this.FSOLauncher.removeActiveTask( 'TSO' );
     this.haltProgress = true;
     this.createProgressItem( global.locale.TSO_FAILED_INSTALLATION, 100 );
     this.FSOLauncher.IPC.stopProgressItem( 'TSOProgressItem' + this.id );
-    Modal.showFailedInstall( 'The Sims Online', errorMessage );
-    return Promise.reject( errorMessage );
   }
 
   /**
@@ -284,4 +269,4 @@ class FilePlanetInstaller {
   }
 }
 
-module.exports = FilePlanetInstaller;
+module.exports = TSOInstaller;

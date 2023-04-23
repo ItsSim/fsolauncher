@@ -323,18 +323,6 @@ class IPCBridge {
   }
 
   /**
-   * Response of a FSODetector run.
-   *
-   * @deprecated
-   * @param {string} dir The directory that was scanned.
-   */
-  sendDetectorResponse( dir ) {
-    try {
-      this.Window.webContents.send( 'FSODETECTOR_RESPONSE', dir );
-    } catch ( e ) {}   
-  }
-
-  /**
    * Useful for debugging with a production build.
    * 
    * @param {string} str The string to log.

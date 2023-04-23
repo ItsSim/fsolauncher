@@ -209,8 +209,7 @@ class EventHandlers {
    */
   onFullInstallConfirm( e, folder ) {
     if ( folder ) {
-      this.FSOLauncher.addActiveTask( 'FULL' );
-      this.FSOLauncher.runFullInstaller( folder );
+      this.FSOLauncher.runFullInstall( folder );
     }
   }
 

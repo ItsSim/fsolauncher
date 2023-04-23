@@ -1,19 +1,18 @@
 const fs = require( 'fs-extra' );
-const Modal = require( '../modal' );
 const download = require( '../download' );
 const unzip = require( '../unzip' );
-const { strFormat, captureWithSentry } = require( '../utils' );
+const { strFormat } = require( '../utils' );
 
 /**
  * Installs remeshes for FreeSO and Simitone.
  */
 class RemeshesInstaller {
   /**
-   * @param {string} path The path to install to.
    * @param {import('../../fsolauncher')} FSOLauncher The launcher instance.
+   * @param {string} path The path to install to.
    * @param {string} parentComponent The name of the parent component.
    */
-  constructor( path, FSOLauncher, parentComponent = 'FreeSO' ) {
+  constructor( FSOLauncher, path, parentComponent = 'FreeSO' ) {
     this.FSOLauncher = FSOLauncher;
     this.id = Math.floor( Date.now() / 1000 );
     this.path = path;
@@ -56,10 +55,10 @@ class RemeshesInstaller {
       await this.step1();
       await this.step2();
       await this.step3();
-      return this.end();
-    } catch ( errorMessage ) {
-      captureWithSentry( errorMessage, { installer: 'remeshes' } );
-      return await this.error( errorMessage );
+      this.end();
+    } catch ( err ) {
+      this.error( err );
+      throw err; // Send it back to the caller.
     }
   }
 
@@ -93,20 +92,13 @@ class RemeshesInstaller {
   /**
    * When the installation errors out.
    *
-   * @param {string} errorMessage The error message.
-   * @returns {Promise<void>} A promise that resolves when the installation ends.
+   * @param {Error} err The error object.
    */
-  error( errorMessage ) {
+  error( err ) {
     this.dl.cleanup();
-    this.FSOLauncher.setProgressBar( 1, {
-      mode: 'error'
-    } );
     this.haltProgress = true;
     this.createProgressItem( strFormat( global.locale.FSO_FAILED_INSTALLATION, 'Remesh Pack' ), 100 );
     this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
-    this.FSOLauncher.removeActiveTask( 'RMS' );
-    Modal.showFailedInstall( 'Remesh Package', errorMessage );
-    return Promise.reject( errorMessage );
   }
 
   /**
@@ -114,12 +106,8 @@ class RemeshesInstaller {
    */
   end() {
     this.dl.cleanup();
-    this.FSOLauncher.setProgressBar( -1 );
     this.createProgressItem( global.locale.INSTALLATION_FINISHED, 100 );
     this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
-    this.FSOLauncher.updateInstalledPrograms();
-    this.FSOLauncher.removeActiveTask( 'RMS' );
-    Modal.showInstalled( 'Remesh Package' );
   }
 
   /**

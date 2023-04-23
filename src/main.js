@@ -70,7 +70,6 @@ let trayIcon;
  * @property {object} Game                          The game configuration.
  * @property {string} Game.GraphicsMode             The game graphics mode.
  * @property {string} Game.Language                 The game language.
- * @property {string} Game.TTS                      Whether to enable TTS
  */
 
 /**
@@ -91,8 +90,7 @@ try {
     },
     Game: {
       GraphicsMode: 'ogl',
-      Language: 'en',
-      TTS: '0'
+      Language: 'en'
     }
   };
   fs.writeFileSync( global.appData + 'FSOLauncher.ini', ini.stringify( conf ), 'utf-8' );

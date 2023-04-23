@@ -14,9 +14,9 @@ class Registry {
    */
   static testWinAccess() {
     if ( process.platform != 'win32' ) return Promise.resolve( false );
-    const Registry = require( 'winreg' );
-    const regKey = new Registry( {
-      hive: Registry.HKLM,
+    const winreg = require( 'winreg' );
+    const regKey = new winreg( {
+      hive: winreg.HKLM,
       key:  '\\SOFTWARE\\AAA_' + new Date().toISOString()
     } );
 
@@ -80,6 +80,7 @@ class Registry {
    * https://github.com/fresc81/node-winreg#access-to-restricted-keys
    * 
    * @param {string} program The program ID.
+   * 
    * @returns {string|boolean} The path to the program if it is installed,
    */
   static async win32LocalPathFallbacks( program ) {
@@ -121,120 +122,121 @@ class Registry {
    */
   static getInstalled() {
     return new Promise( ( resolve, reject ) => {
-      const Promises = [];
+      const checks = [];
 
-      Promises.push( Registry.get( 'OpenAL', Registry.getOpenALPath() ) );
-      Promises.push( Registry.get( 'FSO', Registry.getFSOPath() ) );
-      Promises.push( Registry.get( 'TSO', Registry.getTSOPath() ) );
-      Promises.push( Registry.get( 'NET', Registry.getNETPath() ) );
-      Promises.push( Registry.get( 'Simitone', Registry.getSimitonePath() ) );
-      Promises.push( Registry.get( 'TS1', Registry.getTS1Path() ) );
+      checks.push( this.get( 'OpenAL',   this.getOpenALPath() ) );
+      checks.push( this.get( 'FSO',      this.getFSOPath() ) );
+      checks.push( this.get( 'TSO',      this.getTSOPath() ) );
+      checks.push( this.get( 'NET',      this.getNETPath() ) );
+      checks.push( this.get( 'Simitone', this.getSimitonePath() ) );
+      checks.push( this.get( 'TS1',      this.getTS1Path() ) );
+
       if ( process.platform == 'darwin' ) {
-        Promises.push( Registry.get( 'Mono', Registry.getMonoPath() ) );
-        Promises.push( Registry.get( 'SDL', Registry.getSDLPath() ) );
+        checks.push( this.get( 'Mono', this.getMonoPath() ) );
+        checks.push( this.get( 'SDL',  this.getSDLPath() ) );
       }
 
-      Promise.all( Promises )
+      Promise.all( checks )
         .then( a => resolve( a ) )
         .catch( err => reject( err ) );
     } );
   }
 
   /**
-   * Checks if a registry key exists.
+   * Checks if a registry path exists.
    *
-   * @param {string} e The Component to look for.
-   * @param {string} p The Registry Key to look in.
+   * @param {string} componentCode The Component to look for.
+   * @param {string} regPath The registry path to look in.
+   * 
    * @returns {Promise<{key: string, isInstalled: string}>}
    */
-  static get( e, p ) {
+  static get( componentCode, regPath ) {
     if ( process.platform === 'darwin' ) {
       // when darwin directly test if file exists
       return new Promise( ( resolve, _reject ) => {
-        require( 'fs-extra' ).pathExists( p, ( _err, exists ) => {
-          console.log( 'Testing Mac:', e, p, exists );
-          resolve( { key: e, isInstalled: exists ? require( 'path' ).dirname( p ) : false } );
+        require( 'fs-extra' ).pathExists( regPath, ( _err, exists ) => {
+          console.log( 'Testing Mac:', componentCode, regPath, exists );
+          resolve( { key: componentCode, isInstalled: exists ? require( 'path' ).dirname( regPath ) : false } );
         } );
       } );
     }
     return new Promise( ( resolve, reject ) => {
-      const Registry = require( 'winreg' );
-      const Key = new Registry( { hive: Registry.HKLM, key: p } );
+      const winreg = require( 'winreg' );
+      const regKey = new winreg( { hive: winreg.HKLM, key: regPath } );
 
-      if ( e === 'FSO' || e === 'TSO' || e === 'Simitone' ) {
-        Key.get( 'InstallDir', async ( err, RegistryItem ) => {
+      if ( componentCode === 'FSO' || componentCode === 'TSO' || componentCode === 'Simitone' ) {
+        regKey.get( 'InstallDir', async ( err, item ) => {
           if ( err ) {
             console.log( err );
             let isInstalled = false;
             try {
-              isInstalled = await this.win32LocalPathFallbacks( e );
+              isInstalled = await this.win32LocalPathFallbacks( componentCode );
             } catch ( err ) {/**/}
-            return resolve( { key: e, isInstalled, error: err } );
+            return resolve( { key: componentCode, isInstalled, error: err } );
           }
-          return resolve( { key: e, isInstalled: RegistryItem.value } );
+          return resolve( { key: componentCode, isInstalled: item.value } );
         } );
-      } else if ( e === 'TS1' ) {
-        Key.get( 'InstallPath', async ( err, _RegistryItem ) => {
+      } else if ( componentCode === 'TS1' ) {
+        regKey.get( 'InstallPath', async ( err, _item ) => {
           if ( err ) {
             console.log( err );
-            if ( await this.win32LocalPathFallbacks( e ) ) {
-              return resolve( { key: e, isInstalled: true } );
+            if ( await this.win32LocalPathFallbacks( componentCode ) ) {
+              return resolve( { key: componentCode, isInstalled: true } );
             }
-            return resolve( { key: e, isInstalled: false, error: err } );
+            return resolve( { key: componentCode, isInstalled: false, error: err } );
           }
           // SIMS_GAME_EDITION = 255 All EPs installed.
-          Key.get( 'SIMS_GAME_EDITION', async ( err, RegistryItem ) => {
+          regKey.get( 'SIMS_GAME_EDITION', async ( err, item ) => {
             if ( err ) {
               console.log( err );
-              if ( await this.win32LocalPathFallbacks( e ) ) {
-                return resolve( { key: e, isInstalled: true } );
+              if ( await this.win32LocalPathFallbacks( componentCode ) ) {
+                return resolve( { key: componentCode, isInstalled: true } );
               }
-              return reject( { key: e, isInstalled: false } );
+              return reject( { key: componentCode, isInstalled: false } );
             }
-
-            if ( RegistryItem.value == 255 ) {
-              return resolve( { key: e, isInstalled: true } );
+            if ( item.value == 255 ) {
+              return resolve( { key: componentCode, isInstalled: true } );
             }
-            resolve( { key: e, isInstalled: false } );
+            resolve( { key: componentCode, isInstalled: false } );
           } );
         } );
-      } else if ( e === 'NET' ) {
-        Key.keys( ( err, registries ) => {
+      } else if ( componentCode === 'NET' ) {
+        regKey.keys( ( err, registries ) => {
           if ( err ) {
             console.log( err );
             // Trust our galaxy and return that it’s installed...
-            return resolve( { key: e, isInstalled: true, error: err } );
+            return resolve( { key: componentCode, isInstalled: true, error: err } );
           }
           for ( let i = 0; i < registries.length; i++ ) {
             if (
               registries[i].key.indexOf( 'v4.0' ) > -1 ||
               registries[i].key.indexOf( 'v4' ) > -1
             ) {
-              return resolve( { key: e, isInstalled: true } );
+              return resolve( { key: componentCode, isInstalled: true } );
             }
           }
-          return resolve( { key: e, isInstalled: false } );
+          return resolve( { key: componentCode, isInstalled: false } );
         } );
-      } else if ( e === 'OpenAL' ) {
-        Key.keyExists( async( err, exists ) => {
+      } else if ( componentCode === 'OpenAL' ) {
+        regKey.keyExists( async( err, exists ) => {
           if ( err ) {
             console.log( err );
             let isInstalled = false;
             try {
-              isInstalled = await this.win32LocalPathFallbacks( e );
+              isInstalled = await this.win32LocalPathFallbacks( componentCode );
             } catch ( err ) {/**/}
-            return resolve( { key: e, isInstalled, error: err } );
+            return resolve( { key: componentCode, isInstalled, error: err } );
           } 
 
           if ( exists ) {
-            return resolve( { key: e, isInstalled: true } );
+            return resolve( { key: componentCode, isInstalled: true } );
           } 
           let isInstalled = false;
           try {
-            isInstalled = await this.win32LocalPathFallbacks( e );
+            isInstalled = await this.win32LocalPathFallbacks( componentCode );
           } catch ( err ) {/**/}
 
-          return resolve( { key: e, isInstalled } );
+          return resolve( { key: componentCode, isInstalled } );
         } );
       }
     } );
@@ -244,61 +246,55 @@ class Registry {
    * Creates the default Maxis registry key.
    *
    * @param {string} installDir Where TSO was installed.
+   * 
    * @returns {Promise<void>} A promise that resolves when the registry key is created.
    */
   static async createMaxisEntry( installDir ) {
-    if ( ! await Registry.testWinAccess() ) {
+    if ( ! await this.testWinAccess() ) {
       return Promise.resolve();
     }
-
     return new Promise( ( resolve, reject ) => {
-      const Registry = require( 'winreg' );
-      const Key = new Registry( {
-        hive: Registry.HKLM,
+      const winreg = require( 'winreg' );
+      const regKey = new winreg( {
+        hive: winreg.HKLM,
         key: '\\SOFTWARE\\Maxis\\The Sims Online'
       } );
-
-      Key.keyExists( ( err, exists ) => {
+      regKey.keyExists( ( err, exists ) => {
         if ( err ) {
           console.log( err );
           return reject( global.locale.TSO_REGISTRY_EDIT_FAIL );
         }
         if ( exists ) {
-          Key.destroy( err => {
+          regKey.destroy( err => {
             if ( err ) {
               console.log( err );
               return reject( global.locale.TSO_INSTALLDIR_FAIL );
             }
-
-            Key.create( err => {
+            regKey.create( err => {
               if ( err ) {
                 console.log( err );
                 return reject( global.locale.TSO_INSTALLDIR_FAIL );
               }
-
-              Key.set( 'InstallDir', Registry.REG_SZ, installDir, err => {
+              regKey.set( 'InstallDir', winreg.REG_SZ, installDir, err => {
                 if ( err ) {
                   console.log( err );
                   return reject( global.locale.TSO_INSTALLDIR_FAIL );
                 }
-
                 return resolve();
               } );
             } );
           } );
         } else {
-          Key.create( err => {
+          regKey.create( err => {
             if ( err ) {
               console.log( err );
               return reject( global.locale.TSO_REGISTRY_EDIT_FAIL );
             }
-
-            Key.set( 'InstallDir', Registry.REG_SZ, installDir, err => {
+            regKey.set( 'InstallDir', winreg.REG_SZ, installDir, err => {
               if ( err ) {
                 console.log( err );
                 return reject( global.locale.TSO_INSTALLDIR_FAIL );
               }
-
               return resolve();
             } );
           } );
@@ -313,60 +309,55 @@ class Registry {
    *
    * @param {string} installDir Where FreeSO was installed.
    * @param {string} keyName The name of the registry key.
+   * 
    * @returns {Promise<void>} A promise that resolves when the registry key is created.
    */
   static async createFreeSOEntry( installDir, keyName = 'FreeSO' ) {
-    if ( ! await Registry.testWinAccess() ) {
+    if ( ! await this.testWinAccess() ) {
       return Promise.resolve();
     }
     return new Promise( ( resolve, reject ) => {
-      const Registry = require( 'winreg' );
-      const Key = new Registry( {
-        hive: Registry.HKLM,
+      const winreg = require( 'winreg' );
+      const regKey = new winreg( {
+        hive: winreg.HKLM,
         key: '\\SOFTWARE\\Rhys Simpson\\' + keyName
       } );
-
-      Key.keyExists( ( err, exists ) => {
+      regKey.keyExists( ( err, exists ) => {
         if ( err ) {
           console.log( err );
           return reject( global.locale.TSO_REGISTRY_EDIT_FAIL );
         }
         if ( exists ) {
-          Key.destroy( err => {
+          regKey.destroy( err => {
             if ( err ) {
               console.log( err );
               return reject( global.locale.TSO_INSTALLDIR_FAIL );
             }
-
-            Key.create( err => {
+            regKey.create( err => {
               if ( err ) {
                 console.log( err );
                 return reject( global.locale.TSO_INSTALLDIR_FAIL );
               }
-
-              Key.set( 'InstallDir', Registry.REG_SZ, installDir, err => {
+              regKey.set( 'InstallDir', winreg.REG_SZ, installDir, err => {
                 if ( err ) {
                   console.log( err );
                   return reject( global.locale.TSO_INSTALLDIR_FAIL );
                 }
-
                 return resolve();
               } );
             } );
           } );
         } else {
-          Key.create( err => {
+          regKey.create( err => {
             if ( err ) {
               console.log( err );
               return reject( global.locale.TSO_REGISTRY_EDIT_FAIL );
             }
-
-            Key.set( 'InstallDir', Registry.REG_SZ, installDir, err => {
+            regKey.set( 'InstallDir', winreg.REG_SZ, installDir, err => {
               if ( err ) {
                 console.log( err );
                 return reject( global.locale.TSO_INSTALLDIR_FAIL );
               }
-
               return resolve();
             } );
           } );

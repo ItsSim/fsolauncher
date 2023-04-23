@@ -304,23 +304,6 @@ class Modal {
   }
 
   /**
-   * When the TTS settings change was successful.
-   * 
-   * @param {string} value The new value.
-   */
-  static showCHTTSComplete( value ) {
-    Modal.getIPC().sendSuccessModal(
-      value === '1'
-        ? global.locale.MODAL_SUCCESS
-        : global.locale.MODAL_TTS_DISABLED,
-      value === '1'
-        ? global.locale.MODAL_TTS_ENABLED_TEXT
-        : global.locale.MODAL_TTS_DISABLED_TEXT,
-      global.locale.MODAL_OK
-    );
-  }
-
-  /**
    * When the launcher could not access/write to INI file.
    */
   static showIniFail() {

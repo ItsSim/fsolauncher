@@ -1,7 +1,6 @@
-const Modal = require( '../modal' );
 const download = require( '../download' );
 const unzip = require( '../unzip' );
-const { strFormat, captureWithSentry } = require( '../utils' );
+const { strFormat } = require( '../utils' );
 
 const DOWNLOAD_URL_GITHUB =
   'https://beta.freeso.org/LauncherResourceCentral/Simitone';
@@ -11,10 +10,10 @@ const DOWNLOAD_URL_GITHUB =
  */
 class SimitoneInstaller {
   /**
-   * @param {string} path The path to the directory to create.
    * @param {import('../../fsolauncher')} FSOLauncher The FSOLauncher instance.
+   * @param {string} path The path to the directory to create.
    */
-  constructor( path, FSOLauncher ) {
+  constructor( FSOLauncher, path ) {
     this.FSOLauncher = FSOLauncher;
     this.id = Math.floor( Date.now() / 1000 );
     this.path = path;
@@ -60,10 +59,10 @@ class SimitoneInstaller {
       await this.step5();
       await this.step6();
       await this.step7();
-      return this.end();
-    } catch ( errorMessage ) {
-      captureWithSentry( errorMessage, { installer: 'simitone' } );
-      return await this.error( errorMessage );
+      this.end();
+    } catch ( err ) {
+      this.error( err );
+      throw err; // Send it back to the caller.
     }
   }
 
@@ -159,38 +158,25 @@ class SimitoneInstaller {
    */
   end() {
     this.dl.cleanup();
-    this.FSOLauncher.setProgressBar( -1 );
     this.createProgressItem( global.locale.INSTALLATION_FINISHED, 100 );
     this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
-    this.FSOLauncher.updateInstalledPrograms();
-    this.FSOLauncher.removeActiveTask( 'Simitone' );
     if ( this.simitoneVersion ) {
       this.FSOLauncher.setConfiguration( [
-        'Game',
-        'SimitoneVersion',
-        this.simitoneVersion
+        'Game', 'SimitoneVersion', this.simitoneVersion
       ] );
     }
-    if ( ! this.isFullInstall ) Modal.showInstalled( 'Simitone' );
   }
 
   /**
    * When the installation errors out.
    *
-   * @param {string} errorMessage The error message.
-   * @returns {Promise<void>} A promise that resolves when the installation ends.
+   * @param {Error} err The error object.
    */
-  error( errorMessage ) {
+  error( err ) {
     this.dl.cleanup();
-    this.FSOLauncher.setProgressBar( 1, {
-      mode: 'error'
-    } );
     this.haltProgress = true;
     this.createProgressItem( strFormat( global.locale.FSO_FAILED_INSTALLATION, 'Simitone' ), 100 );
     this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
-    this.FSOLauncher.removeActiveTask( 'Simitone' );
-    Modal.showFailedInstall( 'Simitone', errorMessage );
-    return Promise.reject( errorMessage );
   }
 
   /**

@@ -1,7 +1,6 @@
-const Modal = require( '../modal' );
 const download = require( '../download' );
 const sudo = require( 'sudo-prompt' );
-const { strFormat, captureWithSentry } = require( '../utils' );
+const { strFormat } = require( '../utils' );
 
 /**
  * Installs Mono on macOS systems.
@@ -46,10 +45,10 @@ class MonoInstaller {
     try {
       await this.step1();
       await this.step2();
-      return this.end();
-    } catch ( errorMessage ) {
-      captureWithSentry( errorMessage, { installer: 'mono' } );
-      return await this.error( errorMessage );
+      this.end();
+    } catch ( err ) {
+      this.error( err );
+      throw err; // Send it back to the caller.
     }
   }
 
@@ -74,20 +73,13 @@ class MonoInstaller {
   /**
    * When the installation errors out.
    *
-   * @param {string} errorMessage The error message.
-   * @returns {Promise<void>} A promise that resolves when the installation ends.
+   * @param {Error} err The error object.
    */
-  error( errorMessage ) {
+  error( err ) {
     this.dl.cleanup();
-    this.FSOLauncher.setProgressBar( 1, {
-      mode: 'error'
-    } );
     this.haltProgress = true;
     this.createProgressItem( strFormat( global.locale.FSO_FAILED_INSTALLATION, 'Mono' ), 100 );
     this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
-    this.FSOLauncher.removeActiveTask( 'Mono' );
-    Modal.showFailedInstall( 'Mono', errorMessage );
-    return Promise.reject( errorMessage );
   }
 
   /**
@@ -98,9 +90,6 @@ class MonoInstaller {
     this.FSOLauncher.setProgressBar( -1 );
     this.createProgressItem( global.locale.INSTALLATION_FINISHED, 100 );
     this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
-    this.FSOLauncher.updateInstalledPrograms();
-    this.FSOLauncher.removeActiveTask( 'Mono' );
-    if ( ! this.isFullInstall ) Modal.showInstalled( 'Mono' );
   }
 
   /**
