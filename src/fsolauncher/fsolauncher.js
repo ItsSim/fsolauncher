@@ -567,7 +567,8 @@ class FSOLauncher {
    */
   async handleGameDependentInstall( componentCode, options ) {
     const runner = require( `./lib/installers/${componentCode.toLowerCase()}-installer` );
-    const installer = new runner( this, this.isInstalled.FSO );
+    const subfolder = componentCode === 'RMS' ? '/Content/MeshReplace' : '';
+    const installer = new runner( this, this.isInstalled.FSO + subfolder );
     if ( ! options.fullInstall ) {
       this.IPC.changePage( 'downloads' );
     }
@@ -575,8 +576,8 @@ class FSOLauncher {
 
     if ( componentCode === 'MacExtras' || componentCode === 'RMS' ) {
       // Do an install for Simitone as well.
-      const simitoneInstaller = new runner( this, this.isInstalled.Simitone, 'Simitone' );
-      await simitoneInstaller.install();
+      const smtInstaller = new runner( this, this.isInstalled.Simitone + subfolder, 'Simitone' );
+      await smtInstaller.install();
     }
     return true;
   }
@@ -585,7 +586,10 @@ class FSOLauncher {
    * Handles the standard installation process for a given component.
    * 
    * @param {string} componentCode The code for the component being installed.
-   * @param {Object} options Options for the installation process.
+   * @param {object}         options             The options object.
+   * @param {boolean}        options.fullInstall Whether to do a full install.
+   * @param {string|boolean} options.override    The path to change to.
+   * @param {string}         options.dir         A predefined directory to install to.
    * 
    * @returns {Promise<boolean>}
    */
@@ -637,7 +641,10 @@ class FSOLauncher {
    * Handles the installation process for an executable component.
    * 
    * @param {string} componentCode The code for the component being installed.
-   * @param {Object} options Options for the installation process.
+   * @param {object}         options             The options object.
+   * @param {boolean}        options.fullInstall Whether to do a full install.
+   * @param {string|boolean} options.override    The path to change to.
+   * @param {string}         options.dir         A predefined directory to install to.
    * 
    * @returns {Promise<boolean>}
    */
