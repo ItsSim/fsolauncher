@@ -816,6 +816,8 @@ class FSOLauncher {
       }
     } else if ( newValue !== 'sw' && oldGraphicsMode === 'sw' ) {
       await this.toggleSoftwareMode( false, newValue );
+    } else {
+      this.updateAndPersistConfig( 'Game', 'GraphicsMode', newValue );
     }
   }
 
