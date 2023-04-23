@@ -18,8 +18,11 @@ var darkThemes = [ 'halloween', 'dark' ];
 
 // Expose functions to the DOM
 var setCurrentPage;
+// eslint-disable-next-line no-unused-vars
 var closeOneClickInstall;
+// eslint-disable-next-line no-unused-vars
 var ociPickFolder;
+// eslint-disable-next-line no-unused-vars
 var ociConfirm;
 
 ( () => {
@@ -30,7 +33,8 @@ var ociConfirm;
   var twitterHasAlreadyLoaded = false;
   var simitoneRequirementsCheckInterval;
   var simitoneSuggestedUpdate;
-  var platform = querySelector( 'html' ).className;
+  var isDarwin = querySelector( 'html' ).className.startsWith( 'darwin' );
+  var isWindows = querySelector( 'html' ).className.startsWith( 'win32' );
   var prevTheme;
   var timeout = ( promise, milliseconds = 5000 ) => {
     return new Promise( ( resolve, reject ) => {
@@ -169,7 +173,7 @@ var ociConfirm;
     var date = new Date();
     var m = date.getMonth();
     var d = date.getDate();
-    var y = date.getFullYear();
+    // var y = date.getFullYear();
 
     if ( ! forced ) {
       // Halloween theme activates in October.
@@ -436,7 +440,7 @@ var ociConfirm;
     for ( var Section in vars )
       for ( var Item in vars[Section] ) {
         var $option = querySelector( `[option-id="${Section}.${Item}"]` );
-        if ( platform == 'darwin' && Item == 'GraphicsMode' ) continue;
+        if ( isDarwin && Item == 'GraphicsMode' ) continue;
         $option && ( $option.value = vars[Section][Item] );
       }
   }
@@ -611,7 +615,7 @@ var ociConfirm;
       yesNoAudio.play();
     }
 
-    if ( modalRespId == 'FULL_INSTALL_CONFIRM' && platform == 'win32' ) {
+    if ( modalRespId == 'FULL_INSTALL_CONFIRM' && isWindows ) {
       return openOneClickInstall(); // Has its custom modal
     }
 
