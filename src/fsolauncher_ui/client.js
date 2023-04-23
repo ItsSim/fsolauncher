@@ -611,7 +611,7 @@ var ociConfirm;
       yesNoAudio.play();
     }
 
-    if ( modalRespId == 'FULL_INSTALL_CONFIRM' ) {
+    if ( modalRespId == 'FULL_INSTALL_CONFIRM' && platform == 'win32' ) {
       return openOneClickInstall(); // Has its custom modal
     }
 

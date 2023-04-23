@@ -695,7 +695,7 @@ class FSOLauncher {
       return await this.askForInstallFolder( componentCode );
     } else {
       // Use well-known paths.
-      if ( process.platform != 'win32' ) {
+      if ( process.platform == 'darwin' ) {
         // For darwin, everything goes to Documents for now.
         return global.homeDir + '/Documents/' + this.getPrettyName( componentCode );
       }

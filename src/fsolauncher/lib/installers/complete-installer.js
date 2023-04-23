@@ -92,7 +92,9 @@ class CompleteInstaller {
       global.locale.INS_INFO,
       50
     );
-    folder = folder + '/' + this.FSOLauncher.getPrettyName( 'TSO' );
+    if ( folder ) {
+      folder = folder + '/' + this.FSOLauncher.getPrettyName( 'TSO' );
+    }
     return this.FSOLauncher.install( 'TSO', { fullInstall: true, dir: folder } );
   }
 
@@ -110,7 +112,9 @@ class CompleteInstaller {
       global.locale.INS_INFO,
       75
     );
-    folder = folder + '/' + this.FSOLauncher.getPrettyName( 'FSO' );
+    if ( folder ) {
+      folder = folder + '/' + this.FSOLauncher.getPrettyName( 'FSO' );
+    }
     return this.FSOLauncher.install( 'FSO', { fullInstall: true, dir: folder } );
   }
 
