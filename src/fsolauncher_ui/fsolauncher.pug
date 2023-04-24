@@ -14,7 +14,7 @@ html(class=PLATFORM + ' ' + LANGCODE)
         if SENTRY != 'SENTRY_CI_BROWSER_LOADER'
             script(src=SENTRY, crossorigin="anonymous")
             script(src='sentry-onload.js')        
-    body(monthString=MONTHS, readMoreString=READ_MORE, rss=RSS_URL, wsUrl=WS_URL, wsPort=WS_PORT, twUrl=TW_URL)
+    body(class=LTHEME monthString=MONTHS, readMoreString=READ_MORE, rss=RSS_URL, wsUrl=WS_URL, wsPort=WS_PORT, twUrl=TW_URL)
         #launcher.not-installed
             .hint.arrow-left(hint-page='home', style='top:245px;left:255px')
                 h1 #{TOOLTIP_TITLE_1}

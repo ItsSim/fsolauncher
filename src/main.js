@@ -70,6 +70,7 @@ let trayIcon;
  * @property {object} Game                          The game configuration.
  * @property {string} Game.GraphicsMode             The game graphics mode.
  * @property {string} Game.Language                 The game language.
+ * @property {string} Game.RefreshRate              The game refresh rate.
  */
 
 /**
@@ -108,12 +109,12 @@ global.locale = Object.prototype.hasOwnProperty.call( UIText, code )
 
 global.locale = Object.assign( UIText.en, global.locale ); // Merge EN strings with current language.
 global.locale.LVERSION = global.launcherVersion;
+global.locale.LTHEME   = conf.Launcher.Theme;
 global.locale.PLATFORM = process.platform;
+global.locale.SENTRY   = require( './sentry.config' ).browserLoader;
 global.locale.LANGCODE = code;
-
-global.locale.WS_PORT = global.socketPort;
-global.locale.WS_URL  = global.webService;
-global.locale.SENTRY  = require( './sentry.config' ).browserLoader;
+global.locale.WS_PORT  = global.socketPort;
+global.locale.WS_URL   = global.webService;
 
 global.locale.DEFAULT_REFRESH_RATE = 60;
 
