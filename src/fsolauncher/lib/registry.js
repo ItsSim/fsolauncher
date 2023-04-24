@@ -91,7 +91,7 @@ class Registry {
    * @returns {string|boolean} The path to the program if it is installed,
    */
   static async win32LocalPathFallbacks( componentCode ) {
-    const localRegistry = await this.getLocalRegistry();
+    const localRegistry = await Registry.getLocalRegistry();
     const locals = [];
     if ( localRegistry[componentCode] ) {
       locals.push( localRegistry[componentCode] );
@@ -124,7 +124,7 @@ class Registry {
       if ( ! exists ) {
         continue;
       }
-      return this.stripLocalPath( componentCode, local );
+      return Registry.stripLocalPath( componentCode, local );
     }
     return false;
   }
@@ -139,16 +139,16 @@ class Registry {
     return new Promise( ( resolve, reject ) => {
       const checks = [];
 
-      checks.push( this.get( 'OpenAL',   this.getOpenALPath() ) );
-      checks.push( this.get( 'FSO',      this.getFSOPath() ) );
-      checks.push( this.get( 'TSO',      this.getTSOPath() ) );
-      checks.push( this.get( 'NET',      this.getNETPath() ) );
-      checks.push( this.get( 'Simitone', this.getSimitonePath() ) );
-      checks.push( this.get( 'TS1',      this.getTS1Path() ) );
+      checks.push( Registry.get( 'OpenAL',   Registry.getOpenALPath() ) );
+      checks.push( Registry.get( 'FSO',      Registry.getFSOPath() ) );
+      checks.push( Registry.get( 'TSO',      Registry.getTSOPath() ) );
+      checks.push( Registry.get( 'NET',      Registry.getNETPath() ) );
+      checks.push( Registry.get( 'Simitone', Registry.getSimitonePath() ) );
+      checks.push( Registry.get( 'TS1',      Registry.getTS1Path() ) );
 
       if ( process.platform == 'darwin' ) {
-        checks.push( this.get( 'Mono', this.getMonoPath() ) );
-        checks.push( this.get( 'SDL',  this.getSDLPath() ) );
+        checks.push( Registry.get( 'Mono', Registry.getMonoPath() ) );
+        checks.push( Registry.get( 'SDL',  Registry.getSDLPath() ) );
       }
 
       Promise.all( checks )
@@ -195,7 +195,9 @@ class Registry {
           console.info( 'tested mac', { componentCode, regPath, exists } );
           resolve( { 
             key: componentCode, 
-            isInstalled: exists ? this.stripLocalPath( componentCode, regPath ) : false 
+            isInstalled: exists ? 
+              Registry.stripLocalPath( componentCode, regPath ) 
+                : false 
           } );
         } );
       } );
@@ -209,7 +211,7 @@ class Registry {
           if ( err ) {
             let isInstalled = false;
             try {
-              isInstalled = await this.win32LocalPathFallbacks( componentCode );
+              isInstalled = await Registry.win32LocalPathFallbacks( componentCode );
             } catch ( err ) {/**/}
             return resolve( { key: componentCode, isInstalled, error: err } );
           }
@@ -218,7 +220,7 @@ class Registry {
       } else if ( componentCode === 'TS1' ) {
         regKey.get( 'InstallPath', async ( err, _item ) => {
           if ( err ) {
-            if ( await this.win32LocalPathFallbacks( componentCode ) ) {
+            if ( await Registry.win32LocalPathFallbacks( componentCode ) ) {
               return resolve( { key: componentCode, isInstalled: true } );
             }
             return resolve( { key: componentCode, isInstalled: false, error: err } );
@@ -226,7 +228,7 @@ class Registry {
           // SIMS_GAME_EDITION = 255 All EPs installed.
           regKey.get( 'SIMS_GAME_EDITION', async ( err, item ) => {
             if ( err ) {
-              if ( await this.win32LocalPathFallbacks( componentCode ) ) {
+              if ( await Registry.win32LocalPathFallbacks( componentCode ) ) {
                 return resolve( { key: componentCode, isInstalled: true } );
               }
               return reject( { key: componentCode, isInstalled: false } );
@@ -258,7 +260,7 @@ class Registry {
           if ( err ) {
             let isInstalled = false;
             try {
-              isInstalled = await this.win32LocalPathFallbacks( componentCode );
+              isInstalled = await Registry.win32LocalPathFallbacks( componentCode );
             } catch ( err ) {/**/}
             return resolve( { key: componentCode, isInstalled, error: err } );
           } 
@@ -268,7 +270,7 @@ class Registry {
           } 
           let isInstalled = false;
           try {
-            isInstalled = await this.win32LocalPathFallbacks( componentCode );
+            isInstalled = await Registry.win32LocalPathFallbacks( componentCode );
           } catch ( err ) {/**/}
 
           return resolve( { key: componentCode, isInstalled } );
@@ -288,9 +290,9 @@ class Registry {
   static async createMaxisEntry( fsolauncher, installDir ) {
     // Save to backup registry first
     // Paths saved to local registry have to lead to the exe file
-    await this.saveToLocalRegistry( fsolauncher, 'TSO', installDir + '/TSOClient/TSOClient.exe' );
+    await Registry.saveToLocalRegistry( fsolauncher, 'TSO', installDir + '/TSOClient/TSOClient.exe' );
 
-    if ( ! await this.testWinAccess() ) {
+    if ( ! await Registry.testWinAccess() ) {
       return Promise.resolve();
     }
     return new Promise( ( resolve, reject ) => {
@@ -352,7 +354,7 @@ class Registry {
    * @returns {Promise<void>} A promise that resolves when the registry key is created.
    */
   static async createGameEntry( installDir, keyName ) {
-    if ( ! await this.testWinAccess() ) {
+    if ( ! await Registry.testWinAccess() ) {
       return Promise.resolve();
     }
     return new Promise( ( resolve, reject ) => {
@@ -416,9 +418,9 @@ class Registry {
   static async createSimitoneEntry( fsolauncher, installDir ) {
     // Save to backup registry first.
     // Paths saved to local registry have to lead to the exe file.
-    await this.saveToLocalRegistry( fsolauncher, 'Simitone', installDir + '/Simitone.Windows.exe' );
+    await Registry.saveToLocalRegistry( fsolauncher, 'Simitone', installDir + '/Simitone.Windows.exe' );
 
-    return await this.createGameEntry( installDir, 'Simitone' );
+    return await Registry.createGameEntry( installDir, 'Simitone' );
   }
 
   /**
@@ -432,9 +434,9 @@ class Registry {
   static async createFreeSOEntry( fsolauncher, installDir ) {
     // Save to backup registry first.
     // Paths saved to local registry have to lead to the exe file.
-    await this.saveToLocalRegistry( fsolauncher, 'FSO', installDir + '/FreeSO.exe' );
+    await Registry.saveToLocalRegistry( fsolauncher, 'FSO', installDir + '/FreeSO.exe' );
 
-    return await this.createGameEntry( installDir, 'FreeSO' );
+    return await Registry.createGameEntry( installDir, 'FreeSO' );
   }
 
   /**

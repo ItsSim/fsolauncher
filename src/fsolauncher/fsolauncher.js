@@ -97,7 +97,9 @@ class FSOLauncher {
       global.locale.TIP12,
       global.locale.TIP13
     ];
-    this.IPC.setTip( tips[Math.floor( Math.random() * tips.length )] );
+    const randomTip = tips[Math.floor( Math.random() * tips.length )];
+
+    this.IPC.setTip( randomTip );
     setTimeout( () => this.updateTipRecursive(), 10000 );
   }
 
@@ -133,12 +135,9 @@ class FSOLauncher {
 
   /**
    * Hides all view elements that need internet connection.
-   *
-   * @param {boolean} _init Whether this is the initial call.
    */
-  async updateNetRequiredUI( _init ) {
+  async updateNetRequiredUI() {
     const hasInternet = await this.getInternetStatus();
-
     if ( ! hasInternet ) {
       return this.IPC.hasNoInternet();
     }
@@ -299,12 +298,20 @@ class FSOLauncher {
    * @returns {Promise<void>} A promise that resolves when the check is complete.
    */
   async checkSimitoneRequirements() {
+    const { 
+      get, 
+      getSimitonePath, 
+      getTS1Path 
+    } = require( './lib/registry' );
+
     new Toast( global.locale.TOAST_CHECKING_UPDATES, 1500 );
-    const reg = require( './lib/registry' );
-    const simitoneStatus = await reg.get( 'Simitone', reg.getSimitonePath() );
-    const ts1Status = await reg.get( 'TS1', reg.getTS1Path() );
+
+    const Simitone = await get( 'Simitone', getSimitonePath() ),
+      TS1 = await get( 'TS1', getTS1Path() );
+
     let simitoneUpdateStatus = null;
-    if ( simitoneStatus.isInstalled ) {
+
+    if ( Simitone.isInstalled ) {
       if ( this.conf.Game && this.conf.Game.SimitoneVersion ) {
         this.IPC.setSimitoneVersion( this.conf.Game.SimitoneVersion );
       } else {
@@ -326,8 +333,8 @@ class FSOLauncher {
       this.IPC.setSimitoneVersion( null );
       this.IPC.sendSimitoneShouldUpdate( false );
     }
-    this.isInstalled['Simitone'] = simitoneStatus.isInstalled;
-    this.isInstalled['TS1'] = ts1Status.isInstalled;
+    this.isInstalled['Simitone'] = Simitone.isInstalled;
+    this.isInstalled['TS1'] = TS1.isInstalled;
     this.IPC.sendInstalledPrograms( this.isInstalled );
     //toast.destroy();
   }
@@ -394,15 +401,12 @@ class FSOLauncher {
         override: options.override
       } );
       Modal.showChangedGamePath();
-
-      this.updateInstalledPrograms();
-      this.removeActiveTask( options.component );
     } catch ( err ) {
       captureWithSentry( err, { options } );
       console.error( err );
       Modal.showFailedInstall( this.getPrettyName( options.component ), err );
-      this.removeActiveTask( options.component );
     } finally {
+      this.removeActiveTask( options.component );
       toast.destroy();
     }
   }
@@ -599,16 +603,21 @@ class FSOLauncher {
     const runner = require( `./lib/installers/${componentCode.toLowerCase()}-installer` );
 
     if ( options.override ) {
+      const { 
+        createMaxisEntry, 
+        createFreeSOEntry, 
+        createSimitoneEntry 
+      } = require( './lib/registry' );
+
       // Modify registry to point to the override path.
-      const registry = require( './lib/registry' );
       if ( componentCode === 'TSO' ) {
-        await registry.createMaxisEntry( this, options.override );
+        await createMaxisEntry( this, options.override );
       }
       if ( componentCode === 'FSO' ) {
-        await registry.createFreeSOEntry( this, options.override );
+        await createFreeSOEntry( this, options.override );
       }
       if ( componentCode === 'Simitone' ) {
-        await registry.createSimitoneEntry( this, options.override );
+        await createSimitoneEntry( this, options.override );
       }
       return false;
     }
@@ -1165,10 +1174,10 @@ class FSOLauncher {
     this.IPC.setTheme( this.conf.Launcher.Theme );
     this.IPC.setMaxRefreshRate( getDisplayRefreshRate() );
     this.IPC.restoreConfiguration( this.conf );
-    this.checkRemeshInfo( true );
-    this.updateNetRequiredUI( true );
+    this.checkRemeshInfo();
+    this.updateNetRequiredUI();
     this.window.focus();
-    this.updateInstalledPrograms( true );
+    // this.updateInstalledPrograms();
   }
 
   /**
