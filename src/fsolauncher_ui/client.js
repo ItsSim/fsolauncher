@@ -232,7 +232,6 @@ var ociConfirm;
    * Obtains and displays blog articles from the official blog.
    */
   var fetchNews = async userRequested => {
-    console.log( 'Fetching news...' );
     var $rssUrl = querySelector( 'body' ).getAttribute( 'rss' );
     var $didYouKnow = querySelector( '#did-you-know' );
     var $rss = querySelector( '#rss' );
@@ -273,7 +272,6 @@ var ociConfirm;
       if ( errors || ! response ) {
         return console.log( 'RSS Failed:', errors, response );
       }
-      console.log( response ? 'Articles received successfully.' : 'Failed to receive articles' );
 
       // Clear the rss container for the new articles.
       querySelector( '#rss-root' ).innerHTML = '';
@@ -354,7 +352,6 @@ var ociConfirm;
    * Loads the twitter widget.
    */
   var loadTwitter = () => {
-    console.log( 'Loading Twitter...' );
     return new Promise( ( resolve, reject ) => {
       querySelector( '#did-you-know' ).innerHTML = '';
       var currentTheme = querySelector( 'body' ).className;
@@ -384,7 +381,6 @@ var ociConfirm;
       } );
       $script.addEventListener( 'error', reject );
       $head.appendChild( $script );
-      console.log( 'Twitter loaded successfully' );
     } );
   };
 
