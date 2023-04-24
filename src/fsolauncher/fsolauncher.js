@@ -574,7 +574,8 @@ class FSOLauncher {
     }
     await installer.install();
 
-    if ( componentCode === 'MacExtras' || componentCode === 'RMS' ) {
+    if ( [ 'MacExtras', 'RMS' ].includes( componentCode ) 
+      && this.isInstalled.Simitone ) {
       // Do an install for Simitone as well.
       const smtInstaller = new runner( this, this.isInstalled.Simitone + subfolder, 'Simitone' );
       await smtInstaller.install();
