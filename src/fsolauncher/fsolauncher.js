@@ -2,7 +2,7 @@ const Modal = require( './lib/modal' );
 const Events = require( './events' );
 const IPCBridge = require( './lib/ipc-bridge' );
 const Toast = require( './lib/toast' );
-const { captureWithSentry, getJSON, strFormat, getDisplayRefreshRate } = require( './lib/utils' );
+const { captureWithSentry, getJSON, strFormat, getDisplayRefreshRate, emitSentryEvent } = require( './lib/utils' );
 
 /**
  * Main launcher class.
@@ -163,6 +163,17 @@ class FSOLauncher {
       Modal.sendNotification(
         'FreeSO Launcher', global.locale.INS_FINISHED_LONG, null, true, this.isDarkMode()
       );
+      emitSentryEvent( {
+        message: 'Installation successful',
+        level: 'info',
+        tags: {
+          component: 'FULL'
+        },
+        extra: {
+          folder,
+          isInstalled: this.isInstalled
+        }
+      } );
     } catch ( err ) {
       console.error( 'runFullInstall', err );
     } finally {
@@ -539,6 +550,17 @@ class FSOLauncher {
       if ( ! options.fullInstall && display ) {
         Modal.showInstalled( this.getPrettyName( componentCode ) );
       }
+      emitSentryEvent( {
+        message: 'Installation successful',
+        level: 'info',
+        tags: {
+          component: componentCode
+        },
+        extra: {
+          options,
+          isInstalled: this.isInstalled
+        }
+      } );
     } catch ( err ) {
       if ( ! options.fullInstall ) {
         Modal.showFailedInstall( this.getPrettyName( componentCode ), err );

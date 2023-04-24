@@ -141,11 +141,20 @@ function getDisplayRefreshRate() {
   return 60;
 }
 
+/**
+ * @param {import('@sentry/electron').Event} event
+ */
+function emitSentryEvent( event ) {
+  const { captureEvent } = require( '@sentry/electron' );
+  captureEvent( event );
+}
+
 module.exports = {
   normalizePathSlashes, 
   strFormat, 
   initSentry, 
   captureWithSentry, 
   getJSON,
-  getDisplayRefreshRate
+  getDisplayRefreshRate,
+  emitSentryEvent
 };
