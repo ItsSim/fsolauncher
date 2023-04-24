@@ -10,11 +10,11 @@ const DOWNLOAD_URL_GITHUB =
  */
 class SimitoneInstaller {
   /**
-   * @param {import('../../fsolauncher')} FSOLauncher The FSOLauncher instance.
+   * @param {import('../../fsolauncher')} fsolauncher The FSOLauncher instance.
    * @param {string} path The path to the directory to create.
    */
-  constructor( FSOLauncher, path ) {
-    this.FSOLauncher = FSOLauncher;
+  constructor( fsolauncher, path ) {
+    this.fsolauncher = fsolauncher;
     this.id = Math.floor( Date.now() / 1000 );
     this.path = path;
     this.haltProgress = false;
@@ -33,14 +33,14 @@ class SimitoneInstaller {
    * @param {number} percentage The percentage to display.
    */
   createProgressItem( message, percentage ) {
-    this.FSOLauncher.IPC.addProgressItem(
+    this.fsolauncher.IPC.addProgressItem(
       'FSOProgressItem' + this.id,
       'Simitone Client ' + this.simitoneVersion,
       global.locale.INS_IN + ' ' + this.path,
       message,
       percentage
     );
-    this.FSOLauncher.setProgressBar(
+    this.fsolauncher.setProgressBar(
       percentage == 100 ? 2 : percentage / 100
     );
   }
@@ -70,7 +70,7 @@ class SimitoneInstaller {
    * Obtains GitHub release data.
    */
   async step1() {
-    const simitoneReleaseData = await this.FSOLauncher.getSimitoneReleaseInfo();
+    const simitoneReleaseData = await this.fsolauncher.getSimitoneReleaseInfo();
 
     if ( simitoneReleaseData.tag_name !== undefined ) {
       this.simitoneVersion = simitoneReleaseData.tag_name;
@@ -112,7 +112,7 @@ class SimitoneInstaller {
    * @returns {Promise<void>} A promise that resolves when the registry key is created.
    */
   step5() {
-    return require( '../registry' ).createSimitoneEntry( this.path );
+    return require( '../registry' ).createSimitoneEntry( this.fsolauncher, this.path );
   }
 
   /**
@@ -157,9 +157,9 @@ class SimitoneInstaller {
   end() {
     this.dl.cleanup();
     this.createProgressItem( global.locale.INSTALLATION_FINISHED, 100 );
-    this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
+    this.fsolauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
     if ( this.simitoneVersion ) {
-      this.FSOLauncher.setConfiguration( [
+      this.fsolauncher.setConfiguration( [
         'Game', 'SimitoneVersion', this.simitoneVersion
       ] );
     }
@@ -174,7 +174,7 @@ class SimitoneInstaller {
     this.dl.cleanup();
     this.haltProgress = true;
     this.createProgressItem( strFormat( global.locale.FSO_FAILED_INSTALLATION, 'Simitone' ), 100 );
-    this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
+    this.fsolauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
   }
 
   /**

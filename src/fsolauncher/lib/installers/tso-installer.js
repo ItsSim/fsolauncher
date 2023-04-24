@@ -15,11 +15,11 @@ const TEMP_FILE = 'FilePlanetTSOFiles.zip';
  */
 class TSOInstaller {
   /**
-   * @param {import('../../fsolauncher')} FSOLauncher The FSOLauncher instance.
+   * @param {import('../../fsolauncher')} fsolauncher The FSOLauncher instance.
    * @param {string} path Path to install to.
    */
-  constructor( FSOLauncher, path ) {
-    this.FSOLauncher = FSOLauncher;
+  constructor( fsolauncher, path ) {
+    this.fsolauncher = fsolauncher;
     this.id = Math.floor( Date.now() / 1000 );
     this.path = path;
     this.haltProgress = false;
@@ -37,7 +37,7 @@ class TSOInstaller {
    * @param {number} percentage The percentage to display.
    */
   createProgressItem( message, percentage, extraction ) {
-    this.FSOLauncher.IPC.addProgressItem(
+    this.fsolauncher.IPC.addProgressItem(
       'TSOProgressItem' + this.id,
       'The Sims Online (FilePlanet)',
       global.locale.INS_IN + ' ' + this.path,
@@ -45,7 +45,7 @@ class TSOInstaller {
       percentage,
       extraction
     );
-    this.FSOLauncher.setProgressBar(
+    this.fsolauncher.setProgressBar(
       percentage == 100 ? 2 : percentage / 100
     );
   }
@@ -113,8 +113,7 @@ class TSOInstaller {
    * @returns {Promise<void>} A promise that resolves when the key is created.
    */
   step5() {
-    // registry
-    return require( '../registry' ).createMaxisEntry( this.path );
+    return require( '../registry' ).createMaxisEntry( this.fsolauncher, this.path );
   }
 
   /**
@@ -226,7 +225,7 @@ class TSOInstaller {
   end() {
     this.dl.cleanup();
     this.createProgressItem( global.locale.INSTALLATION_FINISHED, 100 );
-    this.FSOLauncher.IPC.stopProgressItem( 'TSOProgressItem' + this.id );
+    this.fsolauncher.IPC.stopProgressItem( 'TSOProgressItem' + this.id );
   }
 
   /**
@@ -238,7 +237,7 @@ class TSOInstaller {
     this.dl.cleanup();
     this.haltProgress = true;
     this.createProgressItem( global.locale.TSO_FAILED_INSTALLATION, 100 );
-    this.FSOLauncher.IPC.stopProgressItem( 'TSOProgressItem' + this.id );
+    this.fsolauncher.IPC.stopProgressItem( 'TSOProgressItem' + this.id );
   }
 
   /**

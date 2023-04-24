@@ -6,10 +6,10 @@ const { ipcMain } = require( 'electron' );
  */
 class Events {
   /**
-   * @param {import('./fsolauncher')} FSOLauncher The FSOLauncher instance.
+   * @param {import('./fsolauncher')} fsolauncher The FSOLauncher instance.
    */
-  constructor( FSOLauncher ) {
-    this.FSOLauncher = FSOLauncher;
+  constructor( fsolauncher ) {
+    this.fsolauncher = fsolauncher;
   }
 
   /**
@@ -41,7 +41,7 @@ class Events {
    * Received when the user request a Simitone update.
    */
   onInstallSimitoneUpdate() {
-    this.FSOLauncher.install( 'Simitone', { dir: this.FSOLauncher.isInstalled.Simitone } )
+    this.fsolauncher.install( 'Simitone', { dir: this.fsolauncher.isInstalled.Simitone } )
       .catch( console.error );
   }
 
@@ -50,14 +50,14 @@ class Events {
    * Simitone updates.
    */
   onCheckSimitoneRequirements() {
-    this.FSOLauncher.checkSimitoneRequirements();
+    this.fsolauncher.checkSimitoneRequirements();
   }
 
   /**
    * Fires when the DOM is initialized.
    */
   onInitDOM() {
-    this.FSOLauncher.initDOM();
+    this.fsolauncher.initDOM();
   }
 
   /**
@@ -67,11 +67,11 @@ class Events {
    * @param {string[]} response The response from the client.
    */
   onSocketMessage( e, response ) {
-    if ( this.FSOLauncher.conf.Launcher.DesktopNotifications === '1' ) {
+    if ( this.fsolauncher.conf.Launcher.DesktopNotifications === '1' ) {
       Modal.sendNotification( 'FreeSO Announcement', 
         response[0], 
         response[1], 
-        null, this.FSOLauncher.isDarkMode() );
+        null, this.fsolauncher.isDarkMode() );
     }
   }
 
@@ -82,7 +82,7 @@ class Events {
    * @param {string} componentCode The Component to be installed.
    */
   onInstall( e, componentCode ) {
-    this.FSOLauncher.fireInstallModal( componentCode );
+    this.fsolauncher.fireInstallModal( componentCode );
   }
 
   /**
@@ -92,7 +92,7 @@ class Events {
    * @param {string[]} v [Config Key] - [Config Subkey] - [Config Value]
    */
   onSetConfiguration( e, v ) {
-    this.FSOLauncher.setConfiguration( v );
+    this.fsolauncher.setConfiguration( v );
   }
 
   /**
@@ -103,7 +103,7 @@ class Events {
    */
   onInstallerRedirect( e, yes ) {
     if ( yes ) {
-      this.FSOLauncher.IPC.changePage( 'installer' );
+      this.fsolauncher.IPC.changePage( 'installer' );
     }
   }
 
@@ -117,7 +117,7 @@ class Events {
    */
   onInstallComponent( e, yes, componentCode, options ) {
     if ( yes ) {
-      this.FSOLauncher.install( componentCode, options )
+      this.fsolauncher.install( componentCode, options )
         .catch( console.error );
     }
   }
@@ -137,7 +137,7 @@ class Events {
    * @param {any} useVolcanic Use Volcanic or not.
    */
   onPlay( e, useVolcanic ) {
-    this.FSOLauncher.play( useVolcanic );
+    this.fsolauncher.play( useVolcanic );
   }
 
   /**
@@ -148,15 +148,15 @@ class Events {
    */
   onPlayVolcanic( e, yes ) {
     if ( yes ) {
-      this.FSOLauncher.launchGame( true );
+      this.fsolauncher.launchGame( true );
     }
   }
   onPlaySimitone( e, useVolcanic ) {
-    this.FSOLauncher.play( useVolcanic, true );
+    this.fsolauncher.play( useVolcanic, true );
   }
   onPlayVolcanicSimitone( e, yes ) {
     if ( yes ) {
-      this.FSOLauncher.launchGame( true, true );
+      this.fsolauncher.launchGame( true, true );
     }
   }
 
@@ -166,10 +166,10 @@ class Events {
    * @returns {void}
    */
   onCheckUpdates() {
-    if ( this.FSOLauncher.activeTasks.length > 0 ) {
+    if ( this.fsolauncher.activeTasks.length > 0 ) {
       return Modal.showAlreadyInstalling();
     }
-    this.FSOLauncher.checkLauncherUpdates();
+    this.fsolauncher.checkLauncherUpdates();
   }
 
   /**
@@ -180,7 +180,7 @@ class Events {
    */
   onInstallUpdate( e, yes ) {
     if ( yes ) {
-      this.FSOLauncher.installLauncherUpdate();
+      this.fsolauncher.installLauncherUpdate();
     }
   }
 
@@ -188,8 +188,8 @@ class Events {
    * When the user clicks the Full Install button.
    */
   onFullInstall() {
-    if ( this.FSOLauncher.activeTasks.length === 0 ) {
-      if ( this.FSOLauncher.hasInternet ) Modal.showFullInstall();
+    if ( this.fsolauncher.activeTasks.length === 0 ) {
+      if ( this.fsolauncher.hasInternet ) Modal.showFullInstall();
       else Modal.showNoInternetFullInstall();
     } else {
       Modal.showAlreadyInstalling();
@@ -209,7 +209,7 @@ class Events {
         // no passing in a folder.
         folderOrConfirm = null;
       }
-      this.FSOLauncher.runFullInstall( folderOrConfirm );
+      this.fsolauncher.runFullInstall( folderOrConfirm );
     }
   }
 
@@ -224,9 +224,9 @@ class Events {
     options = JSON.parse( options );
 
     if ( yes ) {
-      this.FSOLauncher.changeGamePath( options );
+      this.fsolauncher.changeGamePath( options );
     } else {
-      this.FSOLauncher.removeActiveTask( options.component );
+      this.fsolauncher.removeActiveTask( options.component );
     }
   }
 
@@ -234,7 +234,7 @@ class Events {
    * @param {Electron.IpcMainEvent} _e The event object.
    */
   onOCIPickFolder( _e ) {
-    this.FSOLauncher.ociPickFolder();
+    this.fsolauncher.ociPickFolder();
   }
 }
 

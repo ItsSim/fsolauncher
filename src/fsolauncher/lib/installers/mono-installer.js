@@ -7,10 +7,10 @@ const { strFormat } = require( '../utils' );
  */
 class MonoInstaller {
   /**
-   * @param {import('../../fsolauncher')} FSOLauncher The launcher instance.
+   * @param {import('../../fsolauncher')} fsolauncher The launcher instance.
    */
-  constructor( FSOLauncher ) {
-    this.FSOLauncher = FSOLauncher;
+  constructor( fsolauncher ) {
+    this.fsolauncher = fsolauncher;
     this.id = Math.floor( Date.now() / 1000 );
     this.haltProgress = false;
     this.tempPath = `${global.appData}temp/mono-${this.id}.pkg`;
@@ -24,14 +24,14 @@ class MonoInstaller {
    * @param {number} percentage The percentage to display.
    */
   createProgressItem( message, percentage ) {
-    this.FSOLauncher.IPC.addProgressItem(
+    this.fsolauncher.IPC.addProgressItem(
       'FSOProgressItem' + this.id,
       global.locale.INSTALLER_MONO_DESCR,
       global.locale.INS_DOWNLOADING_FROM + ' mono-project.com',
       message,
       percentage
     );
-    this.FSOLauncher.setProgressBar(
+    this.fsolauncher.setProgressBar(
       percentage == 100 ? 2 : percentage / 100
     );
   }
@@ -79,7 +79,7 @@ class MonoInstaller {
     this.dl.cleanup();
     this.haltProgress = true;
     this.createProgressItem( strFormat( global.locale.FSO_FAILED_INSTALLATION, 'Mono' ), 100 );
-    this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
+    this.fsolauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
   }
 
   /**
@@ -87,9 +87,9 @@ class MonoInstaller {
    */
   end() {
     this.dl.cleanup();
-    this.FSOLauncher.setProgressBar( -1 );
+    this.fsolauncher.setProgressBar( -1 );
     this.createProgressItem( global.locale.INSTALLATION_FINISHED, 100 );
-    this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
+    this.fsolauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
   }
 
   /**

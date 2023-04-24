@@ -7,10 +7,10 @@ const { strFormat } = require( '../utils' );
  */
 class SDLInstaller {
   /**
-   * @param {import('../../fsolauncher')} FSOLauncher The FSO Launcher instance.
+   * @param {import('../../fsolauncher')} fsolauncher The FSO Launcher instance.
    */
-  constructor( FSOLauncher ) {
-    this.FSOLauncher = FSOLauncher;
+  constructor( fsolauncher ) {
+    this.fsolauncher = fsolauncher;
     this.id = Math.floor( Date.now() / 1000 );
     this.haltProgress = false;
     this.tempPath = `${global.appData}temp/sdl2-${this.id}.dmg`;
@@ -24,14 +24,14 @@ class SDLInstaller {
    * @param {number} percentage The percentage to display.
    */
   createProgressItem( message, percentage ) {
-    this.FSOLauncher.IPC.addProgressItem(
+    this.fsolauncher.IPC.addProgressItem(
       'FSOProgressItem' + this.id,
       'Single DirectMedia Layer 2',
       global.locale.INS_DOWNLOADING_FROM + ' libsdl.org',
       message,
       percentage
     );
-    this.FSOLauncher.setProgressBar(
+    this.fsolauncher.setProgressBar(
       percentage == 100 ? 2 : percentage / 100
     );
   }
@@ -79,7 +79,7 @@ class SDLInstaller {
     this.dl.cleanup();
     this.haltProgress = true;
     this.createProgressItem( strFormat( global.locale.FSO_FAILED_INSTALLATION, 'SDL2' ), 100 );
-    this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
+    this.fsolauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
   }
 
   /**
@@ -88,7 +88,7 @@ class SDLInstaller {
   end() {
     this.dl.cleanup();
     this.createProgressItem( global.locale.INSTALLATION_FINISHED, 100 );
-    this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
+    this.fsolauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
   }
 
   /**

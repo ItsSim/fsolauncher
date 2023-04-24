@@ -3,10 +3,10 @@
  */
 class CompleteInstaller {
   /**
-   * @param {import('../../fsolauncher')} FSOLauncher The FSOLauncher instance.
+   * @param {import('../../fsolauncher')} fsolauncher The FSOLauncher instance.
    */
-  constructor( FSOLauncher ) {
-    this.FSOLauncher = FSOLauncher;
+  constructor( fsolauncher ) {
+    this.fsolauncher = fsolauncher;
   }
 
   /**
@@ -33,7 +33,7 @@ class CompleteInstaller {
    * @returns {Promise<void>} A promise that resolves when the installation is finished.
    */
   step1() {
-    this.FSOLauncher.IPC.fullInstallProgressItem(
+    this.fsolauncher.IPC.fullInstallProgressItem(
       process.platform === 'win32' ? global.locale.INS_OAL : global.locale.INS_SDL,
       global.locale.INS_WINDOW,
       process.platform === 'win32' ? global.locale.INS_OAL_WINDOW : global.locale.INS_SDL_WINDOW,
@@ -41,15 +41,15 @@ class CompleteInstaller {
     );
     if ( process.platform === 'darwin' ) {
       // Skip SDL if already installed.
-      if ( this.FSOLauncher.isInstalled['SDL'] ) {
+      if ( this.fsolauncher.isInstalled['SDL'] ) {
         return Promise.resolve();
       }
-      return this.FSOLauncher.install( 'SDL', { fullInstall: true } );
+      return this.fsolauncher.install( 'SDL', { fullInstall: true } );
     }
-    if ( this.FSOLauncher.isInstalled['OpenAL'] ) {
+    if ( this.fsolauncher.isInstalled['OpenAL'] ) {
       return Promise.resolve();
     }
-    return this.FSOLauncher.install( 'OpenAL', { fullInstall: true } );
+    return this.fsolauncher.install( 'OpenAL', { fullInstall: true } );
   }
 
   /**
@@ -58,7 +58,7 @@ class CompleteInstaller {
    * @returns {Promise<void>} A promise that resolves when the installation is finished.
    */
   step2() {
-    this.FSOLauncher.IPC.fullInstallProgressItem(
+    this.fsolauncher.IPC.fullInstallProgressItem(
       process.platform === 'win32' ? global.locale.INS_NET : global.locale.INS_MONO,
       global.locale.INS_WINDOW,
       process.platform === 'win32' ? global.locale.INS_NET_WINDOW : global.locale.INS_MONO_WINDOW,
@@ -66,16 +66,16 @@ class CompleteInstaller {
     );
     if ( process.platform === 'darwin' ) {
       // Skip Mono if already installed.
-      if ( this.FSOLauncher.isInstalled['Mono'] ) {
+      if ( this.fsolauncher.isInstalled['Mono'] ) {
         return Promise.resolve();
       }
-      return this.FSOLauncher.install( 'Mono', { fullInstall: true } );
+      return this.fsolauncher.install( 'Mono', { fullInstall: true } );
     }
     // Skip .NET if already installed.
-    if ( this.FSOLauncher.isInstalled['NET'] ) {
+    if ( this.fsolauncher.isInstalled['NET'] ) {
       return Promise.resolve();
     }
-    return this.FSOLauncher.install( 'NET', { fullInstall: true } );
+    return this.fsolauncher.install( 'NET', { fullInstall: true } );
   }
 
   /**
@@ -86,16 +86,16 @@ class CompleteInstaller {
    * @returns {Promise<void>} A promise that resolves when the installation is finished.
    */
   step3( folder ) {
-    this.FSOLauncher.IPC.fullInstallProgressItem(
+    this.fsolauncher.IPC.fullInstallProgressItem(
       global.locale.INS_TSO,
       global.locale.INS_DLEX,
       global.locale.INS_INFO,
       50
     );
     if ( folder ) {
-      folder = folder + '/' + this.FSOLauncher.getPrettyName( 'TSO' );
+      folder = folder + '/' + this.fsolauncher.getPrettyName( 'TSO' );
     }
-    return this.FSOLauncher.install( 'TSO', { fullInstall: true, dir: folder } );
+    return this.fsolauncher.install( 'TSO', { fullInstall: true, dir: folder } );
   }
 
   /**
@@ -106,23 +106,23 @@ class CompleteInstaller {
    * @returns {Promise<void>} A promise that resolves when the installation is finished.
    */
   step4( folder ) {
-    this.FSOLauncher.IPC.fullInstallProgressItem(
+    this.fsolauncher.IPC.fullInstallProgressItem(
       global.locale.INS_FSO,
       global.locale.INS_DLEX,
       global.locale.INS_INFO,
       75
     );
     if ( folder ) {
-      folder = folder + '/' + this.FSOLauncher.getPrettyName( 'FSO' );
+      folder = folder + '/' + this.fsolauncher.getPrettyName( 'FSO' );
     }
-    return this.FSOLauncher.install( 'FSO', { fullInstall: true, dir: folder } );
+    return this.fsolauncher.install( 'FSO', { fullInstall: true, dir: folder } );
   }
 
   /**
    * When the installation finished.
    */
   end() {
-    this.FSOLauncher.IPC.fullInstallProgressItem(
+    this.fsolauncher.IPC.fullInstallProgressItem(
       global.locale.INS_FINISHED,
       global.locale.INS_PLAY,
       global.locale.INS_PLAY_CLICK,
@@ -136,7 +136,7 @@ class CompleteInstaller {
    * @param {Error} err The error object.
    */
   error( err ) {
-    this.FSOLauncher.IPC.fullInstallProgressItem(
+    this.fsolauncher.IPC.fullInstallProgressItem(
       global.locale.INS_ERROR,
       global.locale.INS_ERROR_DESCR + ' ' + err,
       global.locale.INS_CLOSE,

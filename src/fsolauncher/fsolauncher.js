@@ -599,13 +599,13 @@ class FSOLauncher {
       // Modify registry to point to the override path.
       const registry = require( './lib/registry' );
       if ( componentCode === 'TSO' ) {
-        await registry.createMaxisEntry( options.override );
+        await registry.createMaxisEntry( this, options.override );
       }
       if ( componentCode === 'FSO' ) {
-        await registry.createFreeSOEntry( options.override );
+        await registry.createFreeSOEntry( this, options.override );
       }
       if ( componentCode === 'Simitone' ) {
-        await registry.createSimitoneEntry( options.override );
+        await registry.createSimitoneEntry( this, options.override );
       }
       return false;
     }
@@ -776,26 +776,29 @@ class FSOLauncher {
 
     this.removeActiveTask( 'CHLANG' );
     toast.destroy();
-    this.conf.Game.Language = this.getLangString( this.getLangCode( language ) )[1];
-    this.persist( true );
+
+    return this.updateAndPersistConfig( 
+      'Game', 'Language', this.getLangString( this.getLangCode( language ) )[1]  );
   }
 
   /**
    * Updates a configuration variable based on user input.
    *
    * @param {object} newConfig The new configuration object.
+   * 
+   * @returns {Promise<void>} A promise that resolves when the configuration is updated.
    */
   async setConfiguration( newConfig ) {
     const [ category, key, value ] = newConfig;
 
     if ( category === 'Game' && key === 'Language' ) {
-      this.switchLanguage( value );
+      return this.switchLanguage( value );
     } else if ( key === 'GraphicsMode' ) {
-      await this.handleGraphicsModeChange( value );
+      return this.handleGraphicsModeChange( value );
     } else if ( category === 'Launcher' && key === 'Language' ) {
-      this.setLauncherLanguage( value );
+      return this.setLauncherLanguage( value );
     } else {
-      this.updateAndPersistConfig( category, key, value );
+      return this.updateAndPersistConfig( category, key, value );
     }
   }
 
@@ -803,20 +806,22 @@ class FSOLauncher {
    * Handles changes to the graphics mode setting.
    *
    * @param {string} newValue The new graphics mode value.
+   * 
+   * @returns {Promise<void>} A promise that resolves when the graphics mode is changed.
    */
-  async handleGraphicsModeChange( newValue ) {
+  handleGraphicsModeChange( newValue ) {
     const oldGraphicsMode = this.conf.Game.GraphicsMode;
 
     if ( newValue === 'sw' && oldGraphicsMode !== 'sw' ) {
       if ( ! this.isInstalled.FSO ) {
         Modal.showNeedFSOTSO();
       } else {
-        await this.toggleSoftwareMode( true );
+        return this.toggleSoftwareMode( true );
       }
     } else if ( newValue !== 'sw' && oldGraphicsMode === 'sw' ) {
-      await this.toggleSoftwareMode( false, newValue );
+      return this.toggleSoftwareMode( false, newValue );
     } else {
-      this.updateAndPersistConfig( 'Game', 'GraphicsMode', newValue );
+      return this.updateAndPersistConfig( 'Game', 'GraphicsMode', newValue );
     }
   }
 
@@ -826,6 +831,8 @@ class FSOLauncher {
    * @param {boolean} enable   If true, enable software mode, otherwise
    *                           disable it. 
    * @param {string}  newValue The new graphics mode value.
+   * 
+   * @returns {Promise<void>} A promise that resolves when the graphics mode is changed.
    */
   async toggleSoftwareMode( enable, newValue ) {
     try {
@@ -835,7 +842,7 @@ class FSOLauncher {
       } else {
         await this.disableSoftwareMode();
       }
-      this.updateAndPersistConfig( 'Game', 'GraphicsMode', enable ? 'sw' : newValue );
+      return this.updateAndPersistConfig( 'Game', 'GraphicsMode', enable ? 'sw' : newValue );
     } catch ( err ) {
       captureWithSentry( err );
       console.error( err );
@@ -847,9 +854,11 @@ class FSOLauncher {
    * Sets the launcher language and shows a language change modal.
    *
    * @param {string} value The new language value.
+   * 
+   * @returns {Promise<void>} A promise that resolves when the language is changed.
    */
-  setLauncherLanguage( value ) {
-    this.updateAndPersistConfig( 'Launcher', 'Language', value );
+  async setLauncherLanguage( value ) {
+    await this.updateAndPersistConfig( 'Launcher', 'Language', value );
     Modal.showLanguageOnRestart();
   }
 
@@ -859,10 +868,15 @@ class FSOLauncher {
    * @param {string} category The configuration category.
    * @param {string} key      The configuration key.
    * @param {*}      value    The new configuration value.
+   * 
+   * @returns {Promise<void>} A promise that resolves when the configuration
+   *                          has been updated and persisted.
    */
   updateAndPersistConfig( category, key, value ) {
+    this.conf[category] = this.conf[category] || {};
     this.conf[category][key] = value;
-    this.persist( key !== 'Language' );
+
+    return this.persist();
   }
 
   /**
@@ -923,21 +937,21 @@ class FSOLauncher {
       return Modal.showVolcanicPrompt();
     }
     
-    const fs = require( 'fs-extra' );
     const exeLocation = isSimitone
       ? this.isInstalled.Simitone + '/Simitone.Windows.exe'
       : this.isInstalled.FSO + '/FreeSO.exe';
 
-    fs.stat( exeLocation, ( err, _stat ) => {
+    require( 'fs-extra' ).stat( exeLocation, ( err, _stat ) => {
       if ( err ) {
-        const altExeLocation = isSimitone
-        ? this.isInstalled.Simitone + '/FreeSOClient/Simitone.Windows.exe'
-        : this.isInstalled.FSO + '/FreeSOClient/FreeSO.exe';
-
-        return fs.stat( altExeLocation, ( err, _stat ) => {
-          if ( err ) return Modal.showCouldNotRecover( isSimitone );
-          this.launchGame( false, isSimitone, '/FreeSOClient' );
+        captureWithSentry( err, { 
+          exeLocation, useVolcanic, isSimitone, conf: this.conf, 
+          isInstalled: this.isInstalled
         } );
+        console.error( 'could not find exe', { 
+          exeLocation, useVolcanic, isSimitone, conf: this.conf, 
+          isInstalled: this.isInstalled
+        } );
+        return Modal.showCouldNotRecover( isSimitone );
       }
       this.launchGame( false, isSimitone );
     } );
@@ -956,6 +970,18 @@ class FSOLauncher {
     let cwd = isSimitone
       ? this.isInstalled.Simitone
       : this.isInstalled.FSO;
+
+    if ( ! cwd ) {
+      captureWithSentry( new Error( 'Entered launchGame without cwd' ), { 
+       cwd, file, useVolcanic, isSimitone, 
+       conf: this.conf, isInstalled: this.isInstalled, subfolder
+      } );
+      console.error( 'launchGame with no cwd', { 
+        cwd, file, useVolcanic, isSimitone, 
+        conf: this.conf, isInstalled: this.isInstalled, subfolder
+       } );
+      return Modal.showNeedToPlay();
+    }
 
     const toastText = isSimitone
       ? global.locale.TOAST_LAUNCHING.replace( 'FreeSO', 'Simitone' )
@@ -1074,16 +1100,24 @@ class FSOLauncher {
   /**
    * Save the current state of the configuration.
    *
-   * @param {boolean} _showToast Display a toast while it is saving.
+   * @returns {Promise<void>} A promise that resolves when the configuration is saved.
    */
-  persist( _showToast ) {
+  async persist() {
     const toast = new Toast( global.locale.TOAST_SETTINGS );
-    console.info( 'persist', this.conf );
-    require( 'fs-extra' ).writeFile(
-      global.appData + 'FSOLauncher.ini',
-      require( 'ini' ).stringify( this.conf ),
-      _err => setTimeout( () => toast.destroy(), 1500 )
-    );
+    const fs = require( 'fs-extra' );
+    const ini = require( 'ini' );
+    try {
+      await fs.writeFile(
+        global.appData + 'FSOLauncher.ini',
+        ini.stringify( this.conf )
+      );
+      console.info( 'persist', this.conf );
+    } catch ( err ) {
+      captureWithSentry( err );
+      console.error( 'error persisting', { err, conf: this.conf } );
+    } finally {
+      setTimeout( () => toast.destroy(), 1500 )
+    }
   }
 
   /**

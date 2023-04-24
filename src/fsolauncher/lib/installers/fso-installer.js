@@ -8,11 +8,11 @@ const DOWNLOAD_URL_SERVO = 'https://beta.freeso.org/LauncherResourceCentral/Free
  */
 class FSOInstaller {
   /**
-   * @param {import('../../fsolauncher')} FSOLauncher The FSOLauncher instance.
+   * @param {import('../../fsolauncher')} fsolauncher The FSOLauncher instance.
    * @param {string} path The path to install to.
    */
-  constructor( FSOLauncher, path ) {
-    this.FSOLauncher = FSOLauncher;
+  constructor( fsolauncher, path ) {
+    this.fsolauncher = fsolauncher;
     this.id = Math.floor( Date.now() / 1000 );
     this.path = path;
     this.haltProgress = false;
@@ -27,14 +27,14 @@ class FSOInstaller {
    * @param {number} percentage The percentage to display.
    */
   createProgressItem( message, percentage ) {
-    this.FSOLauncher.IPC.addProgressItem(
+    this.fsolauncher.IPC.addProgressItem(
       `FSOProgressItem${this.id}`,
       'FreeSO Client (from GitHub)',
       `${global.locale.INS_IN} ${this.path}`,
       message, 
       percentage
     );
-    this.FSOLauncher.setProgressBar(
+    this.fsolauncher.setProgressBar(
       percentage == 100 ? 2 : percentage / 100
     );
   }
@@ -101,7 +101,7 @@ class FSOInstaller {
    */
   step4() {
     if ( process.platform === 'darwin' ) return Promise.resolve(); 
-    return require( '../registry' ).createFreeSOEntry( this.path );
+    return require( '../registry' ).createFreeSOEntry( this.fsolauncher, this.path );
   }
 
   /**
@@ -214,7 +214,7 @@ class FSOInstaller {
   end() {
     this.dl.cleanup();
     this.createProgressItem( global.locale.INSTALLATION_FINISHED, 100 );
-    this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
+    this.fsolauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
   }
 
   /**
@@ -225,7 +225,7 @@ class FSOInstaller {
   error( _err ) {
     if ( this.dl ) this.dl.cleanup();
     this.haltProgress = true;
-    this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
+    this.fsolauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
     this.createProgressItem( 
       strFormat( global.locale.FSO_FAILED_INSTALLATION, 'FreeSO' ), 100 
     );

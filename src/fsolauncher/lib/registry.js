@@ -38,7 +38,8 @@ class Registry {
               console.error( 'registry access failed (destroy)', err );
               return resolve( false );
             }
-            console.info( 'registry access ok', 'This user can access the Windows registry' );
+            console.info( 'registry access ok', 
+              '(this user can access the windows registry)' );
             resolve( true );
           } )
         } );
@@ -279,14 +280,15 @@ class Registry {
   /**
    * Creates the default Maxis registry key.
    *
+   * @param {import('../fsolauncher')} fsolauncher
    * @param {string} installDir Where TSO was installed.
    * 
    * @returns {Promise<void>} A promise that resolves when the registry key is created.
    */
-  static async createMaxisEntry( installDir ) {
+  static async createMaxisEntry( installDir, fsolauncher ) {
     // Save to backup registry first
     // Paths saved to local registry have to lead to the exe file
-    await this.saveToLocalRegistry( 'TSO', installDir + '/TSOClient/TSOClient.exe' );
+    await this.saveToLocalRegistry( fsolauncher, 'TSO', installDir + '/TSOClient/TSOClient.exe' );
 
     if ( ! await this.testWinAccess() ) {
       return Promise.resolve();
@@ -406,14 +408,15 @@ class Registry {
   /**
    * Creates the default Simitone Registry Key.
    * 
+   * @param {import('../fsolauncher')} fsolauncher
    * @param {string} installDir Where Simitone was installed.
    * 
    * @returns {Promise<void>} A promise that resolves when the registry key is created.
    */
-  static async createSimitoneEntry( installDir ) {
+  static async createSimitoneEntry( fsolauncher, installDir ) {
     // Save to backup registry first.
     // Paths saved to local registry have to lead to the exe file.
-    await this.saveToLocalRegistry( 'Simitone', installDir + '/Simitone.Windows.exe' );
+    await this.saveToLocalRegistry( fsolauncher, 'Simitone', installDir + '/Simitone.Windows.exe' );
 
     return await this.createGameEntry( installDir, 'Simitone' );
   }
@@ -422,13 +425,14 @@ class Registry {
    * Creates the default FreeSO Registry Key.
    * 
    * @param {string} installDir Where FreeSO was installed.
+   * @param {import('../fsolauncher')} fsolauncher
    * 
    * @returns {Promise<void>} A promise that resolves when the registry key is created.
    */
-  static async createFreeSOEntry( installDir ) {
+  static async createFreeSOEntry( fsolauncher, installDir ) {
     // Save to backup registry first.
     // Paths saved to local registry have to lead to the exe file.
-    await this.saveToLocalRegistry( 'FSO', installDir + '/FreeSO.exe' );
+    await this.saveToLocalRegistry( fsolauncher, 'FSO', installDir + '/FreeSO.exe' );
 
     return await this.createGameEntry( installDir, 'FreeSO' );
   }
@@ -453,27 +457,16 @@ class Registry {
   }
 
   /**
+   * @param {import('../fsolauncher')} fsolauncher
    * @param {string} key
    * @param {string} value
    * 
    * @returns {Promise<void>}
    */
-  static async saveToLocalRegistry( key, value ) {
+  static async saveToLocalRegistry( fsolauncher, key, value ) {
     console.info( 'persisting to local registry', { key, value } );
     try {
-      /**
-       * @type {import('../../main').UserSettings}
-       */
-      const conf = require( 'ini' ).parse( await require( 'fs-extra' )
-        .readFile( global.appData + 'FSOLauncher.ini', 'utf-8' ) );
-
-      conf.LocalRegistry = conf.LocalRegistry || {};
-      conf.LocalRegistry[key] = value;
-
-      await require( 'fs-extra' )
-        .writeFile( global.appData + 'FSOLauncher.ini', require( 'ini' )
-          .stringify( conf ) );
-      console.info( 'persisted to local registry', conf );
+      await fsolauncher.setConfiguration( [ 'LocalRegistry', key, value ] );
     } catch ( err ) {
       captureWithSentry( err );
       console.error( err );

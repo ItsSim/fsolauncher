@@ -8,19 +8,19 @@ const { strFormat } = require( '../utils' );
  */
 class RMSInstaller {
   /**
-   * @param {import('../../fsolauncher')} FSOLauncher The launcher instance.
+   * @param {import('../../fsolauncher')} fsolauncher The launcher instance.
    * @param {string} path The path to install to.
    * @param {string} parentComponent The name of the parent component.
    */
-  constructor( FSOLauncher, path, parentComponent = 'FreeSO' ) {
-    this.FSOLauncher = FSOLauncher;
+  constructor( fsolauncher, path, parentComponent = 'FreeSO' ) {
+    this.fsolauncher = fsolauncher;
     this.id = Math.floor( Date.now() / 1000 );
     this.path = path;
     this.haltProgress = false;
     this.tempPath = `${global.appData}temp/artifacts-remeshes-${this.id}.zip`;
     this.parentComponent = parentComponent;
-    const location = FSOLauncher.remeshInfo.location
-      ? FSOLauncher.remeshInfo.location
+    const location = fsolauncher.remeshInfo.location
+      ? fsolauncher.remeshInfo.location
       : 'https://beta.freeso.org/LauncherResourceCentral/3DModels';
 
     this.dl = download( { from: location, to: this.tempPath } );
@@ -33,14 +33,14 @@ class RMSInstaller {
    * @param {number} percentage The percentage to display.
    */
   createProgressItem( message, percentage ) {
-    this.FSOLauncher.IPC.addProgressItem(
+    this.fsolauncher.IPC.addProgressItem(
       'FSOProgressItem' + this.id,
       global.locale.INS_RPD_FOR + ' ' + this.parentComponent,
       global.locale.INS_IN + ' ' + this.path,
       message,
       percentage
     );
-    this.FSOLauncher.setProgressBar(
+    this.fsolauncher.setProgressBar(
       percentage == 100 ? 2 : percentage / 100
     );
   }
@@ -98,7 +98,7 @@ class RMSInstaller {
     this.dl.cleanup();
     this.haltProgress = true;
     this.createProgressItem( strFormat( global.locale.FSO_FAILED_INSTALLATION, 'Remesh Pack' ), 100 );
-    this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
+    this.fsolauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
   }
 
   /**
@@ -107,7 +107,7 @@ class RMSInstaller {
   end() {
     this.dl.cleanup();
     this.createProgressItem( global.locale.INSTALLATION_FINISHED, 100 );
-    this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
+    this.fsolauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
   }
 
   /**

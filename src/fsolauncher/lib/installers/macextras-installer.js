@@ -7,12 +7,12 @@ const { strFormat } = require( '../utils' );
  */
 class MacExtrasInstaller {
   /**
-   * @param {import('../../fsolauncher')} FSOLauncher The FSOLauncher instance.
+   * @param {import('../../fsolauncher')} fsolauncher The FSOLauncher instance.
    * @param {string} path The path to the installation directory.
    * @param {string} parentComponent The name of the parent component.
    */
-  constructor( FSOLauncher, path, parentComponent = 'FreeSO' ) {
-    this.FSOLauncher = FSOLauncher;
+  constructor( fsolauncher, path, parentComponent = 'FreeSO' ) {
+    this.fsolauncher = fsolauncher;
     this.id = Math.floor( Date.now() / 1000 );
     this.path = path;
     this.haltProgress = false;
@@ -28,14 +28,14 @@ class MacExtrasInstaller {
    * @param {number} percentage The percentage to display.
    */
   createProgressItem( message, percentage ) {
-    this.FSOLauncher.IPC.addProgressItem(
+    this.fsolauncher.IPC.addProgressItem(
       'FSOProgressItem' + this.id,
       `${this.parentComponent} MacExtras`,
       global.locale.INS_IN + ' ' + this.path,
       message,
       percentage
     );
-    this.FSOLauncher.setProgressBar(
+    this.fsolauncher.setProgressBar(
       percentage == 100 ? 2 : percentage / 100
     );
   }
@@ -93,7 +93,7 @@ class MacExtrasInstaller {
     this.dl.cleanup();
     this.haltProgress = true;
     this.createProgressItem( strFormat( global.locale.FSO_FAILED_INSTALLATION, 'macOS Extras' ), 100 );
-    this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
+    this.fsolauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
   }
 
   /**
@@ -102,7 +102,7 @@ class MacExtrasInstaller {
   end() {
     this.dl.cleanup();
     this.createProgressItem( global.locale.INSTALLATION_FINISHED, 100 );
-    this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
+    this.fsolauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
   }
 
   /**
