@@ -92,9 +92,9 @@ class RMSInstaller {
   /**
    * When the installation errors out.
    *
-   * @param {Error} err The error object.
+   * @param {Error} _err The error object.
    */
-  error( err ) {
+  error( _err ) {
     this.dl.cleanup();
     this.haltProgress = true;
     this.createProgressItem( strFormat( global.locale.FSO_FAILED_INSTALLATION, 'Remesh Pack' ), 100 );

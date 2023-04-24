@@ -222,9 +222,9 @@ class FSOInstaller {
   /**
    * When the installation errors out.
    *
-   * @param {Error} err The error object.
+   * @param {Error} _err The error object.
    */
-  error( err ) {
+  error( _err ) {
     if ( this.dl ) this.dl.cleanup();
     this.haltProgress = true;
     this.FSOLauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );

@@ -236,9 +236,9 @@ class Events {
   }
 
   /**
-   * @param {Electron.IpcMainEvent} e The event object.
+   * @param {Electron.IpcMainEvent} _e The event object.
    */
-  onOCIPickFolder( e ) {
+  onOCIPickFolder( _e ) {
     this.FSOLauncher.ociPickFolder();
   }
 }

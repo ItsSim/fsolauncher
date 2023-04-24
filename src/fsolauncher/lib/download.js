@@ -17,7 +17,6 @@ module.exports = function( { from, to, immediate = false } ) {
 
   let _retries = 0,
     _failed,
-    _hasStarted,
     _progress,
     _bytesRead,
     _length,
@@ -29,7 +28,6 @@ module.exports = function( { from, to, immediate = false } ) {
 
   const run = async () => {
     _failed = false;
-    _hasStarted = true;
     _progress = 0;
     _bytesRead = 0;
     _length = 0;
@@ -134,6 +132,7 @@ module.exports = function( { from, to, immediate = false } ) {
   const getDestination = () => to;
   const getOrigin = () => from;
   const getRetries = () => _retries;
+  const getError = () => _error;
 
   if ( immediate ) run();
 
@@ -151,7 +150,8 @@ module.exports = function( { from, to, immediate = false } ) {
     getOrigin,
     hasFailed,
     cleanup,
-    getRetries
+    getRetries,
+    getError
   } );
 };
 
