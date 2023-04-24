@@ -100,7 +100,6 @@ class FSOInstaller {
    * @returns {Promise<void>} A promise that resolves when the key is created.
    */
   step4() {
-    if ( process.platform === 'darwin' ) return Promise.resolve(); 
     return require( '../registry' ).createFreeSOEntry( this.fsolauncher, this.path );
   }
 
