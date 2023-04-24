@@ -170,7 +170,6 @@ class FSOLauncher {
           component: 'FULL'
         },
         extra: {
-          folder,
           isInstalled: this.isInstalled
         }
       } );
