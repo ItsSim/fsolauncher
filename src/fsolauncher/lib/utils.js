@@ -111,8 +111,8 @@ function getJSON( options ) {
     https: net,
   } );
   return new Promise( ( resolve, reject ) => {
-    console.log( 'getJSON:', options );
     const request = https.request( options, res => {
+      console.info( 'getting json', { options, headers: res.headers } );
       let data = '';
       res.on( 'data', chunk => data += chunk );
       res.on( 'end', () => {

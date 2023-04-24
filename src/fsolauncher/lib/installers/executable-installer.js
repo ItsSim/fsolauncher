@@ -12,17 +12,17 @@ class ExecutableInstaller {
       const spawnOptions = { cwd: 'bin' };
       const args = options || [];
       const child = require( 'child_process' ).spawn( file, args, spawnOptions );
-      
+      console.info( 'executing', file, args, spawnOptions );
       child.on( 'close', code => {
-        console.log( file, args, spawnOptions, code );
+        console.info( file, args, spawnOptions, code );
         resolve();
       } );
       child.on( 'error', err => {
-        console.log( file, args, spawnOptions, err );
+        console.info( file, args, spawnOptions, err );
         reject( err );
       } );
-      child.stderr.on( 'data', data => console.log( file, args, spawnOptions, data ) );
-      child.stdout.on( 'data', data => console.log( file, args, spawnOptions, data ) );
+      child.stderr.on( 'data', data => console.error( file, args, spawnOptions, data ) );
+      child.stdout.on( 'data', data => console.info( file, args, spawnOptions, data ) );
     } );
 }
 }

@@ -206,7 +206,7 @@ class Modal {
         }
       } catch ( err ) {
         captureWithSentry( err, { componentName } );
-        console.log( err );
+        console.error( err );
       }
     }
     if ( process.platform === 'darwin' ) {
@@ -472,7 +472,7 @@ class Modal {
       } );
     } catch ( err ) {
       captureWithSentry( err, { title, message, url } );
-      console.log( 'Notification broke:', err );
+      console.error( err );
     }
   }
 

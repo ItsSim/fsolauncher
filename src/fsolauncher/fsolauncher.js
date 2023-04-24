@@ -71,7 +71,7 @@ class FSOLauncher {
       for ( let i = 0; i < programs.length; i++ ) {
         this.isInstalled[programs[i].key] = programs[i].isInstalled;
       }
-      console.log( 'updateInstalledPrograms', this.isInstalled );
+      console.info( 'updateInstalledPrograms', this.isInstalled );
       this.IPC.sendInstalledPrograms( this.isInstalled );
     } finally {
       toast.destroy();
@@ -184,7 +184,7 @@ class FSOLauncher {
    */
   addActiveTask( name ) {
     if ( ! this.isActiveTask( name ) ) {
-      console.log( 'Adding active task:', name );
+      console.info( 'addActiveTask', name );
       this.activeTasks.push( name );
     }
   }
@@ -196,7 +196,7 @@ class FSOLauncher {
    */
   removeActiveTask( name ) {
     if ( name ) {
-      console.log( 'Removing active task:', name );
+      console.info( 'removeActiveTask', name );
       return this.activeTasks.splice( this.activeTasks.indexOf( name ), 1 );
     }
   }
@@ -281,7 +281,7 @@ class FSOLauncher {
       await this.getRemeshData();
     } catch ( err ) {
       captureWithSentry( err );
-      console.log( err );
+      console.error( err );
     }
     if ( this.remeshInfo.version != null ) {
       this.IPC.setRemeshInfo( this.remeshInfo.version );
@@ -312,7 +312,7 @@ class FSOLauncher {
         simitoneUpdateStatus = await this.getSimitoneReleaseInfo();
       } catch ( err ) {
         captureWithSentry( err );
-        console.log( err );
+        console.error( err );
       }
       if ( simitoneUpdateStatus && 
         ( this.conf.Game.SimitoneVersion != simitoneUpdateStatus.tag_name ) ) {
@@ -357,7 +357,7 @@ class FSOLauncher {
         }
       } catch ( err ) {
         captureWithSentry( err, { wasAutomatic } );
-        console.log( err );
+        console.error( err );
         if ( ! wasAutomatic ) Modal.showFailedUpdateCheck();
       } finally {
         toast.destroy();
@@ -397,7 +397,7 @@ class FSOLauncher {
       this.removeActiveTask( options.component );
     } catch ( err ) {
       captureWithSentry( err, { options } );
-      console.log( err );
+      console.error( err );
       Modal.showFailedInstall( this.getPrettyName( options.component ), err );
       this.removeActiveTask( options.component );
     } finally {
@@ -481,7 +481,7 @@ class FSOLauncher {
           await this.getRemeshData();
         } catch ( err ) {
           captureWithSentry( err );
-          console.log( err );
+          console.error( err );
         }
         if ( this.remeshInfo.version == null ) {
           return Modal.showNoRemesh();
@@ -511,7 +511,7 @@ class FSOLauncher {
    */
   async install( componentCode, options = { fullInstall: false, override: false, dir: false } ) {
     this.addActiveTask( componentCode );
-    console.log( 'Installing', componentCode, options );
+    console.info( 'install', componentCode, options );
     try {
       let display = false;
       switch ( componentCode ) {
@@ -605,7 +605,7 @@ class FSOLauncher {
         await registry.createFreeSOEntry( options.override );
       }
       if ( componentCode === 'Simitone' ) {
-        await registry.createFreeSOEntry( options.override, 'Simitone' );
+        await registry.createSimitoneEntry( options.override );
       }
       return false;
     }
@@ -736,15 +736,15 @@ class FSOLauncher {
 
     try {
       process.noAsar = true;
-      const exportTSODir = path.join( __dirname, `../export/language_packs/${language.toUpperCase()}/TSO` )
+      const fsoDir = path.join( __dirname, `../export/language_packs/${language.toUpperCase()}/TSO` )
         .replace( 'app.asar', 'app.asar.unpacked' );
-      const exportFSODir = path.join( __dirname, `../export/language_packs/${language.toUpperCase()}/FSO` )
+      const tsoDir = path.join( __dirname, `../export/language_packs/${language.toUpperCase()}/FSO` )
         .replace( 'app.asar', 'app.asar.unpacked' );
-      await fs.copy( exportTSODir, process.platform == 'win32' ? this.isInstalled.TSO + '/TSOClient' : this.isInstalled.TSO );
-      await fs.copy( exportFSODir, this.isInstalled.FSO );
+      await fs.copy( fsoDir, this.isInstalled.TSO + '/TSOClient' );
+      await fs.copy( tsoDir, this.isInstalled.FSO );
     } catch ( err ) {
       captureWithSentry( err, { language } );
-      console.log( err );
+      console.error( err );
       this.removeActiveTask( 'CHLANG' );
       toast.destroy();
       return Modal.showFSOLangFail();
@@ -757,7 +757,7 @@ class FSOLauncher {
       data = await this.getFSOConfig();
     } catch ( err ) {
       captureWithSentry( err, { language } );
-      console.log( err );
+      console.error( err );
       this.removeActiveTask( 'CHLANG' );
       toast.destroy();
       return Modal.showFirstRun();
@@ -838,7 +838,7 @@ class FSOLauncher {
       this.updateAndPersistConfig( 'Game', 'GraphicsMode', enable ? 'sw' : newValue );
     } catch ( err ) {
       captureWithSentry( err );
-      console.log( err );
+      console.error( err );
       Modal.showGenericError( err.message );
     }
   }
@@ -1008,7 +1008,7 @@ class FSOLauncher {
     if ( process.platform === 'darwin' ) { 
       spawnOptions.shell = true;
     }
-    console.log( 'Running', file + ' ' + args.join( ' ' ), cwd );
+    console.info( 'run', file + ' ' + args.join( ' ' ), cwd );
     ( require( 'child_process' ).spawn( file, args, spawnOptions ) ).unref();
 
     setTimeout( () => { toast.destroy(); }, 5000 );
@@ -1078,32 +1078,12 @@ class FSOLauncher {
    */
   persist( _showToast ) {
     const toast = new Toast( global.locale.TOAST_SETTINGS );
-    console.log( 'persist', this.conf );
+    console.info( 'persist', this.conf );
     require( 'fs-extra' ).writeFile(
       global.appData + 'FSOLauncher.ini',
       require( 'ini' ).stringify( this.conf ),
       _err => setTimeout( () => toast.destroy(), 1500 )
     );
-  }
-
-  /**
-   * Change FreeSO installation path.
-   *
-   * @param {string} dir The installation path.
-   */
-  async changeFSOPath( dir ) {
-    const reg = require( './lib/registry' );
-    try {
-      console.log( 'Changing FSO path:', dir );
-      await reg.createFreeSOEntry( dir );
-      Modal.showChangedGamePath();
-      this.updateInstalledPrograms();
-    } catch ( err ) {
-      captureWithSentry( err );
-      console.log( err );
-      Modal.showGenericError( 
-        'Failed while trying to change the FreeSO installation directory: ' + err );
-    }
   }
 
   /**
@@ -1118,7 +1098,7 @@ class FSOLauncher {
       this.window.setProgressBar( val, options );
     } catch ( err ) {
       captureWithSentry( err );
-      console.log( 'Failed setting ProgressBar', err )
+      console.error( 'setProgressBar', err )
     }
   }
 

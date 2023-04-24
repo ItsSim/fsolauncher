@@ -111,7 +111,6 @@ class FSOInstaller {
    */
   step5() {
     if ( process.platform === 'darwin' ) {
-      console.log( 'Darwin:', 'Downloading MacExtras' );
       this.dl = download( { 
         from: 'https://beta.freeso.org/LauncherResourceCentral/MacExtras', 
         to: `${global.appData}temp/macextras-${this.id}.zip` 
@@ -128,7 +127,6 @@ class FSOInstaller {
    */
   step6() {
     if ( process.platform === 'darwin' ) {
-      console.log( 'Darwin:', 'Extracting MacExtras' );
       return unzip( { 
         from: `${global.appData}temp/macextras-${this.id}.zip`, 
         to: this.path, 
@@ -185,7 +183,7 @@ class FSOInstaller {
       url = apiReleaseInfo[0].full_zip; // Latest version
     } catch ( err ) {
       captureWithSentry( err );
-      console.log( 'Failed getting apiReleaseInfo', err );
+      console.error( 'failed getting api info', err );
     }
     
     if ( ! url ) {
@@ -203,7 +201,7 @@ class FSOInstaller {
         }
       } catch ( err ) {
         captureWithSentry( err );
-        console.log( 'Failed getting githubReleaseInfo', err );
+        console.error( 'failed getting github info', err );
       }
     }
 
@@ -272,9 +270,9 @@ class FSOInstaller {
   cleanup() {
     const fs = require( 'fs-extra' );
     fs.stat( this.tempPath, ( err, _stats ) => {
-      if ( err ) return console.log( err );
+      if ( err ) return console.error( err );
       fs.unlink( this.tempPath, err => {
-        if ( err ) return console.log( err );
+        if ( err ) return console.error( err );
       } );
     } );
   }

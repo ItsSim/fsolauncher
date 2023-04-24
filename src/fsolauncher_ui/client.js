@@ -186,7 +186,7 @@ var ociConfirm;
     try {
       await loadTwitter();
     } catch ( terr ) {
-      console.log( 'Error loading Twitter:', terr );
+      console.error( 'error loading twitter', terr );
     }
   }
 
@@ -255,7 +255,7 @@ var ociConfirm;
       try {
         await loadTwitter();
       } catch ( terr ) {
-        console.log( 'Error loading Twitter:', terr );
+        console.error( 'error loading twitter', terr );
       }
     }
 
@@ -270,7 +270,7 @@ var ociConfirm;
       querySelector( '#rss .alt-content' ).style.display = errors ? 'block' : 'none';
 
       if ( errors || ! response ) {
-        return console.log( 'RSS Failed:', errors, response );
+        return console.error( 'rss feed failed', errors, response );
       }
 
       // Clear the rss container for the new articles.

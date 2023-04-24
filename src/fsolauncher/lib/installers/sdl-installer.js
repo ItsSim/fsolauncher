@@ -166,7 +166,7 @@ class SDLInstaller {
       sudo.exec( cmd, {}, 
         ( err, stdout, stderr ) => {
           if ( err ) return reject( err );
-          console.log( 'SDL2 Installer:', stdout, stderr );
+          console.info( 'sdl2 output', stdout, stderr );
           resolve();
       } );
     } );
@@ -182,7 +182,7 @@ class SDLInstaller {
         return;
       }
       fs.unlink( this.tempPath, function( err ) {
-        if ( err ) return console.log( err );
+        if ( err ) return console.error( err );
       } );
     } );
   }

@@ -126,7 +126,7 @@ class TSOInstaller {
     return new Promise( ( resolve, reject ) => {
       this.dl.run();
       this.dl.events.on( 'error', err => {
-        console.log( err );
+        console.error( err );
       } );
       this.dl.events.on( 'end', _fileName => {
         this.haltProgress = true;
@@ -176,7 +176,7 @@ class TSOInstaller {
         from = `${TEMP_PATH}FilePlanetTSOFiles/Data1.cab`;
       }
     } catch ( err ) {
-      console.log( err );
+      console.error( err );
     }
     return new Promise( ( resolve, reject ) => {
       extract( { from, to: this.path, purge: true },

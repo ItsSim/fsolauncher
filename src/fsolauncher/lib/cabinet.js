@@ -29,7 +29,7 @@ module.exports = function( { from, to, purge = true },
    * @param {any} _uncompSize The uncompressed size.
    */
   const _MSZipDecomp = ( data, _uncompSize ) => {
-    if ( ! ( data[0] === 0x43 && data[1] === 0x4b ) ) console.log( 'MSZIP fail' );
+    if ( ! ( data[0] === 0x43 && data[1] === 0x4b ) ) console.error( 'MSZIP fail' );
     const temp = inflate( data.subarray( 2 ) );
     const view = new Uint8Array( new ArrayBuffer( temp.length ) );
     view.set( temp );

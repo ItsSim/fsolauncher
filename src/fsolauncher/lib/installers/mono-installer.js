@@ -163,7 +163,7 @@ class MonoInstaller {
       sudo.exec( `installer -pkg ${global.appData.replace( / /g, '\\ ' )}temp/mono-${this.id}.pkg -target /`, {}, 
         ( err, stdout, stderr ) => {
           if ( err ) return reject( err );
-          console.log( 'Mono Installer:', stdout, stderr );
+          console.info( 'mono output', stdout, stderr );
           resolve();
       } );
     } );
@@ -179,7 +179,7 @@ class MonoInstaller {
         return;
       }
       fs.unlink( this.tempPath, function( err ) {
-        if ( err ) return console.log( err );
+        if ( err ) return console.error( err );
       } );
     } );
   }

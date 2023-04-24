@@ -112,7 +112,7 @@ class SimitoneInstaller {
    * @returns {Promise<void>} A promise that resolves when the registry key is created.
    */
   step5() {
-    return require( '../registry' ).createFreeSOEntry( this.path, 'Simitone' );
+    return require( '../registry' ).createSimitoneEntry( this.path );
   }
 
   /**
@@ -122,7 +122,6 @@ class SimitoneInstaller {
    */
   step6() {
     if ( process.platform === 'darwin' ) {
-      console.log( 'Darwin:', 'Downloading MacExtras' );
       this.dl = download( { 
         from: 'https://beta.freeso.org/LauncherResourceCentral/MacExtras', 
         to: `${global.appData}temp/macextras-${this.id}.zip` 
@@ -139,7 +138,6 @@ class SimitoneInstaller {
    */
   step7() {
     if ( process.platform === 'darwin' ) {
-      console.log( 'Darwin:', 'Extracting MacExtras' );
       return unzip( { 
         from: `${global.appData}temp/macextras-${this.id}.zip`, 
         to: this.path, 
@@ -218,9 +216,11 @@ class SimitoneInstaller {
   cleanup() {
     const fs = require( 'fs-extra' );
     fs.stat( this.tempPath, ( err, _stats ) => {
-      if ( err ) return console.log( err );
+      if ( err ) {
+        return;
+      }
       fs.unlink( this.tempPath, err => {
-        if ( err ) return console.log( err );
+        if ( err ) return console.error( err );
       } );
     } );
   }

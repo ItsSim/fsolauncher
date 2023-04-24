@@ -194,7 +194,7 @@ class RMSInstaller {
         return;
       }
       fs.unlink( this.tempPath, function( err ) {
-        if ( err ) return console.log( err );
+        if ( err ) return console.error( err );
       } );
     } );
   }

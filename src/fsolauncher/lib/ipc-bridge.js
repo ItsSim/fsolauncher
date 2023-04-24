@@ -359,7 +359,6 @@ class IPCBridge {
    */
   setMaxRefreshRate( rate ) {
     try {
-      console.log( 'Setting max refresh rate to ' + rate );
       this.window.webContents.send( 'MAX_REFRESH_RATE', rate );
     } catch ( err ) {}
   }

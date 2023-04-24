@@ -3,7 +3,7 @@ require( 'v8-compile-cache' );
 
 global.isTestMode = process.argv.includes( '--test-mode' );
 if ( global.isTestMode ) {
-  console.log( 'CI: Test mode enabled' );
+  console.info( 'ci boot test enabled' );
 }
 
 const { initSentry } = require( './fsolauncher/lib/utils' );
@@ -33,8 +33,6 @@ const prevOpenExternal = shell.openExternal;
 shell.openExternal = Object.freeze( url => {
   if ( url.startsWith( 'http' ) || url.startsWith( 'https' ) ) {
     prevOpenExternal( url )
-  } else {
-    console.log( 'openExternal blocked', url )
   }
 } );
 Object.freeze( shell );
@@ -45,7 +43,10 @@ Object.freeze( shell );
  */
 global.appData = process.platform == 'darwin' ?
   `${global.homeDir}/Library/Application Support/FreeSO Launcher/` : '';
-if ( process.platform == 'darwin' ) fs.ensureDirSync( global.appData + 'temp' );
+
+if ( process.platform == 'darwin' ) {
+  fs.ensureDirSync( global.appData + 'temp' );
+}
 
 /** @type {Electron.BrowserWindow} */
 let window;
@@ -71,6 +72,10 @@ let trayIcon;
  * @property {string} Game.GraphicsMode             The game graphics mode.
  * @property {string} Game.Language                 The game language.
  * @property {string} Game.RefreshRate              The game refresh rate.
+ * @property {object} LocalRegistry                 The local registry.
+ * @property {string} LocalRegistry.FSO             The local registry for FSO.
+ * @property {string} LocalRegistry.TSO             The local registry for TSO.
+ * @property {string} LocalRegistry.Simitone        The local registry for Simitone.   
  */
 
 /**
@@ -96,6 +101,7 @@ try {
   };
   fs.writeFileSync( global.appData + 'FSOLauncher.ini', ini.stringify( conf ), 'utf-8' );
 }
+console.info( 'loaded config', conf );
 
 const code = ( ! conf.Launcher.Language || conf.Launcher.Language == 'default' ) ?
   oslocale.sync().substring( 0, 2 ) : conf.Launcher.Language;
@@ -157,7 +163,7 @@ function createWindow() {
 
   window.setMenu( null );
   if ( conf.Launcher.Debug == '1' ) {
-    console.log( 'Debug mode enabled' );
+    console.info( 'debug mode enabled' );
     window.openDevTools( { mode: 'detach' } );
   }
   window.loadURL( `file://${__dirname}/fsolauncher_ui/fsolauncher.pug` );
@@ -203,7 +209,7 @@ function createWindow() {
         }
       } )
       .catch( err => {
-        console.log( err );
+        console.error( err );
         window.show();
       } );
   } );
