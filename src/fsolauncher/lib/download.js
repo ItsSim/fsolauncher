@@ -65,7 +65,7 @@ module.exports = function( { from, to, immediate = false } ) {
    * @param {HttpResponse} r
    */
   const _onDownload = r => {
-    console.info( 'downloading', from, r.headers );
+    console.info( 'downloading', { from, headers: r.headers } );
     if ( ! r ) return _onError( new Error( 'Server did not return a response.' ) );
 
     if ( r.statusCode < 200 || r.statusCode > 299 )

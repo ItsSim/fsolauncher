@@ -25,20 +25,20 @@ class Registry {
     return new Promise( ( resolve, _reject ) => {
       regKey.create( err => {
         if ( err ) {
-          console.error( 'registry access check failed (on create)', err );
+          console.error( 'registry access failed (create)', err );
           return resolve( false );
         }
         regKey.keyExists( function( err, exists ) {
           if ( err || ! exists ) {
-            console.error( 'registry access check failed (on keyExists)', err );
+            console.error( 'registry access failed (keyExists)', err );
             return resolve( false );
           }
           regKey.destroy( function ( err ) {
             if ( err ) {
-              console.error( 'registry access check failed (on destroy)', err );
+              console.error( 'registry access failed (destroy)', err );
               return resolve( false );
             }
-            console.info( 'registry access ok: This user can access the Windows registry' );
+            console.info( 'registry access ok', 'This user can access the Windows registry' );
             resolve( true );
           } )
         } );
@@ -115,12 +115,14 @@ class Registry {
     for ( let i = 0; i < locals.length; i++ ) {
       const local = locals[i];
 
-      console.info( 'testing local', local );
-      if ( ! await require( 'fs-extra' ).pathExists( local ) ) {
+      console.info( 'testing local', { componentCode, local } );
+
+      const exists = await require( 'fs-extra' ).pathExists( local );
+      console.info( 'tested local', { componentCode, local, exists } );
+
+      if ( ! exists ) {
         continue;
       }
-      console.info( 'found local', local );
-
       return this.stripLocalPath( componentCode, local );
     }
     return false;
@@ -187,8 +189,9 @@ class Registry {
     if ( process.platform === 'darwin' ) {
       // when darwin directly test if file exists
       return new Promise( ( resolve, _reject ) => {
+        console.info( 'testing mac', { componentCode, regPath } );
         require( 'fs-extra' ).pathExists( regPath, ( _err, exists ) => {
-          console.info( 'tested mac', componentCode, regPath, exists );
+          console.info( 'tested mac', { componentCode, regPath, exists } );
           resolve( { 
             key: componentCode, 
             isInstalled: exists ? this.stripLocalPath( componentCode, regPath ) : false 
@@ -203,7 +206,6 @@ class Registry {
       if ( componentCode === 'FSO' || componentCode === 'TSO' || componentCode === 'Simitone' ) {
         regKey.get( 'InstallDir', async ( err, item ) => {
           if ( err ) {
-            console.error( err );
             let isInstalled = false;
             try {
               isInstalled = await this.win32LocalPathFallbacks( componentCode );
@@ -215,7 +217,6 @@ class Registry {
       } else if ( componentCode === 'TS1' ) {
         regKey.get( 'InstallPath', async ( err, _item ) => {
           if ( err ) {
-            console.error( err );
             if ( await this.win32LocalPathFallbacks( componentCode ) ) {
               return resolve( { key: componentCode, isInstalled: true } );
             }
@@ -224,7 +225,6 @@ class Registry {
           // SIMS_GAME_EDITION = 255 All EPs installed.
           regKey.get( 'SIMS_GAME_EDITION', async ( err, item ) => {
             if ( err ) {
-              console.error( err );
               if ( await this.win32LocalPathFallbacks( componentCode ) ) {
                 return resolve( { key: componentCode, isInstalled: true } );
               }
@@ -239,7 +239,6 @@ class Registry {
       } else if ( componentCode === 'NET' ) {
         regKey.keys( ( err, registries ) => {
           if ( err ) {
-            console.error( err );
             // Trust our galaxy and return that it’s installed...
             return resolve( { key: componentCode, isInstalled: true, error: err } );
           }
@@ -256,7 +255,6 @@ class Registry {
       } else if ( componentCode === 'OpenAL' ) {
         regKey.keyExists( async( err, exists ) => {
           if ( err ) {
-            console.error( err );
             let isInstalled = false;
             try {
               isInstalled = await this.win32LocalPathFallbacks( componentCode );

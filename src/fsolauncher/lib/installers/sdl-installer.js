@@ -166,7 +166,7 @@ class SDLInstaller {
       sudo.exec( cmd, {}, 
         ( err, stdout, stderr ) => {
           if ( err ) return reject( err );
-          console.info( 'sdl2 output', stdout, stderr );
+          console.info( 'sdl2 output', { stdout, stderr } );
           resolve();
       } );
     } );

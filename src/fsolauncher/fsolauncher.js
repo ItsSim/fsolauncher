@@ -511,7 +511,7 @@ class FSOLauncher {
    */
   async install( componentCode, options = { fullInstall: false, override: false, dir: false } ) {
     this.addActiveTask( componentCode );
-    console.info( 'install', componentCode, options );
+    console.info( 'install', { componentCode, options } );
     try {
       let display = false;
       switch ( componentCode ) {
@@ -1098,7 +1098,7 @@ class FSOLauncher {
       this.window.setProgressBar( val, options );
     } catch ( err ) {
       captureWithSentry( err );
-      console.error( 'setProgressBar', err )
+      console.error( err );
     }
   }
 

@@ -270,7 +270,7 @@ var ociConfirm;
       querySelector( '#rss .alt-content' ).style.display = errors ? 'block' : 'none';
 
       if ( errors || ! response ) {
-        return console.error( 'rss feed failed', errors, response );
+        return console.error( 'rss feed failed', { errors, response } );
       }
 
       // Clear the rss container for the new articles.

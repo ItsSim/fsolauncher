@@ -163,7 +163,7 @@ class MonoInstaller {
       sudo.exec( `installer -pkg ${global.appData.replace( / /g, '\\ ' )}temp/mono-${this.id}.pkg -target /`, {}, 
         ( err, stdout, stderr ) => {
           if ( err ) return reject( err );
-          console.info( 'mono output', stdout, stderr );
+          console.info( 'mono output', { stdout, stderr } );
           resolve();
       } );
     } );
