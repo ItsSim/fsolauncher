@@ -314,7 +314,7 @@ var ociConfirm;
         parser.parseString( await response.text(), parseRss );
       } )
       .catch( error => {
-        console.error( 'An error ocurred getting news:', error );
+        console.error( 'rss fetch failed', error );
         parseRss( error, null )
       } );
 

@@ -25,20 +25,20 @@ class Registry {
     return new Promise( ( resolve, _reject ) => {
       regKey.create( err => {
         if ( err ) {
-          console.error( 'Registry access check failed (on create):', err );
+          console.error( 'registry access check failed (on create)', err );
           return resolve( false );
         }
         regKey.keyExists( function( err, exists ) {
           if ( err || ! exists ) {
-            console.error( 'Registry access check failed (on keyExists):', err );
+            console.error( 'registry access check failed (on keyExists)', err );
             return resolve( false );
           }
           regKey.destroy( function ( err ) {
             if ( err ) {
-              console.error( 'Registry access check failed (on destroy):', err );
+              console.error( 'registry access check failed (on destroy)', err );
               return resolve( false );
             }
-            console.info( 'Registry access OK: This user can access the Windows registry.' );
+            console.info( 'registry access ok: This user can access the Windows registry' );
             resolve( true );
           } )
         } );
@@ -115,11 +115,11 @@ class Registry {
     for ( let i = 0; i < locals.length; i++ ) {
       const local = locals[i];
 
-      console.info( 'testing local:', local );
+      console.info( 'testing local', local );
       if ( ! await require( 'fs-extra' ).pathExists( local ) ) {
         continue;
       }
-      console.info( 'found local:', local );
+      console.info( 'found local', local );
 
       return this.stripLocalPath( componentCode, local );
     }
@@ -188,7 +188,7 @@ class Registry {
       // when darwin directly test if file exists
       return new Promise( ( resolve, _reject ) => {
         require( 'fs-extra' ).pathExists( regPath, ( _err, exists ) => {
-          console.info( 'tested mac:', componentCode, regPath, exists );
+          console.info( 'tested mac', componentCode, regPath, exists );
           resolve( { 
             key: componentCode, 
             isInstalled: exists ? this.stripLocalPath( componentCode, regPath ) : false 

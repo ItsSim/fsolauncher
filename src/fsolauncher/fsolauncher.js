@@ -531,7 +531,7 @@ class FSOLauncher {
           display = await this.handleExecutableInstall( componentCode, options );
           break;
         default:
-          console.error( 'Component not found:', componentCode );
+          console.error( 'invalid componentCode', componentCode );
           this.removeActiveTask( componentCode );
           throw new Error( strFormat( 'Component %s not found', componentCode ) );
       }
