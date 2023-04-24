@@ -285,7 +285,7 @@ class Registry {
    * 
    * @returns {Promise<void>} A promise that resolves when the registry key is created.
    */
-  static async createMaxisEntry( installDir, fsolauncher ) {
+  static async createMaxisEntry( fsolauncher, installDir ) {
     // Save to backup registry first
     // Paths saved to local registry have to lead to the exe file
     await this.saveToLocalRegistry( fsolauncher, 'TSO', installDir + '/TSOClient/TSOClient.exe' );
