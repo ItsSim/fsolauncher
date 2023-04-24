@@ -169,6 +169,8 @@ class FSOLauncher {
       Modal.sendNotification(
         'FreeSO Launcher', global.locale.INS_FINISHED_LONG, null, true, this.isDarkMode()
       );
+    } catch ( err ) {
+      console.error( 'runFullInstall', err );
     } finally {
       setTimeout( () => {
         this.removeActiveTask( 'FULL' );
@@ -543,7 +545,8 @@ class FSOLauncher {
         Modal.showFailedInstall( this.getPrettyName( componentCode ), err );
       }
       this.setProgressBar( 1, { mode: 'error' } );
-      captureWithSentry( err, { component: componentCode, options } );
+      captureWithSentry( err, 
+        { component: componentCode, options, isInstalled: this.isInstalled } );
       throw err;
     } finally {
       setTimeout( () => this.setProgressBar( -1 ), 5000 );
