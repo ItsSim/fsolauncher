@@ -1112,13 +1112,12 @@ class FSOLauncher {
    * @param {Electron.ProgressBarOptions} options The options to use. 
    */
   setProgressBar( val, options ) {
-    if ( this.Window ) {
-      try {
-        this.Window.setProgressBar( val, options );
-      } catch ( err ) {
-        captureWithSentry( err );
-        console.log( 'Failed setting ProgressBar', err )
-      }
+    if ( ! this.Window || this.Window.isDestroyed() ) return;
+    try {
+      this.Window.setProgressBar( val, options );
+    } catch ( err ) {
+      captureWithSentry( err );
+      console.log( 'Failed setting ProgressBar', err )
     }
   }
 
