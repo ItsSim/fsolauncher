@@ -229,11 +229,15 @@
 
 .halloween input,
 .halloween select {
-background-image: url(../../images/15xvbd5.png), 
--webkit-linear-gradient(#15202b, #10171e 95%, #15202b);
+  background-image: -webkit-linear-gradient(#15202b, #10171e 95%, #15202b);
   font-weight: bold;
   color:rgba(255,255,255,0.7) !important;
   border-color:#414141
+}
+
+.halloween select {
+  background-image: url(../../images/15xvbd5.png), 
+  -webkit-linear-gradient(#15202b, #10171e 95%, #15202b);
 }
 
 .halloween option {

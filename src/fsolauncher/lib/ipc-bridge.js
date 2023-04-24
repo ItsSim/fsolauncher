@@ -6,17 +6,17 @@ const { normalizePathSlashes } = require( './utils' );
  */
 class IPCBridge {
   /**
-   * @param {Electron.BrowserWindow} BrowserWindow The window to send messages to.
+   * @param {Electron.BrowserWindow} window The window to send messages to.
    */
-  constructor( BrowserWindow ) { 
-    this.Window = BrowserWindow; 
+  constructor( window ) { 
+    this.window = window; 
   }
 
   /**
    * Loads the FreeSO blog RSS for the main page.
    */
   loadRss() {
-    this.Window.webContents.send( 'LOAD_RSS' );
+    this.window.webContents.send( 'LOAD_RSS' );
   }
 
   /**
@@ -24,7 +24,7 @@ class IPCBridge {
    */
   hasNoInternet() {
     try {
-      this.Window.webContents.send( 'NO_INTERNET' );
+      this.window.webContents.send( 'NO_INTERNET' );
     } catch ( err ) {}
   }
 
@@ -33,7 +33,7 @@ class IPCBridge {
    */
   hasInternet() {
     try {
-      this.Window.webContents.send( 'HAS_INTERNET' );
+      this.window.webContents.send( 'HAS_INTERNET' );
     } catch ( err ) {}
   }
 
@@ -43,7 +43,7 @@ class IPCBridge {
    * @param {string} Theme The name of the theme to change to.
    */
   setTheme( Theme ) {
-    this.Window.webContents.send( 'SET_THEME', Theme );
+    this.window.webContents.send( 'SET_THEME', Theme );
   }
 
   /**
@@ -54,7 +54,7 @@ class IPCBridge {
    *                               values in the settings page.
    */
   restoreConfiguration( Configuration ) {
-    this.Window.webContents.send( 'RESTORE_CONFIGURATION', Configuration );
+    this.window.webContents.send( 'RESTORE_CONFIGURATION', Configuration );
   }
 
   /**
@@ -63,7 +63,7 @@ class IPCBridge {
    * @param {string} page
    */
   changePage( page ) {
-    this.Window.webContents.send( 'CHANGE_PAGE', page );
+    this.window.webContents.send( 'CHANGE_PAGE', page );
   }
 
   /**
@@ -78,8 +78,8 @@ class IPCBridge {
    * @param {string} type        The type of modal to show.
    */
   sendModal( title, text, yesText, noText, modalRespId, extra, type ) {
-    this.Window.focus();
-    this.Window.webContents.send(
+    this.window.focus();
+    this.window.webContents.send(
       'POPUP',
       title,
       text,
@@ -104,7 +104,7 @@ class IPCBridge {
    * @param {string} type        The type of modal to show.
    */
   sendModalNoFocus( title, text, yesText, noText, modalRespId, extra, type ) {
-    this.Window.webContents.send(
+    this.window.webContents.send(
       'POPUP',
       title,
       text,
@@ -188,7 +188,7 @@ class IPCBridge {
     filename = normalizePathSlashes( filename );
     origin = normalizePathSlashes( origin );
     try {
-      this.Window.webContents.send(
+      this.window.webContents.send(
         'CREATE_PROGRESS_ITEM',
         elId,
         filename,
@@ -207,7 +207,7 @@ class IPCBridge {
    */
   stopProgressItem( elId ) {
     try {
-      this.Window.webContents.send( 'STOP_PROGRESS_ITEM', elId );
+      this.window.webContents.send( 'STOP_PROGRESS_ITEM', elId );
     } catch ( err ) {}
   }
 
@@ -221,7 +221,7 @@ class IPCBridge {
    */
   fullInstallProgressItem( title, text1, text2, progress ) {
     try {
-      this.Window.webContents.send(
+      this.window.webContents.send(
         'FULL_INSTALL_PROGRESS_ITEM',
         title,
         text1,
@@ -239,7 +239,7 @@ class IPCBridge {
    */
   toast( id, text ) {
     try {
-      this.Window.webContents.send( 'TOAST', id, text );
+      this.window.webContents.send( 'TOAST', id, text );
     } catch ( err ) {}
   }
 
@@ -250,7 +250,7 @@ class IPCBridge {
    */
   removeToast( id ) {
     try {
-      this.Window.webContents.send( 'REMOVE_TOAST', id );
+      this.window.webContents.send( 'REMOVE_TOAST', id );
     } catch ( err ) {}
   }
 
@@ -261,7 +261,7 @@ class IPCBridge {
    */
   setRemeshInfo( v ) {
     try {
-      this.Window.webContents.send( 'REMESH_INFO', v );
+      this.window.webContents.send( 'REMESH_INFO', v );
     } catch ( err ) {}
   }
 
@@ -272,7 +272,7 @@ class IPCBridge {
    */
   setTip( text ) {
     try {
-      this.Window.webContents.send( 'SET_TIP', text );
+      this.window.webContents.send( 'SET_TIP', text );
     } catch ( err ) {}
   }
 
@@ -283,7 +283,7 @@ class IPCBridge {
    */
   sendSound( sound ) {
     try {
-      this.Window.webContents.send( 'PLAY_SOUND', sound );
+      this.window.webContents.send( 'PLAY_SOUND', sound );
     } catch ( err ) {}
   }
 
@@ -296,7 +296,7 @@ class IPCBridge {
    */
   sendNotifLog( title, body, url ) {
     try {
-      this.Window.webContents.send( 'NOTIFLOG', title, body, url );
+      this.window.webContents.send( 'NOTIFLOG', title, body, url );
     } catch ( err ) {}
   }
 
@@ -308,7 +308,7 @@ class IPCBridge {
    */
   sendInstalledPrograms( list ) {
     try {
-      this.Window.webContents.send( 'INSPROG', list );
+      this.window.webContents.send( 'INSPROG', list );
     } catch ( err ) {}
   }
 
@@ -319,7 +319,7 @@ class IPCBridge {
    */
   sendSimitoneShouldUpdate( v ) {
     try {
-      this.Window.webContents.send( 'SIMITONE_SHOULD_UPDATE', v );
+      this.window.webContents.send( 'SIMITONE_SHOULD_UPDATE', v );
     } catch ( err ) {}    
   }
 
@@ -330,7 +330,7 @@ class IPCBridge {
    */
   sendConsoleLog( str ) {
     try {
-      this.Window.webContents.send( 'CONSOLE_LOG', str );
+      this.window.webContents.send( 'CONSOLE_LOG', str );
     } catch ( err ) {}
   }
 
@@ -341,7 +341,7 @@ class IPCBridge {
    */
   setSimitoneVersion( v ) {
     try {
-      this.Window.webContents.send( 'SIMITONE_SET_VER', v );
+      this.window.webContents.send( 'SIMITONE_SET_VER', v );
     } catch ( err ) {}
   }
 
@@ -350,7 +350,17 @@ class IPCBridge {
    */
   ociPickedFolder( folder ) {
     try {
-      this.Window.webContents.send( 'OCI_PICKED_FOLDER', normalizePathSlashes( folder ) );
+      this.window.webContents.send( 'OCI_PICKED_FOLDER', normalizePathSlashes( folder ) );
+    } catch ( err ) {}
+  }
+
+  /**
+   * @param {string} rate 
+   */
+  setMaxRefreshRate( rate ) {
+    try {
+      console.log( 'Setting max refresh rate to ' + rate );
+      this.window.webContents.send( 'MAX_REFRESH_RATE', rate );
     } catch ( err ) {}
   }
 }

@@ -735,9 +735,19 @@ var ociConfirm;
   }
 
   var isVisible = ( element ) => {
-    const style = window.getComputedStyle( element );
+    var style = window.getComputedStyle( element );
+
     return style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0';
   };
+
+  function filterHz( value, minValue, maxValue ) {
+    if ( parseInt( value ) < minValue ) {
+      return minValue;
+    } else if ( parseInt( value ) > maxValue ) {
+      return maxValue;
+    }
+    return value;
+  }
 
   // Events received from the main process.
   // HAS_INTERNET
@@ -877,6 +887,13 @@ var ociConfirm;
   // FULL_INSTALL_PROGRESS_ITEM
   onMessage( 'FULL_INSTALL_PROGRESS_ITEM', ( a, b, c, e, f ) =>
     updateFullInstallProgressItem( b, c, e, f ) );
+  // MAX_REFRESH_RATE
+  onMessage( 'MAX_REFRESH_RATE', ( a, rate ) => {
+    if ( rate ) {
+      querySelector( '[option-id="Game.RefreshRate"]' )
+        .setAttribute( 'max', rate );
+    }
+  } );
 
   // Renderer HTML event listeners.
   addEventListener( '.launch',                  'click',       () => sendToMain( 'PLAY' ) );
@@ -891,13 +908,25 @@ var ociConfirm;
   addEventListener( '#simitone-should-update',  'click',       () => sendToMain( 'INSTALL_SIMITONE_UPDATE' ) );
   addEventListener( '#overlay',                 'click',       () => clearModals() );
 
-  addEventListenerAll( '[option-id]', 'change', ( a, _b ) => {
-    var c = a.currentTarget.getAttribute( 'option-id' ),
-      e = a.currentTarget.value;
+  addEventListenerAll( '[option-id]', 'change', ( event, _b ) => {
+    var currentTarget = event.currentTarget;
+    var optionId = currentTarget.getAttribute( 'option-id' );
+    var inputValue = currentTarget.value;
+  
+    if ( optionId === 'Launcher.Theme' ) {
+      setTheme( inputValue );
+    }
+    if ( optionId === 'Game.RefreshRate' ) {
+      var min = currentTarget.getAttribute( 'min' );
+      var max = currentTarget.getAttribute( 'max' );
+      var hz = filterHz( inputValue, min, max );
+      if ( hz != inputValue ) {
+        inputValue = currentTarget.value = hz;
+      }
+    }
+    const optionPath = optionId.split( '.' );
 
-    'Launcher.Theme' === c && setTheme( e );
-    c = c.split( '.' );
-    sendToMain( 'SET_CONFIGURATION', [ c[0], c[1], e ] );
+    sendToMain( 'SET_CONFIGURATION', [ optionPath[0], optionPath[1], inputValue ] );
   } );
   addEventListenerAll( '[page-trigger]', 'click', ( a, _b ) => {
     pageTriggerAudio.play();

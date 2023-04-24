@@ -96,12 +96,12 @@ function obfuscatePossibleKeys( data ) {
 /**
  * Captures an error with Sentry.
  * 
- * @param {Error} error The error to capture.
+ * @param {Error} err The error to capture.
  * @param {Object} extra Extra data to send with the error.
  */
-function captureWithSentry( error, extra ) {
+function captureWithSentry( err, extra ) {
   const { captureException } = require( '@sentry/electron' );
-  captureException( error, { extra } );
+  captureException( err, { extra } );
 }
 
 function getJSON( options ) {
@@ -129,10 +129,23 @@ function getJSON( options ) {
   } );
 }
 
+function getDisplayRefreshRate() {
+  const { screen } = require( 'electron' );
+
+  if ( process.platform == 'win32' ) {
+    const primaryDisplay = screen.getPrimaryDisplay();
+    const refreshRate = primaryDisplay.displayFrequency;
+    if ( refreshRate < 30 ) return 30;
+    return refreshRate;
+  }
+  return 60;
+}
+
 module.exports = {
   normalizePathSlashes, 
   strFormat, 
   initSentry, 
   captureWithSentry, 
-  getJSON
+  getJSON,
+  getDisplayRefreshRate
 };

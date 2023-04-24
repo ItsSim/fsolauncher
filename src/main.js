@@ -48,7 +48,7 @@ global.appData = process.platform == 'darwin' ?
 if ( process.platform == 'darwin' ) fs.ensureDirSync( global.appData + 'temp' );
 
 /** @type {Electron.BrowserWindow} */
-let Window;
+let window;
 
 /** @type {Electron.Tray} */
 let tray;
@@ -112,10 +112,12 @@ global.locale.PLATFORM = process.platform;
 global.locale.LANGCODE = code;
 
 global.locale.WS_PORT = global.socketPort;
-global.locale.WS_URL = global.webService;
-global.locale.SENTRY = require( './sentry.config' ).browserLoader;
+global.locale.WS_URL  = global.webService;
+global.locale.SENTRY  = require( './sentry.config' ).browserLoader;
 
-function CreateWindow() {
+global.locale.DEFAULT_REFRESH_RATE = 60;
+
+function createWindow() {
   require( 'electron-pug' )( { pretty: false }, global.locale );
   if ( process.platform == 'darwin' ) {
     const darwinAppMenu = require( './darwin-app-menu' );
@@ -150,17 +152,17 @@ function CreateWindow() {
     preload: require( 'path' ).join( __dirname, './fsolauncher_ui/preload.js' )
   };
 
-  Window = new BrowserWindow( options );
+  window = new BrowserWindow( options );
 
-  Window.setMenu( null );
+  window.setMenu( null );
   if ( conf.Launcher.Debug == '1' ) {
     console.log( 'Debug mode enabled' );
-    Window.openDevTools( { mode: 'detach' } );
+    window.openDevTools( { mode: 'detach' } );
   }
-  Window.loadURL( `file://${__dirname}/fsolauncher_ui/fsolauncher.pug` );
-  Window.on( 'restore', _e => Window.setSize( width, height ) );
+  window.loadURL( `file://${__dirname}/fsolauncher_ui/fsolauncher.pug` );
+  window.on( 'restore', _e => window.setSize( width, height ) );
 
-  launcher = new FSOLauncher( Window, conf );
+  launcher = new FSOLauncher( window, conf );
 
   tray.setToolTip( `FreeSO Launcher ${global.launcherVersion}` );
   tray.setContextMenu( Menu.buildFromTemplate( [
@@ -175,57 +177,57 @@ function CreateWindow() {
       label: global.locale.TRAY_LABEL_2,
       click: () => {
         global.willQuit = true;
-        Window.close();
+        window.close();
       }
     }
   ] ) );
 
   tray.on( 'click', () => {
-    Window.isVisible() ? Window.hide() : Window.show();
+    window.isVisible() ? window.hide() : window.show();
   } );
 
-  Window.on( 'closed', () => { Window = null; } );
+  window.on( 'closed', () => { window = null; } );
 
-  Window.once( 'ready-to-show', () => {
+  window.once( 'ready-to-show', () => {
     launcher
       .updateInstalledPrograms()
       .then( () => {
         if ( conf.Launcher.DirectLaunch === '1' && launcher.isInstalled.FSO ) {
           launcher.launchGame()
           if ( process.platform == 'darwin' ) {
-            Window.show();
+            window.show();
           }
         } else {
-          Window.show();
+          window.show();
         }
       } )
       .catch( err => {
         console.log( err );
-        Window.show();
+        window.show();
       } );
   } );
 
-  Window.on( 'close', e => {
+  window.on( 'close', e => {
     if ( ! global.willQuit && launcher.conf.Launcher.Persistence === '1' ) {
       e.preventDefault();
-      Window.minimize();
+      window.minimize();
     }
   } );
 
-  Window.webContents.setWindowOpenHandler( ( { url } ) => {
+  window.webContents.setWindowOpenHandler( ( { url } ) => {
     shell.openExternal( url );
     return { action: 'deny' };
   } );
 
   if ( global.isTestMode ) {
     global.willQuit = true;
-    Window.webContents.on( 'did-finish-load', () => {
+    window.webContents.on( 'did-finish-load', () => {
       app.quit();
     } );
   }
 }
 
-app.on( 'ready', CreateWindow );
+app.on( 'ready', createWindow );
 
 app.on( 'before-quit', function () {
   if ( tray ) tray.destroy();
@@ -236,7 +238,7 @@ app.on( 'window-all-closed', () => {
 } );
 
 app.on( 'activate', () => {
-  null === Window && CreateWindow();
+  null === window && createWindow();
 } );
 
 const gotTheLock = app.requestSingleInstanceLock();
@@ -245,9 +247,9 @@ if ( ! gotTheLock ) {
   app.quit();
 } else {
   app.on( 'second-instance', ( _event, _commandLine, _workingDirectory ) => {
-    if ( Window ) {
-      Window.show();
-      Window.focus();
+    if ( window ) {
+      window.show();
+      window.focus();
     }
   } );
 }

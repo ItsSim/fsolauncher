@@ -57,12 +57,7 @@ class Events {
    * Fires when the DOM is initialized.
    */
   onInitDOM() {
-    this.FSOLauncher.IPC.setTheme( this.FSOLauncher.conf.Launcher.Theme );
-    this.FSOLauncher.IPC.restoreConfiguration( this.FSOLauncher.conf );
-    this.FSOLauncher.checkRemeshInfo( true );
-    this.FSOLauncher.updateNetRequiredUI( true );
-    this.FSOLauncher.Window.focus();
-    this.FSOLauncher.updateInstalledPrograms( true );
+    this.FSOLauncher.initDOM();
   }
 
   /**

@@ -2,19 +2,19 @@ const Modal = require( './lib/modal' );
 const Events = require( './events' );
 const IPCBridge = require( './lib/ipc-bridge' );
 const Toast = require( './lib/toast' );
-const { captureWithSentry, getJSON, strFormat } = require( './lib/utils' );
+const { captureWithSentry, getJSON, strFormat, getDisplayRefreshRate } = require( './lib/utils' );
 
 /**
  * Main launcher class.
  */
 class FSOLauncher {
   /**
-   * @param {Electron.BrowserWindow} BrowserWindow The main window.
-   * @param {import('../main').UserSettings} UserSettings The configuration object.
+   * @param {Electron.BrowserWindow} window The main window.
+   * @param {import('../main').UserSettings} conf The configuration object.
    */
-  constructor( BrowserWindow, UserSettings ) {
-    this.conf = UserSettings;
-    this.Window = BrowserWindow;
+  constructor( window, conf ) {
+    this.conf = conf;
+    this.window = window;
     this.minimizeReminder = false;
     this.lastUpdateNotification = false;
     this.isSearchingForUpdates = false;
@@ -37,7 +37,7 @@ class FSOLauncher {
       Mono: false,
       SDL: false
     };
-    this.Window.on( 'minimize', () => {
+    this.window.on( 'minimize', () => {
       if ( ! this.minimizeReminder ) {
         Modal.sendNotification(
           'FreeSO Launcher', 
@@ -46,9 +46,9 @@ class FSOLauncher {
         );
         this.minimizeReminder = true;
       }
-      this.Window.hide();
+      this.window.hide();
     } );
-    this.IPC = Toast.IPC = Modal.IPC = new IPCBridge( BrowserWindow );
+    this.IPC = Toast.IPC = Modal.IPC = new IPCBridge( window );
     this.events = new Events( this );
     this.checkUpdatesRecursive();
     this.updateTipRecursive();
@@ -519,7 +519,7 @@ class FSOLauncher {
         case 'MacExtras':
         case 'SDL':
         case 'RMS':
-          display = await this.handleGameDependentInstall( componentCode, options );
+          display = await this.handleSimpleInstall( componentCode, options );
           break;
         case 'TSO':
         case 'FSO':
@@ -553,9 +553,7 @@ class FSOLauncher {
   }
   
   /**
-   * Runs an installer that depends on the game being installed.
-   * For example: the remesh package that needs to be installed where
-   * FreeSO and Simitone is.
+   * Runs an installer that does not need to ask the user for any input.
    * 
    * @param {string}         componentCode       The Component to install.
    * @param {object}         options             The options object.
@@ -565,7 +563,7 @@ class FSOLauncher {
    * 
    * @returns {Promise<boolean>}
    */
-  async handleGameDependentInstall( componentCode, options ) {
+  async handleSimpleInstall( componentCode, options ) {
     const runner = require( `./lib/installers/${componentCode.toLowerCase()}-installer` );
     const subfolder = componentCode === 'RMS' ? '/Content/MeshReplace' : '';
     const installer = new runner( this, this.isInstalled.FSO + subfolder );
@@ -659,7 +657,7 @@ class FSOLauncher {
     }
     await installer.run( file, cmdOptions );
 
-    return true;
+    return false;
   }
 
   /**
@@ -675,7 +673,7 @@ class FSOLauncher {
       `${global.locale.INSTALLER_CHOOSE_WHERE_X} ${this.getPrettyName( componentCode )}`
     );
     const folders = await Modal.showChooseDirectory(
-      this.getPrettyName( componentCode ), this.Window
+      this.getPrettyName( componentCode ), this.window
     );
     toast.destroy();
     if ( folders && folders.length > 0 ) {
@@ -989,6 +987,8 @@ class FSOLauncher {
     if ( isSimitone && this.conf.Game.SimitoneAA === '1' ) {
       args.push( '-aa' );
     }
+    // hz option 
+    args.push( `-hz${this.getEffectiveRefreshRate()}` );
 
     if ( subfolder ) {
       cwd += subfolder;
@@ -1113,9 +1113,9 @@ class FSOLauncher {
    * @param {Electron.ProgressBarOptions} options The options to use. 
    */
   setProgressBar( val, options ) {
-    if ( ! this.Window || this.Window.isDestroyed() ) return;
+    if ( ! this.window || this.window.isDestroyed() ) return;
     try {
-      this.Window.setProgressBar( val, options );
+      this.window.setProgressBar( val, options );
     } catch ( err ) {
       captureWithSentry( err );
       console.log( 'Failed setting ProgressBar', err )
@@ -1135,10 +1135,36 @@ class FSOLauncher {
    * Picks a folder for the OCI (one-click installer) flow.
    */
   async ociPickFolder() {
-    const folders = await Modal.showChooseDirectory( 'FreeSO Game', this.Window );
+    const folders = await Modal.showChooseDirectory( 'FreeSO Game', this.window );
     if ( folders && folders.length > 0 ) {
       this.IPC.ociPickedFolder( folders[0] + '/FreeSO Game' );
     }
+  }
+
+  /**
+   * Once the DOM is ready, this method is called.
+   */
+  initDOM() {
+    this.IPC.setTheme( this.conf.Launcher.Theme );
+    this.IPC.setMaxRefreshRate( getDisplayRefreshRate() );
+    this.IPC.restoreConfiguration( this.conf );
+    this.checkRemeshInfo( true );
+    this.updateNetRequiredUI( true );
+    this.window.focus();
+    this.updateInstalledPrograms( true );
+  }
+
+  /**
+   * Returns the refresh rate to use.
+   * 
+   * @returns {number} The refresh rate to use.
+   */
+  getEffectiveRefreshRate() {
+    const savedRefreshRate = this.conf?.Game?.RefreshRate;
+    if ( ! savedRefreshRate ) {
+      return getDisplayRefreshRate();
+    }
+    return parseInt( savedRefreshRate );
   }
 }
 

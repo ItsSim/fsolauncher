@@ -225,6 +225,18 @@ html(class=PLATFORM + ' ' + LANGCODE)
                                     option(value='1') #{SETTINGS_ENABLED}
                                 small
                                     | #{TD_MODE_HINT} #{SETTINGS_APPLIES_TO}
+                            div 
+                                span #{SETTINGS_REFRESH_RATE}
+                                input(
+                                    type='number', 
+                                    option-id='Game.RefreshRate', 
+                                    min='30', 
+                                    max=DEFAULT_REFRESH_RATE,
+                                    step='1', 
+                                    value=DEFAULT_REFRESH_RATE
+                                )
+                                small 
+                                    | #{SETTINGS_REFRESH_RATE_HINT} #{SETTINGS_APPLIES_TO}
                             div
                                 span #{SETTINGS_LANG}
                                 select(option-id='Game.Language')

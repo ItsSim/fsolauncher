@@ -191,11 +191,11 @@ class Modal {
    * Shows a FilePicker to install the game.
    *
    * @param {string} componentName The visual name of the Component.
-   * @param {Electron.BrowserWindow} Window The window to show the FilePicker in.
+   * @param {Electron.BrowserWindow} window The window to show the FilePicker in.
    * 
    * @returns {Promise<string>} The chosen path.
    */
-  static async showChooseDirectory( componentName, Window ) {
+  static async showChooseDirectory( componentName, window ) {
     let defaultPath = null;
     if ( process.platform === 'win32' ) {
       try {
@@ -213,7 +213,7 @@ class Modal {
       defaultPath = '~/Documents';
     }
     const response = await require( 'electron' )
-      .dialog.showOpenDialog( Window,
+      .dialog.showOpenDialog( window,
       {
         properties: [ 'openDirectory' ],
         title: `${global.locale.MODAL_INSTALL} ${componentName}`,
