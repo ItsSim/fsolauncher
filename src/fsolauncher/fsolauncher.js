@@ -63,19 +63,14 @@ class FSOLauncher {
    *                          list and paths have been updated.
    */
   async updateInstalledPrograms() {
-    const toast = new Toast( global.locale.TOAST_REGISTRY );
-    try {
-      const registry = require( './lib/registry' ),
-        programs = await registry.getInstalled();
+    const registry = require( './lib/registry' ),
+      programs = await registry.getInstalled();
 
-      for ( let i = 0; i < programs.length; i++ ) {
-        this.isInstalled[programs[i].key] = programs[i].isInstalled;
-      }
-      console.info( 'updateInstalledPrograms', this.isInstalled );
-      this.IPC.sendInstalledPrograms( this.isInstalled );
-    } finally {
-      toast.destroy();
+    for ( let i = 0; i < programs.length; i++ ) {
+      this.isInstalled[programs[i].key] = programs[i].isInstalled;
     }
+    console.info( 'updateInstalledPrograms', this.isInstalled );
+    this.IPC.sendInstalledPrograms( this.isInstalled );
   }
 
   /**
@@ -1177,7 +1172,6 @@ class FSOLauncher {
     this.checkRemeshInfo();
     this.updateNetRequiredUI();
     this.window.focus();
-    // this.updateInstalledPrograms();
   }
 
   /**
