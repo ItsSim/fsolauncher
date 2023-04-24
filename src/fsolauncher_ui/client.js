@@ -915,9 +915,13 @@ var ociConfirm;
     if ( optionId === 'Game.RefreshRate' ) {
       var min = currentTarget.getAttribute( 'min' );
       var max = currentTarget.getAttribute( 'max' );
-      var hz = filterHz( inputValue, min, max );
-      if ( hz != inputValue ) {
-        inputValue = currentTarget.value = hz;
+      if ( ! inputValue ) {
+        inputValue = currentTarget.value = max;
+      } else {
+        var hz = filterHz( inputValue, min, max );
+        if ( hz != inputValue ) {
+          inputValue = currentTarget.value = hz;
+        }
       }
     }
     const optionPath = optionId.split( '.' );
