@@ -585,7 +585,7 @@ class FSOLauncher {
   /**
    * Handles the standard installation process for a given component.
    * 
-   * @param {string} componentCode The code for the component being installed.
+   * @param {string}         componentCode       The code for the component being installed.
    * @param {object}         options             The options object.
    * @param {boolean}        options.fullInstall Whether to do a full install.
    * @param {string|boolean} options.override    The path to change to.
@@ -640,7 +640,7 @@ class FSOLauncher {
   /**
    * Handles the installation process for an executable component.
    * 
-   * @param {string} componentCode The code for the component being installed.
+   * @param {string}         componentCode       The code for the component being installed.
    * @param {object}         options             The options object.
    * @param {boolean}        options.fullInstall Whether to do a full install.
    * @param {string|boolean} options.override    The path to change to.

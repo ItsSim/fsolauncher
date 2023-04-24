@@ -93,7 +93,6 @@ class TSOInstaller {
    * @returns {Promise<void>} A promise that resolves when the files are extracted.
    */
   step3() {
-    // extract zip
     return this.extractZip();
   }
 
