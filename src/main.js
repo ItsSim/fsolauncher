@@ -184,7 +184,7 @@ function createWindow() {
       label: global.locale.TRAY_LABEL_2,
       click: () => {
         global.willQuit = true;
-        window.close();
+        window?.close();
       }
     }
   ] ) );
