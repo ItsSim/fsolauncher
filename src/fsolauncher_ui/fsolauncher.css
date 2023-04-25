@@ -1306,6 +1306,13 @@ a {
   padding-left: 0;
 }
 
+#notifications-page div.notification .notification-link {
+  float: right;
+  font-family: 'Munged';
+  text-decoration: none;
+  border-bottom: 1px dotted;
+}
+
 #notifications-page div.notification span {
   font-family: 'Munged';
 }

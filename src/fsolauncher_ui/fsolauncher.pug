@@ -13,8 +13,21 @@ html(class=PLATFORM + ' ' + LANGCODE)
         link(rel='stylesheet', href='./styles/themes/simitone.css')
         if SENTRY != 'SENTRY_CI_BROWSER_LOADER'
             script(src=SENTRY, crossorigin="anonymous")
-            script(src='sentry-onload.js')        
-    body(class=LTHEME monthString=MONTHS, readMoreString=READ_MORE, rss=RSS_URL, wsUrl=WS_URL, wsPort=WS_PORT, twUrl=TW_URL)
+            script(src='sentry-onload.js')
+        script.
+            window.PUG_VARS = {
+                LTHEME  : "#{LTHEME}",
+                RSS_URL : "#{RSS_URL}",
+                WS_URL  : "#{WS_URL}",
+                WS_PORT : "#{WS_PORT}",
+                TW_URL  : "#{TW_URL}",     
+                STRINGS : {
+                    READ_MORE: "#{READ_MORE}",
+                    MONTHS: "#{MONTHS}",
+                    NOTIFICATION_LINK: "#{NOTIFICATION_LINK}",
+                }
+            };
+    body(class=LTHEME)
         #launcher.not-installed
             .hint.arrow-left(hint-page='home', style='top:245px;left:255px')
                 h1 #{TOOLTIP_TITLE_1}

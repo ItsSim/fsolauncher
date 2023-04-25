@@ -1,3 +1,4 @@
+/* global PUG_VARS */
 var parser = new window.RSSParser();
 var querySelector = q => document.querySelector( q );
 var querySelectorAll = q => document.querySelectorAll( q );
@@ -26,7 +27,7 @@ var ociPickFolder;
 var ociConfirm;
 
 ( () => {
-  var socket = window.io( `https://${querySelector( 'body' ).getAttribute( 'wsUrl' )}:${querySelector( 'body' ).getAttribute( 'wsPort' )}` );
+  var socket = window.io( `https://${PUG_VARS.WS_URL}:${PUG_VARS.WS_PORT}` );
   var pageTriggerAudio = new window.Howl( { src: 'sounds/click.wav', volume: 0.4 } );
   var yesNoAudio = new window.Howl( { src: 'sounds/modal.wav', volume: 0.4 } );
   var okAudio = new window.Howl( { src: 'sounds/ok.wav', volume: 0.4 } );
@@ -150,19 +151,27 @@ var ociConfirm;
    * Returns the date as x time ago.
    */
   var ago = date => {
-    var b = Math.floor( ( new Date - date ) / 1000 );
-    return 5 > b ? 'just now' :
-      60 > b ? b + ' seconds ago' :
-        3600 > b ? ( date = Math.floor( b / 60 ),
-          1 < date ? date + ' minutes ago' : '1 minute ago' ) :
-          86400 > b ? ( date = Math.floor( b / 3600 ),
-            1 < date ? date + ' hours ago' : '1 hour ago' ) :
-            172800 > b ? ( date = Math.floor( b / 86400 ),
-              1 < date ? date + ' days ago' : '1 day ago' ) :
-              date.getDate().toString() + ' ' +
-              querySelector( 'body' ).getAttribute( 'monthString' )
-                .split( ' ' )[date.getMonth()] + ', ' + date.getFullYear();
-  }
+    var b = Math.floor( ( new Date() - date ) / 1000 );
+  
+    if ( 5 > b ) {
+      return 'just now';
+    } else if ( 60 > b ) {
+      return b + ' seconds ago';
+    } else if ( 3600 > b ) {
+      date = Math.floor( b / 60 );
+      return ( 1 < date ) ? date + ' minutes ago' : '1 minute ago';
+    } else if ( 86400 > b ) {
+      date = Math.floor( b / 3600 );
+      return ( 1 < date ) ? date + ' hours ago' : '1 hour ago';
+    } else if ( 172800 > b ) {
+      date = Math.floor( b / 86400 );
+      return ( 1 < date ) ? date + ' days ago' : '1 day ago';
+    } else {
+      return date.getDate().toString() + ' ' +
+        PUG_VARS.STRINGS.MONTHS.split( ' ' )[date.getMonth()] + ', ' +
+        date.getFullYear();
+    }
+  };
 
   /**
    * Changes the launcher theme.
@@ -232,7 +241,7 @@ var ociConfirm;
    * Obtains and displays blog articles from the official blog.
    */
   var fetchNews = async userRequested => {
-    var $rssUrl = querySelector( 'body' ).getAttribute( 'rss' );
+    var $rssUrl = PUG_VARS.RSS_URL;
     var $didYouKnow = querySelector( '#did-you-know' );
     var $rss = querySelector( '#rss' );
     var $spinner = querySelector( '#rss-loading' );
@@ -294,9 +303,7 @@ var ociConfirm;
           .replace( /\n/g, '' );
 
         articleDiv.innerHTML = window.DOMPurify.sanitize( articleContent );
-        articleLink.textContent = document
-          .querySelector( 'body' )
-          .getAttribute( 'readMoreString' );
+        articleLink.textContent = PUG_VARS.STRINGS.READ_MORE;
         articleLink.className = 'button';
         articleLink.setAttribute( 'href', entry.link );
         articleLink.setAttribute( 'target', '_blank' );
@@ -362,7 +369,7 @@ var ociConfirm;
       $preloadElement.setAttribute( 'data-height', '490' );
       $preloadElement.setAttribute( 'data-theme', twitterTheme );
       $preloadElement.setAttribute( 'data-chrome', 'transparent' );
-      $preloadElement.setAttribute( 'href', querySelector( 'body' ).getAttribute( 'twUrl' ) );
+      $preloadElement.setAttribute( 'href', PUG_VARS.TW_URL );
       $preloadElement.innerHTML = '@FreeSOGame on Twitter';
       querySelector( '#did-you-know' ).append( $preloadElement );
       var $prevWidget = querySelector( '#tw' );
@@ -475,6 +482,7 @@ var ociConfirm;
    * @param {string} url   Notification url (optional).
    */
   var createNotificationItem = ( title, body, url ) => {
+    url = 'https://beta.freeso.org';
     querySelector( '#notifications-page .alt-content' ).style.display = 'none';
 
     var id = Math.floor( Date.now() / 1000 );
@@ -498,10 +506,9 @@ var ociConfirm;
 
     if ( url ) {
       var btn = document.createElement( 'a' );
-      btn.className = 'button material-icons';
+      btn.className = 'notification-link';
       btn.target = '_blank';
-      btn.style = 'float:right;margin-top:-15px;border-radius:50%';
-      btn.innerHTML = 'link';
+      btn.innerHTML = PUG_VARS.STRINGS.NOTIFICATION_LINK;
       btn.href = url;
     }
 
