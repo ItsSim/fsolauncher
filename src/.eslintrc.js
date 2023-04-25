@@ -25,6 +25,7 @@ module.exports = {
         'space-before-blocks': [ 'error', 'always' ],
         'array-bracket-spacing': [ 'error', 'always' ],
         'quotes': [ 'error', 'single' ],
+        'semi': [ 'error', 'always' ],
         'keyword-spacing': [
             'error', { 'before': true, 'after': true }
         ],
