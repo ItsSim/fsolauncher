@@ -127,7 +127,7 @@ module.exports = function( { from, to, immediate = false } ) {
   const cleanup = async () => {
     _request && _request.abort();
     _fileStream && _fileStream.end();
-    return await fs.remove( to );
+    return fs.remove( to );
   };
   const getDestination = () => to;
   const getOrigin = () => from;

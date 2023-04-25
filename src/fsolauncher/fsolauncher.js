@@ -156,7 +156,7 @@ class FSOLauncher {
    * @param {string} folder Folder to install the game to.
    */
   async runFullInstall( folder ) {
-    const fullInstaller = new ( require( './lib/installers/complete-installer' ) )( this );
+    const fullInstaller = new ( require( './lib/installers/complete' ) )( this );
     try {
       this.addActiveTask( 'FULL' );
       await fullInstaller.install( folder );
@@ -214,26 +214,7 @@ class FSOLauncher {
    * @returns {string} The component's pretty name.
    */
   getPrettyName( componentCode ) {
-    switch ( componentCode ) {
-      case 'TSO':
-        return 'The Sims Online';
-      case 'FSO':
-        return 'FreeSO';
-      case 'OpenAL':
-        return 'OpenAL';
-      case 'NET':
-        return '.NET Framework';
-      case 'RMS':
-        return 'Remesh Package';
-      case 'Simitone':
-        return 'Simitone for Windows';
-      case 'Mono':
-        return 'Mono Runtime';
-      case 'MacExtras':
-        return 'FreeSO MacExtras';
-      case 'SDL':
-        return 'SDL2';
-    }
+    return require( './constants' ).components[componentCode];
   }
 
   /**
@@ -436,12 +417,8 @@ class FSOLauncher {
    * @returns {Array<string>} An array of missing dependencies' pretty names.
    */
   getMissingDependencies( componentCode ) {
-    const dependencies = {
-      'FSO': [ 'TSO', ...( process.platform === 'darwin' ? [ 'Mono', 'SDL' ] : [ 'OpenAL' ] ) ],
-      'RMS': [ 'FSO' ],
-      'MacExtras': [ 'FSO' ],
-      'Simitone': ( process.platform === 'darwin' ) ? [ 'Mono', 'SDL' ] : []
-    };
+    const dependencies = require( './constants' ).dependency;
+
     return ( dependencies[componentCode] || [] )
       .filter( dependency => ! this.isInstalled[dependency] )
       .map( dependency => this.getPrettyName( dependency ) );
@@ -456,15 +433,7 @@ class FSOLauncher {
    *                    false otherwise.
    */
   requiresInternet( componentCode ) {
-    return [ 
-      'TSO', 
-      'FSO', 
-      'RMS', 
-      'Simitone', 
-      'Mono', 
-      'MacExtras', 
-      'SDL' 
-    ].includes( componentCode );
+    return require( './constants' ).needInternet.includes( componentCode );
   }
 
   /**
@@ -566,7 +535,7 @@ class FSOLauncher {
    * @returns {Promise<boolean>}
    */
   async handleSimpleInstall( componentCode, options ) {
-    const runner = require( `./lib/installers/${componentCode.toLowerCase()}-installer` );
+    const runner = require( './lib/installers' )[componentCode];
     const subfolder = componentCode === 'RMS' ? '/Content/MeshReplace' : '';
     const installer = new runner( this, this.isInstalled.FSO + subfolder );
     if ( ! options.fullInstall ) {
@@ -595,7 +564,7 @@ class FSOLauncher {
    * @returns {Promise<boolean>}
    */
   async handleStandardInstall( componentCode, options ) {
-    const runner = require( `./lib/installers/${componentCode.toLowerCase()}-installer` );
+    const runner = require( './lib/installers' )[componentCode];
 
     if ( options.override ) {
       const { 
@@ -655,7 +624,7 @@ class FSOLauncher {
    * @returns {Promise<boolean>}
    */
   async handleExecutableInstall( componentCode, options ) {
-    const runner = require( './lib/installers/executable-installer' );
+    const runner = require( './lib/installers/executable' );
     const installer = new runner();
     const file = componentCode === 'NET' ? 'NDP46-KB3045560-Web.exe' : 'oalinst.exe';
     let cmdOptions;
@@ -698,7 +667,7 @@ class FSOLauncher {
    */
   async obtainInstallDirectory( componentCode ) {
     if ( await ( require( './lib/registry' ).testWinAccess() ) ) {
-      return await this.askForInstallFolder( componentCode );
+      return this.askForInstallFolder( componentCode );
     } else {
       // Use well-known paths.
       if ( process.platform == 'darwin' ) {
@@ -1078,13 +1047,7 @@ class FSOLauncher {
    * @returns {number} The language code.
    */
   getLangCode( lang ) {
-    const codes = {
-      en: 0,
-      es: 6,
-      it: 5,
-      pt: 14
-    };
-    return codes[lang];
+    return require( './constants' ).langCodes[lang];
   }
 
   /**
@@ -1095,13 +1058,7 @@ class FSOLauncher {
    * @returns {string[]} The language strings.
    */
   getLangString( code ) {
-    const languageStrings = {
-      0:  [ 'English',    'en' ], // default
-      6:  [ 'Spanish',    'es' ],
-      5:  [ 'Italian',    'it' ],
-      14: [ 'Portuguese', 'pt' ]
-    };
-    return languageStrings[code];
+    return require( './constants' ).langStrings[code];
   }
 
   /**

@@ -420,7 +420,7 @@ class Registry {
     // Paths saved to local registry have to lead to the exe file.
     await Registry.saveToLocalRegistry( fsolauncher, 'Simitone', installDir + '/Simitone.Windows.exe' );
 
-    return await Registry.createGameEntry( installDir, 'Simitone' );
+    return Registry.createGameEntry( installDir, 'Simitone' );
   }
 
   /**
@@ -436,7 +436,7 @@ class Registry {
     // Paths saved to local registry have to lead to the exe file.
     await Registry.saveToLocalRegistry( fsolauncher, 'FSO', installDir + '/FreeSO.exe' );
 
-    return await Registry.createGameEntry( installDir, 'FreeSO' );
+    return Registry.createGameEntry( installDir, 'FreeSO' );
   }
 
   /**
