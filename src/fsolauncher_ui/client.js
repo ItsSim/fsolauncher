@@ -441,7 +441,6 @@ let ociConfirm;
    * @param {string} url   Notification url (optional).
    */
   function createNotification( title, body, url ) {
-    url = 'https://beta.freeso.org';
     querySelector( '#notifications-page .alt-content' ).style.display = 'none';
 
     const id = Math.floor( Date.now() / 1000 );
