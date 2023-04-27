@@ -40,7 +40,7 @@ class FSOLauncher {
     this.window.on( 'minimize', () => {
       if ( ! this.minimizeReminder ) {
         Modal.sendNotification(
-          'FreeSO Launcher', 
+          'FreeSO Launcher',
           global.locale.MINIMIZE_REMINDER,
           null, null, this.isDarkMode()
         );
@@ -67,7 +67,7 @@ class FSOLauncher {
       programs = await registry.getInstalled();
 
     for ( let i = 0; i < programs.length; i++ ) {
-      this.isInstalled[programs[i].key] = programs[i].isInstalled;
+      this.isInstalled[ programs[ i ].key ] = programs[ i ].isInstalled;
     }
     console.info( 'updateInstalledPrograms', this.isInstalled );
     this.IPC.sendInstalledPrograms( this.isInstalled );
@@ -92,7 +92,7 @@ class FSOLauncher {
       global.locale.TIP12,
       global.locale.TIP13
     ];
-    const randomTip = tips[Math.floor( Math.random() * tips.length )];
+    const randomTip = tips[ Math.floor( Math.random() * tips.length ) ];
 
     this.IPC.setTip( randomTip );
     setTimeout( () => this.updateTipRecursive(), 10000 );
@@ -152,7 +152,7 @@ class FSOLauncher {
   /**
    * Installs the game using the complete installer which installs FreeSO,
    * OpenAL, .NET, Mono, SDL, Mac-extras and The Sims Online.
-   * 
+   *
    * @param {string} folder Folder to install the game to.
    */
   async runFullInstall( folder ) {
@@ -176,7 +176,7 @@ class FSOLauncher {
   /**
    * Adds a task in progress.
    *
-   * @param {string} name Name of the task in progress. 
+   * @param {string} name Name of the task in progress.
    */
   addActiveTask( name ) {
     if ( ! this.isActiveTask( name ) ) {
@@ -210,11 +210,11 @@ class FSOLauncher {
    * Returns a component's hard-coded pretty name.
    *
    * @param {string} componentCode The component's name.
-   * 
+   *
    * @returns {string} The component's pretty name.
    */
   getPrettyName( componentCode ) {
-    return require( './constants' ).components[componentCode];
+    return require( './constants' ).components[ componentCode ];
   }
 
   /**
@@ -240,8 +240,8 @@ class FSOLauncher {
   async getLauncherData() {
     const data = await getJSON( {
       host: global.webService,
-      path: `/${global.updateEndpoint}?os=${require( 'os' ).release()}` + 
-      `&version=${global.launcherVersion}` + 
+      path: `/${global.updateEndpoint}?os=${require( 'os' ).release()}` +
+      `&version=${global.launcherVersion}` +
       `&fso=${( this.isInstalled && this.isInstalled.FSO ) ? '1' : '0'}`
     } );
     this.updateLocation = data.Location;
@@ -274,10 +274,10 @@ class FSOLauncher {
    * @returns {Promise<void>} A promise that resolves when the check is complete.
    */
   async checkSimitoneRequirements() {
-    const { 
-      get, 
-      getSimitonePath, 
-      getTS1Path 
+    const {
+      get,
+      getSimitonePath,
+      getTS1Path
     } = require( './lib/registry' );
 
     new Toast( global.locale.TOAST_CHECKING_UPDATES, 1500 );
@@ -299,7 +299,7 @@ class FSOLauncher {
         captureWithSentry( err );
         console.error( err );
       }
-      if ( simitoneUpdateStatus && 
+      if ( simitoneUpdateStatus &&
         ( this.conf.Game.SimitoneVersion != simitoneUpdateStatus.tag_name ) ) {
         this.IPC.sendSimitoneShouldUpdate( simitoneUpdateStatus.tag_name );
       } else {
@@ -309,8 +309,8 @@ class FSOLauncher {
       this.IPC.setSimitoneVersion( null );
       this.IPC.sendSimitoneShouldUpdate( false );
     }
-    this.isInstalled['Simitone'] = Simitone.isInstalled;
-    this.isInstalled['TS1'] = TS1.isInstalled;
+    this.isInstalled[ 'Simitone' ] = Simitone.isInstalled;
+    this.isInstalled[ 'TS1' ] = TS1.isInstalled;
     this.IPC.sendInstalledPrograms( this.isInstalled );
     //toast.destroy();
   }
@@ -320,7 +320,7 @@ class FSOLauncher {
    *
    * @param {boolean} wasAutomatic Indicates if it has been requested by the recursive loop
    *                               to not spam the user with possible request error modals.
-   * 
+   *
    * @returns {Promise<void>} A promise that resolves when the update check is complete.
    */
   async checkLauncherUpdates( wasAutomatic ) {
@@ -363,10 +363,10 @@ class FSOLauncher {
   /**
    * Changes the game path in the registry.
    *
-   * @param {object}         options           The options object.
+   * @param {Object}         options           The options object.
    * @param {string}         options.component The component to change the path for.
    * @param {string|boolean} options.override  The path to change to.
-   * 
+   *
    * @returns {Promise<void>} A promise that resolves when the path is changed.
    */
   async changeGamePath( options ) {
@@ -413,14 +413,14 @@ class FSOLauncher {
    *
    * @param {string} componentCode The Component for which dependencies
    *                               should be checked.
-   * 
+   *
    * @returns {Array<string>} An array of missing dependencies' pretty names.
    */
   getMissingDependencies( componentCode ) {
     const dependencies = require( './constants' ).dependency;
 
-    return ( dependencies[componentCode] || [] )
-      .filter( dependency => ! this.isInstalled[dependency] )
+    return ( dependencies[ componentCode ] || [] )
+      .filter( dependency => ! this.isInstalled[ dependency ] )
       .map( dependency => this.getPrettyName( dependency ) );
   }
 
@@ -428,7 +428,7 @@ class FSOLauncher {
    * Checks if a component requires an internet connection for installation.
    *
    * @param {string} componentCode The Component to be checked.
-   * 
+   *
    * @returns {boolean} True if the component requires internet access,
    *                    false otherwise.
    */
@@ -458,7 +458,7 @@ class FSOLauncher {
         }
       }
     }
-    if ( ! this.isInstalled[componentCode] ) {
+    if ( ! this.isInstalled[ componentCode ] ) {
       Modal.showFirstInstall( prettyName, componentCode );
     } else {
       Modal.showReInstall( prettyName, componentCode );
@@ -467,16 +467,16 @@ class FSOLauncher {
 
   /**
    * Installs a single Component.
-   * 
+   *
    * Each switch case instantiates and runs a different installer.
    * Any errors that are thrown should be handled by the caller.
    *
    * @param {string}         componentCode       The Component to install.
-   * @param {object}         options             The options object.
+   * @param {Object}         options             The options object.
    * @param {boolean}        options.fullInstall Whether to do a full install.
    * @param {string|boolean} options.override    The path to change to.
    * @param {string}         options.dir         A predefined directory to install to.
-   * 
+   *
    * @returns {Promise<void>} A promise that resolves when the Component is installed.
    */
   async install( componentCode, options = { fullInstall: false, override: false, dir: false } ) {
@@ -485,25 +485,25 @@ class FSOLauncher {
     try {
       let display = false;
       switch ( componentCode ) {
-        case 'Mono':
-        case 'MacExtras':
-        case 'SDL':
-        case 'RMS':
-          display = await this.handleSimpleInstall( componentCode, options );
-          break;
-        case 'TSO':
-        case 'FSO':
-        case 'Simitone':
-          display = await this.handleStandardInstall( componentCode, options );
-          break;
-        case 'OpenAL':
-        case 'NET':
-          display = await this.handleExecutableInstall( componentCode, options );
-          break;
-        default:
-          console.error( 'invalid componentCode', componentCode );
-          this.removeActiveTask( componentCode );
-          throw new Error( strFormat( 'Component %s not found', componentCode ) );
+      case 'Mono':
+      case 'MacExtras':
+      case 'SDL':
+      case 'RMS':
+        display = await this.handleSimpleInstall( componentCode, options );
+        break;
+      case 'TSO':
+      case 'FSO':
+      case 'Simitone':
+        display = await this.handleStandardInstall( componentCode, options );
+        break;
+      case 'OpenAL':
+      case 'NET':
+        display = await this.handleExecutableInstall( componentCode, options );
+        break;
+      default:
+        console.error( 'invalid componentCode', componentCode );
+        this.removeActiveTask( componentCode );
+        throw new Error( strFormat( 'Component %s not found', componentCode ) );
       }
       if ( ! options.fullInstall && display ) {
         Modal.showInstalled( this.getPrettyName( componentCode ) );
@@ -513,7 +513,7 @@ class FSOLauncher {
         Modal.showFailedInstall( this.getPrettyName( componentCode ), err );
       }
       this.setProgressBar( 1, { mode: 'error' } );
-      captureWithSentry( err, 
+      captureWithSentry( err,
         { component: componentCode, options, isInstalled: this.isInstalled } );
       throw err;
     } finally {
@@ -522,20 +522,20 @@ class FSOLauncher {
       this.updateInstalledPrograms();
     }
   }
-  
+
   /**
    * Runs an installer that does not need to ask the user for any input.
-   * 
+   *
    * @param {string}         componentCode       The Component to install.
-   * @param {object}         options             The options object.
+   * @param {Object}         options             The options object.
    * @param {boolean}        options.fullInstall Whether to do a full install.
    * @param {string|boolean} options.override    The path to change to.
    * @param {string}         options.dir         A predefined directory to install to.
-   * 
+   *
    * @returns {Promise<boolean>}
    */
   async handleSimpleInstall( componentCode, options ) {
-    const runner = require( './lib/installers' )[componentCode];
+    const runner = require( './lib/installers' )[ componentCode ];
     const subfolder = componentCode === 'RMS' ? '/Content/MeshReplace' : '';
     const installer = new runner( this, this.isInstalled.FSO + subfolder );
     if ( ! options.fullInstall ) {
@@ -543,7 +543,7 @@ class FSOLauncher {
     }
     await installer.install();
 
-    if ( [ 'MacExtras', 'RMS' ].includes( componentCode ) 
+    if ( [ 'MacExtras', 'RMS' ].includes( componentCode )
       && this.isInstalled.Simitone ) {
       // Do an install for Simitone as well.
       const smtInstaller = new runner( this, this.isInstalled.Simitone + subfolder, 'Simitone' );
@@ -551,26 +551,26 @@ class FSOLauncher {
     }
     return true;
   }
-  
+
   /**
    * Handles the standard installation process for a given component.
-   * 
+   *
    * @param {string}         componentCode       The code for the component being installed.
-   * @param {object}         options             The options object.
+   * @param {Object}         options             The options object.
    * @param {boolean}        options.fullInstall Whether to do a full install.
    * @param {string|boolean} options.override    The path to change to.
    * @param {string}         options.dir         A predefined directory to install to.
-   * 
+   *
    * @returns {Promise<boolean>}
    */
   async handleStandardInstall( componentCode, options ) {
-    const runner = require( './lib/installers' )[componentCode];
+    const runner = require( './lib/installers' )[ componentCode ];
 
     if ( options.override ) {
-      const { 
-        createMaxisEntry, 
-        createFreeSOEntry, 
-        createSimitoneEntry 
+      const {
+        createMaxisEntry,
+        createFreeSOEntry,
+        createSimitoneEntry
       } = require( './lib/registry' );
 
       // Modify registry to point to the override path.
@@ -596,13 +596,13 @@ class FSOLauncher {
     }
     const installer = new runner( this, installDir );
     const isInstalled = await installer.isInstalledInPath();
-    
-    if ( isInstalled && ! options.fullInstall && ! options.dir && 
+
+    if ( isInstalled && ! options.fullInstall && ! options.dir &&
       await ( require( './lib/registry' ).testWinAccess() ) ) {
-        // Already installed in the given path, let the user know.
-        Modal.showAlreadyInstalled( this.getPrettyName( componentCode ), 
-          componentCode, installDir );
-        return false;
+      // Already installed in the given path, let the user know.
+      Modal.showAlreadyInstalled( this.getPrettyName( componentCode ),
+        componentCode, installDir );
+      return false;
     }
     if ( ! options.fullInstall ) {
       this.IPC.changePage( 'downloads' );
@@ -614,13 +614,13 @@ class FSOLauncher {
 
   /**
    * Handles the installation process for an executable component.
-   * 
+   *
    * @param {string}         componentCode       The code for the component being installed.
-   * @param {object}         options             The options object.
+   * @param {Object}         options             The options object.
    * @param {boolean}        options.fullInstall Whether to do a full install.
    * @param {string|boolean} options.override    The path to change to.
    * @param {string}         options.dir         A predefined directory to install to.
-   * 
+   *
    * @returns {Promise<boolean>}
    */
   async handleExecutableInstall( componentCode, options ) {
@@ -638,9 +638,9 @@ class FSOLauncher {
 
   /**
    * Prompts the user to choose an installation folder for a given component.
-   * 
+   *
    * @param {string} componentCode The code for the component being installed.
-   * 
+   *
    * @returns {Promise<string|null>} The selected installation folder or
    *                                 null if the user cancels.
    */
@@ -653,16 +653,16 @@ class FSOLauncher {
     );
     toast.destroy();
     if ( folders && folders.length > 0 ) {
-      return folders[0] + '/' + this.getPrettyName( componentCode );
+      return folders[ 0 ] + '/' + this.getPrettyName( componentCode );
     }
     return null;
   }
 
   /**
    * Obtains the installation directory for a given component.
-   * 
+   *
    * @param {string} componentCode The code for the component being installed.
-   * 
+   *
    * @returns {Promise<string>} The installation directory for the component.
    */
   async obtainInstallDirectory( componentCode ) {
@@ -697,7 +697,7 @@ class FSOLauncher {
    * Copies the translation files and changes the current language in FreeSO.ini.
    *
    * @param {string} language The language to change to.
-   * 
+   *
    * @returns {Promise<void>} A promise that resolves when the language is changed.
    */
   async switchLanguage( language ) {
@@ -705,8 +705,8 @@ class FSOLauncher {
       return Modal.showNeedFSOTSO();
     }
     this.addActiveTask( 'CHLANG' );
-    const fs = require( 'fs-extra' ), 
-      ini = require( 'ini' ), 
+    const fs = require( 'fs-extra' ),
+      ini = require( 'ini' ),
       path = require( 'path' );
     const toast = new Toast( global.locale.TOAST_LANGUAGE );
 
@@ -739,7 +739,7 @@ class FSOLauncher {
       return Modal.showFirstRun();
     }
 
-    data.CurrentLang = this.getLangString( this.getLangCode( language ) )[0];
+    data.CurrentLang = this.getLangString( this.getLangCode( language ) )[ 0 ];
 
     try {
       await fs.writeFile( this.isInstalled.FSO + '/Content/config.ini', ini.stringify( data ) );
@@ -753,15 +753,15 @@ class FSOLauncher {
     this.removeActiveTask( 'CHLANG' );
     toast.destroy();
 
-    return this.updateAndPersistConfig( 
-      'Game', 'Language', this.getLangString( this.getLangCode( language ) )[1]  );
+    return this.updateAndPersistConfig(
+      'Game', 'Language', this.getLangString( this.getLangCode( language ) )[ 1 ]  );
   }
 
   /**
    * Updates a configuration variable based on user input.
    *
-   * @param {object} newConfig The new configuration object.
-   * 
+   * @param {Object} newConfig The new configuration object.
+   *
    * @returns {Promise<void>} A promise that resolves when the configuration is updated.
    */
   async setConfiguration( newConfig ) {
@@ -782,7 +782,7 @@ class FSOLauncher {
    * Handles changes to the graphics mode setting.
    *
    * @param {string} newValue The new graphics mode value.
-   * 
+   *
    * @returns {Promise<void>} A promise that resolves when the graphics mode is changed.
    */
   handleGraphicsModeChange( newValue ) {
@@ -805,9 +805,9 @@ class FSOLauncher {
    * Toggles software mode on or off.
    *
    * @param {boolean} enable   If true, enable software mode, otherwise
-   *                           disable it. 
+   *                           disable it.
    * @param {string}  newValue The new graphics mode value.
-   * 
+   *
    * @returns {Promise<void>} A promise that resolves when the graphics mode is changed.
    */
   async toggleSoftwareMode( enable, newValue ) {
@@ -830,7 +830,7 @@ class FSOLauncher {
    * Sets the launcher language and shows a language change modal.
    *
    * @param {string} value The new language value.
-   * 
+   *
    * @returns {Promise<void>} A promise that resolves when the language is changed.
    */
   async setLauncherLanguage( value ) {
@@ -844,13 +844,13 @@ class FSOLauncher {
    * @param {string} category The configuration category.
    * @param {string} key      The configuration key.
    * @param {*}      value    The new configuration value.
-   * 
+   *
    * @returns {Promise<void>} A promise that resolves when the configuration
    *                          has been updated and persisted.
    */
   updateAndPersistConfig( category, key, value ) {
-    this.conf[category] = this.conf[category] || {};
-    this.conf[category][key] = value;
+    this.conf[ category ] = this.conf[ category ] || {};
+    this.conf[ category ][ key ] = value;
 
     return this.persist();
   }
@@ -872,7 +872,7 @@ class FSOLauncher {
 
   /**
    * Enables Software Mode and adds the needed files.
-   * 
+   *
    * @returns {Promise<void>} A promise that resolves when the operation is complete.
    */
   async enableSoftwareMode() {
@@ -912,22 +912,22 @@ class FSOLauncher {
       }
       return Modal.showVolcanicPrompt();
     }
-    
+
     const exeLocation = isSimitone
       ? this.isInstalled.Simitone + '/Simitone.Windows.exe'
       : this.isInstalled.FSO + '/FreeSO.exe';
 
     require( 'fs-extra' ).stat( exeLocation, ( err, _stat ) => {
       if ( err ) {
-        captureWithSentry( err, { 
-          exeLocation, useVolcanic, isSimitone, conf: this.conf, 
+        captureWithSentry( err, {
+          exeLocation, useVolcanic, isSimitone, conf: this.conf,
           isInstalled: this.isInstalled
         } );
-        console.error( 'could not find exe', { 
-          exeLocation, useVolcanic, isSimitone, conf: this.conf, 
+        console.error( 'could not find exe', {
+          exeLocation, useVolcanic, isSimitone, conf: this.conf,
           isInstalled: this.isInstalled
         } );
-        return Modal.showCouldNotRecover( isSimitone );
+        return Modal.showCouldNotRecover( exeLocation, isSimitone );
       }
       this.launchGame( false, isSimitone );
     } );
@@ -948,14 +948,14 @@ class FSOLauncher {
       : this.isInstalled.FSO;
 
     if ( ! cwd ) {
-      captureWithSentry( new Error( 'Entered launchGame without cwd' ), { 
-       cwd, file, useVolcanic, isSimitone, 
-       conf: this.conf, isInstalled: this.isInstalled, subfolder
-      } );
-      console.error( 'launchGame with no cwd', { 
-        cwd, file, useVolcanic, isSimitone, 
+      captureWithSentry( new Error( 'Entered launchGame without cwd' ), {
+        cwd, file, useVolcanic, isSimitone,
         conf: this.conf, isInstalled: this.isInstalled, subfolder
-       } );
+      } );
+      console.error( 'launchGame with no cwd', {
+        cwd, file, useVolcanic, isSimitone,
+        conf: this.conf, isInstalled: this.isInstalled, subfolder
+      } );
       return Modal.showNeedToPlay();
     }
 
@@ -978,7 +978,7 @@ class FSOLauncher {
     if ( process.platform === 'darwin' ) graphicsMode = 'ogl';
     args.push( `-${graphicsMode}` );
     // 3d is forced off when in SW
-    if ( this.conf.Game['3DMode'] === '1' && ( this.conf.Game.GraphicsMode != 'sw' || isSimitone ) ) {
+    if ( this.conf.Game[ '3DMode' ] === '1' && ( this.conf.Game.GraphicsMode != 'sw' || isSimitone ) ) {
       args.push( '-3d' );
     }
     if ( isSimitone && useVolcanic ) {
@@ -989,7 +989,7 @@ class FSOLauncher {
     if ( isSimitone && this.conf.Game.SimitoneAA === '1' ) {
       args.push( '-aa' );
     }
-    // hz option 
+    // hz option
     args.push( `-hz${this.getEffectiveRefreshRate()}` );
 
     if ( subfolder ) {
@@ -1004,10 +1004,10 @@ class FSOLauncher {
         file = './freeso.command';
       }
     }
-    const spawnOptions = { 
-      cwd, detached: true, stdio: 'ignore' 
+    const spawnOptions = {
+      cwd, detached: true, stdio: 'ignore'
     };
-    if ( process.platform === 'darwin' ) { 
+    if ( process.platform === 'darwin' ) {
       spawnOptions.shell = true;
     }
     console.info( 'run', file + ' ' + args.join( ' ' ), cwd );
@@ -1043,22 +1043,22 @@ class FSOLauncher {
    * Example: 'en', 'es'...
    *
    * @param {string} lang The language string.
-   * 
+   *
    * @returns {number} The language code.
    */
   getLangCode( lang ) {
-    return require( './constants' ).langCodes[lang];
+    return require( './constants' ).langCodes[ lang ];
   }
 
   /**
    * Returns the full language strings from the code.
    *
    * @param {number} code Language code (gettable from getLangCode).
-   * 
+   *
    * @returns {string[]} The language strings.
    */
   getLangString( code ) {
-    return require( './constants' ).langStrings[code];
+    return require( './constants' ).langStrings[ code ];
   }
 
   /**
@@ -1080,15 +1080,15 @@ class FSOLauncher {
       captureWithSentry( err );
       console.error( 'error persisting', { err, conf: this.conf } );
     } finally {
-      setTimeout( () => toast.destroy(), 1500 )
+      setTimeout( () => toast.destroy(), 1500 );
     }
   }
 
   /**
    * Sets the native progress bar to the given value.
-   * 
+   *
    * @param {number} val The value to set.
-   * @param {Electron.ProgressBarOptions} options The options to use. 
+   * @param {Electron.ProgressBarOptions} options The options to use.
    */
   setProgressBar( val, options ) {
     if ( ! this.window || this.window.isDestroyed() ) return;
@@ -1102,7 +1102,7 @@ class FSOLauncher {
 
   /**
    * Returns if the current theme is considerd dark.
-   * 
+   *
    * @returns {boolean} If the theme is dark.
    */
   isDarkMode() {
@@ -1115,7 +1115,7 @@ class FSOLauncher {
   async ociPickFolder() {
     const folders = await Modal.showChooseDirectory( 'FreeSO Game', this.window );
     if ( folders && folders.length > 0 ) {
-      this.IPC.ociPickedFolder( folders[0] + '/FreeSO Game' );
+      this.IPC.ociPickedFolder( folders[ 0 ] + '/FreeSO Game' );
     }
   }
 
@@ -1133,7 +1133,7 @@ class FSOLauncher {
 
   /**
    * Returns the refresh rate to use.
-   * 
+   *
    * @returns {number} The refresh rate to use.
    */
   getEffectiveRefreshRate() {

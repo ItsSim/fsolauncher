@@ -4,7 +4,7 @@
 class Toast {
   /**
    * Returns the Modal IPC object.
-   * 
+   *
    * @returns {import('./ipc-bridge')} The IPC object.
    */
   static getIPC() { return Toast.IPC; }
@@ -20,7 +20,7 @@ class Toast {
       setTimeout( () => this.destroy(), timeout );
     }
   }
-  
+
   /**
    * Instructs the renderer to remove the toast by id.
    */

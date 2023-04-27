@@ -8,4 +8,4 @@ module.exports = {
   'MacExtras': require( './macextras' ),
   'OpenAL': require( './executable' ),
   'NET': require( './executable' )
-}
+};

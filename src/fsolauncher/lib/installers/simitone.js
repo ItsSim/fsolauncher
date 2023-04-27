@@ -4,7 +4,7 @@ const { strFormat } = require( '../utils' );
 
 const DOWNLOAD_URL_GITHUB =
   'https://beta.freeso.org/LauncherResourceCentral/Simitone';
-  
+
 /**
  * Downloads and installs Simitone.
  */
@@ -117,14 +117,14 @@ class SimitoneInstaller {
 
   /**
    * Downloads Mac-extras for Darwin.
-   * 
+   *
    * @returns {Promise<void>} A promise that resolves when the download is complete.
    */
   step6() {
     if ( process.platform === 'darwin' ) {
-      this.dl = download( { 
-        from: 'https://beta.freeso.org/LauncherResourceCentral/MacExtras', 
-        to: `${global.appData}temp/macextras-${this.id}.zip` 
+      this.dl = download( {
+        from: 'https://beta.freeso.org/LauncherResourceCentral/MacExtras',
+        to: `${global.appData}temp/macextras-${this.id}.zip`
       } );
       return this.download();
     }
@@ -133,15 +133,15 @@ class SimitoneInstaller {
 
   /**
    * Installs Mac-extras for Darwin.
-   * 
+   *
    * @returns {Promise<void>} A promise that resolves when the installation is complete.
    */
   step7() {
     if ( process.platform === 'darwin' ) {
-      return unzip( { 
-        from: `${global.appData}temp/macextras-${this.id}.zip`, 
-        to: this.path, 
-        cpperm: true 
+      return unzip( {
+        from: `${global.appData}temp/macextras-${this.id}.zip`,
+        to: this.path,
+        cpperm: true
       }, filename => {
         this.createProgressItem(
           global.locale.INS_EXTRACTING_ME + ' ' + filename, 100
@@ -229,7 +229,7 @@ class SimitoneInstaller {
    * Creates all the directories and subfolders in a path.
    *
    * @param {string} dir The path to create.
-   * 
+   *
    * @returns {Promise<void>} A promise that resolves when the directory is created.
    */
   setupDir( dir ) {
@@ -243,7 +243,7 @@ class SimitoneInstaller {
 
   /**
    * Checks if Simitone is already installed in a given path.
-   * 
+   *
    * @returns {Promise<boolean>} If Simitone is installed already.
    */
   isInstalledInPath() {

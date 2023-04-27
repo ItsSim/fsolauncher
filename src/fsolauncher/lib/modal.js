@@ -1,4 +1,4 @@
-const { captureWithSentry } = require( './utils' );
+const { captureWithSentry, strFormat } = require( './utils' );
 
 /**
  * Container class for all the Modal windows.
@@ -6,7 +6,7 @@ const { captureWithSentry } = require( './utils' );
 class Modal {
   /**
    * Returns the Modal IPC object.
-   * 
+   *
    * @returns {import('./ipc-bridge')} The IPC object.
    */
   static getIPC() { return Modal.IPC; }
@@ -51,7 +51,7 @@ class Modal {
 
   /**
    * When a user decides to reinstall a program.
-   * 
+   *
    * @param {string} componentName The visual name of the Component.
    * @param {string} componentCode The Component ID to install if the user clicks YES.
    */
@@ -70,8 +70,8 @@ class Modal {
   }
 
   /**
-   * When the user tries to do an action that requires an active 
-   * internet connection. 
+   * When the user tries to do an action that requires an active
+   * internet connection.
    */
   static showNoInternet() {
     Modal.getIPC().sendErrorModal(
@@ -124,8 +124,8 @@ class Modal {
   }
 
   /**
-   * When a user tries to install something else while already installing 
-   * a program. 
+   * When a user tries to install something else while already installing
+   * a program.
    */
   static showAlreadyInstalling() {
     Modal.getIPC().sendErrorModal(
@@ -192,7 +192,7 @@ class Modal {
    *
    * @param {string} componentName The visual name of the Component.
    * @param {Electron.BrowserWindow} window The window to show the FilePicker in.
-   * 
+   *
    * @returns {Promise<string>} The chosen path.
    */
   static async showChooseDirectory( componentName, window ) {
@@ -214,12 +214,12 @@ class Modal {
     }
     const response = await require( 'electron' )
       .dialog.showOpenDialog( window,
-      {
-        properties: [ 'openDirectory' ],
-        title: `${global.locale.MODAL_INSTALL} ${componentName}`,
-        defaultPath: defaultPath
-      }
-    );
+        {
+          properties: [ 'openDirectory' ],
+          title: `${global.locale.MODAL_INSTALL} ${componentName}`,
+          defaultPath: defaultPath
+        }
+      );
     return response.canceled ? [] : response.filePaths;
   }
 
@@ -260,7 +260,7 @@ class Modal {
 
   /**
    * When a FreeSO process has been closed.
-   * 
+   *
    * @param {any} c Count of FreeSO processes that have been closed.
    */
   static showKilled( c ) {
@@ -317,7 +317,7 @@ class Modal {
 
   /**
    * When the user is required to launch the game at least once to do an action.
-   * This is because the launcher might need some files that FreeSO doesn't generate 
+   * This is because the launcher might need some files that FreeSO doesn't generate
    * until it's launched for the first time.
    */
   static showFirstRun() {
@@ -345,7 +345,7 @@ class Modal {
    * @param {string} title   Notification title.
    * @param {string} message Notification message.
    * @param {string} url     Notification url.
-   * 
+   *
    * @returns {Promise<void>} Promise that resolves when the notification is sent.
    */
   static async sendNotification( title, message, url, ok = false, shouldBeDark ) {
@@ -406,9 +406,9 @@ class Modal {
           overflow:hidden;
           display:block;
           padding:20px;
-          ${shouldBeDark ? 
-          'background-image: -webkit-linear-gradient(#15202b, #10171e 100%, #15202b);' : 
-          'background-image: -webkit-linear-gradient(#fafafa, #f4f4f4 40%, #e5e5e5);'}
+          ${shouldBeDark ?
+    'background-image: -webkit-linear-gradient(#15202b, #10171e 100%, #15202b);' :
+    'background-image: -webkit-linear-gradient(#fafafa, #f4f4f4 40%, #e5e5e5);'}
           margin:10px;
           border-radius:8px;
           box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
@@ -575,19 +575,22 @@ class Modal {
   }
 
   /**
-   * When the launcher could not recover from not having a FreeSO.exe to
-   * run due to some program removing the FreeSO/Simitone executables..
+   * When the launcher could not launch the gme because of a missing
+   * executable file.
+   *
+   * @param {string} path
+   * @param {boolean} isSimitone
    */
-  static showCouldNotRecover( isSimitone = false ) {
+  static showCouldNotRecover( path, isSimitone = false ) {
     let str2 = global.locale.MODAL_FAILED_LAUNCH_DESC;
     if ( isSimitone ) {
       str2 = str2
         .replace( 'FreeSO.exe', 'Simitone.Windows.exe' )
-        .replace( 'FreeSO', 'Simitone' ); 
+        .replace( 'FreeSO', 'Simitone' );
     }
     Modal.getIPC().sendErrorModal(
       global.locale.MODAL_FAILED_LAUNCH,
-      str2,
+      strFormat( str2, path ),
       global.locale.MODAL_OK2
     );
   }
@@ -618,16 +621,16 @@ class Modal {
    * Language will be displayed on launcher restart.
    */
   static showLanguageOnRestart() {
-    Modal.getIPC().sendSuccessModal( 
-      global.locale.MODAL_REQUIRES_RESTART, 
-      global.locale.MODAL_REQUIRES_RESTART_DESC, 
-      global.locale.MODAL_OK 
+    Modal.getIPC().sendSuccessModal(
+      global.locale.MODAL_REQUIRES_RESTART,
+      global.locale.MODAL_REQUIRES_RESTART_DESC,
+      global.locale.MODAL_OK
     );
   }
 
   /**
    * Used in generic error modal display.
-   * 
+   *
    * @param {string} error Error message to show.
    */
   static showGenericError( error ) {

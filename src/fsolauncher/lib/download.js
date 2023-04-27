@@ -73,7 +73,7 @@ module.exports = function( { from, to, immediate = false } ) {
 
     _response = r; // Make the response accessible.
 
-    _length = parseInt( r.headers['content-length'], 10 );
+    _length = parseInt( r.headers[ 'content-length' ], 10 );
 
     r.on( 'data', _onData );
     r.on( 'error', _onError );
@@ -83,10 +83,10 @@ module.exports = function( { from, to, immediate = false } ) {
   const _onEnd = () => {
     if ( ! _failed ) {
       // Archive.org downloads fail silently when x-page-cache is MISS or EXPIRED.
-      if ( _response.headers['x-page-cache'] ) {
+      if ( _response.headers[ 'x-page-cache' ] ) {
         if (
           [ 'MISS', 'EXPIRED' ].includes(
-            _response.headers['x-page-cache'].trim()
+            _response.headers[ 'x-page-cache' ].trim()
           )
         ) {
           events.emit(

@@ -1,8 +1,22 @@
 /* global PUG_VARS */
-var parser = new window.RSSParser();
-var querySelector = q => document.querySelector( q );
-var querySelectorAll = q => document.querySelectorAll( q );
-var createElement = q => document.createElement( q );
+/**
+ * @param {string} q
+ *
+ * @returns {Element}
+ */
+const querySelector = q => document.querySelector( q );
+/**
+ * @param {string} q
+ *
+ * @returns {NodeListOf<Element>}
+ */
+const querySelectorAll = q => document.querySelectorAll( q );
+/**
+ * @param {string} q
+ *
+ * @returns {Element}
+ */
+const createElement = q => document.createElement( q );
 
 // Add a hook to make all links open a new window.
 window.DOMPurify.addHook( 'afterSanitizeAttributes', node => {
@@ -15,144 +29,128 @@ window.DOMPurify.addHook( 'afterSanitizeAttributes', node => {
   }
 } );
 
-var darkThemes = [ 'halloween', 'dark' ];
+const darkThemes = [ 'halloween', 'dark' ];
 
 // Expose functions to the DOM
-var setCurrentPage;
+let navigateTo;
 // eslint-disable-next-line no-unused-vars
-var closeOneClickInstall;
+let closeOneClickInstall;
 // eslint-disable-next-line no-unused-vars
-var ociPickFolder;
+let ociPickFolder;
 // eslint-disable-next-line no-unused-vars
-var ociConfirm;
+let ociConfirm;
 
 ( () => {
-  var socket = window.io( `https://${PUG_VARS.WS_URL}:${PUG_VARS.WS_PORT}` );
-  var pageTriggerAudio = new window.Howl( { src: 'sounds/click.wav', volume: 0.4 } );
-  var yesNoAudio = new window.Howl( { src: 'sounds/modal.wav', volume: 0.4 } );
-  var okAudio = new window.Howl( { src: 'sounds/ok.wav', volume: 0.4 } );
-  var twitterHasAlreadyLoaded = false;
-  var simitoneRequirementsCheckInterval;
-  var simitoneSuggestedUpdate;
-  var isDarwin = querySelector( 'html' ).className.startsWith( 'darwin' );
-  var isWindows = querySelector( 'html' ).className.startsWith( 'win32' );
-  var prevTheme;
-  var timeout = ( promise, milliseconds = 5000 ) => {
-    return new Promise( ( resolve, reject ) => {
-      setTimeout( () => {
-        reject( new Error( 'Timeout exceeded' ) )
-      }, milliseconds )
-      promise.then( resolve, reject )
-    } )
-  };
-  var init = () => {
-    sendToMain( 'INIT_DOM' );
-    setCurrentPage( 'home' );
+  const socket = window.io( `https://${PUG_VARS.WS_URL}:${PUG_VARS.WS_PORT}` );
+
+  const clickAudio = new window.Howl( { src: 'sounds/click.wav', volume: 0.4 } );
+  const modalAudio = new window.Howl( { src: 'sounds/modal.wav', volume: 0.4 } );
+  const okAudio    = new window.Howl( { src: 'sounds/ok.wav', volume: 0.4 } );
+
+  const isDarwin  = querySelector( 'html' ).className.startsWith( 'darwin' );
+  const isWindows = querySelector( 'html' ).className.startsWith( 'win32' );
+
+  let twitterLoaded = false;
+  let simitoneInterval;
+  let simitoneUpdate;
+  let prevTheme;
+
+  function initClient() {
+    send( 'INIT_DOM' );
+    navigateTo( 'home' );
     fetchNews();
     setInterval( updateTSOClock, 1000 );
-    setElectronVersion( window.shared.electronVersion );
-    socket.on( 'receive global message', data =>
-      sendToMain( 'SOCKET_MESSAGE', [ data.Message, data.Url ] ) );
-  };
+    setVersion( window.shared.electronVersion );
+    socket.on(
+      'receive global message',
+      data => send( 'SOCKET_MESSAGE', [ data.Message, data.Url ]
+      ) );
+  }
 
-  /**
-   * Fires an event to the main process.
-   */
-  var sendToMain = ( id, param ) => window.shared.send( id, param );
-
-  /**
-   * Fires when a message has been received from the main process.
-   * 
-   * @param {string} id 
-   * @param {Function} callback 
-   */
-  var onMessage = ( id, callback ) => window.shared.on( id, callback );
-
-  /**
-   * Adds an event listener.
-   */
-  var addEventListener = ( a, b, c ) => {
+  function send( id, param ) {
+    window.shared.send( id, param );
+  }
+  function onMessage( id, callback ) {
+    return window.shared.on( id, callback );
+  }
+  function timeout( promise, milliseconds = 5000 ) {
+    return new Promise( ( resolve, reject ) => {
+      setTimeout( () => {
+        reject( new Error( 'Timeout exceeded' ) );
+      }, milliseconds );
+      promise.then( resolve, reject );
+    } );
+  }
+  function addEventListener( a, b, c ) {
     a.tagName
       ? a.addEventListener( b, c )
       : querySelector( a ).addEventListener( b, c );
-  };
-
-  /**
-   * Adds multiple event listeners.
-   */
-  var addEventListenerAll = ( a, b, c ) => {
-    var e = querySelectorAll( a );
-    for ( a = 0; a < e.length; a++ )
-      e[a].addEventListener( b, a => c( a, e ) );
-  };
-
-  /**
-   * Updates the ingame clock.
-   */
-  var updateTSOClock = () => {
-    var a = new Date, b = a.getUTCMinutes(), c = a.getUTCSeconds(), d = 'AM', e = 0;
-    1 == a.getUTCHours() % 2 && ( e = 3600, d = 'PM' );
-    e = e + 60 * b + c;
-    var f = Math.floor( e / 300 );
-    12 < f && ( f -= 12 );
-    0 == f && ( f = 12 );
-    var g = Math.floor( e % 300 / 5 );
-    10 > g && ( g = '0' + g );
-    var h = querySelector( '#simtime' );
-    h && ( h.textContent = f + ':' + g + ' ' + d );
+  }
+  function addEventListenerAll( a, b, c ) {
+    const e = querySelectorAll( a );
+    for ( a = 0; a < e.length; a++ ) {
+      e[ a ].addEventListener( b, a => c( a, e ) );
+    }
+  }
+  function setVersion( v ) {
+    return querySelector( '#electron-version' ).textContent = v;
+  }
+  function updateTSOClock() {
+    const currentTime = new Date(),
+      utcMinutes = currentTime.getUTCMinutes(),
+      utcSeconds = currentTime.getUTCSeconds();
+    let timePeriod = 'AM', totalSeconds = 0;
+    if ( currentTime.getUTCHours() % 2 === 1 ) {
+      totalSeconds = 3600;
+      timePeriod = 'PM';
+    }
+    totalSeconds += utcMinutes * 60 + utcSeconds;
+    let hour = Math.floor( totalSeconds / 300 );
+    if ( hour > 12 ) {
+      hour -= 12;
+    }
+    if ( hour === 0 ) {
+      hour = 12;
+    }
+    let minute = Math.floor( totalSeconds % 300 / 5 );
+    if ( minute < 10 ) {
+      minute = '0' + minute;
+    }
+    const simTimeElement = querySelector( '#simtime' );
+    if ( simTimeElement ) {
+      simTimeElement.textContent = `${hour}:${minute} ${timePeriod}`;
+    }
   }
 
-  /**
-   * Sets the electron version.
-   * 
-   * @param {string} v The version.
-   */
-  var setElectronVersion = v => querySelector( '#electron-version' ).textContent = v;
+  const simitonePage = querySelector( '#simitone-page' );
 
-  /**
-   * Marks Simitone as installed.
-   */
-  var simitoneInstalled = () => querySelector( '#simitone-page' )
-    .classList.add( 'simitone-installed' );
-
-  /**
-   * Marks Simitone as not installed.
-   */
-  var simitoneNotInstalled = () => querySelector( '#simitone-page' )
-    .classList.remove( 'simitone-installed' );
-
-  /**
-   * Marks TS1 as installed.
-   */
-  var simsInstalled = () => querySelector( '#simitone-page' )
-    .classList.add( 'ts1cc-installed' );
-
-  /**
-   * Marks TS1 as not installed.
-   */
-  var simsNotInstalled = () => querySelector( '#simitone-page' )
-    .classList.remove( 'ts1cc-installed' );
-
-  /**
-   * Shows the Simitone updater.
-   */
-  var simitoneShouldUpdate = () => {
-    querySelector( '#simitone-page' ).classList.add( 'simitone-should-update' );
-    querySelector( '#simitone-update-version' ).textContent = simitoneSuggestedUpdate;
+  function simitoneInstalled() {
+    simitonePage.classList.add( 'simitone-installed' );
   }
-
-  /**
-   * Hides the Simitone updater.
-   */
-  var simitoneShouldntUpdate = () => querySelector( '#simitone-page' )
-    .classList.remove( 'simitone-should-update' );
+  function simitoneNotInstalled() {
+    simitonePage.classList.remove( 'simitone-installed' );
+  }
+  function simsInstalled() {
+    simitonePage.classList.add( 'ts1cc-installed' );
+  }
+  function simsNotInstalled() {
+    simitonePage.classList.remove( 'ts1cc-installed' );
+  }
+  function simitoneShouldUpdate() {
+    simitonePage.classList.add( 'simitone-should-update' );
+    querySelector( '#simitone-update-version' ).textContent = simitoneUpdate;
+  }
+  function simitoneShouldntUpdate() {
+    simitonePage.classList.remove( 'simitone-should-update' );
+  }
 
   /**
    * Returns the date as x time ago.
+   *
+   * @param {Date} date
    */
-  var ago = date => {
-    var b = Math.floor( ( new Date() - date ) / 1000 );
-  
+  function ago( date ) {
+    const b = Math.floor( ( new Date() - date ) / 1000 );
     if ( 5 > b ) {
       return 'just now';
     } else if ( 60 > b ) {
@@ -168,22 +166,19 @@ var ociConfirm;
       return ( 1 < date ) ? date + ' days ago' : '1 day ago';
     } else {
       return date.getDate().toString() + ' ' +
-        PUG_VARS.STRINGS.MONTHS.split( ' ' )[date.getMonth()] + ', ' +
+        PUG_VARS.STRINGS.MONTHS.split( ' ' )[ date.getMonth() ] + ', ' +
         date.getFullYear();
     }
-  };
+  }
 
   /**
-   * Changes the launcher theme.
-   * 
    * @param {string} theme The theme id.
+   * @param {boolean} forced If forced to change.
    */
-  var setTheme = async ( theme, forced ) => {
-    var date = new Date();
-    var m = date.getMonth();
-    var d = date.getDate();
-    // var y = date.getFullYear();
-
+  async function setTheme( theme, forced ) {
+    const date = new Date();
+    const m = date.getMonth();
+    const d = date.getDate();
     if ( ! forced ) {
       // Halloween theme activates in October.
       if ( ( m == 9 && d >= 15 && d <= 31 ) || ( m == 10 && d == 1 ) ) {
@@ -200,80 +195,65 @@ var ociConfirm;
   }
 
   /**
-   * Creates a new toast.
-   * 
    * @param {string} id The toast id.
    * @param {string} message The toast body.
    */
-  var toast = ( id, message ) => {
-    var div = createElement( 'div' );
-    div.style.display = 'block';
-    div.className = 'toast';
-    div.id = id;
+  function toast( id, message ) {
+    const template = document.querySelector( '#toast-template' );
+    const node = document.importNode( template.content, true );
 
-    var i = createElement( 'i' );
-    i.className = 'material-icons spin';
-    i.innerHTML = 'loop';
+    node.querySelector( '.toast' ).id = id;
+    node.querySelector( '.toast-message' ).textContent = message;
+    node.querySelector( '.toast' ).style.display = 'block';
 
-    var span = createElement( 'span' );
-    span.className = 'toast-message';
-    span.textContent = message;
-
-    div.appendChild( i );
-    div.appendChild( span );
-
-    querySelector( '#debug' ).appendChild( div );
+    document.querySelector( '#debug' ).appendChild( node );
   }
 
   /**
-   * Removes a toast by id.
-   * 
    * @param {string} id The toast id.
    */
-  var removeToast = id => {
-    var $toast = document.getElementById( id );
-    $toast?.parentNode?.removeChild( $toast );
+  function removeToast( id ) {
+    const toast = document.getElementById( id );
+    toast?.parentNode?.removeChild( toast );
   }
 
-  var spinDegrees = 0;
+  let spinDegrees = 0;
 
   /**
-   * Obtains and displays blog articles from the official blog.
+   * @param {boolean} userRequested
    */
-  var fetchNews = async userRequested => {
-    var $rssUrl = PUG_VARS.RSS_URL;
-    var $didYouKnow = querySelector( '#did-you-know' );
-    var $rss = querySelector( '#rss' );
-    var $spinner = querySelector( '#rss-loading' );
+  async function fetchNews( userRequested ) {
+    const rssUrl = PUG_VARS.RSS_URL;
+    const didYouKnow = querySelector( '#did-you-know' );
+    const rss = querySelector( '#rss' );
+    const spinner = querySelector( '#rss-loading' );
+    const homeRefreshBtn = querySelector( '#refresh-home-button' );
+    const homeRefreshBtnIcon = homeRefreshBtn.querySelector( 'i' );
 
-    var $homeRefreshBtn = querySelector( '#refresh-home-button' );
-    var $homeRefreshBtnIcon = $homeRefreshBtn.querySelector( 'i' );
-
-    $homeRefreshBtn.setAttribute( 'disabled', true );
-    $homeRefreshBtn.style.cursor = 'not-allowed';
-    $didYouKnow.style.display = 'none';
-    $rss.style.display = 'none';
-    $spinner.style.display = 'block';
+    homeRefreshBtn.setAttribute( 'disabled', true );
+    homeRefreshBtn.style.cursor = 'not-allowed';
+    didYouKnow.style.display = 'none';
+    rss.style.display = 'none';
+    spinner.style.display = 'block';
 
     if ( userRequested ) {
       spinDegrees += 360;
-      $homeRefreshBtnIcon.style.transform = `rotate(${spinDegrees}deg)`;
+      homeRefreshBtnIcon.style.transform = `rotate(${spinDegrees}deg)`;
     }
-
-    if ( userRequested || ! twitterHasAlreadyLoaded ) {
+    if ( userRequested || ! twitterLoaded ) {
       try {
         await loadTwitter();
       } catch ( terr ) {
         console.error( 'error loading twitter', terr );
       }
     }
-
-    var parseRss = ( errors, response ) => {
-      // Short pause before displaying feed to allow display to render correctly.
+    function parseRss( errors, response ) {
+      // Short pause before displaying feed to allow display to render
+      // correctly.
       setTimeout( () => {
-        $didYouKnow.style.display = 'block';
-        $rss.style.display = 'block';
-        $spinner.style.display = 'none';
+        didYouKnow.style.display = 'block';
+        rss.style.display = 'block';
+        spinner.style.display = 'none';
       }, 500 );
 
       querySelector( '#rss .alt-content' ).style.display = errors ? 'block' : 'none';
@@ -281,73 +261,64 @@ var ociConfirm;
       if ( errors || ! response ) {
         return console.error( 'rss feed failed', { errors, response } );
       }
-
       // Clear the rss container for the new articles.
       querySelector( '#rss-root' ).innerHTML = '';
-      
+
       response?.items?.forEach( function ( entry ) {
-        var articleContainer = createElement( 'div' ),
-          articleTitle = createElement( 'h1' ),
-          articleSpan = createElement( 'span' ),
-          articleDiv = createElement( 'div' ),
-          articleLink = createElement( 'a' );
-        articleContainer.className = 'rss-entry';
-        articleTitle.textContent = entry.title;
-        articleSpan.textContent = entry.pubDate
+        // Get the article template from the DOM
+        const articleTemplate = querySelector( '#article-template' );
+        const articleElement  = document.importNode( articleTemplate.content, true );
+
+        // Set the content for the article element
+        articleElement.querySelector( '.article-title' ).textContent = entry.title;
+        articleElement.querySelector( '.article-pubDate' ).textContent = entry.pubDate
           .replace( '+0000', '' )
           .slice( 0, -9 );
-        articleDiv.className = 'rss-content';
+        articleElement.querySelector( '.article-link' ).setAttribute( 'href', entry.link );
 
-        var articleContent = entry.content
+        const articleContent = entry.content
           .replace( /\s{2,}/g, ' ' )
           .replace( /\n/g, '' );
 
-        articleDiv.innerHTML = window.DOMPurify.sanitize( articleContent );
-        articleLink.textContent = PUG_VARS.STRINGS.READ_MORE;
-        articleLink.className = 'button';
-        articleLink.setAttribute( 'href', entry.link );
-        articleLink.setAttribute( 'target', '_blank' );
-        articleContainer.appendChild( articleTitle );
-        articleContainer.appendChild( articleSpan );
-        articleContainer.appendChild( articleDiv );
-        articleContainer.appendChild( articleLink );
+        articleElement.querySelector( '.rss-content' )
+          .innerHTML = window.DOMPurify.sanitize( articleContent );
 
-        querySelector( '#rss-root' ).appendChild( articleContainer );
+        // Append the article element to the DOM
+        querySelector( '#rss-root' ).appendChild( articleElement );
       } );
-    };
+    }
 
-    timeout( fetch( $rssUrl ) )
-      .then( async response => {
-        parser.parseString( await response.text(), parseRss );
+    timeout( fetch( rssUrl ) )
+      .then( async ( response ) => {
+        ( new window.RSSParser() )
+          .parseString( await response.text(), parseRss );
       } )
       .catch( error => {
         console.error( 'rss fetch failed', error );
-        parseRss( error, null )
+        parseRss( error, null );
       } );
 
     // Re-enable refresh button after 3 seconds.
     setTimeout( () => {
-      $homeRefreshBtn.removeAttribute( 'disabled' ),
-        $homeRefreshBtn.style.cursor = 'pointer'
+      homeRefreshBtn.removeAttribute( 'disabled' );
+      homeRefreshBtn.style.cursor = 'pointer';
     }, 3000 );
   }
 
   /**
-   * Show hints of `pageId`.
-   * 
-   * @param {string} pageId The page id.
+   * @param {string} pageId The page id to show hints of.
    */
-  var showHints = pageId => {
-    for ( var hints = querySelectorAll( '[hint-page]' ), i = 0; i < hints.length; i++ ) {
-      hints[i].style.display = 'none';
+  function showHints( pageId ) {
+    const hints = querySelectorAll( '[hint-page]' );
+    for ( let i = 0; i < hints.length; i++ ) {
+      hints[ i ].style.display = 'none';
     }
-    var hintId = 'HINT_' + pageId;
-
-    if ( ! localStorage[hintId] ) {
-      hints = querySelectorAll( `[hint-page="${pageId}"]` );
-      for ( var j = 0; j < hints.length; j++ ) {
-        hints[j].style.display = 'block';
-        hints[j].addEventListener( 'click', e => {
+    const hintId = 'HINT_' + pageId;
+    if ( ! localStorage[ hintId ] ) {
+      const hints = querySelectorAll( `[hint-page="${pageId}"]` );
+      for ( let j = 0; j < hints.length; j++ ) {
+        hints[ j ].style.display = 'block';
+        hints[ j ].addEventListener( 'click', e => {
           e.currentTarget.style.display = 'none';
         } );
       }
@@ -355,48 +326,44 @@ var ociConfirm;
     }
   }
 
-  /**
-   * Loads the twitter widget.
-   */
-  var loadTwitter = () => {
+  function loadTwitter() {
     return new Promise( ( resolve, reject ) => {
       querySelector( '#did-you-know' ).innerHTML = '';
-      var currentTheme = querySelector( 'body' ).className;
-      var twitterTheme = darkThemes.includes( currentTheme ) ? 'dark' : 'light';
-      var $preloadElement = createElement( 'a' );
-      $preloadElement.className = 'twitter-timeline';
-      $preloadElement.style = 'text-decoration:none;';
-      $preloadElement.setAttribute( 'data-height', '490' );
-      $preloadElement.setAttribute( 'data-theme', twitterTheme );
-      $preloadElement.setAttribute( 'data-chrome', 'transparent' );
-      $preloadElement.setAttribute( 'href', PUG_VARS.TW_URL );
-      $preloadElement.innerHTML = '@FreeSOGame on Twitter';
-      querySelector( '#did-you-know' ).append( $preloadElement );
-      var $prevWidget = querySelector( '#tw' );
-      if ( $prevWidget ) {
-        $prevWidget.parentNode.removeChild( $prevWidget );
-      }
-      var $head = querySelector( 'head' );
-      var $script = createElement( 'script' );
-      $script.setAttribute( 'id', 'tw' );
-      $script.src = 'https://platform.twitter.com/widgets.js';
+      const currentTheme = querySelector( 'body' ).className,
+        twitterTheme = darkThemes.includes( currentTheme ) ? 'dark' : 'light',
+        twAnchor = createElement( 'a' );
 
-      $script.addEventListener( 'load', () => {
-        twitterHasAlreadyLoaded = true;
+      twAnchor.className = 'twitter-timeline';
+      twAnchor.style = 'text-decoration:none;';
+      twAnchor.setAttribute( 'data-height', '490' );
+      twAnchor.setAttribute( 'data-theme', twitterTheme );
+      twAnchor.setAttribute( 'data-chrome', 'transparent' );
+      twAnchor.setAttribute( 'href', PUG_VARS.TW_URL );
+      twAnchor.innerHTML = '@FreeSOGame on Twitter';
+
+      querySelector( '#did-you-know' ).append( twAnchor );
+
+      const prevWidget = querySelector( '#tw' );
+      if ( prevWidget ) {
+        prevWidget.parentNode.removeChild( prevWidget );
+      }
+      const head = querySelector( 'head' );
+      const script = createElement( 'script' );
+      script.setAttribute( 'id', 'tw' );
+      script.src = 'https://platform.twitter.com/widgets.js';
+      script.addEventListener( 'load', () => {
+        twitterLoaded = true;
         resolve();
-        // twttr.events.bind( 'rendered', resolve );
       } );
-      $script.addEventListener( 'error', reject );
-      $head.appendChild( $script );
+      script.addEventListener( 'error', reject );
+      head.appendChild( script );
     } );
-  };
+  }
 
   /**
-   * Sets the current page to `pageId`.
-   *  
    * @param {string} pageId The page id.
    */
-  setCurrentPage = pageId => {
+  navigateTo = pageId => {
     if ( pageId == 'simitone' ) {
       if ( querySelector( 'body' ).className != 'simitone' ) {
         prevTheme = querySelector( 'body' ).className;
@@ -404,344 +371,277 @@ var ociConfirm;
       if ( ! darkThemes.includes( prevTheme ) ) { // Stay in dark theme.
         setTheme( 'simitone', true );
       }
-      sendToMain( 'CHECK_SIMITONE' );
+      send( 'CHECK_SIMITONE' );
 
-      simitoneRequirementsCheckInterval && clearInterval( simitoneRequirementsCheckInterval );
-      simitoneRequirementsCheckInterval = setInterval(
-        () => sendToMain( 'CHECK_SIMITONE' ), 60000 );
+      simitoneInterval && clearInterval( simitoneInterval );
+      simitoneInterval = setInterval( () => send( 'CHECK_SIMITONE' ), 60000 );
     } else {
       if ( prevTheme ) {
         setTheme( prevTheme );
         prevTheme = null;
       }
-      if ( simitoneRequirementsCheckInterval ) {
-        clearInterval( simitoneRequirementsCheckInterval );
-        simitoneRequirementsCheckInterval = null;
+      if ( simitoneInterval ) {
+        clearInterval( simitoneInterval );
+        simitoneInterval = null;
       }
     }
-
-    for ( var menuItems = querySelectorAll( 'li[page-trigger]' ), i = 0; i < menuItems.length; i++ ) {
-      menuItems[i].classList.remove( 'active' );
+    const menuItems = querySelectorAll( 'li[page-trigger]' );
+    for ( let i = 0; i < menuItems.length; i++ ) {
+      menuItems[ i ].classList.remove( 'active' );
     }
+    querySelector( `li[page-trigger="${pageId}"]` )
+      .classList.add( 'active' );
 
-    querySelector( `li[page-trigger="${pageId}"]` ).classList.add( 'active' );
-
-    for ( var pages = querySelectorAll( 'div.page' ), j = pages.length - 1; 0 <= j; j-- ) {
-      pages[j].style.display = 'none';
+    const pages = querySelectorAll( 'div.page' );
+    for ( let j = pages.length - 1; 0 <= j; j-- ) {
+      pages[ j ].style.display = 'none';
     }
     querySelector( `#${pageId}-page` ).style.display = 'block';
 
     showHints( pageId );
-  }
+  };
 
   /**
-   * Restores configuration values into their respective option controls.
-   * 
-   * @param {array} vars Array of unserialized configuration variables. 
+   * @param {array} vars Array of unserialized configuration variables.
    */
-  var restoreConfiguration = vars => {
-    for ( var Section in vars )
-      for ( var Item in vars[Section] ) {
-        var $option = querySelector( `[option-id="${Section}.${Item}"]` );
-        if ( isDarwin && Item == 'GraphicsMode' ) continue;
-        $option && ( $option.value = vars[Section][Item] );
+  function restoreConfiguration( vars ) {
+    for ( const section in vars )
+      for ( const item in vars[ section ] ) {
+        const option = querySelector( `[option-id="${section}.${item}"]` );
+        if ( isDarwin && item == 'GraphicsMode' )
+          continue;
+        option && ( option.value = vars[ section ][ item ] );
       }
   }
 
   /**
    * Creates or updates a full install progress item.
-   * 
+   *
    * @param {string} title    The title.
    * @param {string} text1    The text 1.
    * @param {string} text2    The text 2.
    * @param {number} progress The progress percentage number.
    */
-  var updateFullInstallProgressItem = ( title, text1, text2, _progress ) => {
-    var $fullInstall = querySelector( '#full-install' );
-    if ( title && text1 && text2 ) {
-      var $title = querySelector( '#full-install-title' );
-      var $text1 = querySelector( '#full-install-text1' );
-      var $text2 = querySelector( '#full-install-text2' );
-      var $progress = querySelector( '#full-install-progress' );
-
-      $title.textContent = title;
-      $text1.textContent = text1;
-      $text2.innerHTML = text2;
-      $progress.style.width = '100%'; // Does not show real progress.
-      $fullInstall.style.display = 'block';
-    } else {
-      $fullInstall.style.display = 'none';
+  function fullInstallProgress( title, text1, text2, _progress ) {
+    if ( ! ( title && text1 && text2 ) ) {
+      return querySelector( '#full-install' ).style.display = 'none';
     }
+    querySelector( '#full-install-title' ).textContent = title;
+    querySelector( '#full-install-text1' ).textContent = text1;
+    querySelector( '#full-install-text2' ).innerHTML = text2;
+    querySelector( '#full-install-progress' ).style.width  = '100%';
+    querySelector( '#full-install' ).style.display = 'block';
   }
 
   /**
    * Creates a notification item in the notification log.
-   * 
+   *
    * @param {string} title Notification title.
    * @param {string} body  Notification text.
    * @param {string} url   Notification url (optional).
    */
-  var createNotificationItem = ( title, body, url ) => {
+  function createNotification( title, body, url ) {
     url = 'https://beta.freeso.org';
     querySelector( '#notifications-page .alt-content' ).style.display = 'none';
 
-    var id = Math.floor( Date.now() / 1000 );
-    var notification = createElement( 'div' );
-    notification.className = 'notification';
-    notification.setAttribute( 'data-url', url );
-    notification.id = `FSONotification${id}`;
+    const id = Math.floor( Date.now() / 1000 );
+    const notificationElement = createNotificationElement( title, body, url );
+    notificationElement.querySelector( '.notification' ).id = `FSONotification${id}`;
 
-    var icon = createElement( 'i' );
-    icon.className = 'material-icons';
-    icon.innerHTML = 'notifications_empty';
+    const pageContent = querySelector( '#notifications-page .page-content' );
+    pageContent.prepend( notificationElement );
 
-    var h1 = createElement( 'h1' );
-    h1.textContent = title;
+    querySelector( `#FSONotification${id} .notification-body` )
+      .addEventListener( 'click', ( _e ) => {
+        if ( url ) {
+          window.open( url, '_blank' );
+        }
+      }, false );
+  }
 
-    var span = createElement( 'span' );
-    span.innerHTML = new Date().toLocaleString();
+  function createNotificationElement( title, body, url ) {
+    const template = querySelector( '#notification-template' );
+    const notification = document.importNode( template.content, true );
 
-    var p = createElement( 'p' );
-    p.textContent = window.DOMPurify.sanitize( body );
+    notification.querySelector( '.notification-title' )
+      .textContent = title;
+    notification.querySelector( '.notification-body' )
+      .innerHTML = window.DOMPurify.sanitize( body );
+    notification.querySelector( '.notification-time' )
+      .textContent = new Date().toLocaleString();
 
+    const notificationLink = notification.querySelector( '.notification-link' );
     if ( url ) {
-      var btn = document.createElement( 'a' );
-      btn.className = 'notification-link';
-      btn.target = '_blank';
-      btn.innerHTML = PUG_VARS.STRINGS.NOTIFICATION_LINK;
-      btn.href = url;
+      notificationLink.href = url;
+    } else {
+      notificationLink.remove();
     }
 
-    notification.appendChild( icon );
-    notification.appendChild( h1 );
-    notification.appendChild( p );
-    notification.appendChild( span );
-
-    if ( url ) notification.appendChild( btn );
-
-    var $logContainer = querySelector( '#notifications-page .page-content' );
-    $logContainer.innerHTML = notification.outerHTML + $logContainer.innerHTML;
-
-    querySelector( `#FSONotification${id} p` ).addEventListener( 'click', _e => {
-      if ( url ) {
-        window.open( url, '_blank' );
-      }
-    },
-      false
-    );
+    return notification;
   }
 
   /**
-   * Creates or modifies a progress item.
-   * 
-   * @param {string} elId         Progress item id.
-   * @param {string} title        Progress item title.
-   * @param {string} subtitle     Progress item span text.
-   * @param {string} progressText Progress item info text.
-   * @param {number} percentage   Progress item percentage.
-   * @param {string} miniconsole  Miniconsole (deprecated, use null).
+   * @param {string} elId
+   * @param {string} title
+   * @param {string} subtitle
+   * @param {string} progressText
+   * @param {number} percentage
    */
-  var createOrModifyProgressItem = ( elId, title, subtitle, progressText, percentage, miniconsole ) => {
+  function createOrModifyProgressItem( elId, title, subtitle, progressText, percentage ) {
     document.querySelector( '#downloads-page .alt-content' ).style.display = 'none';
-    var d = document.getElementById( elId );
-    if ( d )
-      ( d.querySelector( 'h1' ).innerHTML = title ),
-        ( d.querySelector( 'span' ).innerHTML = subtitle ),
-        ( d.querySelector( '.info' ).innerHTML = progressText ),
-        ( d.querySelector( '.progress' ).style.width = percentage + '%' ),
-        miniconsole
-          ? ( ( d.querySelector( '.loading' ).style.display = 'none' ),
-            ( percentage = d.querySelector( '.miniconsole' ) ),
-            ( percentage.innerHTML += miniconsole ),
-            ( percentage.style.display = 'block' ),
-            ( percentage.scrollTop = percentage.scrollHeight ) )
-          : ( ( d.querySelector( '.loading' ).style.display = 'block' ),
-            ( d.querySelector( '.miniconsole' ).style.display = 'none' ) );
-    else {
-      d = createElement( 'div' );
-      d.className = 'download';
-      d.setAttribute( 'id', elId );
+    let progressItem = document.getElementById( elId );
 
-      elId = createElement( 'h1' );
-      elId.innerHTML = title;
-
-      title = createElement( 'span' );
-      title.innerHTML = subtitle;
-
-      subtitle = createElement( 'div' );
-      subtitle.className = 'info';
-      subtitle.innerHTML = progressText;
-
-      progressText = createElement( 'div' );
-      progressText.className = 'loading';
-
-      var h = createElement( 'div' );
-      h.className = 'miniconsole';
-
-      miniconsole
-        ? ( ( progressText.style.display = 'none' ),
-          ( h.innerHTML += miniconsole ),
-          ( h.style.display = 'block' ),
-          ( h.scrollTop = h.scrollHeight ) )
-        : ( ( progressText.style.display = 'block' ), ( h.style.display = 'none' ) );
-
-      miniconsole = createElement( 'div' );
-      miniconsole.className = 'progress';
-      miniconsole.style.width = percentage + '%';
-      progressText.appendChild( miniconsole );
-      d.appendChild( elId );
-      d.appendChild( title );
-      d.appendChild( subtitle );
-      d.appendChild( h );
-      d.appendChild( progressText );
-
-      querySelector( '#downloads-page .page-content' ).innerHTML =
-        d.outerHTML + querySelector( '#downloads-page .page-content' ).innerHTML;
+    if ( ! progressItem ) {
+      const progressItemElement = ( elId => {
+        const template = document.querySelector( '#progress-item-template' );
+        const progressItem = document.importNode( template.content, true );
+        progressItem.querySelector( '.download' ).id = elId;
+        return progressItem;
+      } )( elId );
+      progressItem = progressItemElement.querySelector( '.download' );
+      document.querySelector( '#downloads-page .page-content' )
+        .insertAdjacentElement( 'afterbegin', progressItem );
     }
+    progressItem.querySelector( '.progress' ).style.width = percentage + '%';
+    progressItem.querySelector( '.progress-title' ).innerHTML = title;
+    progressItem.querySelector( '.progress-subtitle' ).innerHTML = subtitle;
+    progressItem.querySelector( '.progress-info' ).innerHTML = progressText;
+    progressItem.querySelector( '.loading' ).style.display = 'block';
   }
 
   /**
-   * Creates a modal.
-   * 
    * @param {string} title       The Modal window title.
    * @param {string} text        The main Modal text.
    * @param {string} yesText     The text for an affirmative button.
    * @param {string} noText      The text for a negative response button.
    * @param {string} modalRespId Unique Modal response ID if you want to receive the response in code.
    * @param {string} extra       Extra parameters.
-   * @param {string} type        Modal type.
+   * @param {string} type        Modal type (success/error/empty)
    */
-  var yesNo = ( title, text, yesText, noText, modalRespId, extra, type ) => {
+  function yesNo( title, text, yesText, noText, modalRespId, extra, type ) {
     if ( type == 'success' ) {
       okAudio.play();
     } else {
-      yesNoAudio.play();
+      modalAudio.play();
     }
-
     if ( modalRespId == 'FULL_INSTALL_CONFIRM' && isWindows ) {
       return openOneClickInstall(); // Has its custom modal
     }
+    const modalElement = createYesNoModalElement( title, text, yesText, noText, type );
+    const modalDiv  = modalElement.querySelector( '.modal' );
+    const yesButton = modalElement.querySelector( '.yes-button' );
+    const noButton  = modalElement.querySelector( '.no-button' );
 
-    var modalDiv = createElement( 'div' );
-    modalDiv.className = 'modal overlay-closeable';
-  
-    if ( type ) {
-      modalDiv.className += ' modal-' + type;
-    }
-    var header = createElement( 'h1' );
-    header.innerHTML = title;
-  
-    modalDiv.appendChild( header );
-  
-    var textParagraph = createElement( 'p' );
-    textParagraph.innerHTML = text;
-  
-    modalDiv.appendChild( textParagraph );
-    var buttonContainer = createElement( 'div' );
-  
-    var yesButton = createElement( 'button' );
-    yesButton.innerHTML = yesText;
     yesButton.addEventListener( 'click', function () {
       closeModal( modalDiv );
       modalRespId && window.shared.send( modalRespId, ! 0, extra );
     } );
-    buttonContainer.appendChild( yesButton );
-  
     if ( noText ) {
-      var noButton = createElement( 'span' );
-      noButton.innerHTML = noText;
       noButton.addEventListener( 'click', function () {
         closeModal( modalDiv );
         modalRespId && window.shared.send( modalRespId, ! 1, extra );
       } );
-      buttonContainer.appendChild( noButton );
-    } else {
-      yesButton.style.margin = '0px';
     }
-    modalDiv.appendChild( buttonContainer );
-    querySelector( '#launcher' ).appendChild( modalDiv );
+    querySelector( '#launcher' ).appendChild( modalElement );
     showModal( modalDiv );
   }
 
-  var clearInstallerHints = () => {
-    var hints = querySelectorAll( '[hint-page="installer"]' );
-    for ( var j = 0; j < hints.length; j++ ) {
-      hints[j].style.display = 'none';
-    }
-  };
+  function createYesNoModalElement( title, text, yesText, noText, type ) {
+    const modalTemplate = querySelector( '#yes-no-modal-template' );
+    const modalElement  = document.importNode( modalTemplate.content, true );
 
-  var clearModals = () => {
-    var modals = querySelectorAll( '.overlay-closeable' );
-    for ( var j = 0; j < modals.length; j++ ) {
-      closeModal( modals[j] );
+    modalElement.querySelector( '.modal-header' ).innerHTML = title;
+    modalElement.querySelector( '.modal-text' ).innerHTML = text;
+    modalElement.querySelector( '.yes-button' ).innerHTML = yesText;
+    if ( type ) {
+      modalElement.querySelector( '.modal' ).classList.add( `modal-${type}` );
+    }
+    if ( noText ) {
+      modalElement.querySelector( '.no-button' ).innerHTML = noText;
+    } else {
+      modalElement.querySelector( '.no-button' ).remove();
+      modalElement.querySelector( '.yes-button' ).style.margin = '0px';
+    }
+    return modalElement;
+  }
+
+  function clearInstallerHints() {
+    const hints = querySelectorAll( '[hint-page="installer"]' );
+    for ( let j = 0; j < hints.length; j++ ) {
+      hints[ j ].style.display = 'none';
     }
   }
 
-  var closeModal = ( element ) => {
+  function clearModals() {
+    const modals = querySelectorAll( '.overlay-closeable' );
+    for ( let j = 0; j < modals.length; j++ ) {
+      closeModal( modals[ j ] );
+    }
+  }
+
+  function closeModal( element ) {
     if ( element.classList.contains( 'modal' ) ) {
-      element.parentNode.removeChild( element ); 
+      element.parentNode.removeChild( element );
     } else {
       element.style.display = 'none';
     }
     hideOverlay();
   }
 
-  var showModal = ( element ) => {
+  function showModal( element ) {
     if ( ! element.classList.contains( 'modal' ) ) {
       element.style.display = 'block';
     }
     showOverlay();
   }
 
-  var hideOverlay = () => {
-    var overlayUsing = querySelectorAll( '.overlay-closeable' );
+  function hideOverlay() {
+    const overlayUsing = querySelectorAll( '.overlay-closeable' );
     if ( overlayUsing.length === 0 || ( ! Array.from( overlayUsing ).some( isVisible ) ) ) {
       querySelector( '#overlay' ).style.display = 'none';
     }
   }
-
-  var showOverlay = () => {
+  function showOverlay() {
     querySelector( '#overlay' ).style.display = 'block';
   }
 
-  var ociFolder;
+  let ociFolder;
 
-  var openOneClickInstall = () => {
-    var oci = querySelector( '.oneclick-install' );
+  function openOneClickInstall() {
+    const oci = querySelector( '.oneclick-install' );
     oci.classList.remove( 'oneclick-install-selected' );
     showModal( oci );
   }
 
   closeOneClickInstall = () => {
     closeModal( querySelector( '.oneclick-install' ) );
-  }
+  };
 
   ociPickFolder = () => {
-    sendToMain( 'OCI_PICK_FOLDER' );
-  }
+    send( 'OCI_PICK_FOLDER' );
+  };
 
   ociConfirm = e => {
     e.stopPropagation();
     if ( ociFolder ) {
-      sendToMain( 'FULL_INSTALL_CONFIRM', ociFolder );
+      send( 'FULL_INSTALL_CONFIRM', ociFolder );
       closeModal( querySelector( '.oneclick-install' ) );
     }
-  }
+  };
 
-  var ociPickedFolder = folder => {
+  function ociPickedFolder( folder ) {
     ociFolder = folder;
-    var oci = querySelector( '.oneclick-install' );
+    const oci = querySelector( '.oneclick-install' );
+    const ociFolderElement = querySelector( '.oneclick-install-folder' );
     oci.classList.add( 'oneclick-install-selected' );
-    var ociFolderElement = querySelector( '.oneclick-install-folder' );
     ociFolderElement.innerHTML = folder;
     ociFolder = folder;
   }
 
-  var isVisible = ( element ) => {
-    var style = window.getComputedStyle( element );
-
+  function isVisible( element ) {
+    const style = window.getComputedStyle( element );
     return style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0';
-  };
+  }
 
   function filterHz( value, minValue, maxValue ) {
     if ( parseInt( value ) < minValue ) {
@@ -767,9 +667,9 @@ var ociConfirm;
     querySelector( '.new' ).style.display = 'none';
     if ( ! v ) return;
 
-    var i = parseInt( v );
-    var f = ago( new Date( i * 1000 ) );
-    var seconds = Math.floor( ( new Date() - new Date( i * 1000 ) ) / 1000 );
+    const i = parseInt( v );
+    const f = ago( new Date( i * 1000 ) );
+    const seconds = Math.floor( ( new Date() - new Date( i * 1000 ) ) / 1000 );
 
     if ( seconds < 172800 ) {
       if ( Math.floor( seconds / 86400 ) <= 1 ) {
@@ -783,7 +683,10 @@ var ociConfirm;
 
     querySelector( '#remeshinfo' ).style.display = 'block';
     querySelector( '#remeshinfo' ).innerHTML =
-      `<i style="vertical-align:middle;float:left;margin-right:5px" class="material-icons">access_time</i> 
+      `<i 
+        style="vertical-align:middle; float:left; margin-right:5px" 
+        class="material-icons"
+        >access_time</i> 
       <span style="line-height:25px">${f}</span>`;
   } );
   // OCI_PICKED_FOLDER
@@ -794,10 +697,10 @@ var ociConfirm;
   // SIMITONE_SHOULD_UPDATE
   onMessage( 'SIMITONE_SHOULD_UPDATE', ( a, b ) => {
     if ( ! b ) {
-      simitoneSuggestedUpdate = null;
+      simitoneUpdate = null;
       return simitoneShouldntUpdate();
     }
-    simitoneSuggestedUpdate = b;
+    simitoneUpdate = b;
     simitoneShouldUpdate();
   } );
   onMessage( 'SIMITONE_SET_VER', ( a, b ) => {
@@ -816,7 +719,7 @@ var ociConfirm;
   // TOAST
   onMessage( 'TOAST', ( a, t, c ) => toast( t, c ) );
   // NOTIFLOG
-  onMessage( 'NOTIFLOG', ( a, t, l, c ) => createNotificationItem( t, l, c ) );
+  onMessage( 'NOTIFLOG', ( a, t, l, c ) => createNotification( t, l, c ) );
   // REMOVE_TOAST
   onMessage( 'REMOVE_TOAST', ( a, t ) => removeToast( t ) );
   // POPUP
@@ -824,7 +727,7 @@ var ociConfirm;
   // RESTORE_CONFIGURATION
   onMessage( 'RESTORE_CONFIGURATION', ( a, b ) => restoreConfiguration( b ) );
   // CHANGE_PAGE
-  onMessage( 'CHANGE_PAGE', ( a, b ) => setCurrentPage( b ) );
+  onMessage( 'CHANGE_PAGE', ( a, b ) => navigateTo( b ) );
   // INSPROG
   onMessage( 'INSPROG', ( a, b ) => {
     if ( ! b ) return;
@@ -872,14 +775,14 @@ var ociConfirm;
   } );
   // STOP_PROGRESS_ITEM
   onMessage( 'STOP_PROGRESS_ITEM', ( a, b ) => {
-    var $progressItem = querySelector( `#${b}` );
-    if ( $progressItem ) {
-      $progressItem.className = 'download stopped';
+    const item = querySelector( `#${b}` );
+    if ( item ) {
+      item.className = 'download stopped';
     }
   } );
   // PLAY_SOUND
   onMessage( 'PLAY_SOUND', ( a, b ) => {
-    var audio = new window.Howl( { src: `sounds/${b}.wav`, volume: 0.4 } );
+    const audio = new window.Howl( { src: `sounds/${b}.wav`, volume: 0.4 } );
     audio.play();
   } );
   // CONSOLE_LOG
@@ -889,7 +792,7 @@ var ociConfirm;
     createOrModifyProgressItem( b, c, e, f, g, d ) );
   // FULL_INSTALL_PROGRESS_ITEM
   onMessage( 'FULL_INSTALL_PROGRESS_ITEM', ( a, b, c, e, f ) =>
-    updateFullInstallProgressItem( b, c, e, f ) );
+    fullInstallProgress( b, c, e, f ) );
   // MAX_REFRESH_RATE
   onMessage( 'MAX_REFRESH_RATE', ( a, rate ) => {
     if ( rate ) {
@@ -899,33 +802,33 @@ var ociConfirm;
   } );
 
   // Renderer HTML event listeners.
-  addEventListener( '.launch',                  'click',       () => sendToMain( 'PLAY' ) );
-  addEventListener( '.launch',                  'contextmenu', () => sendToMain( 'PLAY', true ) );
+  addEventListener( '.launch',                  'click',       () => send( 'PLAY' ) );
+  addEventListener( '.launch',                  'contextmenu', () => send( 'PLAY', true ) );
   addEventListener( '#refresh-home-button',     'click',       () => fetchNews( true ) );
-  addEventListener( '#simitone-play-button',    'click',       () => sendToMain( 'PLAY_SIMITONE' ) );
-  addEventListener( '#simitone-play-button',    'contextmenu', () => sendToMain( 'PLAY_SIMITONE', true ) );
-  addEventListener( '#full-install-button',     'click',       () => sendToMain( 'FULL_INSTALL' ) );
+  addEventListener( '#simitone-play-button',    'click',       () => send( 'PLAY_SIMITONE' ) );
+  addEventListener( '#simitone-play-button',    'contextmenu', () => send( 'PLAY_SIMITONE', true ) );
+  addEventListener( '#full-install-button',     'click',       () => send( 'FULL_INSTALL' ) );
   addEventListener( '#full-install-button',     'click',       () => clearInstallerHints() );
-  addEventListener( '#update-check',            'click',       () => sendToMain( 'CHECK_UPDATES' ) );
-  addEventListener( '#simitone-install-button', 'click',       () => sendToMain( 'INSTALL', 'Simitone' ) );
-  addEventListener( '#simitone-should-update',  'click',       () => sendToMain( 'INSTALL_SIMITONE_UPDATE' ) );
+  addEventListener( '#update-check',            'click',       () => send( 'CHECK_UPDATES' ) );
+  addEventListener( '#simitone-install-button', 'click',       () => send( 'INSTALL', 'Simitone' ) );
+  addEventListener( '#simitone-should-update',  'click',       () => send( 'INSTALL_SIMITONE_UPDATE' ) );
   addEventListener( '#overlay',                 'click',       () => clearModals() );
 
   addEventListenerAll( '[option-id]', 'change', ( event, _b ) => {
-    var currentTarget = event.currentTarget;
-    var optionId = currentTarget.getAttribute( 'option-id' );
-    var inputValue = currentTarget.value;
-  
+    const currentTarget = event.currentTarget;
+    const optionId = currentTarget.getAttribute( 'option-id' );
+    let inputValue = currentTarget.value;
+
     if ( optionId === 'Launcher.Theme' ) {
       setTheme( inputValue );
     }
     if ( optionId === 'Game.RefreshRate' ) {
-      var min = currentTarget.getAttribute( 'min' );
-      var max = currentTarget.getAttribute( 'max' );
+      const min = currentTarget.getAttribute( 'min' );
+      const max = currentTarget.getAttribute( 'max' );
       if ( ! inputValue ) {
         inputValue = currentTarget.value = max;
       } else {
-        var hz = filterHz( inputValue, min, max );
+        const hz = filterHz( inputValue, min, max );
         if ( hz != inputValue ) {
           inputValue = currentTarget.value = hz;
         }
@@ -933,14 +836,14 @@ var ociConfirm;
     }
     const optionPath = optionId.split( '.' );
 
-    sendToMain( 'SET_CONFIGURATION', [ optionPath[0], optionPath[1], inputValue ] );
+    send( 'SET_CONFIGURATION', [ optionPath[ 0 ], optionPath[ 1 ], inputValue ] );
   } );
   addEventListenerAll( '[page-trigger]', 'click', ( a, _b ) => {
-    pageTriggerAudio.play();
-    setCurrentPage( a.currentTarget.getAttribute( 'page-trigger' ) );
+    clickAudio.play();
+    navigateTo( a.currentTarget.getAttribute( 'page-trigger' ) );
   } );
   addEventListenerAll( '[install]', 'click', ( a, _b ) =>
-    sendToMain( 'INSTALL', a.currentTarget.getAttribute( 'install' ) ) );
+    send( 'INSTALL', a.currentTarget.getAttribute( 'install' ) ) );
 
-  init(); // Init client code.
+  initClient();
 } )();

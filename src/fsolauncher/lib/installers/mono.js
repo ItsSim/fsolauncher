@@ -115,7 +115,7 @@ class MonoInstaller {
    * Creates all the directories and subfolders in a path.
    *
    * @param {string} dir The path to create.
-   * 
+   *
    * @returns {Promise<void>} A promise that resolves when the directory is created.
    */
   setupDir( dir ) {
@@ -160,12 +160,12 @@ class MonoInstaller {
     );
     return new Promise( ( resolve, reject ) => {
       // headless install
-      sudo.exec( `installer -pkg ${global.appData.replace( / /g, '\\ ' )}temp/mono-${this.id}.pkg -target /`, {}, 
+      sudo.exec( `installer -pkg ${global.appData.replace( / /g, '\\ ' )}temp/mono-${this.id}.pkg -target /`, {},
         ( err, stdout, stderr ) => {
           if ( err ) return reject( err );
           console.info( 'mono output', { stdout, stderr } );
           resolve();
-      } );
+        } );
     } );
   }
 

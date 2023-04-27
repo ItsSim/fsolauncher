@@ -11,7 +11,7 @@ class CompleteInstaller {
 
   /**
    * Runs steps sequentially.
-   * 
+   *
    * @param {string} folder The folder to install everything to.
    */
   async install( folder ) {
@@ -41,12 +41,12 @@ class CompleteInstaller {
     );
     if ( process.platform === 'darwin' ) {
       // Skip SDL if already installed.
-      if ( this.fsolauncher.isInstalled['SDL'] ) {
+      if ( this.fsolauncher.isInstalled[ 'SDL' ] ) {
         return Promise.resolve();
       }
       return this.fsolauncher.install( 'SDL', { fullInstall: true } );
     }
-    if ( this.fsolauncher.isInstalled['OpenAL'] ) {
+    if ( this.fsolauncher.isInstalled[ 'OpenAL' ] ) {
       return Promise.resolve();
     }
     return this.fsolauncher.install( 'OpenAL', { fullInstall: true } );
@@ -66,13 +66,13 @@ class CompleteInstaller {
     );
     if ( process.platform === 'darwin' ) {
       // Skip Mono if already installed.
-      if ( this.fsolauncher.isInstalled['Mono'] ) {
+      if ( this.fsolauncher.isInstalled[ 'Mono' ] ) {
         return Promise.resolve();
       }
       return this.fsolauncher.install( 'Mono', { fullInstall: true } );
     }
     // Skip .NET if already installed.
-    if ( this.fsolauncher.isInstalled['NET'] ) {
+    if ( this.fsolauncher.isInstalled[ 'NET' ] ) {
       return Promise.resolve();
     }
     return this.fsolauncher.install( 'NET', { fullInstall: true } );
@@ -80,7 +80,7 @@ class CompleteInstaller {
 
   /**
    * Installs The Sims Online.
-   * 
+   *
    * @param {string} folder The folder to install TSO to.
    *
    * @returns {Promise<void>} A promise that resolves when the installation is finished.
@@ -100,7 +100,7 @@ class CompleteInstaller {
 
   /**
    * Installs FreeSO.
-   * 
+   *
    * @param {string} folder The folder to install FreeSO to.
    *
    * @returns {Promise<void>} A promise that resolves when the installation is finished.

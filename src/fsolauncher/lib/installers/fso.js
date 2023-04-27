@@ -31,7 +31,7 @@ class FSOInstaller {
       `FSOProgressItem${this.id}`,
       'FreeSO Client (from GitHub)',
       `${global.locale.INS_IN} ${this.path}`,
-      message, 
+      message,
       percentage
     );
     this.fsolauncher.setProgressBar(
@@ -105,14 +105,14 @@ class FSOInstaller {
 
   /**
    * Downloads Mac-extras for Darwin.
-   * 
+   *
    * @returns {Promise<void>} A promise that resolves when the download is complete.
    */
   step5() {
     if ( process.platform === 'darwin' ) {
-      this.dl = download( { 
-        from: 'https://beta.freeso.org/LauncherResourceCentral/MacExtras', 
-        to: `${global.appData}temp/macextras-${this.id}.zip` 
+      this.dl = download( {
+        from: 'https://beta.freeso.org/LauncherResourceCentral/MacExtras',
+        to: `${global.appData}temp/macextras-${this.id}.zip`
       } );
       return this.download();
     }
@@ -121,15 +121,15 @@ class FSOInstaller {
 
   /**
    * Installs Mac-extras for Darwin.
-   * 
+   *
    * @returns {Promise<void>} A promise that resolves when the installation is complete.
    */
   step6() {
     if ( process.platform === 'darwin' ) {
-      return unzip( { 
-        from: `${global.appData}temp/macextras-${this.id}.zip`, 
-        to: this.path, 
-        cpperm: true 
+      return unzip( {
+        from: `${global.appData}temp/macextras-${this.id}.zip`,
+        to: this.path,
+        cpperm: true
       }, filename => {
         this.createProgressItem(
           global.locale.INS_EXTRACTING_ME + ' ' + filename, 100
@@ -141,7 +141,7 @@ class FSOInstaller {
 
   /**
    * Obtain FreeSO release information from GitHub.
-   * 
+   *
    * Used as a backup if the FreeSO API is down.
    *
    * @returns {Promise<object>} A promise that resolves with the release information.
@@ -169,7 +169,7 @@ class FSOInstaller {
 
   /**
    * Obtains the latest release zip either from api.freeso.org or GitHub directly.
-   * 
+   *
    * Use api.freeso.org first, fallback to GitHub.
    *
    * @returns {Promise<string>} A promise that resolves with the URL of the zip.
@@ -179,12 +179,12 @@ class FSOInstaller {
     try {
       const apiReleaseInfo = await this.getFreeSOApiReleaseInfo();
       if ( ! Array.isArray( apiReleaseInfo ) || apiReleaseInfo.length == 0 ) throw new Error( 'Wrong response' );
-      url = apiReleaseInfo[0].full_zip; // Latest version
+      url = apiReleaseInfo[ 0 ].full_zip; // Latest version
     } catch ( err ) {
       captureWithSentry( err );
       console.error( 'failed getting api info', err );
     }
-    
+
     if ( ! url ) {
       try {
         const githubReleaseInfo = await this.getFreeSOGitHubReleaseInfo();
@@ -192,10 +192,10 @@ class FSOInstaller {
           throw new Error( 'Invalid response when trying to obtain FreeSO release information from GitHub.' );
         }
         for ( let i = 0; i < githubReleaseInfo.assets.length; i++ ) {
-          const asset = githubReleaseInfo.assets[i];
-          if ( asset['name'].indexOf( 'client' ) > -1 ) {
+          const asset = githubReleaseInfo.assets[ i ];
+          if ( asset[ 'name' ].indexOf( 'client' ) > -1 ) {
             // This asset contains the full client.
-            url = asset['browser_download_url'];
+            url = asset[ 'browser_download_url' ];
           }
         }
       } catch ( err ) {
@@ -225,8 +225,8 @@ class FSOInstaller {
     if ( this.dl ) this.dl.cleanup();
     this.haltProgress = true;
     this.fsolauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
-    this.createProgressItem( 
-      strFormat( global.locale.FSO_FAILED_INSTALLATION, 'FreeSO' ), 100 
+    this.createProgressItem(
+      strFormat( global.locale.FSO_FAILED_INSTALLATION, 'FreeSO' ), 100
     );
   }
 
@@ -280,7 +280,7 @@ class FSOInstaller {
    * Creates all the directories and subfolders in a path.
    *
    * @param {string} dir The path to create.
-   * 
+   *
    * @returns {Promise<void>} A promise that resolves when the directory is created.
    */
   setupDir( dir ) {
@@ -294,7 +294,7 @@ class FSOInstaller {
 
   /**
    * Checks if FreeSO is already installed in a given path.
-   * 
+   *
    * @returns {Promise<boolean>} If FreeSO is installed already.
    */
   isInstalledInPath() {

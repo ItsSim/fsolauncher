@@ -8,9 +8,9 @@ class Registry {
   /**
    * Tests to see if the current user has access to the registry by
    * creating and deleting a key.
-   * 
+   *
    * https://github.com/fresc81/node-winreg#access-to-restricted-keys
-   * 
+   *
    * @returns {Promise<boolean>} A promise that resolves to true if the
    *                             user has access to the registry.
    */
@@ -19,7 +19,7 @@ class Registry {
     const winreg = require( 'winreg' );
     const regKey = new winreg( {
       hive: winreg.HKLM,
-      key:  '\\SOFTWARE\\AAA_' + new Date().toISOString()
+      key: '\\SOFTWARE\\AAA_' + new Date().toISOString()
     } );
 
     return new Promise( ( resolve, _reject ) => {
@@ -38,25 +38,25 @@ class Registry {
               console.error( 'registry access failed (destroy)', err );
               return resolve( false );
             }
-            console.info( 'registry access ok', 
+            console.info( 'registry access ok',
               '(this user can access the windows registry)' );
             resolve( true );
-          } )
+          } );
         } );
-      } )
+      } );
     } );
   }
   static getOpenALPath() {
     return '\\SOFTWARE\\OpenAL';
   }
   static getFSOPath() {
-    return process.platform === 'win32' ? 
-      '\\SOFTWARE\\Rhys Simpson\\FreeSO' : 
+    return process.platform === 'win32' ?
+      '\\SOFTWARE\\Rhys Simpson\\FreeSO' :
       `${global.homeDir}/Documents/FreeSO/FreeSO.exe`;
   }
   static getTSOPath() {
-    return process.platform === 'win32' ? 
-      '\\SOFTWARE\\Maxis\\The Sims Online' : 
+    return process.platform === 'win32' ?
+      '\\SOFTWARE\\Maxis\\The Sims Online' :
       `${global.homeDir}/Documents/The Sims Online/TSOClient/TSOClient.exe`;
   }
   static getNETPath() {
@@ -64,12 +64,12 @@ class Registry {
   }
   static getSimitonePath() {
     return process.platform === 'win32' ?
-      '\\SOFTWARE\\Rhys Simpson\\Simitone' : 
+      '\\SOFTWARE\\Rhys Simpson\\Simitone' :
       `${global.homeDir}/Documents/Simitone for Windows/Simitone.Windows.exe`;
   }
   static getTS1Path() {
     return process.platform === 'win32' ?
-      '\\SOFTWARE\\Maxis\\The Sims' : 
+      '\\SOFTWARE\\Maxis\\The Sims' :
       `${global.homeDir}/Documents/The Sims/Sims.exe`;
   }
   static getMonoPath() {
@@ -80,28 +80,28 @@ class Registry {
   }
 
   /**
-   * Checks if the program is installed in several predefined local paths. 
+   * Checks if the program is installed in several predefined local paths.
    * This is useful for those cases where the current user does not have access
    * to the registry even in admin mode:
-   * 
+   *
    * https://github.com/fresc81/node-winreg#access-to-restricted-keys
-   * 
+   *
    * @param {string} componentCode The program ID.
-   * 
+   *
    * @returns {string|boolean} The path to the program if it is installed,
    */
   static async win32LocalPathFallbacks( componentCode ) {
     const localRegistry = await Registry.getLocalRegistry();
     const locals = [];
-    if ( localRegistry[componentCode] ) {
-      locals.push( localRegistry[componentCode] );
+    if ( localRegistry[ componentCode ] ) {
+      locals.push( localRegistry[ componentCode ] );
     }
     if ( componentCode == 'FSO' ) {
       locals.push( 'C:/Program Files/FreeSO/FreeSO.exe' );
     }
     if ( componentCode == 'TSO' ) {
       locals.push( 'C:/Program Files/Maxis/The Sims Online/TSOClient/TSOClient.exe' );
-      locals.push( 'C:/Program Files/The Sims Online/TSOClient/TSOClient.exe' ); 
+      locals.push( 'C:/Program Files/The Sims Online/TSOClient/TSOClient.exe' );
     }
     if ( componentCode == 'Simitone' ) {
       locals.push( 'C:/Program Files/Simitone for Windows/Simitone.Windows.exe' );
@@ -114,7 +114,7 @@ class Registry {
       locals.push( 'C:/Program Files (x86)/Maxis/The Sims' );
     }
     for ( let i = 0; i < locals.length; i++ ) {
-      const local = locals[i];
+      const local = locals[ i ];
 
       console.info( 'testing local', { componentCode, local } );
 
@@ -159,10 +159,10 @@ class Registry {
 
   /**
    * Cleans a path to remove the executable name.
-   * 
+   *
    * @param {string} componentCode The Component to look for.
    * @param {string} path The path to clean.
-   * 
+   *
    * @returns {string}
    */
   static stripLocalPath( componentCode, path ) {
@@ -171,7 +171,7 @@ class Registry {
     }
     if ( componentCode == 'TSO' ) {
       return path.replace( '/TSOClient/TSOClient.exe', '' );
-    } 
+    }
     if ( componentCode == 'Simitone' ) {
       return path.replace( '/Simitone.Windows.exe', '' );
     }
@@ -183,7 +183,7 @@ class Registry {
    *
    * @param {string} componentCode The Component to look for.
    * @param {string} regPath The registry path to look in.
-   * 
+   *
    * @returns {Promise<{key: string, isInstalled: string}>}
    */
   static get( componentCode, regPath ) {
@@ -193,11 +193,11 @@ class Registry {
         console.info( 'testing mac', { componentCode, regPath } );
         require( 'fs-extra' ).pathExists( regPath, ( _err, exists ) => {
           console.info( 'tested mac', { componentCode, regPath, exists } );
-          resolve( { 
-            key: componentCode, 
-            isInstalled: exists ? 
-              Registry.stripLocalPath( componentCode, regPath ) 
-                : false 
+          resolve( {
+            key: componentCode,
+            isInstalled: exists ?
+              Registry.stripLocalPath( componentCode, regPath )
+              : false
           } );
         } );
       } );
@@ -247,8 +247,8 @@ class Registry {
           }
           for ( let i = 0; i < registries.length; i++ ) {
             if (
-              registries[i].key.indexOf( 'v4.0' ) > -1 ||
-              registries[i].key.indexOf( 'v4' ) > -1
+              registries[ i ].key.indexOf( 'v4.0' ) > -1 ||
+              registries[ i ].key.indexOf( 'v4' ) > -1
             ) {
               return resolve( { key: componentCode, isInstalled: true } );
             }
@@ -263,11 +263,11 @@ class Registry {
               isInstalled = await Registry.win32LocalPathFallbacks( componentCode );
             } catch ( err ) {/**/}
             return resolve( { key: componentCode, isInstalled, error: err } );
-          } 
+          }
 
           if ( exists ) {
             return resolve( { key: componentCode, isInstalled: true } );
-          } 
+          }
           let isInstalled = false;
           try {
             isInstalled = await Registry.win32LocalPathFallbacks( componentCode );
@@ -284,7 +284,7 @@ class Registry {
    *
    * @param {import('../fsolauncher')} fsolauncher
    * @param {string} installDir Where TSO was installed.
-   * 
+   *
    * @returns {Promise<void>} A promise that resolves when the registry key is created.
    */
   static async createMaxisEntry( fsolauncher, installDir ) {
@@ -350,7 +350,7 @@ class Registry {
    *
    * @param {string} installDir Where the game was installed.
    * @param {string} keyName The name of the registry key.
-   * 
+   *
    * @returns {Promise<void>} A promise that resolves when the registry key is created.
    */
   static async createGameEntry( installDir, keyName ) {
@@ -409,10 +409,10 @@ class Registry {
 
   /**
    * Creates the default Simitone Registry Key.
-   * 
+   *
    * @param {import('../fsolauncher')} fsolauncher
    * @param {string} installDir Where Simitone was installed.
-   * 
+   *
    * @returns {Promise<void>} A promise that resolves when the registry key is created.
    */
   static async createSimitoneEntry( fsolauncher, installDir ) {
@@ -425,10 +425,10 @@ class Registry {
 
   /**
    * Creates the default FreeSO Registry Key.
-   * 
+   *
    * @param {string} installDir Where FreeSO was installed.
    * @param {import('../fsolauncher')} fsolauncher
-   * 
+   *
    * @returns {Promise<void>} A promise that resolves when the registry key is created.
    */
   static async createFreeSOEntry( fsolauncher, installDir ) {
@@ -462,7 +462,7 @@ class Registry {
    * @param {import('../fsolauncher')} fsolauncher
    * @param {string} key
    * @param {string} value
-   * 
+   *
    * @returns {Promise<void>}
    */
   static async saveToLocalRegistry( fsolauncher, key, value ) {

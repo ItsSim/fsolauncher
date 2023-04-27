@@ -1543,3 +1543,19 @@ i.spin {
 .oneclick-install-selected .oneclick-install-plus {
   display: none!important;
 }
+
+#sidebar li.dot i {
+  position: relative;
+}
+
+#sidebar li.dot i::before {
+  content: '';
+  height: 8px;
+  width: 8px;
+  border-radius: 10px;
+  background: red;
+  position: absolute;
+  display: block;
+  top: 0;
+  left: 0;
+}

@@ -100,7 +100,7 @@ class TSOInstaller {
    * Extract cabinet files into the installation directory.
    *
    * @param {Functon} unzipgc The unzip cleaner callback.
-   * 
+   *
    * @returns {Promise<void>} A promise that resolves when the files are extracted.
    */
   step4( unzipgc ) {
@@ -162,7 +162,7 @@ class TSOInstaller {
 
   /**
    * Extracts the MSFT cabinets.
-   * 
+   *
    * @param {Function} unzipgc The unzip cleaner callback.
    *
    * @returns {Promise<Function>} A promise that resolves when the extraction is complete.
@@ -194,7 +194,7 @@ class TSOInstaller {
    * Creates all the directories and subfolders in a path.
    *
    * @param {string} dir The path to create.
-   * 
+   *
    * @returns {Promise<void>} A promise that resolves when the directory is created.
    */
   setupDir( dir ) {
@@ -208,7 +208,7 @@ class TSOInstaller {
 
   /**
    * Checks if The Sims Online is already installed in a given path.
-   * 
+   *
    * @returns {Promise<boolean>} If FreeSO is installed already.
    */
   isInstalledInPath( _after ) {
@@ -243,7 +243,7 @@ class TSOInstaller {
   /**
    * Displays the extraction progress for a given cabinet object.
    *
-   * @param {object} cab The cabinet object.
+   * @param {Object} cab The cabinet object.
    */
   updateExtractionProgress( cab ) {
     this.createProgressItem(

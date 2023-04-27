@@ -10,7 +10,7 @@ const { initSentry } = require( './fsolauncher/lib/utils' );
 // init Sentry error logging
 initSentry();
 
-const { 
+const {
   app, BrowserWindow, shell, Tray, Menu, nativeImage, nativeTheme
 } = require( 'electron' );
 const oslocale = require( 'os-locale' );
@@ -32,7 +32,7 @@ global.updateEndpoint = 'updatecheck';
 const prevOpenExternal = shell.openExternal;
 shell.openExternal = Object.freeze( url => {
   if ( url.startsWith( 'http' ) || url.startsWith( 'https' ) ) {
-    prevOpenExternal( url )
+    prevOpenExternal( url );
   }
 } );
 Object.freeze( shell );
@@ -61,21 +61,21 @@ let launcher;
 let trayIcon;
 
 /**
- * @typedef  {object} UserSettings
- * @property {object} Launcher                      The launcher configuration.
+ * @typedef  {Object} UserSettings
+ * @property {Object} Launcher                      The launcher configuration.
  * @property {string} Launcher.Theme                The launcher theme.
  * @property {string} Launcher.DesktopNotifications Whether to show desktop notifications.
  * @property {string} Launcher.DirectLaunch         Whether to launch the game directly.
  * @property {string} Launcher.Language             The launcher language.
  * @property {string} Launcher.Debug                Whether to enable debug mode.
- * @property {object} Game                          The game configuration.
+ * @property {Object} Game                          The game configuration.
  * @property {string} Game.GraphicsMode             The game graphics mode.
  * @property {string} Game.Language                 The game language.
  * @property {string} Game.RefreshRate              The game refresh rate.
- * @property {object} LocalRegistry                 The local registry.
+ * @property {Object} LocalRegistry                 The local registry.
  * @property {string} LocalRegistry.FSO             The local registry for FSO.
  * @property {string} LocalRegistry.TSO             The local registry for TSO.
- * @property {string} LocalRegistry.Simitone        The local registry for Simitone.   
+ * @property {string} LocalRegistry.Simitone        The local registry for Simitone.
  */
 
 /**
@@ -110,7 +110,7 @@ const code = ( ! conf.Launcher.Language || conf.Launcher.Language == 'default' )
 const options = {};
 
 global.locale = Object.prototype.hasOwnProperty.call( UIText, code )
-  ? UIText[code]
+  ? UIText[ code ]
   : UIText.en;
 
 global.locale = Object.assign( UIText.en, global.locale ); // Merge EN strings with current language.
@@ -200,7 +200,7 @@ function createWindow() {
       .updateInstalledPrograms()
       .then( () => {
         if ( conf.Launcher.DirectLaunch === '1' && launcher.isInstalled.FSO ) {
-          launcher.launchGame()
+          launcher.launchGame();
           if ( process.platform == 'darwin' ) {
             window.show();
           }

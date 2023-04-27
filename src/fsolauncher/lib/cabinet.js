@@ -24,12 +24,12 @@ module.exports = function( { from, to, purge = true },
 
   /**
    * Uses Zlib.js to inflate (decompress).
-   * 
+   *
    * @param {any} data The data to inflate.
    * @param {any} _uncompSize The uncompressed size.
    */
   const _MSZipDecomp = ( data, _uncompSize ) => {
-    if ( ! ( data[0] === 0x43 && data[1] === 0x4b ) ) console.error( 'MSZIP fail' );
+    if ( ! ( data[ 0 ] === 0x43 && data[ 1 ] === 0x4b ) ) console.error( 'MSZIP fail' );
     const temp = inflate( data.subarray( 2 ) );
     const view = new Uint8Array( new ArrayBuffer( temp.length ) );
     view.set( temp );
@@ -39,38 +39,38 @@ module.exports = function( { from, to, purge = true },
    * Extracts files from a cabinet recursively.
    * Once it reaches the end, continues to the next cabinet.
    *
-   * @param {object} cab The cab metadata.
+   * @param {Object} cab The cab metadata.
    * @param {ArrayBuffer} data The cab data to extract.
    */
   const _extractNextFile = async ( cab, data ) => {
-    const file = cab.files[_fileIndex];
+    const file = cab.files[ _fileIndex ];
     onProgress( { read: _cabsRead, current: cab.name, file: file.name } );
     const ofi = _fileIndex;
     _fileIndex = ( _fileIndex + 1 ) % cab.fileN;
     let folder = file.iFolder;
     if ( folder === 0xfffd || folder === 0xffff ) folder = 0;
     else if ( folder === 0xfffe ) folder = cab.folderN - 1;
-    const chunks = cab.folders[folder].chunks;
+    const chunks = cab.folders[ folder ].chunks;
 
     if ( ! ( file.iFolder === 0xfffd || file.iFolder === 0xffff ) || ofi !== 0 ) {
       _fileOffset = 0;
       _fileBuffer = new ArrayBuffer( file.uSize );
       _dataLeftToFill = file.uSize;
 
-      if ( file.uOff < _ucp[folder] ) {
-        const pos = _uncompressed.length - ( _ucp[folder] - file.uOff );
-        const toCopy = Math.min( _ucp[folder] - file.uOff, _dataLeftToFill );
+      if ( file.uOff < _ucp[ folder ] ) {
+        const pos = _uncompressed.length - ( _ucp[ folder ] - file.uOff );
+        const toCopy = Math.min( _ucp[ folder ] - file.uOff, _dataLeftToFill );
         new Uint8Array( _fileBuffer, _fileOffset, toCopy ).set(
           _uncompressed.subarray( pos, pos + toCopy )
         );
         _fileOffset += toCopy;
 
         _dataLeftToFill -= toCopy;
-      } else if ( file.uOff > _ucp[folder] ) {
+      } else if ( file.uOff > _ucp[ folder ] ) {
         throw 'Not implemented.';
       }
     } else {
-      const chunk = chunks[0];
+      const chunk = chunks[ 0 ];
       const view = new Uint8Array( data, chunk.offset, chunk.cBytes );
       const comb = new Uint8Array( view.length + _prevData.length );
       comb.set( _prevData );
@@ -80,14 +80,14 @@ module.exports = function( { from, to, purge = true },
       new Uint8Array( _fileBuffer, _fileOffset, toCopy ).set(
         _uncompressed.subarray( 0, toCopy )
       );
-      _ucp[folder] += _uncompressed.length;
+      _ucp[ folder ] += _uncompressed.length;
       _fileOffset += toCopy;
       _dataLeftToFill -= toCopy;
-      _dc[folder] = 1;
+      _dc[ folder ] = 1;
     }
 
-    while ( _dc[folder] < chunks.length && _dataLeftToFill !== 0 ) {
-      const chunk = chunks[_dc[folder]++];
+    while ( _dc[ folder ] < chunks.length && _dataLeftToFill !== 0 ) {
+      const chunk = chunks[ _dc[ folder ]++ ];
       const view = new Uint8Array( data, chunk.offset, chunk.cBytes );
       if ( chunk.ucBytes !== 0 ) {
         _uncompressed = _MSZipDecomp( view, chunk.ucBytes );
@@ -95,13 +95,13 @@ module.exports = function( { from, to, purge = true },
         new Uint8Array( _fileBuffer, _fileOffset, toCopy ).set(
           _uncompressed.subarray( 0, toCopy )
         );
-        _ucp[folder] += _uncompressed.length;
+        _ucp[ folder ] += _uncompressed.length;
         _fileOffset += toCopy;
         _dataLeftToFill -= toCopy;
       } else {
         _prevData = view;
         _continued = true;
-        _ucp[0] = _ucp[folder];
+        _ucp[ 0 ] = _ucp[ folder ];
         purge && await fs.unlink( cab.name );
         return await _readCabinet( _dir + cab.nextCab );
       }
@@ -129,7 +129,7 @@ module.exports = function( { from, to, purge = true },
   };
   /**
    * Reads a cabinet file, requests extraction for files contained in it.
-   * 
+   *
    * @param {string} file The file name to read.
    */
   const _readCabinet = async file => {
@@ -196,8 +196,8 @@ module.exports = function( { from, to, purge = true },
       }
       cab.folders = [];
       for ( let i = 0; i < cab.folderN; i++ ) {
-        if ( ! _continued || i !== 0 ) _ucp[i] = 0;
-        _dc[i] = 0;
+        if ( ! _continued || i !== 0 ) _ucp[ i ] = 0;
+        _dc[ i ] = 0;
         const f = {};
         f.cfOffset = view.getUint32( read, true ); read += 4;
         f.cfBlocks = view.getUint16( read, true ); read += 2;
@@ -216,7 +216,7 @@ module.exports = function( { from, to, purge = true },
         const uncompData = [];
         const totalBytes = 0;
         for ( let j = 0; j < f.cfBlocks; j++ ) {
-          const c = {}; 
+          const c = {};
           read += 4;
           c.cBytes  = view.getUint16( read, true ); read += 2;
           c.ucBytes = view.getUint16( read, true ); read += 2;
@@ -226,8 +226,8 @@ module.exports = function( { from, to, purge = true },
         const buf = new ArrayBuffer( totalBytes );
         const offset = 0;
         for ( let j = 0; j < uncompData.length; j++ ) {
-          const temp = new Uint8Array( buf, offset, uncompData[j].length );
-          temp.set( uncompData[j] );
+          const temp = new Uint8Array( buf, offset, uncompData[ j ].length );
+          temp.set( uncompData[ j ] );
         }
         f.uncompData = new Uint8Array( buf );
         read = tempread;

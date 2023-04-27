@@ -46,7 +46,7 @@ class Events {
   }
 
   /**
-   * Received when the renderer process asks the main process to check for 
+   * Received when the renderer process asks the main process to check for
    * Simitone updates.
    */
   onCheckSimitoneRequirements() {
@@ -68,9 +68,9 @@ class Events {
    */
   onSocketMessage( e, response ) {
     if ( this.fsolauncher.conf.Launcher.DesktopNotifications === '1' ) {
-      Modal.sendNotification( 'FreeSO Announcement', 
-        response[0], 
-        response[1], 
+      Modal.sendNotification( 'FreeSO Announcement',
+        response[ 0 ],
+        response[ 1 ],
         null, this.fsolauncher.isDarkMode() );
     }
   }
@@ -113,7 +113,7 @@ class Events {
    * @param {Electron.IpcMainEvent} e The event object.
    * @param {boolean} yes The user clicked yes in the dialog.
    * @param {string} componentCode The Component to be installed.
-   * @param {object} options Options for the installer.
+   * @param {Object} options Options for the installer.
    */
   onInstallComponent( e, yes, componentCode, options ) {
     if ( yes ) {
@@ -205,7 +205,7 @@ class Events {
   onFullInstallConfirm( e, folderOrConfirm ) {
     if ( folderOrConfirm ) {
       if ( typeof folderOrConfirm == 'boolean' ) {
-        // This is a regular full install instead of OCI flow, so 
+        // This is a regular full install instead of OCI flow, so
         // no passing in a folder.
         folderOrConfirm = null;
       }
@@ -218,7 +218,7 @@ class Events {
    *
    * @param {Electron.IpcMainEvent} e The event object.
    * @param {boolean} yes If the user selected yes.
-   * @param {object} options The options for the installer.
+   * @param {Object} options The options for the installer.
    */
   onChangeGamePath( e, yes, options ) {
     options = JSON.parse( options );

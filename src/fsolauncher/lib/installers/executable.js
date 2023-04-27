@@ -24,7 +24,7 @@ class ExecutableInstaller {
       child.stderr.on( 'data', data => console.error( file, { args, spawnOptions, data } ) );
       child.stdout.on( 'data', data => console.info( file, { args, spawnOptions, data } ) );
     } );
-}
+  }
 }
 
 module.exports = ExecutableInstaller;

@@ -8,8 +8,8 @@ class IPCBridge {
   /**
    * @param {Electron.BrowserWindow} window The window to send messages to.
    */
-  constructor( window ) { 
-    this.window = window; 
+  constructor( window ) {
+    this.window = window;
   }
 
   /**
@@ -50,7 +50,7 @@ class IPCBridge {
    * Tells the renderer process to repopulate the setting controls in
    * the settings tab.
    *
-   * @param {object} Configuration The configuration object to set as
+   * @param {Object} Configuration The configuration object to set as
    *                               values in the settings page.
    */
   restoreConfiguration( Configuration ) {
@@ -141,7 +141,7 @@ class IPCBridge {
    * @param {string} modalRespId Unique Modal response ID if you want to receive the response in code.
    * @param {string} extra       Extra parameters.
    */
-   sendSuccessModalNoFocus( title, text, yesText, noText, modalRespId, extra ) {
+  sendSuccessModalNoFocus( title, text, yesText, noText, modalRespId, extra ) {
     this.sendModalNoFocus( title, text, yesText, noText, modalRespId, extra, 'success' );
   }
 
@@ -170,7 +170,7 @@ class IPCBridge {
    * @param {string} modalRespId Unique Modal response ID if you want to receive the response in code.
    * @param {string} extra       Extra parameters.
    */
-   sendErrorModalNoFocus( title, text, yesText, noText, modalRespId, extra ) {
+  sendErrorModalNoFocus( title, text, yesText, noText, modalRespId, extra ) {
     this.sendModalNoFocus( title, text, yesText, noText, modalRespId, extra, 'error' );
   }
 
@@ -202,7 +202,7 @@ class IPCBridge {
 
   /**
    * Stop progress animation.
-   * 
+   *
    * @param {string} elId Unique element ID.
    */
   stopProgressItem( elId ) {
@@ -301,7 +301,7 @@ class IPCBridge {
   }
 
   /**
-   * Sends a list of installed programs. This is used to display which programs are 
+   * Sends a list of installed programs. This is used to display which programs are
    * installed in the installer screen.
    *
    * @param {string} list The list of installed programs.
@@ -320,12 +320,12 @@ class IPCBridge {
   sendSimitoneShouldUpdate( v ) {
     try {
       this.window.webContents.send( 'SIMITONE_SHOULD_UPDATE', v );
-    } catch ( err ) {}    
+    } catch ( err ) {}
   }
 
   /**
    * Useful for debugging with a production build.
-   * 
+   *
    * @param {string} str The string to log.
    */
   sendConsoleLog( str ) {
@@ -336,7 +336,7 @@ class IPCBridge {
 
   /**
    * Sets the Simitone Version for the UI.
-   * 
+   *
    * @param {string} v Simitone version
    */
   setSimitoneVersion( v ) {
@@ -346,7 +346,7 @@ class IPCBridge {
   }
 
   /**
-   * @param {string} folder 
+   * @param {string} folder
    */
   ociPickedFolder( folder ) {
     try {
@@ -355,7 +355,7 @@ class IPCBridge {
   }
 
   /**
-   * @param {string} rate 
+   * @param {string} rate
    */
   setMaxRefreshRate( rate ) {
     try {

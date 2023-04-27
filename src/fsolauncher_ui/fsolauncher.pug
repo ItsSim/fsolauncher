@@ -11,9 +11,6 @@ html(class=PLATFORM + ' ' + LANGCODE)
         link(rel='stylesheet', href='./styles/themes/dark.css')
         link(rel='stylesheet', href='./styles/themes/halloween.css')
         link(rel='stylesheet', href='./styles/themes/simitone.css')
-        if SENTRY != 'SENTRY_CI_BROWSER_LOADER'
-            script(src=SENTRY, crossorigin="anonymous")
-            script(src='sentry-onload.js')
         script.
             window.PUG_VARS = {
                 LTHEME  : "#{LTHEME}",
@@ -22,9 +19,7 @@ html(class=PLATFORM + ' ' + LANGCODE)
                 WS_PORT : "#{WS_PORT}",
                 TW_URL  : "#{TW_URL}",     
                 STRINGS : {
-                    READ_MORE: "#{READ_MORE}",
-                    MONTHS: "#{MONTHS}",
-                    NOTIFICATION_LINK: "#{NOTIFICATION_LINK}",
+                    MONTHS: "#{MONTHS}"
                 }
             };
     body(class=LTHEME)
@@ -394,6 +389,47 @@ html(class=PLATFORM + ' ' + LANGCODE)
                             | arrow_back
                         | #{OCI_CANCEL}
                     </div>  
+                    
+        template#toast-template
+            .toast(id="{id}")
+                i.material-icons.spin loop
+                span.toast-message {message}
+
+        template#article-template
+            .rss-entry
+                h1.article-title {title}
+                span.article-pubDate {date}
+                div.rss-content {content}
+                a.button.article-link(target="_blank") #{READ_MORE}
+
+        template#notification-template
+            .notification
+                i.material-icons notifications_empty
+                h1.notification-title {title}
+                p.notification-body {body}
+                span.notification-time {time}
+                a.notification-link(href="#", target="_blank") #{NOTIFICATION_LINK}
+
+        template#yes-no-modal-template
+            .modal.overlay-closeable
+                h1.modal-header {title}
+                p.modal-text {text}
+                .button-container
+                    button.yes-button {yesText}
+                    span.no-button {noText}
+
+        template#progress-item-template
+            .download
+                h1.progress-title
+                span.progress-subtitle
+                .info.progress-info
+                .loading
+                    .progress
+
+        if SENTRY != 'SENTRY_CI_BROWSER_LOADER'
+            script(src=SENTRY, crossorigin="anonymous")
+            script(src='sentry-onload.js')
+            
         script(src='vendor/socket.io.min.js')
         script(src='vendor/howler.min.js')
         script(src='vendor/purify.min.js')

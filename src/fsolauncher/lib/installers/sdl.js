@@ -114,7 +114,7 @@ class SDLInstaller {
    * Creates all the directories and subfolders in a path.
    *
    * @param {string} dir The path to create.
-   * 
+   *
    * @returns {Promise<void>} A promise that resolves when the directory is created.
    */
   setupDir( dir ) {
@@ -163,12 +163,12 @@ class SDLInstaller {
       cmd += 'sudo rm -rf /Library/Frameworks/SDL2.framework && '; // delete in case it exists to avoid errors
       cmd += 'sudo cp -R /Volumes/SDL2/SDL2.framework /Library/Frameworks && '; // move SDL2.framework to /Library/Frameworks
       cmd += 'hdiutil unmount /Volumes/SDL2'; // unmount SDL dmg
-      sudo.exec( cmd, {}, 
+      sudo.exec( cmd, {},
         ( err, stdout, stderr ) => {
           if ( err ) return reject( err );
           console.info( 'sdl2 output', { stdout, stderr } );
           resolve();
-      } );
+        } );
     } );
   }
 

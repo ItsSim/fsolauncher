@@ -6,13 +6,13 @@ module.exports = {
     'Simitone': ( process.platform === 'darwin' ) ? [ 'Mono', 'SDL' ] : []
   },
   needInternet: [
-    'TSO', 
-    'FSO', 
-    'RMS', 
-    'Simitone', 
-    'Mono', 
-    'MacExtras', 
-    'SDL' 
+    'TSO',
+    'FSO',
+    'RMS',
+    'Simitone',
+    'Mono',
+    'MacExtras',
+    'SDL'
   ],
   langCodes: {
     'en': 0,
@@ -21,9 +21,9 @@ module.exports = {
     'pt': 14
   },
   langStrings: {
-    0:  [ 'English',    'en' ], // default
-    6:  [ 'Spanish',    'es' ],
-    5:  [ 'Italian',    'it' ],
+    0: [ 'English', 'en' ], // default
+    6: [ 'Spanish', 'es' ],
+    5: [ 'Italian', 'it' ],
     14: [ 'Portuguese', 'pt' ]
   },
   components: {
@@ -37,4 +37,4 @@ module.exports = {
     'MacExtras': 'FreeSO MacExtras',
     'SDL': 'SDL2'
   }
-}
+};

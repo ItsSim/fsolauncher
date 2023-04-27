@@ -1,20 +1,20 @@
 /**
  * Returns the path with backslashes converted to forward slashes.
- * 
+ *
  * @param {string} dir The path to convert.
- * 
+ *
  * @returns {string} The converted path.
  */
 function normalizePathSlashes( dir ) {
-  return dir ? dir.replace( /\\/g, '/' ) : dir
+  return dir ? dir.replace( /\\/g, '/' ) : dir;
 }
 
 /**
  * Formats a string with unlimited arguments.
- * 
+ *
  * @param {string} str The string to format.
  * @param {...any} args Values to replace.
- * 
+ *
  * @returns {string} The formatted string.
  */
 function strFormat( str, ...args ) {
@@ -84,9 +84,9 @@ function obfuscatePossibleKeys( data ) {
 
   for ( const key in data ) {
     if ( sensitiveKeys.includes( key ) ) {
-      obfuscatedData[key] = '[REDACTED]';
+      obfuscatedData[ key ] = '[REDACTED]';
     } else {
-      obfuscatedData[key] = data[key];
+      obfuscatedData[ key ] = data[ key ];
     }
   }
 
@@ -95,7 +95,7 @@ function obfuscatePossibleKeys( data ) {
 
 /**
  * Captures an error with Sentry.
- * 
+ *
  * @param {Error} err The error to capture.
  * @param {Object} extra Extra data to send with the error.
  */
@@ -142,10 +142,10 @@ function getDisplayRefreshRate() {
 }
 
 module.exports = {
-  normalizePathSlashes, 
-  strFormat, 
-  initSentry, 
-  captureWithSentry, 
+  normalizePathSlashes,
+  strFormat,
+  initSentry,
+  captureWithSentry,
   getJSON,
   getDisplayRefreshRate
 };
