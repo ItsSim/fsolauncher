@@ -1,0 +1,404 @@
+.indigo {
+}
+
+.indigo #logo {
+  filter: hue-rotate(48deg);
+}
+
+.indigo button,
+.indigo .button {
+  background-image: -webkit-linear-gradient(#8b59b6, #371f4a 100%, #1A141F)!important;
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.indigo #logo:after {
+  content: 'MIDNIGHT';
+}
+
+.indigo button:hover,
+.indigo .button:hover {
+}
+
+.indigo #logo {
+  /*background-image: url(../../images/logo_turbo.png) !important;*/
+}
+
+.indigo #launcher #sidebar li.active,
+.indigo #launcher #sidebar li:not(#logo):hover {
+  color: #B388D7;
+}
+.indigo #launcher #sidebar li.active::after {
+  background: #B388D7;
+}
+/*
+.indigo #launcher #sidebar li:not(#logo):hover path,
+.indigo #launcher #sidebar li.active path {
+  fill: #ff691f;
+}
+
+.indigo .hint {
+  background-color: #ff691f;
+}
+
+.indigo .hint.arrow-left:before {
+  border-right-color: #ff691f;
+}
+
+.indigo .hint.arrow-top:before {
+  border-bottom-color: #ff691f;
+}*/
+
+/*.indigo .loading .progress {
+  background-image: -webkit-linear-gradient(
+      -45deg,
+      transparent 33%,
+      rgba(255, 255, 255, 0.3) 33%,
+      rgba(255, 255, 255, 0.3) 66%,
+      transparent 66%
+    ),
+    -webkit-linear-gradient(top, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)),
+    -webkit-linear-gradient(left, #ff691f, #ff691f);
+}*/
+
+/*.indigo .hint.arrow-top:after {
+  border-bottom-color: #ff691f;
+}
+
+.indigo .hint.arrow-left:after {
+  border-right-color: #ff691f;
+}*/
+
+.indigo #rss .rss-entry h1,
+.indigo #settings-page .form h1,
+.indigo #downloads > div .tag h1,
+.indigo .modal h1 {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+/*.indigo #settings-page .form h1 {
+  border-color: #ff691f !important;
+}*/
+
+.indigo .download {
+  background: rgba(0, 0, 0, 0.3) !important;
+  color: #fff !important;
+}
+
+.indigo .download h1 {
+  
+}
+
+.indigo .download .loading {
+  background: rgba(255, 255, 255, 0.2) !important;
+}
+
+.indigo .download span {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+/*.indigo .jumbotron span {
+  color: #ff691f !important;
+}*/
+
+/*.indigo input,
+.indigo select {
+  border-color: transparent !important;
+  font-weight: bold;
+  color: #15202b !important;
+  background: url(../../images/15xvbd5.png), #ff691f;
+  background-position: 97% center;
+  background-repeat: no-repeat;
+}*/
+
+.indigo #settings-page .form div small {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.indigo .item[install='FSO'] {
+  background-image: url(../../images/freeso_logo.png) !important;
+}
+
+.indigo #did-you-know {
+  /*background: #10171e !important;*/
+}
+.indigo #launcher #sidebar li:hover::after {
+  background-color: #B388D7!important;
+}
+.indigo .modal {
+ background-image: -webkit-linear-gradient(#1B1825, #14111f 100%, #43384c)!important;
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.indigo .tag {
+    background-image: -webkit-linear-gradient(#1B1825, #14111f 100%, #43384c)!important;
+  color: rgba(255, 255, 255, 0.5) !important;
+  border: 1px solid #43384C;
+}
+.indigo #settings-page .form h1 {
+}
+
+.indigo #sidebar {
+  border-top: 1px solid #43384C;
+  background: #1B1825 !important;
+  color: rgba(255, 255, 255, 0.75) !important;
+  text-shadow: 2px 2px rgba(0, 0, 0, 0.2) !important;
+  border-right: 1px solid #43384C;
+}
+.indigo #content,
+.indigo #launcher {
+  background: #1d1723 !important;
+}
+.indigo .item {
+  color: #fff !important;
+  border-color: #43384C !important;
+  background-color:#1d1723 !important;
+}
+.indigo h1.jumbotron {
+  /*background: -webkit-linear-gradient(#15202b, #10171e 5%, #15202b)
+  !important;*/
+  background-image: -webkit-linear-gradient(#1B1825, #181521 100%, #43384c)!important;
+  color: rgba(255, 255, 255, 0.75) !important;
+  border: 1px solid #43384C;
+}
+
+/*.indigo button.indigo-transparent,
+.indigo .button.indigo-transparent {
+  background: #ff691f;
+}
+
+.indigo button.indigo-transparent:hover,
+.indigo .button.indigo-transparent:hover {
+  background: #ff691f;
+}*/
+
+.indigo ::-webkit-scrollbar {
+  width: 5px;
+  padding: 3px;
+}
+
+
+.indigo ::-webkit-scrollbar-thumb:active {
+  background: #080b0f;
+}
+
+
+.indigo ::-webkit-scrollbar-track {
+  background: #1B1825;
+}
+
+.indigo .notification {
+  background: rgba(0, 0, 0, 0.3) !important;
+}
+
+.indigo .notification h1,
+.indigo .notification i {
+  color: #4C8DEE !important;
+}
+.indigo .notification p {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.indigo #installer-page .page-content {
+  background-color: #241D2A !important;
+}
+
+.indigo #simtime-container {
+  color:rgba(255,255,255,0.5);
+  background:rgba(0,0,0,0.3)
+}
+.indigo #sidebar li {
+  color:rgba(255,255,255,0.6);
+}
+.indigo h1.jumbotron span {
+  color: rgb(235, 230, 239);
+  text-shadow: 2px 2px rgba(0, 0, 0, 0.2) !important;
+}
+.indigo h1.jumbotron > small {
+  color:rgba(255,255,255,0.6)
+}
+
+.indigo button,
+.indigo .button {
+  color: #10171E;
+}
+
+.indigo #rss .rss-entry > span {
+  color:rgba(255,255,255,0.6);
+}
+
+.indigo div.stag {
+  color: #10171e;
+}
+
+.indigo .modal {
+  border: 1px solid #43384C;
+}
+
+.indigo input,
+.indigo select {
+  background-image: -webkit-linear-gradient(#241D2A, #1b1422 95%, #1b1422);
+  font-weight: bold;
+  color:rgba(255,255,255,0.7) !important;
+  border-color:#43384C
+}
+
+.indigo select {
+  background-image: url(../../images/15xvbd5.png), 
+  -webkit-linear-gradient(#241D2A, #1b1422 95%, #1b1422);
+}
+
+.indigo option {
+  background: #161321;
+}
+
+.indigo .alt-content > * {
+  color:rgba(255,255,255,0.6)!important;
+  text-shadow: 2px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+.indigo .simitone-error {
+  color:rgba(255,255,255,0.75)!important
+}
+
+/*.indigo .tag .tick.installed {
+  color:#10171e!important;
+}*/
+
+.indigo #remeshinfo {
+  color:rgba(255,255,255,0.6)!important
+}
+
+.indigo ::-webkit-scrollbar-thumb {
+  background: #6e4b8b;
+}
+
+.indigo ::-webkit-scrollbar-thumb:active {
+  background: #9265b8;
+}
+
+.indigo .rss-content {
+  color: rgba(255,255,255,0.6)
+}
+
+.indigo #settings-page .form div span {
+  color: rgba(255,255,255,0.6)
+}
+
+.indigo #simitone-install-button {
+  color:#fff!important;
+  background: linear-gradient(
+    45deg,
+    #2d6e96 0%,
+    #1b9a88 50%,
+    #05d474 100%
+  ) !important;
+  text-shadow: 2px 2px rgba(0, 0, 0, 0.2) !important;
+  transition: background-position 1s !important;
+  background-size: 150% !important;
+}
+
+.indigo #sidebar li:not(#logo):hover path, 
+.indigo #launcher #sidebar li.active path {
+    fill: #B388D7!important;
+}
+
+.indigo #simitone-play-button {
+  color:#fff!important;
+  background: linear-gradient(
+    45deg,
+    #2d6e96 0%,
+    #1b9a88 50%,
+    #05d474 100%
+  ) !important;
+  text-shadow: 2px 2px rgba(0, 0, 0, 0.2) !important;
+  transition: background-position 1s !important;
+  background-size: 150% !important;
+}
+
+.indigo #launcher #sidebar li.active,
+.indigo #launcher #sidebar li:not(#logo):hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.indigo #did-you-know {
+  border-left: 1px solid #43384C;
+}
+
+.indigo #sidebar div.bottom li:last-child:before {
+  background-color:#43384C;
+}
+
+.indigo .hint {
+  color: #10171E!important
+}
+.indigo #downloads > div > .item[install='Mono'] {
+  background-color: #10171E!important;
+}
+
+.indigo #downloads > div > .item > .new,
+.indigo #simitone-should-update {
+  color: #10171E!important;
+}
+
+.indigo #rss .rss-entry h1,
+.indigo #settings-page .form h1,
+.indigo #downloads > div .tag h1,
+.indigo .modal h1 {
+  text-shadow: 2px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+.indigo #launcher #content #full-install {
+  background-image: url(../../images/citydark.jpg);
+} 
+.indigo .oneclick-install svg {
+  
+}
+.indigo .oneclick-install {
+  filter: hue-rotate(48deg)!important;
+  background-image: linear-gradient(90deg, rgb(50 136 195 / 1) 0%, #44ABED 50.31%, #5BD536 100%);
+}
+.indigo .oneclick-install-content {
+  background-image: -webkit-linear-gradient(#1b2337, #0e1319 100%, #43384c)!important;
+}
+.indigo .oneclick-install button {
+  color: rgba(0,0,0,1)!important;
+}
+.indigo .oneclick-install-content p {
+  text-shadow:  2px rgb(0 0 0 / 20%);
+    color: rgba(255, 255, 255, 0.5);
+}
+.indigo .oneclick-install-select {
+  border-color: rgba(255, 255, 255, 0.5) !important;
+}
+.indigo .oneclick-install-select svg {
+  filter: drop-shadow( 1px 1px 1px rgba(0, 0, 0, .5));
+}
+.indigo .oneclick-install-select:hover p {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.indigo .oneclick-install .oneclick-install-select button {
+  color: #10171E;
+}
+
+.indigo .item .stag {
+  background: #1BD59E
+}
+
+.indigo .notification h1, 
+.indigo .notification i {
+    color: rgba(255,255,255,0.9)!important;
+}
+
+.indigo .FAQ * {
+  color: rgba(255,255,255,0.6);
+}
+
+.indigo .loading .progress {
+  background-image: -webkit-linear-gradient( -45deg, transparent 33%, rgba(255, 255, 255, 0.3) 33%, rgba(255, 255, 255, 0.3) 66%, transparent 66% ), -webkit-linear-gradient(top, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), 
+    -webkit-linear-gradient(left, #8642be, #8642be);
+}
+
+.indigo .download.stopped .loading .progress {
+  background: #B388D7;
+}

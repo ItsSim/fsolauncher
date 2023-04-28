@@ -29,7 +29,7 @@ window.DOMPurify.addHook( 'afterSanitizeAttributes', node => {
   }
 } );
 
-const darkThemes = [ 'halloween', 'dark' ];
+const darkThemes = [ 'halloween', 'dark', 'indigo' ];
 
 // Expose functions to the DOM
 let navigateTo;

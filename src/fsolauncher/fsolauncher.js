@@ -1106,7 +1106,7 @@ class FSOLauncher {
    * @returns {boolean} If the theme is dark.
    */
   isDarkMode() {
-    return [ 'halloween', 'dark' ].includes( this.conf.Launcher.Theme );
+    return [ 'halloween', 'dark', 'indigo' ].includes( this.conf.Launcher.Theme );
   }
 
   /**
