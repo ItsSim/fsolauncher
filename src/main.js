@@ -18,11 +18,11 @@ const fs = require( 'fs-extra' );
 const ini = require( 'ini' );
 const UIText = require( './fsolauncher_ui/uitext.json' );
 const FSOLauncher = require( './fsolauncher/fsolauncher' );
-const package = require( './package.json' );
+const { version } = require( './package.json' );
 
 process.title = 'FreeSO Launcher';
 global.willQuit = false;
-global.launcherVersion = package.version;
+global.launcherVersion = version;
 global.webService = 'beta.freeso.org';
 global.homeDir = require( 'os' ).homedir();
 global.socketPort = 30001;
