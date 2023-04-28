@@ -119,7 +119,7 @@
 }
 
 .indigo #did-you-know {
-  /*background: #10171e !important;*/
+  /*background: #1d1723 !important;*/
 }
 .indigo #launcher #sidebar li:hover::after {
   background-color: #B388D7!important;
@@ -154,7 +154,7 @@
   background-color:#1d1723 !important;
 }
 .indigo h1.jumbotron {
-  /*background: -webkit-linear-gradient(#15202b, #10171e 5%, #15202b)
+  /*background: -webkit-linear-gradient(#15202b, #1d1723 5%, #15202b)
   !important;*/
   background-image: -webkit-linear-gradient(#1B1825, #181521 100%, #43384c)!important;
   color: rgba(255, 255, 255, 0.75) !important;
@@ -219,7 +219,7 @@
 
 .indigo button,
 .indigo .button {
-  color: #10171E;
+  color: #1d1723;
 }
 
 .indigo #rss .rss-entry > span {
@@ -227,7 +227,7 @@
 }
 
 .indigo div.stag {
-  color: #10171e;
+  color: #1d1723;
 }
 
 .indigo .modal {
@@ -261,7 +261,7 @@
 }
 
 /*.indigo .tag .tick.installed {
-  color:#10171e!important;
+  color:#1d1723!important;
 }*/
 
 .indigo #remeshinfo {
@@ -329,15 +329,15 @@
 }
 
 .indigo .hint {
-  color: #10171E!important
+  color: #1d1723!important
 }
 .indigo #downloads > div > .item[install='Mono'] {
-  background-color: #10171E!important;
+  background-color: #1d1723!important;
 }
 
 .indigo #downloads > div > .item > .new,
 .indigo #simitone-should-update {
-  color: #10171E!important;
+  color: #1d1723!important;
 }
 
 .indigo #rss .rss-entry h1,
@@ -378,7 +378,7 @@
 }
 
 .indigo .oneclick-install .oneclick-install-select button {
-  color: #10171E;
+  color: #1d1723;
 }
 
 .indigo .item .stag {
