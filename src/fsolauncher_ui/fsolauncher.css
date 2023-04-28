@@ -1559,3 +1559,9 @@ i.spin {
   top: 0;
   left: 0;
 }
+
+#settings-page input[type='number']::-webkit-inner-spin-button,
+#settings-page input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
