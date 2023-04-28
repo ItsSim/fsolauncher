@@ -1,4 +1,8 @@
-const { captureWithSentry, strFormat } = require( './utils' );
+const {
+  captureWithSentry,
+  strFormat,
+  normalizePathSlashes
+} = require( './utils' );
 
 /**
  * Container class for all the Modal windows.
@@ -582,6 +586,7 @@ class Modal {
    * @param {boolean} isSimitone
    */
   static showCouldNotRecover( path, isSimitone = false ) {
+    path = normalizePathSlashes( path );
     let str2 = global.locale.MODAL_FAILED_LAUNCH_DESC;
     if ( isSimitone ) {
       str2 = str2
