@@ -14,7 +14,7 @@ class Toast {
    * @param {number} timeout Timeout in seconds.
    */
   constructor( message, timeout = 0 ) {
-    this.id = Math.floor( Date.now() / 1000 );
+    this.id = this.hashDjb2( message );
     Toast.getIPC().toast( this.id, message );
     if ( timeout > 0 ) {
       setTimeout( () => this.destroy(), timeout );
@@ -26,6 +26,15 @@ class Toast {
    */
   destroy() {
     Toast.getIPC().removeToast( this.id );
+  }
+
+  hashDjb2( str ) {
+    let hash = 5381;
+    for ( let i = 0; i < str.length; i++ ) {
+      const char = str.charCodeAt( i );
+      hash = ( ( hash << 5 ) + hash ) + char; /* hash * 33 + c */
+    }
+    return 'toast-' + hash;
   }
 }
 

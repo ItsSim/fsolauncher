@@ -199,6 +199,9 @@ let ociConfirm;
    * @param {string} message The toast body.
    */
   function toast( id, message ) {
+    // remove previous toast if it exists
+    removeToast( id );
+
     const template = document.querySelector( '#toast-template' );
     const node = document.importNode( template.content, true );
 
