@@ -76,7 +76,7 @@ let ociConfirm;
   function timeout( promise, milliseconds = 5000 ) {
     return new Promise( ( resolve, reject ) => {
       setTimeout( () => {
-        reject( new Error( 'Timeout exceeded' ) );
+        reject( 'Timeout exceeded' );
       }, milliseconds );
       promise.then( resolve, reject );
     } );
