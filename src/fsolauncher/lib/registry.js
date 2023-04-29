@@ -366,7 +366,7 @@ class Registry {
       regKey.keyExists( ( err, exists ) => {
         if ( err ) {
           console.error( err );
-          return reject( new Error( global.locale.TSO_REGISTRY_EDIT_FAIL ) );
+          return reject( global.locale.TSO_REGISTRY_EDIT_FAIL );
         }
         if ( exists ) {
           regKey.destroy( err => {
