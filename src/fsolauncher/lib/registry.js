@@ -202,7 +202,7 @@ class Registry {
         } );
       } );
     }
-    return new Promise( ( resolve, reject ) => {
+    return new Promise( resolve => {
       const winreg = require( 'winreg' );
       const regKey = new winreg( { hive: winreg.HKLM, key: regPath } );
 
@@ -231,7 +231,7 @@ class Registry {
               if ( await Registry.win32LocalPathFallbacks( componentCode ) ) {
                 return resolve( { key: componentCode, isInstalled: true } );
               }
-              return reject( { key: componentCode, isInstalled: false } );
+              return resolve( { key: componentCode, isInstalled: false, error: err } );
             }
             if ( item.value == 255 ) {
               return resolve( { key: componentCode, isInstalled: true } );
@@ -366,7 +366,7 @@ class Registry {
       regKey.keyExists( ( err, exists ) => {
         if ( err ) {
           console.error( err );
-          return reject( global.locale.TSO_REGISTRY_EDIT_FAIL );
+          return reject( new Error( global.locale.TSO_REGISTRY_EDIT_FAIL ) );
         }
         if ( exists ) {
           regKey.destroy( err => {
