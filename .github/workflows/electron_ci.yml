@@ -47,6 +47,18 @@ jobs:
       with:
         node-version: 16
 
+    - name: Cache Electron binaries
+      id: cache-electron-binaries
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.electron
+          ~/Library/Caches/electron
+          %USERPROFILE%\.electron
+        key: ${{ runner.os }}-electron-binaries-${{ hashFiles('src/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-electron-binaries-
+
     - name: Cache Node.js modules
       id: cache-node-modules
       uses: actions/cache@v2
