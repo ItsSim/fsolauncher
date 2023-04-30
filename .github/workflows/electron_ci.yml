@@ -54,7 +54,7 @@ jobs:
         path: |
           ~/.electron
           ~/Library/Caches/electron
-          %USERPROFILE%\.electron
+          %LOCALAPPDATA%\electron\Cache
         key: ${{ runner.os }}-electron-binaries-${{ hashFiles('src/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-electron-binaries-
