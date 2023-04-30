@@ -10,11 +10,10 @@
     "debug": "electron --inspect=5858 .",
     "lint": "eslint . --ext .js",
     "startiss": "cmd /K \"../release/FreeSO Launcher Setup.exe\"",
-    "compileiss": "node build_scripts/update-iss-version.js && innosetup-compiler --verbose ../release/win32-ia32.iss",
+    "compileiss": "node scripts/update-iss-version.js && innosetup-compiler --verbose ../release/win32-ia32.iss",
     "copywin": "cpy \"./**/*\" ../fsolauncher-win32-ia32 --cwd=../release/fsolauncher-build-extras --parents",
-    "buildwin": "electron-packager . fsolauncher --app-copyright=\"Copyright (C) FreeSO. All rights reserved.\" --icon=./beta.ico --asar.unpackDir=\"{export,fsolauncher_ui/images,fsolauncher_ui/sounds,fsolauncher_ui/fonts}\" --platform=win32 --arch=ia32 --overwrite --win32metadata.CompanyName=\"FreeSO.org\" --win32metadata.requested-execution-level=\"requireAdministrator\" --version-string.FileDescription=\"FreeSO Launcher\" --out ../release && npm run copywin && npm run compileiss",
-    "builddarwin": "electron-packager . FreeSO\\ Launcher --icon=./beta.icns  --app-copyright=\"Copyright (C) FreeSO. All rights reserved.\" --asar.unpackDir=\"{export,fsolauncher_ui/images,fsolauncher_ui/sounds,fsolauncher_ui/fonts}\" --platform=darwin --arch=universal --overwrite --version-string.FileDescription=\"FreeSO Launcher\" --out ../release && electron-installer-dmg ../release/FreeSO\\ Launcher-darwin-universal/FreeSO\\ Launcher.app FreeSO\\ Launcher --out=../release --icon=./beta.icns --background=./osx_dmg.png --title=FreeSO\\ Launcher --overwrite",
-    "buildasar": "asar pack . \"../release/asar/app.asar\" --unpack-dir \"{export,fsolauncher_ui/images,fsolauncher_ui/sounds,fsolauncher_ui/fonts}\""
+    "buildwin": "node scripts/build-win.js",
+    "builddarwin": "node scripts/build-darwin.js"
   },
   "keywords": [
     "freeso",
@@ -26,8 +25,7 @@
     "cpy-cli": "^3.1.1",
     "electron": "^22.0.0",
     "electron-installer-dmg": "^4.0.0",
-    "electron-packager": "^16.0.0",
-    "electron-reload": "^1.5.0",
+    "electron-packager": "^17.1.0",
     "eslint": "^7.32.0",
     "innosetup-compiler": "^6.2.0"
   },
