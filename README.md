@@ -49,3 +49,4 @@ Visit the [FreeSO Launcher Wiki](https://github.com/ItsSim/fsolauncher/wiki) for
 - [User Guides](https://github.com/ItsSim/fsolauncher/wiki/Using-FreeSO-Launcher)
 - [FAQs](https://github.com/ItsSim/fsolauncher/wiki/FAQ)
 - [Developer Guides](https://github.com/ItsSim/fsolauncher/wiki/Development-guide)
+ 
