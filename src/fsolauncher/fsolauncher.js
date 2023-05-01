@@ -260,7 +260,7 @@ class FSOLauncher {
       captureWithSentry( err );
       console.error( err );
     }
-    if ( this.remeshInfo.version != null ) {
+    if ( this.remeshInfo?.version ) {
       this.IPC.setRemeshInfo( this.remeshInfo.version );
     }
   }
@@ -334,7 +334,7 @@ class FSOLauncher {
       this.isSearchingForUpdates = true;
       try {
         const data = await this.getLauncherData();
-        if ( data.Version !== global.launcherVersion ) {
+        if ( data.Version && data.Version !== global.launcherVersion ) {
           if ( this.lastUpdateNotification !== data.Version || ( ! wasAutomatic ) ) {
             Modal.showInstallUpdate( data.Version );
           }
@@ -446,14 +446,14 @@ class FSOLauncher {
     const prettyName = this.getPrettyName( componentCode );
 
     if ( componentCode === 'RMS' ) {
-      if ( this.remeshInfo.version == null ) {
+      if ( ! this.remeshInfo?.version ) {
         try {
           await this.getRemeshData();
         } catch ( err ) {
           captureWithSentry( err );
           console.error( err );
         }
-        if ( this.remeshInfo.version == null ) {
+        if ( ! this.remeshInfo?.version ) {
           return Modal.showNoRemesh();
         }
       }
