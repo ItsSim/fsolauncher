@@ -334,7 +334,7 @@ class FSOLauncher {
       this.isSearchingForUpdates = true;
       try {
         const data = await this.getLauncherData();
-        if ( data.Version && data.Version !== global.launcherVersion ) {
+        if ( data?.Version && data.Version !== global.launcherVersion ) {
           if ( this.lastUpdateNotification !== data.Version || ( ! wasAutomatic ) ) {
             Modal.showInstallUpdate( data.Version );
           }
