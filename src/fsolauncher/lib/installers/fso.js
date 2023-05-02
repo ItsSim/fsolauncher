@@ -1,7 +1,7 @@
 const { strFormat, captureWithSentry, getJSON } = require( '../utils' );
 const download = require( '../download' ),
   unzip = require( '../unzip' );
-const DOWNLOAD_URL_SERVO = 'https://beta.freeso.org/LauncherResourceCentral/FreeSO';
+const { FSO } = require( '../../constants' ).downloads;
 
 /**
  * Installs FreeSO from GitHub Releases.
@@ -17,7 +17,7 @@ class FSOInstaller {
     this.path = path;
     this.haltProgress = false;
     this.tempPath = `${global.appData}temp/artifacts-freeso-${this.id}.zip`;
-    this.dl = download( { from: DOWNLOAD_URL_SERVO, to: this.tempPath } );
+    this.dl = download( { from: FSO, to: this.tempPath } );
   }
 
   /**

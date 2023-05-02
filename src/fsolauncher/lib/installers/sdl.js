@@ -1,6 +1,7 @@
 const download = require( '../download' );
 const sudo = require( 'sudo-prompt' );
 const { strFormat } = require( '../utils' );
+const { SDL } = require( '../../constants' ).downloads;
 
 /**
  * Installs SDL on macOS systems.
@@ -14,7 +15,7 @@ class SDLInstaller {
     this.id = Math.floor( Date.now() / 1000 );
     this.haltProgress = false;
     this.tempPath = `${global.appData}temp/sdl2-${this.id}.dmg`;
-    this.dl = download( { from: 'https://beta.freeso.org/LauncherResourceCentral/SDL', to: this.tempPath } );
+    this.dl = download( { from: SDL, to: this.tempPath } );
   }
 
   /**

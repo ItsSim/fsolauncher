@@ -1,12 +1,12 @@
 const download = require( '../download' );
 const unzip = require( '../unzip' );
 const extract = require( '../cabinet' );
+const { TSO } = require( '../../constants' ).downloads;
 
 /**
  * ORIGINAL: https://archive.org/download/Fileplanet_dd_042006/Fileplanet_dd_042006.tar/042006/TSO_Installer_v1.1239.1.0.zip'
  * changed to beta.freeso.org redirect in case it needs to be changed.
  */
-const DOWNLOAD_URL_FILEPLANET = 'https://beta.freeso.org/LauncherResourceCentral/TheSimsOnline';
 const TEMP_PATH = `${global.appData}temp/FilePlanetInstaller/`;
 const TEMP_FILE = 'FilePlanetTSOFiles.zip';
 
@@ -25,7 +25,7 @@ class TSOInstaller {
     this.haltProgress = false;
     this.tempFilePath = TEMP_PATH + TEMP_FILE;
     this.dl = download( {
-      from: DOWNLOAD_URL_FILEPLANET,
+      from: TSO,
       to: this.tempFilePath
     } );
   }

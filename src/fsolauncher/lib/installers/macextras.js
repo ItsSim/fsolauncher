@@ -1,6 +1,7 @@
 const download = require( '../download' );
 const unzip = require( '../unzip' );
 const { strFormat } = require( '../utils' );
+const { MacExtras } = require( '../../constants' ).downloads;
 
 /**
  * Installs macOS Extras on macOS systems.
@@ -18,7 +19,7 @@ class MacExtrasInstaller {
     this.haltProgress = false;
     this.parentComponent = parentComponent;
     this.tempPath = `${global.appData}temp/macextras-${this.id}.zip`;
-    this.dl = download( { from: 'https://beta.freeso.org/LauncherResourceCentral/MacExtras', to: this.tempPath } );
+    this.dl = download( { from: MacExtras, to: this.tempPath } );
   }
 
   /**

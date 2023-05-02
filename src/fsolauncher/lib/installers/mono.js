@@ -1,6 +1,7 @@
 const download = require( '../download' );
 const sudo = require( 'sudo-prompt' );
 const { strFormat } = require( '../utils' );
+const { Mono } = require( '../../constants' ).downloads;
 
 /**
  * Installs Mono on macOS systems.
@@ -14,7 +15,7 @@ class MonoInstaller {
     this.id = Math.floor( Date.now() / 1000 );
     this.haltProgress = false;
     this.tempPath = `${global.appData}temp/mono-${this.id}.pkg`;
-    this.dl = download( { from: 'https://beta.freeso.org/LauncherResourceCentral/Mono', to: this.tempPath } );
+    this.dl = download( { from: Mono, to: this.tempPath } );
   }
 
   /**

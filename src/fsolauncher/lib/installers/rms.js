@@ -2,6 +2,7 @@ const fs = require( 'fs-extra' );
 const download = require( '../download' );
 const unzip = require( '../unzip' );
 const { strFormat } = require( '../utils' );
+const { RMS } = require( '../../constants' ).downloads;
 
 /**
  * Installs remeshes for FreeSO and Simitone.
@@ -21,7 +22,7 @@ class RMSInstaller {
     this.parentComponent = parentComponent;
     const location = fsolauncher.remeshInfo.location
       ? fsolauncher.remeshInfo.location
-      : 'https://beta.freeso.org/LauncherResourceCentral/3DModels';
+      : RMS;
 
     this.dl = download( { from: location, to: this.tempPath } );
   }

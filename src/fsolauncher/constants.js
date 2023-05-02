@@ -36,5 +36,14 @@ module.exports = {
     'Mono': 'Mono Runtime',
     'MacExtras': 'FreeSO MacExtras',
     'SDL': 'SDL2'
+  },
+  downloads: {
+    'TSO': 'https://beta.freeso.org/LauncherResourceCentral/TheSimsOnline',
+    'FSO': 'https://beta.freeso.org/LauncherResourceCentral/FreeSO',
+    'RMS': 'https://beta.freeso.org/LauncherResourceCentral/3DModels',
+    'Simitone': 'https://beta.freeso.org/LauncherResourceCentral/Simitone',
+    'Mono': 'https://beta.freeso.org/LauncherResourceCentral/Mono',
+    'MacExtras': 'https://beta.freeso.org/LauncherResourceCentral/MacExtras',
+    'SDL': 'https://beta.freeso.org/LauncherResourceCentral/SDL'
   }
 };

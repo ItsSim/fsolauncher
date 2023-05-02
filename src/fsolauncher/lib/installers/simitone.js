@@ -1,9 +1,7 @@
 const download = require( '../download' );
 const unzip = require( '../unzip' );
 const { strFormat } = require( '../utils' );
-
-const DOWNLOAD_URL_GITHUB =
-  'https://beta.freeso.org/LauncherResourceCentral/Simitone';
+const { Simitone } = require( '../../constants' ).downloads;
 
 /**
  * Downloads and installs Simitone.
@@ -20,7 +18,7 @@ class SimitoneInstaller {
     this.haltProgress = false;
     this.tempPath = `${global.appData}temp/artifacts-simitone-${this.id}.zip`;
     this.dl = download( {
-      from: DOWNLOAD_URL_GITHUB,
+      from: Simitone,
       to: this.tempPath
     } );
     this.simitoneVersion = '';
