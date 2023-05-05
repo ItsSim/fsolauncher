@@ -21,7 +21,6 @@
   ],
   "author": "ItsSim",
   "devDependencies": {
-    "babel-eslint": "^10.1.0",
     "cpy-cli": "^3.1.1",
     "electron": "^22.0.0",
     "electron-installer-dmg": "^4.0.0",
