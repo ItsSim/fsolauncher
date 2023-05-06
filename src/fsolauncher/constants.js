@@ -45,5 +45,48 @@ module.exports = {
     'Mono': 'https://beta.freeso.org/LauncherResourceCentral/Mono',
     'MacExtras': 'https://beta.freeso.org/LauncherResourceCentral/MacExtras',
     'SDL': 'https://beta.freeso.org/LauncherResourceCentral/SDL'
+  },
+  registry: {
+    paths: {
+      'TSO': process.platform === 'win32' ?
+        '\\SOFTWARE\\Maxis\\The Sims Online' :
+        `${global.homeDir}/Documents/The Sims Online/TSOClient/TSOClient.exe`,
+
+      'FSO': process.platform === 'win32' ?
+        '\\SOFTWARE\\Rhys Simpson\\FreeSO' : `${global.homeDir}/Documents/FreeSO/FreeSO.exe`,
+
+      'TS1': process.platform === 'win32' ?
+        '\\SOFTWARE\\Maxis\\The Sims' : `${global.homeDir}/Documents/The Sims/Sims.exe`,
+
+      'Simitone': process.platform === 'win32' ?
+        '\\SOFTWARE\\Rhys Simpson\\Simitone' :
+        `${global.homeDir}/Documents/Simitone for Windows/Simitone.Windows.exe`,
+
+      'OpenAL': '\\SOFTWARE\\OpenAL',
+      'NET': '\\SOFTWARE\\Microsoft\\NET Framework Setup\\NDP',
+      'Mono': '/Library/Frameworks/Mono.framework',
+      'SDL': '/Library/Frameworks/SDL2.framework'
+    },
+    win32Fallbacks: {
+      'TSO': [
+        'C:/Program Files/Maxis/The Sims Online/TSOClient/TSOClient.exe',
+        'C:/Program Files/The Sims Online/TSOClient/TSOClient.exe',
+        'C:/Program Files/FreeSO Game/The Sims Online/TSOClient/TSOClient.exe'
+      ],
+      'FSO': [
+        'C:/Program Files/FreeSO/FreeSO.exe',
+        'C:/Program Files/FreeSO Game/FreeSO/FreeSO.exe'
+      ],
+      'Simitone': [
+        'C:/Program Files/Simitone for Windows/Simitone.Windows.exe',
+        'C:/Program Files (x86)/Simitone for Windows/Simitone.Windows.exe'
+      ],
+      'OpenAL': [
+        'C:/Program Files (x86)/OpenAL'
+      ],
+      'TS1': [
+        'C:/Program Files (x86)/Maxis/The Sims'
+      ]
+    }
   }
 };

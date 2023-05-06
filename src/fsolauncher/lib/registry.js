@@ -1,4 +1,5 @@
 const { captureWithSentry } = require( './utils' );
+const { paths, win32Fallbacks } = require( '../constants' ).registry;
 
 /**
  * Interacts with a Windows PC Registry to handle all the different
@@ -46,38 +47,6 @@ class Registry {
       } );
     } );
   }
-  static getOpenALPath() {
-    return '\\SOFTWARE\\OpenAL';
-  }
-  static getFSOPath() {
-    return process.platform === 'win32' ?
-      '\\SOFTWARE\\Rhys Simpson\\FreeSO' :
-      `${global.homeDir}/Documents/FreeSO/FreeSO.exe`;
-  }
-  static getTSOPath() {
-    return process.platform === 'win32' ?
-      '\\SOFTWARE\\Maxis\\The Sims Online' :
-      `${global.homeDir}/Documents/The Sims Online/TSOClient/TSOClient.exe`;
-  }
-  static getNETPath() {
-    return '\\SOFTWARE\\Microsoft\\NET Framework Setup\\NDP';
-  }
-  static getSimitonePath() {
-    return process.platform === 'win32' ?
-      '\\SOFTWARE\\Rhys Simpson\\Simitone' :
-      `${global.homeDir}/Documents/Simitone for Windows/Simitone.Windows.exe`;
-  }
-  static getTS1Path() {
-    return process.platform === 'win32' ?
-      '\\SOFTWARE\\Maxis\\The Sims' :
-      `${global.homeDir}/Documents/The Sims/Sims.exe`;
-  }
-  static getMonoPath() {
-    return '/Library/Frameworks/Mono.framework';
-  }
-  static getSDLPath() {
-    return '/Library/Frameworks/SDL2.framework';
-  }
 
   /**
    * Checks if the program is installed in several predefined local paths.
@@ -91,36 +60,17 @@ class Registry {
    * @returns {string|boolean} The path to the program if it is installed,
    */
   static async win32LocalPathFallbacks( componentCode ) {
+    const locals = win32Fallbacks[ componentCode ] || [];
     const localRegistry = await Registry.getLocalRegistry();
-    const locals = [];
     if ( localRegistry[ componentCode ] ) {
       locals.push( localRegistry[ componentCode ] );
     }
-    if ( componentCode == 'FSO' ) {
-      locals.push( 'C:/Program Files/FreeSO/FreeSO.exe' );
-    }
-    if ( componentCode == 'TSO' ) {
-      locals.push( 'C:/Program Files/Maxis/The Sims Online/TSOClient/TSOClient.exe' );
-      locals.push( 'C:/Program Files/The Sims Online/TSOClient/TSOClient.exe' );
-    }
-    if ( componentCode == 'Simitone' ) {
-      locals.push( 'C:/Program Files/Simitone for Windows/Simitone.Windows.exe' );
-      locals.push( 'C:/Program Files (x86)/Simitone for Windows/Simitone.Windows.exe' );
-    }
-    if ( componentCode == 'OpenAL' ) {
-      locals.push( 'C:/Program Files (x86)/OpenAL' );
-    }
-    if ( componentCode == 'TS1' ) {
-      locals.push( 'C:/Program Files (x86)/Maxis/The Sims' );
-    }
     for ( let i = 0; i < locals.length; i++ ) {
       const local = locals[ i ];
-
       console.info( 'testing local', { componentCode, local } );
 
       const exists = await require( 'fs-extra' ).pathExists( local );
       console.info( 'tested local', { componentCode, local, exists } );
-
       if ( ! exists ) {
         continue;
       }
@@ -136,25 +86,16 @@ class Registry {
    *                            the program names as keys and the status as values.
    */
   static getInstalled() {
-    return new Promise( ( resolve, reject ) => {
-      const checks = [];
-
-      checks.push( Registry.get( 'OpenAL',   Registry.getOpenALPath() ) );
-      checks.push( Registry.get( 'FSO',      Registry.getFSOPath() ) );
-      checks.push( Registry.get( 'TSO',      Registry.getTSOPath() ) );
-      checks.push( Registry.get( 'NET',      Registry.getNETPath() ) );
-      checks.push( Registry.get( 'Simitone', Registry.getSimitonePath() ) );
-      checks.push( Registry.get( 'TS1',      Registry.getTS1Path() ) );
-
-      if ( process.platform == 'darwin' ) {
-        checks.push( Registry.get( 'Mono', Registry.getMonoPath() ) );
-        checks.push( Registry.get( 'SDL',  Registry.getSDLPath() ) );
+    const checks = [];
+    for ( const componentCode in paths ) {
+      if ( [ 'Mono', 'SDL' ].includes( componentCode ) ) {
+        if ( process.platform == 'win32' ) {
+          continue;
+        }
       }
-
-      Promise.all( checks )
-        .then( a => resolve( a ) )
-        .catch( err => reject( err ) );
-    } );
+      checks.push( Registry.get( componentCode, paths[ componentCode ] ) );
+    }
+    return Promise.all( checks );
   }
 
   /**
