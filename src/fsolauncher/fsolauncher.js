@@ -307,29 +307,28 @@ class FSOLauncher {
    */
   async checkLauncherUpdates( wasAutomatic ) {
     if (
-      ! this.isSearchingForUpdates &&
-      ! this.isUpdating &&
-      this.hasInternet &&
-      this.activeTasks.length === 0
-    ) {
-      const toast = new Toast( global.locale.TOAST_CHECKING_UPDATES );
-      this.isSearchingForUpdates = true;
-      try {
-        const data = await this.getLauncherData();
-        if ( data?.Version && data.Version !== global.launcherVersion ) {
-          if ( this.lastUpdateNotification !== data.Version || ( ! wasAutomatic ) ) {
-            Modal.showInstallUpdate( data.Version );
-          }
-          this.lastUpdateNotification = data.Version;
-        }
-      } catch ( err ) {
-        captureWithSentry( err, { wasAutomatic } );
-        console.error( err );
-        if ( ! wasAutomatic ) Modal.showFailedUpdateCheck();
-      } finally {
-        toast.destroy();
-        this.isSearchingForUpdates = false;
+      this.isSearchingForUpdates || this.isUpdating || ! this.hasInternet ||
+      this.activeTasks.length !== 0
+    ) return;
+
+    const toast = new Toast( global.locale.TOAST_CHECKING_UPDATES );
+    this.isSearchingForUpdates = true;
+
+    try {
+      const data = await this.getLauncherData();
+      const isNewVersion = data?.Version && data.Version !== global.launcherVersion;
+
+      if ( isNewVersion && ( this.lastUpdateNotification !== data.Version || ! wasAutomatic ) ) {
+        Modal.showInstallUpdate( data.Version );
+        this.lastUpdateNotification = data.Version;
       }
+    } catch ( err ) {
+      captureWithSentry( err, { wasAutomatic } );
+      console.error( err );
+      if ( ! wasAutomatic ) Modal.showFailedUpdateCheck();
+    } finally {
+      toast.destroy();
+      this.isSearchingForUpdates = false;
     }
   }
 
