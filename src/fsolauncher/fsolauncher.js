@@ -274,45 +274,27 @@ class FSOLauncher {
    * @returns {Promise<void>} A promise that resolves when the check is complete.
    */
   async checkSimitoneRequirements() {
-    const {
-      get,
-      getSimitonePath,
-      getTS1Path
-    } = require( './lib/registry' );
-
     new Toast( global.locale.TOAST_CHECKING_UPDATES, 1500 );
 
-    const Simitone = await get( 'Simitone', getSimitonePath() ),
-      TS1 = await get( 'TS1', getTS1Path() );
+    await this.updateInstalledPrograms();
 
-    let simitoneUpdateStatus = null;
-
-    if ( Simitone.isInstalled ) {
-      if ( this.conf.Game && this.conf.Game.SimitoneVersion ) {
-        this.IPC.setSimitoneVersion( this.conf.Game.SimitoneVersion );
-      } else {
-        this.IPC.setSimitoneVersion( null );
-      }
-      try {
-        simitoneUpdateStatus = await this.getSimitoneReleaseInfo();
-      } catch ( err ) {
-        captureWithSentry( err );
-        console.error( err );
-      }
-      if ( simitoneUpdateStatus &&
-        ( this.conf.Game.SimitoneVersion != simitoneUpdateStatus.tag_name ) ) {
-        this.IPC.sendSimitoneShouldUpdate( simitoneUpdateStatus.tag_name );
-      } else {
-        this.IPC.sendSimitoneShouldUpdate( false );
-      }
-    } else {
+    if ( ! this.isInstalled.Simitone ) {
       this.IPC.setSimitoneVersion( null );
-      this.IPC.sendSimitoneShouldUpdate( false );
+      return this.IPC.sendSimitoneShouldUpdate( false );
     }
-    this.isInstalled[ 'Simitone' ] = Simitone.isInstalled;
-    this.isInstalled[ 'TS1' ] = TS1.isInstalled;
-    this.IPC.sendInstalledPrograms( this.isInstalled );
-    //toast.destroy();
+
+    this.IPC.setSimitoneVersion( this.conf.Game?.SimitoneVersion || null );
+
+    let releaseInfo;
+    try {
+      releaseInfo = await this.getSimitoneReleaseInfo();
+    } catch ( err ) {
+      captureWithSentry( err );
+      console.error( err );
+    }
+    const shouldUpdate = releaseInfo &&
+      ( this.conf.Game.SimitoneVersion != releaseInfo.tag_name );
+    this.IPC.sendSimitoneShouldUpdate( shouldUpdate ? releaseInfo.tag_name : false );
   }
 
   /**
