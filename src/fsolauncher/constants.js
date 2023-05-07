@@ -1,5 +1,5 @@
 module.exports = {
-  dependency: {
+  dependencies: {
     'FSO': [ 'TSO', ...( process.platform === 'darwin' ? [ 'Mono', 'SDL' ] : [ 'OpenAL' ] ) ],
     'RMS': [ 'FSO' ],
     'MacExtras': [ 'FSO' ],

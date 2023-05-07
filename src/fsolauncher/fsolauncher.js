@@ -398,7 +398,7 @@ class FSOLauncher {
    * @returns {Array<string>} An array of missing dependencies' pretty names.
    */
   getMissingDependencies( componentCode ) {
-    const dependencies = require( './constants' ).dependency;
+    const { dependencies } = require( './constants' );
 
     return ( dependencies[ componentCode ] || [] )
       .filter( dependency => ! this.isInstalled[ dependency ] )
