@@ -734,8 +734,8 @@ class FSOLauncher {
     this.removeActiveTask( 'CHLANG' );
     toast.destroy();
 
-    return this.updateAndPersistConfig(
-      'Game', 'Language', this.getLangString( this.getLangCode( language ) )[ 1 ]  );
+    return this.updateAndPersistConfig( 'Game', 'Language',
+      this.getLangString( this.getLangCode( language ) )[ 1 ]  );
   }
 
   /**
@@ -1094,9 +1094,10 @@ class FSOLauncher {
    * Picks a folder for the OCI (one-click installer) flow.
    */
   async ociPickFolder() {
-    const folders = await Modal.showChooseDirectory( 'FreeSO Game', this.window );
+    const { ociName } = require( './constants' ).registry;
+    const folders = await Modal.showChooseDirectory( ociName, this.window );
     if ( folders && folders.length > 0 ) {
-      this.IPC.ociPickedFolder( folders[ 0 ] + '/FreeSO Game' );
+      this.IPC.ociPickedFolder( folders[ 0 ] + '/' + ociName );
     }
   }
 

@@ -1,14 +1,7 @@
 const download = require( '../download' );
 const unzip = require( '../unzip' );
 const extract = require( '../cabinet' );
-const { TSO } = require( '../../constants' ).downloads;
-
-/**
- * ORIGINAL: https://archive.org/download/Fileplanet_dd_042006/Fileplanet_dd_042006.tar/042006/TSO_Installer_v1.1239.1.0.zip'
- * changed to beta.freeso.org redirect in case it needs to be changed.
- */
-const TEMP_PATH = `${global.appData}temp/FilePlanetInstaller/`;
-const TEMP_FILE = 'FilePlanetTSOFiles.zip';
+const { downloads, temp } = require( '../../constants' );
 
 /**
  * Installs The Sims Online.
@@ -23,11 +16,8 @@ class TSOInstaller {
     this.id = Math.floor( Date.now() / 1000 );
     this.path = path;
     this.haltProgress = false;
-    this.tempFilePath = TEMP_PATH + TEMP_FILE;
-    this.dl = download( {
-      from: TSO,
-      to: this.tempFilePath
-    } );
+    this.tempFilePath = temp.TSO.path + '/' + temp.TSO.file;
+    this.dl = download( { from: downloads.TSO, to: this.tempFilePath } );
   }
 
   /**
@@ -149,7 +139,7 @@ class TSOInstaller {
     return unzip(
       {
         from: this.tempFilePath,
-        to: `${TEMP_PATH}FilePlanetTSOFiles`
+        to: temp.TSO.path + '/' + temp.TSO.extractionFolder
       },
       filename => {
         this.createProgressItem(
@@ -168,11 +158,11 @@ class TSOInstaller {
    * @returns {Promise<Function>} A promise that resolves when the extraction is complete.
    */
   async extractCabs( unzipgc ) {
-    let from = `${TEMP_PATH}FilePlanetTSOFiles/TSO_Installer_v1.1239.1.0/Data1.cab`;
+    let from = `${temp.TSO.path}/${temp.TSO.extractionFolder}/${temp.TSO.firstCab}`;
     try {
       // Support cabs in root
       if ( ! await require( 'fs-extra' ).pathExists( from ) ) {
-        from = `${TEMP_PATH}FilePlanetTSOFiles/Data1.cab`;
+        from = `${temp.TSO.path}/${temp.TSO.extractionFolder}/${temp.TSO.rootCab}`;
       }
     } catch ( err ) {
       console.error( err );

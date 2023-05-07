@@ -46,7 +46,23 @@ module.exports = {
     'MacExtras': 'https://beta.freeso.org/LauncherResourceCentral/MacExtras',
     'SDL': 'https://beta.freeso.org/LauncherResourceCentral/SDL'
   },
+  temp: {
+    'FSO': `${global.appData}temp/artifacts-freeso-%s.zip`,
+    'MacExtras': `${global.appData}temp/macextras-%s.zip`,
+    'Mono': `${global.appData}temp/mono-%s.pkg`,
+    'RMS': `${global.appData}temp/artifacts-remeshes-%s.zip`,
+    'SDL': `${global.appData}temp/sdl2-%s.dmg`,
+    'Simitone': `${global.appData}temp/artifacts-simitone-%s.zip`,
+    'TSO': {
+      path: `${global.appData}temp/tsoclient`,
+      file: 'client.zip',
+      extractionFolder: 'client',
+      firstCab: 'TSO_Installer_v1.1239.1.0/Data1.cab',
+      rootCab: 'Data1.cab'
+    }
+  },
   registry: {
+    ociName: 'FreeSO Game',
     paths: {
       'TSO': process.platform === 'win32' ?
         '\\SOFTWARE\\Maxis\\The Sims Online' :

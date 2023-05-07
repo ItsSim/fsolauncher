@@ -1,7 +1,7 @@
 const download = require( '../download' );
 const sudo = require( 'sudo-prompt' );
 const { strFormat } = require( '../utils' );
-const { Mono } = require( '../../constants' ).downloads;
+const { downloads, temp } = require( '../../constants' );
 
 /**
  * Installs Mono on macOS systems.
@@ -14,8 +14,8 @@ class MonoInstaller {
     this.fsolauncher = fsolauncher;
     this.id = Math.floor( Date.now() / 1000 );
     this.haltProgress = false;
-    this.tempPath = `${global.appData}temp/mono-${this.id}.pkg`;
-    this.dl = download( { from: Mono, to: this.tempPath } );
+    this.tempPath = strFormat( temp.Mono, this.id );
+    this.dl = download( { from: downloads.Mono, to: this.tempPath } );
   }
 
   /**
@@ -161,7 +161,7 @@ class MonoInstaller {
     );
     return new Promise( ( resolve, reject ) => {
       // headless install
-      sudo.exec( `installer -pkg ${global.appData.replace( / /g, '\\ ' )}temp/mono-${this.id}.pkg -target /`, {},
+      sudo.exec( `installer -pkg ${this.tempPath.replace( / /g, '\\ ' )} -target /`, {},
         ( err, stdout, stderr ) => {
           if ( err ) return reject( err );
           console.info( 'mono output', { stdout, stderr } );

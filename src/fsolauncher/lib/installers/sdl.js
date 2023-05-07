@@ -1,7 +1,7 @@
 const download = require( '../download' );
 const sudo = require( 'sudo-prompt' );
 const { strFormat } = require( '../utils' );
-const { SDL } = require( '../../constants' ).downloads;
+const { downloads, temp } = require( '../../constants' );
 
 /**
  * Installs SDL on macOS systems.
@@ -14,8 +14,8 @@ class SDLInstaller {
     this.fsolauncher = fsolauncher;
     this.id = Math.floor( Date.now() / 1000 );
     this.haltProgress = false;
-    this.tempPath = `${global.appData}temp/sdl2-${this.id}.dmg`;
-    this.dl = download( { from: SDL, to: this.tempPath } );
+    this.tempPath = strFormat( temp.SDL, this.id );
+    this.dl = download( { from: downloads.SDL, to: this.tempPath } );
   }
 
   /**
@@ -160,7 +160,7 @@ class SDLInstaller {
     );
     return new Promise( ( resolve, reject ) => {
       // headless install
-      let cmd = `hdiutil attach ${global.appData.replace( / /g, '\\ ' )}temp/sdl2-${this.id}.dmg && `; // mount SDL dmg
+      let cmd = `hdiutil attach ${this.tempPath.replace( / /g, '\\ ' )} && `; // mount SDL dmg
       cmd += 'sudo rm -rf /Library/Frameworks/SDL2.framework && '; // delete in case it exists to avoid errors
       cmd += 'sudo cp -R /Volumes/SDL2/SDL2.framework /Library/Frameworks && '; // move SDL2.framework to /Library/Frameworks
       cmd += 'hdiutil unmount /Volumes/SDL2'; // unmount SDL dmg

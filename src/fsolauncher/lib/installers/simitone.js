@@ -1,7 +1,7 @@
 const download = require( '../download' );
 const unzip = require( '../unzip' );
 const { strFormat } = require( '../utils' );
-const { Simitone } = require( '../../constants' ).downloads;
+const { downloads, temp } = require( '../../constants' );
 
 /**
  * Downloads and installs Simitone.
@@ -16,11 +16,8 @@ class SimitoneInstaller {
     this.id = Math.floor( Date.now() / 1000 );
     this.path = path;
     this.haltProgress = false;
-    this.tempPath = `${global.appData}temp/artifacts-simitone-${this.id}.zip`;
-    this.dl = download( {
-      from: Simitone,
-      to: this.tempPath
-    } );
+    this.tempPath = strFormat( temp.Simitone, this.id );
+    this.dl = download( { from: downloads.Simitone, to: this.tempPath } );
     this.simitoneVersion = '';
   }
 
@@ -68,12 +65,10 @@ class SimitoneInstaller {
    * Obtains GitHub release data.
    */
   async step1() {
-    const simitoneReleaseData = await this.fsolauncher.getSimitoneReleaseInfo();
-
-    if ( simitoneReleaseData.tag_name !== undefined ) {
-      this.simitoneVersion = simitoneReleaseData.tag_name;
+    const releaseInfo = await this.fsolauncher.getSimitoneReleaseInfo();
+    if ( releaseInfo.tag_name !== undefined ) {
+      this.simitoneVersion = releaseInfo.tag_name;
     }
-
     return Promise.resolve();
   }
 
@@ -121,8 +116,8 @@ class SimitoneInstaller {
   step6() {
     if ( process.platform === 'darwin' ) {
       this.dl = download( {
-        from: 'https://beta.freeso.org/LauncherResourceCentral/MacExtras',
-        to: `${global.appData}temp/macextras-${this.id}.zip`
+        from: downloads.MacExtras,
+        to: strFormat( temp.MacExtras, this.id )
       } );
       return this.download();
     }
@@ -137,7 +132,7 @@ class SimitoneInstaller {
   step7() {
     if ( process.platform === 'darwin' ) {
       return unzip( {
-        from: `${global.appData}temp/macextras-${this.id}.zip`,
+        from: strFormat( temp.MacExtras, this.id ),
         to: this.path,
         cpperm: true
       }, filename => {

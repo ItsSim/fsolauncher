@@ -2,7 +2,7 @@ const fs = require( 'fs-extra' );
 const download = require( '../download' );
 const unzip = require( '../unzip' );
 const { strFormat } = require( '../utils' );
-const { RMS } = require( '../../constants' ).downloads;
+const { downloads, temp } = require( '../../constants' );
 
 /**
  * Installs remeshes for FreeSO and Simitone.
@@ -18,11 +18,11 @@ class RMSInstaller {
     this.id = Math.floor( Date.now() / 1000 );
     this.path = path;
     this.haltProgress = false;
-    this.tempPath = `${global.appData}temp/artifacts-remeshes-${this.id}.zip`;
+    this.tempPath = strFormat( temp.RMS, this.id );
     this.parentComponent = parentComponent;
     const location = fsolauncher.remeshInfo.location
       ? fsolauncher.remeshInfo.location
-      : RMS;
+      : downloads.RMS;
 
     this.dl = download( { from: location, to: this.tempPath } );
   }

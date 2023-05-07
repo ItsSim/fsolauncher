@@ -1,7 +1,7 @@
 const { strFormat, captureWithSentry, getJSON } = require( '../utils' );
 const download = require( '../download' ),
   unzip = require( '../unzip' );
-const { FSO } = require( '../../constants' ).downloads;
+const { temp, downloads } = require( '../../constants' );
 
 /**
  * Installs FreeSO from GitHub Releases.
@@ -16,8 +16,8 @@ class FSOInstaller {
     this.id = Math.floor( Date.now() / 1000 );
     this.path = path;
     this.haltProgress = false;
-    this.tempPath = `${global.appData}temp/artifacts-freeso-${this.id}.zip`;
-    this.dl = download( { from: FSO, to: this.tempPath } );
+    this.tempPath = strFormat( temp.FSO, this.id );
+    this.dl = download( { from: downloads.FSO, to: this.tempPath } );
   }
 
   /**
@@ -111,8 +111,8 @@ class FSOInstaller {
   step5() {
     if ( process.platform === 'darwin' ) {
       this.dl = download( {
-        from: 'https://beta.freeso.org/LauncherResourceCentral/MacExtras',
-        to: `${global.appData}temp/macextras-${this.id}.zip`
+        from: downloads.MacExtras,
+        to: strFormat( temp.MacExtras, this.id )
       } );
       return this.download();
     }
@@ -127,7 +127,7 @@ class FSOInstaller {
   step6() {
     if ( process.platform === 'darwin' ) {
       return unzip( {
-        from: `${global.appData}temp/macextras-${this.id}.zip`,
+        from: strFormat( temp.MacExtras, this.id ),
         to: this.path,
         cpperm: true
       }, filename => {
