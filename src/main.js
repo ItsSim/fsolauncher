@@ -167,7 +167,8 @@ function createWindow() {
     window.openDevTools( { mode: 'detach' } );
   }
   window.loadURL( `file://${__dirname}/fsolauncher_ui/fsolauncher.pug` );
-  //window.on( 'restore', _e => window.setSize( width, height ) );
+  window.on( 'restore', _e => window.setSize( width, height ) );
+  window.on( 'maximize', _e => window.setSize( width, height ) );
 
   launcher = new FSOLauncher( window, conf );
 
