@@ -200,16 +200,11 @@ class Events {
    * Full install dialog callback.
    *
    * @param {Electron.IpcMainEvent} e The event object.
-   * @param {string|boolean} folderOrConfirm The folder to install to.
+   * @param {boolean} yes If the user confirmed the installation.
    */
-  onFullInstallConfirm( e, folderOrConfirm ) {
-    if ( folderOrConfirm ) {
-      if ( typeof folderOrConfirm == 'boolean' ) {
-        // This is a regular full install instead of OCI flow, so
-        // no passing in a folder.
-        folderOrConfirm = null;
-      }
-      this.fsolauncher.runFullInstall( folderOrConfirm );
+  onFullInstallConfirm( e, yes ) {
+    if ( yes ) {
+      this.fsolauncher.runFullInstall( this.fsolauncher.ociFolder );
     }
   }
 

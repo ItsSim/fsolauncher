@@ -626,7 +626,7 @@ let ociConfirm;
   ociConfirm = e => {
     e.stopPropagation();
     if ( ociFolder ) {
-      send( 'FULL_INSTALL_CONFIRM', ociFolder );
+      send( 'FULL_INSTALL_CONFIRM', true );
       closeModal( querySelector( '.oneclick-install' ) );
     }
   };

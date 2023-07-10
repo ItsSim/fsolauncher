@@ -26,6 +26,7 @@ class FSOLauncher {
     this.remeshInfo.version = false;
     this.remoteSimitoneVersion = null;
     this.lastDetected = null;
+    this.ociFolder = null;
     this.activeTasks = [];
     this.isInstalled = {
       OpenAL: false,
@@ -1097,7 +1098,8 @@ class FSOLauncher {
     const { ociName } = require( './constants' ).registry;
     const folders = await Modal.showChooseDirectory( ociName, this.window );
     if ( folders && folders.length > 0 ) {
-      this.IPC.ociPickedFolder( folders[ 0 ] + '/' + ociName );
+      this.ociFolder = folders[ 0 ] + '/' + ociName;
+      this.IPC.ociPickedFolder( this.ociFolder );
     }
   }
 
