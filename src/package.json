@@ -29,7 +29,7 @@
     "innosetup-compiler": "^6.2.0"
   },
   "dependencies": {
-    "@sentry/electron": "^4.4.0",
+    "@sentry/electron": "^4.7.0",
     "deflate-js": "^0.2.3",
     "electron-custom-notifications": "file:../vendor/electron-custom-notifications",
     "electron-pug": "^2.0.0",
@@ -40,7 +40,7 @@
     "os-locale": "^5.0.0",
     "sudo-prompt": "file:../vendor/sudo-prompt",
     "v8-compile-cache": "^2.3.0",
-    "winreg": "^1.2.4",
+    "winreg": "file:../vendor/node-winreg",
     "yauzl": "^2.10.0"
   }
 }

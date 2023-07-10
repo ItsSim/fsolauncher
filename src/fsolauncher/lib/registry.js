@@ -20,7 +20,8 @@ class Registry {
     const winreg = require( 'winreg' );
     const regKey = new winreg( {
       hive: winreg.HKLM,
-      key: '\\SOFTWARE\\AAA_' + new Date().toISOString()
+      key: '\\SOFTWARE\\AAA_' + new Date().toISOString(),
+      utf8: true
     } );
 
     return new Promise( ( resolve, _reject ) => {
@@ -145,7 +146,7 @@ class Registry {
     }
     return new Promise( resolve => {
       const winreg = require( 'winreg' );
-      const regKey = new winreg( { hive: winreg.HKLM, key: regPath } );
+      const regKey = new winreg( { hive: winreg.HKLM, key: regPath, utf8: true } );
 
       if ( componentCode === 'FSO' || componentCode === 'TSO' || componentCode === 'Simitone' ) {
         regKey.get( 'InstallDir', async ( err, item ) => {
@@ -240,7 +241,8 @@ class Registry {
       const winreg = require( 'winreg' );
       const regKey = new winreg( {
         hive: winreg.HKLM,
-        key: '\\SOFTWARE\\Maxis\\The Sims Online'
+        key: '\\SOFTWARE\\Maxis\\The Sims Online',
+        utf8: true
       } );
       regKey.keyExists( ( err, exists ) => {
         if ( err ) {
@@ -302,7 +304,8 @@ class Registry {
       const winreg = require( 'winreg' );
       const regKey = new winreg( {
         hive: winreg.HKLM,
-        key: '\\SOFTWARE\\Rhys Simpson\\' + keyName
+        key: '\\SOFTWARE\\Rhys Simpson\\' + keyName,
+        utf8: true
       } );
       regKey.keyExists( ( err, exists ) => {
         if ( err ) {

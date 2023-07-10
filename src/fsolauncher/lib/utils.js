@@ -38,7 +38,6 @@ function initSentry() {
 
 function sanitizeEvent( event ) {
   event = sanitizeExceptions( event );
-  event = sanitizeBreadcrumbs( event );
 
   return event;
 }
@@ -56,17 +55,6 @@ function sanitizeExceptions( event ) {
   return event;
 }
 
-function sanitizeBreadcrumbs( event ) {
-  if ( event.breadcrumbs ) {
-    event.breadcrumbs.forEach( ( breadcrumb ) => {
-      if ( breadcrumb.data ) {
-        breadcrumb.data = obfuscatePossibleKeys( breadcrumb.data ); // Obfuscate possible keys with data
-      }
-    } );
-  }
-  return event;
-}
-
 function obfuscatePath( filePath ) {
   if ( typeof filePath !== 'string' ) {
     return filePath;
@@ -76,22 +64,9 @@ function obfuscatePath( filePath ) {
   return filePath.replace( userDirectory, '[USER_DIR]' );
 }
 
-function obfuscatePossibleKeys( data ) {
-  // Define keys that may exist in the data object and should be removed
-  const sensitiveKeys = [ 'password', 'apiKey', 'accessToken', 'secret' ];
-
-  const obfuscatedData = {};
-
-  for ( const key in data ) {
-    if ( sensitiveKeys.includes( key ) ) {
-      obfuscatedData[ key ] = '[REDACTED]';
-    } else {
-      obfuscatedData[ key ] = data[ key ];
-    }
-  }
-
-  return obfuscatedData;
-}
+const SENTRY_MAX_ERROR_COUNT = 25; // Maximum number of same errors to capture per hour
+const SENTRY_RESET_MINUTES = 60; // Reset error count after this many minutes
+const sentryErrorCounts = {};
 
 /**
  * Captures an error with Sentry.
@@ -101,7 +76,25 @@ function obfuscatePossibleKeys( data ) {
  */
 function captureWithSentry( err, extra ) {
   const { captureException } = require( '@sentry/electron' );
-  captureException( err, { extra } );
+
+  const errorName = err.name + err.message;
+  const currentError = sentryErrorCounts[ errorName ] || {
+    count: 0,
+    timestamp: new Date().getTime()
+  };
+  const expired = currentError.timestamp <= Date.now() - SENTRY_RESET_MINUTES * 60 * 1000;
+
+  if ( currentError.count < SENTRY_MAX_ERROR_COUNT || expired ) {
+    captureException( err, { extra } );
+
+    // If it's been more than SENTRY_RESET_MINUTES since the last error,
+    // reset the count.
+    // Otherwise, increment it.
+    sentryErrorCounts[ errorName ] = {
+      count: expired ? 1 : ( currentError.count + 1 ),
+      timestamp: new Date().getTime()
+    };
+  }
 }
 
 function getJSON( options ) {
