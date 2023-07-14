@@ -20,8 +20,7 @@ class Registry {
     const winreg = require( 'winreg' );
     const regKey = new winreg( {
       hive: winreg.HKLM,
-      key: '\\SOFTWARE\\AAA_' + new Date().toISOString(),
-      utf8: true
+      key: '\\SOFTWARE\\AAA_' + new Date().toISOString()
     } );
 
     return new Promise( ( resolve, _reject ) => {
@@ -146,11 +145,12 @@ class Registry {
     }
     return new Promise( resolve => {
       const winreg = require( 'winreg' );
-      const regKey = new winreg( { hive: winreg.HKLM, key: regPath, utf8: true } );
+      const regKey = new winreg( { hive: winreg.HKLM, key: regPath,  } );
 
       if ( componentCode === 'FSO' || componentCode === 'TSO' || componentCode === 'Simitone' ) {
         regKey.get( 'InstallDir', async ( err, item ) => {
           if ( err ) {
+            console.error( err );
             let isInstalled = false;
             try {
               isInstalled = await Registry.win32LocalPathFallbacks( componentCode );
@@ -162,6 +162,7 @@ class Registry {
       } else if ( componentCode === 'TS1' ) {
         regKey.get( 'InstallPath', async ( err, _item ) => {
           if ( err ) {
+            console.error( err );
             if ( await Registry.win32LocalPathFallbacks( componentCode ) ) {
               return resolve( { key: componentCode, isInstalled: true } );
             }
@@ -170,6 +171,7 @@ class Registry {
           // SIMS_GAME_EDITION = 255 All EPs installed.
           regKey.get( 'SIMS_GAME_EDITION', async ( err, item ) => {
             if ( err ) {
+              console.error( err );
               if ( await Registry.win32LocalPathFallbacks( componentCode ) ) {
                 return resolve( { key: componentCode, isInstalled: true } );
               }
@@ -184,6 +186,7 @@ class Registry {
       } else if ( componentCode === 'NET' ) {
         regKey.keys( ( err, registries ) => {
           if ( err ) {
+            console.error( err );
             // Trust our galaxy and return that it’s installed...
             return resolve( { key: componentCode, isInstalled: true, error: err } );
           }
@@ -200,6 +203,7 @@ class Registry {
       } else if ( componentCode === 'OpenAL' ) {
         regKey.keyExists( async( err, exists ) => {
           if ( err ) {
+            console.error( err );
             let isInstalled = false;
             try {
               isInstalled = await Registry.win32LocalPathFallbacks( componentCode );
@@ -241,8 +245,7 @@ class Registry {
       const winreg = require( 'winreg' );
       const regKey = new winreg( {
         hive: winreg.HKLM,
-        key: '\\SOFTWARE\\Maxis\\The Sims Online',
-        utf8: true
+        key: '\\SOFTWARE\\Maxis\\The Sims Online'
       } );
       regKey.keyExists( ( err, exists ) => {
         if ( err ) {
@@ -304,8 +307,7 @@ class Registry {
       const winreg = require( 'winreg' );
       const regKey = new winreg( {
         hive: winreg.HKLM,
-        key: '\\SOFTWARE\\Rhys Simpson\\' + keyName,
-        utf8: true
+        key: '\\SOFTWARE\\Rhys Simpson\\' + keyName
       } );
       regKey.keyExists( ( err, exists ) => {
         if ( err ) {

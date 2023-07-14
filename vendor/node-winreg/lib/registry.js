@@ -6,42 +6,42 @@
  */
 
 /* imports */
-var util = require('util')
-  , path = require('path')
-  , spawn = require('child_process').spawn
+var util          = require('util')
+,   path          = require('path')
+,   spawn         = require('child_process').spawn
 
-  /* set to console.log for debugging */
-  , log = function () { }
+/* set to console.log for debugging */
+,   log           = function () {}
 
-  /* registry hive ids */
-  , HKLM = 'HKLM'
-  , HKCU = 'HKCU'
-  , HKCR = 'HKCR'
-  , HKU = 'HKU'
-  , HKCC = 'HKCC'
-  , HIVES = [HKLM, HKCU, HKCR, HKU, HKCC]
+/* registry hive ids */
+,   HKLM          = 'HKLM'
+,   HKCU          = 'HKCU'
+,   HKCR          = 'HKCR'
+,   HKU           = 'HKU'
+,   HKCC          = 'HKCC'
+,   HIVES         = [ HKLM, HKCU, HKCR, HKU, HKCC ]
 
-  /* registry value type ids */
-  , REG_SZ = 'REG_SZ'
-  , REG_MULTI_SZ = 'REG_MULTI_SZ'
-  , REG_EXPAND_SZ = 'REG_EXPAND_SZ'
-  , REG_DWORD = 'REG_DWORD'
-  , REG_QWORD = 'REG_QWORD'
-  , REG_BINARY = 'REG_BINARY'
-  , REG_NONE = 'REG_NONE'
-  , REG_TYPES = [REG_SZ, REG_MULTI_SZ, REG_EXPAND_SZ, REG_DWORD, REG_QWORD, REG_BINARY, REG_NONE]
+/* registry value type ids */
+,   REG_SZ        = 'REG_SZ'
+,   REG_MULTI_SZ  = 'REG_MULTI_SZ'
+,   REG_EXPAND_SZ = 'REG_EXPAND_SZ'
+,   REG_DWORD     = 'REG_DWORD'
+,   REG_QWORD     = 'REG_QWORD'
+,   REG_BINARY    = 'REG_BINARY'
+,   REG_NONE      = 'REG_NONE'
+,   REG_TYPES     = [ REG_SZ, REG_MULTI_SZ, REG_EXPAND_SZ, REG_DWORD, REG_QWORD, REG_BINARY, REG_NONE ]
 
-  /* default registry value name */
-  , DEFAULT_VALUE = ''
+/* default registry value name */
+,   DEFAULT_VALUE = ''
 
-  /* general key pattern */
-  , KEY_PATTERN = /(\\[a-zA-Z0-9_\s]+)*/
+/* general key pattern */
+,   KEY_PATTERN   = /(\\[a-zA-Z0-9_\s]+)*/
 
-  /* key path pattern (as returned by REG-cli) */
-  , PATH_PATTERN = /^(HKEY_LOCAL_MACHINE|HKEY_CURRENT_USER|HKEY_CLASSES_ROOT|HKEY_USERS|HKEY_CURRENT_CONFIG)(.*)$/
+/* key path pattern (as returned by REG-cli) */
+,   PATH_PATTERN  = /^(HKEY_LOCAL_MACHINE|HKEY_CURRENT_USER|HKEY_CLASSES_ROOT|HKEY_USERS|HKEY_CURRENT_CONFIG)(.*)$/
 
-  /* registry item pattern */
-  , ITEM_PATTERN = /^(.*)\s(REG_SZ|REG_MULTI_SZ|REG_EXPAND_SZ|REG_DWORD|REG_QWORD|REG_BINARY|REG_NONE)\s+([^\s].*)$/
+/* registry item pattern */
+,   ITEM_PATTERN  = /^(.*)\s(REG_SZ|REG_MULTI_SZ|REG_EXPAND_SZ|REG_DWORD|REG_QWORD|REG_BINARY|REG_NONE)\s+([^\s].*)$/
 
 /**
  * Creates an Error object that contains the exit code of the REG.EXE process.
@@ -91,10 +91,10 @@ util.inherits(ProcessUncleanExitError, Error);
 function captureOutput(child) {
   // Use a mutable data structure so we can append as we get new data and have
   // the calling context see the new data
-  var output = { 'stdout': '', 'stderr': '' };
+  var output = {'stdout': '', 'stderr': ''};
 
-  child.stdout.on('data', function (data) { output["stdout"] += data.toString(); });
-  child.stderr.on('data', function (data) { output["stderr"] += data.toString(); });
+  child.stdout.on('data', function(data) { output["stdout"] += data.toString(); });
+  child.stderr.on('data', function(data) { output["stderr"] += data.toString(); });
 
   return output;
 }
@@ -104,11 +104,11 @@ function captureOutput(child) {
  * Returns an error message containing the stdout/stderr of the child process
  */
 function mkErrorMsg(registryCommand, code, output) {
-  var stdout = output['stdout'].trim();
-  var stderr = output['stderr'].trim();
+    var stdout = output['stdout'].trim();
+    var stderr = output['stderr'].trim();
 
-  var msg = util.format("%s command exited with code %d:\n%s\n%s", registryCommand, code, stdout, stderr);
-  return new ProcessUncleanExitError(msg, code);
+    var msg = util.format("%s command exited with code %d:\n%s\n%s", registryCommand, code, stdout, stderr);
+    return new ProcessUncleanExitError(msg, code);
 }
 
 
@@ -139,18 +139,12 @@ function pushArch(args, arch) {
  * Get the path to system's reg.exe. Useful when another reg.exe is added to the PATH
  * Implemented only for Windows
  */
-function getRegExePath({ utf8 } = { utf8: false }) {
-  if (process.platform === 'win32') {
-    const recExePath = path.join(process.env.windir, 'system32', 'reg.exe');
-
-    if (utf8) {
-      return path.join(process.env.windir, 'system32', 'chcp.com') + ' 65001 | ' + recExePath;
+function getRegExePath() {
+    if (process.platform === 'win32') {
+        return path.join(process.env.windir, 'system32', 'reg.exe');
     } else {
-      return recExePath;
+        return "REG";
     }
-  } else {
-    return "REG";
-  }
 }
 
 
@@ -170,19 +164,19 @@ function getRegExePath({ utf8 } = { utf8: false }) {
  * @param {string} arch - the hive architecture ('x86' or 'x64')
  *
  */
-function RegistryItem(host, hive, key, name, type, value, arch) {
+function RegistryItem (host, hive, key, name, type, value, arch) {
 
   if (!(this instanceof RegistryItem))
     return new RegistryItem(host, hive, key, name, type, value, arch);
 
   /* private members */
   var _host = host    // hostname
-    , _hive = hive    // registry hive
-    , _key = key      // registry key
-    , _name = name    // property name
-    , _type = type    // property type
-    , _value = value  // property value
-    , _arch = arch    // hive architecture
+  ,   _hive = hive    // registry hive
+  ,   _key = key      // registry key
+  ,   _name = name    // property name
+  ,   _type = type    // property type
+  ,   _value = value  // property value
+  ,   _arch = arch    // hive architecture
 
   /* getters/setters */
 
@@ -251,28 +245,26 @@ util.inherits(RegistryItem, Object);
  * @param {string=} options.hive - the hive id
  * @param {string=} options.key - the registry key
  * @param {string=} options.arch - the optional registry hive architecture ('x86' or 'x64'; only valid on Windows 64 Bit Operating Systems)
- * @param {boolean=} options.utf8 - the optional flag to decode output via utf-8
+ *
  * @example
  * var Registry = require('winreg')
  * ,   autoStartCurrentUser = new Registry({
  *       hive: Registry.HKCU,
- *       key:  '\\Software\\Microsoft\\Windows\\CurrentVersion\\Run',
- *       utf8: true
+ *       key:  '\\Software\\Microsoft\\Windows\\CurrentVersion\\Run'
  *     });
  *
  */
-function Registry(options) {
+function Registry (options) {
 
   if (!(this instanceof Registry))
     return new Registry(options);
 
   /* private members */
   var _options = options || {}
-    , _host = '' + (_options.host || '')    // hostname
-    , _hive = '' + (_options.hive || HKLM)  // registry hive
-    , _key = '' + (_options.key || '')    // registry key
-    , _arch = _options.arch || null         // hive architecture
-    , _utf8 = _options.utf8 || false         // enable utf-8 decoding
+  ,   _host = '' + (_options.host || '')    // hostname
+  ,   _hive = '' + (_options.hive || HKLM)  // registry hive
+  ,   _key  = '' + (_options.key  || '')    // registry key
+  ,   _arch = _options.arch || null         // hive architecture
 
   /* getters/setters */
 
@@ -312,13 +304,6 @@ function Registry(options) {
   this.__defineGetter__('arch', function () { return _arch; });
 
   /**
-   * The flag of whether to decode via utf-8.
-   * @readonly
-   * @member {boolean} Registry#utf8
-   */
-  this.__defineGetter__('utf8', function () { return _utf8; });
-
-  /**
    * Creates a new {@link Registry} instance that points to the parent registry key.
    * @readonly
    * @member {Registry} Registry#parent
@@ -328,9 +313,8 @@ function Registry(options) {
     return new Registry({
       host: this.host,
       hive: this.hive,
-      key: (i == -1) ? '' : _key.substring(0, i),
-      arch: this.arch,
-      utf8: this.utf8,
+      key:  (i == -1)?'':_key.substring(0, i),
+      arch: this.arch
     });
   });
 
@@ -447,24 +431,23 @@ Registry.DEFAULT_VALUE = DEFAULT_VALUE;
  * @param {array=} cb.items - an array of {@link RegistryItem} objects
  * @returns {Registry} this registry key object
  */
-Registry.prototype.values = function values(cb) {
+Registry.prototype.values = function values (cb) {
 
   if (typeof cb !== 'function')
     throw new TypeError('must specify a callback');
 
-  var args = ['QUERY', this.path];
+  var args = [ 'QUERY', this.path ];
 
   pushArch(args, this.arch);
 
-  var proc = spawn(getRegExePath({ utf8: this.utf8 }), args, {
-    cwd: undefined,
-    env: process.env,
-    stdio: ['ignore', 'pipe', 'pipe'],
-    shell: true
-  })
-    , buffer = ''
-    , self = this
-    , error = null // null means no error previously reported.
+  var proc = spawn(getRegExePath(), args, {
+        cwd: undefined,
+        env: process.env,
+        stdio: [ 'ignore', 'pipe', 'pipe' ]
+      })
+  ,   buffer = ''
+  ,   self = this
+  ,   error = null // null means no error previously reported.
 
   var output = captureOutput(proc);
 
@@ -476,9 +459,9 @@ Registry.prototype.values = function values(cb) {
       cb(mkErrorMsg('QUERY', code, output), null);
     } else {
       var items = []
-        , result = []
-        , lines = buffer.split('\n')
-        , lineNumber = 0
+      ,   result = []
+      ,   lines = buffer.split('\n')
+      ,   lineNumber = 0
 
       for (var i = 0, l = lines.length; i < l; i++) {
         var line = lines[i].trim();
@@ -494,9 +477,9 @@ Registry.prototype.values = function values(cb) {
       for (var i = 0, l = items.length; i < l; i++) {
 
         var match = ITEM_PATTERN.exec(items[i])
-          , name
-          , type
-          , value
+        ,   name
+        ,   type
+        ,   value
 
         if (match) {
           name = match[1].trim();
@@ -515,7 +498,7 @@ Registry.prototype.values = function values(cb) {
     buffer += data.toString();
   });
 
-  proc.on('error', function (err) {
+  proc.on('error', function(err) {
     error = err;
     cb(err);
   });
@@ -530,24 +513,23 @@ Registry.prototype.values = function values(cb) {
  * @param {array=} cb.items - an array of {@link Registry} objects
  * @returns {Registry} this registry key object
  */
-Registry.prototype.keys = function keys(cb) {
+Registry.prototype.keys = function keys (cb) {
 
   if (typeof cb !== 'function')
     throw new TypeError('must specify a callback');
 
-  var args = ['QUERY', this.path];
+  var args = [ 'QUERY', this.path ];
 
   pushArch(args, this.arch);
 
-  var proc = spawn(getRegExePath({ utf8: this.utf8 }), args, {
-    cwd: undefined,
-    env: process.env,
-    stdio: ['ignore', 'pipe', 'pipe'],
-    shell: true
-  })
-    , buffer = ''
-    , self = this
-    , error = null // null means no error previously reported.
+  var proc = spawn(getRegExePath(), args, {
+        cwd: undefined,
+        env: process.env,
+        stdio: [ 'ignore', 'pipe', 'pipe' ]
+      })
+  ,   buffer = ''
+  ,   self = this
+  ,   error = null // null means no error previously reported.
 
   var output = captureOutput(proc);
 
@@ -567,8 +549,8 @@ Registry.prototype.keys = function keys(cb) {
   proc.stdout.on('end', function () {
 
     var items = []
-      , result = []
-      , lines = buffer.split('\n')
+    ,   result = []
+    ,   lines = buffer.split('\n')
 
     for (var i = 0, l = lines.length; i < l; i++) {
       var line = lines[i].trim();
@@ -581,19 +563,18 @@ Registry.prototype.keys = function keys(cb) {
     for (var i = 0, l = items.length; i < l; i++) {
 
       var match = PATH_PATTERN.exec(items[i])
-        , hive
-        , key
+      ,   hive
+      ,   key
 
       if (match) {
         hive = match[1];
-        key = match[2];
+        key  = match[2];
         if (key && (key !== self.key)) {
           result.push(new Registry({
             host: self.host,
             hive: self.hive,
-            key: key,
-            arch: self.arch,
-            utf8: self.utf8
+            key:  key,
+            arch: self.arch
           }));
         }
       }
@@ -603,7 +584,7 @@ Registry.prototype.keys = function keys(cb) {
 
   });
 
-  proc.on('error', function (err) {
+  proc.on('error', function(err) {
     error = err;
     cb(err);
   });
@@ -619,7 +600,7 @@ Registry.prototype.keys = function keys(cb) {
  * @param {RegistryItem=} cb.item - the retrieved registry item
  * @returns {Registry} this registry key object
  */
-Registry.prototype.get = function get(name, cb) {
+Registry.prototype.get = function get (name, cb) {
 
   if (typeof cb !== 'function')
     throw new TypeError('must specify a callback');
@@ -632,15 +613,14 @@ Registry.prototype.get = function get(name, cb) {
 
   pushArch(args, this.arch);
 
-  var proc = spawn(getRegExePath({ utf8: this.utf8 }), args, {
-    cwd: undefined,
-    env: process.env,
-    stdio: ['ignore', 'pipe', 'pipe'],
-    shell: true
-  })
-    , buffer = ''
-    , self = this
-    , error = null // null means no error previously reported.
+  var proc = spawn(getRegExePath(), args, {
+        cwd: undefined,
+        env: process.env,
+        stdio: [ 'ignore', 'pipe', 'pipe' ]
+      })
+  ,   buffer = ''
+  ,   self = this
+  ,   error = null // null means no error previously reported.
 
   var output = captureOutput(proc);
 
@@ -652,27 +632,27 @@ Registry.prototype.get = function get(name, cb) {
       cb(mkErrorMsg('QUERY', code, output), null);
     } else {
       var items = []
-        , result = null
-        , lines = buffer.split('\n')
-        , lineNumber = 0
+      ,   result = null
+      ,   lines = buffer.split('\n')
+      ,   lineNumber = 0
 
       for (var i = 0, l = lines.length; i < l; i++) {
         var line = lines[i].trim();
         if (line.length > 0) {
           log(line);
           if (lineNumber != 0) {
-            items.push(line);
+             items.push(line);
           }
           ++lineNumber;
         }
       }
 
       //Get last item - so it works in XP where REG QUERY returns with a header
-      var item = items[items.length - 1] || ''
-        , match = ITEM_PATTERN.exec(item)
-        , name
-        , type
-        , value
+      var item = items[items.length-1] || ''
+      ,   match = ITEM_PATTERN.exec(item)
+      ,   name
+      ,   type
+      ,   value
 
       if (match) {
         name = match[1].trim();
@@ -689,7 +669,7 @@ Registry.prototype.get = function get(name, cb) {
     buffer += data.toString();
   });
 
-  proc.on('error', function (err) {
+  proc.on('error', function(err) {
     error = err;
     cb(err);
   });
@@ -706,7 +686,7 @@ Registry.prototype.get = function get(name, cb) {
  * @param {ProcessUncleanExitError=} cb.err - error object or null if successful
  * @returns {Registry} this registry key object
  */
-Registry.prototype.set = function set(name, type, value, cb) {
+Registry.prototype.set = function set (name, type, value, cb) {
 
   if (typeof cb !== 'function')
     throw new TypeError('must specify a callback');
@@ -724,18 +704,17 @@ Registry.prototype.set = function set(name, type, value, cb) {
 
   pushArch(args, this.arch);
 
-  var proc = spawn(getRegExePath({ utf8: this.utf8 }), args, {
-    cwd: undefined,
-    env: process.env,
-    stdio: ['ignore', 'pipe', 'pipe'],
-    shell: true
-  })
-    , error = null // null means no error previously reported.
+  var proc = spawn(getRegExePath(), args, {
+        cwd: undefined,
+        env: process.env,
+        stdio: [ 'ignore', 'pipe', 'pipe' ]
+      })
+  ,   error = null // null means no error previously reported.
 
   var output = captureOutput(proc);
 
   proc.on('close', function (code) {
-    if (error) {
+    if(error) {
       return;
     } else if (code !== 0) {
       log('process exited with code ' + code);
@@ -747,10 +726,10 @@ Registry.prototype.set = function set(name, type, value, cb) {
 
   proc.stdout.on('data', function (data) {
     // simply discard output
-    log('' + data);
+    log(''+data);
   });
 
-  proc.on('error', function (err) {
+  proc.on('error', function(err) {
     error = err;
     cb(err);
   });
@@ -766,7 +745,7 @@ Registry.prototype.set = function set(name, type, value, cb) {
  * @param {ProcessUncleanExitError=} cb.err - error object or null if successful
  * @returns {Registry} this registry key object
  */
-Registry.prototype.remove = function remove(name, cb) {
+Registry.prototype.remove = function remove (name, cb) {
 
   if (typeof cb !== 'function')
     throw new TypeError('must specify a callback');
@@ -775,18 +754,17 @@ Registry.prototype.remove = function remove(name, cb) {
 
   pushArch(args, this.arch);
 
-  var proc = spawn(getRegExePath({ utf8: this.utf8 }), args, {
-    cwd: undefined,
-    env: process.env,
-    stdio: ['ignore', 'pipe', 'pipe'],
-    shell: true
-  })
-    , error = null // null means no error previously reported.
+  var proc = spawn(getRegExePath(), args, {
+        cwd: undefined,
+        env: process.env,
+        stdio: [ 'ignore', 'pipe', 'pipe' ]
+      })
+  ,   error = null // null means no error previously reported.
 
   var output = captureOutput(proc);
 
   proc.on('close', function (code) {
-    if (error) {
+    if(error) {
       return;
     } else if (code !== 0) {
       log('process exited with code ' + code);
@@ -798,10 +776,10 @@ Registry.prototype.remove = function remove(name, cb) {
 
   proc.stdout.on('data', function (data) {
     // simply discard output
-    log('' + data);
+    log(''+data);
   });
 
-  proc.on('error', function (err) {
+  proc.on('error', function(err) {
     error = err;
     cb(err);
   });
@@ -815,7 +793,7 @@ Registry.prototype.remove = function remove(name, cb) {
  * @param {ProcessUncleanExitError=} cb.err - error object or null if successful
  * @returns {Registry} this registry key object
  */
-Registry.prototype.clear = function clear(cb) {
+Registry.prototype.clear = function clear (cb) {
 
   if (typeof cb !== 'function')
     throw new TypeError('must specify a callback');
@@ -824,18 +802,17 @@ Registry.prototype.clear = function clear(cb) {
 
   pushArch(args, this.arch);
 
-  var proc = spawn(getRegExePath({ utf8: this.utf8 }), args, {
-    cwd: undefined,
-    env: process.env,
-    stdio: ['ignore', 'pipe', 'pipe'],
-    shell: true
-  })
-    , error = null // null means no error previously reported.
+  var proc = spawn(getRegExePath(), args, {
+        cwd: undefined,
+        env: process.env,
+        stdio: [ 'ignore', 'pipe', 'pipe' ]
+      })
+  ,   error = null // null means no error previously reported.
 
   var output = captureOutput(proc);
 
   proc.on('close', function (code) {
-    if (error) {
+    if(error) {
       return;
     } else if (code !== 0) {
       log('process exited with code ' + code);
@@ -847,10 +824,10 @@ Registry.prototype.clear = function clear(cb) {
 
   proc.stdout.on('data', function (data) {
     // simply discard output
-    log('' + data);
+    log(''+data);
   });
 
-  proc.on('error', function (err) {
+  proc.on('error', function(err) {
     error = err;
     cb(err);
   });
@@ -874,7 +851,7 @@ Registry.prototype.erase = Registry.prototype.clear;
  * @param {ProcessUncleanExitError=} cb.err - error object or null if successful
  * @returns {Registry} this registry key object
  */
-Registry.prototype.destroy = function destroy(cb) {
+Registry.prototype.destroy = function destroy (cb) {
 
   if (typeof cb !== 'function')
     throw new TypeError('must specify a callback');
@@ -883,13 +860,12 @@ Registry.prototype.destroy = function destroy(cb) {
 
   pushArch(args, this.arch);
 
-  var proc = spawn(getRegExePath({ utf8: this.utf8 }), args, {
-    cwd: undefined,
-    env: process.env,
-    stdio: ['ignore', 'pipe', 'pipe'],
-    shell: true
-  })
-    , error = null // null means no error previously reported.
+  var proc = spawn(getRegExePath(), args, {
+        cwd: undefined,
+        env: process.env,
+        stdio: [ 'ignore', 'pipe', 'pipe' ]
+      })
+  ,   error = null // null means no error previously reported.
 
   var output = captureOutput(proc);
 
@@ -906,10 +882,10 @@ Registry.prototype.destroy = function destroy(cb) {
 
   proc.stdout.on('data', function (data) {
     // simply discard output
-    log('' + data);
+    log(''+data);
   });
 
-  proc.on('error', function (err) {
+  proc.on('error', function(err) {
     error = err;
     cb(err);
   });
@@ -923,7 +899,7 @@ Registry.prototype.destroy = function destroy(cb) {
  * @param {ProcessUncleanExitError=} cb.err - error object or null if successful
  * @returns {Registry} this registry key object
  */
-Registry.prototype.create = function create(cb) {
+Registry.prototype.create = function create (cb) {
 
   if (typeof cb !== 'function')
     throw new TypeError('must specify a callback');
@@ -932,13 +908,12 @@ Registry.prototype.create = function create(cb) {
 
   pushArch(args, this.arch);
 
-  var proc = spawn(getRegExePath({ utf8: this.utf8 }), args, {
-    cwd: undefined,
-    env: process.env,
-    stdio: ['ignore', 'pipe', 'pipe'],
-    shell: true
-  })
-    , error = null // null means no error previously reported.
+  var proc = spawn(getRegExePath(), args, {
+        cwd: undefined,
+        env: process.env,
+        stdio: [ 'ignore', 'pipe', 'pipe' ]
+      })
+  ,   error = null // null means no error previously reported.
 
   var output = captureOutput(proc);
 
@@ -955,10 +930,10 @@ Registry.prototype.create = function create(cb) {
 
   proc.stdout.on('data', function (data) {
     // simply discard output
-    log('' + data);
+    log(''+data);
   });
 
-  proc.on('error', function (err) {
+  proc.on('error', function(err) {
     error = err;
     cb(err);
   });
@@ -973,7 +948,7 @@ Registry.prototype.create = function create(cb) {
  * @param {boolean=} cb.exists - true if a registry key with this name already exists
  * @returns {Registry} this registry key object
  */
-Registry.prototype.keyExists = function keyExists(cb) {
+Registry.prototype.keyExists = function keyExists (cb) {
 
   this.values(function (err, items) {
     if (err) {
@@ -998,7 +973,7 @@ Registry.prototype.keyExists = function keyExists(cb) {
  * @param {boolean=} cb.exists - true if a value with the given name was found in this key
  * @returns {Registry} this registry key object
  */
-Registry.prototype.valueExists = function valueExists(name, cb) {
+Registry.prototype.valueExists = function valueExists (name, cb) {
 
   this.get(name, function (err, item) {
     if (err) {
