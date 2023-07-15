@@ -65,21 +65,21 @@ module.exports = {
     ociName: 'FreeSO Game',
     paths: {
       'TSO': process.platform === 'win32' ?
-        '\\SOFTWARE\\Maxis\\The Sims Online' :
+        'HKLM\\SOFTWARE\\Maxis\\The Sims Online' :
         `${global.homeDir}/Documents/The Sims Online/TSOClient/TSOClient.exe`,
 
       'FSO': process.platform === 'win32' ?
-        '\\SOFTWARE\\Rhys Simpson\\FreeSO' : `${global.homeDir}/Documents/FreeSO/FreeSO.exe`,
+        'HKLM\\SOFTWARE\\Rhys Simpson\\FreeSO' : `${global.homeDir}/Documents/FreeSO/FreeSO.exe`,
 
       'TS1': process.platform === 'win32' ?
-        '\\SOFTWARE\\Maxis\\The Sims' : `${global.homeDir}/Documents/The Sims/Sims.exe`,
+        'HKLM\\SOFTWARE\\Maxis\\The Sims' : `${global.homeDir}/Documents/The Sims/Sims.exe`,
 
       'Simitone': process.platform === 'win32' ?
-        '\\SOFTWARE\\Rhys Simpson\\Simitone' :
+        'HKLM\\SOFTWARE\\Rhys Simpson\\Simitone' :
         `${global.homeDir}/Documents/Simitone for Windows/Simitone.Windows.exe`,
 
-      'OpenAL': '\\SOFTWARE\\OpenAL',
-      'NET': '\\SOFTWARE\\Microsoft\\NET Framework Setup\\NDP',
+      'OpenAL': 'HKLM\\SOFTWARE\\OpenAL',
+      'NET': 'HKLM\\SOFTWARE\\Microsoft\\NET Framework Setup\\NDP',
       'Mono': '/Library/Frameworks/Mono.framework',
       'SDL': '/Library/Frameworks/SDL2.framework'
     },

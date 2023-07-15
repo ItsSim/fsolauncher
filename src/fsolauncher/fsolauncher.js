@@ -557,13 +557,19 @@ class FSOLauncher {
 
       // Modify registry to point to the override path.
       if ( componentCode === 'TSO' ) {
-        await createMaxisEntry( this, options.override );
+        await createMaxisEntry(
+          this.setConfiguration.bind( this ), options.override
+        );
       }
       if ( componentCode === 'FSO' ) {
-        await createFreeSOEntry( this, options.override );
+        await createFreeSOEntry(
+          this.setConfiguration.bind( this ), options.override
+        );
       }
       if ( componentCode === 'Simitone' ) {
-        await createSimitoneEntry( this, options.override );
+        await createSimitoneEntry(
+          this.setConfiguration.bind( this ), options.override
+        );
       }
       return false;
     }
@@ -580,7 +586,7 @@ class FSOLauncher {
     const isInstalled = await installer.isInstalledInPath();
 
     if ( isInstalled && ! options.fullInstall && ! options.dir &&
-      await ( require( './lib/registry' ).testWinAccess() ) ) {
+      await ( require( './lib/registry' ).hasRegistryAccess() ) ) {
       // Already installed in the given path, let the user know.
       Modal.showAlreadyInstalled( this.getPrettyName( componentCode ),
         componentCode, installDir );
@@ -648,7 +654,7 @@ class FSOLauncher {
    * @returns {Promise<string>} The installation directory for the component.
    */
   async obtainInstallDirectory( componentCode ) {
-    if ( await ( require( './lib/registry' ).testWinAccess() ) ) {
+    if ( await ( require( './lib/registry' ).hasRegistryAccess() ) ) {
       return this.askForInstallFolder( componentCode );
     } else {
       // Use well-known paths.

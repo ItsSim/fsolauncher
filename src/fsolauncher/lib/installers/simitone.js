@@ -105,7 +105,11 @@ class SimitoneInstaller {
    * @returns {Promise<void>} A promise that resolves when the registry key is created.
    */
   step5() {
-    return require( '../registry' ).createSimitoneEntry( this.fsolauncher, this.path );
+    return require( '../registry' )
+      .createSimitoneEntry(
+        this.fsolauncher.setConfiguration.bind( this.fsolauncher ),
+        this.path
+      );
   }
 
   /**

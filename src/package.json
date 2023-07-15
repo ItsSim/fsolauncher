@@ -40,7 +40,6 @@
     "os-locale": "^5.0.0",
     "sudo-prompt": "file:../vendor/sudo-prompt",
     "v8-compile-cache": "^2.3.0",
-    "winreg": "file:../vendor/node-winreg",
     "yauzl": "^2.10.0"
   }
 }

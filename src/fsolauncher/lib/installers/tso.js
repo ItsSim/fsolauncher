@@ -103,7 +103,11 @@ class TSOInstaller {
    * @returns {Promise<void>} A promise that resolves when the key is created.
    */
   step5() {
-    return require( '../registry' ).createMaxisEntry( this.fsolauncher, this.path );
+    return require( '../registry' )
+      .createMaxisEntry(
+        this.fsolauncher.setConfiguration.bind( this.fsolauncher ),
+        this.path
+      );
   }
 
   /**

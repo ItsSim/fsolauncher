@@ -100,7 +100,11 @@ class FSOInstaller {
    * @returns {Promise<void>} A promise that resolves when the key is created.
    */
   step4() {
-    return require( '../registry' ).createFreeSOEntry( this.fsolauncher, this.path );
+    return require( '../registry' )
+      .createFreeSOEntry(
+        this.fsolauncher.setConfiguration.bind( this.fsolauncher ),
+        this.path
+      );
   }
 
   /**
