@@ -60,8 +60,7 @@ async function getInstallStatus( code, regPath ) {
     return {
       key: code,
       isInstalled: ( await fs.pathExists( regPath ) ) ?
-        this.stripLocalPath( code, regPath ) :
-        false
+        this.stripLocalPath( code, regPath ) : false
     };
   }
 
@@ -96,7 +95,7 @@ async function getInstallStatus( code, regPath ) {
     return { key: code, isInstalled };
   } catch ( err ) {
     console.error( err );
-    return { key: code, isInstalled: false };
+    return { key: code, isInstalled: await checkWindowsFallbacks( code ) };
   }
 }
 
