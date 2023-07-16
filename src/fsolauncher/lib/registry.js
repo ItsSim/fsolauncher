@@ -111,7 +111,7 @@ async function createMaxisEntry( updateConfig, installDir ) {
     return;
   }
   try {
-    await updateValue( 'HKLM\\SOFTWARE\\Maxis\\The Sims Online', installDir );
+    await updateValue( 'HKLM\\SOFTWARE\\Maxis\\The Sims Online', 'InstallDir', installDir );
   } catch ( err ) {
     console.error( err );
   }
@@ -129,7 +129,7 @@ async function createGameEntry( updateConfig, installDir ) {
     return;
   }
   try {
-    await updateValue( 'HKLM\\SOFTWARE\\Rhys Simpson\\FreeSO', installDir );
+    await updateValue( 'HKLM\\SOFTWARE\\Rhys Simpson\\FreeSO', 'InstallDir', installDir );
   } catch ( err ) {
     console.error( err );
   }
@@ -147,7 +147,7 @@ async function createSimitoneEntry( updateConfig, installDir ) {
     return;
   }
   try {
-    await updateValue( 'HKLM\\SOFTWARE\\Rhys Simpson\\Simitone', installDir );
+    await updateValue( 'HKLM\\SOFTWARE\\Rhys Simpson\\Simitone', 'InstallDir', installDir );
   } catch ( err ) {
     console.error( err );
   }

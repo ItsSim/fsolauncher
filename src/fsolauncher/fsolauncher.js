@@ -551,7 +551,7 @@ class FSOLauncher {
     if ( options.override ) {
       const {
         createMaxisEntry,
-        createFreeSOEntry,
+        createGameEntry,
         createSimitoneEntry
       } = require( './lib/registry' );
 
@@ -562,7 +562,7 @@ class FSOLauncher {
         );
       }
       if ( componentCode === 'FSO' ) {
-        await createFreeSOEntry(
+        await createGameEntry(
           this.setConfiguration.bind( this ), options.override
         );
       }

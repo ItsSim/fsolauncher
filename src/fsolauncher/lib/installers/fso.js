@@ -101,7 +101,7 @@ class FSOInstaller {
    */
   step4() {
     return require( '../registry' )
-      .createFreeSOEntry(
+      .createGameEntry(
         this.fsolauncher.setConfiguration.bind( this.fsolauncher ),
         this.path
       );
