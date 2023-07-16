@@ -10,11 +10,13 @@ async function hasRegistryAccess() {
   try {
     const regKey = 'HKLM\\SOFTWARE\\AAA_' + new Date().toISOString();
     await createKey( regKey );
-    await keyExists( regKey );
+    if ( ! await keyExists( regKey ) ) {
+      throw new Error( 'was not able to create the key' );
+    }
     await deleteKey( regKey );
     return true;
   } catch ( err ) {
-    console.error( err );
+    console.error( 'no registry access', err );
     return false;
   }
 }

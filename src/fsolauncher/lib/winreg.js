@@ -9,7 +9,7 @@ const readFromRegistry = async ( keyPath, valueName ) => {
   if ( match ) {
     return match[ 1 ];
   } else {
-    throw new Error( 'Failed to parse registry output' );
+    throw new Error( 'failed to parse registry output' );
   }
 };
 
