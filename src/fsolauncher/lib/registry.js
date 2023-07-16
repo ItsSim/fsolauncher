@@ -21,7 +21,7 @@ async function hasRegistryAccess() {
 
 async function checkWindowsFallbacks( code ) {
   const fallbacks = win32Fallbacks[ code ] || [];
-  const localPaths = getLocalRegistry();
+  const localPaths = await getLocalRegistry();
   if ( localPaths[ code ] ) {
     fallbacks.push( localPaths[ code ] );
   }
