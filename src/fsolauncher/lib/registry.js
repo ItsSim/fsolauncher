@@ -52,11 +52,11 @@ function stripLocalPath( code, path ) {
  * Gets the installation status for a given software component.
  *
  * @param {string} code - The code name of the software component.
- * @param {string} regPath - The registry path or file path for the software component.
  *
  * @returns {Promise<Object>}
  */
-async function getInstallStatus( code, regPath ) {
+async function getInstallStatus( code ) {
+  const regPath = paths[ code ];
   if ( process.platform === 'darwin' ) {
     // On MacOS, just check if the file exists
     return {
@@ -190,8 +190,6 @@ module.exports = {
       .filter( code => ! (
         process.platform === 'win32' && [ 'Mono', 'SDL' ].includes( code )
       ) )
-      .map( componentCode =>
-        getInstallStatus( componentCode, paths[ componentCode ] )
-      )
+      .map( getInstallStatus )
   ),
 };
