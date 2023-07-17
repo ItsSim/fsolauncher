@@ -16,6 +16,10 @@ const ini = require( 'ini' );
 const FSOLauncher = require( './fsolauncher/fsolauncher' );
 const isTestMode = app.commandLine.getSwitchValue( 'test-mode' );
 
+if ( isTestMode ) {
+  app.disableHardwareAcceleration();
+}
+
 process.title = 'FreeSO Launcher';
 
 // Initialize willQuit with false
@@ -158,6 +162,7 @@ function createWindow() {
     nodeIntegration: false,
     contextIsolation: true,
     backgroundThrottling: false,
+    offscreen: isTestMode,
     preload: require( 'path' ).join( __dirname, './fsolauncher_ui/preload.js' )
   };
 
