@@ -85,13 +85,7 @@ jobs:
       working-directory: src
 
     - name: Run e2e tests
-      shell: bash
-      run: |
-        if [[ "${{ matrix.os }}" == "macos-latest" ]]; then
-          sudo npm run test
-        else
-          npm run test
-        fi
+      run: npm run test
       working-directory: src
       
     - name: Calculate hashes and save to files (Windows)
