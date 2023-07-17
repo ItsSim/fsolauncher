@@ -6,19 +6,28 @@ const { initSentry } = require( './fsolauncher/lib/utils' );
 initSentry();
 
 const { app, BrowserWindow, shell, Tray, Menu, nativeImage, nativeTheme } = require( 'electron' );
-const { appData, checks, version } = require( './fsolauncher/constants' );
-const { locale, setLocale } = require( './fsolauncher/locale' );
 
-const oslocale = require( 'os-locale' );
-const fs = require( 'fs-extra' );
-const ini = require( 'ini' );
-
-const FSOLauncher = require( './fsolauncher/fsolauncher' );
 const isTestMode = app.commandLine.getSwitchValue( 'test-mode' );
 
 if ( isTestMode ) {
   app.disableHardwareAcceleration();
+  app.commandLine.appendSwitch( 'no-sandbox' );
+  app.commandLine.appendSwitch( 'disable-gpu' );
+  app.commandLine.appendSwitch( 'disable-software-rasterizer' );
+  app.commandLine.appendSwitch( 'disable-gpu-compositing' );
+  app.commandLine.appendSwitch( 'disable-gpu-rasterization' );
+  app.commandLine.appendSwitch( 'disable-gpu-sandbox' );
+  app.commandLine.appendSwitch( '--no-sandbox' );
 }
+
+const { appData, checks, version } = require( './fsolauncher/constants' );
+const { locale, setLocale } = require( './fsolauncher/locale' );
+
+const oslocale = require( 'os-locale' ),
+  fs = require( 'fs-extra' ),
+  ini = require( 'ini' );
+
+const FSOLauncher = require( './fsolauncher/fsolauncher' );
 
 process.title = 'FreeSO Launcher';
 
