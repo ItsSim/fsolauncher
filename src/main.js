@@ -1,34 +1,30 @@
 require( 'fix-path' )(); // Fix $PATH on darwin
 require( 'v8-compile-cache' );
 
-global.isTestMode = process.argv.includes( '--test-mode' );
-if ( global.isTestMode ) {
-  console.info( 'ci boot test enabled' );
-}
-
 const { initSentry } = require( './fsolauncher/lib/utils' );
-// init Sentry error logging
+// init Sentry error logging as soon as possible
 initSentry();
 
-const {
-  app, BrowserWindow, shell, Tray, Menu, nativeImage, nativeTheme
-} = require( 'electron' );
+const { app, BrowserWindow, shell, Tray, Menu, nativeImage, nativeTheme } = require( 'electron' );
+const { appData, checks, version } = require( './fsolauncher/constants' );
+const { locale, setLocale } = require( './fsolauncher/locale' );
+
 const oslocale = require( 'os-locale' );
 const fs = require( 'fs-extra' );
 const ini = require( 'ini' );
-const UIText = require( './fsolauncher_ui/uitext.json' );
+
 const FSOLauncher = require( './fsolauncher/fsolauncher' );
-const { version } = require( './package.json' );
+const isTestMode = app.commandLine.getSwitchValue( 'test-mode' );
 
 process.title = 'FreeSO Launcher';
-global.willQuit = false;
-global.launcherVersion = version;
-global.webService = 'beta.freeso.org';
-global.homeDir = require( 'os' ).homedir();
-global.socketPort = 30001;
-global.remeshEndpoint = 'remeshpackage';
-global.updateEndpoint = 'updatecheck';
 
+// Initialize willQuit with false
+// Once changed to true, next time the app is closed, it won't
+// minimize and will completely close
+global.willQuit = false;
+
+// Override shell.openExternal to make sure they are actual URLs
+// before opening them
 const prevOpenExternal = shell.openExternal;
 shell.openExternal = Object.freeze( url => {
   if ( url.startsWith( 'http' ) || url.startsWith( 'https' ) ) {
@@ -37,15 +33,9 @@ shell.openExternal = Object.freeze( url => {
 } );
 Object.freeze( shell );
 
-/**
- * On Windows, prefs and temps are written straight to the launcher folder.
- * On Mac, they are written in ~/Library/Application Support/FreeSO Launcher
- */
-global.appData = process.platform == 'darwin' ?
-  `${global.homeDir}/Library/Application Support/FreeSO Launcher/` : '';
-
+// Create the temp directory on macOS
 if ( process.platform == 'darwin' ) {
-  fs.ensureDirSync( global.appData + 'temp' );
+  fs.ensureDirSync( appData + 'temp' );
 }
 
 /** @type {Electron.BrowserWindow} */
@@ -81,12 +71,15 @@ let trayIcon;
 /**
  * @type {UserSettings}
  */
-let conf;
+let userSettings;
 
 try {
-  conf = ini.parse( fs.readFileSync( global.appData + 'FSOLauncher.ini', 'utf-8' ) );
+  // Load the FSOLauncher.ini file and make it available for the launcher
+  userSettings = ini.parse( fs.readFileSync( appData + 'FSOLauncher.ini', 'utf-8' ) );
 } catch ( err ) {
-  conf = {
+  // The FSOLauncher.ini file does not exist, create a new one with
+  // predefined values
+  userSettings = {
     Launcher: {
       Theme: nativeTheme.shouldUseDarkColors ? 'dark' : 'open_beta',
       DesktopNotifications: '1',
@@ -99,37 +92,46 @@ try {
       Language: 'en'
     }
   };
-  fs.writeFileSync( global.appData + 'FSOLauncher.ini', ini.stringify( conf ), 'utf-8' );
+  // Write the new FSOLauncher.ini to disk
+  fs.writeFileSync( appData + 'FSOLauncher.ini', ini.stringify( userSettings ), 'utf-8' );
 }
-console.info( 'loaded config', conf );
+console.info( 'loaded userSettings', userSettings );
 
-const code = ( ! conf.Launcher.Language || conf.Launcher.Language == 'default' ) ?
-  oslocale.sync().substring( 0, 2 ) : conf.Launcher.Language;
+// Obtain the user's language code to determine which translation to load
+// The user can override their system's language by selecting one manually
+// in the launcher settings
+const code = ( ! userSettings.Launcher.Language || userSettings.Launcher.Language == 'default' ) ?
+  oslocale.sync().substring( 0, 2 ) : userSettings.Launcher.Language;
+
+// Initialize the locale with the obtained language code and add some extra
+// values that will be replaced in the HTML
+setLocale( code, {
+  LVERSION: version,
+  LTHEME: userSettings.Launcher.Theme,
+  PLATFORM: process.platform,
+  SENTRY: require( './sentry.config' ).browserLoader,
+  LANGCODE: code,
+  WS_PORT: checks.webSocketPort,
+  WS_URL: checks.siteUrl,
+  DEFAULT_REFRESH_RATE: 60
+} );
 
 /** @type {Electron.BrowserWindowConstructorOptions} */
 const options = {};
 
-global.locale = Object.prototype.hasOwnProperty.call( UIText, code )
-  ? UIText[ code ]
-  : UIText.en;
-
-global.locale = Object.assign( UIText.en, global.locale ); // Merge EN strings with current language.
-global.locale.LVERSION = global.launcherVersion;
-global.locale.LTHEME   = conf.Launcher.Theme;
-global.locale.PLATFORM = process.platform;
-global.locale.SENTRY   = require( './sentry.config' ).browserLoader;
-global.locale.LANGCODE = code;
-global.locale.WS_PORT  = global.socketPort;
-global.locale.WS_URL   = global.webService;
-
-global.locale.DEFAULT_REFRESH_RATE = 60;
+function showWindow() {
+  ! isTestMode && window.show();
+}
 
 function createWindow() {
-  require( 'electron-pug' )( { pretty: false }, global.locale );
+  require( 'electron-pug' )( { pretty: false }, locale.current );
   if ( process.platform == 'darwin' ) {
+    // Create the app menu for macOS
     const darwinAppMenu = require( './darwin-app-menu' );
     Menu.setApplicationMenu( Menu.buildFromTemplate( darwinAppMenu( app.getName() ) ) );
   }
+
+  // Create the trayIcon for macOS and Windows
   trayIcon = nativeImage.createFromPath(
     require( 'path' ).join( __dirname, process.platform == 'darwin' ? 'beta.png' : 'beta.ico' )
   );
@@ -151,7 +153,7 @@ function createWindow() {
   options.useContentSize = true;
   options.show = false;
   options.resizable = false;
-  options.title = 'FreeSO Launcher ' + global.launcherVersion;
+  options.title = 'FreeSO Launcher ' + version;
   options.webPreferences = {
     nodeIntegration: false,
     contextIsolation: true,
@@ -160,28 +162,30 @@ function createWindow() {
   };
 
   window = new BrowserWindow( options );
-
   window.setMenu( null );
-  if ( conf.Launcher.Debug == '1' ) {
+
+  // Allow the user to open devTools if Debug=1 in FSOLauncher.ini
+  if ( userSettings.Launcher.Debug == '1' && ! isTestMode ) {
     console.info( 'debug mode enabled' );
     window.openDevTools( { mode: 'detach' } );
   }
+
   window.loadURL( `file://${__dirname}/fsolauncher_ui/fsolauncher.pug` );
   window.on( 'restore', _e => window.setSize( width, height ) );
 
-  launcher = new FSOLauncher( window, conf );
+  launcher = new FSOLauncher( window, userSettings );
 
-  tray.setToolTip( `FreeSO Launcher ${global.launcherVersion}` );
+  tray.setToolTip( `FreeSO Launcher ${version}` );
   tray.setContextMenu( Menu.buildFromTemplate( [
     {
-      label: global.locale.TRAY_LABEL_1,
+      label: locale.current.TRAY_LABEL_1,
       click: () => launcher.launchGame()
     },
     {
       type: 'separator'
     },
     {
-      label: global.locale.TRAY_LABEL_2,
+      label: locale.current.TRAY_LABEL_2,
       click: () => {
         global.willQuit = true;
         window?.close();
@@ -190,7 +194,7 @@ function createWindow() {
   ] ) );
 
   tray.on( 'click', () => {
-    window.isVisible() ? window.hide() : window.show();
+    window.isVisible() ? window.hide() : showWindow();
   } );
 
   window.on( 'closed', () => { window = null; } );
@@ -199,23 +203,23 @@ function createWindow() {
     launcher
       .updateInstalledPrograms()
       .then( () => {
-        if ( conf.Launcher.DirectLaunch === '1' && launcher.isInstalled.FSO ) {
+        if ( userSettings.Launcher.DirectLaunch === '1' && launcher.isInstalled.FSO ) {
           launcher.launchGame();
           if ( process.platform == 'darwin' ) {
-            window.show();
+            showWindow();
           }
         } else {
-          window.show();
+          showWindow();
         }
       } )
       .catch( err => {
         console.error( err );
-        window.show();
+        showWindow();
       } );
   } );
 
   window.on( 'close', e => {
-    if ( ! global.willQuit && launcher.conf.Launcher.Persistence === '1' ) {
+    if ( ! global.willQuit && launcher.userSettings.Launcher.Persistence === '1' ) {
       e.preventDefault();
       window.minimize();
     }
@@ -225,13 +229,6 @@ function createWindow() {
     shell.openExternal( url );
     return { action: 'deny' };
   } );
-
-  if ( global.isTestMode ) {
-    global.willQuit = true;
-    window.webContents.on( 'did-finish-load', () => {
-      app.quit();
-    } );
-  }
 }
 
 app.on( 'ready', createWindow );
@@ -255,7 +252,7 @@ if ( ! gotTheLock ) {
 } else {
   app.on( 'second-instance', ( _event, _commandLine, _workingDirectory ) => {
     if ( window ) {
-      window.show();
+      showWindow();
       window.focus();
     }
   } );

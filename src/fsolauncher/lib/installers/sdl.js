@@ -2,6 +2,7 @@ const download = require( '../download' );
 const sudo = require( 'sudo-prompt' );
 const { strFormat } = require( '../utils' );
 const { downloads, temp } = require( '../../constants' );
+const { locale } = require( '../../locale' );
 
 /**
  * Installs SDL on macOS systems.
@@ -28,7 +29,7 @@ class SDLInstaller {
     this.fsolauncher.IPC.addProgressItem(
       'FSOProgressItem' + this.id,
       'Single DirectMedia Layer 2',
-      global.locale.INS_DOWNLOADING_FROM + ' libsdl.org',
+      locale.current.INS_DOWNLOADING_FROM + ' libsdl.org',
       message,
       percentage
     );
@@ -79,7 +80,7 @@ class SDLInstaller {
   error( _err ) {
     this.dl.cleanup();
     this.haltProgress = true;
-    this.createProgressItem( strFormat( global.locale.FSO_FAILED_INSTALLATION, 'SDL2' ), 100 );
+    this.createProgressItem( strFormat( locale.current.FSO_FAILED_INSTALLATION, 'SDL2' ), 100 );
     this.fsolauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
   }
 
@@ -88,7 +89,7 @@ class SDLInstaller {
    */
   end() {
     this.dl.cleanup();
-    this.createProgressItem( global.locale.INSTALLATION_FINISHED, 100 );
+    this.createProgressItem( locale.current.INSTALLATION_FINISHED, 100 );
     this.fsolauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
   }
 
@@ -103,7 +104,7 @@ class SDLInstaller {
       this.dl.events.on( 'error', () => {} );
       this.dl.events.on( 'end', _fileName => {
         if ( this.dl.hasFailed() ) {
-          return reject( global.locale.FSO_NETWORK_ERROR );
+          return reject( locale.current.FSO_NETWORK_ERROR );
         }
         resolve();
       } );
@@ -140,7 +141,7 @@ class SDLInstaller {
       if ( p < 100 ) {
         if ( ! this.haltProgress ) {
           this.createProgressItem(
-            `${global.locale.DL_CLIENT_FILES} ${mb} MB ${global.locale.X_OUT_OF_X} ${size} MB (${p}%)`,
+            `${locale.current.DL_CLIENT_FILES} ${mb} MB ${locale.current.X_OUT_OF_X} ${size} MB (${p}%)`,
             p
           );
         }
@@ -156,7 +157,7 @@ class SDLInstaller {
    */
   extract() {
     this.createProgressItem(
-      global.locale.INS_SDL_DESCR_LONG, 100
+      locale.current.INS_SDL_DESCR_LONG, 100
     );
     return new Promise( ( resolve, reject ) => {
       // headless install

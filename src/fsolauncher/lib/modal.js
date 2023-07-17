@@ -4,6 +4,8 @@ const {
   normalizePathSlashes
 } = require( './utils' );
 
+const { locale } = require( '../locale' );
+
 /**
  * Container class for all the Modal windows.
  */
@@ -22,13 +24,13 @@ class Modal {
    */
   static showRequirementsNotMet( missing ) {
     Modal.getIPC().sendErrorModal(
-      global.locale.MODAL_NOT_AVAILABLE,
-      global.locale.MODAL_NOT_AVAILABLE_DESCR_1 +
+      locale.current.MODAL_NOT_AVAILABLE,
+      locale.current.MODAL_NOT_AVAILABLE_DESCR_1 +
         ' <strong>' +
         missing.join( ', ' ) +
         '</strong> ' +
-        global.locale.MODAL_NOT_AVAILABLE_DESCR_2,
-      global.locale.MODAL_OK2
+        locale.current.MODAL_NOT_AVAILABLE_DESCR_2,
+      locale.current.MODAL_OK2
     );
   }
 
@@ -41,13 +43,13 @@ class Modal {
   static showFirstInstall( componentName, componentCode ) {
     Modal.getIPC().sendModal(
       componentName,
-      global.locale.MODAL_INSTALL_DESCR_1 +
+      locale.current.MODAL_INSTALL_DESCR_1 +
         ' <strong>' +
         componentName +
         '</strong> ' +
-        global.locale.MODAL_INSTALL_DESCR_2,
-      global.locale.MODAL_INSTALL,
-      global.locale.MODAL_CANCEL,
+        locale.current.MODAL_INSTALL_DESCR_2,
+      locale.current.MODAL_INSTALL,
+      locale.current.MODAL_CANCEL,
       'INSTALL_COMPONENT',
       componentCode
     );
@@ -62,12 +64,12 @@ class Modal {
   static showReInstall( componentName, componentCode ) {
     Modal.getIPC().sendModal(
       componentName,
-      global.locale.MODAL_REINSTALL_DESCR_X +
+      locale.current.MODAL_REINSTALL_DESCR_X +
         ' <strong>' +
         componentName +
         '</strong>?',
-      global.locale.MODAL_CONTINUE,
-      global.locale.MODAL_CANCEL,
+      locale.current.MODAL_CONTINUE,
+      locale.current.MODAL_CANCEL,
       'INSTALL_COMPONENT',
       componentCode
     );
@@ -79,9 +81,9 @@ class Modal {
    */
   static showNoInternet() {
     Modal.getIPC().sendErrorModal(
-      global.locale.MODAL_NO_INTERNET,
-      global.locale.MODAL_NEED_INTERNET_SINGLE,
-      global.locale.MODAL_OK
+      locale.current.MODAL_NO_INTERNET,
+      locale.current.MODAL_NEED_INTERNET_SINGLE,
+      locale.current.MODAL_OK
     );
   }
 
@@ -90,9 +92,9 @@ class Modal {
    */
   static showNoInternetFullInstall() {
     Modal.getIPC().sendErrorModal(
-      global.locale.MODAL_NO_INTERNET,
-      global.locale.MODAL_NEED_INTERNET_FULL,
-      global.locale.MODAL_OK
+      locale.current.MODAL_NO_INTERNET,
+      locale.current.MODAL_NEED_INTERNET_FULL,
+      locale.current.MODAL_OK
     );
   }
 
@@ -103,9 +105,9 @@ class Modal {
    */
   static showInstalled( componentName ) {
     Modal.getIPC().sendSuccessModal(
-      global.locale.MODAL_INS_COMPLETE,
-      componentName + ' ' + global.locale.MODAL_INS_COMPLETE_DESCR,
-      global.locale.MODAL_OK2
+      locale.current.MODAL_INS_COMPLETE,
+      componentName + ' ' + locale.current.MODAL_INS_COMPLETE_DESCR,
+      locale.current.MODAL_OK2
     );
   }
 
@@ -117,13 +119,13 @@ class Modal {
    */
   static showFailedInstall( componentName, errorMessage ) {
     Modal.getIPC().sendErrorModal(
-      global.locale.MODAL_INS_FAILED,
+      locale.current.MODAL_INS_FAILED,
       componentName +
         ' ' +
-        global.locale.MODAL_INS_FAILED_DESCR_1 +
+        locale.current.MODAL_INS_FAILED_DESCR_1 +
         ' ' +
         errorMessage,
-      global.locale.MODAL_OK2
+      locale.current.MODAL_OK2
     );
   }
 
@@ -133,9 +135,9 @@ class Modal {
    */
   static showAlreadyInstalling() {
     Modal.getIPC().sendErrorModal(
-      global.locale.MODAL_NEGATIVE,
-      global.locale.MODAL_INS_PROGRESS,
-      global.locale.MODAL_OK
+      locale.current.MODAL_NEGATIVE,
+      locale.current.MODAL_INS_PROGRESS,
+      locale.current.MODAL_OK
     );
   }
 
@@ -144,10 +146,10 @@ class Modal {
    */
   static showFullInstall() {
     Modal.getIPC().sendModal(
-      global.locale.MODAL_INSTALLATION,
-      global.locale.MODAL_INSTALLATION_DESCR,
-      global.locale.MODAL_START,
-      global.locale.MODAL_CANCEL,
+      locale.current.MODAL_INSTALLATION,
+      locale.current.MODAL_INSTALLATION_DESCR,
+      locale.current.MODAL_START,
+      locale.current.MODAL_CANCEL,
       'FULL_INSTALL_CONFIRM'
     );
   }
@@ -167,14 +169,14 @@ class Modal {
     };
 
     Modal.getIPC().sendModal(
-      global.locale.MODAL_NOT_AVAILABLE2,
-      global.locale.MODAL_DETECTED_THAT_1 +
+      locale.current.MODAL_NOT_AVAILABLE2,
+      locale.current.MODAL_DETECTED_THAT_1 +
         ' <strong>' +
         componentName +
         '</strong> ' +
-        global.locale.MODAL_DETECTED_THAT_2,
-      global.locale.MODAL_USE_IT,
-      global.locale.MODAL_CANCEL,
+        locale.current.MODAL_DETECTED_THAT_2,
+      locale.current.MODAL_USE_IT,
+      locale.current.MODAL_CANCEL,
       'CHANGE_GAME_PATH',
       JSON.stringify( options )
     );
@@ -185,9 +187,9 @@ class Modal {
    */
   static showChangedGamePath() {
     Modal.getIPC().sendSuccessModal(
-      global.locale.MODAL_MODIFIED_PATH,
-      global.locale.MODAL_MODIFIED_PATH_DESCR,
-      global.locale.MODAL_OK2
+      locale.current.MODAL_MODIFIED_PATH,
+      locale.current.MODAL_MODIFIED_PATH_DESCR,
+      locale.current.MODAL_OK2
     );
   }
 
@@ -220,7 +222,7 @@ class Modal {
       .dialog.showOpenDialog( window,
         {
           properties: [ 'openDirectory' ],
-          title: `${global.locale.MODAL_INSTALL} ${componentName}`,
+          title: `${locale.current.MODAL_INSTALL} ${componentName}`,
           defaultPath: defaultPath
         }
       );
@@ -232,9 +234,9 @@ class Modal {
    */
   static showNeedFSOTSO() {
     Modal.getIPC().sendErrorModal(
-      global.locale.MODAL_NEGATIVE,
-      global.locale.MODAL_NEED_FSOTSO,
-      global.locale.MODAL_OK2
+      locale.current.MODAL_NEGATIVE,
+      locale.current.MODAL_NEED_FSOTSO,
+      locale.current.MODAL_OK2
     );
   }
 
@@ -243,9 +245,9 @@ class Modal {
    */
   static showFailPlay() {
     Modal.getIPC().sendErrorModal(
-      global.locale.MODAL_NEGATIVE,
-      global.locale.MODAL_LAUNCH_UPDATING,
-      global.locale.MODAL_OK
+      locale.current.MODAL_NEGATIVE,
+      locale.current.MODAL_LAUNCH_UPDATING,
+      locale.current.MODAL_OK
     );
   }
 
@@ -254,10 +256,10 @@ class Modal {
    */
   static showNeedToPlay() {
     Modal.getIPC().sendErrorModal(
-      global.locale.MODAL_NEGATIVE,
-      global.locale.MODAL_NEED_FSOTSO_PLAY,
-      global.locale.MODAL_GOTO_INSTALLER,
-      global.locale.MODAL_CANCEL,
+      locale.current.MODAL_NEGATIVE,
+      locale.current.MODAL_NEED_FSOTSO_PLAY,
+      locale.current.MODAL_GOTO_INSTALLER,
+      locale.current.MODAL_CANCEL,
       'INSTALLER_REDIRECT'
     );
   }
@@ -269,9 +271,9 @@ class Modal {
    */
   static showKilled( c ) {
     Modal.getIPC().sendSuccessModalNoFocus(
-      global.locale.MODAL_CLOSED_FREESO,
-      global.locale.MODAL_CLOSED + ' ' + c + ' ' + global.locale.MODAL_CLOSED_2,
-      global.locale.MODAL_OK2
+      locale.current.MODAL_CLOSED_FREESO,
+      locale.current.MODAL_CLOSED + ' ' + c + ' ' + locale.current.MODAL_CLOSED_2,
+      locale.current.MODAL_OK2
     );
   }
 
@@ -280,9 +282,9 @@ class Modal {
    */
   static showTSOLangFail() {
     Modal.getIPC().sendErrorModal(
-      global.locale.MODAL_NOT_COMPLETE,
-      global.locale.MODAL_TSO_LANG_ERR,
-      global.locale.MODAL_OK
+      locale.current.MODAL_NOT_COMPLETE,
+      locale.current.MODAL_TSO_LANG_ERR,
+      locale.current.MODAL_OK
     );
   }
 
@@ -291,9 +293,9 @@ class Modal {
    */
   static showFSOLangFail() {
     Modal.getIPC().sendErrorModal(
-      global.locale.MODAL_NOT_COMPLETE,
-      global.locale.MODAL_FSO_LANG_ERR,
-      global.locale.MODAL_OK
+      locale.current.MODAL_NOT_COMPLETE,
+      locale.current.MODAL_FSO_LANG_ERR,
+      locale.current.MODAL_OK
     );
   }
 
@@ -302,9 +304,9 @@ class Modal {
    */
   static showCHLangComplete() {
     Modal.getIPC().sendSuccessModal(
-      global.locale.MODAL_SUCCESS,
-      global.locale.MODAL_LANG_SUCCESS,
-      global.locale.MODAL_OK2
+      locale.current.MODAL_SUCCESS,
+      locale.current.MODAL_LANG_SUCCESS,
+      locale.current.MODAL_OK2
     );
   }
 
@@ -313,9 +315,9 @@ class Modal {
    */
   static showIniFail() {
     Modal.getIPC().sendErrorModal(
-      global.locale.MODAL_NOT_COMPLETE,
-      global.locale.MODAL_INI_ERR,
-      global.locale.MODAL_OK
+      locale.current.MODAL_NOT_COMPLETE,
+      locale.current.MODAL_INI_ERR,
+      locale.current.MODAL_OK
     );
   }
 
@@ -326,9 +328,9 @@ class Modal {
    */
   static showFirstRun() {
     Modal.getIPC().sendErrorModal(
-      global.locale.MODAL_NOT_AVAILABLE,
-      global.locale.MODAL_FIRSTTIME,
-      global.locale.MODAL_OK2
+      locale.current.MODAL_NOT_AVAILABLE,
+      locale.current.MODAL_FIRSTTIME,
+      locale.current.MODAL_OK2
     );
   }
 
@@ -337,9 +339,9 @@ class Modal {
    */
   static showNoRemesh() {
     Modal.getIPC().sendErrorModal(
-      global.locale.MODAL_RPU,
-      global.locale.MODAL_RPU_DESCR,
-      global.locale.MODAL_OK
+      locale.current.MODAL_RPU,
+      locale.current.MODAL_RPU_DESCR,
+      locale.current.MODAL_OK
     );
   }
 
@@ -485,9 +487,9 @@ class Modal {
    */
   static showAlreadyRunning() {
     Modal.getIPC().sendErrorModal(
-      global.locale.MODAL_RUNNING,
-      global.locale.MODAL_RUNNING_DESC,
-      global.locale.MODAL_OK2
+      locale.current.MODAL_RUNNING,
+      locale.current.MODAL_RUNNING_DESC,
+      locale.current.MODAL_OK2
     );
   }
 
@@ -496,9 +498,9 @@ class Modal {
    */
   static showFailedUpdateCheck() {
     Modal.getIPC().sendErrorModal(
-      global.locale.MODAL_UPDATE_CHECK_FAILED,
-      global.locale.MODAL_UPDATE_CHECK_FAILED_DESCR,
-      global.locale.MODAL_OK2
+      locale.current.MODAL_UPDATE_CHECK_FAILED,
+      locale.current.MODAL_UPDATE_CHECK_FAILED_DESCR,
+      locale.current.MODAL_OK2
     );
   }
 
@@ -509,12 +511,12 @@ class Modal {
    */
   static showInstallUpdate( v ) {
     Modal.getIPC().sendModal(
-      global.locale.MODAL_INSTALL_UPDATE,
-      global.locale.MODAL_INSTALL_UPDATE_DESCR_1 +
+      locale.current.MODAL_INSTALL_UPDATE,
+      locale.current.MODAL_INSTALL_UPDATE_DESCR_1 +
         v +
-        global.locale.MODAL_INSTALL_UPDATE_DESCR_2,
-      global.locale.MODAL_UPDATE,
-      global.locale.MODAL_LATER,
+        locale.current.MODAL_INSTALL_UPDATE_DESCR_2,
+      locale.current.MODAL_UPDATE,
+      locale.current.MODAL_LATER,
       'INSTALL_UPDATE'
     );
   }
@@ -524,9 +526,9 @@ class Modal {
    */
   static showFailedUpdateDownload() {
     Modal.getIPC().sendErrorModal(
-      global.locale.MODAL_UPDATE_FAILED,
-      global.locale.MODAL_UPDATE_FAILED_DESCR,
-      global.locale.MODAL_OK2
+      locale.current.MODAL_UPDATE_FAILED,
+      locale.current.MODAL_UPDATE_FAILED_DESCR,
+      locale.current.MODAL_OK2
     );
   }
 
@@ -535,9 +537,9 @@ class Modal {
    */
   static showFailedUpdateMove() {
     Modal.getIPC().sendErrorModal(
-      global.locale.MODAL_UPDATE_FAILED,
-      global.locale.MODAL_UPDATE_FAILED_MOVE_DESCR,
-      global.locale.MODAL_OK2
+      locale.current.MODAL_UPDATE_FAILED,
+      locale.current.MODAL_UPDATE_FAILED_MOVE_DESCR,
+      locale.current.MODAL_OK2
     );
   }
 
@@ -546,9 +548,9 @@ class Modal {
    */
   static showUpdateComplete() {
     Modal.getIPC().sendSuccessModal(
-      global.locale.MODAL_UPDATE_COMPLETE,
-      global.locale.MODAL_UPDATE_COMPLETE_DESCR,
-      global.locale.MODAL_OK2
+      locale.current.MODAL_UPDATE_COMPLETE,
+      locale.current.MODAL_UPDATE_COMPLETE_DESCR,
+      locale.current.MODAL_OK2
     );
   }
 
@@ -557,10 +559,10 @@ class Modal {
    */
   static showVolcanicPrompt() {
     Modal.getIPC().sendModal(
-      global.locale.MODAL_START_VOLCANIC,
-      global.locale.MODAL_START_VOLCANIC_DESC,
-      global.locale.MODAL_START_VOLCANIC_OK,
-      global.locale.MODAL_CANCEL,
+      locale.current.MODAL_START_VOLCANIC,
+      locale.current.MODAL_START_VOLCANIC_DESC,
+      locale.current.MODAL_START_VOLCANIC_OK,
+      locale.current.MODAL_CANCEL,
       'PLAY_VOLCANIC'
     );
   }
@@ -570,10 +572,10 @@ class Modal {
    */
   static showVolcanicPromptSimitone() {
     Modal.getIPC().sendModal(
-      global.locale.MODAL_START_VOLCANIC,
-      global.locale.MODAL_START_VOLCANIC_DESC,
-      global.locale.MODAL_START_VOLCANIC_OK,
-      global.locale.MODAL_CANCEL,
+      locale.current.MODAL_START_VOLCANIC,
+      locale.current.MODAL_START_VOLCANIC_DESC,
+      locale.current.MODAL_START_VOLCANIC_OK,
+      locale.current.MODAL_CANCEL,
       'PLAY_VOLCANIC_SIMITONE'
     );
   }
@@ -587,16 +589,16 @@ class Modal {
    */
   static showCouldNotRecover( path, isSimitone = false ) {
     path = normalizePathSlashes( path );
-    let str2 = global.locale.MODAL_FAILED_LAUNCH_DESC;
+    let str2 = locale.current.MODAL_FAILED_LAUNCH_DESC;
     if ( isSimitone ) {
       str2 = str2
         .replace( 'FreeSO.exe', 'Simitone.Windows.exe' )
         .replace( 'FreeSO', 'Simitone' );
     }
     Modal.getIPC().sendErrorModal(
-      global.locale.MODAL_FAILED_LAUNCH,
+      locale.current.MODAL_FAILED_LAUNCH,
       strFormat( str2, path ),
-      global.locale.MODAL_OK2
+      locale.current.MODAL_OK2
     );
   }
 
@@ -605,9 +607,9 @@ class Modal {
    */
   static showRecovered() {
     Modal.getIPC().sendSuccessModal(
-      global.locale.MODAL_GAME_AUTORECOVERED,
-      global.locale.MODAL_GAME_AUTORECOVERED_DESC,
-      global.locale.MODAL_OK
+      locale.current.MODAL_GAME_AUTORECOVERED,
+      locale.current.MODAL_GAME_AUTORECOVERED_DESC,
+      locale.current.MODAL_OK
     );
   }
 
@@ -616,9 +618,9 @@ class Modal {
    */
   static showSoftwareModeEnabled() {
     Modal.getIPC().sendSuccessModal(
-      global.locale.MODAL_SWM,
-      global.locale.MODAL_SWM_DESCR,
-      global.locale.MODAL_OK
+      locale.current.MODAL_SWM,
+      locale.current.MODAL_SWM_DESCR,
+      locale.current.MODAL_OK
     );
   }
 
@@ -627,9 +629,9 @@ class Modal {
    */
   static showLanguageOnRestart() {
     Modal.getIPC().sendSuccessModal(
-      global.locale.MODAL_REQUIRES_RESTART,
-      global.locale.MODAL_REQUIRES_RESTART_DESC,
-      global.locale.MODAL_OK
+      locale.current.MODAL_REQUIRES_RESTART,
+      locale.current.MODAL_REQUIRES_RESTART_DESC,
+      locale.current.MODAL_OK
     );
   }
 
@@ -639,7 +641,7 @@ class Modal {
    * @param {string} error Error message to show.
    */
   static showGenericError( error ) {
-    Modal.getIPC().sendErrorModal( 'Ooops!', error, global.locale.MODAL_OK );
+    Modal.getIPC().sendErrorModal( 'Ooops!', error, locale.current.MODAL_OK );
   }
 }
 

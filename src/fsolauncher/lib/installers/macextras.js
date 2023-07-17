@@ -2,6 +2,7 @@ const download = require( '../download' );
 const unzip = require( '../unzip' );
 const { strFormat } = require( '../utils' );
 const { downloads, temp } = require( '../../constants' );
+const { locale } = require( '../../locale' );
 
 /**
  * Installs macOS Extras on macOS systems.
@@ -32,7 +33,7 @@ class MacExtrasInstaller {
     this.fsolauncher.IPC.addProgressItem(
       'FSOProgressItem' + this.id,
       `${this.parentComponent} MacExtras`,
-      global.locale.INS_IN + ' ' + this.path,
+      locale.current.INS_IN + ' ' + this.path,
       message,
       percentage
     );
@@ -93,7 +94,7 @@ class MacExtrasInstaller {
   error( _err ) {
     this.dl.cleanup();
     this.haltProgress = true;
-    this.createProgressItem( strFormat( global.locale.FSO_FAILED_INSTALLATION, 'macOS Extras' ), 100 );
+    this.createProgressItem( strFormat( locale.current.FSO_FAILED_INSTALLATION, 'macOS Extras' ), 100 );
     this.fsolauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
   }
 
@@ -102,7 +103,7 @@ class MacExtrasInstaller {
    */
   end() {
     this.dl.cleanup();
-    this.createProgressItem( global.locale.INSTALLATION_FINISHED, 100 );
+    this.createProgressItem( locale.current.INSTALLATION_FINISHED, 100 );
     this.fsolauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
   }
 
@@ -117,7 +118,7 @@ class MacExtrasInstaller {
       this.dl.events.on( 'error', () => {} );
       this.dl.events.on( 'end', _fileName => {
         if ( this.dl.hasFailed() ) {
-          return reject( global.locale.FSO_NETWORK_ERROR );
+          return reject( locale.current.FSO_NETWORK_ERROR );
         }
         resolve();
       } );
@@ -154,7 +155,7 @@ class MacExtrasInstaller {
       if ( p < 100 ) {
         if ( ! this.haltProgress ) {
           this.createProgressItem(
-            `${global.locale.DL_CLIENT_FILES} ${mb} MB ${global.locale.X_OUT_OF_X} ${size} MB (${p}%)`,
+            `${locale.current.DL_CLIENT_FILES} ${mb} MB ${locale.current.X_OUT_OF_X} ${size} MB (${p}%)`,
             p
           );
         }
@@ -175,7 +176,7 @@ class MacExtrasInstaller {
       cpperm: true
     }, filename => {
       this.createProgressItem(
-        global.locale.EXTRACTING_CLIENT_FILES + ' ' + filename,
+        locale.current.EXTRACTING_CLIENT_FILES + ' ' + filename,
         100
       );
     } );

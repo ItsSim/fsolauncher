@@ -2,6 +2,7 @@
 /src/FSOLauncher.ini
 /src/bin/
 /src/temp/
+/src/tests/reports/
 /release/*
 !/release/fsolauncher-build-extras/
 !/release/fsolauncher-mac-extras/

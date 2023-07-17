@@ -67,7 +67,7 @@ class Events {
    * @param {string[]} response The response from the client.
    */
   onSocketMessage( e, response ) {
-    if ( this.fsolauncher.conf.Launcher.DesktopNotifications === '1' ) {
+    if ( this.fsolauncher.userSettings.Launcher.DesktopNotifications === '1' ) {
       Modal.sendNotification( 'FreeSO Announcement',
         response[ 0 ],
         response[ 1 ],

@@ -68,6 +68,9 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-node-modules-
 
+    - name: Playwright Skip Browser Download
+      run: echo "PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1" >> $GITHUB_ENV
+
     - name: Install dependencies
       if: steps.cache-node-modules.outputs.cache-hit != 'true'
       run: npm ci
@@ -77,13 +80,12 @@ jobs:
       run: npm run lint
       working-directory: src
 
-    - name: Check if application boots
-      run: npm run test-start
-      working-directory: src
-      timeout-minutes: 1
-
     - name: Build
       run: npm run ${{ matrix.build_command }}
+      working-directory: src
+
+    - name: Run e2e tests
+      run: npm run test
       working-directory: src
       
     - name: Calculate hashes and save to files (Windows)

@@ -1,3 +1,4 @@
+const { appData } = require( '../constants' );
 const { captureWithSentry } = require( './utils' );
 const { createKey, keyExists, deleteKey, readValue, updateValue } = require( './winreg' );
 const { paths, win32Fallbacks } = require( '../constants' ).registry;
@@ -58,7 +59,7 @@ function stripLocalPath( code, path ) {
 async function getInstallStatus( code ) {
   const regPath = paths[ code ];
   if ( process.platform === 'darwin' ) {
-    // On MacOS, just check if the file exists
+    // On macOS, just check if the file exists
     return {
       key: code,
       isInstalled: ( await fs.pathExists( regPath ) ) ?
@@ -160,10 +161,10 @@ async function getLocalRegistry() {
     /**
      * @type {import('../../main').UserSettings}
      */
-    const conf = require( 'ini' ).parse( await require( 'fs-extra' )
-      .readFile( global.appData + 'FSOLauncher.ini', 'utf-8' ) );
+    const userSettings = require( 'ini' ).parse( await require( 'fs-extra' )
+      .readFile( appData + 'FSOLauncher.ini', 'utf-8' ) );
 
-    return conf.LocalRegistry || {};
+    return userSettings.LocalRegistry || {};
   } catch ( err ) {
     captureWithSentry( err );
     console.error( err );

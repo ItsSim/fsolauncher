@@ -1,23 +1,39 @@
-const util = require( 'util' );
-const exec = util.promisify( require( 'child_process' ).exec );
+const cp = require( 'child_process' );
+const path = require( 'path' );
+const registryPath = path.join( process.env.windir, 'system32', 'reg.exe' );
 
-const registryPath = `${process.env.windir}\\system32\\reg.exe`;
+const runWithUTF8 = ( args = [] ) => {
+  return new Promise( ( resolve, reject ) => {
+    const child = cp.spawn( `chcp 65001 >nul && ${registryPath}`, args, { shell: true } );
+
+    let stdout = '', stderr = '';
+    child.stdout.on( 'data', ( data ) => stdout += data );
+    child.stderr.on( 'data', ( data ) => stderr += data );
+
+    child.on( 'exit', ( code ) => {
+      if ( code !== 0 ) {
+        const cmd = registryPath + ' ' + args.join( ' ' );
+        reject( new Error( `${cmd}\n${stderr}` ) );
+      } else {
+        resolve( stdout );
+      }
+    } );
+    child.on( 'error', reject );
+  } );
+};
 
 const readFromRegistry = async ( keyPath, valueName ) => {
-  const { stdout } = await exec( `${registryPath} query "${keyPath}" /v "${valueName}"` );
+  const stdout = await runWithUTF8( [ 'QUERY', `"${keyPath}"`, '/v', `"${valueName}"` ] );
   const match = stdout.match( /REG_[^ ]+\s+([^\r\n]+)/ );
   if ( match ) {
     return match[ 1 ];
-  } else {
-    throw new Error( 'failed to parse registry output' );
   }
+  throw new Error( 'failed to parse registry output' );
 };
 
 module.exports = {
   createKey: async ( keyPath ) => {
-    const { stdout } = await exec( `${registryPath} add "${keyPath}"` );
-
-    return stdout;
+    return await runWithUTF8( [ 'ADD', `"${keyPath}"` ] );
   },
   readValue: async ( keyPath, valueName ) => {
     try {
@@ -29,24 +45,20 @@ module.exports = {
     }
   },
   updateValue: async ( keyPath, valueName, data, type = 'REG_SZ' ) => {
-    const { stdout } = await exec( `${registryPath} add "${keyPath}" /v "${valueName}" /t "${type}" /d "${data}" /f` );
-
-    return stdout;
+    return await runWithUTF8( [ 'ADD', `"${keyPath}"`, '/v', `"${valueName}"`, '/t', type, '/d', `"${data}"`, '/f' ] );
   },
   deleteKey: async ( keyPath ) => {
-    const { stdout } = await exec( `${registryPath} delete "${keyPath}" /f` );
-
-    return stdout;
+    return await runWithUTF8( [ 'DELETE', `"${keyPath}"`, '/f' ] );
   },
   keyExists: async ( keyPath ) => {
     try {
       // Try checking the 64-bit registry first.
-      await exec( `${registryPath} query "${keyPath}"` );
+      await runWithUTF8( [ 'QUERY', `"${keyPath}"` ] );
       return true;
     } catch ( error ) {
       // If that fails, try checking the 32-bit registry.
       try {
-        await exec( `${registryPath} query "${keyPath.replace( 'SOFTWARE\\', 'SOFTWARE\\WOW6432Node\\' )}"` );
+        await runWithUTF8( [ 'QUERY', `"${keyPath}"`.replace( 'SOFTWARE\\', 'SOFTWARE\\WOW6432Node\\' ) ] );
         return true;
       } catch ( error ) {
         return false;

@@ -2,6 +2,7 @@ const download = require( '../download' );
 const unzip = require( '../unzip' );
 const extract = require( '../cabinet' );
 const { downloads, temp } = require( '../../constants' );
+const { locale } = require( '../../locale' );
 
 /**
  * Installs The Sims Online.
@@ -30,7 +31,7 @@ class TSOInstaller {
     this.fsolauncher.IPC.addProgressItem(
       'TSOProgressItem' + this.id,
       'The Sims Online (FilePlanet)',
-      global.locale.INS_IN + ' ' + this.path,
+      locale.current.INS_IN + ' ' + this.path,
       message,
       percentage,
       extraction
@@ -124,7 +125,7 @@ class TSOInstaller {
       this.dl.events.on( 'end', _fileName => {
         this.haltProgress = true;
         if ( this.dl.hasFailed() ) {
-          return reject( global.locale.FSO_NETWORK_ERROR );
+          return reject( locale.current.FSO_NETWORK_ERROR );
         }
         resolve();
       } );
@@ -147,7 +148,7 @@ class TSOInstaller {
       },
       filename => {
         this.createProgressItem(
-          global.locale.EXTRACTING_CLIENT_FILES + ' ' + filename,
+          locale.current.EXTRACTING_CLIENT_FILES + ' ' + filename,
           100
         );
       }
@@ -218,7 +219,7 @@ class TSOInstaller {
    */
   end() {
     this.dl.cleanup();
-    this.createProgressItem( global.locale.INSTALLATION_FINISHED, 100 );
+    this.createProgressItem( locale.current.INSTALLATION_FINISHED, 100 );
     this.fsolauncher.IPC.stopProgressItem( 'TSOProgressItem' + this.id );
   }
 
@@ -230,7 +231,7 @@ class TSOInstaller {
   error( _err ) {
     this.dl.cleanup();
     this.haltProgress = true;
-    this.createProgressItem( global.locale.TSO_FAILED_INSTALLATION, 100 );
+    this.createProgressItem( locale.current.TSO_FAILED_INSTALLATION, 100 );
     this.fsolauncher.IPC.stopProgressItem( 'TSOProgressItem' + this.id );
   }
 
@@ -257,7 +258,7 @@ class TSOInstaller {
       if ( this.haltProgress ) return;
       this.createProgressItem(
         // Archive.org does not provide Content-Length so the MBs are hardcoded.
-        `${global.locale.DL_CLIENT_FILES} ${mb} MB ${global.locale.X_OUT_OF_X} 1268 MB (${p}%)`,
+        `${locale.current.DL_CLIENT_FILES} ${mb} MB ${locale.current.X_OUT_OF_X} 1268 MB (${p}%)`,
         p
       );
       return this.updateDownloadProgress();

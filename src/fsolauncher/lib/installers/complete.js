@@ -1,3 +1,5 @@
+const { locale } = require( '../../locale' );
+
 /**
  * Installs OpenAL, .NET, Mono, SDL, TSO and FreeSO.
  */
@@ -34,9 +36,9 @@ class CompleteInstaller {
    */
   step1() {
     this.fsolauncher.IPC.fullInstallProgressItem(
-      process.platform === 'win32' ? global.locale.INS_OAL : global.locale.INS_SDL,
-      global.locale.INS_WINDOW,
-      process.platform === 'win32' ? global.locale.INS_OAL_WINDOW : global.locale.INS_SDL_WINDOW,
+      process.platform === 'win32' ? locale.current.INS_OAL : locale.current.INS_SDL,
+      locale.current.INS_WINDOW,
+      process.platform === 'win32' ? locale.current.INS_OAL_WINDOW : locale.current.INS_SDL_WINDOW,
       10
     );
     if ( process.platform === 'darwin' ) {
@@ -59,9 +61,9 @@ class CompleteInstaller {
    */
   step2() {
     this.fsolauncher.IPC.fullInstallProgressItem(
-      process.platform === 'win32' ? global.locale.INS_NET : global.locale.INS_MONO,
-      global.locale.INS_WINDOW,
-      process.platform === 'win32' ? global.locale.INS_NET_WINDOW : global.locale.INS_MONO_WINDOW,
+      process.platform === 'win32' ? locale.current.INS_NET : locale.current.INS_MONO,
+      locale.current.INS_WINDOW,
+      process.platform === 'win32' ? locale.current.INS_NET_WINDOW : locale.current.INS_MONO_WINDOW,
       25
     );
     if ( process.platform === 'darwin' ) {
@@ -87,9 +89,9 @@ class CompleteInstaller {
    */
   step3( folder ) {
     this.fsolauncher.IPC.fullInstallProgressItem(
-      global.locale.INS_TSO,
-      global.locale.INS_DLEX,
-      global.locale.INS_INFO,
+      locale.current.INS_TSO,
+      locale.current.INS_DLEX,
+      locale.current.INS_INFO,
       50
     );
     if ( folder ) {
@@ -107,9 +109,9 @@ class CompleteInstaller {
    */
   step4( folder ) {
     this.fsolauncher.IPC.fullInstallProgressItem(
-      global.locale.INS_FSO,
-      global.locale.INS_DLEX,
-      global.locale.INS_INFO,
+      locale.current.INS_FSO,
+      locale.current.INS_DLEX,
+      locale.current.INS_INFO,
       75
     );
     if ( folder ) {
@@ -123,9 +125,9 @@ class CompleteInstaller {
    */
   end() {
     this.fsolauncher.IPC.fullInstallProgressItem(
-      global.locale.INS_FINISHED,
-      global.locale.INS_PLAY,
-      global.locale.INS_PLAY_CLICK,
+      locale.current.INS_FINISHED,
+      locale.current.INS_PLAY,
+      locale.current.INS_PLAY_CLICK,
       100
     );
   }
@@ -137,9 +139,9 @@ class CompleteInstaller {
    */
   error( err ) {
     this.fsolauncher.IPC.fullInstallProgressItem(
-      global.locale.INS_ERROR,
-      global.locale.INS_ERROR_DESCR + ' ' + err,
-      global.locale.INS_CLOSE,
+      locale.current.INS_ERROR,
+      locale.current.INS_ERROR_DESCR + ' ' + err,
+      locale.current.INS_CLOSE,
       100
     );
   }

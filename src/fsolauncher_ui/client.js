@@ -529,7 +529,7 @@ let ociConfirm;
     if ( modalRespId == 'FULL_INSTALL_CONFIRM' && isWindows ) {
       return openOneClickInstall(); // Has its custom modal
     }
-    const modalElement = createYesNoModalElement( title, text, yesText, noText, type );
+    const modalElement = createYesNoModalElement( title, text, yesText, noText, type, modalRespId );
     const modalDiv  = modalElement.querySelector( '.modal' );
     const yesButton = modalElement.querySelector( '.yes-button' );
     const noButton  = modalElement.querySelector( '.no-button' );
@@ -548,13 +548,17 @@ let ociConfirm;
     showModal( modalDiv );
   }
 
-  function createYesNoModalElement( title, text, yesText, noText, type ) {
+  function createYesNoModalElement( title, text, yesText, noText, type, modalRespId ) {
     const modalTemplate = querySelector( '#yes-no-modal-template' );
     const modalElement  = document.importNode( modalTemplate.content, true );
 
+    if ( modalRespId ) {
+      modalElement.setAttribute( 'data-response-id', modalRespId );
+    }
     modalElement.querySelector( '.modal-header' ).innerHTML = title;
     modalElement.querySelector( '.modal-text' ).innerHTML = text;
     modalElement.querySelector( '.yes-button' ).innerHTML = yesText;
+
     if ( type ) {
       modalElement.querySelector( '.modal' ).classList.add( `modal-${type}` );
     }

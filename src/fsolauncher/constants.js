@@ -1,4 +1,12 @@
+const homeDir = require( 'os' ).homedir();
+const appData = process.platform == 'darwin' ?
+  `${homeDir}/Library/Application Support/FreeSO Launcher/` : '';
+const version = require( '../package.json' ).version;
+
 module.exports = {
+  homeDir,
+  appData,
+  version,
   dependencies: {
     'FSO': [ 'TSO', ...( process.platform === 'darwin' ? [ 'Mono', 'SDL' ] : [ 'OpenAL' ] ) ],
     'RMS': [ 'FSO' ],
@@ -37,6 +45,12 @@ module.exports = {
     'MacExtras': 'FreeSO MacExtras',
     'SDL': 'SDL2'
   },
+  checks: {
+    siteUrl: 'beta.freeso.org',
+    remeshEndpoint: 'remeshpackage',
+    updateEndpoint: 'updatecheck',
+    webSocketPort: 30001,
+  },
   downloads: {
     'TSO': 'https://beta.freeso.org/LauncherResourceCentral/TheSimsOnline',
     'FSO': 'https://beta.freeso.org/LauncherResourceCentral/FreeSO',
@@ -47,14 +61,14 @@ module.exports = {
     'SDL': 'https://beta.freeso.org/LauncherResourceCentral/SDL'
   },
   temp: {
-    'FSO': `${global.appData}temp/artifacts-freeso-%s.zip`,
-    'MacExtras': `${global.appData}temp/macextras-%s.zip`,
-    'Mono': `${global.appData}temp/mono-%s.pkg`,
-    'RMS': `${global.appData}temp/artifacts-remeshes-%s.zip`,
-    'SDL': `${global.appData}temp/sdl2-%s.dmg`,
-    'Simitone': `${global.appData}temp/artifacts-simitone-%s.zip`,
+    'FSO': `${appData}temp/artifacts-freeso-%s.zip`,
+    'MacExtras': `${appData}temp/macextras-%s.zip`,
+    'Mono': `${appData}temp/mono-%s.pkg`,
+    'RMS': `${appData}temp/artifacts-remeshes-%s.zip`,
+    'SDL': `${appData}temp/sdl2-%s.dmg`,
+    'Simitone': `${appData}temp/artifacts-simitone-%s.zip`,
     'TSO': {
-      path: `${global.appData}temp/tsoclient`,
+      path: `${appData}temp/tsoclient`,
       file: 'client.zip',
       extractionFolder: 'client',
       firstCab: 'TSO_Installer_v1.1239.1.0/Data1.cab',
@@ -66,17 +80,17 @@ module.exports = {
     paths: {
       'TSO': process.platform === 'win32' ?
         'HKLM\\SOFTWARE\\Maxis\\The Sims Online' :
-        `${global.homeDir}/Documents/The Sims Online/TSOClient/TSOClient.exe`,
+        `${homeDir}/Documents/The Sims Online/TSOClient/TSOClient.exe`,
 
       'FSO': process.platform === 'win32' ?
-        'HKLM\\SOFTWARE\\Rhys Simpson\\FreeSO' : `${global.homeDir}/Documents/FreeSO/FreeSO.exe`,
+        'HKLM\\SOFTWARE\\Rhys Simpson\\FreeSO' : `${homeDir}/Documents/FreeSO/FreeSO.exe`,
 
       'TS1': process.platform === 'win32' ?
-        'HKLM\\SOFTWARE\\Maxis\\The Sims' : `${global.homeDir}/Documents/The Sims/Sims.exe`,
+        'HKLM\\SOFTWARE\\Maxis\\The Sims' : `${homeDir}/Documents/The Sims/Sims.exe`,
 
       'Simitone': process.platform === 'win32' ?
         'HKLM\\SOFTWARE\\Rhys Simpson\\Simitone' :
-        `${global.homeDir}/Documents/Simitone for Windows/Simitone.Windows.exe`,
+        `${homeDir}/Documents/Simitone for Windows/Simitone.Windows.exe`,
 
       'OpenAL': 'HKLM\\SOFTWARE\\OpenAL',
       'NET': 'HKLM\\SOFTWARE\\Microsoft\\NET Framework Setup\\NDP',

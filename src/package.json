@@ -6,7 +6,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "test-start": "electron . --test-mode",
+    "test": "playwright test",
     "debug": "electron --inspect=5858 .",
     "lint": "eslint . --ext .js",
     "startiss": "cmd /K \"../release/FreeSO Launcher Setup.exe\"",
@@ -21,12 +21,15 @@
   ],
   "author": "ItsSim",
   "devDependencies": {
+    "@playwright/test": "^1.36.1",
     "cpy-cli": "^3.1.1",
     "electron": "^22.0.0",
     "electron-installer-dmg": "^4.0.0",
     "electron-packager": "^17.1.0",
+    "electron-playwright-helpers": "^1.6.0",
     "eslint": "^7.32.0",
-    "innosetup-compiler": "^6.2.0"
+    "innosetup-compiler": "^6.2.0",
+    "playwright": "^1.36.1"
   },
   "dependencies": {
     "@sentry/electron": "^4.7.0",

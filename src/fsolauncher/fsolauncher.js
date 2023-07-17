@@ -1,8 +1,11 @@
+const { captureWithSentry, getJSON, strFormat, getDisplayRefreshRate } = require( './lib/utils' );
+const { locale } = require( './locale' );
+const { checks, version, homeDir, appData } = require( './constants' );
+
 const Modal = require( './lib/modal' );
 const Events = require( './events' );
 const IPCBridge = require( './lib/ipc-bridge' );
 const Toast = require( './lib/toast' );
-const { captureWithSentry, getJSON, strFormat, getDisplayRefreshRate } = require( './lib/utils' );
 
 /**
  * Main launcher class.
@@ -10,10 +13,10 @@ const { captureWithSentry, getJSON, strFormat, getDisplayRefreshRate } = require
 class FSOLauncher {
   /**
    * @param {Electron.BrowserWindow} window The main window.
-   * @param {import('../main').UserSettings} conf The configuration object.
+   * @param {import('../main').UserSettings} userSettings The configuration object.
    */
-  constructor( window, conf ) {
-    this.conf = conf;
+  constructor( window, userSettings ) {
+    this.userSettings = userSettings;
     this.window = window;
     this.minimizeReminder = false;
     this.lastUpdateNotification = false;
@@ -42,7 +45,7 @@ class FSOLauncher {
       if ( ! this.minimizeReminder ) {
         Modal.sendNotification(
           'FreeSO Launcher',
-          global.locale.MINIMIZE_REMINDER,
+          locale.current.MINIMIZE_REMINDER,
           null, null, this.isDarkMode()
         );
         this.minimizeReminder = true;
@@ -79,19 +82,19 @@ class FSOLauncher {
    */
   updateTipRecursive() {
     const tips = [
-      global.locale.TIP1,
-      global.locale.TIP2,
-      global.locale.TIP3,
-      global.locale.TIP4,
-      global.locale.TIP5,
-      global.locale.TIP6,
-      global.locale.TIP7,
-      global.locale.TIP8,
-      global.locale.TIP9,
-      global.locale.TIP10,
-      // global.locale.TIP11,
-      global.locale.TIP12,
-      global.locale.TIP13
+      locale.current.TIP1,
+      locale.current.TIP2,
+      locale.current.TIP3,
+      locale.current.TIP4,
+      locale.current.TIP5,
+      locale.current.TIP6,
+      locale.current.TIP7,
+      locale.current.TIP8,
+      locale.current.TIP9,
+      locale.current.TIP10,
+      // locale.current.TIP11,
+      locale.current.TIP12,
+      locale.current.TIP13
     ];
     const randomTip = tips[ Math.floor( Math.random() * tips.length ) ];
 
@@ -162,7 +165,7 @@ class FSOLauncher {
       this.addActiveTask( 'FULL' );
       await fullInstaller.install( folder );
       Modal.sendNotification(
-        'FreeSO Launcher', global.locale.INS_FINISHED_LONG, null, true, this.isDarkMode()
+        'FreeSO Launcher', locale.current.INS_FINISHED_LONG, null, true, this.isDarkMode()
       );
     } catch ( err ) {
       console.error( 'runFullInstall', err );
@@ -225,8 +228,8 @@ class FSOLauncher {
    */
   async getRemeshData() {
     const data = await getJSON( {
-      host: global.webService,
-      path: '/' + global.remeshEndpoint
+      host: checks.siteUrl,
+      path: '/' + checks.remeshEndpoint
     } );
     this.remeshInfo.location = data.Location;
     this.remeshInfo.version  = data.Version;
@@ -240,9 +243,9 @@ class FSOLauncher {
    */
   async getLauncherData() {
     const data = await getJSON( {
-      host: global.webService,
-      path: `/${global.updateEndpoint}?os=${require( 'os' ).release()}` +
-      `&version=${global.launcherVersion}` +
+      host: checks.siteUrl,
+      path: `/${checks.updateEndpoint}?os=${require( 'os' ).release()}` +
+      `&version=${version}` +
       `&fso=${( this.isInstalled && this.isInstalled.FSO ) ? '1' : '0'}`
     } );
     this.updateLocation = data.Location;
@@ -275,7 +278,7 @@ class FSOLauncher {
    * @returns {Promise<void>} A promise that resolves when the check is complete.
    */
   async checkSimitoneRequirements() {
-    new Toast( global.locale.TOAST_CHECKING_UPDATES, 1500 );
+    new Toast( locale.current.TOAST_CHECKING_UPDATES, 1500 );
 
     await this.updateInstalledPrograms();
 
@@ -284,7 +287,7 @@ class FSOLauncher {
       return this.IPC.sendSimitoneShouldUpdate( false );
     }
 
-    this.IPC.setSimitoneVersion( this.conf.Game?.SimitoneVersion || null );
+    this.IPC.setSimitoneVersion( this.userSettings.Game?.SimitoneVersion || null );
 
     let releaseInfo;
     try {
@@ -294,7 +297,7 @@ class FSOLauncher {
       console.error( err );
     }
     const shouldUpdate = releaseInfo &&
-      ( this.conf.Game.SimitoneVersion != releaseInfo.tag_name );
+      ( this.userSettings.Game.SimitoneVersion != releaseInfo.tag_name );
     this.IPC.sendSimitoneShouldUpdate( shouldUpdate ? releaseInfo.tag_name : false );
   }
 
@@ -312,12 +315,12 @@ class FSOLauncher {
       this.activeTasks.length !== 0
     ) return;
 
-    const toast = new Toast( global.locale.TOAST_CHECKING_UPDATES );
+    const toast = new Toast( locale.current.TOAST_CHECKING_UPDATES );
     this.isSearchingForUpdates = true;
 
     try {
       const data = await this.getLauncherData();
-      const isNewVersion = data?.Version && data.Version !== global.launcherVersion;
+      const isNewVersion = data?.Version && data.Version !== version;
 
       if ( isNewVersion && ( this.lastUpdateNotification !== data.Version || ! wasAutomatic ) ) {
         Modal.showInstallUpdate( data.Version );
@@ -352,7 +355,7 @@ class FSOLauncher {
    * @returns {Promise<void>} A promise that resolves when the path is changed.
    */
   async changeGamePath( options ) {
-    const toast = new Toast( global.locale.TOAST_CHPATH );
+    const toast = new Toast( locale.current.TOAST_CHPATH );
     try {
       await this.install( options.component, {
         fullInstall: false,
@@ -491,9 +494,7 @@ class FSOLauncher {
         Modal.showInstalled( this.getPrettyName( componentCode ) );
       }
     } catch ( err ) {
-      if ( ! options.fullInstall ) {
-        Modal.showFailedInstall( this.getPrettyName( componentCode ), err );
-      }
+      Modal.showFailedInstall( this.getPrettyName( componentCode ), err );
       this.setProgressBar( 1, { mode: 'error' } );
       captureWithSentry( err,
         { component: componentCode, options, isInstalled: this.isInstalled } );
@@ -634,7 +635,7 @@ class FSOLauncher {
    */
   async askForInstallFolder( componentCode ) {
     const toast = new Toast(
-      `${global.locale.INSTALLER_CHOOSE_WHERE_X} ${this.getPrettyName( componentCode )}`
+      `${locale.current.INSTALLER_CHOOSE_WHERE_X} ${this.getPrettyName( componentCode )}`
     );
     const folders = await Modal.showChooseDirectory(
       this.getPrettyName( componentCode ), this.window
@@ -660,7 +661,7 @@ class FSOLauncher {
       // Use well-known paths.
       if ( process.platform == 'darwin' ) {
         // For darwin, everything goes to Documents for now.
-        return global.homeDir + '/Documents/' + this.getPrettyName( componentCode );
+        return homeDir + '/Documents/' + this.getPrettyName( componentCode );
       }
       if ( componentCode == 'TSO' ) {
         return 'C:/Program Files/Maxis/' + this.getPrettyName( componentCode );
@@ -696,7 +697,7 @@ class FSOLauncher {
     const fs = require( 'fs-extra' ),
       ini = require( 'ini' ),
       path = require( 'path' );
-    const toast = new Toast( global.locale.TOAST_LANGUAGE );
+    const toast = new Toast( locale.current.TOAST_LANGUAGE );
 
     try {
       process.noAsar = true;
@@ -774,7 +775,7 @@ class FSOLauncher {
    * @returns {Promise<void>} A promise that resolves when the graphics mode is changed.
    */
   handleGraphicsModeChange( newValue ) {
-    const oldGraphicsMode = this.conf.Game.GraphicsMode;
+    const oldGraphicsMode = this.userSettings.Game.GraphicsMode;
 
     if ( newValue === 'sw' && oldGraphicsMode !== 'sw' ) {
       if ( ! this.isInstalled.FSO ) {
@@ -837,8 +838,8 @@ class FSOLauncher {
    *                          has been updated and persisted.
    */
   updateAndPersistConfig( category, key, value ) {
-    this.conf[ category ] = this.conf[ category ] || {};
-    this.conf[ category ][ key ] = value;
+    this.userSettings[ category ] = this.userSettings[ category ] || {};
+    this.userSettings[ category ][ key ] = value;
 
     return this.persist();
   }
@@ -847,7 +848,7 @@ class FSOLauncher {
    * Disables Software Mode and removes dxtn.dll and opengl32.dll.
    */
   async disableSoftwareMode() {
-    const toast = new Toast( global.locale.TOAST_DISABLING_SWM );
+    const toast = new Toast( locale.current.TOAST_DISABLING_SWM );
     this.addActiveTask( 'CHSWM' );
     try {
       await require( 'fs-extra' ).remove( this.isInstalled.FSO + '/dxtn.dll' );
@@ -864,7 +865,7 @@ class FSOLauncher {
    * @returns {Promise<void>} A promise that resolves when the operation is complete.
    */
   async enableSoftwareMode() {
-    const toast = new Toast( global.locale.TOAST_ENABLING_SWM );
+    const toast = new Toast( locale.current.TOAST_ENABLING_SWM );
     this.addActiveTask( 'CHSWM' );
     try {
       await require( 'fs-extra' ).copy( 'bin/dxtn.dll', this.isInstalled.FSO + '/dxtn.dll' );
@@ -908,11 +909,11 @@ class FSOLauncher {
     require( 'fs-extra' ).stat( exeLocation, ( err, _stat ) => {
       if ( err ) {
         captureWithSentry( err, {
-          exeLocation, useVolcanic, isSimitone, conf: this.conf,
+          exeLocation, useVolcanic, isSimitone, userSettings: this.userSettings,
           isInstalled: this.isInstalled
         } );
         console.error( 'could not find exe', {
-          exeLocation, useVolcanic, isSimitone, conf: this.conf,
+          exeLocation, useVolcanic, isSimitone, userSettings: this.userSettings,
           isInstalled: this.isInstalled
         } );
         return Modal.showCouldNotRecover( exeLocation, isSimitone );
@@ -938,18 +939,18 @@ class FSOLauncher {
     if ( ! cwd ) {
       captureWithSentry( new Error( 'Entered launchGame without cwd' ), {
         cwd, file, useVolcanic, isSimitone,
-        conf: this.conf, isInstalled: this.isInstalled, subfolder
+        userSettings: this.userSettings, isInstalled: this.isInstalled, subfolder
       } );
       console.error( 'launchGame with no cwd', {
         cwd, file, useVolcanic, isSimitone,
-        conf: this.conf, isInstalled: this.isInstalled, subfolder
+        userSettings: this.userSettings, isInstalled: this.isInstalled, subfolder
       } );
       return Modal.showNeedToPlay();
     }
 
     const toastText = isSimitone
-      ? global.locale.TOAST_LAUNCHING.replace( 'FreeSO', 'Simitone' )
-      : global.locale.TOAST_LAUNCHING;
+      ? locale.current.TOAST_LAUNCHING.replace( 'FreeSO', 'Simitone' )
+      : locale.current.TOAST_LAUNCHING;
     const toast = new Toast( toastText );
     const args = [];
 
@@ -958,15 +959,15 @@ class FSOLauncher {
     // game language, by default english
     if ( ! isSimitone ) {
       // for now disable this for Simitone
-      args.push( `-lang${this.getLangCode( this.conf.Game.Language )}` );
+      args.push( `-lang${this.getLangCode( this.userSettings.Game.Language )}` );
     }
     // SW only allows ogl
-    let graphicsMode = this.conf.Game.GraphicsMode != 'sw'
-      ? this.conf.Game.GraphicsMode : 'ogl';
+    let graphicsMode = this.userSettings.Game.GraphicsMode != 'sw'
+      ? this.userSettings.Game.GraphicsMode : 'ogl';
     if ( process.platform === 'darwin' ) graphicsMode = 'ogl';
     args.push( `-${graphicsMode}` );
     // 3d is forced off when in SW
-    if ( this.conf.Game[ '3DMode' ] === '1' && ( this.conf.Game.GraphicsMode != 'sw' || isSimitone ) ) {
+    if ( this.userSettings.Game[ '3DMode' ] === '1' && ( this.userSettings.Game.GraphicsMode != 'sw' || isSimitone ) ) {
       args.push( '-3d' );
     }
     if ( isSimitone && useVolcanic ) {
@@ -974,7 +975,7 @@ class FSOLauncher {
       args.push( '-ide' );
       file = 'Simitone.Windows.exe';
     }
-    if ( isSimitone && this.conf.Game.SimitoneAA === '1' ) {
+    if ( isSimitone && this.userSettings.Game.SimitoneAA === '1' ) {
       args.push( '-aa' );
     }
     // hz option
@@ -1055,18 +1056,18 @@ class FSOLauncher {
    * @returns {Promise<void>} A promise that resolves when the configuration is saved.
    */
   async persist() {
-    const toast = new Toast( global.locale.TOAST_SETTINGS );
+    const toast = new Toast( locale.current.TOAST_SETTINGS );
     const fs = require( 'fs-extra' );
     const ini = require( 'ini' );
     try {
       await fs.writeFile(
-        global.appData + 'FSOLauncher.ini',
-        ini.stringify( this.conf )
+        appData + 'FSOLauncher.ini',
+        ini.stringify( this.userSettings )
       );
-      console.info( 'persist', this.conf );
+      console.info( 'persist', this.userSettings );
     } catch ( err ) {
       captureWithSentry( err );
-      console.error( 'error persisting', { err, conf: this.conf } );
+      console.error( 'error persisting', { err, userSettings: this.userSettings } );
     } finally {
       setTimeout( () => toast.destroy(), 1500 );
     }
@@ -1094,7 +1095,7 @@ class FSOLauncher {
    * @returns {boolean} If the theme is dark.
    */
   isDarkMode() {
-    return [ 'halloween', 'dark', 'indigo' ].includes( this.conf.Launcher.Theme );
+    return [ 'halloween', 'dark', 'indigo' ].includes( this.userSettings.Launcher.Theme );
   }
 
   /**
@@ -1113,9 +1114,9 @@ class FSOLauncher {
    * Once the DOM is ready, this method is called.
    */
   initDOM() {
-    this.IPC.setTheme( this.conf.Launcher.Theme );
+    this.IPC.setTheme( this.userSettings.Launcher.Theme );
     this.IPC.setMaxRefreshRate( getDisplayRefreshRate() );
-    this.IPC.restoreConfiguration( this.conf );
+    this.IPC.restoreConfiguration( this.userSettings );
     this.checkRemeshInfo();
     this.updateNetRequiredUI();
     this.window.focus();
@@ -1127,7 +1128,7 @@ class FSOLauncher {
    * @returns {number} The refresh rate to use.
    */
   getEffectiveRefreshRate() {
-    const savedRefreshRate = this.conf?.Game?.RefreshRate;
+    const savedRefreshRate = this.userSettings?.Game?.RefreshRate;
     if ( ! savedRefreshRate ) {
       return getDisplayRefreshRate();
     }

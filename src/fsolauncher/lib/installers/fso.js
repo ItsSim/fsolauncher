@@ -2,6 +2,7 @@ const { strFormat, captureWithSentry, getJSON } = require( '../utils' );
 const download = require( '../download' ),
   unzip = require( '../unzip' );
 const { temp, downloads } = require( '../../constants' );
+const { locale } = require( '../../locale' );
 
 /**
  * Installs FreeSO from GitHub Releases.
@@ -30,7 +31,7 @@ class FSOInstaller {
     this.fsolauncher.IPC.addProgressItem(
       `FSOProgressItem${this.id}`,
       'FreeSO Client (from GitHub)',
-      `${global.locale.INS_IN} ${this.path}`,
+      `${locale.current.INS_IN} ${this.path}`,
       message,
       percentage
     );
@@ -66,7 +67,7 @@ class FSOInstaller {
    */
   async step1() {
     this.dl = null;
-    this.createProgressItem( global.locale.INS_SOURCES, 0 );
+    this.createProgressItem( locale.current.INS_SOURCES, 0 );
     const from = await this.getZipUrl();
     if ( ! from ) {
       throw new Error( 'Could not obtain FreeSO release information...' );
@@ -136,7 +137,7 @@ class FSOInstaller {
         cpperm: true
       }, filename => {
         this.createProgressItem(
-          global.locale.INS_EXTRACTING_ME + ' ' + filename, 100
+          locale.current.INS_EXTRACTING_ME + ' ' + filename, 100
         );
       } );
     }
@@ -216,7 +217,7 @@ class FSOInstaller {
    */
   end() {
     this.dl.cleanup();
-    this.createProgressItem( global.locale.INSTALLATION_FINISHED, 100 );
+    this.createProgressItem( locale.current.INSTALLATION_FINISHED, 100 );
     this.fsolauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
   }
 
@@ -230,7 +231,7 @@ class FSOInstaller {
     this.haltProgress = true;
     this.fsolauncher.IPC.stopProgressItem( 'FSOProgressItem' + this.id );
     this.createProgressItem(
-      strFormat( global.locale.FSO_FAILED_INSTALLATION, 'FreeSO' ), 100
+      strFormat( locale.current.FSO_FAILED_INSTALLATION, 'FreeSO' ), 100
     );
   }
 
@@ -245,7 +246,7 @@ class FSOInstaller {
       this.dl.events.on( 'error', () => {} );
       this.dl.events.on( 'end', _fileName => {
         if ( this.dl.hasFailed() ) {
-          return reject( global.locale.FSO_NETWORK_ERROR );
+          return reject( locale.current.FSO_NETWORK_ERROR );
         }
         resolve();
       } );
@@ -261,7 +262,7 @@ class FSOInstaller {
   extract() {
     return unzip( { from: this.tempPath, to: this.path }, filename => {
       this.createProgressItem(
-        global.locale.EXTRACTING_CLIENT_FILES + ' ' + filename,
+        locale.current.EXTRACTING_CLIENT_FILES + ' ' + filename,
         100
       );
     } );
@@ -321,7 +322,7 @@ class FSOInstaller {
       if ( p < 100 ) {
         if ( ! this.haltProgress ) {
           this.createProgressItem(
-            `${global.locale.DL_CLIENT_FILES} ${mb} MB ${global.locale.X_OUT_OF_X} ${size} MB (${p}%)`,
+            `${locale.current.DL_CLIENT_FILES} ${mb} MB ${locale.current.X_OUT_OF_X} ${size} MB (${p}%)`,
             p
           );
         }
