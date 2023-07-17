@@ -1,10 +1,11 @@
 const cp = require( 'child_process' );
 const path = require( 'path' );
-const registryPath = path.join( process.env.windir, 'system32', 'reg.exe' );
 
 const runWithUTF8 = ( args = [] ) => {
   return new Promise( ( resolve, reject ) => {
-    const child = cp.spawn( `chcp 65001 >nul && ${registryPath}`, args, { shell: true } );
+    const registryPath = path.join( process.env.windir, 'system32', 'reg.exe' );
+    const chcpPath = path.join( process.env.windir, 'system32', 'chcp.com' );
+    const child = cp.spawn( `${chcpPath} 65001 >nul && ${registryPath}`, args, { shell: true } );
 
     let stdout = '', stderr = '';
     child.stdout.on( 'data', ( data ) => stdout += data );

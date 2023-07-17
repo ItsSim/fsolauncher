@@ -58,7 +58,7 @@ function stripLocalPath( code, path ) {
  */
 async function getInstallStatus( code ) {
   const regPath = paths[ code ];
-  if ( process.platform === 'darwin' ) {
+  if ( process.platform !== 'win32' ) {
     // On macOS, just check if the file exists
     return {
       key: code,
