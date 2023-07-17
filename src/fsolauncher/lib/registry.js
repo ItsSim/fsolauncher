@@ -63,7 +63,7 @@ async function getInstallStatus( code ) {
     return {
       key: code,
       isInstalled: ( await fs.pathExists( regPath ) ) ?
-        this.stripLocalPath( code, regPath ) : false
+        stripLocalPath( code, regPath ) : false
     };
   }
 
