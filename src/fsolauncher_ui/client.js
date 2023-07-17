@@ -553,7 +553,7 @@ let ociConfirm;
     const modalElement  = document.importNode( modalTemplate.content, true );
 
     if ( modalRespId ) {
-      modalElement.setAttribute( 'data-response-id', modalRespId );
+      modalElement.querySelector( '.modal' ).setAttribute( 'data-response-id', modalRespId );
     }
     modalElement.querySelector( '.modal-header' ).innerHTML = title;
     modalElement.querySelector( '.modal-text' ).innerHTML = text;
