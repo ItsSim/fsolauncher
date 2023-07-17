@@ -1,9 +1,9 @@
 const { _electron: electron } = require( 'playwright' );
 const { test, expect } = require( '@playwright/test' );
-const fs = require( 'fs-extra' );
 const { findLatestBuild, parseElectronApp, stubDialog } = require( 'electron-playwright-helpers' );
 
 const path = require( 'path' );
+const fs = require( 'fs-extra' );
 
 const INSTALL_TIMEOUT_MS = 15 * 60 * 1000; // 15 minutes
 const WINDOWS_INSTALL_PATH_WITH_SPECIAL_CHARS = 'C:\\Users\\Public\\TéstFõldér';
