@@ -4,6 +4,7 @@ const fs = require( 'fs-extra' );
 const { findLatestBuild, parseElectronApp, stubDialog } = require( 'electron-playwright-helpers' );
 const { getInstalled } = require( '../../fsolauncher/lib/registry' );
 const { appData } = require( '../../fsolauncher/constants' );
+const path = require( 'path' );
 
 const INSTALL_TIMEOUT_MS = 15 * 60 * 1000; // 15 minutes
 const WINDOWS_INSTALL_PATH_WITH_SPECIAL_CHARS = 'C:\\Users\\Public\\TéstFõldér';
@@ -21,6 +22,7 @@ test.beforeEach( async () => {
 
   // Pass in --test-mode for headless testing
   electronApp = await electron.launch( {
+    cwd: path.dirname( appInfo.executable ),
     args: [ appInfo.main, '--test-mode=true', '--disable-gpu' ], // Main file from package.json
     executablePath: appInfo.executable // Path to the Electron executable
   } );
