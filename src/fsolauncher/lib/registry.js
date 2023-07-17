@@ -162,7 +162,7 @@ async function getLocalRegistry() {
      * @type {import('../../main').UserSettings}
      */
     const userSettings = require( 'ini' ).parse( await require( 'fs-extra' )
-      .readFile( appData + 'FSOLauncher.ini', 'utf-8' ) );
+      .readFile( appData + '/FSOLauncher.ini', 'utf-8' ) );
 
     return userSettings.LocalRegistry || {};
   } catch ( err ) {

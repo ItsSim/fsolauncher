@@ -48,7 +48,7 @@ Object.freeze( shell );
 
 // Create the temp directory on macOS
 if ( process.platform == 'darwin' ) {
-  fs.ensureDirSync( appData + 'temp' );
+  fs.ensureDirSync( appData + '/temp' );
 }
 
 /** @type {Electron.BrowserWindow} */
@@ -88,7 +88,7 @@ let userSettings;
 
 try {
   // Load the FSOLauncher.ini file and make it available for the launcher
-  userSettings = ini.parse( fs.readFileSync( appData + 'FSOLauncher.ini', 'utf-8' ) );
+  userSettings = ini.parse( fs.readFileSync( appData + '/FSOLauncher.ini', 'utf-8' ) );
 } catch ( err ) {
   // The FSOLauncher.ini file does not exist, create a new one with
   // predefined values
@@ -106,7 +106,7 @@ try {
     }
   };
   // Write the new FSOLauncher.ini to disk
-  fs.writeFileSync( appData + 'FSOLauncher.ini', ini.stringify( userSettings ), 'utf-8' );
+  fs.writeFileSync( appData + '/FSOLauncher.ini', ini.stringify( userSettings ), 'utf-8' );
 }
 console.info( 'loaded userSettings', userSettings );
 

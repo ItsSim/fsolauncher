@@ -2,8 +2,7 @@ const { _electron: electron } = require( 'playwright' );
 const { test, expect } = require( '@playwright/test' );
 const fs = require( 'fs-extra' );
 const { findLatestBuild, parseElectronApp, stubDialog } = require( 'electron-playwright-helpers' );
-const { getInstalled } = require( '../../fsolauncher/lib/registry' );
-const { appData } = require( '../../fsolauncher/constants' );
+
 const path = require( 'path' );
 
 const INSTALL_TIMEOUT_MS = 15 * 60 * 1000; // 15 minutes
@@ -16,13 +15,23 @@ let window;
 let electronApp;
 
 test.beforeEach( async () => {
-  fs.existsSync( `${appData}FSOLauncher.ini` ) && fs.unlinkSync( `${appData}FSOLauncher.ini` );
   const latestBuild = findLatestBuild( '../release' );
   const appInfo = parseElectronApp( latestBuild );
+  const exeDir = path.dirname( appInfo.executable );
+
+  // Override appData so that when launcher libraries are used in tests
+  // they can find FSOLauncher.ini, which is in the same dir as
+  // the executable when on Windows
+  if ( process.platform === 'win32' ) {
+    process.env.APP_DATA = exeDir;
+  }
+  const { appData } = require( '../../fsolauncher/constants' );
+
+  fs.existsSync( `${appData}/FSOLauncher.ini` ) && fs.unlinkSync( `${appData}/FSOLauncher.ini` );
 
   // Pass in --test-mode for headless testing
   electronApp = await electron.launch( {
-    cwd: path.dirname( appInfo.executable ),
+    cwd: exeDir,
     args: [ appInfo.main, '--test-mode=true', '--disable-gpu' ], // Main file from package.json
     executablePath: appInfo.executable // Path to the Electron executable
   } );
@@ -95,6 +104,8 @@ test( 'should do a complete install', async () => {
   }
   // Actually check that the programs are installed using the launcher's
   // registry utility
+  const { getInstalled } = require( '../../fsolauncher/lib/registry' );
+
   const programs = await getInstalled();
   const isInstalled = programs.reduce( ( status, program ) => {
     status[ program.key ] = program.isInstalled;

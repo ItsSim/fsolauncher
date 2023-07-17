@@ -54,5 +54,10 @@ jobs:
       working-directory: src
 
     - name: Run e2e tests
-      run: npm run test
+      run: |
+        if [[ "${{ matrix.os }}" == "macos-latest" ]]; then
+          sudo npm run test
+        else
+          npm run test
+        fi
       working-directory: src

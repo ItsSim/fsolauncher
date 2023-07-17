@@ -1061,7 +1061,7 @@ class FSOLauncher {
     const ini = require( 'ini' );
     try {
       await fs.writeFile(
-        appData + 'FSOLauncher.ini',
+        appData + '/FSOLauncher.ini',
         ini.stringify( this.userSettings )
       );
       console.info( 'persist', this.userSettings );

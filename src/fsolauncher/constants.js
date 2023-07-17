@@ -1,6 +1,7 @@
 const homeDir = require( 'os' ).homedir();
-const appData = process.platform == 'darwin' ?
-  `${homeDir}/Library/Application Support/FreeSO Launcher/` : '';
+const appData = process.env.APP_DATA || (
+  process.platform == 'darwin' ? `${homeDir}/Library/Application Support/FreeSO Launcher` : '.'
+);
 const version = require( '../package.json' ).version;
 
 module.exports = {
@@ -61,14 +62,14 @@ module.exports = {
     'SDL': 'https://beta.freeso.org/LauncherResourceCentral/SDL'
   },
   temp: {
-    'FSO': `${appData}temp/artifacts-freeso-%s.zip`,
-    'MacExtras': `${appData}temp/macextras-%s.zip`,
-    'Mono': `${appData}temp/mono-%s.pkg`,
-    'RMS': `${appData}temp/artifacts-remeshes-%s.zip`,
-    'SDL': `${appData}temp/sdl2-%s.dmg`,
-    'Simitone': `${appData}temp/artifacts-simitone-%s.zip`,
+    'FSO': `${appData}/temp/artifacts-freeso-%s.zip`,
+    'MacExtras': `${appData}/temp/macextras-%s.zip`,
+    'Mono': `${appData}/temp/mono-%s.pkg`,
+    'RMS': `${appData}/temp/artifacts-remeshes-%s.zip`,
+    'SDL': `${appData}/temp/sdl2-%s.dmg`,
+    'Simitone': `${appData}/temp/artifacts-simitone-%s.zip`,
     'TSO': {
-      path: `${appData}temp/tsoclient`,
+      path: `${appData}/temp/tsoclient`,
       file: 'client.zip',
       extractionFolder: 'client',
       firstCab: 'TSO_Installer_v1.1239.1.0/Data1.cab',
