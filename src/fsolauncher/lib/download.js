@@ -7,25 +7,6 @@ const { http, https } = require( 'follow-redirects' ).wrap( {
 const path = require( 'path' );
 const { EventEmitter } = require( 'events' );
 
-async function sampleFileBytes( filePath, byteCount = 102400 ) {
-  const stats = await fs.stat( filePath );
-
-  // Read the first bytes
-  const firstBuffer = await fs.readFile( filePath, { length: byteCount } );
-
-  // Read the last bytes
-  const start = stats.size - byteCount;
-  const fd = await fs.open( filePath, 'r' );
-  const lastBuffer = Buffer.alloc( byteCount );
-  await fd.read( lastBuffer, 0, byteCount, start );
-  await fd.close();
-
-  return {
-    firstBytes: firstBuffer.toString( 'base64' ),
-    lastBytes: lastBuffer.toString( 'base64' )
-  };
-}
-
 /**
  * Custom HTTP download, with a few more failsafes for dealing with archive.org responses.
  * Supports pause, resume, retry and abort (stop).
@@ -99,7 +80,7 @@ module.exports = function( { from, to, immediate = false } ) {
     r.on( 'end', _onEnd );
   };
 
-  const _onEnd = () => {
+  const _onEnd = async () => {
     if ( ! _failed ) {
       // Archive.org downloads fail silently when x-page-cache is MISS or EXPIRED.
       if ( _response.headers[ 'x-page-cache' ] ) {
@@ -123,20 +104,20 @@ module.exports = function( { from, to, immediate = false } ) {
         );
         return setTimeout( () => retry(), 5000 );
       }
+      if ( ! await fs.exists( to ) ) {
+        events.emit(
+          'internal-retry',
+          `File download ${to} was not created. Retrying download in 5 seconds.`
+        );
+        return setTimeout( () => retry(), 5000 );
+      }
     }
+
     // If we've gone this far, we're most likely OK.
     _progress = 100;
     _request.abort();
     _fileStream.end();
     events.emit( 'end', to );
-
-    try {
-      sampleFileBytes( to ).then( fileSample => {
-        console.log( `First bytes of ${to} (base64 encoded): `, fileSample );
-      } );
-    } catch ( error ) {
-      console.error( 'Error when sampling file bytes: ', error );
-    }
   };
 
   const retry = () => (
