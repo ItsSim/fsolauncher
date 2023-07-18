@@ -54,13 +54,25 @@ module.exports = ( { from, to, cpperm }, onEntry = () => {} ) =>
         }
       } );
     }
-    // Open zip file with yauzl.
-    yauzl.open( from, { lazyEntries: true }, function( err, zipfile ) {
-      if ( err ) return reject( err );
-      zipfile
-        .on( 'entry', entry => handleEntry( zipfile, entry ) )
-        .once( 'error', reject )
-        .once( 'close', () => resolve( cleanup ) )
-        .readEntry();
-    } );
+
+    function doExtraction() {
+      // Open zip file with yauzl.
+      yauzl.open( from, { lazyEntries: true }, function( err, zipfile ) {
+        if ( err ) return reject( err );
+        zipfile
+          .on( 'entry', entry => handleEntry( zipfile, entry ) )
+          .once( 'error', reject )
+          .once( 'close', () => resolve( cleanup ) )
+          .readEntry();
+      } );
+    }
+
+    fs.exists( from )
+      .then( exists => {
+        if ( exists ) {
+          return doExtraction();
+        }
+        reject( new Error( `file to extract ${from} does not exist` ) );
+      } )
+      .catch( reject );
   } );
