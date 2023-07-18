@@ -29,8 +29,7 @@
     "electron-playwright-helpers": "^1.6.0",
     "eslint": "^7.32.0",
     "innosetup-compiler": "^6.2.0",
-    "playwright": "^1.36.1",
-    "sinon": "^15.2.0"
+    "playwright": "^1.36.1"
   },
   "dependencies": {
     "@sentry/electron": "^4.7.0",

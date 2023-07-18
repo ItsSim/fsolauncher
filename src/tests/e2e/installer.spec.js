@@ -4,8 +4,8 @@ const { findLatestBuild, parseElectronApp, stubDialog } = require( 'electron-pla
 
 const path = require( 'path' );
 const fs = require( 'fs-extra' );
-const sinon = require( 'sinon' );
-const sudo = require( 'sudo-prompt' );
+
+const stubConstants = require( '../stubs/constants' );
 
 const INSTALL_TIMEOUT_MS = 15 * 60 * 1000; // 15 minutes
 const WINDOWS_INSTALL_PATH_WITH_SPECIAL_CHARS = 'C:\\Users\\Public\\TéstFõldér';
@@ -16,23 +16,14 @@ let window;
 /** @type {import('playwright').ElectronApplication} */
 let electronApp;
 
-/** @type {import('sinon').SinonSandbox} */
-let sandbox;
-
 test.beforeEach( async () => {
   const latestBuild = findLatestBuild( '../release' );
   const appInfo = parseElectronApp( latestBuild );
   const exeDir = path.dirname( appInfo.executable );
 
-  // Create the Sinon sandbox for mocking libraries
-  sandbox = sinon.createSandbox();
+  // Stub constants file for tests
+  stubConstants( exeDir );
 
-  // Override appData so that when launcher libraries are used in tests
-  // they can find FSOLauncher.ini, which is in the same dir as
-  // the executable when on Windows
-  if ( process.platform === 'win32' ) {
-    process.env.APP_DATA = exeDir;
-  }
   const { appData } = require( '../../fsolauncher/constants' );
 
   fs.existsSync( `${appData}/FSOLauncher.ini` ) && fs.unlinkSync( `${appData}/FSOLauncher.ini` );
@@ -40,7 +31,7 @@ test.beforeEach( async () => {
   // Pass in --test-mode for headless testing
   electronApp = await electron.launch( {
     cwd: exeDir,
-    args: [ appInfo.main, '--test-mode=true', '--disable-gpu' ], // Main file from package.json
+    args: [ appInfo.main, '--test-mode=true' ], // Main file from package.json
     executablePath: appInfo.executable // Path to the Electron executable
   } );
 
@@ -58,7 +49,6 @@ test.beforeEach( async () => {
 test.afterEach( async () => {
   await electronApp.evaluate( async ( { _app } ) => global.willQuit = true );
   await electronApp.close();
-  sandbox.restore();
 } );
 
 test( 'should launch the app', () => {
@@ -80,7 +70,7 @@ test( 'should do a complete install', async () => {
 
   if ( process.platform === 'win32' ) {
     // Reproduce installation flow on Windows
-    // Mock the file dialog
+    // Stub the file dialog
     await stubDialog( electronApp, 'showOpenDialog', { filePaths: [
       WINDOWS_INSTALL_PATH_WITH_SPECIAL_CHARS
     ] } );
@@ -93,10 +83,6 @@ test( 'should do a complete install', async () => {
     await window.click( '.oneclick-install-confirm' );
   } else {
     // Reproduce the installation on macOS
-    // Mock sudo-prompt
-    const sudoMock = sandbox.stub( sudo, 'exec' );
-    sudoMock.yields( null, 'stdout', 'stderr' ); // no error, just stdout and stderr
-
     // Click the 'YES' button
     await window.click( '[data-response-id="FULL_INSTALL_CONFIRM"] .yes-button' );
   }

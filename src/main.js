@@ -7,7 +7,7 @@ initSentry();
 
 const { app, BrowserWindow, shell, Tray, Menu, nativeImage, nativeTheme } = require( 'electron' );
 
-const isTestMode = app.commandLine.getSwitchValue( 'test-mode' );
+const isTestMode = global.isTestMode = app.commandLine.getSwitchValue( 'test-mode' );
 
 if ( isTestMode ) {
   app.disableHardwareAcceleration();

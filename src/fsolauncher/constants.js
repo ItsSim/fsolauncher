@@ -1,13 +1,10 @@
 const homeDir = require( 'os' ).homedir();
-const appData = process.env.APP_DATA || (
-  process.platform == 'darwin' ? `${homeDir}/Library/Application Support/FreeSO Launcher` : '.'
-);
-const version = require( '../package.json' ).version;
+const appData = process.platform == 'darwin' ? `${homeDir}/Library/Application Support/FreeSO Launcher` : '.';
 
 module.exports = {
   homeDir,
   appData,
-  version,
+  version: require( '../package.json' ).version,
   dependencies: {
     'FSO': [ 'TSO', ...( process.platform === 'darwin' ? [ 'Mono', 'SDL' ] : [ 'OpenAL' ] ) ],
     'RMS': [ 'FSO' ],
