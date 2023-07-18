@@ -47,8 +47,15 @@ test.beforeEach( async () => {
 } );
 
 test.afterEach( async () => {
-  await electronApp.evaluate( async ( { _app } ) => global.willQuit = true );
-  await electronApp.close();
+  try {
+    console.info( 'Setting global.willQuit to true...' );
+    await electronApp.evaluate( async () => global.willQuit = true );
+    console.info( 'global.willQuit has been set to true. Attempting to close the app...' );
+    await electronApp.close();
+    console.info( 'The app has been closed.' );
+  } catch ( error ) {
+    console.error( 'An error occurred in afterEach hook:', error );
+  }
 } );
 
 test( 'should launch the app', () => {
