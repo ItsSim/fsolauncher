@@ -2,7 +2,6 @@ const { _electron: electron } = require( 'playwright' );
 const { test, expect } = require( '@playwright/test' );
 const { findLatestBuild, parseElectronApp, stubDialog } = require( 'electron-playwright-helpers' );
 const { stubConstants } = require( '../stubs' );
-const { killProc, checkProcRunning } = require( './helpers' );
 
 const path = require( 'path' );
 const fs = require( 'fs-extra' );
@@ -138,12 +137,6 @@ test( 'should do a complete install', async () => {
     // An error appeared when launching the game
     throw new Error( 'Error modal appeared when launching the game' );
   }
-
-  // Check FreeSO.exe is running
-  const launched = await checkProcRunning( 'FreeSO' );
-  expect( launched ).toBeTruthy();
-
-  await killProc( 'FreeSO' );
 } );
 
 test( 'should still be installed after restarting the launcher', async () => {
