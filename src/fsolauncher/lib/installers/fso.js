@@ -153,8 +153,7 @@ class FSOInstaller {
    */
   getFreeSOGitHubReleaseInfo() {
     return getJSON( {
-      host: 'api.github.com',
-      path: '/repos/riperiperi/FreeSO/releases/latest',
+      url: 'https://api.github.com/repos/riperiperi/FreeSO/releases/latest',
       headers: { 'user-agent': 'node.js' }
     } );
   }
@@ -166,8 +165,7 @@ class FSOInstaller {
    */
   getFreeSOApiReleaseInfo() {
     return getJSON( {
-      host: 'api.freeso.org',
-      path: '/userapi/update/beta',
+      url: 'https://api.freeso.org/userapi/update/beta',
       headers: { 'user-agent': 'node.js' }
     } );
   }

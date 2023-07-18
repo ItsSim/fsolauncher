@@ -126,8 +126,7 @@ class FSOLauncher {
    */
   getSimitoneReleaseInfo() {
     return getJSON( {
-      host: 'api.github.com',
-      path: '/repos/riperiperi/Simitone/releases/latest',
+      url: 'https://api.github.com/repos/riperiperi/Simitone/releases/latest',
       headers: { 'user-agent': 'node.js' }
     } );
   }
@@ -228,8 +227,7 @@ class FSOLauncher {
    */
   async getRemeshData() {
     const data = await getJSON( {
-      host: checks.siteUrl,
-      path: '/' + checks.remeshEndpoint
+      url: `https://${checks.siteUrl}/${checks.remeshEndpoint}`
     } );
     this.remeshInfo.location = data.Location;
     this.remeshInfo.version  = data.Version;
@@ -243,8 +241,7 @@ class FSOLauncher {
    */
   async getLauncherData() {
     const data = await getJSON( {
-      host: checks.siteUrl,
-      path: `/${checks.updateEndpoint}?os=${require( 'os' ).release()}` +
+      url: `https://${checks.siteUrl}/${checks.updateEndpoint}?os=${require( 'os' ).release()}` +
       `&version=${version}` +
       `&fso=${( this.isInstalled && this.isInstalled.FSO ) ? '1' : '0'}`
     } );

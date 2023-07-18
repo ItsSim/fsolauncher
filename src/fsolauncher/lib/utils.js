@@ -97,28 +97,21 @@ function captureWithSentry( err, extra ) {
   }
 }
 
+/**
+ * @param {import('axios').CreateAxiosDefaults} options
+ */
 function getJSON( options ) {
-  const { net } = require( 'electron' );
-  const { https } = require( 'follow-redirects' ).wrap( {
-    http: net,
-    https: net,
-  } );
   return new Promise( ( resolve, reject ) => {
-    const request = https.request( options, res => {
-      console.info( 'getting json', { options, headers: res.headers } );
-      let data = '';
-      res.on( 'data', chunk => data += chunk );
-      res.on( 'end', () => {
+    require( 'axios' )( options )
+      .then( ( response ) => {
+        console.info( 'getting json', { options, headers: response.headers } );
         try {
-          resolve( JSON.parse( data ) );
+          resolve( response.data );
         } catch ( err ) {
           reject( err );
         }
-      } );
-    } );
-    request.setTimeout( 30000, () => reject( 'Timed out' ) );
-    request.on( 'error', err => reject( err ) );
-    request.end();
+      } )
+      .catch( reject );
   } );
 }
 
