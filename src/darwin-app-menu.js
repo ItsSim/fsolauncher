@@ -44,7 +44,8 @@ module.exports = ( name ) => [
         label: 'Quit ' + name,
         accelerator: 'Command+Q',
         click: () => {
-          global.willQuit = true; app.quit();
+          global.willQuit = true;
+          app.quit();
         }
       },
     ]

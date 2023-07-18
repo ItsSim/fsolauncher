@@ -4,6 +4,8 @@ const { findLatestBuild, parseElectronApp, stubDialog } = require( 'electron-pla
 
 const path = require( 'path' );
 const fs = require( 'fs-extra' );
+const { promisify } = require( 'util' );
+const exec = promisify( require( 'child_process' ).exec );
 
 const stubConstants = require( '../stubs/constants' );
 
@@ -48,13 +50,13 @@ test.beforeEach( async () => {
 
 test.afterEach( async () => {
   try {
-    console.info( 'Setting global.willQuit to true...' );
+    console.info( 'setting global.willQuit to true...' );
     await electronApp.evaluate( async () => global.willQuit = true );
-    console.info( 'global.willQuit has been set to true. Attempting to close the app...' );
+    console.info( 'global.willQuit has been set to true - attempting to close the app...' );
     await electronApp.close();
-    console.info( 'The app has been closed.' );
-  } catch ( error ) {
-    console.error( 'An error occurred in afterEach hook:', error );
+    console.info( 'the app has been closed.' );
+  } catch ( err ) {
+    console.error( 'an error occurred in afterEach hook:', err );
   }
 } );
 
@@ -127,4 +129,25 @@ test( 'should do a complete install', async () => {
     // An error appeared when launching the game
     throw new Error( 'Error modal appeared when launching the game' );
   }
+
+  // Kill FreeSO.exe
+  if ( process.platform === 'win32' ) {
+    try {
+      console.info( 'killing any running instances of freeso.exe...' );
+      await exec( 'taskkill /F /IM freeso.exe' );
+    } catch ( err ) {
+      console.error( 'error killing freeso:', err );
+    }
+  }
+} );
+
+test( 'should still be installed after restarting the launcher', async () => {
+  const { getInstalled } = require( '../../fsolauncher/lib/registry' );
+  const programs = await getInstalled();
+  const isInstalled = programs.reduce( ( status, program ) => {
+    status[ program.key ] = program.isInstalled;
+    return status;
+  }, {} );
+  expect( isInstalled.FSO ).toBeTruthy();
+  expect( isInstalled.TSO ).toBeTruthy();
 } );
