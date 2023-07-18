@@ -61,7 +61,6 @@ test.beforeEach( async () => {
 
 test.afterEach( async () => {
   try {
-    await killProc( 'FreeSO' );
     console.info( 'setting global.willQuit to true...' );
     await electronApp.evaluate( async () => global.willQuit = true );
     console.info( 'global.willQuit has been set to true - attempting to close the app...' );
@@ -143,6 +142,8 @@ test( 'should do a complete install', async () => {
   // Check FreeSO.exe is running
   const launched = await checkProcRunning( 'FreeSO' );
   expect( launched ).toBeTruthy();
+
+  await killProc( 'FreeSO' );
 } );
 
 test( 'should still be installed after restarting the launcher', async () => {
