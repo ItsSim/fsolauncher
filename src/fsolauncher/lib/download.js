@@ -66,10 +66,25 @@ module.exports = function( { from, to, immediate = false } ) {
    */
   const _onDownload = r => {
     console.info( 'downloading', { from, headers: r.headers } );
+
     if ( ! r ) return _onError( new Error( 'Server did not return a response.' ) );
 
     if ( r.statusCode < 200 || r.statusCode > 299 )
       return _onError( new Error( 'Received status code ' + r.statusCode ) );
+
+    // Added check for 'fastly-restarts' and 'x-cache' headers
+    if ( r.headers[ 'fastly-restarts' ] || r.headers[ 'x-cache' ]?.includes( 'MISS' ) ) {
+      events.emit( 'internal-retry', 'Detected download conditions that may indicate a failure. Retrying download in 5 seconds.' );
+      return setTimeout( () => retry(), 5000 );
+    }
+
+    // Archive.org downloads fail silently when x-page-cache is MISS or EXPIRED.
+    if ( r.headers[ 'x-page-cache' ] ) {
+      if ( [ 'MISS', 'EXPIRED' ].includes( r.headers[ 'x-page-cache' ].trim() ) ) {
+        events.emit( 'internal-retry', 'X-Page-Cache header present with value "MISS" or "EXPIRED". Retrying download in 5 seconds.' );
+        return setTimeout( () => retry(), 5000 );
+      }
+    }
 
     _response = r; // Make the response accessible.
 
@@ -82,32 +97,10 @@ module.exports = function( { from, to, immediate = false } ) {
 
   const _onEnd = async () => {
     if ( ! _failed ) {
-      // Archive.org downloads fail silently when x-page-cache is MISS or EXPIRED.
-      if ( _response.headers[ 'x-page-cache' ] ) {
-        if (
-          [ 'MISS', 'EXPIRED' ].includes(
-            _response.headers[ 'x-page-cache' ].trim()
-          )
-        ) {
-          events.emit(
-            'internal-retry',
-            'X-Page-Cache header present with value "MISS" or "EXPIRED". Retrying download in 5 seconds.'
-          );
-          return setTimeout( () => retry(), 5000 );
-        }
-      }
-      // Nonetheless, check if the filesize is 0 and retry.
       if ( _bytesRead == 0 ) {
         events.emit(
           'internal-retry',
           'Download size was zero. Retrying download in 5 seconds.'
-        );
-        return setTimeout( () => retry(), 5000 );
-      }
-      if ( ! await fs.exists( to ) ) {
-        events.emit(
-          'internal-retry',
-          `File download ${to} was not created. Retrying download in 5 seconds.`
         );
         return setTimeout( () => retry(), 5000 );
       }
