@@ -99,7 +99,7 @@ test( 'should do a complete install', async () => {
 
   if ( await window.isVisible( '.modal-error' ) ) {
     // An error appeared (will be console.logged)
-    throw new Error( 'Error modal appeared' );
+    throw new Error( 'Error modal appeared when doing a full install' );
   }
   // Actually check that the programs are installed using the launcher's
   // registry utility
@@ -112,4 +112,12 @@ test( 'should do a complete install', async () => {
   }, {} );
   expect( isInstalled.FSO ).toBeTruthy();
   expect( isInstalled.TSO ).toBeTruthy();
+
+  // Try launching the game
+  // Click the 'PLAY' button
+  await window.click( 'button.launch' );
+  if ( await window.isVisible( '.modal-error' ) ) {
+    // An error appeared when launching the game
+    throw new Error( 'Error modal appeared when launching the game' );
+  }
 } );
