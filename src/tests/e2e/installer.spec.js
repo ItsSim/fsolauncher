@@ -1,22 +1,21 @@
 const { _electron: electron } = require( 'playwright' );
 const { test, expect } = require( '@playwright/test' );
 const { findLatestBuild, parseElectronApp, stubDialog } = require( 'electron-playwright-helpers' );
-
+const { stubConstants } = require( '../stubs' );
+const { promisify } = require( 'util' );
 const path = require( 'path' );
 const fs = require( 'fs-extra' );
-const { promisify } = require( 'util' );
 const exec = promisify( require( 'child_process' ).exec );
-
-const stubConstants = require( '../stubs/constants' );
-
-const INSTALL_TIMEOUT_MS = 15 * 60 * 1000; // 15 minutes
-const WINDOWS_INSTALL_PATH_WITH_SPECIAL_CHARS = 'C:\\Users\\Public\\TéstFõldér';
 
 /** @type {import('playwright').Page} */
 let window;
 
 /** @type {import('playwright').ElectronApplication} */
 let electronApp;
+
+// Test constants
+const INSTALL_TIMEOUT_MS = 15 * 60 * 1000; // 15 minutes
+const WINDOWS_INSTALL_PATH_WITH_SPECIAL_CHARS = 'C:\\Users\\Public\\TéstFõldér';
 
 test.beforeEach( async () => {
   const latestBuild = findLatestBuild( '../release' );
@@ -42,6 +41,7 @@ test.beforeEach( async () => {
   electronApp.process().stderr.on( 'data', error => console.info( `[Main] ${error}` ) );
 
   window = await electronApp.firstWindow();
+
   // Log renderer process
   window.on( 'console', log => console.info( `[Renderer] ${log.text()}` ) );
 
@@ -110,17 +110,10 @@ test( 'should do a complete install', async () => {
     // An error appeared (will be console.logged)
     throw new Error( 'Error modal appeared when doing a full install' );
   }
+
   // Actually check that the programs are installed using the launcher's
   // registry utility
-  const { getInstalled } = require( '../../fsolauncher/lib/registry' );
-
-  const programs = await getInstalled();
-  const isInstalled = programs.reduce( ( status, program ) => {
-    status[ program.key ] = program.isInstalled;
-    return status;
-  }, {} );
-  expect( isInstalled.FSO ).toBeTruthy();
-  expect( isInstalled.TSO ).toBeTruthy();
+  await verifyGameInstalled();
 
   // Try launching the game
   // Click the 'PLAY' button
@@ -131,17 +124,15 @@ test( 'should do a complete install', async () => {
   }
 
   // Kill FreeSO.exe
-  if ( process.platform === 'win32' ) {
-    try {
-      console.info( 'killing any running instances of freeso.exe...' );
-      await exec( 'taskkill /F /IM freeso.exe' );
-    } catch ( err ) {
-      console.error( 'error killing freeso:', err );
-    }
-  }
+  await killGame();
 } );
 
 test( 'should still be installed after restarting the launcher', async () => {
+  // Programs should still be installed after a reboot
+  await verifyGameInstalled();
+} );
+
+async function verifyGameInstalled() {
   const { getInstalled } = require( '../../fsolauncher/lib/registry' );
   const programs = await getInstalled();
   const isInstalled = programs.reduce( ( status, program ) => {
@@ -150,4 +141,14 @@ test( 'should still be installed after restarting the launcher', async () => {
   }, {} );
   expect( isInstalled.FSO ).toBeTruthy();
   expect( isInstalled.TSO ).toBeTruthy();
-} );
+}
+
+async function killGame() {
+  if ( process.platform != 'win32' ) return;
+  try {
+    console.info( 'killing any running instances of freeso.exe...' );
+    await exec( 'taskkill /F /IM freeso.exe' );
+  } catch ( err ) {
+    console.error( 'error killing freeso:', err );
+  }
+}
