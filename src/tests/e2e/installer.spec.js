@@ -2,10 +2,10 @@ const { _electron: electron } = require( 'playwright' );
 const { test, expect } = require( '@playwright/test' );
 const { findLatestBuild, parseElectronApp, stubDialog } = require( 'electron-playwright-helpers' );
 const { stubConstants } = require( '../stubs' );
-const { promisify } = require( 'util' );
+const { killProc, checkProcRunning } = require( './helpers' );
+
 const path = require( 'path' );
 const fs = require( 'fs-extra' );
-const exec = promisify( require( 'child_process' ).exec );
 
 /** @type {import('playwright').Page} */
 let window;
@@ -17,10 +17,19 @@ let electronApp;
 const INSTALL_TIMEOUT_MS = 15 * 60 * 1000; // 15 minutes
 const WINDOWS_INSTALL_PATH_WITH_SPECIAL_CHARS = 'C:\\Users\\Public\\TéstFõldér';
 
-test.beforeEach( async () => {
-  const latestBuild = findLatestBuild( '../release' );
-  const appInfo = parseElectronApp( latestBuild );
-  const exeDir = path.dirname( appInfo.executable );
+/** @type {string} */
+let latestBuild;
+
+/** @type {import('electron-playwright-helpers').ElectronAppInfo} */
+let appInfo;
+
+/** @type {string} */
+let exeDir;
+
+test.beforeAll( () => {
+  latestBuild = findLatestBuild( '../release' );
+  appInfo = parseElectronApp( latestBuild );
+  exeDir = path.dirname( appInfo.executable );
 
   // Stub constants file for tests
   stubConstants( exeDir );
@@ -28,7 +37,9 @@ test.beforeEach( async () => {
   const { appData } = require( '../../fsolauncher/constants' );
 
   fs.existsSync( `${appData}/FSOLauncher.ini` ) && fs.unlinkSync( `${appData}/FSOLauncher.ini` );
+} );
 
+test.beforeEach( async () => {
   // Pass in --test-mode for headless testing
   electronApp = await electron.launch( {
     cwd: exeDir,
@@ -50,6 +61,7 @@ test.beforeEach( async () => {
 
 test.afterEach( async () => {
   try {
+    await killProc( 'FreeSO' );
     console.info( 'setting global.willQuit to true...' );
     await electronApp.evaluate( async () => global.willQuit = true );
     console.info( 'global.willQuit has been set to true - attempting to close the app...' );
@@ -111,28 +123,7 @@ test( 'should do a complete install', async () => {
     throw new Error( 'Error modal appeared when doing a full install' );
   }
 
-  // Actually check that the programs are installed using the launcher's
-  // registry utility
-  await verifyGameInstalled();
-
-  // Try launching the game
-  // Click the 'PLAY' button
-  await window.click( 'button.launch' );
-  if ( await window.isVisible( '.modal-error' ) ) {
-    // An error appeared when launching the game
-    throw new Error( 'Error modal appeared when launching the game' );
-  }
-
-  // Kill FreeSO.exe
-  await killGame();
-} );
-
-test( 'should still be installed after restarting the launcher', async () => {
-  // Programs should still be installed after a reboot
-  await verifyGameInstalled();
-} );
-
-async function verifyGameInstalled() {
+  // Check the game is correctly installed
   const { getInstalled } = require( '../../fsolauncher/lib/registry' );
   const programs = await getInstalled();
   const isInstalled = programs.reduce( ( status, program ) => {
@@ -141,14 +132,27 @@ async function verifyGameInstalled() {
   }, {} );
   expect( isInstalled.FSO ).toBeTruthy();
   expect( isInstalled.TSO ).toBeTruthy();
-}
 
-async function killGame() {
-  if ( process.platform != 'win32' ) return;
-  try {
-    console.info( 'killing any running instances of freeso.exe...' );
-    await exec( 'taskkill /F /IM freeso.exe' );
-  } catch ( err ) {
-    console.error( 'error killing freeso:', err );
+  // Click the 'PLAY' button
+  await window.click( 'button.launch' );
+  if ( await window.isVisible( '.modal-error' ) ) {
+    // An error appeared when launching the game
+    throw new Error( 'Error modal appeared when launching the game' );
   }
-}
+
+  // Check FreeSO.exe is running
+  const launched = await checkProcRunning( 'FreeSO' );
+  expect( launched ).toBeTruthy();
+} );
+
+test( 'should still be installed after restarting the launcher', async () => {
+  // Programs should still be installed after a reboot
+  const { getInstalled } = require( '../../fsolauncher/lib/registry' );
+  const programs = await getInstalled();
+  const isInstalled = programs.reduce( ( status, program ) => {
+    status[ program.key ] = program.isInstalled;
+    return status;
+  }, {} );
+  expect( isInstalled.FSO ).toBeTruthy();
+  expect( isInstalled.TSO ).toBeTruthy();
+} );
