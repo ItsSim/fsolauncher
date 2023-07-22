@@ -32,6 +32,11 @@ module.exports = function( { from, to, immediate = false } ) {
 
     _request = httpModule.get( from, { headers: { 'Pragma': 'no-cache' } },
       ( response ) => {
+        console.info( 'downloading', {
+          from,
+          statusCode: response.statusCode,
+          headers: response.headers
+        } );
         if ( response.statusCode >= 200 && response.statusCode <= 299 ) {
           _onDownload( response );
           response.on( 'data', _onData );
@@ -64,7 +69,6 @@ module.exports = function( { from, to, immediate = false } ) {
   };
 
   const _onDownload = ( response ) => {
-    console.info( 'downloading', { from, headers: response.headers } );
     _response = response;
     _length = parseInt( response.headers[ 'content-length' ], 10 );
   };

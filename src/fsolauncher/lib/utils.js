@@ -115,7 +115,11 @@ function getJSON( url, timeout = 30000 ) {
   return new Promise( ( resolve, reject ) => {
     const httpModule = url.startsWith( 'https' ) ? https : http;
     const req = httpModule.get( url, ( response ) => {
-      console.info( 'getting json', { url, timeout, headers: response.headers } );
+      console.info( 'getting json', {
+        url,
+        statusCode: response.statusCode,
+        headers: response.headers
+      } );
       let data = '';
       // A response status in the 200 range is a success status and can be resolved
       if ( response.statusCode >= 200 && response.statusCode <= 299 ) {
