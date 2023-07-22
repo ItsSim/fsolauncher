@@ -50,14 +50,14 @@ test.beforeEach( async () => {
   console.info( '[beforeEach] launched electronApp' );
 
   // Log main process
-  electronApp.process().stdout.on( 'data', data => console.info( `[Main] ${data}` ) );
-  electronApp.process().stderr.on( 'data', error => console.info( `[Main] ${error}` ) );
+  electronApp.process().stdout.on( 'data', data => console.info( `[main] ${data}` ) );
+  electronApp.process().stderr.on( 'data', error => console.info( `[main] ${error}` ) );
 
   window = await electronApp.firstWindow();
   console.info( '[beforeEach] waited for firstWindow' );
 
   // Log renderer process
-  window.on( 'console', log => console.info( `[Renderer] ${log.text()}` ) );
+  window.on( 'console', log => console.info( `[renderer] ${log.text()}` ) );
 
   await window.waitForLoadState( 'load' ); // Waits for the page to be completely loaded
   console.info( '[beforeEach] achieved loadState' );
@@ -122,7 +122,7 @@ test( 'should do a complete install', async () => {
   await window.waitForSelector( '#full-install', { state: 'hidden', timeout: INSTALL_TIMEOUT_MS } );
 
   if ( await window.isVisible( '.modal-error' ) ) {
-    // An error appeared (will be console.logged)
+    // An error modal appeared which means there was an issue with the installation
     throw new Error( 'Error modal appeared when doing a full install' );
   }
 
@@ -139,18 +139,11 @@ test( 'should do a complete install', async () => {
   // Click the 'PLAY' button
   await window.click( 'button.launch' );
   if ( await window.isVisible( '.modal-error' ) ) {
-    // An error appeared when launching the game
+    // An error modal appeared when launching the game
     throw new Error( 'Error modal appeared when launching the game' );
   }
-  // Kill FreeSO.exe on Windows (Playwright quirk)
-  if ( process.platform === 'win32' ) {
-    try {
-      console.info( 'test: killing any running instances of freeso.exe...' );
-      console.info( await exec( 'taskkill /F /IM freeso.exe' ) );
-    } catch ( err ) {
-      console.error( 'error killing freeso:', err );
-    }
-  }
+  // Kill FreeSO.exe after launching
+  await killGame();
 } );
 
 test( 'should still be installed after restarting the launcher', async () => {
@@ -164,3 +157,25 @@ test( 'should still be installed after restarting the launcher', async () => {
   expect( isInstalled.FSO ).toBeTruthy();
   expect( isInstalled.TSO ).toBeTruthy();
 } );
+
+async function killGame() {
+  // Kill FreeSO.exe on Windows and macOS
+  if ( process.platform === 'win32' ) {
+    try {
+      console.info( 'killing any running instances of freeso.exe...' );
+      console.info( await exec( 'taskkill /F /IM freeso.exe' ) );
+    } catch ( err ) {
+      console.error( 'error killing freeso:', err );
+    }
+  } else if ( process.platform === 'darwin' ) {
+    try {
+      console.info( 'killing any running instances of FreeSO on macOS...' );
+      // 'pgrep' finds the process ID of a running program
+      const { stdout: pid } = await exec( 'pgrep -f FreeSO.exe' );
+      // 'pkill' kills the process by its ID
+      console.info( await exec( `pkill -TERM -P ${pid}` ) );
+    } catch ( err ) {
+      console.error( 'error killing FreeSO:', err );
+    }
+  }
+}
