@@ -171,7 +171,7 @@ async function killGame() {
     try {
       console.info( 'killing any running instances of FreeSO on macOS...' );
       // 'pgrep' finds the process ID of a running program
-      const { stdout: pid } = await exec( 'pgrep -f FreeSO.exe' );
+      const { stdout: pid } = await exec( 'pgrep -f freeso.command' );
       // 'pkill' kills the process by its ID
       console.info( await exec( `pkill -TERM -P ${pid}` ) );
     } catch ( err ) {
