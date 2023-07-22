@@ -45,28 +45,31 @@ test.beforeEach( async () => {
     args: [ appInfo.main, '--test-mode=true' ], // Main file from package.json
     executablePath: appInfo.executable // Path to the Electron executable
   } );
+  console.info( '[beforeEach] launched electronApp' );
 
   // Log main process
   electronApp.process().stdout.on( 'data', data => console.info( `[Main] ${data}` ) );
   electronApp.process().stderr.on( 'data', error => console.info( `[Main] ${error}` ) );
 
   window = await electronApp.firstWindow();
+  console.info( '[beforeEach] waited for firstWindow' );
 
   // Log renderer process
   window.on( 'console', log => console.info( `[Renderer] ${log.text()}` ) );
 
   await window.waitForLoadState( 'load' ); // Waits for the page to be completely loaded
+  console.info( '[beforeEach] achieved loadState' );
 } );
 
 test.afterEach( async () => {
   try {
-    console.info( 'setting global.willQuit to true...' );
+    console.info( '[afterEach] setting global.willQuit to true...' );
     await electronApp.evaluate( async () => global.willQuit = true );
-    console.info( 'global.willQuit has been set to true - attempting to close the app...' );
+    console.info( '[afterEach] global.willQuit has been set to true - attempting to close the app...' );
     await electronApp.close();
-    console.info( 'the app has been closed.' );
+    console.info( '[afterEach] the app has been closed.' );
   } catch ( err ) {
-    console.error( 'an error occurred in afterEach hook:', err );
+    console.error( '[afterEach] an error occurred:', err );
   }
 } );
 
