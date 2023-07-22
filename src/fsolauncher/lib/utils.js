@@ -132,6 +132,7 @@ function getJSON( url, timeout = 30000 ) {
             reject( err );
           }
         } );
+        response.on( 'error', reject );
       } else {
         reject( new Error( `Request failed with status code ${response.statusCode}` ) );
       }
