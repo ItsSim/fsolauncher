@@ -4,6 +4,7 @@ const axios = require( 'axios' );
 const { EventEmitter } = require( 'events' );
 
 module.exports = function( { from, to, immediate = false } ) {
+  const maxRetries = 5; // Maximum retry limit
   const events = new EventEmitter();
 
   /**
@@ -91,7 +92,12 @@ module.exports = function( { from, to, immediate = false } ) {
     _failed = true;
     console.error( 'download error', e );
     events.emit( 'error', e.message );
-    _onEnd();
+
+    if ( _retries < maxRetries ) {
+      setTimeout( retry, 5000 );
+    } else {
+      _onEnd();
+    }
   };
 
   const _onDownload = ( response ) => {
@@ -104,12 +110,8 @@ module.exports = function( { from, to, immediate = false } ) {
 
   const _onEnd = async () => {
     if ( ! _failed ) {
-      if ( _bytesRead === 0 ) {
-        events.emit(
-          'internal-retry',
-          'Download size was zero. Retrying download in 5 seconds.'
-        );
-        return setTimeout( () => retry(), 5000 );
+      if ( _bytesRead === 0 && _retries < maxRetries ) {
+        return setTimeout( retry, 5000 );
       }
     }
 
@@ -118,7 +120,12 @@ module.exports = function( { from, to, immediate = false } ) {
     events.emit( 'end', to );
   };
 
-  const retry = () => ( _fileStream.end(), _retries++, run() );
+  const retry = () => {
+    console.info( `retrying ${from}` );
+    _fileStream.end();
+    _retries++;
+    run();
+  };
 
   const getProgress = () =>
     parseInt( ( ( 100.0 * _bytesRead ) / _length ).toFixed( 0 ) );

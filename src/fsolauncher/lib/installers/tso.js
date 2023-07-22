@@ -119,9 +119,7 @@ class TSOInstaller {
   download() {
     return new Promise( ( resolve, reject ) => {
       this.dl.run();
-      this.dl.events.on( 'error', err => {
-        console.error( err );
-      } );
+      this.dl.events.on( 'error', () => {} );
       this.dl.events.on( 'end', _fileName => {
         this.haltProgress = true;
         if ( this.dl.hasFailed() ) {
