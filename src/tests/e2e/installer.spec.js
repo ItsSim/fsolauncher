@@ -2,8 +2,10 @@ const { _electron: electron } = require( 'playwright' );
 const { test, expect } = require( '@playwright/test' );
 const { findLatestBuild, parseElectronApp, stubDialog } = require( 'electron-playwright-helpers' );
 const { stubConstants } = require( '../stubs' );
+const { promisify } = require( 'util' );
 
 const path = require( 'path' );
+const exec = promisify( require( 'child_process' ).exec );
 const fs = require( 'fs-extra' );
 
 /** @type {import('playwright').Page} */
@@ -121,7 +123,7 @@ test( 'should do a complete install', async () => {
 
   if ( await window.isVisible( '.modal-error' ) ) {
     // An error appeared (will be console.logged)
-    throw new Error( 'Error modal appeared when doing a full install' );
+    throw new Error( 'error modal appeared when doing a full install' );
   }
 
   // Check the game is correctly installed
@@ -138,7 +140,16 @@ test( 'should do a complete install', async () => {
   await window.click( 'button.launch' );
   if ( await window.isVisible( '.modal-error' ) ) {
     // An error appeared when launching the game
-    throw new Error( 'Error modal appeared when launching the game' );
+    throw new Error( 'error modal appeared when launching the game' );
+  }
+  // Kill FreeSO.exe on Windows (Playwright quirk)
+  if ( process.platform === 'win32' ) {
+    try {
+      console.info( 'killing any running instances of freeso.exe...' );
+      await exec( 'taskkill /F /IM freeso.exe' );
+    } catch ( err ) {
+      console.error( 'error killing freeso:', err );
+    }
   }
 } );
 

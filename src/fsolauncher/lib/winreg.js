@@ -40,7 +40,7 @@ module.exports = {
     try {
       // Try reading from the 64-bit registry first.
       return await readFromRegistry( keyPath, valueName );
-    } catch ( error ) {
+    } catch ( err ) {
       // If that fails, try reading from the 32-bit registry.
       return await readFromRegistry( keyPath.replace( 'SOFTWARE\\', 'SOFTWARE\\WOW6432Node\\' ), valueName );
     }
@@ -56,12 +56,12 @@ module.exports = {
       // Try checking the 64-bit registry first.
       await runWithUTF8( [ 'QUERY', `"${keyPath}"` ] );
       return true;
-    } catch ( error ) {
+    } catch ( err ) {
       // If that fails, try checking the 32-bit registry.
       try {
         await runWithUTF8( [ 'QUERY', `"${keyPath}"`.replace( 'SOFTWARE\\', 'SOFTWARE\\WOW6432Node\\' ) ] );
         return true;
-      } catch ( error ) {
+      } catch ( err ) {
         return false;
       }
     }
