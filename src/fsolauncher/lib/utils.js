@@ -26,6 +26,9 @@ function initSentry() {
   if ( dsn !== 'SENTRY_CI_DSN' ) {
     require( '@sentry/electron' ).init( {
       dsn,
+      integrations: defaultIntegrations => defaultIntegrations.filter(
+        integration => integration.name !== 'Net'
+      ),
       beforeSend( event ) {
         return sanitizeEvent( event );
       },
@@ -63,6 +66,7 @@ function obfuscatePath( filePath ) {
 
 const SENTRY_MAX_ERROR_COUNT = 25; // Maximum number of same errors to capture per hour
 const SENTRY_RESET_MINUTES = 60; // Reset error count after this many minutes
+
 const sentryErrorCounts = {};
 
 /**
@@ -95,20 +99,43 @@ function captureWithSentry( err, extra ) {
 }
 
 /**
- * @param {import('axios').CreateAxiosDefaults} options
+ * Get JSON from a specified URL.
+ *
+ * @param {{ url: string, headers?: Object }} options The options for the request.
+ *
+ * @returns {Promise<any>} A promise that resolves with the JSON data from the response.
  */
 function getJSON( options ) {
+  const { net } = require( 'electron' );
+  const { http, https } = require( 'follow-redirects' ).wrap( {
+    http: net,
+    https: net
+  } );
   return new Promise( ( resolve, reject ) => {
-    require( 'axios' )( options )
-      .then( ( response ) => {
-        console.info( 'getting json', { options, headers: response.headers } );
-        try {
-          resolve( response.data );
-        } catch ( err ) {
-          reject( err );
-        }
-      } )
-      .catch( reject );
+    const httpModule = options.url.startsWith( 'https' ) ? https : http;
+    const requestOptions = options.headers ? { headers: options.headers } : {};
+
+    const req = httpModule.get( options.url, requestOptions, ( response ) => {
+      console.info( 'getting json', { options, requestOptions } );
+
+      let data = '';
+
+      // A response status in the 200 range is a success status and can be resolved
+      if ( response.statusCode >= 200 && response.statusCode <= 299 ) {
+        response.on( 'data', chunk => data += chunk );
+        response.on( 'end', () => {
+          try {
+            resolve( JSON.parse( data ) );
+          } catch ( err ) {
+            reject( err );
+          }
+        } );
+      } else {
+        reject( new Error( `Request failed with status code ${response.statusCode}` ) );
+      }
+    } );
+
+    req.on( 'error', reject );
   } );
 }
 

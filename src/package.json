@@ -33,11 +33,11 @@
   },
   "dependencies": {
     "@sentry/electron": "^4.7.0",
-    "axios": "^1.4.0",
     "deflate-js": "^0.2.3",
     "electron-custom-notifications": "file:../vendor/electron-custom-notifications",
     "electron-pug": "^2.0.0",
     "fix-path": "^3.0.0",
+    "follow-redirects": "^1.15.2",
     "fs-extra": "^10.1.0",
     "ini": "^2.0.0",
     "os-locale": "^5.0.0",

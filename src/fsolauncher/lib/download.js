@@ -1,56 +1,25 @@
 const fs = require( 'fs-extra' );
 const path = require( 'path' );
-const axios = require( 'axios' );
 const { EventEmitter } = require( 'events' );
+const { net } = require( 'electron' );
+const { http, https } = require( 'follow-redirects' ).wrap( {
+  http: net,
+  https: net
+} );
 
 module.exports = function( { from, to, immediate = false } ) {
   const maxRetries = 5; // Maximum retry limit
   const events = new EventEmitter();
+  const httpModule = from.startsWith( 'https' ) ? https : http;
 
-  /**
-   * @type {number}
-   */
   let _retries = 0;
-
-  /**
-   * @type {boolean}
-   */
   let _failed;
-
-  /**
-   * @type {number}
-   */
   let _progress;
-
-  /**
-   * @type {number}
-   */
-  let _bytesRead;
-
-  /**
-   * @type {number}
-   */
+  let _bytesRead = 0;
   let _length;
-
-  /**
-   * @type {Error}
-   */
   let _error;
-
-  /**
-   * @type {import('fs').WriteStream}
-   */
   let _fileStream;
-
-  /**
-   * @type {import('axios').CancelTokenSource}
-   */
-  let _cancelSource;
-
-  /**
-   * @type {Promise<import('axios').AxiosResponse<any>>}
-   */
-  let _promise;
+  let _request;
 
   const run = async () => {
     _failed = false;
@@ -61,23 +30,18 @@ module.exports = function( { from, to, immediate = false } ) {
     await fs.ensureDir( path.dirname( to ) );
     _fileStream = fs.createWriteStream( to );
 
-    _cancelSource = axios.CancelToken.source();
+    _request = httpModule.get( from, { headers: { 'Pragma': 'no-cache' } },
+      ( response ) => {
+        if ( response.statusCode >= 200 && response.statusCode <= 299 ) {
+          _onDownload( response );
+          response.on( 'data', _onData );
+          response.on( 'end', _onEnd );
+        } else {
+          _onError( new Error( 'Non 2xx status code' ) );
+        }
+      } );
 
-    _promise = axios( {
-      method: 'get',
-      url: from,
-      responseType: 'stream',
-      headers: {
-        'Pragma': 'no-cache'
-      },
-      cancelToken: _cancelSource.token,
-    } )
-      .then( ( response ) => {
-        _onDownload( response );
-        response.data.on( 'data', _onData );
-        response.data.on( 'end', _onEnd );
-      } )
-      .catch( _onError );
+    _request.on( 'error', _onError );
   };
 
   const _onData = ( chunk ) => {
@@ -104,8 +68,6 @@ module.exports = function( { from, to, immediate = false } ) {
     console.info( 'downloading', { from, headers: response.headers } );
 
     _length = parseInt( response.headers[ 'content-length' ], 10 );
-
-    // ...
   };
 
   const _onEnd = async () => {
@@ -114,7 +76,6 @@ module.exports = function( { from, to, immediate = false } ) {
         return setTimeout( retry, 5000 );
       }
     }
-
     _progress = 100;
     _fileStream.end();
     events.emit( 'end', to );
@@ -133,8 +94,8 @@ module.exports = function( { from, to, immediate = false } ) {
   const getSizeMB = () => ( _length / 1048576 ).toFixed( 0 );
   const hasFailed = () => _failed;
   const cleanup = async () => {
-    if ( _cancelSource ) {
-      _cancelSource.cancel();
+    if ( _request ) {
+      _request.abort();
     }
     if ( _fileStream ) {
       _fileStream.end();
