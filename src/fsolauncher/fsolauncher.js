@@ -24,9 +24,10 @@ class FSOLauncher {
     this.isUpdating = false;
     this.hasInternet = false;
     this.updateLocation = false;
-    this.remeshInfo = {};
-    this.remeshInfo.location = false;
-    this.remeshInfo.version = false;
+    this.remeshInfo = {
+      location: false,
+      version: false,
+    };
     this.remoteSimitoneVersion = null;
     this.lastDetected = null;
     this.ociFolder = null;
@@ -125,10 +126,7 @@ class FSOLauncher {
    *                          release data.
    */
   getSimitoneReleaseInfo() {
-    return getJSON( {
-      url: 'https://api.github.com/repos/riperiperi/Simitone/releases/latest',
-      headers: { 'user-agent': 'node.js' }
-    } );
+    return getJSON( 'https://api.github.com/repos/riperiperi/Simitone/releases/latest' );
   }
 
   /**
@@ -226,11 +224,11 @@ class FSOLauncher {
    * @returns {Promise<object>} A promise that resolves to the response.
    */
   async getRemeshData() {
-    const data = await getJSON( {
-      url: `https://${checks.siteUrl}/${checks.remeshEndpoint}`
-    } );
-    this.remeshInfo.location = data.Location;
-    this.remeshInfo.version  = data.Version;
+    const data = await getJSON( `https://${checks.siteUrl}/${checks.remeshEndpoint}` );
+    this.remeshInfo = {
+      location: data.Location,
+      version: data.Version
+    };
     return data;
   }
 
@@ -240,11 +238,11 @@ class FSOLauncher {
    * @returns {Promise<object>} A promise that resolves to the response.
    */
   async getLauncherData() {
-    const data = await getJSON( {
-      url: `https://${checks.siteUrl}/${checks.updateEndpoint}?os=${require( 'os' ).release()}` +
+    const data = await getJSON(
+      `https://${checks.siteUrl}/${checks.updateEndpoint}?os=${require( 'os' ).release()}` +
       `&version=${version}` +
       `&fso=${( this.isInstalled && this.isInstalled.FSO ) ? '1' : '0'}`
-    } );
+    );
     this.updateLocation = data.Location;
     return data;
   }

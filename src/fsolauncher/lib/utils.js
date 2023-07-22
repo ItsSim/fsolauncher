@@ -101,29 +101,27 @@ function captureWithSentry( err, extra ) {
 /**
  * Get JSON from a specified URL.
  *
- * @param {{ url: string, headers?: Object }} options The options for the request.
+ * @param {string} url The URL to get the JSON from.
+ * @param {number} timeout Duration to wait for a response before rejecting the promise (in milliseconds).
  *
  * @returns {Promise<any>} A promise that resolves with the JSON data from the response.
  */
-function getJSON( options ) {
+function getJSON( url, timeout = 30000 ) {
   const { net } = require( 'electron' );
   const { http, https } = require( 'follow-redirects' ).wrap( {
     http: net,
     https: net
   } );
   return new Promise( ( resolve, reject ) => {
-    const httpModule = options.url.startsWith( 'https' ) ? https : http;
-    const requestOptions = options.headers ? { headers: options.headers } : {};
-
-    const req = httpModule.get( options.url, requestOptions, ( response ) => {
-      console.info( 'getting json', { options, requestOptions } );
-
+    const httpModule = url.startsWith( 'https' ) ? https : http;
+    const req = httpModule.get( url, ( response ) => {
+      console.info( 'getting json', { url, timeout, headers: response.headers } );
       let data = '';
-
       // A response status in the 200 range is a success status and can be resolved
       if ( response.statusCode >= 200 && response.statusCode <= 299 ) {
         response.on( 'data', chunk => data += chunk );
         response.on( 'end', () => {
+          clearTimeout( requestTimeout ); // Clear the timeout when response ends
           try {
             resolve( JSON.parse( data ) );
           } catch ( err ) {
@@ -134,8 +132,14 @@ function getJSON( options ) {
         reject( new Error( `Request failed with status code ${response.statusCode}` ) );
       }
     } );
-
-    req.on( 'error', reject );
+    req.on( 'error', ( err ) => {
+      clearTimeout( requestTimeout ); // Clear the timeout when error occurs
+      reject( err );
+    } );
+    const requestTimeout = setTimeout( () => {
+      req.abort(); // Abort the request on timeout
+      reject( new Error( 'Request timed out' ) );
+    }, timeout );
   } );
 }
 

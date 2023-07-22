@@ -54,9 +54,9 @@ class FSOInstaller {
       await this.step5();
       await this.step6();
       this.end();
-    } catch ( error ) {
-      this.error( error );
-      throw error; // Send it back to the caller.
+    } catch ( err ) {
+      this.error( err );
+      throw err; // Send it back to the caller.
     }
   }
 
@@ -152,10 +152,7 @@ class FSOInstaller {
    * @returns {Promise<object>} A promise that resolves with the release information.
    */
   getFreeSOGitHubReleaseInfo() {
-    return getJSON( {
-      url: 'https://api.github.com/repos/riperiperi/FreeSO/releases/latest',
-      headers: { 'user-agent': 'node.js' }
-    } );
+    return getJSON( 'https://api.github.com/repos/riperiperi/FreeSO/releases/latest' );
   }
 
   /**
@@ -164,10 +161,7 @@ class FSOInstaller {
    * @returns {Promise<object>} A promise that resolves with the release information.
    */
   getFreeSOApiReleaseInfo() {
-    return getJSON( {
-      url: 'https://api.freeso.org/userapi/update/beta',
-      headers: { 'user-agent': 'node.js' }
-    } );
+    return getJSON( 'https://api.freeso.org/userapi/update/beta' );
   }
 
   /**

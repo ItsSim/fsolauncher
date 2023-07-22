@@ -1,5 +1,4 @@
 const fs = require( 'fs-extra' );
-const path = require( 'path' );
 const { EventEmitter } = require( 'events' );
 const { net } = require( 'electron' );
 const { http, https } = require( 'follow-redirects' ).wrap( {
@@ -27,7 +26,7 @@ module.exports = function( { from, to, immediate = false } ) {
     _bytesRead = 0;
     _length = 0;
     _error = null;
-    await fs.ensureDir( path.dirname( to ) );
+    await fs.ensureDir( require( 'path' ).dirname( to ) );
     _fileStream = fs.createWriteStream( to );
 
     _request = httpModule.get( from, { headers: { 'Pragma': 'no-cache' } },
