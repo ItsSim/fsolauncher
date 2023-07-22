@@ -173,7 +173,7 @@ async function killGame() {
       // 'pgrep' finds the process ID of a running program
       const { stdout: pid } = await exec( 'pgrep -f freeso.command' );
       // 'pkill' kills the process by its ID
-      console.info( await exec( `pkill -TERM -P ${pid}` ) );
+      console.info( await exec( `pkill -TERM ${pid}` ) );
     } catch ( err ) {
       console.error( 'error killing FreeSO:', err );
     }
