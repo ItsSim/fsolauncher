@@ -123,7 +123,7 @@ test( 'should do a complete install', async () => {
 
   if ( await window.isVisible( '.modal-error' ) ) {
     // An error appeared (will be console.logged)
-    throw new Error( 'error modal appeared when doing a full install' );
+    throw new Error( 'Error modal appeared when doing a full install' );
   }
 
   // Check the game is correctly installed
@@ -140,13 +140,13 @@ test( 'should do a complete install', async () => {
   await window.click( 'button.launch' );
   if ( await window.isVisible( '.modal-error' ) ) {
     // An error appeared when launching the game
-    throw new Error( 'error modal appeared when launching the game' );
+    throw new Error( 'Error modal appeared when launching the game' );
   }
   // Kill FreeSO.exe on Windows (Playwright quirk)
   if ( process.platform === 'win32' ) {
     try {
-      console.info( 'killing any running instances of freeso.exe...' );
-      await exec( 'taskkill /F /IM freeso.exe' );
+      console.info( 'test: killing any running instances of freeso.exe...' );
+      console.info( await exec( 'taskkill /F /IM freeso.exe' ) );
     } catch ( err ) {
       console.error( 'error killing freeso:', err );
     }
