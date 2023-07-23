@@ -434,6 +434,7 @@ class FSOLauncher {
           console.error( err );
         }
         if ( ! this.remeshInfo?.version ) {
+          console.info( 'no remesh pkg available', this.remeshInfo );
           return Modal.showNoRemesh();
         }
       }
