@@ -156,7 +156,7 @@ test( 'installs the remesh package @slow', async () => {
   const dlTitle = await ( await dl.$( '.progress-title' ) ).textContent();
   const dlId = await dl.getAttribute( 'id' );
 
-  expect( dlTitle.toLowerCase ).toContain( 'remesh' );
+  expect( dlTitle.toLowerCase() ).toContain( 'remesh' );
 
   console.info( 'test: remesh installation started' );
   test.setTimeout( INSTALL_TIMEOUT_MS );
