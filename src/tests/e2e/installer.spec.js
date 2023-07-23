@@ -168,7 +168,7 @@ test( 'installs the remesh package', async () => {
   const dirPath = `${isInstalled.FSO}/Content/MeshReplace`;
 
   expect( await fs.pathExists( dirPath ) ).toBeTruthy();
-  expect( ( await fs.readdir( dirPath ) ).lengh ).toBeGreaterThan( 0 );
+  expect( ( await fs.readdir( dirPath ) ).length ).toBeGreaterThan( 0 );
 } );
 
 async function killGame() {
