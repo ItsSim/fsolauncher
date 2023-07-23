@@ -79,7 +79,7 @@ test( 'launches the app without errors', () => {
   // Setup and teardown
 } );
 
-test( 'performs a complete installation @slow', async () => {
+test( 'performs a complete installation', async () => {
   // Go to installer
   await window.click( '[page-trigger="installer"]' );
   await window.waitForSelector( '#full-install-button' );
@@ -146,7 +146,7 @@ test( 'is still installed after a launcher restart', async () => {
   expect( isInstalled.TSO ).toBeTruthy();
 } );
 
-test( 'installs the remesh package @slow', async () => {
+test( 'installs the remesh package', async () => {
   await window.click( '[page-trigger="installer"]' );
   await window.click( '[install="RMS"]' );
   await window.waitForSelector( '[data-response-id="INSTALL_COMPONENT"]' );
@@ -160,7 +160,7 @@ test( 'installs the remesh package @slow', async () => {
 
   console.info( 'test: remesh installation started' );
   test.setTimeout( INSTALL_TIMEOUT_MS );
-  await window.waitForSelector( `#${dlId}.stopped` );
+  await window.waitForSelector( `#${dlId}.stopped`, { timeout: INSTALL_TIMEOUT_MS } );
 
   const isInstalled = await getInstalled();
   const dirPath = `${isInstalled.FSO}/Content/MeshReplace`;
