@@ -75,11 +75,11 @@ test.afterEach( async () => {
   }
 } );
 
-test( 'should launch the app', () => {
+test( 'launches the app without errors', () => {
   // Setup and teardown
 } );
 
-test( 'should do a complete install', async () => {
+test( 'performs a complete installation @slow', async () => {
   // Go to installer
   await window.click( '[page-trigger="installer"]' );
   await window.waitForSelector( '#full-install-button' );
@@ -115,47 +115,58 @@ test( 'should do a complete install', async () => {
   await window.waitForSelector( '#full-install' );
 
   // Full install was started!
-  console.info( 'test: full install was reached' );
+  console.info( 'test: full install started' );
   test.setTimeout( INSTALL_TIMEOUT_MS ); // Allow whole test to run for 10 mins
 
   // Wait for the full install to finish
   await window.waitForSelector( '#full-install', { state: 'hidden', timeout: INSTALL_TIMEOUT_MS } );
 
-  if ( await window.isVisible( '.modal-error' ) ) {
-    // An error modal appeared which means there was an issue with the installation
-    throw new Error( 'Error modal appeared when doing a full install' );
-  }
+  // No error modals
+  expect( await window.isVisible( '.modal-error' ) ).toBeFalsy();
 
   // Check the game is correctly installed
-  const { getInstalled } = require( '../../fsolauncher/lib/registry' );
-  const programs = await getInstalled();
-  const isInstalled = programs.reduce( ( status, program ) => {
-    status[ program.key ] = program.isInstalled;
-    return status;
-  }, {} );
+  const isInstalled = await getInstalled();
   expect( isInstalled.FSO ).toBeTruthy();
   expect( isInstalled.TSO ).toBeTruthy();
 
   // Click the 'PLAY' button
   await window.click( 'button.launch' );
-  if ( await window.isVisible( '.modal-error' ) ) {
-    // An error modal appeared when launching the game
-    throw new Error( 'Error modal appeared when launching the game' );
-  }
+
+  // No error modals
+  expect( await window.isVisible( '.modal-error' ) ).toBeFalsy();
+
   // Kill FreeSO.exe after launching
   await killGame();
 } );
 
-test( 'should still be installed after restarting the launcher', async () => {
+test( 'is still installed after a launcher restart', async () => {
   // Programs should still be installed after a reboot
-  const { getInstalled } = require( '../../fsolauncher/lib/registry' );
-  const programs = await getInstalled();
-  const isInstalled = programs.reduce( ( status, program ) => {
-    status[ program.key ] = program.isInstalled;
-    return status;
-  }, {} );
+  const isInstalled = await getInstalled();
   expect( isInstalled.FSO ).toBeTruthy();
   expect( isInstalled.TSO ).toBeTruthy();
+} );
+
+test( 'installs the remesh package @slow', async () => {
+  await window.click( '[page-trigger="installer"]' );
+  await window.click( '[install="RMS"]' );
+  await window.waitForSelector( '[data-response-id="INSTALL_COMPONENT"]' );
+  await window.click( '[data-response-id="INSTALL_COMPONENT"] .yes-button' );
+
+  const dl = await window.waitForSelector( '#downloads-page .download' );
+  const dlTitle = await ( await dl.$( '.progress-title' ) ).textContent();
+  const dlId = await dl.getAttribute( 'id' );
+
+  expect( dlTitle.toLowerCase ).toContain( 'remesh' );
+
+  console.info( 'test: remesh installation started' );
+  test.setTimeout( INSTALL_TIMEOUT_MS );
+  await window.waitForSelector( `#${dlId}.stopped` );
+
+  const isInstalled = await getInstalled();
+  const dirPath = `${isInstalled.FSO}/Content/MeshReplace`;
+
+  expect( await fs.pathExists( dirPath ) ).toBeTruthy();
+  expect( ( await fs.readdir( dirPath ) ).lengh ).toBeGreaterThan( 0 );
 } );
 
 async function killGame() {
@@ -178,4 +189,12 @@ async function killGame() {
       console.error( 'error killing FreeSO:', err );
     }
   }
+}
+
+async function getInstalled() {
+  const { getInstalled } = require( '../../fsolauncher/lib/registry' );
+  return ( await getInstalled() ).reduce( ( status, program ) => {
+    status[ program.key ] = program.isInstalled;
+    return status;
+  }, {} );
 }
