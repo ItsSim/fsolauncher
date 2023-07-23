@@ -160,6 +160,8 @@ test( 'installs the remesh package', async () => {
 
   console.info( 'test: remesh installation started' );
   test.setTimeout( INSTALL_TIMEOUT_MS );
+
+  // Wait for the installer to finish
   await window.waitForSelector( `#${dlId}.stopped`, { timeout: INSTALL_TIMEOUT_MS } );
 
   const isInstalled = await getInstalled();
