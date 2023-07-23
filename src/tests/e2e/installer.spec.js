@@ -144,6 +144,7 @@ test( 'performs a complete installation', async () => {
 test( 'is still installed after a launcher restart', async () => {
   // Programs should still be installed after a reboot
   await window.click( '[page-trigger="installer"]' );
+  await window.waitForSelector( '.item.installed' );
   expect( await window.isVisible( '.item.installed[install="FSO"]' ) ).toBeTruthy();
   expect( await window.isVisible( '.item.installed[install="TSO"]' ) ).toBeTruthy();
 } );
