@@ -43,6 +43,7 @@ test.beforeAll( () => {
 test.beforeEach( async () => {
   // Pass in --test-mode for headless testing
   electronApp = await electron.launch( {
+    timeout: 60000,
     cwd: exeDir,
     args: [ appInfo.main, '--test-mode=true' ], // Main file from package.json
     executablePath: appInfo.executable // Path to the Electron executable
@@ -149,6 +150,9 @@ test( 'is still installed after a launcher restart', async () => {
 test( 'installs the remesh package', async () => {
   await window.click( '[page-trigger="installer"]' );
   await window.click( '[install="RMS"]' );
+
+  expect( await window.isVisible( '.modal-error' ) ).toBeFalsy();
+
   await window.waitForSelector( '[data-response-id="INSTALL_COMPONENT"]' );
   await window.click( '[data-response-id="INSTALL_COMPONENT"] .yes-button' );
 
