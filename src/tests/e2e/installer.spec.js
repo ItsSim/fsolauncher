@@ -149,6 +149,7 @@ test( 'is still installed after a launcher restart', async () => {
 
 test( 'installs the remesh package', async () => {
   await window.click( '[page-trigger="installer"]' );
+  await window.isVisible( '.item.installed[install="FSO"]' );
   await window.click( '[install="RMS"]' );
 
   expect( await window.isVisible( '.modal-error' ) ).toBeFalsy();
