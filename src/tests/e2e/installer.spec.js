@@ -7,14 +7,14 @@ const path = require( 'path' );
 const exec = promisify( require( 'child_process' ).exec );
 const fs = require( 'fs-extra' );
 
+// Timeout for long tests
+const INSTALL_TIMEOUT_MS = 15 * 60 * 1000; // 15 minutes
+
 /** @type {import('playwright').Page} */
 let window;
 
 /** @type {import('playwright').ElectronApplication} */
 let electronApp;
-
-// Timeout for long tests
-const INSTALL_TIMEOUT_MS = 15 * 60 * 1000; // 15 minutes
 
 /** @type {string} */
 let latestBuild;
@@ -37,7 +37,8 @@ test.beforeAll( () => {
   exeDir = path.dirname( appInfo.executable );
   appData = process.platform == 'win32' ? exeDir :
     require( 'os' ).homedir() + '/Library/Application Support/FreeSO Launcher';
-  installDir = process.platform == 'win32' ? 'C:\\Users\\Public\\TéstFõldér' : '~/Documents';
+  installDir = process.platform == 'win32' ? 'C:\\Users\\Public\\TéstFõldér' :
+    require( 'os' ).homedir() + '/Documents';
 
   fs.existsSync( `${appData}/FSOLauncher.ini` ) && fs.unlinkSync( `${appData}/FSOLauncher.ini` );
 } );
