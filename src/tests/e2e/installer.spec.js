@@ -172,7 +172,9 @@ test( 'installs the remesh package', async () => {
   // Wait for the installer to finish
   await window.waitForSelector( `#${dlId}.stopped`, { timeout: INSTALL_TIMEOUT_MS } );
 
-  const dirPath = installDir + '/FreeSO/Content/MeshReplace';
+  const dirPath = process.platform == 'win32' ?
+    installDir + '/FreeSO Game/FreeSO/Content/MeshReplace' :
+    installDir + '/FreeSO/Content/MeshReplace';
 
   expect( await fs.pathExists( dirPath ) ).toBeTruthy();
   expect( ( await fs.readdir( dirPath ) ).length ).toBeGreaterThan( 0 );

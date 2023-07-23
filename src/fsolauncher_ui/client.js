@@ -737,8 +737,8 @@ let ociConfirm;
   // INSPROG
   onMessage( 'INSPROG', ( a, b ) => {
     if ( ! b ) return;
-
     document.body.setAttribute( 'data-insprog', 'true' );
+
     if ( b.FSO ) {
       querySelector( '.item[install=FSO]' ).className = 'item installed';
     } else {
