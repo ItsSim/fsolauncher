@@ -1,7 +1,6 @@
 const { _electron: electron } = require( 'playwright' );
 const { test, expect } = require( '@playwright/test' );
 const { findLatestBuild, parseElectronApp, stubDialog } = require( 'electron-playwright-helpers' );
-const { stubConstants } = require( '../stubs' );
 const { promisify } = require( 'util' );
 
 const path = require( 'path' );
@@ -14,9 +13,8 @@ let window;
 /** @type {import('playwright').ElectronApplication} */
 let electronApp;
 
-// Test constants
+// Timeout for long tests
 const INSTALL_TIMEOUT_MS = 15 * 60 * 1000; // 15 minutes
-const WINDOWS_INSTALL_PATH_WITH_SPECIAL_CHARS = 'C:\\Users\\Public\\TéstFõldér';
 
 /** @type {string} */
 let latestBuild;
@@ -27,15 +25,19 @@ let appInfo;
 /** @type {string} */
 let exeDir;
 
+/** @type {string} */
+let appData;
+
+/** @type {string} */
+let installDir;
+
 test.beforeAll( () => {
   latestBuild = findLatestBuild( '../release' );
   appInfo = parseElectronApp( latestBuild );
   exeDir = path.dirname( appInfo.executable );
-
-  // Stub constants file for tests
-  stubConstants( exeDir );
-
-  const { appData } = require( '../../fsolauncher/constants' );
+  appData = process.platform == 'win32' ? exeDir :
+    require( 'os' ).homedir() + '/Library/Application Support/FreeSO Launcher';
+  installDir = process.platform == 'win32' ? 'C:\\Users\\Public\\TéstFõldér' : '~/Documents';
 
   fs.existsSync( `${appData}/FSOLauncher.ini` ) && fs.unlinkSync( `${appData}/FSOLauncher.ini` );
 } );
@@ -95,10 +97,8 @@ test( 'performs a complete installation', async () => {
 
   if ( process.platform === 'win32' ) {
     // Reproduce installation flow on Windows
-    // Stub the file dialog
-    await stubDialog( electronApp, 'showOpenDialog', { filePaths: [
-      WINDOWS_INSTALL_PATH_WITH_SPECIAL_CHARS
-    ] } );
+    // Stub the file dialog to return the predefined install path for tests
+    await stubDialog( electronApp, 'showOpenDialog', { filePaths: [ installDir ] } );
 
     // Click the 'select folder' button
     await window.click( '.oneclick-install-select' );
@@ -126,9 +126,9 @@ test( 'performs a complete installation', async () => {
   expect( await window.isVisible( '.modal-error' ) ).toBeFalsy();
 
   // Check the game is correctly installed
-  const isInstalled = await getInstalled();
-  expect( isInstalled.FSO ).toBeTruthy();
-  expect( isInstalled.TSO ).toBeTruthy();
+  await window.click( '[page-trigger="installer"]' );
+  expect( await window.isVisible( '.item.installed[install="FSO"]' ) ).toBeTruthy();
+  expect( await window.isVisible( '.item.installed[install="TSO"]' ) ).toBeTruthy();
 
   // Click the 'PLAY' button
   await window.click( 'button.launch' );
@@ -142,9 +142,9 @@ test( 'performs a complete installation', async () => {
 
 test( 'is still installed after a launcher restart', async () => {
   // Programs should still be installed after a reboot
-  const isInstalled = await getInstalled();
-  expect( isInstalled.FSO ).toBeTruthy();
-  expect( isInstalled.TSO ).toBeTruthy();
+  await window.click( '[page-trigger="installer"]' );
+  expect( await window.isVisible( '.item.installed[install="FSO"]' ) ).toBeTruthy();
+  expect( await window.isVisible( '.item.installed[install="TSO"]' ) ).toBeTruthy();
 } );
 
 test( 'installs the remesh package', async () => {
@@ -169,8 +169,7 @@ test( 'installs the remesh package', async () => {
   // Wait for the installer to finish
   await window.waitForSelector( `#${dlId}.stopped`, { timeout: INSTALL_TIMEOUT_MS } );
 
-  const isInstalled = await getInstalled();
-  const dirPath = `${isInstalled.FSO}/Content/MeshReplace`;
+  const dirPath = installDir + '/FreeSO/Content/MeshReplace';
 
   expect( await fs.pathExists( dirPath ) ).toBeTruthy();
   expect( ( await fs.readdir( dirPath ) ).length ).toBeGreaterThan( 0 );
@@ -196,12 +195,4 @@ async function killGame() {
       console.error( 'error killing FreeSO:', err );
     }
   }
-}
-
-async function getInstalled() {
-  const { getInstalled } = require( '../../fsolauncher/lib/registry' );
-  return ( await getInstalled() ).reduce( ( status, program ) => {
-    status[ program.key ] = program.isInstalled;
-    return status;
-  }, {} );
 }
