@@ -376,12 +376,15 @@ class FSOLauncher {
     const missing = this.getMissingDependencies( componentCode );
 
     if ( this.requiresInternet( componentCode ) && ! this.hasInternet ) {
+      console.info( `no internet to install ${componentCode}` );
       return Modal.showNoInternet();
     }
     if ( this.isActiveTask( componentCode ) ) {
+      console.info( `already installing ${componentCode}` );
       return Modal.showAlreadyInstalling();
     }
     if ( missing.length > 0 ) {
+      console.info( `missing requirements for ${componentCode}`, missing );
       Modal.showRequirementsNotMet( missing );
     } else {
       await this.handleInstallationModal( componentCode );
