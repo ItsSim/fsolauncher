@@ -23,7 +23,7 @@ html(class=PLATFORM + ' ' + LANGCODE)
           MONTHS: "#{MONTHS}"
         }
       };
-  body(class=LTHEME)
+  body(class=LTHEME, data-insprog='false')
     #launcher.not-installed
       .hint.arrow-left(hint-page='home' style='top:245px;left:255px')
         h1 #{TOOLTIP_TITLE_1}

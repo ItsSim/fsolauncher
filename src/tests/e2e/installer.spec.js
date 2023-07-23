@@ -65,6 +65,8 @@ test.beforeEach( async () => {
 
   await window.waitForLoadState( 'load' ); // Waits for the page to be completely loaded
   console.info( '[beforeEach] achieved loadState' );
+  await window.waitForSelector( '[data-insprog="true"]' );
+  console.info( '[beforeEach] INS_PROG was received by renderer' );
 } );
 
 test.afterEach( async () => {
@@ -144,7 +146,6 @@ test( 'performs a complete installation', async () => {
 test( 'is still installed after a launcher restart', async () => {
   // Programs should still be installed after a reboot
   await window.click( '[page-trigger="installer"]' );
-  await window.waitForSelector( '.item.installed' );
   expect( await window.isVisible( '.item.installed[install="FSO"]' ) ).toBeTruthy();
   expect( await window.isVisible( '.item.installed[install="TSO"]' ) ).toBeTruthy();
 } );
