@@ -42,7 +42,7 @@ class Events {
    */
   onInstallSimitoneUpdate() {
     this.fsolauncher.install( 'Simitone', { dir: this.fsolauncher.isInstalled.Simitone } )
-      .catch( console.error );
+      .catch( err => console.error( 'error installing simitone update', { err } ) );
   }
 
   /**
@@ -118,7 +118,7 @@ class Events {
   onInstallComponent( e, yes, componentCode, options ) {
     if ( yes ) {
       this.fsolauncher.install( componentCode, options )
-        .catch( console.error );
+        .catch( err => console.error( `error installing ${componentCode}`, { err, options } ) );
     }
   }
 

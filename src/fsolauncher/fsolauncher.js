@@ -385,10 +385,9 @@ class FSOLauncher {
     }
     if ( missing.length > 0 ) {
       console.info( `missing requirements for ${componentCode}`, missing );
-      Modal.showRequirementsNotMet( missing );
-    } else {
-      await this.handleInstallationModal( componentCode );
+      return Modal.showRequirementsNotMet( missing );
     }
+    await this.handleInstallationModal( componentCode );
   }
 
   /**
@@ -401,7 +400,6 @@ class FSOLauncher {
    */
   getMissingDependencies( componentCode ) {
     const { dependencies } = require( './constants' );
-
     return ( dependencies[ componentCode ] || [] )
       .filter( dependency => ! this.isInstalled[ dependency ] )
       .map( dependency => this.getPrettyName( dependency ) );
@@ -579,6 +577,7 @@ class FSOLauncher {
     if ( ! installDir ) {
       installDir = await this.obtainInstallDirectory( componentCode );
     }
+    console.info( 'installDir chosen', { installDir } );
     if ( ! installDir ) {
       return false;
     }
@@ -590,11 +589,13 @@ class FSOLauncher {
       // Already installed in the given path, let the user know.
       Modal.showAlreadyInstalled( this.getPrettyName( componentCode ),
         componentCode, installDir );
+      console.info( 'already installed', { componentCode } );
       return false;
     }
     if ( ! options.fullInstall ) {
       this.IPC.changePage( 'downloads' );
     }
+    console.info( 'starting the installation', { componentCode } );
     await installer.install();
 
     return true;
