@@ -79,6 +79,14 @@ module.exports = function( { from, to, immediate = false } ) {
         return; // Retrying
       }
     }
+    console.info( 'download finished', {
+      _failed,
+      _bytesRead,
+      _length,
+      from,
+      to,
+      fileExists: await fs.exists( to )
+    } );
     _progress = 100;
     _request.abort();
     _fileStream.end();
