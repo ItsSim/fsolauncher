@@ -87,22 +87,13 @@ module.exports = function( { from, to, immediate = false } ) {
   const _onDownload = ( response ) => {
     _response = response;
     _length = parseInt( response.headers[ 'content-length' ], 10 );
-    if ( from.startsWith( 'https://github.com/' ) && response.headers[ 'content-md5' ] ) {
-      _hash = crypto.createHash( 'md5' );
-    }
+    _hash = crypto.createHash( 'md5' );
   };
 
   const _onEnd = async () => {
     if ( ! _failed ) {
       if ( _bytesRead === 0 && retry() ) {
         return; // Retrying
-      }
-      if ( ! _checkMD5() ) {
-        _failed = true;
-        await cleanup();
-        if ( retry() ) {
-          return; // Retrying
-        }
       }
     }
     console.info( 'download finished', {
@@ -111,7 +102,8 @@ module.exports = function( { from, to, immediate = false } ) {
       _length,
       from,
       to,
-      fileExists: await fs.exists( to )
+      fileExists: await fs.exists( to ),
+      md5: _hash.digest( 'base64' )
     } );
     _progress = 100;
     _request.abort();
@@ -132,18 +124,6 @@ module.exports = function( { from, to, immediate = false } ) {
     }
     console.info( `retries for ${from} depleted` );
     return false;
-  }
-
-  function _checkMD5() {
-    if ( _hash && _response.headers[ 'content-md5' ] ) {
-      const md5Server = _response.headers[ 'content-md5' ];
-      const md5Calculated = _hash.digest( 'base64' );
-      if ( md5Calculated !== md5Server ) {
-        console.error( 'MD5 check failed', { from, md5Server, md5Calculated } );
-        return false;
-      }
-    }
-    return true;
   }
 
   const getProgress = () =>
