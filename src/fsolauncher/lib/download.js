@@ -7,6 +7,11 @@ const { http, https } = require( 'follow-redirects' ).wrap( {
 } );
 const crypto = require( 'crypto' );
 
+/**
+ * @param {Object} options
+ * @param {string} options.from
+ * @param {string} options.to
+ */
 module.exports = function( { from, to, immediate = false } ) {
   const maxRetries = 5; // Maximum retry limit
   const events = new EventEmitter();
@@ -39,11 +44,6 @@ module.exports = function( { from, to, immediate = false } ) {
     _error = null;
     await fs.ensureDir( require( 'path' ).dirname( to ) );
     _fileStream = fs.createWriteStream( to );
-
-    if ( from.startsWith( 'https://github.com/' ) ) {
-      _hash = crypto.createHash( 'md5' );
-    }
-
     _request = httpModule.get( from, { headers: { 'Pragma': 'no-cache' } },
       ( response ) => {
         console.info( 'downloading', {
@@ -60,7 +60,6 @@ module.exports = function( { from, to, immediate = false } ) {
           _onError( new Error( 'Non 2xx status code' ) );
         }
       } );
-
     _request.on( 'error', _onError );
   };
 
@@ -88,6 +87,9 @@ module.exports = function( { from, to, immediate = false } ) {
   const _onDownload = ( response ) => {
     _response = response;
     _length = parseInt( response.headers[ 'content-length' ], 10 );
+    if ( from.startsWith( 'https://github.com/' ) && response.headers[ 'content-md5' ] ) {
+      _hash = crypto.createHash( 'md5' );
+    }
   };
 
   const _onEnd = async () => {
