@@ -150,9 +150,34 @@ test( 'is still installed after a launcher restart', async () => {
   expect( await window.isVisible( '.item.installed[install="TSO"]' ) ).toBeTruthy();
 } );
 
-test( 'installs the remesh package', async () => {
+test( 'installs Simitone', async () => {
+  await window.click( '[page-trigger="simitone"]' );
+  await window.click( '#simitone-install-button' );
+
+  expect( await window.isVisible( '.modal-error' ) ).toBeFalsy();
+
+  await window.waitForSelector( '[data-response-id="INSTALL_COMPONENT"]' );
+  await window.click( '[data-response-id="INSTALL_COMPONENT"] .yes-button' );
+
+  const dl = await window.waitForSelector( '#downloads-page .download' );
+  const dlTitle = await ( await dl.$( '.progress-title' ) ).textContent();
+  const dlId = await dl.getAttribute( 'id' );
+
+  expect( dlTitle.toLowerCase() ).toContain( 'simitone' );
+
+  console.info( 'test: remesh installation started' );
+  test.setTimeout( INSTALL_TIMEOUT_MS );
+
+  // Wait for the installer to finish
+  await window.waitForSelector( `#${dlId}.stopped`, { timeout: INSTALL_TIMEOUT_MS } );
+
+  await window.click( '[page-trigger="simitone"]' );
+
+  expect( await window.isVisible( '#simitone-play-button' ) ).toBeTruthy();
+} );
+
+test( 'installs Remesh Package', async () => {
   await window.click( '[page-trigger="installer"]' );
-  await window.isVisible( '.item.installed[install="FSO"]' );
   await window.click( '[install="RMS"]' );
 
   expect( await window.isVisible( '.modal-error' ) ).toBeFalsy();
@@ -166,7 +191,7 @@ test( 'installs the remesh package', async () => {
 
   expect( dlTitle.toLowerCase() ).toContain( 'remesh' );
 
-  console.info( 'test: remesh installation started' );
+  console.info( 'test: remesh installation started for FreeSO' );
   test.setTimeout( INSTALL_TIMEOUT_MS );
 
   // Wait for the installer to finish
@@ -178,6 +203,24 @@ test( 'installs the remesh package', async () => {
 
   expect( await fs.pathExists( dirPath ) ).toBeTruthy();
   expect( ( await fs.readdir( dirPath ) ).length ).toBeGreaterThan( 0 );
+
+  // Now for Simitone
+  const dlSimitone = await window.waitForSelector( '#downloads-page .download:not(.stopped)' );
+  const dlTitleSimitone = await ( await dlSimitone.$( '.progress-title' ) ).textContent();
+  const dlIdSimitone = await dlSimitone.getAttribute( 'id' );
+
+  expect( dlTitleSimitone.toLowerCase() ).toContain( 'remesh' );
+
+  console.info( 'test: remesh installation started for Simitone' );
+  test.setTimeout( INSTALL_TIMEOUT_MS );
+
+  // Wait for the installer to finish
+  await window.waitForSelector( `#${dlIdSimitone}.stopped`, { timeout: INSTALL_TIMEOUT_MS } );
+
+  const dirPathSimitone = installDir + '/Simitone for Windows/Content/MeshReplace';
+
+  expect( await fs.pathExists( dirPathSimitone ) ).toBeTruthy();
+  expect( ( await fs.readdir( dirPathSimitone ) ).length ).toBeGreaterThan( 0 );
 } );
 
 async function killGame() {
