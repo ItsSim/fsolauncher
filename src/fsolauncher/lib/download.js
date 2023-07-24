@@ -5,6 +5,7 @@ const { http, https } = require( 'follow-redirects' ).wrap( {
   http: net,
   https: net
 } );
+const crypto = require( 'crypto' );
 
 module.exports = function( { from, to, immediate = false } ) {
   const maxRetries = 5; // Maximum retry limit
@@ -12,14 +13,23 @@ module.exports = function( { from, to, immediate = false } ) {
   const httpModule = from.startsWith( 'https' ) ? https : http;
 
   let _retries = 0;
+  /** @type {boolean} */
   let _failed;
+  /** @type {number} */
   let _progress;
   let _bytesRead = 0;
+  /** @type {number} */
   let _length;
+  /** @type {Error} */
   let _error;
+  /** @type {fs.WriteStream} */
   let _fileStream;
+  /** @type {import('follow-redirects').RedirectableRequest} */
   let _request;
+  /** @type {import('follow-redirects').FollowResponse} */
   let _response;
+  /** @type {crypto.Hash} */
+  let _hash;
 
   const run = async () => {
     _failed = false;
@@ -29,6 +39,10 @@ module.exports = function( { from, to, immediate = false } ) {
     _error = null;
     await fs.ensureDir( require( 'path' ).dirname( to ) );
     _fileStream = fs.createWriteStream( to );
+
+    if ( from.startsWith( 'https://github.com/' ) ) {
+      _hash = crypto.createHash( 'md5' );
+    }
 
     _request = httpModule.get( from, { headers: { 'Pragma': 'no-cache' } },
       ( response ) => {
@@ -53,6 +67,9 @@ module.exports = function( { from, to, immediate = false } ) {
   const _onData = ( chunk ) => {
     _fileStream.write( chunk );
     _bytesRead += chunk.length;
+    if ( _hash ) {
+      _hash.update( chunk );
+    }
     _progress = getProgress();
     events.emit( 'progress', _progress );
   };
@@ -77,6 +94,13 @@ module.exports = function( { from, to, immediate = false } ) {
     if ( ! _failed ) {
       if ( _bytesRead === 0 && retry() ) {
         return; // Retrying
+      }
+      if ( ! _checkMD5() ) {
+        _failed = true;
+        await cleanup();
+        if ( retry() ) {
+          return; // Retrying
+        }
       }
     }
     console.info( 'download finished', {
@@ -106,6 +130,18 @@ module.exports = function( { from, to, immediate = false } ) {
     }
     console.info( `retries for ${from} depleted` );
     return false;
+  }
+
+  function _checkMD5() {
+    if ( _hash && _response.headers[ 'content-md5' ] ) {
+      const md5Server = _response.headers[ 'content-md5' ];
+      const md5Calculated = _hash.digest( 'base64' );
+      if ( md5Calculated !== md5Server ) {
+        console.error( 'MD5 check failed', { from, md5Server, md5Calculated } );
+        return false;
+      }
+    }
+    return true;
   }
 
   const getProgress = () =>
