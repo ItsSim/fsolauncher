@@ -190,7 +190,14 @@ jobs:
     
         commit_count=$(git rev-list --count ${{ env.LATEST_RELEASE_TAG }}..HEAD)
         if [ "$commit_count" != "0" ]; then
-          release_notes=$(printf "%s\n\nThere have been %s changes since the last release. See the [list of changes](https://github.com/${{ github.repository }}/compare/${{ env.LATEST_RELEASE_TAG }}...${{ env.FULL_VERSION_NAME }})." "$release_notes" "$commit_count")
+          if [ "$commit_count" == "1" ]; then
+            changes_word="change"
+            verb="has"
+          else
+            changes_word="changes"
+            verb="have"
+          fi
+          release_notes=$(printf "%s\n\nThere %s been %s %s since the last release. See the [list of changes](https://github.com/${{ github.repository }}/compare/${{ env.LATEST_RELEASE_TAG }}...${{ env.FULL_VERSION_NAME }})." "$release_notes" "$verb" "$commit_count" "$changes_word")
         fi
     
         echo "$release_notes" > release_notes.txt
