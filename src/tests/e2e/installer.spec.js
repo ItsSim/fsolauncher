@@ -159,6 +159,10 @@ test( 'installs Simitone', async () => {
   await window.waitForSelector( '[data-response-id="INSTALL_COMPONENT"]' );
   await window.click( '[data-response-id="INSTALL_COMPONENT"] .yes-button' );
 
+  if ( process.platform == 'win32' ) {
+    await stubDialog( electronApp, 'showOpenDialog', { filePaths: [ installDir ] } );
+  }
+
   const dl = await window.waitForSelector( '#downloads-page .download' );
   const dlTitle = await ( await dl.$( '.progress-title' ) ).textContent();
   const dlId = await dl.getAttribute( 'id' );
@@ -184,10 +188,6 @@ test( 'installs Remesh Package', async () => {
 
   await window.waitForSelector( '[data-response-id="INSTALL_COMPONENT"]' );
   await window.click( '[data-response-id="INSTALL_COMPONENT"] .yes-button' );
-
-  if ( process.platform == 'win32' ) {
-    await stubDialog( electronApp, 'showOpenDialog', { filePaths: [ installDir ] } );
-  }
 
   const dl = await window.waitForSelector( '#downloads-page .download' );
   const dlTitle = await ( await dl.$( '.progress-title' ) ).textContent();
