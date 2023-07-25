@@ -6,7 +6,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "test": "playwright test",
+    "test": "playwright test -x",
     "debug": "electron --inspect=5858 .",
     "lint": "eslint . --ext .js",
     "startiss": "cmd /K \"../release/FreeSO Launcher Setup.exe\"",
