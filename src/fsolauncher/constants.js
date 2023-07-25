@@ -48,6 +48,7 @@ module.exports = {
     remeshEndpoint: 'remeshpackage',
     updateEndpoint: 'updatecheck',
     webSocketPort: 30001,
+    interval: 5 * 60 * 1000 // every 5 minutes
   },
   downloads: {
     'TSO': 'https://beta.freeso.org/LauncherResourceCentral/TheSimsOnline',

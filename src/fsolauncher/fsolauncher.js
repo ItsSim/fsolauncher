@@ -678,7 +678,7 @@ class FSOLauncher {
       this.checkLauncherUpdates( true );
       this.checkRemeshInfo();
       this.checkUpdatesRecursive();
-    }, 60000 );
+    }, checks.interval );
   }
 
   /**
