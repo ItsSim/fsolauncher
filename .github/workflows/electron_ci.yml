@@ -187,12 +187,12 @@ jobs:
         else
           release_notes="This is a stable release suitable for reliable end-user experience and optimized for production use."
         fi
-
-        commit_messages=$(git log ${{ env.LATEST_RELEASE_TAG }}..HEAD --pretty=format:"- [%h](https://github.com/${{ github.repository }}/commit/%H) %s")
-        if [ -n "$commit_messages" ]; then
-          release_notes=$(printf "%s\n\n### List of changes since the last release:\n%s" "$release_notes" "$commit_messages")
+    
+        commit_count=$(git rev-list --count ${{ env.LATEST_RELEASE_TAG }}..HEAD)
+        if [ "$commit_count" != "0" ]; then
+          release_notes=$(printf "%s\n\nThere have been %s changes since the last release. See the [list of changes](https://github.com/${{ github.repository }}/compare/${{ env.LATEST_RELEASE_TAG }}...${{ env.FULL_VERSION_NAME }})." "$release_notes" "$commit_count")
         fi
-
+    
         echo "$release_notes" > release_notes.txt
 
     - name: Create release
