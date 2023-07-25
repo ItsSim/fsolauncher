@@ -177,7 +177,7 @@ test( 'installs Simitone', async () => {
 
   await window.click( '[page-trigger="simitone"]' );
 
-  expect( await window.isVisible( '#simitone-play-button' ) ).toBeTruthy();
+  await window.waitForSelector( '#simitone-play-button' );
 } );
 
 test( 'installs Remesh Package', async () => {
