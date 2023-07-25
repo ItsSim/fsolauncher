@@ -57,7 +57,7 @@ class FSOLauncher {
     this.events = new Events( this );
     this.checkUpdatesRecursive();
     this.updateTipRecursive();
-    this.updateNetRequiredUIRecursive( true );
+    this.updateInternetStatusRecursive();
     this.events.listen();
   }
 
@@ -142,21 +142,21 @@ class FSOLauncher {
   /**
    * Hides all view elements that need internet connection.
    */
-  async updateNetRequiredUI() {
-    const hasInternet = await this.getInternetStatus();
-    if ( ! hasInternet ) {
+  async updateInternetStatus() {
+    this.hasInternet = await this.getInternetStatus();
+    if ( ! this.hasInternet ) {
       return this.IPC.hasNoInternet();
     }
     return this.IPC.hasInternet();
   }
 
   /**
-   * Recursively updates the UI that needs internet.
+   * Recursively updates the current internet status.
    */
-  updateNetRequiredUIRecursive() {
+  updateInternetStatusRecursive() {
     setTimeout( () => {
-      this.updateNetRequiredUI();
-      this.updateNetRequiredUIRecursive();
+      this.updateInternetStatus();
+      this.updateInternetStatusRecursive();
     }, 5000 );
   }
 
@@ -1128,7 +1128,7 @@ class FSOLauncher {
     this.IPC.setMaxRefreshRate( getDisplayRefreshRate() );
     this.IPC.restoreConfiguration( this.userSettings );
     this.checkRemeshInfo();
-    this.updateNetRequiredUI();
+    this.updateInternetStatus();
     this.window.focus();
   }
 

@@ -189,9 +189,14 @@ class Events {
    */
   onFullInstall() {
     if ( this.fsolauncher.activeTasks.length === 0 ) {
-      if ( this.fsolauncher.hasInternet ) Modal.showFullInstall();
-      else Modal.showNoInternetFullInstall();
+      if ( this.fsolauncher.hasInternet ) {
+        Modal.showFullInstall();
+      } else {
+        console.info( 'no internet to do a full install' );
+        Modal.showNoInternetFullInstall();
+      }
     } else {
+      console.info( 'another installation in progress, cannot do full install' );
       Modal.showAlreadyInstalling();
     }
   }
