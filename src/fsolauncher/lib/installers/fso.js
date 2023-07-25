@@ -149,7 +149,7 @@ class FSOInstaller {
    *
    * Used as a backup if the FreeSO API is down.
    *
-   * @returns {Promise<object>} A promise that resolves with the release information.
+   * @returns {Promise<Object>} A promise that resolves with the release information.
    */
   getFreeSOGitHubReleaseInfo() {
     return getJSON( 'https://api.github.com/repos/riperiperi/FreeSO/releases/latest' );
@@ -158,7 +158,7 @@ class FSOInstaller {
   /**
    * Obtain FreeSO release information from the FreeSO API.
    *
-   * @returns {Promise<object>} A promise that resolves with the release information.
+   * @returns {Promise<Object>} A promise that resolves with the release information.
    */
   getFreeSOApiReleaseInfo() {
     return getJSON( 'https://api.freeso.org/userapi/update/beta' );

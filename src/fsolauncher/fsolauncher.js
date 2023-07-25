@@ -111,18 +111,28 @@ class FSOLauncher {
    *                             internet status.
    */
   getInternetStatus() {
+    const sites = [ 'google.com', 'bing.com', 'yahoo.com' ];
     return new Promise( ( resolve, _reject ) => {
-      require( 'dns' ).lookup( 'google.com', err => {
-        this.hasInternet = ! ( err && err.code === 'ENOTFOUND' );
-        return resolve( this.hasInternet );
-      } );
+      const doCheck = ( index ) => {
+        if ( index >= sites.length ) {
+          return resolve( false );
+        }
+        require( 'dns' ).lookup( sites[ index ], err => {
+          if ( err && err.code === 'ENOTFOUND' ) {
+            doCheck( index + 1 );
+          } else {
+            return resolve( true );
+          }
+        } );
+      };
+      doCheck( 0 );
     } );
   }
 
   /**
    * Obtains Simitone release information from GitHub.
    *
-   * @returns {Promise<void>} A promise that resolves to the Simitone
+   * @returns {Promise<Object>} A promise that resolves to the Simitone
    *                          release data.
    */
   getSimitoneReleaseInfo() {
@@ -221,7 +231,7 @@ class FSOLauncher {
   /**
    * Obtains remesh package information.
    *
-   * @returns {Promise<object>} A promise that resolves to the response.
+   * @returns {Promise<Object>} A promise that resolves to the response.
    */
   async getRemeshData() {
     const data = await getJSON( `https://${checks.siteUrl}/${checks.remeshEndpoint}` );
@@ -235,7 +245,7 @@ class FSOLauncher {
   /**
    * Returns the launcher's update endpoint response.
    *
-   * @returns {Promise<object>} A promise that resolves to the response.
+   * @returns {Promise<Object>} A promise that resolves to the response.
    */
   async getLauncherData() {
     const data = await getJSON(
@@ -526,8 +536,8 @@ class FSOLauncher {
     if ( [ 'MacExtras', 'RMS' ].includes( componentCode )
       && this.isInstalled.Simitone ) {
       // Do an install for Simitone as well.
-      const smtInstaller = new runner( this, this.isInstalled.Simitone + subfolder, 'Simitone' );
-      await smtInstaller.install();
+      const simitoneInstaller = new runner( this, this.isInstalled.Simitone + subfolder, 'Simitone' );
+      await simitoneInstaller.install();
     }
     return true;
   }
@@ -1009,7 +1019,7 @@ class FSOLauncher {
    * Promise that returns FreeSO configuration
    * variables.
    *
-   * @returns {Promise<object>} A promise that returns FreeSO configuration variables.
+   * @returns {Promise<Object>} A promise that returns FreeSO configuration variables.
    */
   getFSOConfig() {
     return new Promise( ( resolve, reject ) => {
