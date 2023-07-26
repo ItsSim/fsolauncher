@@ -81,10 +81,6 @@ test.afterEach( async () => {
   }
 } );
 
-test( 'launches the app without errors', () => {
-  // Setup and teardown
-} );
-
 test( 'performs a complete installation', async () => {
   // Go to installer
   await window.click( '[page-trigger="installer"]' );
