@@ -54,7 +54,10 @@ module.exports = function( { from, to, immediate = false } ) {
         if ( response.statusCode >= 200 && response.statusCode <= 299 ) {
           _onDownload( response );
           response.on( 'data', _onData );
-          response.on( 'end', _onEnd );
+          response.on( 'end', () => {
+            _fileStream.end();
+            _fileStream.on( 'finish', _onEnd );
+          } );
           response.on( 'error', _onError );
         } else {
           _onError( new Error( 'Non 2xx status code' ) );
@@ -107,7 +110,6 @@ module.exports = function( { from, to, immediate = false } ) {
     } );
     _progress = 100;
     _request.abort();
-    _fileStream.end();
     events.emit( 'end', to );
   };
 
@@ -116,7 +118,7 @@ module.exports = function( { from, to, immediate = false } ) {
       setTimeout( () => {
         console.info( `retrying ${from}` );
         _request.abort();
-        _fileStream.end();
+        _fileStream.destroy();
         _retries++;
         run();
       }, 5000 );
