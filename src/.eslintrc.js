@@ -16,7 +16,7 @@ module.exports = {
   },
   'ignorePatterns': [ '**/vendor/*.js' ],
   'rules': {
-    'no-unused-vars': [ 'warn', { 'args': 'after-used', 'argsIgnorePattern': '^_' } ],
+    'no-unused-vars': [ 'error', { 'args': 'after-used', 'argsIgnorePattern': '^_' } ],
     'prefer-const': 'error',
     'space-in-parens': [ 'error', 'always' ],
     'space-before-blocks': [ 'error', 'always' ],

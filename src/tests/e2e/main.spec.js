@@ -27,6 +27,9 @@ test.beforeAll( () => {
   exeDir = require( 'path' ).dirname( appInfo.executable );
   appData = process.platform == 'win32' ? exeDir :
     require( 'os' ).homedir() + '/Library/Application Support/FreeSO Launcher';
+
+  // Delete config file if it exists before testing
+  fs.existsSync( `${appData}/FSOLauncher.ini` ) && fs.unlinkSync( `${appData}/FSOLauncher.ini` );
 } );
 
 test.beforeEach( async () => {

@@ -1,6 +1,6 @@
 const { _electron: electron } = require( 'playwright' );
 const { test, expect } = require( '@playwright/test' );
-const { findLatestBuild, parseElectronApp, stubDialog } = require( 'electron-playwright-helpers' );
+const { findLatestBuild, parseElectronApp } = require( 'electron-playwright-helpers' );
 
 /** @type {import('playwright').Page} */
 let window;
