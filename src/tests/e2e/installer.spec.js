@@ -149,8 +149,7 @@ test.describe( 'installer', () => {
     await window.locator( `#${dlId}.stopped` ).waitFor( { timeout: INSTALL_TIMEOUT_MS } );
 
     await window.locator( '[page-trigger="simitone"]' ).click();
-
-    expect( await window.locator( '#simitone-play-button' ).isVisible() ).toBeTruthy();
+    await window.locator( '#simitone-play-button' ).waitFor();
   } );
 
   test( 'installs Remesh Package', async () => {
