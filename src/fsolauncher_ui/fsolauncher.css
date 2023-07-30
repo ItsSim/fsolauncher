@@ -511,12 +511,16 @@ strong {
   font-family: 'Balsamiq';
 }
 
-a[href]:focus, select:focus, input:focus, [tabindex]:focus:not([install]) {
+[data-keyboard-user] a[href]:focus, 
+[data-keyboard-user] select:focus, 
+[data-keyboard-user] input:focus, 
+[data-keyboard-user] [tabindex]:focus:not([install]) {
   outline: none; 
   box-shadow: 0 0 0 3px rgba(76, 141, 238,0.5); /* Blue focus ring */
 }
 
-button:focus, .button:focus {
+[data-keyboard-user] button:focus,
+[data-keyboard-user] .button:focus {
   box-shadow: 
   0 0 0 3px rgba(76, 141, 238,0.5), /* Blue focus ring */
   inset 8px 8px 8px rgba(255, 255, 255, 0.2),

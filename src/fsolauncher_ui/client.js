@@ -670,6 +670,14 @@ let ociConfirm;
     return value;
   }
 
+  function toggleKeyboardUser( e ) {
+    if ( e.type === 'keydown' && e.key === 'Tab' ) {
+      document.body.setAttribute( 'data-keyboard-user', '' );
+    } else if ( e.type === 'mousedown' ) {
+      document.body.removeAttribute( 'data-keyboard-user' );
+    }
+  }
+
   // Events received from the main process.
   // HAS_INTERNET
   onMessage( 'HAS_INTERNET', () => {
@@ -834,7 +842,9 @@ let ociConfirm;
   addEventListener( '#overlay',                  'click',       () => clearModals() );
   addEventListener( '.oneclick-install-select',  'click',       () => ociPickFolder() );
   addEventListener( '.oneclick-install-close',   'click',       () => closeOneClickInstall() );
-  addEventListener( '.oneclick-install-confirm', 'click',       ev => ociConfirm( ev ) );
+  addEventListener( '.oneclick-install-confirm', 'click',       e => ociConfirm( e ) );
+  addEventListener( document.body,               'keydown',     e => toggleKeyboardUser( e ) );
+  addEventListener( document.body,               'mousedown',   e => toggleKeyboardUser( e ) );
 
   addEventListenerAll( '[option-id]', 'change', ( event, _b ) => {
     const currentTarget = event.currentTarget;
