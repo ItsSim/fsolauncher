@@ -362,7 +362,7 @@ html(class=PLATFORM + ' ' + LANGCODE)
           div.oneclick-install-text
             h1 #{OCI_TITLE}
             p !{OCI_TEXT}
-          div.oneclick-install-select(onclick="ociPickFolder()")
+          div.oneclick-install-select
             <svg width="111" height="93" viewBox="0 0 111 93" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M4.625 32.375V0H32.375C40.2144 8.98175 43.3409 13.875 50.875 13.875H106.375V32.375H4.625ZM0 41.625L9.25 92.5H101.75L111 41.625H0Z" fill="url(#paint0_linear_1_14)"/>
               <defs>
@@ -385,8 +385,8 @@ html(class=PLATFORM + ' ' + LANGCODE)
                 </linearGradient>
               </defs>
             </svg>
-            button.oneclick-install-confirm(style='display: none' onclick="ociConfirm(event)") #{OCI_CONFIRM}
-          div.oneclick-install-close(onclick="closeOneClickInstall()")
+            button.oneclick-install-confirm(style='display: none') #{OCI_CONFIRM}
+          div.oneclick-install-close
             i.material-icons(style="font-size:16px;vertical-align:middle;margin-right:5px")
               | arrow_back
             | #{OCI_CANCEL}

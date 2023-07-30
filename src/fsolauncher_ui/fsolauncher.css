@@ -511,6 +511,20 @@ strong {
   font-family: 'Balsamiq';
 }
 
+a[href]:focus, select:focus, input:focus, [tabindex]:focus:not([install]) {
+  outline: none; 
+  box-shadow: 0 0 0 3px rgba(76, 141, 238,0.5); /* Blue focus ring */
+}
+
+button:focus, .button:focus {
+  box-shadow: 
+  0 0 0 3px rgba(76, 141, 238,0.5), /* Blue focus ring */
+  inset 8px 8px 8px rgba(255, 255, 255, 0.2),
+  inset -2px -2px 2px rgba(0, 0, 0, 0.2), 
+  0 1px 3px rgba(0, 0, 0, 0.12),
+  0 1px 2px rgba(0, 0, 0, 0.24)!important;
+}
+
 button,
 .button {
   /*text-shadow: 0px 3px 0px rgba(0,0,0,0.075);*/
@@ -649,22 +663,26 @@ button.blue:hover,
   /*box-shadow: 0 19px 38px rgba(0,0,0,0.1), 0 15px 12px rgba(0,0,0,0.1);*/
 }
 
-#downloads > div > .item:hover {
+#downloads > div > .item:hover,
+#downloads > div > .item:focus {
   background-size: 90% !important;
 }
 
-#downloads > div.block > .item:hover {
+#downloads > div.block > .item:hover,
+#downloads > div.block > .item:focus {
   background-size: 35% !important;
 }
 
-#downloads > div > .item[install='MacExtras']:hover {
+#downloads > div > .item[install='MacExtras']:hover,
+#downloads > div > .item[install='MacExtras']:focus {
   background-size: 70% !important;
 }
 #downloads > div > .item[install='Mono'] {
   background-color: #fff !important;
 }
 
-#downloads > div > .item[install='Mono']:hover {
+#downloads > div > .item[install='Mono']:hover,
+#downloads > div > .item[install='Mono']:focus {
   background-size: 120% !important;
 }
 

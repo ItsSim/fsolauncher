@@ -41,7 +41,10 @@ let ociPickFolder;
 let ociConfirm;
 
 ( () => {
-  const socket = window.io( `https://${PUG_VARS.WS_URL}:${PUG_VARS.WS_PORT}` );
+  const socket = window.io( `https://${PUG_VARS.WS_URL}:${PUG_VARS.WS_PORT}`, {
+    reconnectionAttempts: 8,
+    reconnectionDelay: 2000
+  } );
 
   const clickAudio = new window.Howl( { src: 'sounds/click.wav', volume: 0.4 } );
   const modalAudio = new window.Howl( { src: 'sounds/modal.wav', volume: 0.4 } );
@@ -81,16 +84,25 @@ let ociConfirm;
       promise.then( resolve, reject );
     } );
   }
-  function addEventListener( a, b, c ) {
-    a.tagName
-      ? a.addEventListener( b, c )
-      : querySelector( a ).addEventListener( b, c );
-  }
-  function addEventListenerAll( a, b, c ) {
-    const e = querySelectorAll( a );
-    for ( a = 0; a < e.length; a++ ) {
-      e[ a ].addEventListener( b, a => c( a, e ) );
+  function addEventListener( s, eventType, callback ) {
+    s = s.tagName ? s : querySelector( s );
+    if ( eventType === 'click' ) {
+      s.setAttribute( 'role', 'button' );
+      s.setAttribute( 'tabindex', '0' );
+      s.addEventListener( 'keydown', e => e.key === 'Enter' || e.key === ' ' ? callback( e ) : null );
     }
+    s.addEventListener( eventType, callback );
+  }
+
+  function addEventListenerAll( s, eventType, callback ) {
+    querySelectorAll( s ).forEach( element => {
+      if ( eventType === 'click' ) {
+        element.setAttribute( 'role', 'button' );
+        element.setAttribute( 'tabindex', '0' );
+        element.addEventListener( 'keydown', e => e.key === 'Enter' || e.key === ' ' ? callback( e, element ) : null );
+      }
+      element.addEventListener( eventType, e => callback( e, element ) );
+    } );
   }
   function setVersion( v ) {
     return querySelector( '#electron-version' ).textContent = v;
@@ -321,7 +333,7 @@ let ociConfirm;
       const hints = querySelectorAll( `[hint-page="${pageId}"]` );
       for ( let j = 0; j < hints.length; j++ ) {
         hints[ j ].style.display = 'block';
-        hints[ j ].addEventListener( 'click', e => {
+        addEventListener( hints[ j ], 'click', e => {
           e.currentTarget.style.display = 'none';
         } );
       }
@@ -453,8 +465,8 @@ let ociConfirm;
     const pageContent = querySelector( '#notifications-page .page-content' );
     pageContent.prepend( notificationElement );
 
-    querySelector( `#FSONotification${id} .notification-body` )
-      .addEventListener( 'click', ( _e ) => {
+    addEventListener( `#FSONotification${id} .notification-body`,
+      'click', ( _e ) => {
         if ( url ) {
           window.open( url, '_blank' );
         }
@@ -534,12 +546,12 @@ let ociConfirm;
     const yesButton = modalElement.querySelector( '.yes-button' );
     const noButton  = modalElement.querySelector( '.no-button' );
 
-    yesButton.addEventListener( 'click', function () {
+    addEventListener( yesButton, 'click', function () {
       closeModal( modalDiv );
       modalRespId && window.shared.send( modalRespId, ! 0, extra );
     } );
     if ( noText ) {
-      noButton.addEventListener( 'click', function () {
+      addEventListener( noButton, 'click', function () {
         closeModal( modalDiv );
         modalRespId && window.shared.send( modalRespId, ! 1, extra );
       } );
@@ -809,17 +821,20 @@ let ociConfirm;
   } );
 
   // Renderer HTML event listeners.
-  addEventListener( '.launch',                  'click',       () => send( 'PLAY' ) );
-  addEventListener( '.launch',                  'contextmenu', () => send( 'PLAY', true ) );
-  addEventListener( '#refresh-home-button',     'click',       () => fetchNews( true ) );
-  addEventListener( '#simitone-play-button',    'click',       () => send( 'PLAY_SIMITONE' ) );
-  addEventListener( '#simitone-play-button',    'contextmenu', () => send( 'PLAY_SIMITONE', true ) );
-  addEventListener( '#full-install-button',     'click',       () => send( 'FULL_INSTALL' ) );
-  addEventListener( '#full-install-button',     'click',       () => clearInstallerHints() );
-  addEventListener( '#update-check',            'click',       () => send( 'CHECK_UPDATES' ) );
-  addEventListener( '#simitone-install-button', 'click',       () => send( 'INSTALL', 'Simitone' ) );
-  addEventListener( '#simitone-should-update',  'click',       () => send( 'INSTALL_SIMITONE_UPDATE' ) );
-  addEventListener( '#overlay',                 'click',       () => clearModals() );
+  addEventListener( '.launch',                   'click',       () => send( 'PLAY' ) );
+  addEventListener( '.launch',                   'contextmenu', () => send( 'PLAY', true ) );
+  addEventListener( '#refresh-home-button',      'click',       () => fetchNews( true ) );
+  addEventListener( '#simitone-play-button',     'click',       () => send( 'PLAY_SIMITONE' ) );
+  addEventListener( '#simitone-play-button',     'contextmenu', () => send( 'PLAY_SIMITONE', true ) );
+  addEventListener( '#full-install-button',      'click',       () => send( 'FULL_INSTALL' ) );
+  addEventListener( '#full-install-button',      'click',       () => clearInstallerHints() );
+  addEventListener( '#update-check',             'click',       () => send( 'CHECK_UPDATES' ) );
+  addEventListener( '#simitone-install-button',  'click',       () => send( 'INSTALL', 'Simitone' ) );
+  addEventListener( '#simitone-should-update',   'click',       () => send( 'INSTALL_SIMITONE_UPDATE' ) );
+  addEventListener( '#overlay',                  'click',       () => clearModals() );
+  addEventListener( '.oneclick-install-select',  'click',       () => ociPickFolder() );
+  addEventListener( '.oneclick-install-close',   'click',       () => closeOneClickInstall() );
+  addEventListener( '.oneclick-install-confirm', 'click',       ev => ociConfirm( ev ) );
 
   addEventListenerAll( '[option-id]', 'change', ( event, _b ) => {
     const currentTarget = event.currentTarget;
