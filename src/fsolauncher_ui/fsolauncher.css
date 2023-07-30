@@ -519,14 +519,20 @@ strong {
   box-shadow: 0 0 0 3px rgba(76, 141, 238,0.5); /* Blue focus ring */
 }
 
-[data-keyboard-user] button:focus,
-[data-keyboard-user] .button:focus {
+[data-keyboard-user] button:not(.icon-only):focus,
+[data-keyboard-user] .button:not(.icon-only):focus {
   box-shadow: 
   0 0 0 3px rgba(76, 141, 238,0.5), /* Blue focus ring */
   inset 8px 8px 8px rgba(255, 255, 255, 0.2),
   inset -2px -2px 2px rgba(0, 0, 0, 0.2), 
   0 1px 3px rgba(0, 0, 0, 0.12),
   0 1px 2px rgba(0, 0, 0, 0.24)!important;
+}
+
+[data-keyboard-user] button.icon-only:focus,
+[data-keyboard-user] .button.icon-only:focus {
+  outline: none; 
+  box-shadow: 0 0 0 3px rgba(76, 141, 238,0.5)!important; /* Blue focus ring */
 }
 
 button,
@@ -561,6 +567,10 @@ body button.icon-only {
   box-shadow: none !important;
   opacity: 0.6;
   color: #fff;
+}
+
+body button.icon-only i {
+  margin-right: 0!important;
 }
 
 button.icon-only:hover {
