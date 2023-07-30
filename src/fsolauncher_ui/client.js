@@ -557,6 +557,13 @@ let ociConfirm;
       } );
     }
     querySelector( '#launcher' ).appendChild( modalElement );
+
+    const focusables = modalDiv.querySelectorAll(
+      'a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select, [tabindex]' 
+    );
+    if ( focusables.length > 0 ) {
+      focusables[ 0 ].focus();
+    }
     showModal( modalDiv );
   }
 
