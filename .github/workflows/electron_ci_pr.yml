@@ -55,4 +55,6 @@ jobs:
 
     - name: Run e2e tests
       run: npm run test
+      env:
+        GITHUB_RATELIMIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       working-directory: src

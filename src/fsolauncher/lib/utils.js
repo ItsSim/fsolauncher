@@ -114,7 +114,7 @@ function getJSON( url, timeout = 30000 ) {
   } );
   return new Promise( ( resolve, reject ) => {
     const httpModule = url.startsWith( 'https' ) ? https : http;
-    const req = httpModule.get( url, ( response ) => {
+    const req = httpModule.get( url, { headers: githubApiHeaders( url ) }, ( response ) => {
       console.info( 'getting json', {
         url,
         statusCode: response.statusCode,
@@ -160,11 +160,22 @@ function getDisplayRefreshRate() {
   return 60;
 }
 
+function githubApiHeaders( url, headers = {} ) {
+  if ( url.startsWith( 'https://api.github.com' ) ) {
+    const rateLimitToken = process.env.GITHUB_RATELIMIT_TOKEN;
+    if ( rateLimitToken ) {
+      headers[ 'Authorization' ] = `token ${rateLimitToken}`;
+    }
+  }
+  return headers;
+}
+
 module.exports = {
   normalizePathSlashes,
   strFormat,
   initSentry,
   captureWithSentry,
   getJSON,
-  getDisplayRefreshRate
+  getDisplayRefreshRate,
+  githubApiHeaders
 };

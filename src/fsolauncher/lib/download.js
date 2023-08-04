@@ -1,6 +1,7 @@
 const fs = require( 'fs-extra' );
 const { EventEmitter } = require( 'events' );
 const { net } = require( 'electron' );
+const { githubApiHeaders } = require( './utils' );
 const { http, https } = require( 'follow-redirects' ).wrap( {
   http: net,
   https: net
@@ -44,7 +45,8 @@ module.exports = function( { from, to, immediate = false } ) {
     _error = null;
     await fs.ensureDir( require( 'path' ).dirname( to ) );
     _fileStream = fs.createWriteStream( to );
-    _request = httpModule.get( from, { headers: { 'Pragma': 'no-cache' } },
+    _request = httpModule.get( from,
+      { headers: githubApiHeaders( from, { 'Pragma': 'no-cache', } ) },
       ( response ) => {
         console.info( 'downloading', {
           from,
