@@ -414,12 +414,7 @@ let ociConfirm;
     const newPage = document.querySelector( `#${pageId}-page` );
     newPage.style.display = 'block';
 
-    const focusables = newPage.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]'
-    );
-    if ( focusables.length > 0 ) {
-      setTimeout( () => focusables[ 0 ].focus(), 0 );
-    }
+    focusContent( newPage );
     showHints( pageId );
   };
 
@@ -565,12 +560,6 @@ let ociConfirm;
     }
     querySelector( '#launcher' ).appendChild( modalElement );
 
-    const focusables = modalDiv.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]'
-    );
-    if ( focusables.length > 0 ) {
-      focusables[ 0 ].focus();
-    }
     showModal( modalDiv );
   }
 
@@ -625,6 +614,16 @@ let ociConfirm;
       element.style.display = 'block';
     }
     showOverlay();
+    focusContent( element );
+  }
+
+  function focusContent( element ) {
+    const focusables = element.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]'
+    );
+    if ( focusables.length > 0 ) {
+      setTimeout( () => focusables[ 0 ].focus(), 0 );
+    }
   }
 
   function hideOverlay() {
