@@ -108,7 +108,7 @@ module.exports = function( { from, to, immediate = false } ) {
       from,
       to,
       fileExists: await fs.exists( to ),
-      md5: _hash.digest( 'base64' )
+      md5: _hash?.digest( 'base64' )
     } );
     _progress = 100;
     _request.abort();
