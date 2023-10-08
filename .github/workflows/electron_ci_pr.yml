@@ -17,8 +17,10 @@ jobs:
         include:
           - os: windows-latest
             build_command: "buildwin"
+            artifact_name: "fsolauncher-win-pr"
           - os: macos-latest
             build_command: "builddarwin"
+            artifact_name: "fsolauncher-mac-pr"
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -58,3 +60,41 @@ jobs:
       env:
         GITHUB_RATELIMIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       working-directory: src
+
+    - name: List contents of the release directory (Windows)
+      if: matrix.os == 'windows-latest'
+      run: |
+        dir "release"
+
+    - name: List contents of the release directory (macOS)
+      if: matrix.os == 'macos-latest'
+      run: |
+        ls -la release
+
+    - name: Upload artifacts (Windows)
+      uses: actions/upload-artifact@v2
+      if: matrix.os == 'windows-latest'
+      with:
+        name: ${{ matrix.artifact_name }}
+        path: release/FreeSO Launcher Setup.exe
+
+    - name: Upload artifacts (macOS)
+      uses: actions/upload-artifact@v2
+      if: matrix.os == 'macos-latest'
+      with:
+        name: ${{ matrix.artifact_name }}
+        path: release/FreeSO Launcher.dmg
+
+    - name: Comment PR with Workflow Run URL
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        PR_COMMENT="Workflow run for this pull request is completed. Check out the results [here]($URL). You can find the download links for the build artifacts specific to this pull request at the bottom of the page."
+        
+        curl -sSL \
+          -H "Authorization: token $GITHUB_TOKEN" \
+          -H "Accept: application/vnd.github.v3+json" \
+          -X POST \
+          -d "{\"body\": \"$PR_COMMENT\"}" \
+          "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments"
