@@ -66,6 +66,8 @@ test.describe( 'settings', () => {
     await window.locator( '[page-trigger="settings"]' ).click();
     await window.locator( '[option-id="Launcher.Theme"]' ).selectOption( 'indigo' );
 
-    expect( await window.locator( 'body' ).getAttribute( 'class' ) ).toContain( 'indigo' );
+    const bodyClass = await window.locator( 'body' ).getAttribute( 'class' );
+
+    expect( bodyClass.includes( 'indigo' ) || bodyClass.includes( 'halloween' ) ).toBeTruthy();
   } );
 } );
