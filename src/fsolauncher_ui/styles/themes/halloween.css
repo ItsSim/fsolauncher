@@ -15,7 +15,7 @@
 }
 
 .halloween #logo {
-  /*background-image: url(../../images/logo_turbo.png) !important;*/
+  background-image: url(../../images/logo_halloween.png) !important;
 }
 
 /*.halloween #launcher #sidebar li.active,
@@ -241,7 +241,7 @@
 }
 
 .halloween option {
-  background: #c04f16;
+  background: #10171e;
 }
 
 .halloween .alt-content > * {
@@ -306,7 +306,7 @@
 
 .halloween button,
 .halloween .button {
-  background-image: -webkit-linear-gradient(#ff5400, #ff5600 90%, #b03d04)!important;
+  background-image: linear-gradient(to right, rgb(255, 165, 0), rgb(255, 69, 0));
   color: #10171E;
 }
 
@@ -371,16 +371,6 @@
 
 .halloween .jumbotron span {
   color: #ff691f !important;
-}
-
-.halloween input,
-.halloween select {
-  font-weight: bold;
-  color: #10171E !important;
-  border-color: #0B1015;
-  background-image: url(../../images/15xvbd5.png),-webkit-linear-gradient(#ff5400, #ff5600 90%, #b03d04)!important;
-  background-position: 97% center;
-  background-repeat: no-repeat;
 }
 
 .halloween button.halloween-transparent,
