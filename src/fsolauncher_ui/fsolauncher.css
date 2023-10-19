@@ -28,29 +28,6 @@
   font-family: 'Balsamiq';
 }
 
-/*body.no-internet #home-page .page-content {
-    display:none
-}
-
-body.no-internet #home-page .alt-content {
-    display:block
-}
-
-body #home-page .page-content {
-    display:block
-}*/
-
-/*body #home-page .alt-content {
-    display:none
-}
-
-body.no-internet-prima #rss .alt-content {
-    display:block
-}
-body.no-internet-prima #rss #rss-root {
-    display:none
-}**/
-
 #rss .alt-content {
   display: none;
 }
@@ -124,28 +101,6 @@ body #about-page .alt-content-small {
   padding-top: 100px;
 }
 
-/*
-::-webkit-scrollbar
-{
-    width:10px;
-    padding:3px
-}
-
-::-webkit-scrollbar-thumb
-{
-    background:rgba(0,0,0,0.2)
-}
-
-::-webkit-scrollbar-thumb:active
-{
-    background:rgba(0,0,0,0.5)
-}
-
-::-webkit-scrollbar-track
-{
-    background:#ddd
-}*/
-
 div.page {
   background-size: cover;
   background-position: center center;
@@ -207,7 +162,6 @@ div#splash > div {
   margin-top: -10px;
   margin-left: -100px;
   width: 200px;
-  /*font-weight:bold;*/
   height: 20px;
 }
 
@@ -237,9 +191,7 @@ div.page > h1.jumbotron {
   padding: 40px;
   color: #fff;
   background: linear-gradient( 180deg, #4e90f3 0%, #3877d8 100% );
-  /*font-weight:700;*/
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  /*text-shadow: 0px 3px 0px rgba(0,0,0,0.075);*/
   position: fixed;
   left: 230px;
   width: calc(100% - 230px);
@@ -251,9 +203,6 @@ div.page > h1.jumbotron {
 }
 
 div.page > h1.jumbotron span {
-  /*padding-right: 10px;
-  border-right: 1px solid rgba(255, 255, 255, 0.4);
-  margin-right: 10px;*/
   display: block;
   margin-top: -10px;
   text-transform: uppercase;
@@ -307,7 +256,6 @@ div.page p {
   height: 100px;
   margin: 0 auto;
   margin-top: 20px;
-  /*font-weight:700;*/
   background: url(images/logo.png) no-repeat;
   margin-bottom: 40px;
   border-bottom: 1px solid rgba(0, 0, 0, 0);
@@ -318,15 +266,6 @@ div.page p {
 #logo:after {
   content: 'OPEN BETA';
 }
-
-/*#launcher #sidebar li.bottom
-{
-    position:absolute;
-    bottom:0;
-    left:0;
-    width:100%;
-    border-top:1px solid rgba(0,0,0,0.05)
-}*/
 
 #sidebar div.bottom {
   position: absolute;
@@ -360,7 +299,6 @@ div.page p {
   margin-bottom: 5px;
   border-radius: 6px;
   padding: 13px;
-  /*padding-left: 25px;*/
 }
 
 #launcher #sidebar li.active,
@@ -409,7 +347,6 @@ div.page p {
 
 #launcher #content #full-install .bottom h1 {
   font-size: 24px;
-  /*font-weight:700;*/
   font-weight: normal;
   margin-bottom: 10px;
 }
@@ -466,7 +403,6 @@ div.page p {
   float: left;
   width: 0%;
   height: 5px;
-  /*background:#4C8DEE;*/
   overflow: hidden;
   background-image: -webkit-linear-gradient(
       -45deg,
@@ -503,7 +439,6 @@ div.page p {
 
 strong {
   font-family: 'Fredoka One';
-  /*font-weight:700*/
 }
 
 .ru strong,
@@ -537,12 +472,10 @@ strong {
 
 button,
 .button {
-  /*text-shadow: 0px 3px 0px rgba(0,0,0,0.075);*/
   padding: 10px;
   padding-left: 12px;
   padding-right: 12px;
   font-family: inherit;
-  /*font-weight:700;*/
   text-align: center;
   border: 0;
   color: #fff;
@@ -607,15 +540,10 @@ button.launch,
   margin-top: -140px;
 }
 
-#downloads {
-  /* padding:20px;*/
-}
-
 #downloads > div {
   width: 100%;
   float: left;
   position: relative;
-  /*padding:10px*/
 }
 
 button.blue,
@@ -628,11 +556,6 @@ button.blue:hover,
   background-color: #2daac4;
 }
 
-/*li:hover i.simitone-icon,
- li.active i.simitone-icon {
-  filter: opacity(0.5) drop-shadow(0 0 0 rgb(41, 117, 231)) drop-shadow(0 0 0 rgb(41, 117, 231));
-}*/
-
 #downloads div.item div.tick {
   position: absolute;
   right: -10px;
@@ -644,7 +567,6 @@ button.blue:hover,
 }
 
 #downloads div.installed.item div.tick.installed {
-  /*background-color: #43a900 !important;*/
   width: 45px;
   height: 45px;
   background-image: url(images/icon_installed.png);
@@ -656,7 +578,6 @@ button.blue:hover,
 #downloads > div > .item {
   height: 273px;
   width: 100%;
-  /*box-shadow:0 1px 3px rgba(0,0,0,0.12),0 1px 2px rgba(0,0,0,0.24);*/
   position: relative;
   width: 100%;
   background-position: center center;
@@ -665,16 +586,10 @@ button.blue:hover,
   border-right: 1px solid #f0f0f0;
   border-top: 1px solid #f0f0f0;
   cursor: pointer;
-  /*border-radius:6px;*/
-  /*transition: box-shadow 0.3s cubic-bezier(.25,.8,.25,1);*/
 }
 
 #installer-page .page-content {
   padding-bottom: 0;
-}
-
-#downloads > div > .item:hover .tag {
-  /*box-shadow: 0 19px 38px rgba(0,0,0,0.1), 0 15px 12px rgba(0,0,0,0.1);*/
 }
 
 #downloads > div > .item:hover,
@@ -708,7 +623,6 @@ button.blue:hover,
   border-radius: 99px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   background: #e21801;
-  /*font-weight: bold;*/
   font-size: 16px;
   text-transform: uppercase;
   padding: 10px;
@@ -755,21 +669,16 @@ button.blue:hover,
   padding: 20px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   color: #595959;
-  /*width:75%;*/
   width: 300px;
-  /*border-top-right-radius:6px;
-    border-bottom-right-radius:6px*/
   border-radius: 8px;
   transition: box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 #downloads > div .tag h1 {
-  /*font-weight:700;*/
   font-size: 20px;
   color: #4C8DEE;
   margin-bottom: 10px;
   transition: color 0.2s;
-  /*text-shadow: 0px 3px 0px rgba(0,0,0,0.075);*/
 }
 
 #downloads > div .tag span {
@@ -828,13 +737,10 @@ select {
   color: #4C8DEE;
   letter-spacing: 2px;
   text-transform: uppercase;
-  /*font-weight:700;*/
-  /*color:#4C8DEE;*/
   margin-bottom: 20px;
   padding-left: 0;
   font-size: 16px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  /*text-shadow: 0px 3px 0px rgba(0,0,0,0.075);*/
 }
 
 #settings-page .form div {
@@ -872,11 +778,6 @@ select {
 #rss img {
   max-width: 100%;
   max-height: 100%;
-}
-
-#did-you-know {
-  /*background: #fff;*/
-  /*box-shadow:0 1px 3px rgba(0,0,0,0.12),0 1px 2px rgba(0,0,0,0.24);*/
 }
 
 #rss .rss-entry {
@@ -947,8 +848,6 @@ select {
   color: #4C8DEE;
   line-height: 30px;
   text-align: center;
-  /*font-weight:700;*/
-  /*text-shadow: 0px 3px 0px rgba(0,0,0,0.05);*/
 }
 
 #rss .rss-entry > a {
@@ -956,7 +855,6 @@ select {
   display: block;
   font-style: normal;
   text-decoration: none;
-  /*font-weight:700*/
 }
 
 #rss .rss-entry > span {
@@ -1030,8 +928,6 @@ select {
 }
 
 .hint h1 {
-  /*font-family:'The Sims Sans';*/
-  /*font-weight:700;*/
   display: block;
   font-size: 14px;
   font-family: inherit;
@@ -1131,11 +1027,8 @@ select {
 
 .modal h1 {
   font-size: 24px;
-  /*font-weight:bold;*/
   color: #4C8DEE;
-  /*text-transform: uppercase;*/
   margin-bottom: 20px;
-  /*text-shadow: 0px 3px 0px rgba(0,0,0,0.075);*/
 }
 
 .modal.modal-success h1:before {
@@ -1251,7 +1144,6 @@ select {
   width: 100%;
   display: block;
   padding: 20px;
-  /*font-size:22px;*/
   font-size: 20px;
 }
 
@@ -1294,9 +1186,6 @@ a {
 #tip span {
   font-family: 'Munged';
   font-size: 14px;
-}
-
-#notifications-page .page-content {
 }
 
 #notifications-page div.notification {
@@ -1596,4 +1485,35 @@ i.spin {
 #settings-page input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+#rss {
+  width: 50%;
+}
+
+#did-you-know {
+  width: 50%;
+  height: 100%;
+}
+
+#rss {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.tw {
+  height: 100%;
+}
+
+#did-you-know {
+  max-height: 100%;
+}
+
+#downloads > div,
+#settings-page .form {
+  width: 50%;
+}
+
+#downloads > div.block {
+  width: 100%;
 }
