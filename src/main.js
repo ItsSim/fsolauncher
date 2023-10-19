@@ -170,7 +170,6 @@ function createWindow() {
   options.webPreferences = {
     nodeIntegration: false,
     contextIsolation: true,
-    backgroundThrottling: false,
     offscreen: isTestMode,
     preload: require( 'path' ).join( __dirname, './fsolauncher_ui/preload.js' )
   };
