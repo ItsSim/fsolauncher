@@ -47,7 +47,6 @@ module.exports = {
     siteUrl: 'beta.freeso.org',
     remeshEndpoint: 'remeshpackage',
     updateEndpoint: 'updatecheck',
-    webSocketPort: 30001,
     interval: 5 * 60 * 1000 // every 5 minutes
   },
   downloads: {

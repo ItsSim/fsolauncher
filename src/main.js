@@ -20,7 +20,7 @@ if ( isTestMode ) {
   app.commandLine.appendSwitch( '--no-sandbox' );
 }
 
-const { appData, checks, version } = require( './fsolauncher/constants' );
+const { appData, version } = require( './fsolauncher/constants' );
 const { locale, setLocale } = require( './fsolauncher/locale' );
 
 const oslocale = require( 'os-locale' ),
@@ -124,8 +124,6 @@ setLocale( code, {
   PLATFORM: process.platform,
   SENTRY: require( './sentry.config' ).browserLoader,
   LANGCODE: code,
-  WS_PORT: checks.webSocketPort,
-  WS_URL: checks.siteUrl,
   DEFAULT_REFRESH_RATE: 60
 } );
 

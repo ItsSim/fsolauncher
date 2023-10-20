@@ -41,7 +41,8 @@ let ociPickFolder;
 let ociConfirm;
 
 ( () => {
-  const socket = window.io( `https://${PUG_VARS.WS_URL}:${PUG_VARS.WS_PORT}`, {
+  const socket = window.io( 'https://beta.freeso.org', {
+    path: '/LauncherResourceCentral/ws',
     reconnectionAttempts: 8,
     reconnectionDelay: 2000
   } );
