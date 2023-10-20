@@ -189,6 +189,13 @@ html(class=PLATFORM + ' ' + LANGCODE)
                 small
                   | #{SETTINGS_DL_HINT}
               div
+                span #{SETTINGS_DN}
+                select(option-id='Launcher.DesktopNotifications')
+                  option(value='0') #{SETTINGS_DISABLED}
+                  option(value='1') #{SETTINGS_ENABLED}
+                small
+                  | #{SETTINGS_DN_HINT}
+              div
                 span #{SETTINGS_THEME}
                 select(option-id='Launcher.Theme')
                   option(value='simitone') Simitone
