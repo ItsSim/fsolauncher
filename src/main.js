@@ -205,7 +205,7 @@ function createWindow() {
   ] ) );
 
   tray.on( 'click', () => {
-    window.isVisible() ? window.hide() : showWindow();
+    window.isVisible() ? ( process.platform == 'darwin' ? window.minimize() : window.hide() ) : showWindow();
   } );
 
   window.on( 'closed', () => { window = null; } );

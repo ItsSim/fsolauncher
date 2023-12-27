@@ -42,17 +42,19 @@ class FSOLauncher {
       Mono: false,
       SDL: false
     };
-    this.window.on( 'minimize', () => {
-      if ( ! this.minimizeReminder ) {
-        Modal.sendNotification(
-          'FreeSO Launcher',
-          locale.current.MINIMIZE_REMINDER,
-          null, null, this.isDarkMode()
-        );
-        this.minimizeReminder = true;
-      }
-      this.window.hide();
-    } );
+    if ( process.platform != 'darwin' ) {
+      this.window.on( 'minimize', () => {
+        if ( ! this.minimizeReminder ) {
+          Modal.sendNotification(
+            'FreeSO Launcher',
+            locale.current.MINIMIZE_REMINDER,
+            null, null, this.isDarkMode()
+          );
+          this.minimizeReminder = true;
+        }
+        this.window.hide();
+      } );
+    }
     this.IPC = Toast.IPC = Modal.IPC = new IPCBridge( window );
     this.events = new Events( this );
     this.checkUpdatesRecursive();
