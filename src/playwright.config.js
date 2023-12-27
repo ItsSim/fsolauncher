@@ -6,4 +6,4 @@ const reporter = [
 if ( process.env.CI ) {
   reporter.push( [ 'github' ] );
 }
-module.exports = { reporter };
+module.exports = { reporter, workers: 1 };
