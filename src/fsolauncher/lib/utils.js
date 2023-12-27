@@ -151,13 +151,10 @@ function getJSON( url, timeout = 30000 ) {
 function getDisplayRefreshRate() {
   const { screen } = require( 'electron' );
 
-  if ( process.platform == 'win32' ) {
-    const primaryDisplay = screen.getPrimaryDisplay();
-    const refreshRate = primaryDisplay.displayFrequency;
-    if ( refreshRate < 30 ) return 30;
-    return refreshRate;
-  }
-  return 60;
+  const primaryDisplay = screen.getPrimaryDisplay();
+  const refreshRate = primaryDisplay.displayFrequency;
+  if ( refreshRate < 30 ) return 30;
+  return refreshRate;
 }
 
 function githubApiHeaders( url, headers = {} ) {
