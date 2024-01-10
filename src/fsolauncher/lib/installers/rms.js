@@ -25,7 +25,7 @@ class RMSInstaller {
       ? fsolauncher.remeshInfo.location
       : downloads.RMS;
 
-    this.dl = download( { from: location, to: this.tempPath } );
+    this.dl = download( { from: location + `?${fsolauncher.remeshInfo.version ?? this.id}`, to: this.tempPath } );
   }
 
   /**
