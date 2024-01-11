@@ -89,6 +89,10 @@ jobs:
         name: ${{ matrix.artifact_name }}
         path: release/FreeSO Launcher.dmg
 
+  post_comment:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
     - name: Comment PR with Workflow Run URL
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
