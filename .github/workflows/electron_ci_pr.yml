@@ -88,21 +88,3 @@ jobs:
       with:
         name: ${{ matrix.artifact_name }}
         path: release/FreeSO Launcher.dmg
-
-  post_comment:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-    - name: Comment PR with Workflow Run URL
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-        PR_COMMENT="Workflow run for this pull request is completed. Check out the results [here]($URL). You can find the download links for the build artifacts specific to this pull request at the bottom of the page."
-        
-        curl -sSL \
-          -H "Authorization: token $GITHUB_TOKEN" \
-          -H "Accept: application/vnd.github.v3+json" \
-          -X POST \
-          -d "{\"body\": \"$PR_COMMENT\"}" \
-          "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments"
