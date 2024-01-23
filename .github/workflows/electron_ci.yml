@@ -291,7 +291,7 @@ jobs:
             {path: 'release/mac/FreeSO Launcher.dmg',       name: launcherNameMac,                 contentType: 'application/octet-stream'},
             {path: 'release/mac/sha256_darwin.txt',         name: launcherNameMac + '.sha256',     contentType: 'text/plain'},
             {path: remeshesFile,                            name: remeshesName,                    contentType: 'application/zip'},
-            {path: 'release/remeshes/sha256_remeshes.txt',  name: remeshesName + '.sha562',        contentType: 'text/plain'},
+            {path: 'release/remeshes/sha256_remeshes.txt',  name: remeshesName + '.sha256',        contentType: 'text/plain'},
           ];
           
           const release = await github.rest.repos.getReleaseByTag({
