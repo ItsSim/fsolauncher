@@ -32,7 +32,6 @@ jobs:
           hash=$(shasum -a 256 release/remeshes-*.zip | awk '{print $1}')
           echo "Remeshes hash: $hash"
           echo $hash > release/sha256_remeshes.txt
-        working-directory: other/fsolauncher-remeshes
 
       - name: Upload Remeshes as Artifact
         uses: actions/upload-artifact@v2
