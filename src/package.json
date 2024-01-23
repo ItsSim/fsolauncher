@@ -11,7 +11,7 @@
     "lint": "eslint . --ext .js",
     "startiss": "cmd /K \"../release/FreeSO Launcher Setup.exe\"",
     "compileiss": "node scripts/update-iss-version.js && innosetup-compiler --verbose ../release/win32-ia32.iss",
-    "copywin": "cpy \"./**/*\" ../fsolauncher-win32-ia32 --cwd=../release/fsolauncher-build-extras --parents",
+    "copywin": "cpy \"./**/*\" ../../release/fsolauncher-win32-ia32 --cwd=../other/fsolauncher-build-extras --parents",
     "buildwin": "node scripts/build-win.js",
     "builddarwin": "node scripts/build-darwin.js"
   },

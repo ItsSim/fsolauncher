@@ -47,6 +47,41 @@ jobs:
       with:
         node-version: 16
 
+    - name: Build Remeshes
+      run: |
+        npm install
+        npm run build
+      working-directory: other/fsolauncher-remeshes
+
+    - name: Get Remeshes Version
+      id: get_remeshes_version
+      shell: bash
+      run: |
+        echo "REMESHES_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
+      working-directory: other/fsolauncher-remeshes
+
+    - name: Calculate SHA256 hash of Remeshes (Windows)
+      if: matrix.os == 'windows-latest'
+      run: |
+        $hash = (Get-FileHash -Path "release/remeshes-*.zip" -Algorithm SHA256).Hash.ToLower()
+        echo "Windows hash: $hash"
+        echo $hash > release/sha256_remeshes.txt
+
+    - name: Calculate SHA256 hash of Remeshes (macOS)
+      if: matrix.os == 'macos-latest'
+      run: |
+        hash=$(shasum -a 256 release/remeshes-*.zip | awk '{print $1}')
+        echo "macOS hash: $hash"
+        echo $hash > release/sha256_remeshes.txt
+
+    - name: Upload Remeshes as Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: remeshes-zip
+        path: |
+          release/remeshes-*.zip
+          release/sha256_remeshes.txt
+
     - name: Cache Electron binaries
       id: cache-electron-binaries
       uses: actions/cache@v2
@@ -231,17 +266,26 @@ jobs:
         name: fsolauncher-mac
         path: release/mac
 
+    - name: Download Remeshes
+      uses: actions/download-artifact@v2
+      with:
+        name: remeshes-zip
+        path: release/remeshes
+
     - name: Upload release assets
       uses: actions/github-script@v5
       with:
         script: |
           const fs = require('fs');
-          
+          const launcherVersion = process.env.FULL_VERSION_NAME;
+          const remeshesVersion = process.env.REMESHES_VERSION;
           const assetPaths = [
-            {path: 'release/win/FreeSO Launcher Setup.exe', name: `fsolauncher-${process.env.FULL_VERSION_NAME}.exe`, contentType: 'application/octet-stream'},
-            {path: 'release/win/sha256_win32.txt', name: `sha256-win32-${process.env.FULL_VERSION_NAME}.txt`, contentType: 'text/plain'},
-            {path: 'release/mac/FreeSO Launcher.dmg', name: `fsolauncher-${process.env.FULL_VERSION_NAME}.dmg`, contentType: 'application/octet-stream'},
-            {path: 'release/mac/sha256_darwin.txt', name: `sha256-darwin-${process.env.FULL_VERSION_NAME}.txt`, contentType: 'text/plain'}
+            {path: 'release/win/FreeSO Launcher Setup.exe', name: `fsolauncher-${launcherVersion}.exe`, contentType: 'application/octet-stream'},
+            {path: 'release/win/sha256_win32.txt', name: `fsolauncher-${launcherVersion}.exe.sha256`, contentType: 'text/plain'},
+            {path: 'release/mac/FreeSO Launcher.dmg', name: `fsolauncher-${launcherVersion}.dmg`, contentType: 'application/octet-stream'},
+            {path: 'release/mac/sha256_darwin.txt', name: `fsolauncher-${launcherVersion}.dmg.sha256`, contentType: 'text/plain'},
+            {path: `release/remeshes/remeshes-${remeshesVersion}.zip`, name: `remeshes-${remeshesVersion}.zip`, contentType: 'application/zip'},
+            {path: 'release/remeshes/sha256_remeshes.txt', name: `remeshes-${remeshesVersion}.zip.sha256`, contentType: 'text/plain'},
           ];
           
           const release = await github.rest.repos.getReleaseByTag({

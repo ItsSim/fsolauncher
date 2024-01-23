@@ -1,11 +1,9 @@
-/src/node_modules
+node_modules
 /src/FSOLauncher.ini
 /src/bin/
 /src/temp/
 /src/tests/reports/
 /release/*
-!/release/fsolauncher-build-extras/
-!/release/fsolauncher-mac-extras/
 !/release/win32-ia32.iss
 .DS_Store
 tools/fsolauncher.exe

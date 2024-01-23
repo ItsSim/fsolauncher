@@ -1,0 +1,13 @@
+{
+  "name": "fsolauncher-remeshes",
+  "version": "1.0.0",
+  "description": "A 3D remesh package for FreeSO",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "archiver": "^6.0.1"
+  }
+}
