@@ -1,4 +1,4 @@
-const strings = require( '../fsolauncher_ui/uitext.json' );
+const strings = require( '../fsolauncher-ui/uitext.json' );
 
 const locale = { current: {} };
 

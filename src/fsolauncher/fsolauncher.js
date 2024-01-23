@@ -713,9 +713,9 @@ class FSOLauncher {
 
     try {
       process.noAsar = true;
-      const fsoDir = path.join( __dirname, `../export/language_packs/${language.toUpperCase()}/TSO` )
+      const fsoDir = path.join( __dirname, `../export/language-packs/${language.toUpperCase()}/TSO` )
         .replace( 'app.asar', 'app.asar.unpacked' );
-      const tsoDir = path.join( __dirname, `../export/language_packs/${language.toUpperCase()}/FSO` )
+      const tsoDir = path.join( __dirname, `../export/language-packs/${language.toUpperCase()}/FSO` )
         .replace( 'app.asar', 'app.asar.unpacked' );
       await fs.copy( fsoDir, this.isInstalled.TSO + '/TSOClient' );
       await fs.copy( tsoDir, this.isInstalled.FSO );

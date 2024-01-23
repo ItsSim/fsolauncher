@@ -169,7 +169,7 @@ function createWindow() {
     nodeIntegration: false,
     contextIsolation: true,
     offscreen: isTestMode,
-    preload: require( 'path' ).join( __dirname, './fsolauncher_ui/preload.js' )
+    preload: require( 'path' ).join( __dirname, './fsolauncher-ui/preload.js' )
   };
 
   window = new BrowserWindow( options );
@@ -181,7 +181,7 @@ function createWindow() {
     window.openDevTools( { mode: 'detach' } );
   }
 
-  window.loadURL( `file://${__dirname}/fsolauncher_ui/fsolauncher.pug` );
+  window.loadURL( `file://${__dirname}/fsolauncher-ui/fsolauncher.pug` );
   window.on( 'restore', _e => window.setSize( width, height ) );
 
   launcher = new FSOLauncher( window, userSettings );
