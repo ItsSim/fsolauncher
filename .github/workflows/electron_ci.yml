@@ -38,8 +38,8 @@ jobs:
         with:
           name: remeshes-zip
           path: |
-            other/fsolauncher-remeshes/release/remeshes-*.zip
-            other/fsolauncher-remeshes/release/sha256_remeshes.txt
+            release/remeshes-*.zip
+            release/sha256_remeshes.txt
 
   build-launcher:
     runs-on: ${{ matrix.os }}
