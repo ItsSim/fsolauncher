@@ -177,10 +177,10 @@ function createWindow() {
   window.setMenu( null );
 
   // Allow the user to open devTools if Debug=1 in FSOLauncher.ini
-  //if ( userSettings.Launcher.Debug == '1' && ! isTestMode ) {
+  if ( userSettings.Launcher.Debug == '1' && ! isTestMode ) {
     console.info( 'debug mode enabled' );
     window.openDevTools( { mode: 'detach' } );
-  //}
+  }
 
   window.loadURL( `file://${__dirname}/fsolauncher-ui/fsolauncher.pug` );
   window.on( 'restore', _e => window.setSize( width, height ) );
