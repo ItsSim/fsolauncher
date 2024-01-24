@@ -54,7 +54,6 @@ let ociConfirm;
   const isDarwin  = querySelector( 'html' ).className.startsWith( 'darwin' );
   const isWindows = querySelector( 'html' ).className.startsWith( 'win32' );
 
-  let twitterLoaded = false;
   let simitoneInterval;
   let simitoneUpdate;
   let prevTheme;
@@ -199,12 +198,6 @@ let ociConfirm;
       }
     }
     querySelector( 'body' ).className = theme;
-
-    try {
-      await loadTwitter();
-    } catch ( terr ) {
-      console.error( 'error loading twitter', terr );
-    }
   }
 
   /**
@@ -256,13 +249,7 @@ let ociConfirm;
       spinDegrees += 360;
       homeRefreshBtnIcon.style.transform = `rotate(${spinDegrees}deg)`;
     }
-    if ( userRequested || ! twitterLoaded ) {
-      try {
-        await loadTwitter();
-      } catch ( terr ) {
-        console.error( 'error loading twitter', terr );
-      }
-    }
+
     function parseRss( errors, response ) {
       // Short pause before displaying feed to allow display to render
       // correctly.
@@ -340,40 +327,6 @@ let ociConfirm;
       }
       localStorage.setItem( hintId, true );
     }
-  }
-
-  function loadTwitter() {
-    return new Promise( ( resolve, reject ) => {
-      querySelector( '#did-you-know' ).innerHTML = '';
-      const currentTheme = querySelector( 'body' ).className,
-        twitterTheme = darkThemes.includes( currentTheme ) ? 'dark' : 'light',
-        twAnchor = createElement( 'a' );
-
-      twAnchor.className = 'twitter-timeline';
-      twAnchor.style = 'text-decoration:none;';
-      twAnchor.setAttribute( 'data-height', '490' );
-      twAnchor.setAttribute( 'data-theme', twitterTheme );
-      twAnchor.setAttribute( 'data-chrome', 'transparent' );
-      twAnchor.setAttribute( 'href', PUG_VARS.TW_URL );
-      twAnchor.innerHTML = '@FreeSOGame on Twitter';
-
-      querySelector( '#did-you-know' ).append( twAnchor );
-
-      const prevWidget = querySelector( '#tw' );
-      if ( prevWidget ) {
-        prevWidget.parentNode.removeChild( prevWidget );
-      }
-      const head = querySelector( 'head' );
-      const script = createElement( 'script' );
-      script.setAttribute( 'id', 'tw' );
-      script.src = 'https://platform.twitter.com/widgets.js';
-      script.addEventListener( 'load', () => {
-        twitterLoaded = true;
-        resolve();
-      } );
-      script.addEventListener( 'error', reject );
-      head.appendChild( script );
-    } );
   }
 
   /**
