@@ -11,12 +11,6 @@ const querySelector = q => document.querySelector( q );
  * @returns {NodeListOf<Element>}
  */
 const querySelectorAll = q => document.querySelectorAll( q );
-/**
- * @param {string} q
- *
- * @returns {Element}
- */
-const createElement = q => document.createElement( q );
 
 // Add a hook to make all links open a new window.
 window.DOMPurify.addHook( 'afterSanitizeAttributes', node => {
