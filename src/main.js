@@ -124,7 +124,8 @@ setLocale( code, {
   PLATFORM: process.platform,
   SENTRY: require( './sentry.config' ).browserLoader,
   LANGCODE: code,
-  DEFAULT_REFRESH_RATE: 60
+  DEFAULT_REFRESH_RATE: 60,
+  REMESH_PACKAGE_CREDITS: require( './fsolauncher-ui/remesh-package-credits.json' )
 } );
 
 /** @type {Electron.BrowserWindowConstructorOptions} */
@@ -176,10 +177,10 @@ function createWindow() {
   window.setMenu( null );
 
   // Allow the user to open devTools if Debug=1 in FSOLauncher.ini
-  if ( userSettings.Launcher.Debug == '1' && ! isTestMode ) {
+  //if ( userSettings.Launcher.Debug == '1' && ! isTestMode ) {
     console.info( 'debug mode enabled' );
     window.openDevTools( { mode: 'detach' } );
-  }
+  //}
 
   window.loadURL( `file://${__dirname}/fsolauncher-ui/fsolauncher.pug` );
   window.on( 'restore', _e => window.setSize( width, height ) );

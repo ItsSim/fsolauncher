@@ -13,6 +13,8 @@
     "ABOUT_FAQ_4_TEXT": "Right-click the Play button.",
     "ABOUT_FAQ_5_H1": "Need help?",
     "ABOUT_FAQ_5_TEXT": "DM us on <a href='https://twitter.com/FreeSOGame' target='_blank'>Twitter</a> or join <a href='https://discord.gg/xveESFj' target='_blank'>Discord</a>",
+    "ABOUT_FAQ_6_H1": "Remesh Package Credits",
+    "ABOUT_FAQ_6_TEXT": "Contains 3D art created by the following members of the community:",
     "ABOUT_FAQ_GITHUB": "For launcher technical issues, <a target='_blank' href='https://github.com/ItsSim/fsolauncher/issues'>submit a GitHub issue</a> to the repository.",
     "ABOUT_INTERNET": "Internet connection required to update",
     "ABOUT_LAUNCHER_VERSION": "Launcher Version",

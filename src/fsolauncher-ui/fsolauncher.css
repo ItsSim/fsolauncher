@@ -74,6 +74,16 @@ body #about-page .alt-content-small {
   display: none;
 }
 
+body #about-page ul.columns {
+  column-count: 3;
+  margin-top: -20px;
+  text-align: left;
+}
+
+body #about-page ul.columns li {
+  list-style: none;
+} 
+
 #launcher #sidebar {
   float: left;
   width: 230px;
@@ -242,7 +252,7 @@ div.error {
   background-color: #f1c40f;
 }
 
-div.page p {
+div.page p, div.page .readable-font {
   padding: 20px;
   font-family: 'Munged';
   font-size: 14px;
