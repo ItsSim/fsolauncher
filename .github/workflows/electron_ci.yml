@@ -183,7 +183,7 @@ jobs:
           release/sha256_darwin.txt
 
   create-release:
-    needs: [build-launcher, build-remeshes]
+    needs: [build-launcher, build-extras]
     runs-on: ubuntu-latest
     
     steps:
