@@ -10,7 +10,7 @@ on:
       - develop
 
 jobs:
-  build-remeshes:
+  build-extras:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
