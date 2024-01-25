@@ -1,7 +1,6 @@
 const fs = require( 'fs' );
 const archiver = require( 'archiver' );
 const path = require( 'path' );
-const { execSync } = require( 'child_process' );
 
 console.log( "Starting build script..." );
 
@@ -13,7 +12,7 @@ console.log( `Version: ${version}` );
 
 // Execute the timestamp.sh script and parse its output
 console.log( "Executing timestamp.sh script..." );
-const timestamp = execSync( 'bash timestamp.sh' ).toString().trim();
+const timestamp = fs.readFileSync( './timestamp.txt', 'utf8' ).trim();
 console.log( `Extracted timestamp: ${timestamp}` );
 
 // Output file
