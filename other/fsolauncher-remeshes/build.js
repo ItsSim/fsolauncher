@@ -13,7 +13,7 @@ console.log( `Version: ${version}` );
 // Execute the timestamp.sh script and parse its output
 console.log( "Executing timestamp.sh script..." );
 const timestamp = fs.readFileSync( './timestamp.txt', 'utf8' ).trim();
-console.log( `Extracted timestamp: ${timestamp}` );
+console.log( `Remeshes were last updated: ${timestamp}` );
 
 // Output file
 const outputFilename = `remeshes-${version}-${timestamp}.zip`;
