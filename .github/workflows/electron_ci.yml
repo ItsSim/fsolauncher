@@ -315,7 +315,7 @@ jobs:
             {path: 'release/mac/sha256_darwin.txt',         name: launcherNameMac + '.sha256',     contentType: 'text/plain'},
             {path: remeshesFile,                            name: remeshesName,                    contentType: 'application/zip'},
             {path: 'release/extras/sha256_remeshes.txt',    name: remeshesName + '.sha256',        contentType: 'text/plain'},
-            {path: proxyFile,                               name: proxyName,                       contentType: 'application/zip'},
+            {path: proxyFile,                               name: proxyName,                       contentType: 'application/octet-stream'},
             {path: 'release/extras/sha256_proxy.txt',       name: proxyName + '.sha256',           contentType: 'text/plain'},
           ];
           
