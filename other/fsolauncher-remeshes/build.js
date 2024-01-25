@@ -13,9 +13,7 @@ console.log( `Version: ${version}` );
 
 // Execute the timestamp.sh script and parse its output
 console.log( "Executing timestamp.sh script..." );
-const timestampOutput = execSync( 'bash timestamp.sh' ).toString().trim();
-console.log( `timestamp.sh output: ${timestampOutput}` );
-const timestamp = timestampOutput.split(' ')[0]; // Timestamp is the first part of the output
+const timestamp = execSync( 'bash timestamp.sh' ).toString().trim();
 console.log( `Extracted timestamp: ${timestamp}` );
 
 // Output file
