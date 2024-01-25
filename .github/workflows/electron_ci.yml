@@ -27,19 +27,33 @@ jobs:
           npm run build
         working-directory: other/fsolauncher-remeshes
 
-      - name: Calculate SHA256 hash of Remeshes
+      - name: Build Proxy
+        run: |
+          npm install
+          npm run build
+        working-directory: other/fsolauncher-proxy
+
+      - name: Calculate Remeshes SHA256
         run: |
           hash=$(shasum -a 256 release/remeshes-*.zip | awk '{print $1}')
           echo "Remeshes hash: $hash"
           echo $hash > release/sha256_remeshes.txt
 
-      - name: Upload Remeshes as Artifact
+      - name: Calculate Proxy SHA256
+        run: |
+          hash=$(shasum -a 256 release/proxy-* | awk '{print $1}')
+          echo "Proxy hash: $hash"
+          echo $hash > release/sha256_proxy.txt
+
+      - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: remeshes-zip
+          name: extras
           path: |
             release/remeshes-*.zip
             release/sha256_remeshes.txt
+            release/proxy-*
+            release/sha256_proxy.txt
 
   build-launcher:
     runs-on: ${{ matrix.os }}
@@ -265,15 +279,22 @@ jobs:
     - name: Download Remeshes
       uses: actions/download-artifact@v2
       with:
-        name: remeshes-zip
-        path: release/remeshes
+        name: extras
+        path: release/extras
 
     - name: Find Remeshes File
       id: find_remeshes_file
       run: |
-        remeshes_file=$(ls release/remeshes/remeshes-*.zip)
+        remeshes_file=$(ls release/extras/remeshes-*.zip)
         echo "REMESHES_FILE=$remeshes_file" >> $GITHUB_ENV
         echo "Found remeshes file: $remeshes_file"
+
+    - name: Find Proxy File
+      id: find_proxy_file
+      run: |
+        proxy_file=$(ls release/extras/proxy-*)
+        echo "PROXY_FILE=$proxy_file" >> $GITHUB_ENV
+        echo "Found proxy file: $proxy_file"
 
     - name: Upload release assets
       uses: actions/github-script@v5
@@ -285,13 +306,17 @@ jobs:
           const launcherNameMac = `fsolauncher-${launcherVersion}.dmg`;
           const remeshesFile = process.env.REMESHES_FILE;
           const remeshesName = remeshesFile.split('/').pop();
+          const proxyFile = process.env.PROXY_FILE;
+          const proxyName = proxyFile.split('/').pop();
           const assetPaths = [
             {path: 'release/win/FreeSO Launcher Setup.exe', name: launcherNameWindows,             contentType: 'application/octet-stream'},
             {path: 'release/win/sha256_win32.txt',          name: launcherNameWindows + '.sha256', contentType: 'text/plain'},
             {path: 'release/mac/FreeSO Launcher.dmg',       name: launcherNameMac,                 contentType: 'application/octet-stream'},
             {path: 'release/mac/sha256_darwin.txt',         name: launcherNameMac + '.sha256',     contentType: 'text/plain'},
             {path: remeshesFile,                            name: remeshesName,                    contentType: 'application/zip'},
-            {path: 'release/remeshes/sha256_remeshes.txt',  name: remeshesName + '.sha256',        contentType: 'text/plain'},
+            {path: 'release/extras/sha256_remeshes.txt',    name: remeshesName + '.sha256',        contentType: 'text/plain'},
+            {path: proxyFile,                               name: proxyName,                       contentType: 'application/zip'},
+            {path: 'release/extras/sha256_proxy.txt',       name: proxyName + '.sha256',           contentType: 'text/plain'},
           ];
           
           const release = await github.rest.repos.getReleaseByTag({
