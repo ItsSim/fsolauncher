@@ -8,6 +8,7 @@ initSentry();
 const { app, BrowserWindow, shell, Tray, Menu, nativeImage, nativeTheme } = require( 'electron' );
 
 const isTestMode = global.isTestMode = app.commandLine.getSwitchValue( 'test-mode' );
+const themeColors = require( './theme-colors' );
 
 if ( isTestMode ) {
   app.disableHardwareAcceleration();
@@ -154,6 +155,7 @@ function createWindow() {
 
   const width = 1090, height = process.platform == 'darwin' ? 646 : 664;
 
+  options.backgroundColor = themeColors[ userSettings.Launcher.Theme ] || '#fff';
   options.minWidth = width;
   options.minHeight = height;
   options.maxWidth = width;
