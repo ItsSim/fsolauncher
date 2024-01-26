@@ -39,19 +39,19 @@ html(class=PLATFORM + ' ' + LANGCODE)
           i.material-icons access_time
           #simtime 00:00 AM
         li.active(page-trigger='home')
-          i.material-icons.left home
+          i.material-icons.left.fill home
           |  #{HOME}
         li(page-trigger='installer')
-          i.material-icons.left widgets
+          i.material-icons.left.fill package_2
           |  #{INSTALLER}
         li(page-trigger='downloads')
-          i.material-icons.left get_app
+          i.material-icons.left.fill get_app
           |  #{DOWNLOADS}
         li(page-trigger='settings')
-          i.material-icons.left settings
+          i.material-icons.left.fill settings
           |  #{SETTINGS}
         li(page-trigger='notifications')
-          i.material-icons.left notifications
+          i.material-icons.left.fill notifications
           |  #{NOTIFICATIONS}
 
         div.bottom
@@ -71,7 +71,7 @@ html(class=PLATFORM + ' ' + LANGCODE)
                 -190 77 -231 78 -49 0 -53 -2 -77 -38z')
             |  SIMITONE
           li(page-trigger='about')
-            i.material-icons.left help_outline
+            i.material-icons.left help
             |  #{ABOUT}
       #content
         #home-page.page(style='display:none')
@@ -93,6 +93,13 @@ html(class=PLATFORM + ' ' + LANGCODE)
                 | #{INTERNET_REQ}
               #rss-root
             #did-you-know(style='display:none')
+              #now-trending
+                .top 
+                  h1 Hot Spots
+                  span <i>0</i> players online
+                .content
+                  ul
+
         #installer-page.page(style='display:none;background-color:#fff')
           h1.jumbotron
             button#full-install-button.turbo-transparent(style='margin-top:-10px;float:right')
@@ -106,7 +113,7 @@ html(class=PLATFORM + ' ' + LANGCODE)
           .page-content
             #full-install(style='padding:30px')
               #tip
-                <i class="material-icons">info_outline</i>
+                i.material-icons info
                 h1 #{DYK}
                 span#tip-text(style='text-align:left') #{TIP1}
               .bottom
@@ -445,6 +452,21 @@ html(class=PLATFORM + ' ' + LANGCODE)
       span(style='line-height: 25px') #{UNKNOWN}
       div.ribbon-wrapper
         div.ribbon NEW
+
+    template#now-trending-item-template 
+      li
+        .icon 
+          img(src="")
+        .info 
+          .lot-name Tangiers Casino
+          .owner
+            i.material-icons account_circle
+            span Sam Rothstein
+        .players 
+          i.material-icons.fill.busy local_fire_department
+          span 
+            i.material-icons group
+            strong.count 20
 
     if SENTRY != 'SENTRY_CI_BROWSER_LOADER'
       script(src=SENTRY, crossorigin="anonymous")

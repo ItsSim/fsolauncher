@@ -2,8 +2,12 @@
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
-  src: url(../fonts/MaterialIconsRound-Regular.otf)
-    format('opentype');
+  src: url(../fonts/MaterialSymbolsRounded.woff2)
+    format('woff2');
+}
+
+.material-icons.fill {
+  font-variation-settings: 'FILL' 1;
 }
 
 .material-icons {

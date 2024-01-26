@@ -220,6 +220,38 @@ let ociConfirm;
     toast?.parentNode?.removeChild( toast );
   }
 
+  function fetchTrendingLots() {
+    fetch( 'https://beta.freeso.org/LauncherResourceCentral/TrendingLots' )
+      .then( response => response.json() )
+      .then( data => {
+        document.querySelector( '#now-trending .top span i' ).textContent = data.avatarsOnline;
+
+        // Clear existing lots
+        const container = document.querySelector( '#now-trending ul' );
+        container.innerHTML = '';
+
+        // Add new lots to the DOM
+        data.lots.forEach( lot => {
+          const lotTemplate = querySelector( '#now-trending-item-template' );
+          const lotElement = document.importNode( lotTemplate.content, true );
+
+          lotElement.querySelector( '.lot-name' ).textContent = lot.name;
+          lotElement.querySelector( '.owner span' ).textContent = lot.ownerDetails.name;
+          lotElement.querySelector( '.players .count' ).textContent = lot.avatars_in_lot;
+          lotElement.querySelector( '.icon img' ).src = 'data:image/png;base64,' + lot.base64Image;
+
+          if ( lot.is_trending ) {
+            lotElement.querySelector( 'li' ).classList.add( 'hot' );
+          } else {
+            lotElement.querySelector( 'li' ).classList.remove( 'hot' );
+          }
+
+          container.appendChild( lotElement );
+        } );
+      } )
+      .catch( err => console.log( 'Error while fetching lots:', err ) );
+  }
+
   let spinDegrees = 0;
 
   /**
@@ -243,6 +275,8 @@ let ociConfirm;
       spinDegrees += 360;
       homeRefreshBtnIcon.style.transform = `rotate(${spinDegrees}deg)`;
     }
+
+    fetchTrendingLots();
 
     function parseRss( errors, response ) {
       // Short pause before displaying feed to allow display to render
