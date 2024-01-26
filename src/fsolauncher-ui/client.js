@@ -651,30 +651,31 @@ let ociConfirm;
   } );
   // REMESH_INFO
   onMessage( 'REMESH_INFO', ( a, v ) => {
-    querySelector( '.new' ).style.display = 'none';
     if ( ! v ) return;
+
+    querySelector( '#remeshinfo' ).style.display = 'block';
+
+    const template = document.querySelector( '#remesh-info-template' );
+    const node = document.importNode( template.content, true );
 
     const i = parseInt( v );
     const f = ago( new Date( i * 1000 ) );
     const seconds = Math.floor( ( new Date() - new Date( i * 1000 ) ) / 1000 );
 
+    node.querySelector( 'span' ).textContent = f;
+
     if ( seconds < 172800 ) {
       if ( Math.floor( seconds / 86400 ) <= 1 ) {
-        querySelector( '.new' ).style.display = 'block';
+        querySelector( '.item[install="RMS"]' ).classList.add( 'recent' );
       } else {
-        querySelector( '.new' ).style.display = 'none';
+        querySelector( '.item[install="RMS"]' ).classList.remove( 'recent' );
       }
     } else {
-      querySelector( '.new' ).style.display = 'none';
+      querySelector( '.item[install="RMS"]' ).classList.remove( 'recent' );
     }
 
-    querySelector( '#remeshinfo' ).style.display = 'block';
-    querySelector( '#remeshinfo' ).innerHTML =
-      `<i 
-        style="vertical-align:middle; float:left; margin-right:5px" 
-        class="material-icons"
-        >access_time</i> 
-      <span style="line-height:25px">${f}</span>`;
+    querySelector( '#remeshinfo' ).innerHTML = '';
+    querySelector( '#remeshinfo' ).appendChild( node );
   } );
   // OCI_PICKED_FOLDER
   onMessage( 'OCI_PICKED_FOLDER', ( a, folder ) => {

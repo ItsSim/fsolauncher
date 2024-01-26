@@ -124,13 +124,12 @@ html(class=PLATFORM + ' ' + LANGCODE)
                   h1 #{TOOLTIP_REMESH_TITLE}
                   small #{TOOLTIP_REMESH_DESCR}
                 .item(install='RMS' style='background-image:url(images/volcanic.png); background-color:#fff; background-size:30%;background-position:center center;background-repeat:no-repeat;')
-                  .new <i style="vertical-align:middle;" class="material-icons">new_releases</i> #{INSTALLER_RP_ALERT}
                   .stag.orange #{INSTALLER_OPTIONAL}
                   .tag
                     h1 #{INSTALLER_RP_TITLE}
                     span #{INSTALLER_RP_DESCR}
                     br
-                    small(id='remeshinfo' style='font-size:14px;color:rgba(0,0,0,0.5);margin-top:5px;display:block;overflow:hidden') <i style="vertica-align:middle;float:left;margin-right:5px" class="material-icons">access_time</i> <span style="line-height:25px">#{UNKNOWN}</span>
+                    small(id='remeshinfo' style='font-size:14px;color:rgba(0,0,0,0.5);margin-top:5px;display:block;overflow:hidden')
               div
                 .item(install='FSO' style='background:url(images/banner.jpg) #fff; background-position:center center; background-size:80%;background-repeat:no-repeat;')
                   .tag
@@ -440,6 +439,12 @@ html(class=PLATFORM + ' ' + LANGCODE)
         .info.progress-info
         .loading
           .progress
+
+    template#remesh-info-template 
+      i.material-icons(style='vertical-align: middle; float: left; margin-right: 8px') access_time
+      span(style='line-height: 25px') #{UNKNOWN}
+      div.ribbon-wrapper
+        div.ribbon NEW
 
     if SENTRY != 'SENTRY_CI_BROWSER_LOADER'
       script(src=SENTRY, crossorigin="anonymous")

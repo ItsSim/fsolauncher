@@ -618,29 +618,48 @@ button.blue:hover,
   background-size: 120% !important;
 }
 
-#downloads > div > .item > .new {
-  float: left;
-  color: #fff;
-  margin-top: 20px;
-  margin-left: 20px;
-  border-radius: 99px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  background: #e21801;
-  font-size: 16px;
-  text-transform: uppercase;
-  padding: 10px;
-  padding-left: 15px;
-  padding-right: 15px;
+.item.recent .ribbon-wrapper {
+  display: block;
+}
+
+.ribbon-wrapper {
+  display: none;
+  width: 85px;
+  height: 88px;
+  overflow: hidden;
+  position: absolute;
+  top: -3px;
+  right: -3px;
+}
+
+.ribbon {
   text-align: center;
-  top:30px;
-  height:50px;
-  left:30px;
-  padding:6px;
-  padding-left:8px;
-  padding-right:8px;
-  border-radius:8px;
-  font-size:14px;
-  position:absolute;
+  transform: rotate(45deg);
+  position: relative;
+  padding: 7px 0;
+  left: -5px;
+  top: 15px;
+  width: 120px;
+  letter-spacing: 1px;
+  background-image: -webkit-linear-gradient(top, #ff1c1c, #c72626);
+  color: #fff;
+  box-shadow: 0px 0px 3px rgba(0,0,0,0.3);
+}
+
+.ribbon:before, .ribbon:after {
+  content: "";
+  border-top: 3px solid #a00606;   
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+  position: absolute;
+  bottom: -3px;
+}
+
+.ribbon:before {
+  left: 0;
+}
+.ribbon:after {
+  right: 0;
 }
 
 ::-webkit-scrollbar {
