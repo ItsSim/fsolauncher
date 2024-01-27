@@ -221,35 +221,39 @@ let ociConfirm;
   }
 
   function fetchTrendingLots() {
-    fetch( 'https://beta.freeso.org/LauncherResourceCentral/TrendingLots' )
-      .then( response => response.json() )
-      .then( data => {
-        document.querySelector( '#now-trending .top span i' ).textContent = data.avatarsOnline;
+    return new Promise( ( resolve, _reject ) => {
+      fetch( 'https://beta.freeso.org/LauncherResourceCentral/TrendingLots' )
+        .then( response => response.json() )
+        .then( data => {
+          document.querySelector( '#now-trending .top span i' ).textContent = data.avatarsOnline;
 
-        // Clear existing lots
-        const container = document.querySelector( '#now-trending ul' );
-        container.innerHTML = '';
+          // Clear existing lots
+          const container = document.querySelector( '#now-trending ul' );
+          container.innerHTML = '';
 
-        // Add new lots to the DOM
-        data.lots.forEach( lot => {
-          const lotTemplate = querySelector( '#now-trending-item-template' );
-          const lotElement = document.importNode( lotTemplate.content, true );
+          // Add new lots to the DOM
+          data.lots.forEach( lot => {
+            const lotTemplate = querySelector( '#now-trending-item-template' );
+            const lotElement = document.importNode( lotTemplate.content, true );
 
-          lotElement.querySelector( '.lot-name' ).textContent = lot.name;
-          lotElement.querySelector( '.owner span' ).textContent = lot.ownerDetails.name;
-          lotElement.querySelector( '.players .count' ).textContent = lot.avatars_in_lot;
-          lotElement.querySelector( '.icon img' ).src = 'data:image/png;base64,' + lot.base64Image;
+            lotElement.querySelector( '.lot-name' ).textContent = lot.name;
+            lotElement.querySelector( '.owner span' ).textContent = lot.ownerDetails.name;
+            lotElement.querySelector( '.players .count' ).textContent = lot.avatars_in_lot;
+            lotElement.querySelector( '.icon img.lot' ).src = 'data:image/png;base64,' + lot.base64Image;
+            lotElement.querySelector( '.icon .avatar' ).style.backgroundImage = 'url(data:image/png;base64,' + lot.ownerDetails.base64Image + ')';
 
-          if ( lot.is_trending ) {
-            lotElement.querySelector( 'li' ).classList.add( 'hot' );
-          } else {
-            lotElement.querySelector( 'li' ).classList.remove( 'hot' );
-          }
+            if ( lot.is_trending ) {
+              lotElement.querySelector( 'li' ).classList.add( 'hot' );
+            } else {
+              lotElement.querySelector( 'li' ).classList.remove( 'hot' );
+            }
 
-          container.appendChild( lotElement );
-        } );
-      } )
-      .catch( err => console.log( 'Error while fetching lots:', err ) );
+            container.appendChild( lotElement );
+          } );
+        } )
+        .catch( err => console.log( 'Error while fetching lots:', err ) )
+        .finally( resolve );
+    } );
   }
 
   let spinDegrees = 0;
@@ -276,9 +280,9 @@ let ociConfirm;
       homeRefreshBtnIcon.style.transform = `rotate(${spinDegrees}deg)`;
     }
 
-    fetchTrendingLots();
+    await fetchTrendingLots();
 
-    function parseRss( errors, response ) {
+    async function parseRss( errors, response ) {
       // Short pause before displaying feed to allow display to render
       // correctly.
       setTimeout( () => {

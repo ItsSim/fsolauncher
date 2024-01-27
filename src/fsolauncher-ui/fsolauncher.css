@@ -1587,8 +1587,9 @@ i.spin {
   width: 40px;
   color: #10171E;
   margin-right: 30px;
+  position: relative;
 }
-#now-trending li .icon img {
+#now-trending li .icon .lot {
   width: 75px;
   position: absolute;
   left: -10px;
@@ -1654,11 +1655,20 @@ i.spin {
   margin-left: 5px;
 }
 
+#now-trending li .icon .avatar {
+  position: absolute;
+  left: -5px;
+  top: -18px;
+  height: 69px;
+  width: 17px;
+  background-position: -198px;
+  background-size: cover;
+}
+
 #now-trending li .players span i {
   margin-right: 5px;
   font-size: 1.2rem;
 }
-
 
 .open_beta #now-trending .top span,
 .turbo #now-trending .top span,
