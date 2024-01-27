@@ -282,7 +282,7 @@ let ociConfirm;
 
     await fetchTrendingLots();
 
-    async function parseRss( errors, response ) {
+    function parseRss( errors, response ) {
       // Short pause before displaying feed to allow display to render
       // correctly.
       setTimeout( () => {
