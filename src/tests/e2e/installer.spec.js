@@ -40,7 +40,7 @@ test.describe( 'installer', () => {
     appData = process.platform == 'win32' ? exeDir :
       require( 'os' ).homedir() + '/Library/Application Support/FreeSO Launcher';
     installDir = process.platform == 'win32' ? 'C:\\Users\\Public\\TéstFõldér' :
-      require( 'os' ).homedir() + '/Documents';
+      appData + '/GameComponents';
 
     fs.existsSync( `${appData}/FSOLauncher.ini` ) && fs.unlinkSync( `${appData}/FSOLauncher.ini` );
   } );

@@ -78,24 +78,24 @@ module.exports = {
     paths: {
       'TSO': process.platform === 'win32' ?
         'HKLM\\SOFTWARE\\Maxis\\The Sims Online' :
-        `${homeDir}/Documents/The Sims Online/TSOClient/TSOClient.exe`,
+        `${appData}/GameComponents/The Sims Online/TSOClient/TSOClient.exe`,
 
       'FSO': process.platform === 'win32' ?
-        'HKLM\\SOFTWARE\\Rhys Simpson\\FreeSO' : `${homeDir}/Documents/FreeSO/FreeSO.exe`,
+        'HKLM\\SOFTWARE\\Rhys Simpson\\FreeSO' : `${appData}/GameComponents/FreeSO/FreeSO.exe`,
 
       'TS1': process.platform === 'win32' ?
-        'HKLM\\SOFTWARE\\Maxis\\The Sims' : `${homeDir}/Documents/The Sims/Sims.exe`,
+        'HKLM\\SOFTWARE\\Maxis\\The Sims' : `${appData}/GameComponents/The Sims/Sims.exe`,
 
       'Simitone': process.platform === 'win32' ?
         'HKLM\\SOFTWARE\\Rhys Simpson\\Simitone' :
-        `${homeDir}/Documents/Simitone for Windows/Simitone.Windows.exe`,
+        `${appData}/GameComponents/Simitone for Windows/Simitone.Windows.exe`,
 
       'OpenAL': 'HKLM\\SOFTWARE\\OpenAL',
       'NET': 'HKLM\\SOFTWARE\\Microsoft\\NET Framework Setup\\NDP',
       'Mono': '/Library/Frameworks/Mono.framework',
       'SDL': '/Library/Frameworks/SDL2.framework'
     },
-    win32Fallbacks: {
+    fallbacks: process.platform === 'win32' ? {
       'TSO': [
         'C:/Program Files/Maxis/The Sims Online/TSOClient/TSOClient.exe',
         'C:/Program Files/The Sims Online/TSOClient/TSOClient.exe',
@@ -114,6 +114,23 @@ module.exports = {
       ],
       'TS1': [
         'C:/Program Files (x86)/Maxis/The Sims'
+      ]
+    } : {
+      'TSO': [
+        `${appData}/GameComponents/The Sims Online/TSOClient/TSOClient.exe`,
+        `${homeDir}/Documents/The Sims Online/TSOClient/TSOClient.exe`,
+      ],
+      'FSO': [
+        `${appData}/GameComponents/FreeSO/FreeSO.exe`,
+        `${homeDir}/Documents/FreeSO/FreeSO.exe`,
+      ],
+      'Simitone': [
+        `${appData}/GameComponents/Simitone for Windows/Simitone.Windows.exe`,
+        `${homeDir}/Documents/Simitone for Windows/Simitone.Windows.exe`,
+      ],
+      'TS1': [
+        `${appData}/GameComponents/The Sims`,
+        `${homeDir}/Documents/The Sims`
       ]
     }
   }

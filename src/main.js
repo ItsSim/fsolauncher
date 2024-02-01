@@ -102,7 +102,7 @@ try {
       Language: 'default'
     },
     Game: {
-      GraphicsMode: 'ogl',
+      GraphicsMode: process.platform === 'win32' ? 'dx' : 'ogl',
       Language: 'en'
     }
   };

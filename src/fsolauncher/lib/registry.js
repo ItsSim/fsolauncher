@@ -1,7 +1,7 @@
 const { appData } = require( '../constants' );
 const { captureWithSentry } = require( './utils' );
 const { createKey, keyExists, deleteKey, readValue, updateValue } = require( './winreg' );
-const { paths, win32Fallbacks } = require( '../constants' ).registry;
+const { paths, fallbacks: fb } = require( '../constants' ).registry;
 const fs = require( 'fs-extra' );
 
 async function hasRegistryAccess() {
@@ -22,8 +22,8 @@ async function hasRegistryAccess() {
   }
 }
 
-async function checkWindowsFallbacks( code ) {
-  const fallbacks = win32Fallbacks[ code ] || [];
+async function checkFallbacks( code ) {
+  const fallbacks = fb[ code ] || [];
   const localPaths = await getLocalRegistry();
   if ( localPaths[ code ] ) {
     fallbacks.push( localPaths[ code ] );
@@ -63,7 +63,7 @@ async function getInstallStatus( code ) {
     return {
       key: code,
       isInstalled: ( await fs.pathExists( regPath ) ) ?
-        stripLocalPath( code, regPath ) : false
+        stripLocalPath( code, regPath ) : await checkFallbacks( code )
     };
   }
 
@@ -93,12 +93,12 @@ async function getInstallStatus( code ) {
       isInstalled = false;
     }
     if ( ! isInstalled ) {
-      isInstalled = await checkWindowsFallbacks( code );
+      isInstalled = await checkFallbacks( code );
     }
     return { key: code, isInstalled };
   } catch ( err ) {
     console.error( err );
-    return { key: code, isInstalled: await checkWindowsFallbacks( code ) };
+    return { key: code, isInstalled: await checkFallbacks( code ) };
   }
 }
 

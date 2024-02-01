@@ -672,8 +672,9 @@ class FSOLauncher {
     } else {
       // Use well-known paths.
       if ( process.platform == 'darwin' ) {
-        // For darwin, everything goes to Documents for now.
-        return homeDir + '/Documents/' + this.getPrettyName( componentCode );
+        // For darwin, everything goes to ~/Library/Application Support/FreeSO Launcher/GameComponents
+        // and not ~/Documents, to avoid iCloud sync issues
+        return appData + '/GameComponents/' + this.getPrettyName( componentCode );
       }
       if ( componentCode == 'TSO' ) {
         return 'C:/Program Files/Maxis/' + this.getPrettyName( componentCode );

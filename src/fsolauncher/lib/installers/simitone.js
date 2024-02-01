@@ -1,7 +1,7 @@
 const download = require( '../download' );
 const unzip = require( '../unzip' );
 const { strFormat } = require( '../utils' );
-const { downloads, temp } = require( '../../constants' );
+const { downloads, temp, homeDir } = require( '../../constants' );
 const { locale } = require( '../../locale' );
 
 /**
@@ -29,10 +29,11 @@ class SimitoneInstaller {
    * @param {number} percentage The percentage to display.
    */
   createProgressItem( message, percentage ) {
+    const textPath = process.platform === 'win32' ? this.path : this.path.replace( homeDir, '~' );
     this.fsolauncher.IPC.addProgressItem(
       'FSOProgressItem' + this.id,
       'Simitone Client ' + this.simitoneVersion,
-      locale.current.INS_IN + ' ' + this.path,
+      `${locale.current.INS_IN} ${textPath}`,
       message,
       percentage
     );
