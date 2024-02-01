@@ -1,6 +1,6 @@
 const { captureWithSentry, getJSON, strFormat, getDisplayRefreshRate } = require( './lib/utils' );
 const { locale } = require( './locale' );
-const { checks, version, homeDir, appData } = require( './constants' );
+const { checks, version, appData } = require( './constants' );
 
 const Modal = require( './lib/modal' );
 const Events = require( './events' );
