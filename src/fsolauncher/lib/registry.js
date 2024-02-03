@@ -1,5 +1,5 @@
 const { appData } = require( '../constants' );
-const { captureWithSentry } = require( './utils' );
+const { captureWithSentry, normalizePathSlashes } = require( './utils' );
 const { createKey, keyExists, deleteKey, readValue, updateValue } = require( './winreg' );
 const { paths, fallbacks: fb } = require( '../constants' ).registry;
 const fs = require( 'fs-extra' );
@@ -37,16 +37,13 @@ async function checkFallbacks( code ) {
 }
 
 function stripLocalPath( code, path ) {
-  switch ( code ) {
-  case 'FSO':
-    return path.replace( '/FreeSO.exe', '' );
-  case 'TSO':
-    return path.replace( '/TSOClient/TSOClient.exe', '' );
-  case 'Simitone':
-    return path.replace( '/Simitone.Windows.exe', '' );
-  default:
-    return path;
+  if ( typeof path === 'string' ) {
+    path = normalizePathSlashes( path );
+    path.replace( '/FreeSO.exe', '' );
+    path.replace( '/TSOClient/TSOClient.exe', '' );
+    path.replace( '/Simitone.Windows.exe', '' );
   }
+  return path;
 }
 
 /**
