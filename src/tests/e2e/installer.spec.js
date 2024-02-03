@@ -107,7 +107,7 @@ test.describe( 'installer', () => {
     expect( await window.locator( '.modal-error' ).isVisible() ).toBeFalsy();
 
     // Go to the installer and make sure the checkmarks are there
-    await window.locator( '[page-trigger="installer"]' ).click();
+    await window.locator( '[page-trigger="installer"]' ).dblclick();
     expect( await window.locator( '.item.installed[install="FSO"]' ).isVisible() ).toBeTruthy();
     expect( await window.locator( '.item.installed[install="TSO"]' ).isVisible() ).toBeTruthy();
 
