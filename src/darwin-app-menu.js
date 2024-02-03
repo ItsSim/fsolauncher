@@ -18,7 +18,7 @@ module.exports = ( name, fsolauncher ) => [
         label: 'Check for Updates',
         click: () => {
           fsolauncher.IPC.changePage( 'about' );
-          if ( fsolauncher.window.isMinimized() ) fsolauncher.window.restore();
+          fsolauncher.window.restore();
           fsolauncher.checkLauncherUpdates();
         }
       },
@@ -30,7 +30,7 @@ module.exports = ( name, fsolauncher ) => [
         accelerator: 'CmdOrCtrl+,',
         click: () => {
           fsolauncher.IPC.changePage( 'settings' );
-          if ( fsolauncher.window.isMinimized() ) fsolauncher.window.restore();
+          fsolauncher.window.restore();
           fsolauncher.window.focus();
         }
       },
