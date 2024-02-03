@@ -39,9 +39,9 @@ async function checkFallbacks( code ) {
 function normalizeLocalPath( path ) {
   if ( path ) {
     path = normalizePathSlashes( path );
-    path.replace( '/FreeSO.exe', '' );
-    path.replace( '/TSOClient/TSOClient.exe', '' );
-    path.replace( '/Simitone.Windows.exe', '' );
+    path = path.replace( '/FreeSO.exe', '' );
+    path = path.replace( '/TSOClient/TSOClient.exe', '' );
+    path = path.replace( '/Simitone.Windows.exe', '' );
   }
 
   return path;
