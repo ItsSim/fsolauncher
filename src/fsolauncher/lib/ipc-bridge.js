@@ -78,7 +78,8 @@ class IPCBridge {
    * @param {string} type        The type of modal to show.
    */
   sendModal( title, text, yesText, noText, modalRespId, extra, type ) {
-    if ( this.window.isMinimized() ) this.window.restore();
+    this.window.show();
+    this.window.restore();
     this.window.focus();
     this.window.webContents.send(
       'POPUP',
