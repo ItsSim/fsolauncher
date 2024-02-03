@@ -93,6 +93,9 @@ async function getInstallStatus( code ) {
     if ( ! isInstalled ) {
       isInstalled = await checkFallbacks( code );
     }
+    if ( typeof isInstalled === 'string' ) {
+      isInstalled = normalizeLocalPath( isInstalled );
+    }
     return { key: code, isInstalled };
   } catch ( err ) {
     console.error( err );
