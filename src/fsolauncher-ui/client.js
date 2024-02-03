@@ -867,7 +867,7 @@ let ociConfirm;
           const containerWidth = container.offsetWidth;
 
           if ( textWidth > containerWidth ) {
-            const duration = textWidth / 50; // Adjust speed: higher divisor = slower
+            const duration = textWidth / 80; // Adjust speed: higher divisor = slower
 
             // Calculate the percentage of the text that needs to move before bouncing back
             const movePercent = ( textWidth - containerWidth ) / textWidth * 100;
