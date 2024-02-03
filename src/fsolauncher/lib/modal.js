@@ -99,6 +99,17 @@ class Modal {
   }
 
   /**
+   * When a user successfully finishes a full install.
+   */
+  static showFullInstalled() {
+    Modal.getIPC().sendSuccessModal(
+      locale.current.INS_FINISHED,
+      locale.current.INS_FINISHED_LONG + '<br>' + locale.current.INS_PLAY_CLICK,
+      locale.current.MODAL_OK
+    );
+  }
+
+  /**
    * When a Component has been installed successfully.
    *
    * @param {string} componentName The visual name of the Component.
@@ -510,7 +521,7 @@ class Modal {
    * @param {string} v Version to show in the modal.
    */
   static showInstallUpdate( v ) {
-    Modal.getIPC().sendModal(
+    Modal.getIPC().sendModalNoFocus(
       locale.current.MODAL_INSTALL_UPDATE,
       locale.current.MODAL_INSTALL_UPDATE_DESCR_1 +
         v +

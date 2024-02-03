@@ -95,8 +95,8 @@ html(class=PLATFORM + ' ' + LANGCODE)
             #did-you-know(style='display:none')
               #now-trending
                 .top 
-                  h1 Hot Spots
-                  span <i>0</i> players online
+                  h1 #{TOP_TITLE}
+                  span <i>0</i> #{TOP_ONLINE}
                 .content
                   ul
 
@@ -139,12 +139,22 @@ html(class=PLATFORM + ' ' + LANGCODE)
                     small(id='remeshinfo' style='font-size:14px;color:rgba(0,0,0,0.5);margin-top:5px;display:block;overflow:hidden')
               div
                 .item(install='FSO' style='background:url(images/banner.jpg) #fff; background-position:center center; background-size:80%;background-repeat:no-repeat;')
+                  .item-info
+                    .container
+                      .text 
+                        .marquee #{INSD_IN} <span class="install-dir"></span>
+                      i.material-icons help
                   .tag
                     h1 #{INSTALLER_FSO_TITLE}
                     span #{INSTALLER_FSO_DESCR}
                     .tick.installed                                        
               div
                 .item(install='TSO' style='background:url(images/tsologo.png) #fff; background-position:center center;background-size:80%;background-repeat:no-repeat;')
+                  .item-info
+                    .container
+                      .text 
+                        .marquee #{INSD_IN} <span class="install-dir"></span>
+                      i.material-icons help
                   .tag(style='z-index:1')
                     h1 #{INSTALLER_TSO_TITLE}
                     span #{INSTALLER_TSO_DESCR}

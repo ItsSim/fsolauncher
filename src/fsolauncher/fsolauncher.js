@@ -173,9 +173,7 @@ class FSOLauncher {
     try {
       this.addActiveTask( 'FULL' );
       await fullInstaller.install( folder );
-      Modal.sendNotification(
-        'FreeSO Launcher', locale.current.INS_FINISHED_LONG, null, true, this.isDarkMode()
-      );
+      Modal.showFullInstalled();
     } catch ( err ) {
       console.error( 'runFullInstall', err );
     } finally {

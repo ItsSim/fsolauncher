@@ -11,11 +11,6 @@
   background-repeat: no-repeat;
   background-attachment: fixed;
   font-family: 'Fredoka One';
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
 }
 
@@ -1714,4 +1709,71 @@ i.spin {
 .turbo #now-trending li,
 .simitone #now-trending li {
   border-color: rgba(0,0,0,0.1);
+}
+
+/* Keyframes for the marquee effect */
+.installed .item-info {
+  display: block;
+}
+.item-info {
+  z-index: 1;
+  padding: 15px;
+  width: 100%;
+  font-size: 0.9rem;
+  cursor: initial;
+  display: none;
+}
+
+.item-info i {
+  font-size: 1.4rem;
+}
+
+.item-info .text {
+  flex: 1;
+  font-family: 'Munged';
+  display: none;
+  user-select: text;
+
+  overflow: hidden;
+  position: relative;
+}
+.item-info .text .marquee {
+  overflow: hidden;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.item-info:hover .container {
+  background: rgb(243 243 243);
+}
+.dark .item-info .container,
+.halloween .item-info .container,
+.indigo .item-info .container {
+  color: rgba(255, 255, 255, 0.7);
+}
+.dark .item-info:hover .container,
+.halloween .item-info:hover .container,
+.indigo .item-info:hover .container {
+  background: rgb(37 37 37);
+}
+.item-info:hover .text {
+  display: block;
+}
+
+.item-info .container {
+  width: 100%;
+  display: flex;
+
+  padding: 5px;
+  align-items: center;
+  justify-content: flex-end;
+  border-radius: 99px;
+  padding-left: 15px;
+  padding-right: 8px;
+}
+
+@keyframes marqueeEffect {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(-100%); }
+  100% { transform: translateX(0); }
 }

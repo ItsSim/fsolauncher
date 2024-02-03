@@ -761,11 +761,13 @@ let ociConfirm;
 
     if ( b.FSO ) {
       querySelector( '.item[install=FSO]' ).className = 'item installed';
+      querySelector( '.item[install=FSO] .item-info .install-dir' ).textContent = b.FSO;
     } else {
       querySelector( '.item[install=FSO]' ).className = 'item';
     }
     if ( b.TSO ) {
       querySelector( '.item[install=TSO]' ).className = 'item installed';
+      querySelector( '.item[install=TSO] .item-info .install-dir' ).textContent = b.TSO;
     } else {
       querySelector( '.item[install=TSO]' ).className = 'item';
     }
@@ -845,6 +847,60 @@ let ociConfirm;
   addEventListener( '.oneclick-install-confirm', 'click',       e => ociConfirm( e ) );
   addEventListener( document.body,               'keydown',     e => toggleKeyboardUser( e ) );
   addEventListener( document.body,               'mousedown',   e => toggleKeyboardUser( e ) );
+
+  // Disable click for installation path tag
+  querySelectorAll( '.item-info' ).forEach( function ( item ) {
+    item.addEventListener( 'click', function ( event ) {
+      event.stopPropagation();
+    } );
+  } );
+
+  document.addEventListener( 'DOMContentLoaded', function () {
+    document.querySelectorAll( '.item-info' ).forEach( function ( item, index ) {
+      item.addEventListener( 'mouseenter', function () {
+        const marqueeText = this.querySelector( '.marquee' );
+        if ( ! marqueeText ) return;
+
+        const container = this.querySelector( '.text' );
+        setTimeout( () => {
+          const textWidth = marqueeText.offsetWidth;
+          const containerWidth = container.offsetWidth;
+
+          if ( textWidth > containerWidth ) {
+            const duration = textWidth / 50; // Adjust speed: higher divisor = slower
+
+            // Calculate the percentage of the text that needs to move before bouncing back
+            const movePercent = ( textWidth - containerWidth ) / textWidth * 100;
+
+            // Create unique animation name
+            const animationName = `marqueeEffect-${index}`;
+
+            // Inject custom keyframes for this marquee
+            const style = document.createElement( 'style' );
+            style.type = 'text/css';
+            style.innerHTML = `
+              @keyframes ${animationName} {
+                0% { transform: translateX(0%); }
+                50% { transform: translateX(-${movePercent}%); }
+                100% { transform: translateX(0%); }
+              }
+            `;
+            document.head.appendChild( style );
+
+            // Apply the animation with the calculated duration
+            marqueeText.style.animation = `${animationName} ${duration}s linear 1s infinite`;
+          }
+        }, 0 );
+      } );
+
+      item.addEventListener( 'mouseleave', function () {
+        const marqueeText = this.querySelector( '.marquee' );
+        if ( marqueeText ) {
+          marqueeText.style.animation = ''; // Reset animation
+        }
+      } );
+    } );
+  } );
 
   addEventListenerAll( '[option-id]', 'change', ( event, _b ) => {
     const currentTarget = event.currentTarget;

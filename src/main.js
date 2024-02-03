@@ -138,11 +138,6 @@ function showWindow() {
 
 function createWindow() {
   require( 'electron-pug' )( { pretty: false }, locale.current );
-  if ( process.platform == 'darwin' ) {
-    // Create the app menu for macOS
-    const darwinAppMenu = require( './darwin-app-menu' );
-    Menu.setApplicationMenu( Menu.buildFromTemplate( darwinAppMenu( app.getName() ) ) );
-  }
 
   // Create the trayIcon for macOS and Windows
   trayIcon = nativeImage.createFromPath(
@@ -188,6 +183,12 @@ function createWindow() {
   window.on( 'restore', _e => window.setSize( width, height ) );
 
   launcher = new FSOLauncher( window, userSettings );
+
+  if ( process.platform == 'darwin' ) {
+    // Create the app menu for macOS
+    const darwinAppMenu = require( './darwin-app-menu' );
+    Menu.setApplicationMenu( Menu.buildFromTemplate( darwinAppMenu( app.getName(), launcher ) ) );
+  }
 
   tray.setToolTip( `FreeSO Launcher ${version}` );
   tray.setContextMenu( Menu.buildFromTemplate( [
