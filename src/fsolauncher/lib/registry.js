@@ -30,19 +30,20 @@ async function checkFallbacks( code ) {
   }
   for ( const fallback of fallbacks ) {
     if ( await fs.pathExists( fallback ) ) {
-      return stripLocalPath( code, fallback );
+      return normalizeLocalPath( fallback );
     }
   }
   return false;
 }
 
-function stripLocalPath( code, path ) {
-  if ( typeof path === 'string' ) {
+function normalizeLocalPath( path ) {
+  if ( path ) {
     path = normalizePathSlashes( path );
     path.replace( '/FreeSO.exe', '' );
     path.replace( '/TSOClient/TSOClient.exe', '' );
     path.replace( '/Simitone.Windows.exe', '' );
   }
+
   return path;
 }
 
@@ -60,7 +61,7 @@ async function getInstallStatus( code ) {
     return {
       key: code,
       isInstalled: ( await fs.pathExists( regPath ) ) ?
-        stripLocalPath( code, regPath ) : await checkFallbacks( code )
+        normalizeLocalPath( regPath ) : await checkFallbacks( code )
     };
   }
 
