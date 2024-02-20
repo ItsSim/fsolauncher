@@ -1771,3 +1771,12 @@ i.spin {
   padding-left: 15px;
   padding-right: 8px;
 }
+
+.dark .item-info .container .material-icons,
+.halloween .item-info .container .material-icons,
+.indigo .item-info .container .material-icons {
+ color: rgba(255,255,255,0.3)
+}
+.item-info .container .material-icons {
+  color: rgba(0,0,0,0.3);
+}
