@@ -4,13 +4,13 @@
 
 The official FreeSO Launcher for Windows and macOS.
 
-![Screenshot](https://user-images.githubusercontent.com/35347872/165303049-e2176513-7ce0-4279-bd40-62d1bd571f61.png)
-![Screenshot](https://user-images.githubusercontent.com/35347872/165303098-1cfbae44-2227-4d30-ab39-3537e0229a37.png)
-![Screenshot](https://user-images.githubusercontent.com/35347872/165303154-a0b65f66-d88d-42fd-8355-66e371ea8f8d.png)
-![Screenshot](https://user-images.githubusercontent.com/35347872/165325139-82fe05be-62a7-4603-ab03-bcef9a2ad66c.png)
-![Screenshot 2023-04-29 at 00 34 21](https://user-images.githubusercontent.com/35347872/235264926-bd4fb2ca-1efc-459f-8581-18d33aa2c725.png)
-![Screenshot](https://i.imgur.com/u5iJ0qD.png)
-![Screenshot](https://user-images.githubusercontent.com/35347872/165303264-02c54e3c-fd11-4ec3-9886-3ef907876ad7.png)
+<img width="1202" src="https://github.com/ItsSim/fsolauncher/assets/35347872/8170e1b5-e4ed-44ac-9c2d-a0a53c81cbc7">
+<img width="1202" src="https://github.com/ItsSim/fsolauncher/assets/35347872/7e498aa9-3a67-44df-bd23-26c94fe751dc">
+<img width="1202" src="https://github.com/ItsSim/fsolauncher/assets/35347872/1e78df0b-720f-433e-a452-8cda132571f9">
+<img width="1202" src="https://github.com/ItsSim/fsolauncher/assets/35347872/c0af405d-eacf-4938-b9ab-3467e66bd626">
+<img width="1202" src="https://github.com/ItsSim/fsolauncher/assets/35347872/90285e17-95be-4008-b207-757da1a17a7f">
+<img width="1202" src="https://github.com/ItsSim/fsolauncher/assets/35347872/c01eae1a-78c8-4aa9-8c03-dea96f518066">
+<img width="1202" src="https://github.com/ItsSim/fsolauncher/assets/35347872/58315823-4d6f-4361-bfd5-ce5e02b7a2d0">
 
 ## Prerequisites for Development
 
