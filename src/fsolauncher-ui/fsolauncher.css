@@ -1134,6 +1134,8 @@ select {
   display: block;
   margin-bottom: 30px;
   font-family: 'Munged';
+  line-height: 20px;
+  font-size: 0.85rem;
 }
 
 #downloads-page div.download .info {
@@ -1770,6 +1772,10 @@ i.spin {
   border-radius: 99px;
   padding-left: 15px;
   padding-right: 8px;
+}
+
+.item-info .container .material-icons {
+  cursor: pointer;
 }
 
 .dark .item-info .container .material-icons,

@@ -35,6 +35,22 @@ class Events {
     ipcMain.on( 'CHECK_SIMITONE',          this.onCheckSimitoneRequirements.bind( this ) );
     ipcMain.on( 'INSTALL_SIMITONE_UPDATE', this.onInstallSimitoneUpdate.bind( this ) );
     ipcMain.on( 'OCI_PICK_FOLDER',         this.onOCIPickFolder.bind( this ) );
+    ipcMain.on( 'OPEN_FOLDER',             this.onOpenFolder.bind( this ) );
+  }
+
+  /**
+   * Received when a user clicks on the folder icon to see where
+   * FreeSO or TSO is installed.
+   *
+   * @param {Electron.IpcMainEvent} e The event object.
+   * @param {string} componentCode The component code to open its location.
+   */
+  onOpenFolder( e, componentCode ) {
+    try {
+      this.fsolauncher.openFolder( componentCode );
+    } catch ( err ) {
+      console.error( 'error trying to open folder', err );
+    }
   }
 
   /**

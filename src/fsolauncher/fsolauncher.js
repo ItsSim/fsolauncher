@@ -6,6 +6,7 @@ const Modal = require( './lib/modal' );
 const Events = require( './events' );
 const IPCBridge = require( './lib/ipc-bridge' );
 const Toast = require( './lib/toast' );
+const { shell } = require( 'electron' );
 
 /**
  * Main launcher class.
@@ -1144,6 +1145,24 @@ class FSOLauncher {
       return getDisplayRefreshRate();
     }
     return parseInt( savedRefreshRate );
+  }
+
+  /**
+   * Opens a folder in file explorer.
+   *
+   * @param {string} componentCode The component code to open its location.
+   */
+  openFolder( componentCode ) {
+    return new Promise( ( resolve, reject ) => {
+      const path = this.isInstalled[ componentCode ];
+
+      shell.openPath( path ).then( ( response ) => {
+        if ( response === '' ) {
+          return resolve();
+        }
+        reject( response );
+      } );
+    } );
   }
 }
 

@@ -58,10 +58,8 @@ let ociConfirm;
     fetchNews();
     setInterval( updateTSOClock, 1000 );
     setVersion( window.shared.electronVersion );
-    socket.on(
-      'receive global message',
-      data => send( 'SOCKET_MESSAGE', [ data.Message, data.Url ]
-      ) );
+    socket.on( 'receive global message',
+      data => send( 'SOCKET_MESSAGE', [ data.Message, data.Url ] ) );
   }
 
   function send( id, param ) {
@@ -932,6 +930,8 @@ let ociConfirm;
   } );
   addEventListenerAll( '[install]', 'click', ( a, _b ) =>
     send( 'INSTALL', a.currentTarget.getAttribute( 'install' ) ) );
+  addEventListenerAll( '[install] .item-info i.material-icons', 'click', ( a, _b ) =>
+    send( 'OPEN_FOLDER', a.currentTarget.closest( '.item' ).getAttribute( 'install' ) ) );
 
   initClient();
 } )();
