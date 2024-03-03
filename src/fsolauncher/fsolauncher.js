@@ -1154,7 +1154,11 @@ class FSOLauncher {
    */
   openFolder( componentCode ) {
     return new Promise( ( resolve, reject ) => {
-      const path = this.isInstalled[ componentCode ];
+      let path = this.isInstalled[ componentCode ];
+
+      if ( process.platform === 'win32' ) {
+        path = path.replace( /\//g, '\\' );
+      }
 
       shell.openPath( path ).then( ( response ) => {
         if ( response === '' ) {
