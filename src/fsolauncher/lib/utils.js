@@ -26,6 +26,9 @@ function initSentry() {
   if ( dsn !== 'SENTRY_CI_DSN' ) {
     require( '@sentry/electron' ).init( {
       dsn,
+      integrations: defaultIntegrations => defaultIntegrations.filter(
+        integration => integration.name !== 'Net'
+      ),
       beforeSend( event ) {
         return sanitizeEvent( event );
       },
