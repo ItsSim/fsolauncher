@@ -34,13 +34,17 @@
   "dependencies": {
     "@sentry/electron": "^4.7.0",
     "deflate-js": "^0.2.3",
+    "dompurify": "^3.0.9",
     "electron-custom-notifications": "file:../vendor/electron-custom-notifications",
     "electron-pug": "^2.0.0",
     "fix-path": "^3.0.0",
     "follow-redirects": "^1.15.4",
     "fs-extra": "^10.1.0",
+    "howler": "^2.2.4",
     "ini": "^2.0.0",
     "os-locale": "^5.0.0",
+    "rss-parser": "^3.13.0",
+    "socket.io-client": "^4.7.4",
     "sudo-prompt": "file:../vendor/sudo-prompt",
     "v8-compile-cache": "^2.3.0",
     "yauzl": "^2.10.0"

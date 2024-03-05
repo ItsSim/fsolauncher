@@ -1,7 +1,6 @@
-/* global Sentry */
 ( () => {
-  Sentry.onLoad( function() {
-    Sentry.init( {
+  window.Sentry.onLoad( function() {
+    window.Sentry.init( {
       beforeSend( event ) {
         return sanitizeEvent( event );
       },

@@ -13,10 +13,10 @@ html(class=PLATFORM + ' ' + LANGCODE)
     link(rel='stylesheet' href='./styles/themes/indigo.css')
     script.
       window.PUG_VARS = {
-        LTHEME  : "#{LTHEME}",
-        RSS_URL : "#{RSS_URL}",
-        TW_URL  : "#{TW_URL}",     
-        STRINGS : {
+        LTHEME: "#{LTHEME}",
+        RSS_URL: "#{RSS_URL}",
+        TW_URL: "#{TW_URL}",     
+        STRINGS: {
           MONTHS: "#{MONTHS}"
         }
       };
@@ -483,8 +483,8 @@ html(class=PLATFORM + ' ' + LANGCODE)
       script(src=SENTRY, crossorigin="anonymous")
       script(src='sentry-onload.js')
 
-    script(src='vendor/socket.io.min.js')
-    script(src='vendor/howler.min.js')
-    script(src='vendor/purify.min.js')
-    script(src='vendor/rss-parser.min.js')
+    script(src='../node_modules/socket.io-client/dist/socket.io.min.js')
+    script(src='../node_modules/howler/dist/howler.min.js')
+    script(src='../node_modules/dompurify/dist/purify.min.js')
+    script(src='../node_modules/rss-parser/dist/rss-parser.min.js')
     script(src='client.js')

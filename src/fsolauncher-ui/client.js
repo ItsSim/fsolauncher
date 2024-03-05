@@ -1,4 +1,3 @@
-/* global PUG_VARS */
 /**
  * @param {string} q
  *
@@ -170,7 +169,7 @@ let ociConfirm;
       return ( 1 < date ) ? date + ' days ago' : '1 day ago';
     } else {
       return date.getDate().toString() + ' ' +
-        PUG_VARS.STRINGS.MONTHS.split( ' ' )[ date.getMonth() ] + ', ' +
+        window.PUG_VARS.STRINGS.MONTHS.split( ' ' )[ date.getMonth() ] + ', ' +
         date.getFullYear();
     }
   }
@@ -260,7 +259,7 @@ let ociConfirm;
    * @param {boolean} userRequested
    */
   async function fetchNews( userRequested ) {
-    const rssUrl = PUG_VARS.RSS_URL;
+    const rssUrl = window.PUG_VARS.RSS_URL;
     const didYouKnow = querySelector( '#did-you-know' );
     const rss = querySelector( '#rss' );
     const spinner = querySelector( '#rss-loading' );
