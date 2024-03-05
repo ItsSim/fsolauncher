@@ -4,6 +4,12 @@
       beforeSend( event ) {
         return sanitizeEvent( event );
       },
+      integrations: [
+        window.Sentry.replayIntegration( {
+          maskAllText: false,
+          blockAllMedia: false,
+        } )
+      ]
     } );
   } );
 
