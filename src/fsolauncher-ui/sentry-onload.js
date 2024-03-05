@@ -8,6 +8,7 @@
         window.Sentry.replayIntegration( {
           maskAllText: false,
           blockAllMedia: false,
+          maskAllInputs: false
         } )
       ]
     } );
