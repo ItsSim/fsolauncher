@@ -1,4 +1,4 @@
-const packager = require( 'electron-packager' ),
+const packager = require( '@electron/packager' ),
   { execSync } = require( 'child_process' );
 
 ( async () => {
