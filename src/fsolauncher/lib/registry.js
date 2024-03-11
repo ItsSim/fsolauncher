@@ -90,6 +90,12 @@ async function getInstallStatus( code ) {
     default:
       isInstalled = false;
     }
+    if ( typeof isInstalled === 'string' ) {
+      const exists = await fs.pathExists( isInstalled );
+      if ( isInstalled && ! exists ) {
+        isInstalled = false;
+      }
+    }
     if ( ! isInstalled ) {
       isInstalled = await checkFallbacks( code );
     }
