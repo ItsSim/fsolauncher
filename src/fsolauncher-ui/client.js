@@ -56,7 +56,6 @@ let ociConfirm;
     navigateTo( 'home' );
     fetchNews();
     setInterval( updateTSOClock, 1000 );
-    setVersion( window.shared.electronVersion );
     socket.on( 'receive global message',
       data => send( 'SOCKET_MESSAGE', [ data.Message, data.Url ] ) );
   }
@@ -95,9 +94,7 @@ let ociConfirm;
       element.addEventListener( eventType, e => callback( e, element ) );
     } );
   }
-  function setVersion( v ) {
-    return querySelector( '#electron-version' ).textContent = v;
-  }
+
   function updateTSOClock() {
     const currentTime = new Date(),
       utcMinutes = currentTime.getUTCMinutes(),

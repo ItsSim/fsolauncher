@@ -10,6 +10,5 @@ contextBridge.exposeInMainWorld( 'shared', {
   },
   openExternal: url => {
     shell.openExternal( url );
-  },
-  electronVersion: process.versions.electron
+  }
 } );

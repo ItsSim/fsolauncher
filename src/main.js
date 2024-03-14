@@ -121,6 +121,7 @@ const code = ( ! userSettings.Launcher.Language || userSettings.Launcher.Languag
 // values that will be replaced in the HTML
 setLocale( code, {
   LVERSION: version,
+  EVERSION: process.versions.electron,
   LTHEME: userSettings.Launcher.Theme,
   PLATFORM: process.platform,
   SENTRY: require( './sentry.config' ).browserLoader,
