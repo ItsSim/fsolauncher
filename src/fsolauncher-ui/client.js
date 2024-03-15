@@ -358,8 +358,31 @@ let ociConfirm;
    * @param {string} pageId The page id.
    */
   navigateTo = pageId => {
+    const menuItems = document.querySelectorAll( 'li[page-trigger]' );
+    for ( let i = 0; i < menuItems.length; i++ ) {
+      menuItems[ i ].classList.remove( 'active' );
+    }
+    document.querySelector( `li[page-trigger="${pageId}"]` )
+      .classList.add( 'active' );
+
+    const pages = document.querySelectorAll( 'div.page' );
+    for ( let j = pages.length - 1; 0 <= j; j-- ) {
+      pages[ j ].style.display = 'none';
+    }
+    const newPage = document.querySelector( `#${pageId}-page` );
+    newPage.style.display = 'block';
+
+    focusContent( newPage );
+    showHints( pageId );
+    afterPageChange( pageId );
+  };
+
+  /**
+   * @param {string} pageId The page id.
+   */
+  function afterPageChange( pageId ) {
     if ( pageId == 'simitone' ) {
-      if ( document.querySelector( 'body' ).className != 'simitone' ) {
+      if ( document.querySelector( 'body' ).className !== 'simitone' ) {
         prevTheme = document.querySelector( 'body' ).className;
       }
       if ( ! isDarkMode( prevTheme ) ) { // Stay in dark theme.
@@ -379,23 +402,7 @@ let ociConfirm;
         simitoneInterval = null;
       }
     }
-    const menuItems = document.querySelectorAll( 'li[page-trigger]' );
-    for ( let i = 0; i < menuItems.length; i++ ) {
-      menuItems[ i ].classList.remove( 'active' );
-    }
-    document.querySelector( `li[page-trigger="${pageId}"]` )
-      .classList.add( 'active' );
-
-    const pages = document.querySelectorAll( 'div.page' );
-    for ( let j = pages.length - 1; 0 <= j; j-- ) {
-      pages[ j ].style.display = 'none';
-    }
-    const newPage = document.querySelector( `#${pageId}-page` );
-    newPage.style.display = 'block';
-
-    focusContent( newPage );
-    showHints( pageId );
-  };
+  }
 
   /**
    * @param {array} vars Array of unserialized configuration variables.
