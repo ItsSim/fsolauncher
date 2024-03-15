@@ -362,7 +362,7 @@ let ociConfirm;
       if ( document.querySelector( 'body' ).className != 'simitone' ) {
         prevTheme = document.querySelector( 'body' ).className;
       }
-      if ( ! window.PUG_VARS.DARK_THEMES.includes( prevTheme ) ) { // Stay in dark theme.
+      if ( ! isDarkMode( prevTheme ) ) { // Stay in dark theme.
         setTheme( 'simitone', true );
       }
       send( 'CHECK_SIMITONE' );
