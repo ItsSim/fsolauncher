@@ -1,5 +1,5 @@
 const Modal = require( './lib/modal' );
-const { ipcMain } = require( 'electron' );
+const { ipcMain, nativeTheme } = require( 'electron' );
 
 /**
  * Handles all events from the client.
@@ -36,6 +36,17 @@ class Events {
     ipcMain.on( 'INSTALL_SIMITONE_UPDATE', this.onInstallSimitoneUpdate.bind( this ) );
     ipcMain.on( 'OCI_PICK_FOLDER',         this.onOCIPickFolder.bind( this ) );
     ipcMain.on( 'OPEN_FOLDER',             this.onOpenFolder.bind( this ) );
+
+    nativeTheme.on( 'updated', this.handleNativeThemeChange.bind( this ) );
+  }
+
+  /**
+   * Fires when the user changes their dark mode settings in
+   * the OS.
+   * The launcher should switch to a theme matching its mode (light/dark).
+   */
+  handleNativeThemeChange() {
+    this.fsolauncher.changeToAppropriateTheme();
   }
 
   /**

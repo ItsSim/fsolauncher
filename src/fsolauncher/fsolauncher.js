@@ -1,12 +1,12 @@
 const { captureWithSentry, getJSON, strFormat, getDisplayRefreshRate } = require( './lib/utils' );
 const { locale } = require( './locale' );
-const { checks, version, appData } = require( './constants' );
+const { checks, version, appData, darkThemes } = require( './constants' );
+const { shell } = require( 'electron' );
 
 const Modal = require( './lib/modal' );
 const Events = require( './events' );
 const IPCBridge = require( './lib/ipc-bridge' );
 const Toast = require( './lib/toast' );
-const { shell } = require( 'electron' );
 
 /**
  * Main launcher class.
@@ -1082,6 +1082,7 @@ class FSOLauncher {
       console.error( 'error persisting', { err, userSettings: this.userSettings } );
     } finally {
       setTimeout( () => toast.destroy(), 1500 );
+      this.IPC.restoreConfiguration( this.userSettings );
     }
   }
 
@@ -1107,7 +1108,7 @@ class FSOLauncher {
    * @returns {boolean} If the theme is dark.
    */
   isDarkMode() {
-    return [ 'halloween', 'dark', 'indigo' ].includes( this.userSettings.Launcher.Theme );
+    return darkThemes.includes( this.userSettings.Launcher.Theme );
   }
 
   /**
@@ -1167,6 +1168,24 @@ class FSOLauncher {
         reject( response );
       } );
     } );
+  }
+
+  changeToAppropriateTheme() {
+    const currentTheme = this.userSettings.Launcher.Theme;
+    const appropriateTheme = this.getAppropriateTheme();
+
+    if ( currentTheme !== appropriateTheme ) {
+      this.updateAndPersistConfig( 'Launcher', 'Theme', appropriateTheme );
+      this.IPC.setTheme( appropriateTheme );
+    }
+  }
+
+  getAppropriateTheme() {
+    const shouldBeDark = require( 'electron' ).nativeTheme.shouldUseDarkColors;
+    if ( shouldBeDark && ! this.isDarkMode() ) return 'dark';
+    if ( ! shouldBeDark && this.isDarkMode() ) return 'open_beta';
+
+    return this.userSettings.Launcher.Theme;
   }
 }
 

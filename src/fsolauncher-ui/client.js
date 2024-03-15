@@ -22,8 +22,6 @@ window.DOMPurify.addHook( 'afterSanitizeAttributes', node => {
   }
 } );
 
-const darkThemes = [ 'halloween', 'dark', 'indigo' ];
-
 // Expose functions to the DOM
 let navigateTo;
 // eslint-disable-next-line no-unused-vars
@@ -363,7 +361,7 @@ let ociConfirm;
       if ( querySelector( 'body' ).className != 'simitone' ) {
         prevTheme = querySelector( 'body' ).className;
       }
-      if ( ! darkThemes.includes( prevTheme ) ) { // Stay in dark theme.
+      if ( ! window.PUG_VARS.DARK_THEMES.includes( prevTheme ) ) { // Stay in dark theme.
         setTheme( 'simitone', true );
       }
       send( 'CHECK_SIMITONE' );
@@ -731,7 +729,7 @@ let ociConfirm;
     }
   } );
   // SET_THEME
-  onMessage( 'SET_THEME', ( a, themeId ) => setTheme( themeId ) );
+  onMessage( 'SET_THEME', ( a, themeId ) => ( setTheme( themeId ), prevTheme = null ) );
   // SET_TIP
   onMessage( 'SET_TIP', ( a, tipText ) => {
     querySelector( '#tip-text' ).innerHTML = window.DOMPurify.sanitize( tipText );

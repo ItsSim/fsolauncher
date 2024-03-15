@@ -20,6 +20,9 @@ module.exports = {
     'MacExtras',
     'SDL'
   ],
+  darkThemes: [
+    'halloween', 'dark', 'indigo'
+  ],
   langCodes: {
     'en': 0,
     'es': 6,

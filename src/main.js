@@ -21,7 +21,7 @@ if ( isTestMode ) {
   app.commandLine.appendSwitch( '--no-sandbox' );
 }
 
-const { appData, version } = require( './fsolauncher/constants' );
+const { appData, version, darkThemes } = require( './fsolauncher/constants' );
 const { locale, setLocale } = require( './fsolauncher/locale' );
 
 const oslocale = require( 'os-locale' ),
@@ -124,6 +124,7 @@ setLocale( code, {
   EVERSION: process.versions.electron,
   LTHEME: userSettings.Launcher.Theme,
   PLATFORM: process.platform,
+  DARK_THEMES: darkThemes.join( ',' ),
   SENTRY: require( './sentry.config' ).browserLoader,
   LANGCODE: code,
   DEFAULT_REFRESH_RATE: 60,
