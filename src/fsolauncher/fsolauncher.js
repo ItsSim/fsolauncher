@@ -1,7 +1,7 @@
 const { captureWithSentry, getJSON, strFormat, getDisplayRefreshRate } = require( './lib/utils' );
 const { locale } = require( './locale' );
 const { checks, version, appData, darkThemes } = require( './constants' );
-const { shell } = require( 'electron' );
+const { shell, nativeTheme } = require( 'electron' );
 
 const Modal = require( './lib/modal' );
 const Events = require( './events' );
@@ -1181,7 +1181,7 @@ class FSOLauncher {
   }
 
   getAppropriateTheme() {
-    const shouldBeDark = require( 'electron' ).nativeTheme.shouldUseDarkColors;
+    const shouldBeDark = nativeTheme.shouldUseDarkColors;
     if ( shouldBeDark && ! this.isDarkMode() ) return 'dark';
     if ( ! shouldBeDark && this.isDarkMode() ) return 'open_beta';
 
