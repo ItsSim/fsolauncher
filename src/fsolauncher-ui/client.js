@@ -1,20 +1,7 @@
-/**
- * @param {string} q
- *
- * @returns {Element}
- */
-const querySelector = q => document.querySelector( q );
-/**
- * @param {string} q
- *
- * @returns {NodeListOf<Element>}
- */
-const querySelectorAll = q => document.querySelectorAll( q );
-
 // Add a hook to make all links open a new window.
 window.DOMPurify.addHook( 'afterSanitizeAttributes', node => {
   // set all elements owning target to target=_blank.
-  if ( 'target' in node ) { node.setAttribute( 'target', '_blank' ); }
+  if ( 'target' in node ) node.setAttribute( 'target', '_blank' );
   // set non-HTML/MathML links to xlink:show=new.
   if ( ! node.hasAttribute( 'target' ) &&
     ( node.hasAttribute( 'xlink:href' ) || node.hasAttribute( 'href' ) ) ) {
@@ -42,8 +29,8 @@ let ociConfirm;
   const modalAudio = new window.Howl( { src: 'sounds/modal.wav', volume: 0.4 } );
   const okAudio    = new window.Howl( { src: 'sounds/ok.wav', volume: 0.4 } );
 
-  const isDarwin  = querySelector( 'html' ).className.startsWith( 'darwin' );
-  const isWindows = querySelector( 'html' ).className.startsWith( 'win32' );
+  const isDarwin  = document.querySelector( 'html' ).className.startsWith( 'darwin' );
+  const isWindows = document.querySelector( 'html' ).className.startsWith( 'win32' );
 
   let simitoneInterval;
   let simitoneUpdate;
@@ -73,7 +60,7 @@ let ociConfirm;
     } );
   }
   function addEventListener( s, eventType, callback ) {
-    s = s.tagName ? s : querySelector( s );
+    s = s.tagName ? s : document.querySelector( s );
     if ( eventType === 'click' ) {
       s.setAttribute( 'role', 'button' );
       s.setAttribute( 'tabindex', '0' );
@@ -83,7 +70,7 @@ let ociConfirm;
   }
 
   function addEventListenerAll( s, eventType, callback ) {
-    querySelectorAll( s ).forEach( element => {
+    document.querySelectorAll( s ).forEach( element => {
       if ( eventType === 'click' ) {
         element.setAttribute( 'role', 'button' );
         element.setAttribute( 'tabindex', '0' );
@@ -91,6 +78,10 @@ let ociConfirm;
       }
       element.addEventListener( eventType, e => callback( e, element ) );
     } );
+  }
+
+  function getCurrentPage() {
+    return document.querySelector( '[page-trigger].active' ).getAttribute( 'page-trigger' );
   }
 
   function updateTSOClock() {
@@ -114,13 +105,13 @@ let ociConfirm;
     if ( minute < 10 ) {
       minute = '0' + minute;
     }
-    const simTimeElement = querySelector( '#simtime' );
+    const simTimeElement = document.querySelector( '#simtime' );
     if ( simTimeElement ) {
       simTimeElement.textContent = `${hour}:${minute} ${timePeriod}`;
     }
   }
 
-  const simitonePage = querySelector( '#simitone-page' );
+  const simitonePage = document.querySelector( '#simitone-page' );
 
   function simitoneInstalled() {
     simitonePage.classList.add( 'simitone-installed' );
@@ -136,7 +127,7 @@ let ociConfirm;
   }
   function simitoneShouldUpdate() {
     simitonePage.classList.add( 'simitone-should-update' );
-    querySelector( '#simitone-update-version' ).textContent = simitoneUpdate;
+    document.querySelector( '#simitone-update-version' ).textContent = simitoneUpdate;
   }
   function simitoneShouldntUpdate() {
     simitonePage.classList.remove( 'simitone-should-update' );
@@ -171,6 +162,13 @@ let ociConfirm;
 
   /**
    * @param {string} theme The theme id.
+   */
+  function isDarkMode( theme ) {
+    return window.PUG_VARS.DARK_THEMES.includes( theme );
+  }
+
+  /**
+   * @param {string} theme The theme id.
    * @param {boolean} forced If forced to change.
    */
   async function setTheme( theme, forced ) {
@@ -182,8 +180,11 @@ let ociConfirm;
       if ( ( m == 9 && d >= 15 && d <= 31 ) || ( m == 10 && d == 1 ) ) {
         theme = 'halloween';
       }
+      if ( getCurrentPage() === 'simitone' && ! isDarkMode( theme ) ) {
+        theme = 'simitone';
+      }
     }
-    querySelector( 'body' ).className = theme;
+    document.querySelector( 'body' ).className = theme;
   }
 
   /**
@@ -225,7 +226,7 @@ let ociConfirm;
 
           // Add new lots to the DOM
           data.lots.forEach( lot => {
-            const lotTemplate = querySelector( '#now-trending-item-template' );
+            const lotTemplate = document.querySelector( '#now-trending-item-template' );
             const lotElement = document.importNode( lotTemplate.content, true );
 
             lotElement.querySelector( '.lot-name' ).textContent = lot.name;
@@ -255,10 +256,10 @@ let ociConfirm;
    */
   async function fetchNews( userRequested ) {
     const rssUrl = window.PUG_VARS.RSS_URL;
-    const didYouKnow = querySelector( '#did-you-know' );
-    const rss = querySelector( '#rss' );
-    const spinner = querySelector( '#rss-loading' );
-    const homeRefreshBtn = querySelector( '#refresh-home-button' );
+    const didYouKnow = document.querySelector( '#did-you-know' );
+    const rss = document.querySelector( '#rss' );
+    const spinner = document.querySelector( '#rss-loading' );
+    const homeRefreshBtn = document.querySelector( '#refresh-home-button' );
     const homeRefreshBtnIcon = homeRefreshBtn.querySelector( 'i' );
 
     homeRefreshBtn.setAttribute( 'disabled', true );
@@ -283,17 +284,17 @@ let ociConfirm;
         spinner.style.display = 'none';
       }, 500 );
 
-      querySelector( '#rss .alt-content' ).style.display = errors ? 'block' : 'none';
+      document.querySelector( '#rss .alt-content' ).style.display = errors ? 'block' : 'none';
 
       if ( errors || ! response ) {
         return console.error( 'rss feed failed', { errors, response } );
       }
       // Clear the rss container for the new articles.
-      querySelector( '#rss-root' ).innerHTML = '';
+      document.querySelector( '#rss-root' ).innerHTML = '';
 
       response?.items?.forEach( function ( entry ) {
         // Get the article template from the DOM
-        const articleTemplate = querySelector( '#article-template' );
+        const articleTemplate = document.querySelector( '#article-template' );
         const articleElement  = document.importNode( articleTemplate.content, true );
 
         // Set the content for the article element
@@ -311,7 +312,7 @@ let ociConfirm;
           .innerHTML = window.DOMPurify.sanitize( articleContent );
 
         // Append the article element to the DOM
-        querySelector( '#rss-root' ).appendChild( articleElement );
+        document.querySelector( '#rss-root' ).appendChild( articleElement );
       } );
     }
 
@@ -336,13 +337,13 @@ let ociConfirm;
    * @param {string} pageId The page id to show hints of.
    */
   function showHints( pageId ) {
-    const hints = querySelectorAll( '[hint-page]' );
+    const hints = document.querySelectorAll( '[hint-page]' );
     for ( let i = 0; i < hints.length; i++ ) {
       hints[ i ].style.display = 'none';
     }
     const hintId = 'HINT_' + pageId;
     if ( ! localStorage[ hintId ] ) {
-      const hints = querySelectorAll( `[hint-page="${pageId}"]` );
+      const hints = document.querySelectorAll( `[hint-page="${pageId}"]` );
       for ( let j = 0; j < hints.length; j++ ) {
         hints[ j ].style.display = 'block';
         addEventListener( hints[ j ], 'click', e => {
@@ -358,8 +359,8 @@ let ociConfirm;
    */
   navigateTo = pageId => {
     if ( pageId == 'simitone' ) {
-      if ( querySelector( 'body' ).className != 'simitone' ) {
-        prevTheme = querySelector( 'body' ).className;
+      if ( document.querySelector( 'body' ).className != 'simitone' ) {
+        prevTheme = document.querySelector( 'body' ).className;
       }
       if ( ! window.PUG_VARS.DARK_THEMES.includes( prevTheme ) ) { // Stay in dark theme.
         setTheme( 'simitone', true );
@@ -378,14 +379,14 @@ let ociConfirm;
         simitoneInterval = null;
       }
     }
-    const menuItems = querySelectorAll( 'li[page-trigger]' );
+    const menuItems = document.querySelectorAll( 'li[page-trigger]' );
     for ( let i = 0; i < menuItems.length; i++ ) {
       menuItems[ i ].classList.remove( 'active' );
     }
-    querySelector( `li[page-trigger="${pageId}"]` )
+    document.querySelector( `li[page-trigger="${pageId}"]` )
       .classList.add( 'active' );
 
-    const pages = querySelectorAll( 'div.page' );
+    const pages = document.querySelectorAll( 'div.page' );
     for ( let j = pages.length - 1; 0 <= j; j-- ) {
       pages[ j ].style.display = 'none';
     }
@@ -402,7 +403,7 @@ let ociConfirm;
   function restoreConfiguration( vars ) {
     for ( const section in vars )
       for ( const item in vars[ section ] ) {
-        const option = querySelector( `[option-id="${section}.${item}"]` );
+        const option = document.querySelector( `[option-id="${section}.${item}"]` );
         if ( isDarwin && item == 'GraphicsMode' )
           continue;
         option && ( option.value = vars[ section ][ item ] );
@@ -419,13 +420,13 @@ let ociConfirm;
    */
   function fullInstallProgress( title, text1, text2, _progress ) {
     if ( ! ( title && text1 && text2 ) ) {
-      return querySelector( '#full-install' ).style.display = 'none';
+      return document.querySelector( '#full-install' ).style.display = 'none';
     }
-    querySelector( '#full-install-title' ).textContent = title;
-    querySelector( '#full-install-text1' ).textContent = text1;
-    querySelector( '#full-install-text2' ).innerHTML = text2;
-    querySelector( '#full-install-progress' ).style.width  = '100%';
-    querySelector( '#full-install' ).style.display = 'block';
+    document.querySelector( '#full-install-title' ).textContent = title;
+    document.querySelector( '#full-install-text1' ).textContent = text1;
+    document.querySelector( '#full-install-text2' ).innerHTML = text2;
+    document.querySelector( '#full-install-progress' ).style.width  = '100%';
+    document.querySelector( '#full-install' ).style.display = 'block';
   }
 
   /**
@@ -436,13 +437,13 @@ let ociConfirm;
    * @param {string} url   Notification url (optional).
    */
   function createNotification( title, body, url ) {
-    querySelector( '#notifications-page .alt-content' ).style.display = 'none';
+    document.querySelector( '#notifications-page .alt-content' ).style.display = 'none';
 
     const id = Math.floor( Date.now() / 1000 );
     const notificationElement = createNotificationElement( title, body, url );
     notificationElement.querySelector( '.notification' ).id = `FSONotification${id}`;
 
-    const pageContent = querySelector( '#notifications-page .page-content' );
+    const pageContent = document.querySelector( '#notifications-page .page-content' );
     pageContent.prepend( notificationElement );
 
     addEventListener( `#FSONotification${id} .notification-body`,
@@ -454,7 +455,7 @@ let ociConfirm;
   }
 
   function createNotificationElement( title, body, url ) {
-    const template = querySelector( '#notification-template' );
+    const template = document.querySelector( '#notification-template' );
     const notification = document.importNode( template.content, true );
 
     notification.querySelector( '.notification-title' )
@@ -536,13 +537,13 @@ let ociConfirm;
         modalRespId && window.shared.send( modalRespId, ! 1, extra );
       } );
     }
-    querySelector( '#launcher' ).appendChild( modalElement );
+    document.querySelector( '#launcher' ).appendChild( modalElement );
 
     showModal( modalDiv );
   }
 
   function createYesNoModalElement( title, text, yesText, noText, type, modalRespId ) {
-    const modalTemplate = querySelector( '#yes-no-modal-template' );
+    const modalTemplate = document.querySelector( '#yes-no-modal-template' );
     const modalElement  = document.importNode( modalTemplate.content, true );
 
     if ( modalRespId ) {
@@ -565,14 +566,14 @@ let ociConfirm;
   }
 
   function clearInstallerHints() {
-    const hints = querySelectorAll( '[hint-page="installer"]' );
+    const hints = document.querySelectorAll( '[hint-page="installer"]' );
     for ( let j = 0; j < hints.length; j++ ) {
       hints[ j ].style.display = 'none';
     }
   }
 
   function clearModals() {
-    const modals = querySelectorAll( '.overlay-closeable' );
+    const modals = document.querySelectorAll( '.overlay-closeable' );
     for ( let j = 0; j < modals.length; j++ ) {
       closeModal( modals[ j ] );
     }
@@ -605,25 +606,25 @@ let ociConfirm;
   }
 
   function hideOverlay() {
-    const overlayUsing = querySelectorAll( '.overlay-closeable' );
+    const overlayUsing = document.querySelectorAll( '.overlay-closeable' );
     if ( overlayUsing.length === 0 || ( ! Array.from( overlayUsing ).some( isVisible ) ) ) {
-      querySelector( '#overlay' ).style.display = 'none';
+      document.querySelector( '#overlay' ).style.display = 'none';
     }
   }
   function showOverlay() {
-    querySelector( '#overlay' ).style.display = 'block';
+    document.querySelector( '#overlay' ).style.display = 'block';
   }
 
   let ociFolder;
 
   function openOneClickInstall() {
-    const oci = querySelector( '.oneclick-install' );
+    const oci = document.querySelector( '.oneclick-install' );
     oci.classList.remove( 'oneclick-install-selected' );
     showModal( oci );
   }
 
   closeOneClickInstall = () => {
-    closeModal( querySelector( '.oneclick-install' ) );
+    closeModal( document.querySelector( '.oneclick-install' ) );
   };
 
   ociPickFolder = () => {
@@ -634,14 +635,14 @@ let ociConfirm;
     e.stopPropagation();
     if ( ociFolder ) {
       send( 'FULL_INSTALL_CONFIRM', true );
-      closeModal( querySelector( '.oneclick-install' ) );
+      closeModal( document.querySelector( '.oneclick-install' ) );
     }
   };
 
   function ociPickedFolder( folder ) {
     ociFolder = folder;
-    const oci = querySelector( '.oneclick-install' );
-    const ociFolderElement = querySelector( '.oneclick-install-folder' );
+    const oci = document.querySelector( '.oneclick-install' );
+    const ociFolderElement = document.querySelector( '.oneclick-install-folder' );
     oci.classList.add( 'oneclick-install-selected' );
     ociFolderElement.innerHTML = folder;
     ociFolder = folder;
@@ -683,7 +684,7 @@ let ociConfirm;
   onMessage( 'REMESH_INFO', ( a, v ) => {
     if ( ! v ) return;
 
-    querySelector( '#remeshinfo' ).style.display = 'block';
+    document.querySelector( '#remeshinfo' ).style.display = 'block';
 
     const template = document.querySelector( '#remesh-info-template' );
     const node = document.importNode( template.content, true );
@@ -696,16 +697,16 @@ let ociConfirm;
 
     if ( seconds < 172800 ) {
       if ( Math.floor( seconds / 86400 ) <= 1 ) {
-        querySelector( '.item[install="RMS"]' ).classList.add( 'recent' );
+        document.querySelector( '.item[install="RMS"]' ).classList.add( 'recent' );
       } else {
-        querySelector( '.item[install="RMS"]' ).classList.remove( 'recent' );
+        document.querySelector( '.item[install="RMS"]' ).classList.remove( 'recent' );
       }
     } else {
-      querySelector( '.item[install="RMS"]' ).classList.remove( 'recent' );
+      document.querySelector( '.item[install="RMS"]' ).classList.remove( 'recent' );
     }
 
-    querySelector( '#remeshinfo' ).innerHTML = '';
-    querySelector( '#remeshinfo' ).appendChild( node );
+    document.querySelector( '#remeshinfo' ).innerHTML = '';
+    document.querySelector( '#remeshinfo' ).appendChild( node );
   } );
   // OCI_PICKED_FOLDER
   onMessage( 'OCI_PICKED_FOLDER', ( a, folder ) => {
@@ -723,16 +724,16 @@ let ociConfirm;
   } );
   onMessage( 'SIMITONE_SET_VER', ( a, b ) => {
     if ( b ) {
-      querySelector( '#simitone-ver' ).textContent = `(Installed: ${b})`;
+      document.querySelector( '#simitone-ver' ).textContent = `(Installed: ${b})`;
     } else {
-      querySelector( '#simitone-ver' ).textContent = '';
+      document.querySelector( '#simitone-ver' ).textContent = '';
     }
   } );
   // SET_THEME
   onMessage( 'SET_THEME', ( a, themeId ) => ( setTheme( themeId ), prevTheme = null ) );
   // SET_TIP
   onMessage( 'SET_TIP', ( a, tipText ) => {
-    querySelector( '#tip-text' ).innerHTML = window.DOMPurify.sanitize( tipText );
+    document.querySelector( '#tip-text' ).innerHTML = window.DOMPurify.sanitize( tipText );
   } );
   // TOAST
   onMessage( 'TOAST', ( a, t, c ) => toast( t, c ) );
@@ -752,26 +753,26 @@ let ociConfirm;
     document.body.setAttribute( 'data-insprog', 'true' );
 
     if ( b.FSO ) {
-      querySelector( '.item[install=FSO]' ).className = 'item installed';
-      querySelector( '.item[install=FSO] .item-info .install-dir' ).textContent = b.FSO;
+      document.querySelector( '.item[install=FSO]' ).className = 'item installed';
+      document.querySelector( '.item[install=FSO] .item-info .install-dir' ).textContent = b.FSO;
     } else {
-      querySelector( '.item[install=FSO]' ).className = 'item';
+      document.querySelector( '.item[install=FSO]' ).className = 'item';
     }
     if ( b.TSO ) {
-      querySelector( '.item[install=TSO]' ).className = 'item installed';
-      querySelector( '.item[install=TSO] .item-info .install-dir' ).textContent = b.TSO;
+      document.querySelector( '.item[install=TSO]' ).className = 'item installed';
+      document.querySelector( '.item[install=TSO] .item-info .install-dir' ).textContent = b.TSO;
     } else {
-      querySelector( '.item[install=TSO]' ).className = 'item';
+      document.querySelector( '.item[install=TSO]' ).className = 'item';
     }
     if ( b.NET ) {
-      querySelector( '.item[install=NET]' ).className = 'item installed';
+      document.querySelector( '.item[install=NET]' ).className = 'item installed';
     } else {
-      querySelector( '.item[install=NET]' ).className = 'item';
+      document.querySelector( '.item[install=NET]' ).className = 'item';
     }
     if ( b.OpenAL ) {
-      querySelector( '.item[install=OpenAL]' ).className = 'item installed';
+      document.querySelector( '.item[install=OpenAL]' ).className = 'item installed';
     } else {
-      querySelector( '.item[install=OpenAL]' ).className = 'item';
+      document.querySelector( '.item[install=OpenAL]' ).className = 'item';
     }
     if ( b.TS1 ) {
       simsInstalled();
@@ -784,19 +785,19 @@ let ociConfirm;
       simitoneNotInstalled();
     }
     if ( b.Mono ) {
-      querySelector( '.item[install=Mono]' ).className = 'item installed';
+      document.querySelector( '.item[install=Mono]' ).className = 'item installed';
     } else {
-      querySelector( '.item[install=Mono]' ).className = 'item';
+      document.querySelector( '.item[install=Mono]' ).className = 'item';
     }
     if ( b.SDL ) {
-      querySelector( '.item[install=SDL]' ).className = 'item installed';
+      document.querySelector( '.item[install=SDL]' ).className = 'item installed';
     } else {
-      querySelector( '.item[install=SDL]' ).className = 'item';
+      document.querySelector( '.item[install=SDL]' ).className = 'item';
     }
   } );
   // STOP_PROGRESS_ITEM
   onMessage( 'STOP_PROGRESS_ITEM', ( a, b ) => {
-    const item = querySelector( `#${b}` );
+    const item = document.querySelector( `#${b}` );
     if ( item ) {
       item.className = 'download stopped';
     }
@@ -817,7 +818,7 @@ let ociConfirm;
   // MAX_REFRESH_RATE
   onMessage( 'MAX_REFRESH_RATE', ( a, rate ) => {
     if ( rate ) {
-      querySelector( '[option-id="Game.RefreshRate"]' )
+      document.querySelector( '[option-id="Game.RefreshRate"]' )
         .setAttribute( 'max', rate );
     }
   } );
@@ -841,7 +842,7 @@ let ociConfirm;
   addEventListener( document.body,               'mousedown',   e => toggleKeyboardUser( e ) );
 
   // Disable click for installation path tag
-  querySelectorAll( '.item-info' ).forEach( function ( item ) {
+  document.querySelectorAll( '.item-info' ).forEach( function ( item ) {
     item.addEventListener( 'click', function ( event ) {
       event.stopPropagation();
     } );
