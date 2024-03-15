@@ -25,13 +25,13 @@ jobs:
         run: |
           npm install
           npm run build
-        working-directory: other/fsolauncher-remeshes
+        working-directory: extras/fsolauncher-remeshes
 
       - name: Build Proxy
         run: |
           npm install
           npm run build
-        working-directory: other/fsolauncher-proxy
+        working-directory: extras/fsolauncher-proxy
 
       - name: Calculate Remeshes SHA256
         run: |
