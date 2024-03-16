@@ -58,8 +58,8 @@ test.describe( 'installer', () => {
 
   test( 'is still installed after a launcher restart', async () => {
     await T.getWindow().locator( '[page-trigger="installer"]' ).click();
-    expect( await T.getWindow().locator( '.item.installed[install="FSO"]' ).isVisible() ).toBeTruthy();
-    expect( await T.getWindow().locator( '.item.installed[install="TSO"]' ).isVisible() ).toBeTruthy();
+    await T.getWindow().locator( '.item.installed[install="FSO"]' ).waitFor( { state: 'visible' } );
+    await T.getWindow().locator( '.item.installed[install="TSO"]' ).waitFor( { state: 'visible' } );
   } );
 
   test( 'installs Simitone', async () => {
