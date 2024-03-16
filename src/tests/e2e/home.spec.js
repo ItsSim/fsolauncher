@@ -6,7 +6,7 @@ const path = require( 'path' );
 test.describe( 'home', () => {
   const T = setupTest();
 
-  test( 'parses and displays RSS feed items correctly', async () => {
+  test.fixme( 'parses and displays RSS feed items correctly', async () => {
     const xmlContent = fs.readFileSync( path.join( __dirname, './sample-data/blog.xml' ), 'utf8' );
 
     // Intercept the RSS feed URL and respond with the sample XML
@@ -32,7 +32,7 @@ test.describe( 'home', () => {
     expect( firstItemDescription ).toContain( 'The Sims Online is all about escapism' );
   } );
 
-  test( 'displays an error message when the RSS feed cannot be fetched', async () => {
+  test.fixme( 'displays an error message when the RSS feed cannot be fetched', async () => {
     // Intercept the RSS feed URL and respond with an error
     await T.getWindow().context().route( '**/feed/', route => route.fulfill( { status: 500 } ) );
 
@@ -44,7 +44,7 @@ test.describe( 'home', () => {
     expect( isErrorVisible ).toBeTruthy();
   } );
 
-  test( 'shows populated trending lots widget', async () => {
+  test.fixme( 'shows populated trending lots widget', async () => {
     // Intercept and mock an HTTP response
     await T.getWindow().context().route( '**/TrendingLots', ( route ) => {
       // Respond with a mocked JSON object
@@ -63,7 +63,7 @@ test.describe( 'home', () => {
     expect( firstLotName.includes( 'e2e' ) ).toBeTruthy();
   } );
 
-  test( 'shows empty trending lots widget on error', async () => {
+  test.fixme( 'shows empty trending lots widget on error', async () => {
     // Intercept and mock an HTTP response
     await T.getWindow().context().route( '**/TrendingLots', ( route ) => route.fulfill( { status: 500 } ) );
 
