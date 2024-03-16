@@ -19,8 +19,6 @@ test.describe( 'home', () => {
       } );
     } );
 
-    await T.getWindow().locator( '#rss-loading' ).waitFor( { state: 'hidden' } );
-
     await T.getWindow().locator( '#refresh-home-button' ).click();
 
     await T.getWindow().locator( '#rss-loading' ).waitFor( { state: 'hidden' } );
@@ -40,8 +38,6 @@ test.describe( 'home', () => {
   test( 'displays an error message when the RSS feed cannot be fetched', async () => {
     // Intercept the RSS feed URL and respond with an error
     await T.getWindow().context().route( '**/feed/', route => route.fulfill( { status: 500 } ) );
-
-    await T.getWindow().locator( '#rss-loading' ).waitFor( { state: 'hidden' } );
 
     await T.getWindow().locator( '#refresh-home-button' ).click();
 
@@ -63,8 +59,6 @@ test.describe( 'home', () => {
         body: lotsJSON,
       } );
     } );
-
-    await T.getWindow().locator( '#now-trending' ).waitFor();
 
     await T.getWindow().locator( '#refresh-home-button' ).click();
 
