@@ -1,16 +1,11 @@
 // playwright.config.js
 
-// Initialize the reporter array with the custom reporter
 const reporter = [
-  [ './tests/custom-reporter.js' ],
-  [ 'html', { open: 'never', outputFolder: 'tests/reports/html' } ] // Existing HTML reporter
+  [ 'html', { open: 'never', outputFolder: 'tests/reports/html' } ]
 ];
-
-// Conditionally add the GitHub reporter in CI environments
 if ( process.env.CI ) {
   reporter.push( [ 'github' ] );
 }
-
 module.exports = {
   reporter,
   workers: 1,
