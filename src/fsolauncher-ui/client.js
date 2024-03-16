@@ -45,7 +45,7 @@ let ociConfirm;
     updateTSOClock();
     setInterval( updateTSOClock, 1000 );
     // Fetch initial RSS feed and trending lots
-    setTimeout( () => fetchWidgetData(), 300 ); // some weird Electron bug
+    setTimeout( () => fetchWidgetData(), 10000 ); // testing
     // Listen for global messages
     socket.on( 'receive global message', data => handleSocketMessage( data ) );
   }
