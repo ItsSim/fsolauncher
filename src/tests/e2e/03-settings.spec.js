@@ -19,26 +19,27 @@ test.describe( 'settings', () => {
   test( 'contains valid graphics modes for OS', async () => {
     const dropdown = T.getWindow().locator( 'select[option-id="Game.GraphicsMode"]' );
     await dropdown.waitFor( { state: 'visible' } );
-    await dropdown.hover();
-    await dropdown.click();
 
     // Fetch all option element handles
     const graphicsModesOptionsHandles = await T.getWindow().locator( '[option-id="Game.GraphicsMode"] option' ).elementHandles();
 
-    // Filter out invisible options and then map to their values
+    // Evaluate the display style of each option to determine visibility
     const graphicsModesValues = await Promise.all(
-      graphicsModesOptionsHandles
-        .map( async ( handle ) => {
-          const isVisible = await handle.isVisible();
-          const value = await handle.getAttribute( 'value' );
-          return isVisible ? value : null;
-        } )
+      graphicsModesOptionsHandles.map( async ( handle ) => {
+        // Use evaluate to check the computed style directly in the browser context
+        const displayStyle = await handle.evaluate( el => window.getComputedStyle( el ).display );
+        // If the display style is not 'none', consider the element as visible and return its value
+        if ( displayStyle !== 'none' ) {
+          return handle.getAttribute( 'value' );
+        }
+        return null; // Otherwise, return null to indicate the option is not visible
+      } )
     );
 
-    // Filter out null values resulting from invisible options
+    // Filter out null values resulting from options with display: none
     const visibleGraphicsModesValues = graphicsModesValues.filter( value => value !== null );
 
-    // Now visibleGraphicsModesValues should only contain values of visible options
+    // Assertions based on expected visible options
     if ( process.platform === 'darwin' ) {
       expect( visibleGraphicsModesValues ).not.toContain( 'dx' );
       expect( visibleGraphicsModesValues ).not.toContain( 'sw' );
@@ -47,6 +48,7 @@ test.describe( 'settings', () => {
       expect( visibleGraphicsModesValues ).toContain( 'sw' );
     }
   } );
+
 
 
 } );
