@@ -2,7 +2,7 @@ const { test, expect } = require( '@playwright/test' );
 const setupTest = require( './setup-test' );
 
 test.describe( 'settings', () => {
-  const T = setupTest( test );
+  const T = setupTest();
 
   test( 'changes the theme', async () => {
     await T.getWindow().locator( '[page-trigger="settings"]' ).click();

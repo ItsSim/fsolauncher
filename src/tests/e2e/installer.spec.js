@@ -7,11 +7,10 @@ const fs = require( 'fs-extra' );
 const setupTest = require( './setup-test' );
 
 test.describe( 'installer', () => {
-
   // Timeout for long tests
   const INSTALL_TIMEOUT_MS = 15 * 60 * 1000; // 15 minutes
 
-  const T = setupTest( test );
+  const T = setupTest();
 
   test( 'performs a complete installation', async () => {
     await T.getWindow().locator( '[page-trigger="installer"]' ).click();

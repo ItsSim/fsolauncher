@@ -1,12 +1,10 @@
 const { _electron: electron } = require( 'playwright' );
+const { test } = require( '@playwright/test' );
 const { findLatestBuild, parseElectronApp } = require( 'electron-playwright-helpers' );
 const fs = require( 'fs-extra' );
 const path = require( 'path' );
 
-/**
- * @param {import('@playwright/test')} test
- */
-module.exports = ( test ) => {
+module.exports = () => {
   /** @type {import('playwright').Page} */
   let window;
 

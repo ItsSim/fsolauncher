@@ -3,7 +3,7 @@ const fs = require( 'fs-extra' );
 const setupTest = require( './setup-test' );
 
 test.describe( 'main', () => {
-  const T = setupTest( test );
+  const T = setupTest();
 
   test( 'starts the app', () => {
     // Setup and teardown
