@@ -26,6 +26,9 @@ module.exports = () => {
   /** @type {string} */
   let installDir;
 
+  /** @type {string[]} */
+  let consoleErrors = [];
+
   test.beforeAll( () => {
     latestBuild = findLatestBuild( '../release' );
     appInfo = parseElectronApp( latestBuild );
@@ -39,6 +42,9 @@ module.exports = () => {
   } );
 
   test.beforeEach( async () => {
+    // Reset console errors at the start of each test
+    consoleErrors = [];
+
     // Pass in --test-mode for headless testing
     electronApp = await electron.launch( {
       timeout: 60000,
@@ -53,17 +59,18 @@ module.exports = () => {
     // Log main process
     electronApp.process().stdout.on( 'data', data => console.info( `[main] ${data}` ) );
     electronApp.process().stderr.on( 'data', error => console.info( `[main] ${error}` ) );
+    electronApp.process().stderr.on( 'data', error => consoleErrors.push( `[main] ${error}` ) );
 
     window = await electronApp.firstWindow();
     console.info( '[beforeEach] waited for firstWindow' );
 
     // Log renderer process
     window.on( 'console', log => console.info( `[renderer] ${log.text()}` ) );
-
-    await window.waitForLoadState( 'load' ); // Waits for the page to be completely loaded
-    console.info( '[beforeEach] achieved loadState' );
-    await window.locator( '[data-insprog="true"]' ).waitFor();
-    console.info( '[beforeEach] INS_PROG was received by renderer' );
+    window.on( 'console', log => {
+      if ( log.type() === 'error' ) {
+        consoleErrors.push( `[renderer] ${log.text()}` );
+      }
+    } );
   } );
 
   test.afterEach( async () => {
@@ -85,6 +92,12 @@ module.exports = () => {
     getAppInfo: () => appInfo,
     getExeDir: () => exeDir,
     getAppData: () => appData,
-    getInstallDir: () => installDir
+    getInstallDir: () => installDir,
+    getConsoleErrors: () => ( {
+      main: consoleErrors.filter( e => e.includes( '[main]' ) ),
+      renderer: consoleErrors.filter( e => e.includes( '[renderer]' ) ),
+      all: consoleErrors
+    } ),
+    clearConsoleErrors: () => ( consoleErrors = [] )
   };
 };

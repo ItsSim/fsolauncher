@@ -4,19 +4,24 @@ const fs = require( 'fs-extra' );
 const path = require( 'path' );
 
 test.describe( 'home', () => {
+  const blogXML = fs.readFileSync( path.join( __dirname, './sample-data/blog.xml' ), 'utf8' );
+  const lotsJSON = JSON.stringify( require( './sample-data/trending-lots.json' ) );
+
   const T = setupTest();
 
-  test.fixme( 'parses and displays RSS feed items correctly', async () => {
-    const xmlContent = fs.readFileSync( path.join( __dirname, './sample-data/blog.xml' ), 'utf8' );
-
+  test( 'parses and displays RSS feed items correctly', async () => {
     // Intercept the RSS feed URL and respond with the sample XML
     await T.getWindow().context().route( '**/feed/', route => {
       route.fulfill( {
         status: 200,
         contentType: 'application/rss+xml',
-        body: xmlContent,
+        body: blogXML,
       } );
     } );
+
+    await T.getWindow().locator( '#rss-loading' ).waitFor( { state: 'hidden' } );
+
+    await T.getWindow().locator( '#refresh-home-button' ).click();
 
     await T.getWindow().locator( '#rss-loading' ).waitFor( { state: 'hidden' } );
 
@@ -32,9 +37,13 @@ test.describe( 'home', () => {
     expect( firstItemDescription ).toContain( 'The Sims Online is all about escapism' );
   } );
 
-  test.fixme( 'displays an error message when the RSS feed cannot be fetched', async () => {
+  test( 'displays an error message when the RSS feed cannot be fetched', async () => {
     // Intercept the RSS feed URL and respond with an error
     await T.getWindow().context().route( '**/feed/', route => route.fulfill( { status: 500 } ) );
+
+    await T.getWindow().locator( '#rss-loading' ).waitFor( { state: 'hidden' } );
+
+    await T.getWindow().locator( '#refresh-home-button' ).click();
 
     await T.getWindow().locator( '#rss-loading' ).waitFor( { state: 'hidden' } );
 
@@ -44,16 +53,20 @@ test.describe( 'home', () => {
     expect( isErrorVisible ).toBeTruthy();
   } );
 
-  test.fixme( 'shows populated trending lots widget', async () => {
+  test( 'shows populated trending lots widget', async () => {
     // Intercept and mock an HTTP response
     await T.getWindow().context().route( '**/TrendingLots', ( route ) => {
       // Respond with a mocked JSON object
       route.fulfill( {
         status: 200,
         contentType: 'application/json',
-        body: JSON.stringify( require( './sample-data/trending-lots.json' ) ),
+        body: lotsJSON,
       } );
     } );
+
+    await T.getWindow().locator( '#now-trending' ).waitFor();
+
+    await T.getWindow().locator( '#refresh-home-button' ).click();
 
     await T.getWindow().locator( '#now-trending' ).waitFor();
 
@@ -61,14 +74,5 @@ test.describe( 'home', () => {
     expect( await T.getWindow().locator( '#now-trending ul li' ).count() ).toBe( 10 );
     const firstLotName = await T.getWindow().locator( '#now-trending ul li:first-child .lot-name' ).innerText();
     expect( firstLotName.includes( 'e2e' ) ).toBeTruthy();
-  } );
-
-  test.fixme( 'shows empty trending lots widget on error', async () => {
-    // Intercept and mock an HTTP response
-    await T.getWindow().context().route( '**/TrendingLots', ( route ) => route.fulfill( { status: 500 } ) );
-
-    await T.getWindow().locator( '#now-trending' ).waitFor();
-    expect( await T.getWindow().locator( '#now-trending .top span i' ).innerText() ).toBe( '0' );
-    expect( await T.getWindow().locator( '#now-trending ul li' ).count() ).toBe( 0 );
   } );
 } );

@@ -40,10 +40,18 @@ test.describe( 'installer', () => {
     expect( await T.getWindow().locator( '.item.installed[install="FSO"]' ).isVisible() ).toBeTruthy();
     expect( await T.getWindow().locator( '.item.installed[install="TSO"]' ).isVisible() ).toBeTruthy();
 
+    T.clearConsoleErrors(); // Clear errors so we can catch any after the button click
+
     await T.getWindow().locator( 'button.launch' ).click();
 
     // Expect no errors when launching the game
     expect( await T.getWindow().locator( '.modal-error' ).isVisible() ).toBeFalsy();
+
+    // Wait for a few seconds to catch any delayed errors
+    await T.getWindow().waitForTimeout( 500 );
+
+    // Assert that no console errors were logged
+    expect( T.getConsoleErrors().main ).toEqual( [] );
 
     await killGame();
   } );
