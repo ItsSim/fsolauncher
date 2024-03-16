@@ -34,8 +34,8 @@ jobs:
       id: cache-node-modules
       uses: actions/cache@v2
       with:
-        path: src/node_modules
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('src/package-lock.json') }}
+        path: app/node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('app/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-node-modules-
 
@@ -49,21 +49,21 @@ jobs:
     - name: Install dependencies
       if: steps.cache-node-modules.outputs.cache-hit != 'true'
       run: npm ci
-      working-directory: src
+      working-directory: app
 
     - name: Run ESLint
       run: npm run lint
-      working-directory: src
+      working-directory: app
 
     - name: Build
       run: npm run ${{ matrix.build_command }}
-      working-directory: src
+      working-directory: app
 
     - name: Run e2e tests
       run: npm run test
       env:
         GITHUB_RATELIMIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      working-directory: src
+      working-directory: app
 
     - name: List contents of the release directory (Windows)
       if: matrix.os == 'windows-latest'

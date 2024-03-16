@@ -20,7 +20,7 @@ The official FreeSO Launcher for Windows and macOS.
 ## Running the Launcher Locally
 
 1. Clone the repository.
-2. Navigate to the `src` folder.
+2. Navigate to the `app` folder.
 3. Run `npm install`.
 4. Run `npm run start`.
 
@@ -28,8 +28,8 @@ The official FreeSO Launcher for Windows and macOS.
 
 After cloning and running `npm install`, build the launcher by following the steps below:
 
-- **For Windows**: In the `src` folder, run `npm run buildwin`.
-- **For macOS**: In the `src` folder, run `npm run builddarwin`.
+- **For Windows**: In the `app` folder, run `npm run buildwin`.
+- **For macOS**: In the `app` folder, run `npm run builddarwin`.
 
 Built binaries are generated in the `release` folder (`FreeSO Launcher.dmg` for macOS and `FreeSO Launcher Setup.exe` for Windows).
 

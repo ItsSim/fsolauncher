@@ -73,14 +73,14 @@ jobs:
 
     - name: Replace Sentry DSN and Browser Loader (Windows)
       if: matrix.os == 'windows-latest'
-      working-directory: src
+      working-directory: app
       run: |
         (Get-Content sentry.config.js) -replace "SENTRY_CI_DSN", "${{ secrets.SENTRY_CI_DSN }}" | Set-Content sentry.config.js
         (Get-Content sentry.config.js) -replace "SENTRY_CI_BROWSER_LOADER", "${{ secrets.SENTRY_CI_BROWSER_LOADER }}" | Set-Content sentry.config.js
         
     - name: Replace Sentry DSN and Browser Loader (macOS)
       if: matrix.os == 'macos-latest'
-      working-directory: src
+      working-directory: app
       run: |
         sed "s#SENTRY_CI_DSN#${{ secrets.SENTRY_CI_DSN }}#g" sentry.config.js > sentry.config.temp.js
         mv sentry.config.temp.js sentry.config.js
@@ -100,7 +100,7 @@ jobs:
           ~/.electron
           ~/Library/Caches/electron
           ~/AppData/Local/electron/Cache/
-        key: ${{ runner.os }}-electron-binaries-${{ hashFiles('src/package-lock.json') }}
+        key: ${{ runner.os }}-electron-binaries-${{ hashFiles('app/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-electron-binaries-
 
@@ -108,8 +108,8 @@ jobs:
       id: cache-node-modules
       uses: actions/cache@v2
       with:
-        path: src/node_modules
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('src/package-lock.json') }}
+        path: app/node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('app/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-node-modules-
 
@@ -123,21 +123,21 @@ jobs:
     - name: Install dependencies
       if: steps.cache-node-modules.outputs.cache-hit != 'true'
       run: npm ci
-      working-directory: src
+      working-directory: app
 
     - name: Run ESLint
       run: npm run lint
-      working-directory: src
+      working-directory: app
 
     - name: Build
       run: npm run ${{ matrix.build_command }}
-      working-directory: src
+      working-directory: app
 
     - name: Run e2e tests
       run: npm run test
       env:
         GITHUB_RATELIMIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      working-directory: src
+      working-directory: app
       
     - name: Calculate hashes and save to files (Windows)
       if: matrix.os == 'windows-latest'
@@ -193,7 +193,7 @@ jobs:
     - name: Get version
       uses: nyaa8/package-version@v1
       with:
-        path: 'src/package.json'
+        path: 'app/package.json'
         follow-symlinks: 'false'
 
     - name: Calculate release type counter

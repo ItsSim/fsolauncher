@@ -1,8 +1,8 @@
 node_modules
-/src/FSOLauncher.ini
-/src/bin/
-/src/temp/
-/src/tests/reports/
+/app/FSOLauncher.ini
+/app/bin/
+/app/temp/
+/app/tests/reports/
 /release/*
 !/release/win32-ia32.iss
 .DS_Store
