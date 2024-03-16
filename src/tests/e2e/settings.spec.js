@@ -1,5 +1,5 @@
 const { test, expect } = require( '@playwright/test' );
-const setupTest = require( './setup-test' );
+const setupTest = require( './util/setup-test' );
 
 test.describe( 'settings', () => {
   const T = setupTest();

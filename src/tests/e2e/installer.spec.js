@@ -4,7 +4,7 @@ const { promisify } = require( 'util' );
 
 const exec = promisify( require( 'child_process' ).exec );
 const fs = require( 'fs-extra' );
-const setupTest = require( './setup-test' );
+const setupTest = require( './util/setup-test' );
 
 test.describe( 'installer', () => {
   // Timeout for long tests

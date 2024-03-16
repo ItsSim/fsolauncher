@@ -1,6 +1,6 @@
 const { test, expect } = require( '@playwright/test' );
 const fs = require( 'fs-extra' );
-const setupTest = require( './setup-test' );
+const setupTest = require( './util/setup-test' );
 
 test.describe( 'main', () => {
   const T = setupTest();

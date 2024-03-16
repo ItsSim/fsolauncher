@@ -4,7 +4,7 @@ const { findLatestBuild, parseElectronApp } = require( 'electron-playwright-help
 const fs = require( 'fs-extra' );
 const path = require( 'path' );
 
-module.exports = () => {
+module.exports = ( waitForLoad = true ) => {
   /** @type {import('playwright').Page} */
   let window;
 
@@ -39,14 +39,18 @@ module.exports = () => {
   } );
 
   test.beforeEach( async () => {
-  // Pass in --test-mode for headless testing
+    // Pass in --test-mode for headless testing
     electronApp = await electron.launch( {
       timeout: 60000,
       cwd: exeDir,
-      args: [ appInfo.main, '--test-mode=true' ], // Main file from package.json
+      args: [ appInfo.main, '--test-mode=true', '--disable-http-cache' ], // Main file from package.json
       executablePath: appInfo.executable // Path to the Electron executable
     } );
     console.info( '[beforeEach] launched electronApp' );
+
+    await electronApp.evaluate( async ( { session } ) => {
+      await session.defaultSession.clearCache();
+    } );
 
     // Log main process
     electronApp.process().stdout.on( 'data', data => console.info( `[main] ${data}` ) );
@@ -58,10 +62,12 @@ module.exports = () => {
     // Log renderer process
     window.on( 'console', log => console.info( `[renderer] ${log.text()}` ) );
 
-    await window.waitForLoadState( 'load' ); // Waits for the page to be completely loaded
-    console.info( '[beforeEach] achieved loadState' );
-    await window.locator( '[data-insprog="true"]' ).waitFor();
-    console.info( '[beforeEach] INS_PROG was received by renderer' );
+    if ( waitForLoad ) {
+      await window.waitForLoadState( 'load' ); // Waits for the page to be completely loaded
+      console.info( '[beforeEach] achieved loadState' );
+      await window.locator( '[data-insprog="true"]' ).waitFor();
+      console.info( '[beforeEach] INS_PROG was received by renderer' );
+    }
   } );
 
   test.afterEach( async () => {

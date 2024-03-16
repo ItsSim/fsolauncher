@@ -51,14 +51,6 @@ let ociConfirm;
   function onMessage( id, callback ) {
     return window.shared.on( id, callback );
   }
-  function timeout( promise, milliseconds = 5000 ) {
-    return new Promise( ( resolve, reject ) => {
-      setTimeout( () => {
-        reject( 'Timeout exceeded' );
-      }, milliseconds );
-      promise.then( resolve, reject );
-    } );
-  }
   function addEventListener( s, eventType, callback ) {
     s = s.tagName ? s : document.querySelector( s );
     if ( eventType === 'click' ) {
@@ -213,40 +205,49 @@ let ociConfirm;
     toast?.parentNode?.removeChild( toast );
   }
 
-  function fetchTrendingLots() {
-    return new Promise( ( resolve, _reject ) => {
-      fetch( 'https://beta.freeso.org/LauncherResourceCentral/TrendingLots' )
-        .then( response => response.json() )
-        .then( data => {
-          document.querySelector( '#now-trending .top span i' ).textContent = data.avatarsOnline;
+  async function fetchTrendingLots() {
+    try {
+      // Use async/await instead of Promise.then() for cleaner syntax
+      const response = await fetch( 'https://beta.freeso.org/LauncherResourceCentral/TrendingLots' );
+      const data = await response.json();
 
-          // Clear existing lots
-          const container = document.querySelector( '#now-trending ul' );
-          container.innerHTML = '';
+      // Directly accessing elements
+      const avatarsOnlineElement = document.querySelector( '#now-trending .top span i' );
+      const container = document.querySelector( '#now-trending ul' );
 
-          // Add new lots to the DOM
-          data.lots.forEach( lot => {
-            const lotTemplate = document.querySelector( '#now-trending-item-template' );
-            const lotElement = document.importNode( lotTemplate.content, true );
+      // Update avatars online count
+      avatarsOnlineElement.textContent = data.avatarsOnline;
 
-            lotElement.querySelector( '.lot-name' ).textContent = lot.name;
-            lotElement.querySelector( '.owner span' ).textContent = lot.ownerDetails.name;
-            lotElement.querySelector( '.players .count' ).textContent = lot.avatars_in_lot;
-            lotElement.querySelector( '.icon img.lot' ).src = 'data:image/png;base64,' + lot.base64Image;
-            lotElement.querySelector( '.icon .avatar' ).style.backgroundImage = 'url(data:image/png;base64,' + lot.ownerDetails.base64Image + ')';
+      // Clear existing lots
+      container.innerHTML = '';
 
-            if ( lot.is_trending ) {
-              lotElement.querySelector( 'li' ).classList.add( 'hot' );
-            } else {
-              lotElement.querySelector( 'li' ).classList.remove( 'hot' );
-            }
+      // Iterating over lots to update the DOM
+      data.lots.forEach( lot => {
+        const lotTemplate = document.querySelector( '#now-trending-item-template' );
+        const lotElement = document.importNode( lotTemplate.content, true );
 
-            container.appendChild( lotElement );
-          } );
-        } )
-        .catch( err => console.log( 'Error while fetching lots:', err ) )
-        .finally( resolve );
-    } );
+        // Setting lot details
+        lotElement.querySelector( '.lot-name' ).textContent = lot.name;
+        lotElement.querySelector( '.owner span' ).textContent = lot.ownerDetails.name;
+        lotElement.querySelector( '.players .count' ).textContent = lot.avatars_in_lot;
+        lotElement.querySelector( '.icon img.lot' ).src = 'data:image/png;base64,' + lot.base64Image;
+        lotElement.querySelector( '.icon .avatar' ).style.backgroundImage = 'url(data:image/png;base64,' + lot.ownerDetails.base64Image + ')';
+
+        // Handling trending status
+        if ( lot.is_trending ) {
+          lotElement.querySelector( 'li' ).classList.add( 'hot' );
+        } else {
+          lotElement.querySelector( 'li' ).classList.remove( 'hot' );
+        }
+
+        // Adding the lot to the DOM
+        container.appendChild( lotElement );
+      } );
+
+    } catch ( err ) {
+      // Error handling
+      console.log( 'Error while fetching lots:', err );
+    }
   }
 
   let spinDegrees = 0;
@@ -273,64 +274,69 @@ let ociConfirm;
       homeRefreshBtnIcon.style.transform = `rotate(${spinDegrees}deg)`;
     }
 
-    await fetchTrendingLots();
+    fetchTrendingLots();
 
-    function parseRss( errors, response ) {
-      // Short pause before displaying feed to allow display to render
-      // correctly.
+    try {
+      const rssFeed = await fetch( rssUrl );
+      ( new window.RSSParser() ).parseString( await rssFeed.text(), parseAndDisplayFeed );
+    } catch ( error ) {
+      console.error( 'rss fetch failed', error );
+      parseAndDisplayFeed( error, null );
+    } finally {
+      // Re-enable refresh button after 3 seconds.
       setTimeout( () => {
-        didYouKnow.style.display = 'block';
-        rss.style.display = 'block';
-        spinner.style.display = 'none';
-      }, 500 );
-
-      document.querySelector( '#rss .alt-content' ).style.display = errors ? 'block' : 'none';
-
-      if ( errors || ! response ) {
-        return console.error( 'rss feed failed', { errors, response } );
-      }
-      // Clear the rss container for the new articles.
-      document.querySelector( '#rss-root' ).innerHTML = '';
-
-      response?.items?.forEach( function ( entry ) {
-        // Get the article template from the DOM
-        const articleTemplate = document.querySelector( '#article-template' );
-        const articleElement  = document.importNode( articleTemplate.content, true );
-
-        // Set the content for the article element
-        articleElement.querySelector( '.article-title' ).textContent = entry.title;
-        articleElement.querySelector( '.article-pubDate' ).textContent = entry.pubDate
-          .replace( '+0000', '' )
-          .slice( 0, -9 );
-        articleElement.querySelector( '.article-link' ).setAttribute( 'href', entry.link );
-
-        const articleContent = entry.content
-          .replace( /\s{2,}/g, ' ' )
-          .replace( /\n/g, '' );
-
-        articleElement.querySelector( '.rss-content' )
-          .innerHTML = window.DOMPurify.sanitize( articleContent );
-
-        // Append the article element to the DOM
-        document.querySelector( '#rss-root' ).appendChild( articleElement );
-      } );
+        homeRefreshBtn.removeAttribute( 'disabled' );
+        homeRefreshBtn.style.cursor = 'pointer';
+      }, 3000 );
     }
+  }
 
-    timeout( fetch( rssUrl ) )
-      .then( async ( response ) => {
-        ( new window.RSSParser() )
-          .parseString( await response.text(), parseRss );
-      } )
-      .catch( error => {
-        console.error( 'rss fetch failed', error );
-        parseRss( error, null );
-      } );
-
-    // Re-enable refresh button after 3 seconds.
+  /**
+   * @param {*} errors
+   * @param {string} response
+   */
+  function parseAndDisplayFeed( errors, response ) {
+    const didYouKnow = document.querySelector( '#did-you-know' );
+    const rss = document.querySelector( '#rss' );
+    const spinner = document.querySelector( '#rss-loading' );
+    // Short pause before displaying feed to allow display to render
+    // correctly.
     setTimeout( () => {
-      homeRefreshBtn.removeAttribute( 'disabled' );
-      homeRefreshBtn.style.cursor = 'pointer';
-    }, 3000 );
+      didYouKnow.style.display = 'block';
+      rss.style.display = 'block';
+      spinner.style.display = 'none';
+    }, 500 );
+
+    document.querySelector( '#rss .alt-content' ).style.display = errors ? 'block' : 'none';
+
+    if ( errors || ! response ) {
+      return console.error( 'rss feed failed', { errors, response } );
+    }
+    // Clear the rss container for the new articles.
+    document.querySelector( '#rss-root' ).innerHTML = '';
+
+    response?.items?.forEach( function ( entry ) {
+      // Get the article template from the DOM
+      const articleTemplate = document.querySelector( '#article-template' );
+      const articleElement  = document.importNode( articleTemplate.content, true );
+
+      // Set the content for the article element
+      articleElement.querySelector( '.article-title' ).textContent = entry.title;
+      articleElement.querySelector( '.article-pubDate' ).textContent = entry.pubDate
+        .replace( '+0000', '' )
+        .slice( 0, -9 );
+      articleElement.querySelector( '.article-link' ).setAttribute( 'href', entry.link );
+
+      const articleContent = entry.content
+        .replace( /\s{2,}/g, ' ' )
+        .replace( /\n/g, '' );
+
+      articleElement.querySelector( '.rss-content' )
+        .innerHTML = window.DOMPurify.sanitize( articleContent );
+
+      // Append the article element to the DOM
+      document.querySelector( '#rss-root' ).appendChild( articleElement );
+    } );
   }
 
   /**

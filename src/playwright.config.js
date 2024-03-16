@@ -6,4 +6,11 @@ const reporter = [
 if ( process.env.CI ) {
   reporter.push( [ 'github' ] );
 }
-module.exports = { reporter, workers: 1 };
+module.exports = {
+  reporter,
+  workers: 1,
+  use: {
+    // Disable HTTP cache for all browser contexts
+    httpCache: false,
+  },
+};
