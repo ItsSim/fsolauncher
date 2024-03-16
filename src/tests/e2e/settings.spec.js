@@ -17,7 +17,9 @@ test.describe( 'settings', () => {
   } );
 
   test( 'contains valid graphics modes for OS', async () => {
-    await T.getWindow().locator( '[option-id="Game.GraphicsMode"]' ).click();
+    const dropdown = T.getWindow().locator( 'select[option-id="Game.GraphicsMode"]' );
+    await dropdown.hover();
+    await dropdown.click();
 
     // Fetch all option element handles
     const graphicsModesOptionsHandles = await T.getWindow().locator( '[option-id="Game.GraphicsMode"] option' ).elementHandles();
