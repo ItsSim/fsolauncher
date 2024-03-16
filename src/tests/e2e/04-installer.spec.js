@@ -91,6 +91,7 @@ test.describe( 'installer', () => {
 
   test( 'installs Remesh Package', async () => {
     await T.getWindow().locator( '[page-trigger="installer"]' ).click();
+    await T.getWindow().locator( '.item.installed[install="FSO"]' ).waitFor( { state: 'visible' } );
     await T.getWindow().locator( '[install="RMS"]' ).click();
 
     expect( await T.getWindow().locator( '.modal-error' ).isVisible() ).toBeFalsy();
