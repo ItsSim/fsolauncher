@@ -4,7 +4,7 @@ const fs = require( 'fs-extra' );
 const path = require( 'path' );
 
 test.describe( 'home', () => {
-  const T = setupTest( false );
+  const T = setupTest();
 
   test( 'parses and displays RSS feed items correctly', async () => {
     const xmlContent = fs.readFileSync( path.join( __dirname, './sample-data/blog.xml' ), 'utf8' );

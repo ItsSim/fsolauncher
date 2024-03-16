@@ -36,17 +36,25 @@ let ociConfirm;
   let simitoneUpdate;
   let prevTheme;
 
-  function initClient() {
-    send( 'INIT_DOM' );
+  function run() {
+    // Let the main process know the DOM is ready
+    sendMessage( 'INIT_DOM' );
+    // Start at the homepage
     navigateTo( 'home' );
-    fetchNews();
+    // Start the TSO clock
+    updateTSOClock();
     setInterval( updateTSOClock, 1000 );
-    socket.on( 'receive global message',
-      data => send( 'SOCKET_MESSAGE', [ data.Message, data.Url ] ) );
+    // Fetch initial RSS feed and trending lots
+    setTimeout( () => fetchWidgetData(), 300 ); // some weird Electron bug
+    // Listen for global messages
+    socket.on( 'receive global message', data => handleSocketMessage( data ) );
   }
 
-  function send( id, param ) {
-    window.shared.send( id, param );
+  function handleSocketMessage( data ) {
+    sendMessage( 'SOCKET_MESSAGE', [ data.Message, data.Url ] );
+  }
+  function sendMessage( id, ...params ) {
+    window.shared.send( id, ...params );
   }
   function onMessage( id, callback ) {
     return window.shared.on( id, callback );
@@ -255,7 +263,7 @@ let ociConfirm;
   /**
    * @param {boolean} userRequested
    */
-  async function fetchNews( userRequested ) {
+  async function fetchWidgetData( userRequested ) {
     const rssUrl = window.PUG_VARS.RSS_URL;
     const didYouKnow = document.querySelector( '#did-you-know' );
     const rss = document.querySelector( '#rss' );
@@ -394,10 +402,10 @@ let ociConfirm;
       if ( ! isDarkMode( prevTheme ) ) { // Stay in dark theme.
         setTheme( 'simitone', true );
       }
-      send( 'CHECK_SIMITONE' );
+      sendMessage( 'CHECK_SIMITONE' );
 
       simitoneInterval && clearInterval( simitoneInterval );
-      simitoneInterval = setInterval( () => send( 'CHECK_SIMITONE' ), 60000 );
+      simitoneInterval = setInterval( () => sendMessage( 'CHECK_SIMITONE' ), 60000 );
     } else {
       if ( prevTheme ) {
         setTheme( prevTheme );
@@ -542,12 +550,12 @@ let ociConfirm;
 
     addEventListener( yesButton, 'click', function () {
       closeModal( modalDiv );
-      modalRespId && window.shared.send( modalRespId, ! 0, extra );
+      modalRespId && sendMessage( modalRespId, ! 0, extra );
     } );
     if ( noText ) {
       addEventListener( noButton, 'click', function () {
         closeModal( modalDiv );
-        modalRespId && window.shared.send( modalRespId, ! 1, extra );
+        modalRespId && sendMessage( modalRespId, ! 1, extra );
       } );
     }
     document.querySelector( '#launcher' ).appendChild( modalElement );
@@ -641,13 +649,13 @@ let ociConfirm;
   };
 
   ociPickFolder = () => {
-    send( 'OCI_PICK_FOLDER' );
+    sendMessage( 'OCI_PICK_FOLDER' );
   };
 
   ociConfirm = e => {
     e.stopPropagation();
     if ( ociFolder ) {
-      send( 'FULL_INSTALL_CONFIRM', true );
+      sendMessage( 'FULL_INSTALL_CONFIRM', true );
       closeModal( document.querySelector( '.oneclick-install' ) );
     }
   };
@@ -837,16 +845,16 @@ let ociConfirm;
   } );
 
   // Renderer HTML event listeners.
-  addEventListener( '.launch',                   'click',       () => send( 'PLAY' ) );
-  addEventListener( '.launch',                   'contextmenu', () => send( 'PLAY', true ) );
-  addEventListener( '#refresh-home-button',      'click',       () => fetchNews( true ) );
-  addEventListener( '#simitone-play-button',     'click',       () => send( 'PLAY_SIMITONE' ) );
-  addEventListener( '#simitone-play-button',     'contextmenu', () => send( 'PLAY_SIMITONE', true ) );
-  addEventListener( '#full-install-button',      'click',       () => send( 'FULL_INSTALL' ) );
+  addEventListener( '.launch',                   'click',       () => sendMessage( 'PLAY' ) );
+  addEventListener( '.launch',                   'contextmenu', () => sendMessage( 'PLAY', true ) );
+  addEventListener( '#refresh-home-button',      'click',       () => fetchWidgetData( true ) );
+  addEventListener( '#simitone-play-button',     'click',       () => sendMessage( 'PLAY_SIMITONE' ) );
+  addEventListener( '#simitone-play-button',     'contextmenu', () => sendMessage( 'PLAY_SIMITONE', true ) );
+  addEventListener( '#full-install-button',      'click',       () => sendMessage( 'FULL_INSTALL' ) );
   addEventListener( '#full-install-button',      'click',       () => clearInstallerHints() );
-  addEventListener( '#update-check',             'click',       () => send( 'CHECK_UPDATES' ) );
-  addEventListener( '#simitone-install-button',  'click',       () => send( 'INSTALL', 'Simitone' ) );
-  addEventListener( '#simitone-should-update',   'click',       () => send( 'INSTALL_SIMITONE_UPDATE' ) );
+  addEventListener( '#update-check',             'click',       () => sendMessage( 'CHECK_UPDATES' ) );
+  addEventListener( '#simitone-install-button',  'click',       () => sendMessage( 'INSTALL', 'Simitone' ) );
+  addEventListener( '#simitone-should-update',   'click',       () => sendMessage( 'INSTALL_SIMITONE_UPDATE' ) );
   addEventListener( '#overlay',                  'click',       () => clearModals() );
   addEventListener( '.oneclick-install-select',  'click',       () => ociPickFolder() );
   addEventListener( '.oneclick-install-close',   'click',       () => closeOneClickInstall() );
@@ -930,16 +938,16 @@ let ociConfirm;
     }
     const optionPath = optionId.split( '.' );
 
-    send( 'SET_CONFIGURATION', [ optionPath[ 0 ], optionPath[ 1 ], inputValue ] );
+    sendMessage( 'SET_CONFIGURATION', [ optionPath[ 0 ], optionPath[ 1 ], inputValue ] );
   } );
   addEventListenerAll( '[page-trigger]', 'click', ( a, _b ) => {
     clickAudio.play();
     navigateTo( a.currentTarget.getAttribute( 'page-trigger' ) );
   } );
   addEventListenerAll( '[install]', 'click', ( a, _b ) =>
-    send( 'INSTALL', a.currentTarget.getAttribute( 'install' ) ) );
+    sendMessage( 'INSTALL', a.currentTarget.getAttribute( 'install' ) ) );
   addEventListenerAll( '[install] .item-info i.material-icons', 'click', ( a, _b ) =>
-    send( 'OPEN_FOLDER', a.currentTarget.closest( '.item' ).getAttribute( 'install' ) ) );
+    sendMessage( 'OPEN_FOLDER', a.currentTarget.closest( '.item' ).getAttribute( 'install' ) ) );
 
-  initClient();
+  run();
 } )();
