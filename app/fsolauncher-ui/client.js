@@ -60,16 +60,33 @@ let ociConfirm;
   function onMessage( id, callback ) {
     return window.shared.on( id, callback );
   }
+  /**
+   * Wrapper for addEventListener with auto tabindex and role management
+   * for accessibility.
+   *
+   * @param {string|HTMLElement} s - The CSS selector string or HTMLElement to which the event listener will be added.
+   * @param {string} eventType - The type of event to listen for (e.g., 'click', 'keydown').
+   * @param {function(Event): void} callback - The callback function to be executed when the event is triggered. Receives the event object as an argument.
+   */
   function addEventListener( s, eventType, callback ) {
-    s = s.tagName ? s : document.querySelector( s );
-    if ( eventType === 'click' ) {
-      s.setAttribute( 'role', 'button' );
-      s.setAttribute( 'tabindex', '0' );
-      s.addEventListener( 'keydown', e => e.key === 'Enter' || e.key === ' ' ? callback( e ) : null );
+    const el = s.tagName ? s : document.querySelector( s );
+    if ( eventType === 'click' && 'body' !== el.tagName ) {
+      el.setAttribute( 'role', 'button' );
+      el.setAttribute( 'tabindex', '0' );
+      el.addEventListener( 'keydown', e => e.key === 'Enter' || e.key === ' ' ? callback( e ) : null );
     }
-    s.addEventListener( eventType, callback );
+    el.addEventListener( eventType, callback );
   }
 
+  /**
+   * Wrapper for addEventListener with auto tabindex and role management
+   * for accessibility.
+   *
+   * @param {string} s - The CSS selector string targeting the elements to which the event listener will be added.
+   * @param {string} eventType - The type of event to listen for (e.g., 'click', 'keydown').
+   * @param {function(Event, HTMLElement): void} callback - The callback function to be executed when the event is triggered.
+   *        Receives the event object as the first argument and the current element as the second argument.
+   */
   function addEventListenerAll( s, eventType, callback ) {
     document.querySelectorAll( s ).forEach( element => {
       if ( eventType === 'click' ) {
@@ -706,6 +723,26 @@ let ociConfirm;
     }
   }
 
+  function searchForNavigationTriggers( e ) {
+    // Starting from the event target, climb up the DOM tree
+    // until we find an element with the 'data-navigate-to' attribute
+    // or until we reach the body element.
+    let target = e.target;
+    while ( target && target !== document.body ) {
+      if ( target.hasAttribute( 'data-navigate-to' ) ) {
+        // Found an element with the 'data-navigate-to' attribute.
+        // Retrieve the attribute value and use it for navigation.
+        const destination = target.getAttribute( 'data-navigate-to' );
+        navigateTo( destination );
+        // Prevent the default action if the navigation is handled.
+        e.preventDefault();
+        return; // Stop the loop and exit the function
+      }
+      // Move up to the parent element and check again.
+      target = target.parentElement;
+    }
+  }
+
   // Events received from the main process.
   // HAS_INTERNET
   onMessage( 'HAS_INTERNET', () => {
@@ -874,6 +911,7 @@ let ociConfirm;
   addEventListener( '.oneclick-install-confirm', 'click',       e => ociConfirm( e ) );
   addEventListener( document.body,               'keydown',     e => toggleKeyboardUser( e ) );
   addEventListener( document.body,               'mousedown',   e => toggleKeyboardUser( e ) );
+  addEventListener( document.body,               'click',       e => searchForNavigationTriggers( e ) );
 
   // Disable click for installation path tag
   document.querySelectorAll( '.item-info' ).forEach( function ( item ) {
