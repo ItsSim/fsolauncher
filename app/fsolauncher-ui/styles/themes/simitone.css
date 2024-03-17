@@ -250,7 +250,7 @@
   opacity: 0.75;
 }
 
-.simitone #launcher #sidebar li.active:after,
-.simitone #launcher #sidebar li:not(#logo):hover:after {
+.simitone #launcher #sidebar li.active:before,
+.simitone #launcher #sidebar li:not(#logo):hover:before {
   background: #258f80!important;
 }

@@ -27,7 +27,7 @@
 .indigo #launcher #sidebar li:not(#logo):hover {
   color: #B388D7;
 }
-.indigo #launcher #sidebar li.active::after {
+.indigo #launcher #sidebar li.active::before {
   background: #B388D7;
 }
 /*
@@ -121,7 +121,7 @@
 .indigo #did-you-know {
   /*background: #1d1723 !important;*/
 }
-.indigo #launcher #sidebar li:hover::after {
+.indigo #launcher #sidebar li:hover::before {
   background-color: #B388D7!important;
 }
 .indigo .modal {

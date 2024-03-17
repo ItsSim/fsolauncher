@@ -440,8 +440,8 @@
   background: #FF691F;
 }
 
-.halloween #launcher #sidebar li.active:after,
-.halloween #launcher #sidebar li:not(#logo):hover:after {
+.halloween #launcher #sidebar li.active:before,
+.halloween #launcher #sidebar li:not(#logo):hover:before {
   background: #FF691F!important;
 }
 

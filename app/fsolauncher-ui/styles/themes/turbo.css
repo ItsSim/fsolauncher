@@ -102,7 +102,7 @@
   background: #7abceb;
 }
 
-.turbo #launcher #sidebar li.active:after,
-.turbo #launcher #sidebar li:not(#logo):hover:after {
+.turbo #launcher #sidebar li.active:before,
+.turbo #launcher #sidebar li:not(#logo):hover:before {
   background: #725dd2!important;
 }
