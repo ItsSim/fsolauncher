@@ -1,7 +1,7 @@
 ---
 name: Bug report
 about: Create a report to help us improve
-title: "[Windows, Mac] "
+title: "[Windows/Mac] "
 labels: bug, needs repro
 assignees: ''
 
