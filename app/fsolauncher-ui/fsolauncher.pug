@@ -3,6 +3,7 @@ html(class=PLATFORM + ' ' + LANGCODE)
   head
     meta(charset='utf-8')
     meta(http-equiv='X-UA-Compatible' content='IE=edge')
+    meta(http-equiv="Content-Security-Policy", content!="default-src 'self'; script-src 'self' https://js.sentry-cdn.com; style-src 'self' 'unsafe-inline'; connect-src 'self' wss://*.freeso.org wss://freeso.org https://*.freeso.org https://freeso.org https://sentry.io; img-src 'self' data: https://*.sentry-cdn.com;")
     link(rel='stylesheet' href='./styles/reset.css')
     link(rel='stylesheet' href='./fsolauncher.css')
     link(rel='stylesheet' href='./styles/material-icons.css')
@@ -11,17 +12,15 @@ html(class=PLATFORM + ' ' + LANGCODE)
     link(rel='stylesheet' href='./styles/themes/halloween.css')
     link(rel='stylesheet' href='./styles/themes/simitone.css')
     link(rel='stylesheet' href='./styles/themes/indigo.css')
-    script.
-      window.PUG_VARS = {
-        LTHEME: "#{LTHEME}",
-        RSS_URL: "#{RSS_URL}",
-        TW_URL: "#{TW_URL}",
-        DARK_THEMES: "#{DARK_THEMES}",
-        STRINGS: {
-          MONTHS: "#{MONTHS}"
-        }
-      };
-  body(class=LTHEME, data-insprog='false')
+  body(
+    class=LTHEME, 
+    data-insprog='false', 
+    data-ltheme=LTHEME, 
+    data-rss-url=RSS_URL, 
+    data-tw-url=TW_URL, 
+    data-dark-themes=DARK_THEMES, 
+    data-months=MONTHS
+  )
     #launcher.not-installed
       .hint.arrow-left(hint-page='home' style='top:245px;left:255px')
         h1 #{TOOLTIP_TITLE_1}
@@ -477,10 +476,10 @@ html(class=PLATFORM + ' ' + LANGCODE)
 
     if SENTRY != 'SENTRY_CI_BROWSER_LOADER'
       script(src=SENTRY, crossorigin="anonymous")
-      script(src='sentry-onload.js')
+      script(src='./sentry-onload.js')
 
     script(src='../node_modules/socket.io-client/dist/socket.io.min.js')
     script(src='../node_modules/howler/dist/howler.min.js')
     script(src='../node_modules/dompurify/dist/purify.min.js')
     script(src='../node_modules/rss-parser/dist/rss-parser.min.js')
-    script(src='client.js')
+    script(src='./client.js')

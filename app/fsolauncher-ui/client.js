@@ -156,7 +156,7 @@ let ociConfirm;
       return ( 1 < date ) ? date + ' days ago' : '1 day ago';
     } else {
       return date.getDate().toString() + ' ' +
-        window.PUG_VARS.STRINGS.MONTHS.split( ' ' )[ date.getMonth() ] + ', ' +
+        getPugVar( 'months' ).split( ' ' )[ date.getMonth() ] + ', ' +
         date.getFullYear();
     }
   }
@@ -165,7 +165,7 @@ let ociConfirm;
    * @param {string} theme The theme id.
    */
   function isDarkMode( theme ) {
-    return window.PUG_VARS.DARK_THEMES.includes( theme );
+    return getPugVar( 'dark-themes' ).includes( theme );
   }
 
   /**
@@ -215,57 +215,60 @@ let ociConfirm;
   }
 
   async function fetchTrendingLots() {
-    try {
-      // Use async/await instead of Promise.then() for cleaner syntax
-      const response = await fetch( 'https://beta.freeso.org/LauncherResourceCentral/TrendingLots' );
-      const data = await response.json();
+    // Use async/await instead of Promise.then() for cleaner syntax
+    const response = await fetch( 'https://beta.freeso.org/LauncherResourceCentral/TrendingLots' );
+    const data = await response.json();
 
-      // Directly accessing elements
-      const avatarsOnlineElement = document.querySelector( '#now-trending .top span i' );
-      const container = document.querySelector( '#now-trending ul' );
+    // Directly accessing elements
+    const avatarsOnlineElement = document.querySelector( '#now-trending .top span i' );
+    const container = document.querySelector( '#now-trending ul' );
 
-      // Update avatars online count
-      avatarsOnlineElement.textContent = data.avatarsOnline;
+    // Update avatars online count
+    avatarsOnlineElement.textContent = data.avatarsOnline;
 
-      // Clear existing lots
-      container.innerHTML = '';
+    // Clear existing lots
+    container.innerHTML = '';
 
-      // Iterating over lots to update the DOM
-      data.lots.forEach( lot => {
-        const lotTemplate = document.querySelector( '#now-trending-item-template' );
-        const lotElement = document.importNode( lotTemplate.content, true );
+    // Iterating over lots to update the DOM
+    data.lots.forEach( lot => {
+      const lotTemplate = document.querySelector( '#now-trending-item-template' );
+      const lotElement = document.importNode( lotTemplate.content, true );
 
-        // Setting lot details
-        lotElement.querySelector( '.lot-name' ).textContent = lot.name;
-        lotElement.querySelector( '.owner span' ).textContent = lot.ownerDetails.name;
-        lotElement.querySelector( '.players .count' ).textContent = lot.avatars_in_lot;
-        lotElement.querySelector( '.icon img.lot' ).src = 'data:image/png;base64,' + lot.base64Image;
-        lotElement.querySelector( '.icon .avatar' ).style.backgroundImage = 'url(data:image/png;base64,' + lot.ownerDetails.base64Image + ')';
+      // Setting lot details
+      lotElement.querySelector( '.lot-name' ).textContent = lot.name;
+      lotElement.querySelector( '.owner span' ).textContent = lot.ownerDetails.name;
+      lotElement.querySelector( '.players .count' ).textContent = lot.avatars_in_lot;
+      lotElement.querySelector( '.icon img.lot' ).src = 'data:image/png;base64,' + lot.base64Image;
+      lotElement.querySelector( '.icon .avatar' ).style.backgroundImage = 'url(data:image/png;base64,' + lot.ownerDetails.base64Image + ')';
 
-        // Handling trending status
-        if ( lot.is_trending ) {
-          lotElement.querySelector( 'li' ).classList.add( 'hot' );
-        } else {
-          lotElement.querySelector( 'li' ).classList.remove( 'hot' );
-        }
+      // Handling trending status
+      if ( lot.is_trending ) {
+        lotElement.querySelector( 'li' ).classList.add( 'hot' );
+      } else {
+        lotElement.querySelector( 'li' ).classList.remove( 'hot' );
+      }
 
-        // Adding the lot to the DOM
-        container.appendChild( lotElement );
-      } );
-
-    } catch ( err ) {
-      // Error handling
-      console.log( 'Error while fetching lots:', err );
-    }
+      // Adding the lot to the DOM
+      container.appendChild( lotElement );
+    } );
   }
 
   let spinDegrees = 0;
 
   /**
+   * @param {string} id
+   *
+   * @returns string
+   */
+  function getPugVar( id ) {
+    return document.body.getAttribute( 'data-' + id );
+  }
+
+  /**
    * @param {boolean} userRequested
    */
   async function fetchWidgetData( userRequested ) {
-    const rssUrl = window.PUG_VARS.RSS_URL;
+    const rssUrl = getPugVar( 'rss-url' );
     const didYouKnow = document.querySelector( '#did-you-know' );
     const rss = document.querySelector( '#rss' );
     const spinner = document.querySelector( '#rss-loading' );
@@ -274,6 +277,7 @@ let ociConfirm;
 
     homeRefreshBtn.setAttribute( 'disabled', true );
     homeRefreshBtn.style.cursor = 'not-allowed';
+
     didYouKnow.style.display = 'none';
     rss.style.display = 'none';
     spinner.style.display = 'block';
@@ -283,15 +287,25 @@ let ociConfirm;
       homeRefreshBtnIcon.style.transform = `rotate(${spinDegrees}deg)`;
     }
 
-    fetchTrendingLots();
+    const fetchTrendingLotsPromise = fetchTrendingLots();
+    const fetchRssPromise = fetch( rssUrl )
+      .then( response => response.text() )
+      .then( text => new window.RSSParser().parseString( text, parseAndDisplayFeed ) )
+      .catch( error => {
+        console.error( 'RSS fetch failed', error );
+        parseAndDisplayFeed( error, null );
+      } );
 
     try {
-      const rssFeed = await fetch( rssUrl );
-      ( new window.RSSParser() ).parseString( await rssFeed.text(), parseAndDisplayFeed );
+      await Promise.all( [ fetchTrendingLotsPromise, fetchRssPromise ] );
     } catch ( error ) {
-      console.error( 'rss fetch failed', error );
-      parseAndDisplayFeed( error, null );
+      console.error( 'An error occurred while fetching widget data:', error );
     } finally {
+      // Hide spinner and show content
+      spinner.style.display = 'none';
+      didYouKnow.style.display = 'block';
+      rss.style.display = 'block';
+
       // Re-enable refresh button after 3 seconds.
       setTimeout( () => {
         homeRefreshBtn.removeAttribute( 'disabled' );
@@ -300,27 +314,18 @@ let ociConfirm;
     }
   }
 
+
   /**
    * @param {*} errors
    * @param {string} response
    */
   function parseAndDisplayFeed( errors, response ) {
-    const didYouKnow = document.querySelector( '#did-you-know' );
-    const rss = document.querySelector( '#rss' );
-    const spinner = document.querySelector( '#rss-loading' );
-    // Short pause before displaying feed to allow display to render
-    // correctly.
-    setTimeout( () => {
-      didYouKnow.style.display = 'block';
-      rss.style.display = 'block';
-      spinner.style.display = 'none';
-    }, 500 );
-
     document.querySelector( '#rss .alt-content' ).style.display = errors ? 'block' : 'none';
 
     if ( errors || ! response ) {
       return console.error( 'rss feed failed', { errors, response } );
     }
+
     // Clear the rss container for the new articles.
     document.querySelector( '#rss-root' ).innerHTML = '';
 
