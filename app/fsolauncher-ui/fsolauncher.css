@@ -1793,5 +1793,5 @@ ul#sidebar li[page-trigger="downloads"].has-downloads.active::after {
 .dark ul#sidebar li[page-trigger="downloads"].has-downloads::after,
 .halloween ul#sidebar li[page-trigger="downloads"].has-downloads::after,
 .indigo ul#sidebar li[page-trigger="downloads"].has-downloads::after {
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.3);
 }
