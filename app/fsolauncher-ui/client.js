@@ -35,6 +35,7 @@ let ociConfirm;
   let simitoneInterval;
   let simitoneUpdate;
   let prevTheme;
+  let totalUnreadProgressItems = 0;
 
   function run() {
     // Let the main process know the DOM is ready
@@ -391,11 +392,18 @@ let ociConfirm;
     afterPageChange( pageId );
   };
 
+  function addUnreadProgressItems() {
+    const menuItem = document.querySelector( '[page-trigger="downloads"]' );
+    totalUnreadProgressItems++;
+    menuItem.classList.add( 'has-downloads' );
+    menuItem.style.setProperty( '--unread-progress-items', `"${totalUnreadProgressItems}"` );
+  }
+
   /**
    * @param {string} pageId The page id.
    */
   function afterPageChange( pageId ) {
-    if ( pageId == 'simitone' ) {
+    if ( pageId === 'simitone' ) {
       if ( document.querySelector( 'body' ).className !== 'simitone' ) {
         prevTheme = document.querySelector( 'body' ).className;
       }
@@ -517,6 +525,8 @@ let ociConfirm;
       progressItem = progressItemElement.querySelector( '.download' );
       document.querySelector( '#downloads-page .page-content' )
         .insertAdjacentElement( 'afterbegin', progressItem );
+
+      addUnreadProgressItems();
     }
     progressItem.querySelector( '.progress' ).style.width = percentage + '%';
     progressItem.querySelector( '.progress-title' ).innerHTML = title;

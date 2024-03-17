@@ -1,7 +1,7 @@
 const { strFormat, captureWithSentry, getJSON } = require( '../utils' );
 const download = require( '../download' ),
   unzip = require( '../unzip' );
-const { temp, downloads, homeDir } = require( '../../constants' );
+const { temp, downloads, appData } = require( '../../constants' );
 const { locale } = require( '../../locale' );
 
 /**
@@ -28,7 +28,7 @@ class FSOInstaller {
    * @param {number} percentage The percentage to display.
    */
   createProgressItem( message, percentage ) {
-    const textPath = process.platform === 'win32' ? this.path : this.path.replace( homeDir, '~' );
+    const textPath = process.platform === 'win32' ? this.path : this.path.replace( appData + '/', '' );
     this.fsolauncher.IPC.addProgressItem(
       `FSOProgressItem${this.id}`,
       'FreeSO Client (from GitHub)',

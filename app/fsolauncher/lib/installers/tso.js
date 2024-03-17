@@ -1,7 +1,7 @@
 const download = require( '../download' );
 const unzip = require( '../unzip' );
 const extract = require( '../cabinet' );
-const { downloads, temp, homeDir } = require( '../../constants' );
+const { downloads, temp, appData } = require( '../../constants' );
 const { locale } = require( '../../locale' );
 
 /**
@@ -28,7 +28,7 @@ class TSOInstaller {
    * @param {number} percentage The percentage to display.
    */
   createProgressItem( message, percentage, extraction ) {
-    const textPath = process.platform === 'win32' ? this.path : this.path.replace( homeDir, '~' );
+    const textPath = process.platform === 'win32' ? this.path : this.path.replace( appData + '/', '' );
     this.fsolauncher.IPC.addProgressItem(
       'TSOProgressItem' + this.id,
       'The Sims Online (FilePlanet)',

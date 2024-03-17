@@ -2,7 +2,7 @@ const fs = require( 'fs-extra' );
 const download = require( '../download' );
 const unzip = require( '../unzip' );
 const { strFormat } = require( '../utils' );
-const { downloads, temp, homeDir } = require( '../../constants' );
+const { downloads, temp, appData } = require( '../../constants' );
 const { locale } = require( '../../locale' );
 
 /**
@@ -35,7 +35,7 @@ class RMSInstaller {
    * @param {number} percentage The percentage to display.
    */
   createProgressItem( message, percentage ) {
-    const textPath = process.platform === 'win32' ? this.path : this.path.replace( homeDir, '~' );
+    const textPath = process.platform === 'win32' ? this.path : this.path.replace( appData + '/', '' );
     this.fsolauncher.IPC.addProgressItem(
       'FSOProgressItem' + this.id,
       locale.current.INS_RPD_FOR + ' ' + this.parentComponent,

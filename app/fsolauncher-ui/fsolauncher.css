@@ -1317,8 +1317,8 @@ a {
   border-right:0!important;
 }
 
-#launcher #sidebar li.active:after,
-#launcher #sidebar li:not(#logo):hover:after {
+#launcher #sidebar li.active:before,
+#launcher #sidebar li:not(#logo):hover:before {
   height: 50%;
   width:4px;
   background: #4C8DEE;
@@ -1764,4 +1764,34 @@ i.spin {
 }
 .item-info .container .material-icons:hover {
   color: rgba(0,0,0,0.5);
+}
+
+ul#sidebar li[page-trigger="downloads"].has-downloads::after {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  content: var(--unread-progress-items, '');
+  font-family: 'Munged';
+  font-weight: bold;
+  font-size: 0.6rem;
+  background: rgb(0 0 0 / 9%);
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  margin-left: 10px;
+  position: absolute;
+  top: 4px;
+  left: -3px;
+  transition: 0.4s left;
+}
+
+ul#sidebar li[page-trigger="downloads"].has-downloads:hover::after,
+ul#sidebar li[page-trigger="downloads"].has-downloads.active::after {
+  left: 4px;
+}
+
+.dark ul#sidebar li[page-trigger="downloads"].has-downloads::after,
+.halloween ul#sidebar li[page-trigger="downloads"].has-downloads::after,
+.indigo ul#sidebar li[page-trigger="downloads"].has-downloads::after {
+  background: rgba(0, 0, 0, 0.4);
 }
