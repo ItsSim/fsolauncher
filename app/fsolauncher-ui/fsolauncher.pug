@@ -3,7 +3,7 @@ html(class=PLATFORM + ' ' + LANGCODE)
   head
     meta(charset='utf-8')
     meta(http-equiv='X-UA-Compatible' content='IE=edge')
-    meta(http-equiv="Content-Security-Policy", content!="default-src 'self'; script-src 'self' https://*.sentry-cdn.com; style-src 'self' 'unsafe-inline'; connect-src 'self' wss://*.freeso.org wss://freeso.org https://*.freeso.org https://freeso.org https://sentry.io; img-src 'self' data: https://*.sentry-cdn.com;")
+    meta(http-equiv="Content-Security-Policy", content!="default-src 'self'; script-src 'self' https://*.sentry-cdn.com; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; connect-src 'self' wss://*.freeso.org wss://freeso.org https://*.freeso.org https://freeso.org https://sentry.io; img-src 'self' data: https://*.sentry-cdn.com;")
     link(rel='stylesheet' href='./styles/reset.css')
     link(rel='stylesheet' href='./fsolauncher.css')
     link(rel='stylesheet' href='./styles/material-icons.css')
