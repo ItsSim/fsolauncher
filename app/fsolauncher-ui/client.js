@@ -363,7 +363,7 @@ let ociConfirm;
         .replace( /\n/g, '' );
 
       articleElement.querySelector( '.rss-content' )
-        .innerHTML = window.DOMPurify.sanitize( articleContent );
+        .innerHTML = window.DOMPurify.sanitize( articleContent ).replace( '&nbsp;', '' );
 
       // Append the article element to the DOM
       document.querySelector( '#rss-root' ).appendChild( articleElement );

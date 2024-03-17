@@ -802,13 +802,17 @@ select {
   padding-bottom: 5px;
   padding: 20px;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 #rss .rss-entry p {
-  padding: 5px;
-  font-size: 16px;
+  padding: 0;
+  font-size: 1rem;
   line-height: 22px;
   text-align: justify;
+  hyphens: auto;
+  text-indent: 2rem;
 }
 
 #rss .rss-entry:not(:last-child):before {
@@ -852,13 +856,6 @@ select {
   font-size: 20px;
 }
 
-#rss .rss-entry .rss-content {
-  font-family: 'Munged';
-  line-height: 22px;
-  text-align: justify;
-  text-indent: 30px;
-}
-
 #rss .rss-entry > h1 {
   font-size: 25px;
   margin-bottom: 20px;
@@ -882,7 +879,6 @@ select {
 }
 
 #rss .rss-entry > .button {
-  width: 150px;
   margin: 0 auto;
   margin-top: 20px;
   border-radius: 999px;
