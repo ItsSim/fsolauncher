@@ -181,6 +181,7 @@
     "OCI_HELP": "Click to select a folder",
     "OCI_TEXT": "Pick a folder to install the game in – we'll take care of the rest.",
     "OCI_TITLE": "Choose a folder",
+    "OPEN_FOLDER": "Reveal in File Explorer",
     "PLAY": "PLAY",
     "READ_MORE": "READ MORE",
     "REFRESH_HOME_BTN_TITLE": "Refresh news",

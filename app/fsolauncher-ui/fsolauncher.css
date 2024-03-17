@@ -1600,9 +1600,9 @@ i.spin {
 }
 #now-trending li .info .lot-name {
   margin-bottom: 0px;
-  letter-spacing: -0.55px;
+  letter-spacing: -0.3px;
   padding-bottom: 5px;
-  background: linear-gradient(90deg, #4C8DEE 0%, #54D035 100%);
+  background: linear-gradient(90deg, #4C8DEE 0%, #33e11f 100%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -1686,10 +1686,10 @@ i.spin {
   filter: brightness(105%);
 }
 
-.open_beta #now-trending .lot-name,
-.turbo #now-trending .lot-name,
-.simitone #now-trending .lot-name {
-  filter: brightness(105%);
+.open_beta #now-trending li .info .lot-name,
+.turbo #now-trending li .info .lot-name,
+.simitone #now-trending li .info .lot-name {
+  filter: saturate(1.2);
 }
 
 .open_beta #now-trending .owner *,
@@ -1713,7 +1713,6 @@ i.spin {
   border-color: rgba(0,0,0,0.1);
 }
 
-/* Keyframes for the marquee effect */
 .installed .item-info {
   display: block;
 }
@@ -1730,34 +1729,6 @@ i.spin {
   font-size: 1.4rem;
 }
 
-.item-info .text {
-  flex: 1;
-  font-family: 'Munged';
-  display: none;
-  user-select: text;
-
-  overflow: hidden;
-  position: relative;
-}
-.item-info .text .marquee {
-  overflow: hidden;
-  white-space: nowrap;
-  display: inline-block;
-}
-
-.item-info:hover .container {
-  background: rgb(243 243 243);
-}
-.dark .item-info .container,
-.halloween .item-info .container,
-.indigo .item-info .container {
-  color: rgba(255, 255, 255, 0.7);
-}
-.dark .item-info:hover .container,
-.halloween .item-info:hover .container,
-.indigo .item-info:hover .container {
-  background: rgb(37 37 37);
-}
 .item-info:hover .text {
   display: block;
 }
@@ -1765,7 +1736,6 @@ i.spin {
 .item-info .container {
   width: 100%;
   display: flex;
-
   padding: 5px;
   align-items: center;
   justify-content: flex-end;
@@ -1783,6 +1753,15 @@ i.spin {
 .indigo .item-info .container .material-icons {
  color: rgba(255,255,255,0.3)
 }
+.dark .item-info .container .material-icons:hover,
+.halloween .item-info .container .material-icons:hover,
+.indigo .item-info .container .material-icons:hover {
+  color: rgba(255,255,255,0.5)
+}
+
 .item-info .container .material-icons {
   color: rgba(0,0,0,0.3);
+}
+.item-info .container .material-icons:hover {
+  color: rgba(0,0,0,0.5);
 }

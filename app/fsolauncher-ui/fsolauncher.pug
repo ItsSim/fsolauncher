@@ -140,10 +140,8 @@ html(class=PLATFORM + ' ' + LANGCODE)
                     small(id='remeshinfo' style='font-size:14px;color:rgba(0,0,0,0.5);margin-top:5px;display:block;overflow:hidden')
               div
                 .item(install='FSO' style='background:url(images/banner.jpg) #fff; background-position:center center; background-size:80%;background-repeat:no-repeat;')
-                  .item-info
+                  .item-info(title=OPEN_FOLDER)
                     .container
-                      .text 
-                        .marquee #{INSD_IN} <span class="install-dir"></span>
                       i.material-icons folder_open
                   .tag
                     h1 #{INSTALLER_FSO_TITLE}
@@ -151,10 +149,8 @@ html(class=PLATFORM + ' ' + LANGCODE)
                     .tick.installed                                        
               div
                 .item(install='TSO' style='background:url(images/tsologo.png) #fff; background-position:center center;background-size:80%;background-repeat:no-repeat;')
-                  .item-info
+                  .item-info(title=OPEN_FOLDER)
                     .container
-                      .text 
-                        .marquee #{INSD_IN} <span class="install-dir"></span>
                       i.material-icons folder_open
                   .tag(style='z-index:1')
                     h1 #{INSTALLER_TSO_TITLE}
