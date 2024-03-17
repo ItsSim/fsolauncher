@@ -309,7 +309,7 @@
   border-left: 1px solid #414141;
 }
 
-.dark #sidebar div.bottom li:last-child:before {
+.dark #sidebar div.bottom li:last-child:after {
   background-color:#414141;
 }
 

@@ -324,7 +324,7 @@
   border-left: 1px solid #43384C;
 }
 
-.indigo #sidebar div.bottom li:last-child:before {
+.indigo #sidebar div.bottom li:last-child:after {
   background-color:#43384C;
 }
 

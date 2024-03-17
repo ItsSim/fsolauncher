@@ -299,7 +299,7 @@
   border-left: 1px solid #414141;
 }
 
-.halloween #sidebar div.bottom li:last-child:before {
+.halloween #sidebar div.bottom li:last-child:after {
   background-color:#414141;
 }
 

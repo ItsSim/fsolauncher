@@ -281,7 +281,7 @@ div.page p, div.page .readable-font {
 #sidebar div.bottom li:last-child {
   margin-bottom: 8px!important;
 }
-#sidebar div.bottom li:last-child:before {
+#sidebar div.bottom li:last-child:after {
   height: 1px;
   width: calc(100% + 16px);
   background: rgba(0, 0, 0, 0.1);
