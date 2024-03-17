@@ -253,6 +253,7 @@ div.page p, div.page .readable-font {
   font-size: 14px;
   line-height: 22px;
   text-align: justify;
+  hyphens: auto;
 }
 
 #launcher #sidebar li#logo {
@@ -440,6 +441,7 @@ div.page p, div.page .readable-font {
 
 .FAQ p {
   max-width: 500px;
+  hyphens: auto;
 }
 
 strong {
