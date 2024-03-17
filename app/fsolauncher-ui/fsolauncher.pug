@@ -3,7 +3,39 @@ html(class=PLATFORM + ' ' + LANGCODE)
   head
     meta(charset='utf-8')
     meta(http-equiv='X-UA-Compatible' content='IE=edge')
-    meta(http-equiv="Content-Security-Policy", content!="default-src 'self'; script-src 'self' https://*.sentry-cdn.com; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; connect-src 'self' wss://*.freeso.org wss://freeso.org https://*.freeso.org https://freeso.org https://*.sentry.io https://sentry.io; img-src 'self' data: https://*.sentry-cdn.com;")
+    meta(http-equiv="Content-Security-Policy", content="default-src 'self'; script-src 'self' https://*.sentry-cdn.com; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; connect-src 'self' wss://*.freeso.org wss://freeso.org https://*.freeso.org https://freeso.org https://*.sentry.io https://sentry.io; img-src 'self' data: https://*.sentry-cdn.com; font-src 'self' data:;")
+    style. 
+      @font-face {
+        font-family: 'Material Icons';
+        font-style: normal;
+        font-weight: 400;
+        src: url('#{PRELOADED_FONTS.MATERIAL_SYMBOLS}')
+          format('woff2');
+      }
+      @font-face {
+        font-family: 'Munged';
+        src: url('#{PRELOADED_FONTS.MUNGED_BOLD}')
+          format('truetype');
+        font-weight: bold;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: 'Munged';
+        src: url(''#{PRELOADED_FONTS.MATERIAL_REGULAR}'')
+          format('truetype');
+        font-weight: 500;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: 'Fredoka One';
+        src: url('#{PRELOADED_FONTS.FREDOKA}') format('truetype');
+        font-style: normal;
+      }
+      @font-face {
+        font-family: 'Balsamiq';
+        src: url('#{PRELOADED_FONTS.BALSAMIQ}') format('truetype');
+        font-style: normal;
+      }
     link(rel='stylesheet' href='./styles/reset.css')
     link(rel='stylesheet' href='./fsolauncher.css')
     link(rel='stylesheet' href='./styles/material-icons.css')

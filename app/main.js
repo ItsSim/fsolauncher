@@ -128,7 +128,8 @@ setLocale( code, {
   SENTRY: require( './sentry.config' ).browserLoader,
   LANGCODE: code,
   DEFAULT_REFRESH_RATE: 60,
-  REMESH_PACKAGE_CREDITS: require( './fsolauncher-ui/remesh-package-credits.json' )
+  REMESH_PACKAGE_CREDITS: require( './fsolauncher-ui/remesh-package-credits.json' ),
+  PRELOADED_FONTS: require( './font-loader' )()
 } );
 
 /** @type {Electron.BrowserWindowConstructorOptions} */

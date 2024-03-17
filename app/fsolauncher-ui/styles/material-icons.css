@@ -1,15 +1,6 @@
-@font-face {
-  font-family: 'Material Icons';
-  font-style: normal;
-  font-weight: 400;
-  src: url(../fonts/MaterialSymbolsRounded.woff2)
-    format('woff2');
-}
-
 .material-icons.fill {
   font-variation-settings: 'FILL' 1;
 }
-
 .material-icons {
   font-family: 'Material Icons';
   font-weight: normal;
@@ -22,15 +13,12 @@
   word-wrap: normal;
   white-space: nowrap;
   direction: ltr;
-
   /* Support for all WebKit browsers. */
   -webkit-font-smoothing: antialiased;
   /* Support for Safari and Chrome. */
   text-rendering: optimizeLegibility;
-
   /* Support for Firefox. */
   -moz-osx-font-smoothing: grayscale;
-
   /* Support for IE. */
   font-feature-settings: 'liga';
 }
