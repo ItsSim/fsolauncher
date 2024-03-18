@@ -1012,7 +1012,7 @@ select {
   margin-left: -23px;
 }
 
-#debug {
+#toasts {
   position: fixed;
   bottom: 20px;
   right: 20px;

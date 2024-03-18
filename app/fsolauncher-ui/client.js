@@ -220,7 +220,7 @@ let ociConfirm;
     node.querySelector( '.toast-message' ).textContent = message;
     node.querySelector( '.toast' ).style.display = 'block';
 
-    document.querySelector( '#debug' ).appendChild( node );
+    document.querySelector( '#toasts' ).appendChild( node );
   }
 
   /**

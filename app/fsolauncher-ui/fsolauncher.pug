@@ -9,10 +9,7 @@ html(lang=LANG_CODE class=PLATFORM + ' ' + LANG_CODE)
     data-months=MONTHS
   )
     #launcher
-      .hint.arrow-left(hint-page='home' style='top:245px;left:255px')
-        h1 #{TOOLTIP_TITLE_1}
-        small #{TOOLTIP_DESCR_1}
-      #debug
+      #toasts
         #no-internet-notice
           i.material-icons(style='margin-top:-5px') wifi_off
           |  #{INTERNET_TOASTT}
