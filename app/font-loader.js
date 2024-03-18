@@ -16,7 +16,7 @@ module.exports = () => {
     MATERIAL_SYMBOLS: fontb64( 'MaterialSymbolsRounded.woff2' ),
     FREDOKA: fontb64( 'FredokaOne-Regular.ttf' ),
     BALSAMIQ: fontb64( 'BalsamiqSans-Bold.ttf' ),
-    MUNGED_BOLD: fontb64( 'hinted-Munged-otVXWjH6W8.ttf' ),
-    MUNGED_REGULAR: fontb64( 'hinted-Munged-embOpitJmj.ttf' )
+    MUNGED_REGULAR: fontb64( 'hinted-Munged-otVXWjH6W8.ttf' ),
+    MUNGED_BOLD: fontb64( 'hinted-Munged-embOpitJmj.ttf' )
   };
 };

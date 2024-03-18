@@ -1,5 +1,5 @@
 const strings = require( '../fsolauncher-ui/uitext.json' );
-
+const { deepClone } = require( '../fsolauncher/lib/utils' );
 const locale = { current: {} };
 
 function setLocale( code, moreStrings = {} ) {
@@ -7,7 +7,7 @@ function setLocale( code, moreStrings = {} ) {
     ? strings[ code ]
     : strings.en;
 
-  locale.current = Object.assign( strings.en, locale.current, moreStrings );
+  locale.current = Object.assign( deepClone( strings.en ), deepClone( locale.current ), deepClone( moreStrings ) );
 }
 
 module.exports = { locale, setLocale };

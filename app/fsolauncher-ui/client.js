@@ -823,8 +823,6 @@ let ociConfirm;
   // INSPROG
   onMessage( 'INSPROG', ( a, b ) => {
     if ( ! b ) return;
-    document.body.setAttribute( 'data-insprog', 'true' );
-
     if ( b.FSO ) {
       document.querySelector( '.item[install=FSO]' ).className = 'item installed';
     } else {
@@ -878,8 +876,6 @@ let ociConfirm;
     const audio = new window.Howl( { src: `sounds/${b}.wav`, volume: 0.4 } );
     audio.play();
   } );
-  // CONSOLE_LOG
-  onMessage( 'CONSOLE_LOG', ( a, b ) => console.log( b ) );
   // CREATE_PROGRESS_ITEM
   onMessage( 'CREATE_PROGRESS_ITEM', ( a, b, c, e, f, g, d ) =>
     createOrModifyProgressItem( b, c, e, f, g, d ) );

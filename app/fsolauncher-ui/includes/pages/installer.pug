@@ -1,0 +1,91 @@
+//--------------------------------------------------------------------------------
+  installer.pug
+  --------------------------------------------------------------------------------
+  Contains UI for the Installer tab.
+
+#installer-page.page(style='display:none;background-color:#fff')
+  h1.jumbotron
+    button#full-install-button.turbo-transparent(style='margin-top:-10px;float:right')
+      i.material-icons.left(style='margin-top:-2px') get_app
+      |  #{FULL_INSTALL_BTN}
+    span #{INSTALLER}
+    small #{INSTALLER_DESCR}
+    .hint.arrow-top(hint-page='installer' style='top:100px;right:65px')
+      h1 #{TOOLTIP_TITLE_2}
+      small #{TOOLTIP_DESCR_2}
+  .page-content
+    #full-install(style='padding:30px')
+      #tip
+        i.material-icons info
+        h1 #{DYK}
+        span#tip-text(style='text-align:left') #{TIP1}
+      .bottom
+        h1#full-install-title Downloading FreeSO...
+        p#full-install-text1 Please wait while we install FreeSO for the first time.
+        .loading
+          #full-install-progress.progress
+        p#full-install-text2.small Reticulating splines... 20% @ 1MB/s
+    #downloads
+      span#detector-response
+        p #{AUTODETECT_TEXT} (<strong id="detector-response-path"></strong>). 
+        span#detector-confirm.button(style='float:right') #{AUTODETECT_BTN}
+      div.block
+        .hint.arrow-left(hint-page='installer' style='top:90px;left:370px')
+          h1 #{TOOLTIP_REMESH_TITLE}
+          small #{TOOLTIP_REMESH_DESCR}
+        .item(install='RMS' style='background-image:url(images/volcanic.png); background-color:#fff; background-size:30%;background-position:center center;background-repeat:no-repeat;')
+          .stag.orange #{INSTALLER_OPTIONAL}
+          .tag
+            h1 #{INSTALLER_RP_TITLE}
+            span #{INSTALLER_RP_DESCR}
+            br
+            small(id='remeshinfo' style='font-size:14px;color:rgba(0,0,0,0.5);margin-top:5px;display:block;overflow:hidden')
+      div
+        .item(install='FSO' style='background:url(images/banner.jpg) #fff; background-position:center center; background-size:80%;background-repeat:no-repeat;')
+          .item-info(title=OPEN_FOLDER)
+            .container
+              i.material-icons folder_open
+          .tag
+            h1 #{INSTALLER_FSO_TITLE}
+            span #{INSTALLER_FSO_DESCR}
+            .tick.installed                                        
+      div
+        .item(install='TSO' style='background:url(images/tsologo.png) #fff; background-position:center center;background-size:80%;background-repeat:no-repeat;')
+          .item-info(title=OPEN_FOLDER)
+            .container
+              i.material-icons folder_open
+          .tag(style='z-index:1')
+            h1 #{INSTALLER_TSO_TITLE}
+            span #{INSTALLER_TSO_DESCR}
+            .tick.installed                                           
+      div.win32-only
+        .item(install='OpenAL' style='background:url(images/openal.png) #fff; background-position:center center; background-size:80%;background-repeat:no-repeat;')
+          .tag
+            h1 #{INSTALLER_OAL_TITLE}
+            span #{INSTALLER_OAL_DESCR}
+            .tick.installed   
+      div.win32-only
+        .item(install='NET' style='background:url(images/netframework.png) #fff; background-position:center center; background-size:80%;background-repeat:no-repeat;')
+          .tag
+            h1 #{INSTALLER_NET_TITLE}
+            span #{INSTALLER_NET_DESCR}
+            .tick.installed     
+      div.darwin-only
+        .item(install='Mono' style='background-image:url(images/mono.png); background-color:#fff; background-size:100%;background-position:center center;background-repeat:no-repeat;')
+          .tag
+            h1 #{INSTALLER_MONO_TITLE}
+            span #{INSTALLER_MONO_DESCR}
+            .tick.installed
+      div.darwin-only
+        .item(install='SDL' style='background-image:url(images/sdl.png); background-color:#fff; background-size:80%;background-position:center center;background-repeat:no-repeat;')
+          .tag
+            h1 #{INSTALLER_SDL_TITLE}
+            span #{INSTALLER_SDL_DESCR}
+            .tick.installed
+      div.darwin-only
+        .item(install='MacExtras' style='background-image:url(images/macos.png); background-color:#fff; background-size:60%;background-position:center center;background-repeat:no-repeat;')
+          .stag.orange #{INSTALLER_OPTIONAL}
+          .tag
+            h1 #{INSTALLER_MACEXTRAS_TITLE}
+            span #{INSTALLER_MACEXTRAS_DESCR}
+            .tick.installed

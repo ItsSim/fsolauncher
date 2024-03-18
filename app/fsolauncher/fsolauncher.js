@@ -13,10 +13,12 @@ const Toast = require( './lib/toast' );
  */
 class FSOLauncher {
   /**
-   * @param {Electron.BrowserWindow} window The main window.
-   * @param {import('../main').UserSettings} userSettings The configuration object.
+   * @param {object} params An object containing all parameters.
+   * @param {Electron.BrowserWindow} params.window The main Electron browser window instance.
+   * @param {import('../main').UserSettings} params.userSettings User configuration settings loaded from an external source.
+   * @param {function(import('../main').UserSettings): void} params.onReload Callback function that should be called to handle the reload logic.
    */
-  constructor( window, userSettings ) {
+  constructor( { window, userSettings, onReload } ) {
     this.userSettings = userSettings;
     this.window = window;
     this.minimizeReminder = false;
@@ -25,6 +27,7 @@ class FSOLauncher {
     this.isUpdating = false;
     this.hasInternet = false;
     this.updateLocation = false;
+    this.reloadCallback = onReload;
     this.remeshInfo = {
       location: false,
       version: false,
@@ -62,6 +65,15 @@ class FSOLauncher {
     this.updateTipRecursive();
     this.updateInternetStatusRecursive();
     this.events.listen();
+  }
+
+  /**
+   * Produces a soft launcher reload.
+   * Only the renderer process gets reloaded.
+   */
+  reload() {
+    if ( this.reloadCallback )
+      this.reloadCallback( this.userSettings );
   }
 
   /**
@@ -836,7 +848,7 @@ class FSOLauncher {
    */
   async setLauncherLanguage( value ) {
     await this.updateAndPersistConfig( 'Launcher', 'Language', value );
-    Modal.showLanguageOnRestart();
+    this.reload();
   }
 
   /**

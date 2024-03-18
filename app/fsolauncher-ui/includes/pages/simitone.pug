@@ -1,0 +1,43 @@
+//--------------------------------------------------------------------------------
+  simitone.pug
+  --------------------------------------------------------------------------------
+  Contains UI for the Simitone tab.
+
+#simitone-page.page(style='display:none')
+  h1.jumbotron
+    span #{SIMITONE_H1}
+    small #{SIMITONE_DESCR}
+  .page-content(style='padding:20px;')
+    div#simitone-teaser
+      button(id='simitone-install-button') #{SIMITONE_INSTALL}
+      button(id='simitone-play-button') #{SIMITONE_LAUNCH}
+    div.simitone-column
+      h1 #{SIMITONE_COL1_H1}
+      p !{SIMITONE_COL1_DESCR}
+    div.simitone-column.simitone-requirements
+      h1 #{SIMITONE_COL2_H1}
+      ul 
+        li#ts1cc-indicator
+          | <i class="material-icons left"></i> !{SIMITONE_REQ_TSCC}
+        li#simitone-indicator
+          | <i class="material-icons left"></i> !{SIMITONE_REQ_ST} <span id="simitone-ver"></span>
+          br 
+          div#simitone-should-update
+            | !{SIMITONE_UPDATE} <span id="simitone-update-version">v8.0.9</span>
+    div#simitone-ts1cc-error.simitone-box.simitone-error
+      h2 #{SIMITONE_MISSING_TSCC_H1}
+      p 
+        | !{SIMITONE_MISSING_TSCC_DESCR} 
+        span.darwin-only <br />!{SIMITONE_MISSING_TSCC_DESCR_MAC}
+    div(style='clear:both')
+    div.simitone-column
+      div.simitone-image(style='background-image:url(./images/simitone_teaser.png);')
+    div.simitone-column
+      h1(style='text-align: center') #{SIMITONE_FEATURES_1_H1}
+      p !{SIMITONE_FEATURES_1_DESCR}
+    div(style='clear:both')
+    div.simitone-column
+      h1(style='text-align: center') #{SIMITONE_FEATURES_2_H1}
+      p !{SIMITONE_FEATURES_2_DESCR}  
+    div.simitone-column
+      div.simitone-image(style='background-size:105%;background-position:0px -5px;background-image:url(./images/simitone_gameplay.png);')

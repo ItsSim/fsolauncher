@@ -326,17 +326,6 @@ class IPCBridge {
   }
 
   /**
-   * Useful for debugging with a production build.
-   *
-   * @param {string} str The string to log.
-   */
-  sendConsoleLog( str ) {
-    try {
-      this.window.webContents.send( 'CONSOLE_LOG', str );
-    } catch ( err ) {}
-  }
-
-  /**
    * Sets the Simitone Version for the UI.
    *
    * @param {string} v Simitone version

@@ -111,26 +111,30 @@ try {
 }
 console.info( 'loaded userSettings', userSettings );
 
-// Obtain the user's language code to determine which translation to load
-// The user can override their system's language by selecting one manually
-// in the launcher settings
-const code = ( ! userSettings.Launcher.Language || userSettings.Launcher.Language == 'default' ) ?
-  oslocale.sync().substring( 0, 2 ) : userSettings.Launcher.Language;
-
-// Initialize the locale with the obtained language code and add some extra
-// values that will be replaced in the HTML
-setLocale( code, {
-  LVERSION: version,
-  EVERSION: process.versions.electron,
-  LTHEME: userSettings.Launcher.Theme,
-  PLATFORM: process.platform,
-  DARK_THEMES: darkThemes.join( ',' ),
-  SENTRY: require( './sentry.config' ).browserLoader,
-  LANGCODE: code,
-  DEFAULT_REFRESH_RATE: 60,
-  REMESH_PACKAGE_CREDITS: require( './fsolauncher-ui/remesh-package-credits.json' ),
-  PRELOADED_FONTS: require( './font-loader' )()
-} );
+function loadLocale( langCode, theme ) {
+  // Obtain the user's language code to determine which translation to load
+  // The user can override their system's language by selecting one manually
+  // in the launcher settings
+  if ( ! langCode || langCode === 'default' ) {
+    langCode = oslocale.sync().substring( 0, 2 );
+  }
+  // Initialize the locale with the obtained language code and add some extra
+  // values that will be replaced in the HTML
+  setLocale( langCode, {
+    CSP_STRING: require( './csp-config' )(),
+    LAUNCHER_VERSION: version,
+    ELECTRON_VERSION: process.versions.electron,
+    LAUNCHER_THEME: theme,
+    PLATFORM: process.platform,
+    DARK_THEMES: darkThemes.join( ',' ),
+    SENTRY: require( './sentry.config' ).browserLoader,
+    LANG_CODE: langCode,
+    DEFAULT_REFRESH_RATE: 60,
+    REMESH_PACKAGE_CREDITS: require( './fsolauncher-ui/remesh-package.json' ),
+    PRELOADED_FONTS: require( './font-loader' )()
+  } );
+}
+loadLocale( userSettings.Launcher.Language, userSettings.Launcher.Theme );
 
 /** @type {Electron.BrowserWindowConstructorOptions} */
 const options = {};
@@ -185,7 +189,13 @@ function createWindow() {
   window.loadURL( `file://${__dirname}/fsolauncher-ui/fsolauncher.pug` );
   window.on( 'restore', _e => window.setSize( width, height ) );
 
-  launcher = new FSOLauncher( window, userSettings );
+  launcher = new FSOLauncher( {
+    window, userSettings,
+    onReload: async settings => {
+      loadLocale( settings.Launcher.Language, settings.Launcher.Theme );
+      window.reload();
+    }
+  } );
 
   if ( process.platform == 'darwin' ) {
     // Create the app menu for macOS

@@ -1,0 +1,14 @@
+//--------------------------------------------------------------------------------
+  scripts.pug
+  --------------------------------------------------------------------------------
+  Contains the <script> files loaded at the end of the <body>.
+
+if SENTRY != 'SENTRY_CI_BROWSER_LOADER'
+  script(src=SENTRY, crossorigin="anonymous")
+  script(src='./sentry-onload.js')
+
+script(src='../node_modules/socket.io-client/dist/socket.io.min.js')
+script(src='../node_modules/howler/dist/howler.min.js')
+script(src='../node_modules/dompurify/dist/purify.min.js')
+script(src='../node_modules/rss-parser/dist/rss-parser.min.js')
+script(src='./client.js')

@@ -1,0 +1,98 @@
+//--------------------------------------------------------------------------------
+  settings.pug
+  --------------------------------------------------------------------------------
+  Contains UI for the Settings tab.
+
+#settings-page.page(style='display:none')
+  h1.jumbotron
+    span #{SETTINGS}
+    small #{SETTINGS_DESCR}
+  .page-content
+    .form
+      h1 #{SETTINGS_LAUNCHER_H1}
+      div
+        span #{SETTINGS_DL}
+        select(option-id='Launcher.DirectLaunch')
+          option(value='0') #{SETTINGS_DISABLED}
+          option(value='1') #{SETTINGS_ENABLED}
+        small
+          | #{SETTINGS_DL_HINT}
+      div
+        span #{SETTINGS_DN}
+        select(option-id='Launcher.DesktopNotifications')
+          option(value='0') #{SETTINGS_DISABLED}
+          option(value='1') #{SETTINGS_ENABLED}
+        small
+          | #{SETTINGS_DN_HINT}
+      div
+        span #{SETTINGS_THEME}
+        select(option-id='Launcher.Theme')
+          option(value='simitone') Simitone
+          option(value='open_beta') Open Beta
+          option(value='dark') Open Beta (Dark)
+          option(value='turbo') Neon
+          option(value='indigo') Midnight
+        small #{SETTINGS_THEME_HINT}
+      div
+        span #{AFTER_X}
+        select(option-id='Launcher.Persistence')
+          option(value='1') #{STAY_TRAY}
+          option(value='0') #{EXIT_LAUNCHER}
+        small #{AFTER_X_HINT}
+      div
+        span #{SETTINGS_LAUNCHER_LANGUAGE}
+        select(option-id='Launcher.Language')
+          option(value='default') #{SYSTEM_DEFAULT}
+          option(value='en') English
+          option(value='es') Español
+          option(value='pt') Português Brasileiro
+          option(value='it') Italiano
+          option(value='ru') русский
+          option(value='pl') Polskie
+          option(value='nl') Nederlands
+        small #{SETTINGS_LAUNCHER_LANGUAGE_HINT}
+    .form
+      h1 #{SETTINGS_GAME_H1}
+      div
+        span #{SETTINGS_GM}
+        select(option-id='Game.GraphicsMode')
+          option(value='ogl') OpenGL
+          option.win32-only(value='dx') DirectX
+          option.win32-only(value='sw') Software
+        small
+          | #{SETTINGS_GM_HINT} #{SETTINGS_APPLIES_TO}
+      div
+        span #{TD_MODE}
+        select(option-id='Game.3DMode')
+          option(value='0') #{SETTINGS_DISABLED}
+          option(value='1') #{SETTINGS_ENABLED}
+        small
+          | #{TD_MODE_HINT} #{SETTINGS_APPLIES_TO}
+      div 
+        span #{SETTINGS_REFRESH_RATE}
+        input(
+          type='number', 
+          option-id='Game.RefreshRate', 
+          min='30', 
+          max=DEFAULT_REFRESH_RATE,
+          step='1', 
+          value=DEFAULT_REFRESH_RATE
+        )
+        small 
+          | #{SETTINGS_REFRESH_RATE_HINT} #{SETTINGS_APPLIES_TO}
+      div
+        span #{SETTINGS_LANG}
+        select(option-id='Game.Language')
+          option(value='en') English
+          option(value='es') Español
+          option(value='it') Italiano
+        small #{SETTINGS_LANG_HINT}
+    div(style='clear:both')
+    .form
+      h1 #{SETTINGS_SIMITONE_H1}
+      div
+        span #{SETTINGS_AA}
+        select(option-id='Game.SimitoneAA')
+          option(value='0') #{SETTINGS_DISABLED}
+          option(value='1') #{SETTINGS_ENABLED}
+        small #{SETTINGS_AA_HINT}

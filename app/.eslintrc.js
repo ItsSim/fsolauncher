@@ -21,7 +21,7 @@ module.exports = {
     'space-in-parens': [ 'error', 'always' ],
     'space-before-blocks': [ 'error', 'always' ],
     'array-bracket-spacing': [ 'error', 'always' ],
-    'quotes': [ 'error', 'single' ],
+    'quotes': [ 'error', 'single', { 'avoidEscape': true } ],
     'semi': [ 'error', 'always' ],
     'indent': [ 'error', 2 ],
     'computed-property-spacing': [ 'error', 'always' ],

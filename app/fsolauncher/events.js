@@ -31,7 +31,6 @@ class Events {
     ipcMain.on( 'PLAY_VOLCANIC',           this.onPlayVolcanic.bind( this ) );
     ipcMain.on( 'PLAY_VOLCANIC_SIMITONE',  this.onPlayVolcanicSimitone.bind( this ) );
     ipcMain.on( 'SOCKET_MESSAGE',          this.onSocketMessage.bind( this ) );
-    ipcMain.on( 'CONSOLE_LOG',             this.onConsoleLog.bind( this ) );
     ipcMain.on( 'CHECK_SIMITONE',          this.onCheckSimitoneRequirements.bind( this ) );
     ipcMain.on( 'INSTALL_SIMITONE_UPDATE', this.onInstallSimitoneUpdate.bind( this ) );
     ipcMain.on( 'OCI_PICK_FOLDER',         this.onOCIPickFolder.bind( this ) );
@@ -148,14 +147,6 @@ class Events {
         .catch( err => console.error( `error installing ${componentCode}`, { err, options } ) );
     }
   }
-
-  /**
-   * When the renderer process requests a main process console.log.
-   *
-   * @param {Electron.IpcMainEvent} e The event object.
-   * @param {string} v The message to be logged.
-   */
-  onConsoleLog( e, v ) { console.log( v ); }
 
   /**
    * When the user clicks the play button.

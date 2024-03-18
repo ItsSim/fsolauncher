@@ -1,0 +1,50 @@
+//--------------------------------------------------------------------------------
+  head.pug 
+  --------------------------------------------------------------------------------
+  Contains the HTML <head> and the Content Security Policy.
+  Also contains stylesheets and preloaded font files.
+
+head
+  meta(charset='utf-8')
+  meta(http-equiv='X-UA-Compatible' content='IE=edge')
+  meta(http-equiv="Content-Security-Policy" content=CSP_STRING)
+  style. 
+    @font-face {
+      font-family: 'Material Icons';
+      font-style: normal;
+      font-weight: 400;
+      src: url('#{PRELOADED_FONTS.MATERIAL_SYMBOLS}')
+        format('woff2');
+    }
+    @font-face {
+      font-family: 'Munged';
+      src: url('#{PRELOADED_FONTS.MUNGED_REGULAR}')
+        format('truetype');
+      font-weight: bold;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Munged';
+      src: url('#{PRELOADED_FONTS.MUNGED_REGULAR}')
+        format('truetype');
+      font-weight: 500;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Fredoka One';
+      src: url('#{PRELOADED_FONTS.FREDOKA}') format('truetype');
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Balsamiq';
+      src: url('#{PRELOADED_FONTS.BALSAMIQ}') format('truetype');
+      font-style: normal;
+    }
+  link(rel='stylesheet' href='./styles/reset.css')
+  link(rel='stylesheet' href='./fsolauncher.css')
+  link(rel='stylesheet' href='./styles/material-icons.css')
+  link(rel='stylesheet' href='./styles/themes/turbo.css')
+  link(rel='stylesheet' href='./styles/themes/dark.css')
+  link(rel='stylesheet' href='./styles/themes/halloween.css')
+  link(rel='stylesheet' href='./styles/themes/simitone.css')
+  link(rel='stylesheet' href='./styles/themes/indigo.css')

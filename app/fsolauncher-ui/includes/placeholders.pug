@@ -1,0 +1,62 @@
+//--------------------------------------------------------------------------------
+  placeholders.pug
+  --------------------------------------------------------------------------------
+  Contains HTML templates that are later used in client.js to dynamically create
+  HTML elements on the fly.
+
+template#toast-template
+  .toast(id="{id}")
+    i.material-icons.spin loop
+    span.toast-message {message}
+
+template#article-template
+  .rss-entry
+    h1.article-title {title}
+    span.article-pubDate {date}
+    div.rss-content {content}
+    a.button.article-link(target="_blank") #{READ_MORE}
+
+template#notification-template
+  .notification
+    i.material-icons notifications_empty
+    h1.notification-title {title}
+    p.notification-body {body}
+    span.notification-time {time}
+    a.notification-link(href="#" target="_blank") #{NOTIFICATION_LINK}
+
+template#yes-no-modal-template
+  .modal.overlay-closeable
+    h1.modal-header {title}
+    p.modal-text {text}
+    .button-container
+      button.yes-button {yesText}
+      span.no-button {noText}
+
+template#progress-item-template
+  .download
+    h1.progress-title
+    span.progress-subtitle
+    .info.progress-info
+    .loading
+      .progress
+
+template#remesh-info-template 
+  i.material-icons(style='vertical-align: middle; float: left; margin-right: 8px') access_time
+  span(style='line-height: 25px') #{UNKNOWN}
+  div.ribbon-wrapper
+    div.ribbon NEW
+
+template#now-trending-item-template 
+  li
+    .icon 
+      img.lot(src="")
+      .avatar
+    .info 
+      .lot-name Tangiers Casino
+      .owner
+        span Sam Rothstein
+    .players 
+      i.material-icons.fill.busy local_fire_department
+      span 
+        i.material-icons group
+        strong.count 20
