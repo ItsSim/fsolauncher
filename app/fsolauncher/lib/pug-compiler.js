@@ -84,5 +84,4 @@ module.exports = ( options = {}, getLocals = () => ( {} ) ) =>
         return result( errorData );
       }
     }, err => err ? reject( err ) : resolve( emitter ) );
-
   } );
