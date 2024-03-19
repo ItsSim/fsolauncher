@@ -446,6 +446,8 @@ let ociConfirm;
         simitoneInterval = null;
       }
     }
+
+    sendMessage( 'PAGE_CHANGE', pageId );
   }
 
   /**

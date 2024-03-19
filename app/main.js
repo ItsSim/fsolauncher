@@ -6,9 +6,9 @@ const { initSentry } = require( './fsolauncher/lib/utils' );
 initSentry();
 
 const { app, BrowserWindow, shell, Tray, Menu, nativeImage, nativeTheme } = require( 'electron' );
-
+const compilePugFiles = require( './fsolauncher/lib/pug-compiler' );
 const isTestMode = global.isTestMode = app.commandLine.getSwitchValue( 'test-mode' );
-const themeColors = require( './theme-colors' );
+const themeColors = require( './colors.config' );
 
 if ( isTestMode ) {
   app.disableHardwareAcceleration();
@@ -22,7 +22,7 @@ if ( isTestMode ) {
 }
 
 const { appData, version, darkThemes } = require( './fsolauncher/constants' );
-const { locale, setLocale } = require( './fsolauncher/locale' );
+const { locale, setLocale } = require( './fsolauncher/lib/locale' );
 
 const oslocale = require( 'os-locale' ),
   fs = require( 'fs-extra' ),
@@ -111,7 +111,11 @@ try {
 }
 console.info( 'loaded userSettings', userSettings );
 
-function loadLocale( langCode, theme ) {
+/**
+ * @param {UserSettings} settings
+ */
+function loadLocale( settings ) {
+  let langCode = settings.Launcher.Language;
   // Obtain the user's language code to determine which translation to load
   // The user can override their system's language by selecting one manually
   // in the launcher settings
@@ -121,20 +125,20 @@ function loadLocale( langCode, theme ) {
   // Initialize the locale with the obtained language code and add some extra
   // values that will be replaced in the HTML
   setLocale( langCode, {
-    CSP_STRING: require( './csp-config' )(),
+    CSP_STRING: require( './csp.config' ),
     LAUNCHER_VERSION: version,
     ELECTRON_VERSION: process.versions.electron,
-    LAUNCHER_THEME: theme,
+    LAUNCHER_THEME: settings.Launcher.Theme,
     PLATFORM: process.platform,
     DARK_THEMES: darkThemes.join( ',' ),
     SENTRY: require( './sentry.config' ).browserLoader,
     LANG_CODE: langCode,
     DEFAULT_REFRESH_RATE: 60,
     REMESH_PACKAGE_CREDITS: require( './fsolauncher-ui/remesh-package.json' ),
-    PRELOADED_FONTS: require( './font-loader' )()
+    PRELOADED_FONTS: require( './fonts.config' )
   } );
 }
-loadLocale( userSettings.Launcher.Language, userSettings.Launcher.Theme );
+loadLocale( userSettings );
 
 /** @type {Electron.BrowserWindowConstructorOptions} */
 const options = {};
@@ -143,8 +147,8 @@ function showWindow() {
   ! isTestMode && window.show();
 }
 
-function createWindow() {
-  require( 'electron-pug' )( { pretty: false }, locale.current );
+async function createWindow() {
+  compilePugFiles( { pretty: false }, () => locale.current );
 
   // Create the trayIcon for macOS and Windows
   trayIcon = nativeImage.createFromPath(
@@ -192,14 +196,14 @@ function createWindow() {
   launcher = new FSOLauncher( {
     window, userSettings,
     onReload: async settings => {
-      loadLocale( settings.Launcher.Language, settings.Launcher.Theme );
+      loadLocale( settings );
       window.reload();
     }
   } );
 
   if ( process.platform == 'darwin' ) {
     // Create the app menu for macOS
-    const darwinAppMenu = require( './darwin-app-menu' );
+    const darwinAppMenu = require( './fsolauncher/lib/darwin-app-menu' );
     Menu.setApplicationMenu( Menu.buildFromTemplate( darwinAppMenu( app.getName(), launcher ) ) );
   }
 

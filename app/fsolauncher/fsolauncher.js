@@ -1,5 +1,5 @@
 const { captureWithSentry, getJSON, strFormat, getDisplayRefreshRate } = require( './lib/utils' );
-const { locale } = require( './locale' );
+const { locale } = require( './lib/locale' );
 const { checks, version, appData, darkThemes } = require( './constants' );
 const { shell, nativeTheme } = require( 'electron' );
 
@@ -72,8 +72,9 @@ class FSOLauncher {
    * Only the renderer process gets reloaded.
    */
   reload() {
-    if ( this.reloadCallback )
+    if ( this.reloadCallback ) {
       this.reloadCallback( this.userSettings );
+    }
   }
 
   /**

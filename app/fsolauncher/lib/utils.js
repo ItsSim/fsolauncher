@@ -167,10 +167,6 @@ function githubApiHeaders( url, headers = {} ) {
   return headers;
 }
 
-function deepClone( obj ) {
-  return JSON.parse( JSON.stringify( obj ) );
-}
-
 module.exports = {
   normalizePathSlashes,
   strFormat,
@@ -178,6 +174,5 @@ module.exports = {
   captureWithSentry,
   getJSON,
   getDisplayRefreshRate,
-  githubApiHeaders,
-  deepClone
+  githubApiHeaders
 };

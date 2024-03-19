@@ -35,8 +35,19 @@ class Events {
     ipcMain.on( 'INSTALL_SIMITONE_UPDATE', this.onInstallSimitoneUpdate.bind( this ) );
     ipcMain.on( 'OCI_PICK_FOLDER',         this.onOCIPickFolder.bind( this ) );
     ipcMain.on( 'OPEN_FOLDER',             this.onOpenFolder.bind( this ) );
+    ipcMain.on( 'PAGE_CHANGE',             this.onPageChange.bind( this ) );
 
     nativeTheme.on( 'updated', this.handleNativeThemeChange.bind( this ) );
+  }
+
+  /**
+   * @param {Electron.IpcMainEvent} e The event object.
+   * @param {string} pageId The page id.
+   */
+  onPageChange( e, pageId ) {
+    if ( pageId === 'installer' ) {
+      this.fsolauncher.updateInstalledPrograms();
+    }
   }
 
   /**

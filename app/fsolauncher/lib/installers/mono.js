@@ -2,7 +2,7 @@ const download = require( '../download' );
 const sudo = require( '../sudo-prompt' );
 const { strFormat } = require( '../utils' );
 const { downloads, temp } = require( '../../constants' );
-const { locale } = require( '../../locale' );
+const { locale } = require( '../locale' );
 
 /**
  * Installs Mono on macOS systems.

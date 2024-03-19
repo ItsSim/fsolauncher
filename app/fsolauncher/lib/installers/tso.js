@@ -2,7 +2,7 @@ const download = require( '../download' );
 const unzip = require( '../unzip' );
 const extract = require( '../cabinet' );
 const { downloads, temp, appData } = require( '../../constants' );
-const { locale } = require( '../../locale' );
+const { locale } = require( '../locale' );
 
 /**
  * Installs The Sims Online.

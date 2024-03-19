@@ -4,7 +4,7 @@ const {
   normalizePathSlashes
 } = require( './utils' );
 
-const { locale } = require( '../locale' );
+const { locale } = require( './locale' );
 
 /**
  * Container class for all the Modal windows.

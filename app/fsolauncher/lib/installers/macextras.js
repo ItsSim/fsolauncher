@@ -2,7 +2,7 @@ const download = require( '../download' );
 const unzip = require( '../unzip' );
 const { strFormat } = require( '../utils' );
 const { downloads, temp, appData } = require( '../../constants' );
-const { locale } = require( '../../locale' );
+const { locale } = require( '../locale' );
 
 /**
  * Installs macOS Extras on macOS systems.

@@ -4,7 +4,7 @@ const { app, shell } = require( 'electron' );
  * Generates the app menu for macOS.
  *
  * @param {string} name The name of the application.
- * @param {import('./fsolauncher/fsolauncher')} fsolauncher The FSOLauncher instance.
+ * @param {import('../fsolauncher')} fsolauncher The FSOLauncher instance.
  */
 module.exports = ( name, fsolauncher ) => [
   {

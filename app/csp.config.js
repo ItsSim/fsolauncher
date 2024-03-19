@@ -1,4 +1,4 @@
-const cspDirectives = {
+const directives = {
   'default-src': [ "'self'" ],
   'script-src': [ "'self'", 'https://*.sentry-cdn.com' ],
   'worker-src': [ "'self'", 'blob:' ],
@@ -16,6 +16,6 @@ const cspDirectives = {
   'font-src': [ "'self'", 'data:' ],
 };
 
-module.exports = ( directives = cspDirectives ) => Object.entries( directives )
+module.exports = Object.entries( directives )
   .map( ( [ directive, sources ] ) => `${directive} ${sources.join( ' ' )}` )
   .join( '; ' );

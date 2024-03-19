@@ -1,4 +1,4 @@
-const { locale } = require( '../../locale' );
+const { locale } = require( '../locale' );
 
 /**
  * Installs OpenAL, .NET, Mono, SDL, TSO and FreeSO.

@@ -2,7 +2,7 @@ const { strFormat, captureWithSentry, getJSON } = require( '../utils' );
 const download = require( '../download' ),
   unzip = require( '../unzip' );
 const { temp, downloads, appData } = require( '../../constants' );
-const { locale } = require( '../../locale' );
+const { locale } = require( '../locale' );
 
 /**
  * Installs FreeSO from GitHub Releases.
