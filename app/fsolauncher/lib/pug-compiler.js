@@ -1,5 +1,4 @@
 const { protocol } = require( 'electron' );
-const { parse: parseUrl } = require( 'url' );
 const fs = require( 'fs-extra' );
 const path = require( 'path' );
 const pug = require( 'pug' );
@@ -24,8 +23,16 @@ class PugEmitter extends EventEmitter {}
  * @return {string} path to file
  */
 const getPath = ( url ) => {
-  const { pathname } = parseUrl( url );
-  return process.platform === 'win32' ? pathname.substring( 1 ).replace( '/', '\\' ) : pathname;
+  const parsed = require( 'url' ).parse( url );
+  let result = decodeURIComponent( parsed.pathname );
+
+  // Local files in Windows start with slash if no host is given
+  // file:///c:/something.pug
+  if ( process.platform === 'win32' && ! parsed.host.trim() ) {
+    result = result.substr( 1 );
+  }
+
+  return result;
 };
 
 /**
@@ -35,47 +42,47 @@ const getPath = ( url ) => {
  * is ready.
  *
  * @param {pug.Options} options pug compiler options
-  * @param {Function} getLocals Function that returns the current locals
+ * @param {Function} getLocals Function that returns the current locals
  *
- * @returns {PugEmitter}
+ * @returns {Promise<PugEmitter>}
  */
-module.exports = ( options = {}, getLocals = () => ( {} ) ) => {
-  const emitter = new PugEmitter();
+module.exports = ( options = {}, getLocals = () => ( {} ) ) =>
+  new Promise( ( resolve, reject ) => {
+    const emitter = new PugEmitter();
 
-  protocol.interceptBufferProtocol( 'file', async ( request, callback ) => {
-    try {
+    protocol.interceptBufferProtocol( 'file', ( request, result ) => {
       const file = getPath( request.url );
-      const content = await fs.readFile( file );
-      const ext = path.extname( file );
 
-      let data = { data: content, mimeType: mime.getType( ext ) };
+      // See if file actually exists
+      try {
+        const content = fs.readFileSync( file );
+        const ext = path.extname( file );
+        let data = { data: content, mimeType: mime.getType( ext ) };
 
-      if ( ext === '.pug' ) {
-        // Use getLocals function to retrieve current locals
-        const currentLocals = getLocals();
-        const compiled = pug.compileFile( file, options )( currentLocals );
-        data = { data: Buffer.from( compiled ), mimeType: HTML_MIMETYPE };
+        if ( ext === '.pug' ) {
+          // Use getLocals function to retrieve current locals
+          const currentLocals = getLocals();
+          const compiled = pug.compileFile( file, options )( currentLocals );
+          data = { data: Buffer.from( compiled ), mimeType: HTML_MIMETYPE };
+        }
+
+        return result( data );
+      } catch ( err ) {
+        // See here for error numbers:
+        // https://code.google.com/p/chromium/codesearch#chromium/src/net/base/net_error_list.h
+        let errorData;
+        if ( err.code === 'ENOENT' ) {
+          errorData = -6;
+        } else if ( typeof err.code === 'number' ) {
+          errorData = -2;
+        } else {
+          // Remaining errors are considered to be pug errors
+          errorData = { data: Buffer.from( `<pre style="tab-size:1">${err}</pre>` ), mimeType: HTML_MIMETYPE };
+        }
+
+        emitter.emit( 'error', err );
+        return result( errorData );
       }
+    }, err => err ? reject( err ) : resolve( emitter ) );
 
-      callback( data );
-    } catch ( err ) {
-      emitter.emit( 'error', err );
-
-      let errorData;
-      if ( err.code === 'ENOENT' ) {
-        errorData = -6; // File not found
-      } else if ( typeof err.code === 'number' ) {
-        errorData = -2; // Generic error
-      } else {
-        // Treat other errors as Pug-related and display them
-        errorData = { data: Buffer.from( `<pre style="tab-size: 1">${err}</pre>` ), mimeType: HTML_MIMETYPE };
-      }
-
-      callback( errorData );
-    }
-  }, err => {
-    if ( err ) throw err;
   } );
-
-  return emitter;
-};

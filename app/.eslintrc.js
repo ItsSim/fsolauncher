@@ -22,6 +22,7 @@ module.exports = {
     'space-before-blocks': [ 'error', 'always' ],
     'array-bracket-spacing': [ 'error', 'always' ],
     'quotes': [ 'error', 'single', { 'avoidEscape': true } ],
+    'object-curly-spacing': [ 'error', 'always' ],
     'semi': [ 'error', 'always' ],
     'indent': [ 'error', 2 ],
     'computed-property-spacing': [ 'error', 'always' ],
