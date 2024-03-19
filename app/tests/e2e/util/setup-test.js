@@ -99,9 +99,9 @@ module.exports = () => {
     getAppData: () => appData,
     getInstallDir: () => installDir,
     getLogs: () => ( {
-      main: logs.filter( ).filter( log => log.includes( '[main]' ) && ! isLogExcluded( log ) ),
+      main: logs.filter( log => log.includes( '[main]' ) && ! isLogExcluded( log ) ),
       renderer: logs.filter( log => log.includes( '[renderer]' ) && ! isLogExcluded( log ) ),
-      all: logs.filter( log => ! isLogExcluded( log ) )
+      all: logs.filter( log => ! isLogExcluded( log ) ),
     } ),
     /**
      * @param {string[]} excludes
