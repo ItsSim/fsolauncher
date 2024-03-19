@@ -5,7 +5,7 @@
   HTML elements on the fly.
 
 template#toast-template
-  .toast(id="{id}")
+  .toast(id='{id}')
     i.material-icons.spin loop
     span.toast-message {message}
 
@@ -14,7 +14,7 @@ template#article-template
     h1.article-title {title}
     span.article-pubDate {date}
     div.rss-content {content}
-    a.button.article-link(target="_blank") #{READ_MORE}
+    a.button.article-link(target='_blank') #{READ_MORE}
 
 template#notification-template
   .notification
@@ -22,7 +22,7 @@ template#notification-template
     h1.notification-title {title}
     p.notification-body {body}
     span.notification-time {time}
-    a.notification-link(href="#" target="_blank") #{NOTIFICATION_LINK}
+    a.notification-link(href='#' target='_blank') #{NOTIFICATION_LINK}
 
 template#yes-no-modal-template
   .modal.overlay-closeable
@@ -41,15 +41,15 @@ template#progress-item-template
       .progress
 
 template#remesh-info-template 
-  i.material-icons(style='vertical-align: middle; float: left; margin-right: 8px') access_time
-  span(style='line-height: 25px') #{UNKNOWN}
+  i.material-icons(style={'vertical-align': 'middle', 'float': 'left', 'margin-right': '8px'}) access_time
+  span(style={'line-height': '25px'}) #{UNKNOWN}
   div.ribbon-wrapper
     div.ribbon NEW
 
 template#now-trending-item-template 
   li
     .icon 
-      img.lot(src="")
+      img.lot(src='')
       .avatar
     .info 
       .lot-name Tangiers Casino

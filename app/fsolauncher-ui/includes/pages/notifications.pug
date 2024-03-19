@@ -3,12 +3,12 @@
   --------------------------------------------------------------------------------
   Contains UI for the Notifications tab.
 
-#notifications-page.page(style='display:none')
+#notifications-page.page(style={'display': 'none'})
   h1.jumbotron
     span #{NOTIFICATIONS}
     small #{NOTIFICATIONS_DESC}
   .page-content
     .alt-content
-      i.material-icons(style='font-size:28px;margin-bottom:10px') notifications_none
+      i.material-icons(style={'font-size': '28px', 'margin-bottom': '10px'}) notifications_none
       br
-      span(style='color:rgba(0,0,0,0.4)') #{NOTIFICATIONS_NONE}
+      span(style={'color': 'rgba(0,0,0,0.4)'}) #{NOTIFICATIONS_NONE}

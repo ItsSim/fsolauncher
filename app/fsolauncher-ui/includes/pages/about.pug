@@ -3,21 +3,21 @@
   --------------------------------------------------------------------------------
   Contains UI for the About tab.
 
-#about-page.page(style='display:none')
+#about-page.page(style={'display': 'none'})
   h1.jumbotron
     span #{ABOUT}
     small #{ABOUT_DESCR}
   .page-content
-    .FAQ(style='max-width:600px;float:left')
+    .FAQ(style={'max-width': '600px', 'float': 'left'})
       block faq
         strong #{ABOUT_LAUNCHER_VERSION}
         p FreeSO Launcher #{LAUNCHER_VERSION}
           <br> Electron #{ELECTRON_VERSION}
-        button#update-check(style='margin-bottom:20px')
-          i.material-icons.left(style='margin-top:-2px') update
+        button#update-check(style={'margin-bottom': '20px'})
+          i.material-icons.left(style={'margin-top': '-2px'}) update
           |  #{ABOUT_CHECK}
-        .alt-content-small(style='margin-bottom:20px; color:#C0392B')
-          i.material-icons(style='float:left;margin-right:10px;margin-top:-3px') wifi_off
+        .alt-content-small(style={'margin-bottom': '20px', 'color': '#C0392B'})
+          i.material-icons(style={'float': 'left', 'margin-right': '10px', 'margin-top': '-3px'}) wifi_off
           |  #{ABOUT_INTERNET}
       br
       block faq
@@ -39,7 +39,7 @@
       block faq
         strong #{ABOUT_FAQ_5_H1}
         p !{ABOUT_FAQ_5_TEXT}.
-        p(style='margin-top:-20px') !{ABOUT_FAQ_GITHUB}
+        p(style={'margin-top': '-20px'}) !{ABOUT_FAQ_GITHUB}
 
       block faq 
         strong #{ABOUT_FAQ_6_H1}

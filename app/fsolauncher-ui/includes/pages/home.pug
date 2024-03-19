@@ -3,8 +3,8 @@
   --------------------------------------------------------------------------------
   Contains UI for the Home tab.
 
-#home-page.page(style='display:none')
-  .hint.arrow-left(hint-page='home' style='top:140px;left:30px')
+#home-page.page(style={'display': 'none'})
+  .hint.arrow-left(hint-page='home' style={'top': '140px', 'left': '30px'})
     h1 #{TOOLTIP_TITLE_1}
     small #{TOOLTIP_DESCR_1}
   h1.jumbotron
@@ -12,18 +12,25 @@
       button#refresh-home-button.icon-only(title=REFRESH_HOME_BTN_TITLE)
         i.material-icons.left refresh
     small #{HOME_DESCR}
-  .page-content(style='position:relative')
-    #rss-loading(style='font-size:20px;margin-top:20px;display:block;text-align:center')
-      i.material-icons.spin(style='margin-bottom:10px;font-size:1.5em') loop
+  .page-content(style={'position': 'relative'})
+    #rss-loading(
+      style={
+        'font-size': '20px', 
+        'margin-top': '20px', 
+        'display': 'block', 
+        'text-align': 'center'
+      }
+    )
+      i.material-icons.spin(style={'margin-bottom': '10px', 'font-size': '1.5em'}) loop
       br
       |  #{RETICULATING}
     #rss
       .alt-content
-        i.material-icons(style='font-size:28px') wifi_off
+        i.material-icons(style={'font-size': '28px'}) wifi_off
         br
         | #{INTERNET_REQ}
       #rss-root
-    #did-you-know(style='display:none')
+    #did-you-know(style={'display': 'none'})
       #now-trending
         .top 
           h1 #{TOP_TITLE}

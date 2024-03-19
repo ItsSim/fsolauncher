@@ -3,7 +3,7 @@
   --------------------------------------------------------------------------------
   Contains the modal UI for the one-click install flow.
 
-div.oneclick-install.overlay-closeable(style='display: none')
+div.oneclick-install.overlay-closeable(style={'display': 'none'})
   div.oneclick-install-content
     div.oneclick-install-text
       h1 #{OCI_TITLE}
@@ -27,8 +27,8 @@ div.oneclick-install.overlay-closeable(style='display: none')
             stop(offset='0.503125' stop-color='#44ABED')
             stop(offset='1' stop-color='#5BD536')
 
-      button.oneclick-install-confirm(style='display: none') #{OCI_CONFIRM}
+      button.oneclick-install-confirm(style={'display': 'none'}) #{OCI_CONFIRM}
     div.oneclick-install-close
-      i.material-icons(style="font-size:16px;vertical-align:middle;margin-right:5px")
+      i.material-icons(style={'font-size': '16px', 'vertical-align': 'middle', 'margin-right': '5px'})
         | arrow_back
       | #{OCI_CANCEL}

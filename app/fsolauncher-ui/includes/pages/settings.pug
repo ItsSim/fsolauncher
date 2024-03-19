@@ -3,7 +3,7 @@
   --------------------------------------------------------------------------------
   Contains UI for the Settings tab.
 
-#settings-page.page(style='display:none')
+#settings-page.page(style={'display': 'none'})
   h1.jumbotron
     span #{SETTINGS}
     small #{SETTINGS_DESCR}
@@ -87,7 +87,7 @@
           option(value='es') Español
           option(value='it') Italiano
         small #{SETTINGS_LANG_HINT}
-    div(style='clear:both')
+    div(style={'clear': 'both'})
     .form
       h1 #{SETTINGS_SIMITONE_H1}
       div
