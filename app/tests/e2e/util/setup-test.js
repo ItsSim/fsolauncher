@@ -27,7 +27,10 @@ module.exports = () => {
   let installDir;
 
   /** @type {string[]} */
-  let consoleErrors = [];
+  let logs = [];
+
+  /** @type {string[]} */
+  let logExcludes = [];
 
   test.beforeAll( () => {
     latestBuild = findLatestBuild( '../release' );
@@ -43,7 +46,7 @@ module.exports = () => {
 
   test.beforeEach( async () => {
     // Reset console errors at the start of each test
-    consoleErrors = [];
+    logs = [];
 
     // Pass in --test-mode for headless testing
     electronApp = await electron.launch( {
@@ -59,7 +62,7 @@ module.exports = () => {
     // Log main process
     electronApp.process().stdout.on( 'data', data => console.info( `[main] ${data}` ) );
     electronApp.process().stderr.on( 'data', error => console.info( `[main] ${error}` ) );
-    electronApp.process().stderr.on( 'data', error => consoleErrors.push( `[main] ${error}` ) );
+    electronApp.process().stderr.on( 'data', error => logs.push( `[main] ${error}` ) );
 
     window = await electronApp.firstWindow();
     console.info( '[beforeEach] waited for firstWindow' );
@@ -68,7 +71,7 @@ module.exports = () => {
     window.on( 'console', log => console.info( `[renderer] ${log.text()}` ) );
     window.on( 'console', log => {
       if ( log.type() === 'error' ) {
-        consoleErrors.push( `[renderer] ${log.text()}` );
+        logs.push( `[renderer] ${log.text()}` );
       }
     } );
   } );
@@ -85,6 +88,8 @@ module.exports = () => {
     }
   } );
 
+  const isLogExcluded = log => logExcludes.some( exclude => log.includes( exclude ) );
+
   return {
     getWindow: () => window,
     getElectronApp: () => electronApp,
@@ -93,11 +98,14 @@ module.exports = () => {
     getExeDir: () => exeDir,
     getAppData: () => appData,
     getInstallDir: () => installDir,
-    getConsoleErrors: () => ( {
-      main: consoleErrors.filter( e => e.includes( '[main]' ) ),
-      renderer: consoleErrors.filter( e => e.includes( '[renderer]' ) ),
-      all: consoleErrors
+    getLogs: () => ( {
+      main: logs.filter( ).filter( log => log.includes( '[main]' ) && ! isLogExcluded( log ) ),
+      renderer: logs.filter( log => log.includes( '[renderer]' ) && ! isLogExcluded( log ) ),
+      all: logs.filter( log => ! isLogExcluded( log ) )
     } ),
-    clearConsoleErrors: () => ( consoleErrors = [] )
+    /**
+     * @param {string[]} excludes
+     */
+    restartLogs: ( excludes = [] ) => ( logExcludes = excludes, logs = [] )
   };
 };

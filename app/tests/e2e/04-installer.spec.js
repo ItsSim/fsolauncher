@@ -40,7 +40,9 @@ test.describe( 'installer', () => {
     expect( await T.getWindow().locator( '.item.installed[install="FSO"]' ).isVisible() ).toBeTruthy();
     expect( await T.getWindow().locator( '.item.installed[install="TSO"]' ).isVisible() ).toBeTruthy();
 
-    T.clearConsoleErrors(); // Clear errors so we can catch any after the button click
+    // Clear console.errors so we can catch any after the button click
+    // Ignore reg.exe errors
+    T.restartLogs( [ 'reg.exe' ] );
 
     await T.getWindow().locator( 'button.launch' ).click();
 
@@ -51,7 +53,7 @@ test.describe( 'installer', () => {
     await T.getWindow().waitForTimeout( 500 );
 
     // Assert that no console errors were logged
-    expect( T.getConsoleErrors().main ).toEqual( [] );
+    expect( T.getLogs().main ).toEqual( [] );
 
     await killGame();
   } );
