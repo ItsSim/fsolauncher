@@ -17,10 +17,10 @@ jobs:
         include:
           - os: windows-latest
             build_command: "buildwin"
-            artifact_name: "fsolauncher-win-pr"
+            artifact_name: "fsolauncher-win32-unofficial"
           - os: macos-latest
             build_command: "builddarwin"
-            artifact_name: "fsolauncher-mac-pr"
+            artifact_name: "fsolauncher-darwin64-unofficial"
     steps:
     - name: Checkout
       uses: actions/checkout@v2
