@@ -12,9 +12,9 @@ function fontb64( file ) {
 }
 
 module.exports = {
-  MATERIAL_SYMBOLS: fontb64( 'MaterialSymbolsRounded.woff2' ),
-  FREDOKA: fontb64( 'FredokaOne-Regular.ttf' ),
-  BALSAMIQ: fontb64( 'BalsamiqSans-Bold.ttf' ),
-  MUNGED_REGULAR: fontb64( 'hinted-Munged-otVXWjH6W8.ttf' ),
-  MUNGED_BOLD: fontb64( 'hinted-Munged-embOpitJmj.ttf' )
+  MATERIAL_SYMBOLS: fontb64( 'material-symbols.woff2' ),
+  FREDOKA: fontb64( 'fredoka.ttf' ),
+  BALSAMIQ: fontb64( 'balsamiq.ttf' ),
+  MUNGED_REGULAR: fontb64( 'munged-regular.ttf' ),
+  MUNGED_BOLD: fontb64( 'munged-bold.ttf' )
 };

@@ -240,6 +240,10 @@
   -webkit-linear-gradient(#15202b, #10171e 95%, #15202b);
 }
 
+.halloween #rss-loading {
+  color: rgba(255, 255, 255, 0.6);
+}
+
 .halloween option {
   background: #10171e;
 }

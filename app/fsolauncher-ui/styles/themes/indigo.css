@@ -247,6 +247,10 @@
   -webkit-linear-gradient(#241D2A, #1b1422 95%, #1b1422);
 }
 
+.indigo #rss-loading {
+  color: rgba(255, 255, 255, 0.6);
+}
+
 .indigo option {
   background: #161321;
 }

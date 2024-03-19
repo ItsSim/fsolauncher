@@ -726,7 +726,7 @@
     "X_OUT_OF_X": "su"
   },
   "nl": {
-    "ABOUT": "OVER",
+    "ABOUT": "INFO",
     "ABOUT_CHECK": "Controleer voor updates",
     "ABOUT_DESCR": "Informatie over FreeSO",
     "ABOUT_FAQ_1_H1": "Wat is FreeSO?",
@@ -758,7 +758,7 @@
     "FSO_FAILED_INSTALLATION": "Het installeren van %s is mislukt. Probeer het later opnieuw.",
     "FSO_NETWORK_ERROR": "Er is een probleem opgetreden bij het downloaden van de vereiste bestanden vanwege een netwerkfout. Probeer het later opnieuw.",
     "FULL_INSTALL_BTN": "VOLLEDIGE INSTALLATIE",
-    "HOME": "STARTPAGINA",
+    "HOME": "HOME",
     "HOME_DESCR": "Bekijk het laatste nieuws over FreeSO",
     "INS_CLOSE": "Dit venster wordt binnen 5 seconden gesloten.",
     "INS_DLEX": "Noodzakelijke bestanden downloaden en uitpakken.",
@@ -789,7 +789,7 @@
     "INS_WINDOW": "Volg de instructies in het venster.",
     "INSD_IN": "Geïnstalleerd in",
     "INSTALLATION_FINISHED": "Installatie is met succes voltooid.",
-    "INSTALLER": "INSTALLATIES",
+    "INSTALLER": "INSTALLER",
     "INSTALLER_DESCR": "Klik op een item om het te installeren",
     "INSTALLER_FSO_DESCR": "Free Simulator Online",
     "INSTALLER_FSO_TITLE": "FreeSO Spel",
@@ -1282,7 +1282,7 @@
     "X_OUT_OF_X": "z"
   },
   "pt": {
-    "ABOUT": "SOBRE",
+    "ABOUT": "INFO",
     "ABOUT_CHECK": "Procurar atualizações",
     "ABOUT_DESCR": "Informações sobre FreeSO",
     "ABOUT_FAQ_1_H1": "O que é FreeSO?",
@@ -1314,7 +1314,7 @@
     "FSO_FAILED_INSTALLATION": "Falha na instalação do %s. Tente novamente mais tarde.",
     "FSO_NETWORK_ERROR": "Houve um problema ao baixar os arquivos necessários devido a um erro de conexão. Por favor tente novamente mais tarde.",
     "FULL_INSTALL_BTN": "INSTALAÇÃO COMPLETA",
-    "HOME": "TELA INICIAL",
+    "HOME": "Início",
     "HOME_DESCR": "Confira as últimas notícias do FreeSO",
     "INS_CLOSE": "Esta janela será fechada em 5 segundos.",
     "INS_DLEX": "Baixando e extraindo os arquivos necessários.",

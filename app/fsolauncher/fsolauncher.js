@@ -849,6 +849,13 @@ class FSOLauncher {
    */
   async setLauncherLanguage( value ) {
     await this.updateAndPersistConfig( 'Launcher', 'Language', value );
+
+    // Do not allow hot reload if something's going on, as it can break
+    // any ongoing progress UI
+    if ( this.activeTasks.length ) {
+      return Modal.showLanguageOnRestart();
+    }
+
     this.reload();
   }
 

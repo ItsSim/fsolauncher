@@ -305,6 +305,7 @@ div.page p, div.page .readable-font {
   margin-bottom: 5px;
   border-radius: 6px;
   padding: 13px;
+  font-size: 1.07rem;
 }
 
 #launcher #sidebar li.active,
@@ -1604,6 +1605,7 @@ i.spin {
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  font-size: 1.08rem;
 }
 #now-trending .hot .busy {
   display: inline-block;

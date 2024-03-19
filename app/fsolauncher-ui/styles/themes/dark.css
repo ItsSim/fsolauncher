@@ -232,6 +232,10 @@
   border-color:#414141
 }
 
+.dark #rss-loading {
+  color: rgba(255, 255, 255, 0.6);
+}
+
 .dark select {
   background-image: url(../../images/15xvbd5.png), 
   -webkit-linear-gradient(#15202b, #10171e 95%, #15202b);
