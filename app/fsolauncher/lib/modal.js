@@ -384,7 +384,7 @@ class Modal {
         path.join(
           __dirname,
           '../../fsolauncher-ui/fonts',
-          'hinted-Munged-otVXWjH6W8.ttf'
+          'munged-regular.ttf'
         ),
         { encoding: 'base64' }
       );
@@ -392,7 +392,7 @@ class Modal {
         path.join(
           __dirname,
           '../../fsolauncher-ui/fonts',
-          'FredokaOne-Regular.ttf'
+          'fredoka.ttf'
         ),
         { encoding: 'base64' }
       );
