@@ -32,14 +32,9 @@ head
     }
     @font-face {
       font-family: 'Fredoka One';
-      src: url('#{PRELOADED_FONTS.FREDOKA}') format('truetype');
+      src: url('#{[ 'ru', 'pl' ].includes( LANG_CODE ) ? PRELOADED_FONTS.BALSAMIQ : PRELOADED_FONTS.FREDOKA}') format('truetype');
       font-style: normal;
       font-weight: 675;
-    }
-    @font-face {
-      font-family: 'Balsamiq';
-      src: url('#{PRELOADED_FONTS.BALSAMIQ}') format('truetype');
-      font-style: normal;
     }
   link(rel='stylesheet' href='./styles/reset.css')
   link(rel='stylesheet' href='./fsolauncher.css')

@@ -18,11 +18,6 @@
   letter-spacing: -0.02em;
 }
 
-.ru #launcher,
-.pl #launcher {
-  font-family: 'Balsamiq';
-}
-
 #rss .alt-content {
   display: none;
 }
@@ -449,11 +444,6 @@ strong {
   font-family: 'Fredoka One';
 }
 
-.ru strong,
-.pl strong {
-  font-family: 'Balsamiq';
-}
-
 [data-keyboard-user] a[href]:focus, 
 [data-keyboard-user] select:focus, 
 [data-keyboard-user] input:focus, 
@@ -801,12 +791,16 @@ select {
 }
 
 #rss .rss-entry {
-  margin-bottom: 20px;
-  padding-bottom: 5px;
-  padding: 20px;
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  margin-top: 20px;
   position: relative;
   display: flex;
   flex-direction: column;
+}
+
+#rss .rss-content {
+  padding: 5px;
 }
 
 #rss .rss-entry p {
@@ -1072,9 +1066,10 @@ select {
 
 .modal p {
   font-family: 'Munged';
-  line-height: 21px;
   word-break: break-word;
   flex: 1;
+  font-size: 0.95rem;
+  line-height: 1.3rem;
 }
 
 .modal div {
@@ -1221,11 +1216,6 @@ a {
   margin-bottom: -10px;
   font-family: 'Fredoka One';
   color: rgba(0, 0, 0, 0.5);
-}
-
-.ru #notifications-page div.notification h1,
-.pl #notifications-page div.notification h1 {
-  font-family: 'Balsamiq';
 }
 
 #notifications-page div.notification i {
@@ -1491,6 +1481,18 @@ i.spin {
   width: 50%;
 }
 
+#rss-link a {
+  font-family: 'Munged';
+  display: block;
+  font-size: 0.85rem;
+  border: 2px solid rgb(187 187 187 / 30%);
+  padding: 15px;
+  border-radius: 4px;
+  text-align: center;
+  margin-bottom: 0;
+  margin-top: -10px;
+}
+
 #did-you-know {
   width: 50%;
   height: 100%;
@@ -1533,6 +1535,7 @@ i.spin {
 #now-trending .content {
   flex: 1;
   overflow-y: auto;
+  background: rgb(30 58 82 / 2%);
 }
 #now-trending .top {
   display: flex;
