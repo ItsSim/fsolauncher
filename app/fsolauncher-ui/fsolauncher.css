@@ -810,7 +810,7 @@ select {
 
 #rss .rss-entry p {
   padding: 0;
-  font-size: 1rem;
+  font-size: 0.95rem;
   line-height: 22px;
   text-align: justify;
   hyphens: auto;
