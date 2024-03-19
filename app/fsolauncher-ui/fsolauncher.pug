@@ -9,12 +9,12 @@ html(lang=LANG_CODE class=PLATFORM + ' ' + LANG_CODE)
     data-months=MONTHS
   )
     #launcher
+      #overlay
       #toasts
         #no-internet-notice
           i.material-icons(style='margin-top:-5px') wifi_off
           | #{INTERNET_TOASTT}
-      #overlay
-
+      
       include includes/sidebar.pug
 
       #content
