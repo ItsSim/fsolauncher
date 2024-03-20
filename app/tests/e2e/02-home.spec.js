@@ -31,7 +31,7 @@ test.describe( 'home', () => {
     const firstItemTitle = await T.getWindow().locator( '.rss-entry:first-child .article-title' ).innerText();
     const firstItemDescription = await T.getWindow().locator( '.rss-entry:first-child .rss-content' ).innerText();
 
-    expect( firstItemTitle ).toContain( 'e2e' );
+    expect( firstItemTitle ).toContain( 'e2e'.toUpperCase() );
     expect( firstItemDescription ).toContain( 'The Sims Online is all about escapism' );
   } );
 
