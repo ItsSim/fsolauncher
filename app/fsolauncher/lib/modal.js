@@ -414,7 +414,7 @@ class Modal {
         @font-face {
           font-family: 'Fredoka One';
           src: url(data:font/truetype;charset=utf-8;base64,${b64fontFredokaOne}) format('truetype');
-          font-weight: normal;
+          font-weight: 675;
           font-style: normal;
         }
         .notification {
