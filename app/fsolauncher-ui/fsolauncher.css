@@ -804,7 +804,7 @@ select {
 }
 
 #rss .rss-entry p {
-  padding: 0;
+  padding: 10px;
   font-size: 0.95rem;
   line-height: 22px;
   text-align: justify;
@@ -819,7 +819,7 @@ select {
   right: 0;
   bottom: -15px;
   height: 1px;
-  width: 100px;
+  width: 50px;
   margin: auto;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
@@ -854,11 +854,16 @@ select {
 }
 
 #rss .rss-entry > h1 {
-  font-size: 25px;
+  font-size: 1.5rem;
   margin-bottom: 20px;
   color: #4C8DEE;
-  line-height: 30px;
+  max-width: 300px;
+  margin-right: auto;
+  margin-left: auto;
+  text-transform: uppercase;
+  line-height: 1.8rem;
   text-align: center;
+  letter-spacing: 0;
 }
 
 #rss .rss-entry > a {
@@ -1587,12 +1592,12 @@ i.spin {
   color: #10171E;
   margin-right: 30px;
   position: relative;
+  filter: brightness(1.2);
 }
 #now-trending li .icon .lot {
-  width: 75px;
+  width: 80px;
   position: absolute;
-  left: -10px;
-  bottom: px;
+  left: -15px;
 }
 #now-trending li .info {
   flex: 1;

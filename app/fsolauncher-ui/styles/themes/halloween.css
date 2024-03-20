@@ -357,6 +357,10 @@
   border-right-color: #ff691f;
 }
 
+.halloween #rss .rss-entry:not(:last-child):before {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
 .halloween #rss .rss-entry h1,
 .halloween #settings-page .form h1,
 .halloween #downloads > div .tag h1,

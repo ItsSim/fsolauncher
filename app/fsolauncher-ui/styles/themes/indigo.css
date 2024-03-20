@@ -343,6 +343,10 @@
   color: #1d1723!important;
 }
 
+.indigo #rss .rss-entry:not(:last-child):before {
+  border-color: #43384C;
+}
+
 .indigo #rss .rss-entry h1,
 .indigo #settings-page .form h1,
 .indigo #downloads > div .tag h1,
