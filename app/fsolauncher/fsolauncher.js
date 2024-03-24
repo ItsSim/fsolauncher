@@ -340,6 +340,9 @@ class FSOLauncher {
     try {
       const data = await this.getLauncherData();
       const isNewVersion = data?.Version && data.Version !== version;
+      if ( isNewVersion ) {
+        console.info( 'new launcher version available', data );
+      }
 
       if ( isNewVersion && ( this.lastUpdateNotification !== data.Version || ! wasAutomatic ) ) {
         Modal.showInstallUpdate( data.Version );

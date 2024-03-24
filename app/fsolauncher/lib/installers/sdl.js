@@ -1,6 +1,6 @@
 const download = require( '../download' );
-const sudo = require( '../sudo-prompt' );
-const { strFormat } = require( '../utils' );
+const { strFormat, loadDependency } = require( '../utils' );
+const sudo = loadDependency( 'sudo-prompt' );
 const { downloads, temp } = require( '../../constants' );
 const { locale } = require( '../locale' );
 

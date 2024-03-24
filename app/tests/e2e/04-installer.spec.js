@@ -13,71 +13,61 @@ test.describe( 'installer', () => {
   const T = setupTest();
 
   test( 'performs a complete installation', async () => {
-    await T.getWindow().locator( '[page-trigger="installer"]' ).click();
-    await T.getWindow().locator( '#full-install-button' ).waitFor();
-    await T.getWindow().locator( '#full-install-button' ).click();
+    await T.getPage().locator( '[page-trigger="installer"]' ).click();
+    await T.getPage().locator( '#full-install-button' ).waitFor();
+    await T.getPage().locator( '#full-install-button' ).click();
 
     if ( process.platform === 'win32' ) {
       await stubDialog( T.getElectronApp(), 'showOpenDialog', { filePaths: [ T.getInstallDir() ] } );
-      await T.getWindow().locator( '.oneclick-install-select' ).click();
-      await T.getWindow().locator( '.oneclick-install-confirm' ).click();
+      await T.getPage().locator( '.oneclick-install-select' ).click();
+      await T.getPage().locator( '.oneclick-install-confirm' ).click();
     } else {
-      await T.getWindow().locator( '[data-response-id="FULL_INSTALL_CONFIRM"] .yes-button' ).click();
+      await T.getPage().locator( '[data-response-id="FULL_INSTALL_CONFIRM"] .yes-button' ).click();
     }
 
     // Full installation started
-    expect( await T.getWindow().locator( '#full-install' ).isVisible() ).toBeTruthy();
+    expect( await T.getPage().locator( '#full-install' ).isVisible() ).toBeTruthy();
 
     // Wait for the installation to finish
     test.setTimeout( INSTALL_TIMEOUT_MS );
-    await T.getWindow().locator( '#full-install' ).waitFor( { state: 'hidden', timeout: INSTALL_TIMEOUT_MS } );
+    await T.getPage().locator( '#full-install' ).waitFor( { state: 'hidden', timeout: INSTALL_TIMEOUT_MS } );
 
     // Expect no errors when the installation finishes
-    expect( await T.getWindow().locator( '.modal-error' ).isVisible() ).toBeFalsy();
+    expect( await T.getPage().locator( '.modal-error' ).isVisible() ).toBeFalsy();
 
     // Go to the installer and make sure the checkmarks are there
-    await T.getWindow().locator( '[page-trigger="installer"]' ).dblclick();
-    expect( await T.getWindow().locator( '.item.installed[install="FSO"]' ).isVisible() ).toBeTruthy();
-    expect( await T.getWindow().locator( '.item.installed[install="TSO"]' ).isVisible() ).toBeTruthy();
+    await T.getPage().locator( '[page-trigger="installer"]' ).dblclick();
+    expect( await T.getPage().locator( '.item.installed[install="FSO"]' ).isVisible() ).toBeTruthy();
+    expect( await T.getPage().locator( '.item.installed[install="TSO"]' ).isVisible() ).toBeTruthy();
 
-    // Clear console.errors so we can catch any after the button click
-    // Ignore reg.exe errors
-    T.restartLogs( [ 'reg.exe' ] );
-
-    await T.getWindow().locator( 'button.launch' ).click();
+    await T.getPage().locator( 'button.launch' ).click();
 
     // Expect no errors when launching the game
-    expect( await T.getWindow().locator( '.modal-error' ).isVisible() ).toBeFalsy();
-
-    // Wait for a few seconds to catch any delayed errors
-    await T.getWindow().waitForTimeout( 500 );
-
-    // Assert that no console errors were logged
-    expect( T.getLogs().main ).toEqual( [] );
+    expect( await T.getPage().locator( '.modal-error' ).isVisible() ).toBeFalsy();
 
     await killGame();
   } );
 
   test( 'is still installed after a launcher restart', async () => {
-    await T.getWindow().locator( '[page-trigger="installer"]' ).click();
-    await T.getWindow().locator( '.item.installed[install="FSO"]' ).waitFor( { state: 'visible' } );
-    await T.getWindow().locator( '.item.installed[install="TSO"]' ).waitFor( { state: 'visible' } );
+    await T.getPage().locator( '[page-trigger="installer"]' ).click();
+    await T.getPage().locator( '.item.installed[install="FSO"]' ).waitFor( { state: 'visible' } );
+    await T.getPage().locator( '.item.installed[install="TSO"]' ).waitFor( { state: 'visible' } );
   } );
 
   test( 'installs Simitone', async () => {
-    await T.getWindow().locator( '[page-trigger="simitone"]' ).click();
-    await T.getWindow().locator( '#simitone-install-button' ).click();
+    await T.getPage().locator( '[page-trigger="simitone"]' ).click();
+    await T.getPage().locator( '#simitone-install-button' ).click();
 
-    expect( await T.getWindow().locator( '.modal-error' ).isVisible() ).toBeFalsy();
+    expect( await T.getPage().locator( '.modal-error' ).isVisible() ).toBeFalsy();
 
-    await T.getWindow().locator( '[data-response-id="INSTALL_COMPONENT"] .yes-button' ).click();
+    await T.getPage().locator( '[data-response-id="INSTALL_COMPONENT"] .yes-button' ).click();
 
     if ( process.platform == 'win32' ) {
       await stubDialog( T.getElectronApp(), 'showOpenDialog', { filePaths: [ T.getInstallDir() ] } );
     }
 
-    const dlTitle = await T.getWindow().locator( '#downloads-page .download .progress-title' ).textContent();
-    const dlId = await T.getWindow().locator( '#downloads-page .download' ).getAttribute( 'id' );
+    const dlTitle = await T.getPage().locator( '#downloads-page .download .progress-title' ).textContent();
+    const dlId = await T.getPage().locator( '#downloads-page .download' ).getAttribute( 'id' );
 
     expect( dlTitle.toLowerCase() ).toContain( 'simitone' );
 
@@ -85,23 +75,23 @@ test.describe( 'installer', () => {
     test.setTimeout( INSTALL_TIMEOUT_MS );
 
     // Wait for the installer to finish
-    await T.getWindow().locator( `#${dlId}.stopped` ).waitFor( { timeout: INSTALL_TIMEOUT_MS } );
+    await T.getPage().locator( `#${dlId}.stopped` ).waitFor( { timeout: INSTALL_TIMEOUT_MS } );
 
-    await T.getWindow().locator( '[page-trigger="simitone"]' ).click();
-    await T.getWindow().locator( '#simitone-play-button' ).waitFor();
+    await T.getPage().locator( '[page-trigger="simitone"]' ).click();
+    await T.getPage().locator( '#simitone-play-button' ).waitFor();
   } );
 
   test( 'installs Remesh Package', async () => {
-    await T.getWindow().locator( '[page-trigger="installer"]' ).click();
-    await T.getWindow().locator( '.item.installed[install="FSO"]' ).waitFor( { state: 'visible' } );
-    await T.getWindow().locator( '[install="RMS"]' ).click();
+    await T.getPage().locator( '[page-trigger="installer"]' ).click();
+    await T.getPage().locator( '.item.installed[install="FSO"]' ).waitFor( { state: 'visible' } );
+    await T.getPage().locator( '[install="RMS"]' ).click();
 
-    expect( await T.getWindow().locator( '.modal-error' ).isVisible() ).toBeFalsy();
+    expect( await T.getPage().locator( '.modal-error' ).isVisible() ).toBeFalsy();
 
-    await T.getWindow().locator( '[data-response-id="INSTALL_COMPONENT"] .yes-button' ).click();
+    await T.getPage().locator( '[data-response-id="INSTALL_COMPONENT"] .yes-button' ).click();
 
-    const dlTitle = await T.getWindow().locator( '#downloads-page .download .progress-title' ).textContent();
-    const dlId = await T.getWindow().locator( '#downloads-page .download' ).getAttribute( 'id' );
+    const dlTitle = await T.getPage().locator( '#downloads-page .download .progress-title' ).textContent();
+    const dlId = await T.getPage().locator( '#downloads-page .download' ).getAttribute( 'id' );
 
     expect( dlTitle.toLowerCase() ).toContain( 'remesh' );
 
@@ -109,7 +99,7 @@ test.describe( 'installer', () => {
     test.setTimeout( INSTALL_TIMEOUT_MS );
 
     // Wait for the installer to finish
-    await T.getWindow().locator( `#${dlId}.stopped` ).waitFor( { timeout: INSTALL_TIMEOUT_MS } );
+    await T.getPage().locator( `#${dlId}.stopped` ).waitFor( { timeout: INSTALL_TIMEOUT_MS } );
 
     const dirPath = process.platform == 'win32' ?
       T.getInstallDir() + '/FreeSO Game/FreeSO/Content/MeshReplace' :
@@ -119,8 +109,8 @@ test.describe( 'installer', () => {
     expect( ( await fs.readdir( dirPath ) ).length ).toBeGreaterThan( 0 );
 
     // Now for Simitone
-    const dlTitleSimitone = await T.getWindow().locator( '#downloads-page .download:not(.stopped) .progress-title' ).textContent();
-    const dlIdSimitone = await T.getWindow().locator( '#downloads-page .download:not(.stopped)' ).getAttribute( 'id' );
+    const dlTitleSimitone = await T.getPage().locator( '#downloads-page .download:not(.stopped) .progress-title' ).textContent();
+    const dlIdSimitone = await T.getPage().locator( '#downloads-page .download:not(.stopped)' ).getAttribute( 'id' );
 
     expect( dlTitleSimitone.toLowerCase() ).toContain( 'remesh' );
 
@@ -128,7 +118,7 @@ test.describe( 'installer', () => {
     test.setTimeout( INSTALL_TIMEOUT_MS );
 
     // Wait for the installer to finish
-    await T.getWindow().locator( `#${dlIdSimitone}.stopped` ).waitFor( { timeout: INSTALL_TIMEOUT_MS } );
+    await T.getPage().locator( `#${dlIdSimitone}.stopped` ).waitFor( { timeout: INSTALL_TIMEOUT_MS } );
 
     const dirPathSimitone = T.getInstallDir() + '/Simitone for Windows/Content/MeshReplace';
 

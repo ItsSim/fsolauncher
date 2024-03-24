@@ -167,6 +167,19 @@ function githubApiHeaders( url, headers = {} ) {
   return headers;
 }
 
+function loadDependency( dependencyName ) {
+  if ( global.isTestMode ) {
+    // Attempt to load a stub version if in test mode
+    try {
+      return require( `../../tests/e2e/stubs/${dependencyName}` );
+    } catch ( error ) {
+      console.warn( `Stub for ${dependencyName} not found, using real implementation.` );
+    }
+  }
+  // Fallback to real implementation
+  return require( dependencyName );
+}
+
 module.exports = {
   normalizePathSlashes,
   strFormat,
@@ -174,5 +187,6 @@ module.exports = {
   captureWithSentry,
   getJSON,
   getDisplayRefreshRate,
-  githubApiHeaders
+  githubApiHeaders,
+  loadDependency
 };

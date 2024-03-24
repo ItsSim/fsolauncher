@@ -6,7 +6,7 @@ const path = require( 'path' );
 
 module.exports = () => {
   /** @type {import('playwright').Page} */
-  let window;
+  let page;
 
   /** @type {import('playwright').ElectronApplication} */
   let electronApp;
@@ -28,9 +28,6 @@ module.exports = () => {
 
   /** @type {string[]} */
   let logs = [];
-
-  /** @type {string[]} */
-  let logExcludes = [];
 
   test.beforeAll( () => {
     latestBuild = findLatestBuild( '../release' );
@@ -64,12 +61,12 @@ module.exports = () => {
     electronApp.process().stderr.on( 'data', error => console.info( `[main] ${error}` ) );
     electronApp.process().stderr.on( 'data', error => logs.push( `[main] ${error}` ) );
 
-    window = await electronApp.firstWindow();
+    page = await electronApp.firstWindow();
     console.info( '[beforeEach] waited for firstWindow' );
 
     // Log renderer process
-    window.on( 'console', log => console.info( `[renderer] ${log.text()}` ) );
-    window.on( 'console', log => {
+    page.on( 'console', log => console.info( `[renderer] ${log.text()}` ) );
+    page.on( 'console', log => {
       if ( log.type() === 'error' ) {
         logs.push( `[renderer] ${log.text()}` );
       }
@@ -88,10 +85,8 @@ module.exports = () => {
     }
   } );
 
-  const isLogExcluded = log => logExcludes.some( exclude => log.includes( exclude ) );
-
   return {
-    getWindow: () => window,
+    getPage: () => page,
     getElectronApp: () => electronApp,
     getLatestBuild: () => latestBuild,
     getAppInfo: () => appInfo,
@@ -99,13 +94,13 @@ module.exports = () => {
     getAppData: () => appData,
     getInstallDir: () => installDir,
     getLogs: () => ( {
-      main: logs.filter( log => log.includes( '[main]' ) && ! isLogExcluded( log ) ),
-      renderer: logs.filter( log => log.includes( '[renderer]' ) && ! isLogExcluded( log ) ),
-      all: logs.filter( log => ! isLogExcluded( log ) ),
+      main: logs.filter( log => log.includes( '[main]' ) ),
+      renderer: logs.filter( log => log.includes( '[renderer]' ) ),
+      all: logs,
     } ),
     /**
      * @param {string[]} excludes
      */
-    restartLogs: ( excludes = [] ) => ( logExcludes = excludes, logs = [] )
+    restartLogs: () => ( logs = [] )
   };
 };

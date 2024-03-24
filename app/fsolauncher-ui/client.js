@@ -54,12 +54,15 @@ let ociConfirm;
   function handleSocketMessage( data ) {
     sendMessage( 'SOCKET_MESSAGE', [ data.Message, data.Url ] );
   }
+
   function sendMessage( id, ...params ) {
     window.shared.send( id, ...params );
   }
+
   function onMessage( id, callback ) {
     return window.shared.on( id, callback );
   }
+
   /**
    * Wrapper for addEventListener with auto tabindex and role management
    * for accessibility.
@@ -666,6 +669,7 @@ let ociConfirm;
       document.querySelector( '#overlay' ).style.display = 'none';
     }
   }
+
   function showOverlay() {
     document.querySelector( '#overlay' ).style.display = 'block';
   }

@@ -5,23 +5,23 @@ test.describe( 'settings', () => {
   const T = setupTest();
 
   test.beforeEach( async () => {
-    await T.getWindow().locator( '[page-trigger="settings"]' ).click();
+    await T.getPage().locator( '[page-trigger="settings"]' ).click();
   } );
 
   test( 'changes the theme', async () => {
-    await T.getWindow().locator( '[option-id="Launcher.Theme"]' ).selectOption( 'indigo' );
+    await T.getPage().locator( '[option-id="Launcher.Theme"]' ).selectOption( 'indigo' );
 
-    const bodyClass = await T.getWindow().locator( 'body' ).getAttribute( 'class' );
+    const bodyClass = await T.getPage().locator( 'body' ).getAttribute( 'class' );
 
     expect( bodyClass.includes( 'indigo' ) || bodyClass.includes( 'halloween' ) ).toBeTruthy();
   } );
 
   test( 'contains valid graphics modes for OS', async () => {
-    const dropdown = T.getWindow().locator( 'select[option-id="Game.GraphicsMode"]' );
+    const dropdown = T.getPage().locator( 'select[option-id="Game.GraphicsMode"]' );
     await dropdown.waitFor( { state: 'visible' } );
 
     // Fetch all option element handles
-    const graphicsModesOptionsHandles = await T.getWindow().locator( '[option-id="Game.GraphicsMode"] option' ).elementHandles();
+    const graphicsModesOptionsHandles = await T.getPage().locator( '[option-id="Game.GraphicsMode"] option' ).elementHandles();
 
     // Evaluate the display style of each option to determine visibility
     const graphicsModesValues = await Promise.all(
