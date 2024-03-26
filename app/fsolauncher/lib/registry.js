@@ -166,7 +166,7 @@ async function createSimitoneEntry( updateConfig, installDir ) {
 async function getLocalRegistry() {
   try {
     /**
-     * @type {import('../../main').UserSettings}
+     * @type {UserSettings}
      */
     const userSettings = require( 'ini' ).parse( await require( 'fs-extra' )
       .readFile( appData + '/FSOLauncher.ini', 'utf-8' ) );
