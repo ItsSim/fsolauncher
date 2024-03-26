@@ -15,8 +15,8 @@ class FSOLauncher {
   /**
    * @param {object} params An object containing all parameters.
    * @param {Electron.BrowserWindow} params.window The main Electron browser window instance.
-   * @param {import('../main').UserSettings} params.userSettings User configuration settings loaded from an external source.
-   * @param {function(import('../main').UserSettings): void} params.onReload Callback function that should be called to handle the reload logic.
+   * @param {UserSettings} params.userSettings User configuration settings loaded from an external source.
+   * @param {function(UserSettings): void} params.onReload Callback function that should be called to handle the reload logic.
    */
   constructor( { window, userSettings, onReload } ) {
     this.userSettings = userSettings;

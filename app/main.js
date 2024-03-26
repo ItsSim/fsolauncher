@@ -65,24 +65,6 @@ let launcher;
 let trayIcon;
 
 /**
- * @typedef  {Object} UserSettings
- * @property {Object} Launcher                      The launcher configuration.
- * @property {string} Launcher.Theme                The launcher theme.
- * @property {string} Launcher.DesktopNotifications Whether to show desktop notifications.
- * @property {string} Launcher.DirectLaunch         Whether to launch the game directly.
- * @property {string} Launcher.Language             The launcher language.
- * @property {string} Launcher.Debug                Whether to enable debug mode.
- * @property {Object} Game                          The game configuration.
- * @property {string} Game.GraphicsMode             The game graphics mode.
- * @property {string} Game.Language                 The game language.
- * @property {string} Game.RefreshRate              The game refresh rate.
- * @property {Object} LocalRegistry                 The local registry.
- * @property {string} LocalRegistry.FSO             The local registry for FSO.
- * @property {string} LocalRegistry.TSO             The local registry for TSO.
- * @property {string} LocalRegistry.Simitone        The local registry for Simitone.
- */
-
-/**
  * @type {UserSettings}
  */
 let userSettings;
