@@ -4,6 +4,7 @@ const path = require( 'path' );
 const pug = require( 'pug' );
 const mime = require( 'mime' );
 const EventEmitter = require( 'events' );
+const { URL } = require( 'url' );
 
 const HTML_MIMETYPE = mime.getType( 'html' );
 
@@ -23,13 +24,13 @@ class PugEmitter extends EventEmitter {}
  * @return {string} path to file
  */
 const getPath = ( url ) => {
-  const parsed = require( 'url' ).parse( url );
+  const parsed = new URL( url );
   let result = decodeURIComponent( parsed.pathname );
 
   // Local files in Windows start with slash if no host is given
   // file:///c:/something.pug
   if ( process.platform === 'win32' && ! parsed.host.trim() ) {
-    result = result.substr( 1 );
+    result = result.slice( 1 );
   }
 
   return result;
@@ -46,42 +47,32 @@ const getPath = ( url ) => {
  *
  * @returns {Promise<PugEmitter>}
  */
-module.exports = ( options = {}, getLocals = () => ( {} ) ) =>
-  new Promise( ( resolve, reject ) => {
-    const emitter = new PugEmitter();
+module.exports = ( options = {}, getLocals = () => ( {} ) ) => {
+  const emitter = new PugEmitter();
+  protocol.handle( 'file', async ( request ) => {
+    const file = getPath( request.url );
+    try {
+      const content = await fs.readFile( file );
+      const ext = path.extname( file );
 
-    protocol.interceptBufferProtocol( 'file', ( request, result ) => {
-      const file = getPath( request.url );
-
-      // See if file actually exists
-      try {
-        const content = fs.readFileSync( file );
-        const ext = path.extname( file );
-        let data = { data: content, mimeType: mime.getType( ext ) };
-
-        if ( ext === '.pug' ) {
-          // Use getLocals function to retrieve current locals
-          const currentLocals = getLocals();
-          const compiled = pug.compileFile( file, options )( currentLocals );
-          data = { data: Buffer.from( compiled ), mimeType: HTML_MIMETYPE };
-        }
-
-        return result( data );
-      } catch ( err ) {
-        // See here for error numbers:
-        // https://code.google.com/p/chromium/codesearch#chromium/src/net/base/net_error_list.h
-        let errorData;
-        if ( err.code === 'ENOENT' ) {
-          errorData = -6;
-        } else if ( typeof err.code === 'number' ) {
-          errorData = -2;
-        } else {
-          // Remaining errors are considered to be pug errors
-          errorData = { data: Buffer.from( `<pre style="tab-size:1">${err}</pre>` ), mimeType: HTML_MIMETYPE };
-        }
-
-        emitter.emit( 'error', err );
-        return result( errorData );
+      if ( ext === '.pug' ) {
+        const currentLocals = getLocals();
+        const compiled = pug.compileFile( file, options )( currentLocals );
+        return new Response( Buffer.from( compiled ), { headers: { 'Content-Type': HTML_MIMETYPE } } );
+      } else {
+        const mimeType = mime.getType( ext ) || 'application/octet-stream';
+        return new Response( content, { headers: { 'Content-Type': mimeType } } );
       }
-    }, err => err ? reject( err ) : resolve( emitter ) );
+    } catch ( err ) {
+      console.error( 'pug-compiler', err );
+      emitter.emit( 'error', err );
+      if ( err.code === 'ENOENT' ) {
+        return new Response( '', { status: 404 } );
+      }
+      return new Response( `<pre style="tab-size:1">${err}</pre>`, {
+        headers: { 'Content-Type': HTML_MIMETYPE },
+        status: 500
+      } );
+    }
   } );
+};
