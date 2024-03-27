@@ -51,14 +51,18 @@ module.exports = {
     updatesUrl: 'https://beta.freeso.org/UpdateCheck',
     interval: 5 * 60 * 1000 // every 5 minutes
   },
-  simitoneReleaseUrl: 'https://api.github.com/repos/riperiperi/Simitone/releases/latest',
-  gameGitHubReleasesUrl: 'https://api.github.com/repos/riperiperi/FreeSO/releases/latest',
-  gameApiReleasesUrl: 'https://api.freeso.org/userapi/update/beta',
-  updateWizardUrl: 'https://beta.freeso.org/update',
-  repoNewIssueUrl: 'https://github.com/ItsSim/fsolauncher/issues/new/choose',
-  repoViewIssuesUrl: 'https://github.com/ItsSim/fsolauncher/issues',
-  repoDocsUrl: 'https://github.com/ItsSim/fsolauncher/wiki',
-  repoUrl: 'https://github.com/ItsSim/fsolauncher',
+  links: {
+    updateWizardUrl: 'https://beta.freeso.org/update',
+    repoNewIssueUrl: 'https://github.com/ItsSim/fsolauncher/issues/new/choose',
+    repoViewIssuesUrl: 'https://github.com/ItsSim/fsolauncher/issues',
+    repoDocsUrl: 'https://github.com/ItsSim/fsolauncher/wiki',
+    repoUrl: 'https://github.com/ItsSim/fsolauncher',
+  },
+  releases: {
+    simitoneUrl: 'https://api.github.com/repos/riperiperi/Simitone/releases/latest',
+    fsoGithubUrl: 'https://api.github.com/repos/riperiperi/FreeSO/releases/latest',
+    fsoApiUrl: 'https://api.freeso.org/userapi/update/beta',
+  },
   resourceCentral: {
     'TSO': 'https://beta.freeso.org/LauncherResourceCentral/TheSimsOnline',
     'FSO': 'https://beta.freeso.org/LauncherResourceCentral/FreeSO',
@@ -108,6 +112,7 @@ module.exports = {
       'SDL': '/Library/Frameworks/SDL2.framework'
     },
     fallbacks: process.platform === 'win32' ? {
+      // windows fallbacks
       'TSO': [
         'C:/Program Files/Maxis/The Sims Online/TSOClient/TSOClient.exe',
         'C:/Program Files/The Sims Online/TSOClient/TSOClient.exe',
@@ -128,6 +133,7 @@ module.exports = {
         'C:/Program Files (x86)/Maxis/The Sims'
       ]
     } : {
+      // macOS fallbacks
       'TSO': [
         `${appData}/GameComponents/The Sims Online/TSOClient/TSOClient.exe`,
         `${homeDir}/Documents/The Sims Online/TSOClient/TSOClient.exe`,

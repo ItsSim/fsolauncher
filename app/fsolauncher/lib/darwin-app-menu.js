@@ -1,5 +1,5 @@
 const { app, shell } = require( 'electron' );
-const { repoUrl, repoDocsUrl, repoNewIssueUrl, repoViewIssuesUrl } = require( '../constants' );
+const { links: { repoUrl, repoDocsUrl, repoNewIssueUrl, repoViewIssuesUrl } } = require( '../constants' );
 const { locale } = require( '../lib/locale' );
 
 /**

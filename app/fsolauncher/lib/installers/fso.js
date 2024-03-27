@@ -1,7 +1,7 @@
 const { strFormat, captureWithSentry, getJSON } = require( '../utils' );
 const download = require( '../download' ),
   unzip = require( '../unzip' );
-const { temp, resourceCentral, appData, gameApiReleasesUrl, gameGitHubReleasesUrl } = require( '../../constants' );
+const { temp, resourceCentral, appData, releases: { fsoApiUrl, fsoGithubUrl } } = require( '../../constants' );
 const { locale } = require( '../locale' );
 
 /**
@@ -153,7 +153,7 @@ class FSOInstaller {
    * @returns {Promise<Object>} A promise that resolves with the release information.
    */
   getFreeSOGitHubReleaseInfo() {
-    return getJSON( gameGitHubReleasesUrl );
+    return getJSON( fsoGithubUrl );
   }
 
   /**
@@ -162,7 +162,7 @@ class FSOInstaller {
    * @returns {Promise<Object>} A promise that resolves with the release information.
    */
   getFreeSOApiReleaseInfo() {
-    return getJSON( gameApiReleasesUrl );
+    return getJSON( fsoApiUrl );
   }
 
   /**

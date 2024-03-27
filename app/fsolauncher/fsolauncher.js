@@ -1,6 +1,6 @@
 const { captureWithSentry, getJSON, strFormat, getDisplayRefreshRate } = require( './lib/utils' );
 const { locale } = require( './lib/locale' );
-const { versionChecks, version, appData, darkThemes, simitoneReleaseUrl, updateWizardUrl } = require( './constants' );
+const { versionChecks, version, appData, darkThemes, releases: { simitoneUrl }, links: { updateWizardUrl } } = require( './constants' );
 const { shell, nativeTheme } = require( 'electron' );
 
 const Modal = require( './lib/modal' );
@@ -152,7 +152,7 @@ class FSOLauncher {
    *                          release data.
    */
   getSimitoneReleaseInfo() {
-    return getJSON( simitoneReleaseUrl );
+    return getJSON( simitoneUrl );
   }
 
   /**
