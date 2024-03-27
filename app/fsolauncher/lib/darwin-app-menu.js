@@ -1,4 +1,6 @@
 const { app, shell } = require( 'electron' );
+const { repoUrl, repoDocsUrl, repoNewIssueUrl, repoViewIssuesUrl } = require( '../constants' );
+const { locale } = require( '../lib/locale' );
 
 /**
  * Generates the app menu for macOS.
@@ -89,29 +91,29 @@ module.exports = ( name, fsolauncher ) => [
     submenu: [
       {
         label: 'Source Code on GitHub',
-        click: () => shell.openExternal( 'https://github.com/ItsSim/fsolauncher' )
+        click: () => shell.openExternal( repoUrl )
       },
       {
         label: 'View Documentation',
-        click: () => shell.openExternal( 'https://github.com/ItsSim/fsolauncher/wiki' )
+        click: () => shell.openExternal( repoDocsUrl )
       },
       {
         type: 'separator'
       },
       {
         label: 'Create New Issue',
-        click: () => shell.openExternal( 'https://github.com/ItsSim/fsolauncher/issues/new/choose' )
+        click: () => shell.openExternal( repoNewIssueUrl )
       },
       {
         label: 'View All Issues',
-        click: () => shell.openExternal( 'https://github.com/ItsSim/fsolauncher/issues' )
+        click: () => shell.openExternal( repoViewIssuesUrl )
       },
       {
         type: 'separator'
       },
       {
         label: 'Official FreeSO Website',
-        click: () => shell.openExternal( 'https://freeso.org' )
+        click: () => shell.openExternal( locale.current.WEB_URL )
       }
     ]
   }

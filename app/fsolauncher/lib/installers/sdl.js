@@ -1,7 +1,7 @@
 const download = require( '../download' );
 const { strFormat, loadDependency } = require( '../utils' );
 const sudo = loadDependency( 'sudo-prompt' );
-const { downloads, temp } = require( '../../constants' );
+const { resourceCentral, temp } = require( '../../constants' );
 const { locale } = require( '../locale' );
 
 /**
@@ -16,7 +16,7 @@ class SDLInstaller {
     this.id = Math.floor( Date.now() / 1000 );
     this.haltProgress = false;
     this.tempPath = strFormat( temp.SDL, this.id );
-    this.dl = download( { from: downloads.SDL, to: this.tempPath } );
+    this.dl = download( { from: resourceCentral.SDL, to: this.tempPath } );
   }
 
   /**

@@ -2,7 +2,7 @@ const fs = require( 'fs-extra' );
 const download = require( '../download' );
 const unzip = require( '../unzip' );
 const { strFormat } = require( '../utils' );
-const { downloads, temp, appData } = require( '../../constants' );
+const { resourceCentral, temp, appData } = require( '../../constants' );
 const { locale } = require( '../locale' );
 
 /**
@@ -23,7 +23,7 @@ class RMSInstaller {
     this.parentComponent = parentComponent;
     const location = fsolauncher.remeshInfo.location
       ? fsolauncher.remeshInfo.location
-      : downloads.RMS;
+      : resourceCentral.RMS;
 
     this.dl = download( { from: location, to: this.tempPath } );
   }

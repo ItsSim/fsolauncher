@@ -1,7 +1,7 @@
 const download = require( '../download' );
 const unzip = require( '../unzip' );
 const { strFormat } = require( '../utils' );
-const { downloads, temp, appData } = require( '../../constants' );
+const { resourceCentral, temp, appData } = require( '../../constants' );
 const { locale } = require( '../locale' );
 
 /**
@@ -18,7 +18,7 @@ class SimitoneInstaller {
     this.path = path;
     this.haltProgress = false;
     this.tempPath = strFormat( temp.Simitone, this.id );
-    this.dl = download( { from: downloads.Simitone, to: this.tempPath } );
+    this.dl = download( { from: resourceCentral.Simitone, to: this.tempPath } );
     this.simitoneVersion = '';
   }
 
@@ -122,7 +122,7 @@ class SimitoneInstaller {
   step6() {
     if ( process.platform === 'darwin' ) {
       this.dl = download( {
-        from: downloads.MacExtras,
+        from: resourceCentral.MacExtras,
         to: strFormat( temp.MacExtras, this.id )
       } );
       return this.download();

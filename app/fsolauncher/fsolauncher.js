@@ -1,6 +1,6 @@
 const { captureWithSentry, getJSON, strFormat, getDisplayRefreshRate } = require( './lib/utils' );
 const { locale } = require( './lib/locale' );
-const { checks, version, appData, darkThemes } = require( './constants' );
+const { versionChecks, version, appData, darkThemes, simitoneReleaseUrl, updateWizardUrl } = require( './constants' );
 const { shell, nativeTheme } = require( 'electron' );
 
 const Modal = require( './lib/modal' );
@@ -152,7 +152,7 @@ class FSOLauncher {
    *                          release data.
    */
   getSimitoneReleaseInfo() {
-    return getJSON( 'https://api.github.com/repos/riperiperi/Simitone/releases/latest' );
+    return getJSON( simitoneReleaseUrl );
   }
 
   /**
@@ -248,7 +248,7 @@ class FSOLauncher {
    * @returns {Promise<Object>} A promise that resolves to the response.
    */
   async getRemeshData() {
-    const data = await getJSON( `https://${checks.siteUrl}/${checks.remeshEndpoint}` );
+    const data = await getJSON( versionChecks.remeshPackageUrl );
     this.remeshInfo = {
       location: data.Location,
       version: data.Version
@@ -263,7 +263,7 @@ class FSOLauncher {
    */
   async getLauncherData() {
     const data = await getJSON(
-      `https://${checks.siteUrl}/${checks.updateEndpoint}?os=${require( 'os' ).release()}` +
+      `${versionChecks.updatesUrl}?os=${require( 'os' ).release()}` +
       `&version=${version}` +
       `&fso=${( this.isInstalled && this.isInstalled.FSO ) ? '1' : '0'}`
     );
@@ -364,7 +364,7 @@ class FSOLauncher {
    * @returns {Promise<void>} A promise that resolves when the window is opened.
    */
   async installLauncherUpdate() {
-    return require( 'electron' ).shell.openExternal( 'https://beta.freeso.org/update' );
+    return require( 'electron' ).shell.openExternal( updateWizardUrl );
   }
 
   /**
@@ -706,7 +706,7 @@ class FSOLauncher {
       this.checkLauncherUpdates( true );
       this.checkRemeshInfo();
       this.checkUpdatesRecursive();
-    }, checks.interval );
+    }, versionChecks.interval );
   }
 
   /**

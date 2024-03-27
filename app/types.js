@@ -27,3 +27,7 @@
  * @property {GameSettings} Game
  * @property {LocalRegistry} LocalRegistry
  */
+
+/**
+ * @typedef {Object.<string, string>} LocaleStrings
+ */

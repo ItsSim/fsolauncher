@@ -1,7 +1,7 @@
 const { strFormat, captureWithSentry, getJSON } = require( '../utils' );
 const download = require( '../download' ),
   unzip = require( '../unzip' );
-const { temp, downloads, appData } = require( '../../constants' );
+const { temp, resourceCentral, appData, gameApiReleasesUrl, gameGitHubReleasesUrl } = require( '../../constants' );
 const { locale } = require( '../locale' );
 
 /**
@@ -18,7 +18,7 @@ class FSOInstaller {
     this.path = path;
     this.haltProgress = false;
     this.tempPath = strFormat( temp.FSO, this.id );
-    this.dl = download( { from: downloads.FSO, to: this.tempPath } );
+    this.dl = download( { from: resourceCentral.FSO, to: this.tempPath } );
   }
 
   /**
@@ -117,7 +117,7 @@ class FSOInstaller {
   step5() {
     if ( process.platform === 'darwin' ) {
       this.dl = download( {
-        from: downloads.MacExtras,
+        from: resourceCentral.MacExtras,
         to: strFormat( temp.MacExtras, this.id )
       } );
       return this.download();
@@ -153,7 +153,7 @@ class FSOInstaller {
    * @returns {Promise<Object>} A promise that resolves with the release information.
    */
   getFreeSOGitHubReleaseInfo() {
-    return getJSON( 'https://api.github.com/repos/riperiperi/FreeSO/releases/latest' );
+    return getJSON( gameGitHubReleasesUrl );
   }
 
   /**
@@ -162,7 +162,7 @@ class FSOInstaller {
    * @returns {Promise<Object>} A promise that resolves with the release information.
    */
   getFreeSOApiReleaseInfo() {
-    return getJSON( 'https://api.freeso.org/userapi/update/beta' );
+    return getJSON( gameApiReleasesUrl );
   }
 
   /**

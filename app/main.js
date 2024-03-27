@@ -21,7 +21,7 @@ if ( isTestMode ) {
   app.commandLine.appendSwitch( '--no-sandbox' );
 }
 
-const { appData, version, darkThemes } = require( './fsolauncher/constants' );
+const { appData, version, darkThemes, resourceCentral } = require( './fsolauncher/constants' );
 const { locale, setLocale } = require( './fsolauncher/lib/locale' );
 
 const oslocale = require( 'os-locale' ),
@@ -117,7 +117,9 @@ function loadLocale( settings ) {
     LANG_CODE: langCode,
     DEFAULT_REFRESH_RATE: 60,
     REMESH_PACKAGE_CREDITS: require( './fsolauncher-ui/remesh-package.json' ),
-    PRELOADED_FONTS: require( './fonts.config' )
+    PRELOADED_FONTS: require( './fonts.config' ),
+    WS_URL: resourceCentral.WS,
+    TRENDING_LOTS_URL: resourceCentral.TrendingLots,
   } );
 }
 loadLocale( userSettings );

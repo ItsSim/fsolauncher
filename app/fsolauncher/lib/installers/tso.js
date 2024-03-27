@@ -1,7 +1,7 @@
 const download = require( '../download' );
 const unzip = require( '../unzip' );
 const extract = require( '../cabinet' );
-const { downloads, temp, appData } = require( '../../constants' );
+const { resourceCentral, temp, appData } = require( '../../constants' );
 const { locale } = require( '../locale' );
 
 /**
@@ -18,7 +18,7 @@ class TSOInstaller {
     this.path = path;
     this.haltProgress = false;
     this.tempFilePath = temp.TSO.path + '/' + temp.TSO.file;
-    this.dl = download( { from: downloads.TSO, to: this.tempFilePath } );
+    this.dl = download( { from: resourceCentral.TSO, to: this.tempFilePath } );
   }
 
   /**

@@ -1,7 +1,7 @@
 const download = require( '../download' );
 const unzip = require( '../unzip' );
 const { strFormat } = require( '../utils' );
-const { downloads, temp, appData } = require( '../../constants' );
+const { resourceCentral, temp, appData } = require( '../../constants' );
 const { locale } = require( '../locale' );
 
 /**
@@ -20,7 +20,7 @@ class MacExtrasInstaller {
     this.haltProgress = false;
     this.parentComponent = parentComponent;
     this.tempPath = strFormat( temp.MacExtras, this.id );
-    this.dl = download( { from: downloads.MacExtras, to: this.tempPath } );
+    this.dl = download( { from: resourceCentral.MacExtras, to: this.tempPath } );
   }
 
   /**

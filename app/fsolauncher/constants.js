@@ -46,20 +46,29 @@ module.exports = {
     'MacExtras': 'FreeSO MacExtras',
     'SDL': 'SDL2'
   },
-  checks: {
-    siteUrl: 'beta.freeso.org',
-    remeshEndpoint: 'remeshpackage',
-    updateEndpoint: 'updatecheck',
+  versionChecks: {
+    remeshPackageUrl: 'https://beta.freeso.org/RemeshPackage',
+    updatesUrl: 'https://beta.freeso.org/UpdateCheck',
     interval: 5 * 60 * 1000 // every 5 minutes
   },
-  downloads: {
+  simitoneReleaseUrl: 'https://api.github.com/repos/riperiperi/Simitone/releases/latest',
+  gameGitHubReleasesUrl: 'https://api.github.com/repos/riperiperi/FreeSO/releases/latest',
+  gameApiReleasesUrl: 'https://api.freeso.org/userapi/update/beta',
+  updateWizardUrl: 'https://beta.freeso.org/update',
+  repoNewIssueUrl: 'https://github.com/ItsSim/fsolauncher/issues/new/choose',
+  repoViewIssuesUrl: 'https://github.com/ItsSim/fsolauncher/issues',
+  repoDocsUrl: 'https://github.com/ItsSim/fsolauncher/wiki',
+  repoUrl: 'https://github.com/ItsSim/fsolauncher',
+  resourceCentral: {
     'TSO': 'https://beta.freeso.org/LauncherResourceCentral/TheSimsOnline',
     'FSO': 'https://beta.freeso.org/LauncherResourceCentral/FreeSO',
     'RMS': 'https://beta.freeso.org/LauncherResourceCentral/3DModels',
     'Simitone': 'https://beta.freeso.org/LauncherResourceCentral/Simitone',
     'Mono': 'https://beta.freeso.org/LauncherResourceCentral/Mono',
     'MacExtras': 'https://beta.freeso.org/LauncherResourceCentral/MacExtras',
-    'SDL': 'https://beta.freeso.org/LauncherResourceCentral/SDL'
+    'SDL': 'https://beta.freeso.org/LauncherResourceCentral/SDL',
+    'WS': 'https://beta.freeso.org/LauncherResourceCentral/ws',
+    'TrendingLots': 'https://beta.freeso.org/LauncherResourceCentral/TrendingLots'
   },
   temp: {
     'FSO': `${appData}/temp/artifacts-freeso-%s.zip`,

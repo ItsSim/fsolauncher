@@ -19,8 +19,7 @@ let ociPickFolder;
 let ociConfirm;
 
 ( () => {
-  const socket = window.io( 'https://beta.freeso.org', {
-    path: '/LauncherResourceCentral/ws',
+  const socket = window.io( getPugVar( 'ws-url' ), {
     reconnectionAttempts: 8,
     reconnectionDelay: 2000
   } );
@@ -236,7 +235,7 @@ let ociConfirm;
 
   async function fetchTrendingLots() {
     // Use async/await instead of Promise.then() for cleaner syntax
-    const response = await fetch( 'https://beta.freeso.org/LauncherResourceCentral/TrendingLots' );
+    const response = await fetch( getPugVar( 'trending-lots-url' ) );
     const data = await response.json();
 
     // Directly accessing elements
