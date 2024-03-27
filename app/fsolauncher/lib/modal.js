@@ -375,25 +375,11 @@ class Modal {
     const path = require( 'path' ),
       fs = require( 'fs-extra' );
 
+    const { FREDOKA, MUNGED_REGULAR } = require( '../../fonts.config' );
+
     try {
       const b64icon = await fs.readFile(
         path.join( __dirname, '../../', 'beta.ico' ),
-        { encoding: 'base64' }
-      );
-      const b64fontMunged = await fs.readFile(
-        path.join(
-          __dirname,
-          '../../fsolauncher-ui/fonts',
-          'munged-regular.ttf'
-        ),
-        { encoding: 'base64' }
-      );
-      const b64fontFredokaOne = await fs.readFile(
-        path.join(
-          __dirname,
-          '../../fsolauncher-ui/fonts',
-          'fredoka.ttf'
-        ),
         { encoding: 'base64' }
       );
 
@@ -407,13 +393,13 @@ class Modal {
         }
         @font-face {
           font-family: 'Munged';
-          src: url(data:font/truetype;charset=utf-8;base64,${b64fontMunged}) format('truetype');
+          src: url(${MUNGED_REGULAR}) format('truetype');
           font-weight: normal;
           font-style: normal;
         }
         @font-face {
           font-family: 'Fredoka One';
-          src: url(data:font/truetype;charset=utf-8;base64,${b64fontFredokaOne}) format('truetype');
+          src: url(${FREDOKA}) format('truetype');
           font-weight: 675;
           font-style: normal;
         }
