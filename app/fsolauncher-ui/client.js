@@ -19,7 +19,10 @@ let ociPickFolder;
 let ociConfirm;
 
 ( () => {
-  const socket = window.io( getPugVar( 'ws-url' ), {
+  const parsedWsUrl = new URL( getPugVar( 'ws-url' ) );
+  const baseWsUrl = `${parsedWsUrl.protocol}//${parsedWsUrl.hostname}${parsedWsUrl.port ? ':' + parsedWsUrl.port : ''}`;
+  const socket = window.io( baseWsUrl, {
+    path: parsedWsUrl.pathname,
     reconnectionAttempts: 8,
     reconnectionDelay: 2000
   } );
