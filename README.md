@@ -14,8 +14,7 @@ The official FreeSO Launcher for Windows and macOS.
 
 ## Prerequisites for Development
 
-- Node.js `v14.16` or higher
-- A build environment corresponding to the target platform (macOS for Mac builds, Windows for Windows builds)
+- Latest Node.js LTS on a Windows or macOS machine.
 
 ## Running the Launcher Locally
 
@@ -33,13 +32,17 @@ After cloning and running `npm install`, build the launcher by following the ste
 
 Built binaries are generated in the `release` folder (`FreeSO Launcher.dmg` for macOS and `FreeSO Launcher Setup.exe` for Windows).
 
+Notes on building for multiple platforms:
+* If you're using a macOS machine for development, you can generate builds for both macOS and Windows using the commands above. You need to have [wine](https://formulae.brew.sh/cask/wine-stable) installed before running `npm run buildwin`.
+* If you're using a Windows machine for development, you can only generate builds for Windows via `npm run buildwin`. This is due to the .dmg creation process during macOS builds, which is incompatible with Windows systems.
+
 ## Latest Releases
 
 Visit the [Releases page](https://github.com/ItsSim/fsolauncher/releases) to download the latest version of FreeSO Launcher for Windows and macOS.
 
 ## Linux Support
 
-At this time, Linux support is not planned. However, a Lutris script exists to install FreeSO and its dependencies: [FreeSO on Lutris](https://lutris.net/games/freeso/)
+At this time, Linux support is not planned. However, a Lutris script exists to install FreeSO and its dependencies: [FreeSO on Lutris](https://lutris.net/games/freeso/) (not official or maintainted by the maintainers of this repository).
 
 ## FreeSO Launcher Wiki
 
