@@ -7,8 +7,8 @@ initSentry();
 
 const { app, BrowserWindow, shell, Tray, Menu, nativeImage, nativeTheme } = require( 'electron' );
 const compilePugFiles = require( './fsolauncher/lib/pug-compiler' );
-const isTestMode = global.isTestMode = app.commandLine.getSwitchValue( 'test-mode' );
 const themeColors = require( './colors.config' );
+const { appData, version, darkThemes, resourceCentral, isTestMode } = require( './fsolauncher/constants' );
 
 if ( isTestMode ) {
   app.disableHardwareAcceleration();
@@ -21,7 +21,6 @@ if ( isTestMode ) {
   app.commandLine.appendSwitch( '--no-sandbox' );
 }
 
-const { appData, version, darkThemes, resourceCentral } = require( './fsolauncher/constants' );
 const { locale, setLocale } = require( './fsolauncher/lib/locale' );
 
 const oslocale = require( 'os-locale' ),

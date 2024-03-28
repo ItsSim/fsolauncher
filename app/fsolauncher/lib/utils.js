@@ -168,7 +168,8 @@ function githubApiHeaders( url, headers = {} ) {
 }
 
 function loadDependency( dependencyName ) {
-  if ( global.isTestMode ) {
+  const { isTestMode } = require( '../constants' );
+  if ( isTestMode ) {
     // Attempt to load a stub version if in test mode
     try {
       return require( `../../tests/e2e/stubs/${dependencyName}` );
