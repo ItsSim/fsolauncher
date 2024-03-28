@@ -1808,7 +1808,7 @@ ul#sidebar li[page-trigger="downloads"].has-downloads.active::after {
   background-size: contain;
   background-position: right;
   height: 100%;
-  width: 800px;
+  width: 650px;
   position: absolute;
   top: 0px;
   right: -100px;
