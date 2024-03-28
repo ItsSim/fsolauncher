@@ -42,7 +42,13 @@ Visit the [Releases page](https://github.com/ItsSim/fsolauncher/releases) to dow
 
 ## Linux Support
 
-At this time, Linux support is not planned. However, a Lutris script exists to install FreeSO and its dependencies: [FreeSO on Lutris](https://lutris.net/games/freeso/) (not official or maintainted by the maintainers of this repository).
+At this time, Linux support is not planned.
+
+## Windows 7/8/8.1 Support
+
+As of launcher version 1.11.x and onward, we no longer support Windows 7, 8, and 8.1. Users of these operating systems will need to remain on launcher version 1.10.x or earlier. You can find the last 1.10.x release [here](https://github.com/ItsSim/fsolauncher/releases/tag/1.10.4-prod.2).
+
+This change follows the discontinuation of support for these versions of Windows by Electron (and Chromium also) starting with Electron 23. For further details, please refer to [this informative article](https://www.electronjs.org/blog/windows-7-to-8-1-deprecation-notice) on the Electron blog.
 
 ## FreeSO Launcher Wiki
 
