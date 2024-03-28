@@ -143,7 +143,7 @@ async function createWindow() {
   }
   tray = new Tray( trayIcon );
 
-  const width = 1090, height = process.platform == 'darwin' ? 646 : 664;
+  const width = 1090, height = 646;
 
   options.backgroundColor = themeColors[ userSettings.Launcher.Theme ] || '#fff';
   options.minWidth = width;
