@@ -793,7 +793,7 @@ select {
 #rss .rss-entry {
   margin-bottom: 40px;
   padding-bottom: 20px;
-  margin-top: 35px;
+  margin-top: 25px;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -1802,4 +1802,15 @@ ul#sidebar li[page-trigger="downloads"].has-downloads.active::after {
 .halloween ul#sidebar li[page-trigger="downloads"].has-downloads::after,
 .indigo ul#sidebar li[page-trigger="downloads"].has-downloads::after {
   background: rgba(0, 0, 0, 0.3);
+}
+
+.scenario-stage {
+  background-size: contain;
+  background-position: right;
+  height: 100%;
+  width: 800px;
+  position: absolute;
+  top: 0px;
+  right: -100px;
+  background-repeat: no-repeat;
 }

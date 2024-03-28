@@ -119,6 +119,7 @@ function loadLocale( settings ) {
     PRELOADED_FONTS: require( './fonts.config' ),
     WS_URL: resourceCentral.WS,
     TRENDING_LOTS_URL: resourceCentral.TrendingLots,
+    SCENARIOS_URL: resourceCentral.Scenarios
   } );
 }
 loadLocale( userSettings );

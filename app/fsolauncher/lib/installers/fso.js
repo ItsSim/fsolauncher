@@ -18,7 +18,7 @@ class FSOInstaller {
     this.path = path;
     this.haltProgress = false;
     this.tempPath = strFormat( temp.FSO, this.id );
-    this.dl = download( { from: resourceCentral.FSO, to: this.tempPath } );
+    this.dl = download( { from: resourceCentral.FreeSO, to: this.tempPath } );
   }
 
   /**

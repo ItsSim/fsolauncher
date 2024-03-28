@@ -23,7 +23,7 @@ class RMSInstaller {
     this.parentComponent = parentComponent;
     const location = fsolauncher.remeshInfo.location
       ? fsolauncher.remeshInfo.location
-      : resourceCentral.RMS;
+      : resourceCentral[ '3DModels' ];
 
     this.dl = download( { from: location, to: this.tempPath } );
   }

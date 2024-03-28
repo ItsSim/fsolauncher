@@ -18,7 +18,7 @@ class TSOInstaller {
     this.path = path;
     this.haltProgress = false;
     this.tempFilePath = temp.TSO.path + '/' + temp.TSO.file;
-    this.dl = download( { from: resourceCentral.TSO, to: this.tempFilePath } );
+    this.dl = download( { from: resourceCentral.TheSimsOnline, to: this.tempFilePath } );
   }
 
   /**

@@ -66,15 +66,16 @@ module.exports = {
     fsoApiUrl: 'https://api.freeso.org/userapi/update/beta',
   },
   resourceCentral: {
-    'TSO': 'https://beta.freeso.org/LauncherResourceCentral/TheSimsOnline',
-    'FSO': 'https://beta.freeso.org/LauncherResourceCentral/FreeSO',
-    'RMS': 'https://beta.freeso.org/LauncherResourceCentral/3DModels',
+    'TheSimsOnline': 'https://beta.freeso.org/LauncherResourceCentral/TheSimsOnline',
+    'FreeSO': 'https://beta.freeso.org/LauncherResourceCentral/FreeSO',
+    '3DModels': 'https://beta.freeso.org/LauncherResourceCentral/3DModels',
     'Simitone': 'https://beta.freeso.org/LauncherResourceCentral/Simitone',
     'Mono': 'https://beta.freeso.org/LauncherResourceCentral/Mono',
     'MacExtras': 'https://beta.freeso.org/LauncherResourceCentral/MacExtras',
     'SDL': 'https://beta.freeso.org/LauncherResourceCentral/SDL',
     'WS': 'https://beta.freeso.org/LauncherResourceCentral/ws',
-    'TrendingLots': 'https://beta.freeso.org/LauncherResourceCentral/TrendingLots'
+    'TrendingLots': 'https://beta.freeso.org/LauncherResourceCentral/TrendingLots',
+    'Scenarios': 'https://beta.freeso.org/LauncherResourceCentral/Scenarios'
   },
   temp: {
     'FSO': `${appData}/temp/artifacts-freeso-%s.zip`,

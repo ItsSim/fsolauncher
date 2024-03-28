@@ -51,6 +51,8 @@ let ociConfirm;
     fetchWidgetData();
     // Listen for global messages
     socket.on( 'receive global message', data => handleSocketMessage( data ) );
+    // Begin the scenarios loop.
+    runScenarios();
   }
 
   function handleSocketMessage( data ) {
@@ -180,6 +182,119 @@ let ociConfirm;
       return date.getDate().toString() + ' ' +
         getPugVar( 'months' ).split( ' ' )[ date.getMonth() ] + ', ' +
         date.getFullYear();
+    }
+  }
+
+  async function runScenarios() {
+    /**
+     * The scenario stages where GIFs can be played.
+     */
+    const stages = document.querySelectorAll( '.scenario-stage' );
+
+    /**
+     * Index of the last displayed GIF.
+     *
+     * @type {number}
+     */
+    let lastScenarioIndex = -1;
+
+    /**
+     * Cache for storing Base64-encoded representations of GIFs.
+     * Maps the URL of a GIF to its Base64-encoded string.
+     *
+     * @type {Object.<string, string>}
+     */
+    const base64GifCache = {};
+
+    /**
+     * Fetches the scenario manifest from beta.freeso.org
+     *
+     * @returns {Promise<Array<{id: string, url: string, description: string}>>} A promise that resolves to the array of GIF objects.
+     */
+    async function getAvailableScenarios() {
+      try {
+        const response = await fetch( getPugVar( 'scenarios-url' ) );
+        const manifest = await response.json();
+        return manifest.gifs;
+      } catch ( err ) {
+        console.error( 'error fetching scenarios', err );
+        return [];
+      }
+    }
+
+    /**
+     * Fetches a GIF and converts it to a Base64-encoded string, if not cached.
+     * If the fetch or conversion fails, logs the error and returns null (shows nothing).
+     *
+     * @param {string} url The URL of the GIF to fetch.
+     *
+     * @returns {Promise<string|null>} A promise that resolves with the Base64-encoded string of the GIF or null if an error occurs.
+     */
+    async function fetchGifAsBase64IfNeeded( url ) {
+      try {
+        // Return the Base64 string from cache if available.
+        if ( base64GifCache[ url ] ) {
+          return base64GifCache[ url ];
+        }
+
+        // Fetch and convert to Base64 if not in cache.
+        const response = await fetch( url );
+        const blob = await response.blob();
+        return new Promise( ( resolve, reject ) => {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            const base64Data = reader.result;
+            base64GifCache[ url ] = base64Data; // Cache it.
+            resolve( base64Data );
+          };
+          reader.onerror = () => reject( 'Failed to convert blob to Base64.' );
+          reader.readAsDataURL( blob );
+        } );
+      } catch ( err ) {
+        console.error( `error fetching or converting GIF at ${url}:`, err );
+        return null;
+      }
+    }
+
+    /**
+     * Generates a random index for the next scenario, ensuring it's not the same as the last one if possible.
+     *
+     * @param {number} scenarioCount - The total number of scenarios available.
+     *
+     * @returns {number} The index of the next GIF to display.
+     */
+    function getRandomScenarioIndex( scenarioCount ) {
+      let newIndex;
+      do {
+        newIndex = Math.floor( Math.random() * scenarioCount );
+      } while ( scenarioCount > 1 && newIndex === lastScenarioIndex ); // Ensure not to repeat the last GIF if there's more than one GIF.
+      return newIndex;
+    }
+
+    /**
+     * Displays a scenario selected randomly from the available list, ensuring
+     * it's not the same as the last one displayed.
+     *
+     * @param {Array<{id: string, url: string, description: string}>} scenarios - An array of GIF objects to display.
+     */
+    async function displayRandomScenario( scenarios ) {
+      if ( scenarios.length > 0 ) {
+        const randomIndex = getRandomScenarioIndex( scenarios.length );
+        lastScenarioIndex = randomIndex;
+        const gif = scenarios[ randomIndex ];
+        const base64Gif = await fetchGifAsBase64IfNeeded( gif.url );
+        if ( base64Gif ) {
+          stages.forEach( stage =>
+            stage.style.backgroundImage = 'url(' + base64Gif.replace( 'image/gif','image/gif;rnd=' + Math.random() ) + ')'
+          );
+        }
+      }
+    }
+
+    const scenarios = await getAvailableScenarios();
+    if ( scenarios.length > 0 ) {
+      await displayRandomScenario( scenarios ); // Display the first gif immediately.
+      setInterval( async () => await displayRandomScenario( scenarios ), 30000 );
     }
   }
 
