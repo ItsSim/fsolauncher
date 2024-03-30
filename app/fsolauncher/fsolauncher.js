@@ -1184,7 +1184,7 @@ class FSOLauncher {
   getEffectiveRefreshRate() {
     const savedRefreshRate = this.userSettings?.Game?.RefreshRate;
     if ( ! savedRefreshRate ) {
-      return getDisplayRefreshRate();
+      return Math.round( getDisplayRefreshRate() );
     }
     return Math.round( parseInt( savedRefreshRate ) );
   }
