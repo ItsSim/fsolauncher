@@ -181,6 +181,59 @@ function loadDependency( dependencyName ) {
   return require( dependencyName );
 }
 
+function enableFileLogger() {
+  const { appData } = require( '../constants' );
+  const fs = require( 'fs-extra' );
+  const os = require( 'os' );
+
+  const sessionDate = new Date().getTime();
+  const logFilePath = appData + `/logs/session-${sessionDate}.log`;
+  fs.ensureDirSync( require( 'path' ).dirname( logFilePath ) );
+
+  // Function to append messages to the log file.
+  function logToFile( message ) {
+    // Ensure message ends with a newline for readability.
+    fs.appendFileSync( logFilePath, message + '\n', 'utf8' );
+  }
+
+  // Function to format the arguments for logging.
+  function formatArgs( args ) {
+    return args.map( arg => typeof arg === 'object' ? JSON.stringify( arg, null, 2 ) : arg ).join( ' ' );
+  }
+
+  // Store references to the original console methods.
+  const originalLog   = console.log;
+  const originalInfo  = console.info;
+  const originalError = console.error;
+  const originalDebug = console.debug;
+
+  console.log = ( ...args ) => {
+    logToFile( '[LOG] ' + formatArgs( args ) );
+    originalLog.apply( console, args );
+  };
+
+  console.info = ( ...args ) => {
+    logToFile( '[INFO] ' + formatArgs( args ) );
+    originalInfo.apply( console, args );
+  };
+
+  console.error = ( ...args ) => {
+    logToFile( '[ERROR] ' + formatArgs( args ) );
+    originalError.apply( console, args );
+  };
+
+  console.debug = ( ...args ) => {
+    logToFile( '[DEBUG] ' + formatArgs( args ) );
+    originalDebug.apply( console, args );
+  };
+
+  console.info( `os: ${os.type()} (${os.platform()}) ${os.release()}` );
+  console.info( `arch: ${os.arch()}` );
+  console.info( `totalmen: ${( os.totalmem() / 1024 / 1024 ).toFixed( 2 )} MB` );
+  console.info( `freemem: ${( os.freemem() / 1024 / 1024 ).toFixed( 2 )} MB` );
+  console.info( `uptime: ${( os.uptime() / 60 ).toFixed( 2 )} minutes` );
+}
+
 module.exports = {
   normalizePathSlashes,
   strFormat,
@@ -189,5 +242,6 @@ module.exports = {
   getJSON,
   getDisplayRefreshRate,
   githubApiHeaders,
-  loadDependency
+  loadDependency,
+  enableFileLogger
 };

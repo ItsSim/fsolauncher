@@ -1,11 +1,12 @@
 const homeDir = require( 'os' ).homedir();
 const appData = process.platform == 'darwin' ? `${homeDir}/Library/Application Support/FreeSO Launcher` : '.';
-const { app } = require( 'electron' );
 
 module.exports = {
   homeDir,
   appData,
-  isTestMode: !! app.commandLine.getSwitchValue( 'test-mode' ),
+  isTestMode: process.argv.indexOf( '--fl-test-mode' ) !== -1,
+  fileLogEnabled: process.argv.indexOf( '--fl-filelog' ) !== -1,
+  devToolsEnabled: process.argv.indexOf( '--fl-devtools' ) !== -1,
   version: require( '../package.json' ).version,
   dependencies: {
     'FSO': [ 'TSO', ...( process.platform === 'darwin' ? [ 'Mono', 'SDL' ] : [ 'OpenAL' ] ) ],

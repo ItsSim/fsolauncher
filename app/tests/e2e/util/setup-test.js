@@ -49,7 +49,7 @@ module.exports = () => {
     electronApp = await electron.launch( {
       timeout: 60000,
       cwd: exeDir,
-      args: [ appInfo.main, '--test-mode=true', '--disable-http-cache' ], // Main file from package.json
+      args: [ appInfo.main, '--fl-test-mode', '--disable-http-cache' ], // Main file from package.json
       executablePath: appInfo.executable // Path to the Electron executable
     } );
     console.info( '[beforeEach] launched electronApp' );

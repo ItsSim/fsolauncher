@@ -8,6 +8,8 @@
     "start": "electron .",
     "test": "playwright test -x",
     "debug": "electron --inspect=5858 .",
+    "devtools": "electron . --inspect=5858 --fl-devtools",
+    "filelog": "electron . --fl-filelog",
     "lint": "eslint . --ext .js",
     "startiss": "cmd /K \"../release/FreeSO Launcher Setup.exe\"",
     "compileiss": "node scripts/update-iss-version.js && innosetup-compiler --verbose ../release/win32-ia32.iss",

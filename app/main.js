@@ -1,14 +1,19 @@
 require( 'fix-path' )(); // Fix $PATH on darwin
 require( 'v8-compile-cache' );
 
-const { initSentry } = require( './fsolauncher/lib/utils' );
+const { initSentry, enableFileLogger } = require( './fsolauncher/lib/utils' );
 // init Sentry error logging as soon as possible
 initSentry();
 
 const { app, BrowserWindow, shell, Tray, Menu, nativeImage, nativeTheme } = require( 'electron' );
 const compilePugFiles = require( './fsolauncher/lib/pug-compiler' );
 const themeColors = require( './colors.config' );
-const { appData, version, darkThemes, resourceCentral, isTestMode } = require( './fsolauncher/constants' );
+const { appData, version, darkThemes, resourceCentral, isTestMode, fileLogEnabled, devToolsEnabled } = require( './fsolauncher/constants' );
+
+if ( fileLogEnabled ) {
+  enableFileLogger();
+  console.info( 'file logger enabled' );
+}
 
 if ( isTestMode ) {
   app.disableHardwareAcceleration();
@@ -168,9 +173,8 @@ async function createWindow() {
   window = new BrowserWindow( options );
   window.setMenu( null );
 
-  // Allow the user to open devTools if Debug=1 in FSOLauncher.ini
-  if ( userSettings.Launcher.Debug == '1' && ! isTestMode ) {
-    console.info( 'debug mode enabled' );
+  if ( devToolsEnabled && ! isTestMode ) {
+    console.info( 'devtools enabled' );
     window.openDevTools( { mode: 'detach' } );
   }
 

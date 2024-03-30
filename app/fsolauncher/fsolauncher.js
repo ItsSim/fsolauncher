@@ -1035,14 +1035,32 @@ class FSOLauncher {
       spawnOptions.shell = true;
     }
     console.info( 'run', file + ' ' + args.join( ' ' ), cwd );
-    ( require( 'child_process' ).spawn( file, args, spawnOptions ) ).unref();
 
-    setTimeout( () => { toast.destroy(); }, 5000 );
+    /**
+     * @type {import("child_process").ChildProcess}
+     */
+    const launchedProcess = require( 'child_process' ).spawn( file, args, spawnOptions );
+
+    // Detach the child process from the parent.
+    launchedProcess.unref();
+
+    launchedProcess.on( 'error', err =>
+      console.error( `${file} child process emitted error`, err )
+    );
+
+    if ( launchedProcess?.pid ) {
+      console.info( `${file} executed successfully`, {
+        pid: launchedProcess.pid
+      } );
+    } else {
+      console.error( `${file} did not execute!` );
+    }
+
+    setTimeout( () => toast.destroy(), 5000 );
   }
 
   /**
-   * Promise that returns FreeSO configuration
-   * variables.
+   * Promise that returns FreeSO configuration variables.
    *
    * @returns {Promise<Object>} A promise that returns FreeSO configuration variables.
    */
