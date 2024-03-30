@@ -830,12 +830,13 @@ let ociConfirm;
   }
 
   function filterHz( value, minValue, maxValue ) {
-    if ( parseInt( value ) < minValue ) {
+    const intVal = parseInt( value );
+    if ( intVal < minValue ) {
       return minValue;
-    } else if ( parseInt( value ) > maxValue ) {
+    } else if ( intVal > maxValue ) {
       return maxValue;
     }
-    return value;
+    return intVal;
   }
 
   function toggleKeyboardUser( e ) {
