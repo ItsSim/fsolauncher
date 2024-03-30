@@ -6,8 +6,7 @@ name: electron-ci
 on:
   push:
     branches:
-      - main
-      - develop
+      - '**'
 
 jobs:
   build-extras:
