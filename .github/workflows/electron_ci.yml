@@ -200,9 +200,14 @@ jobs:
       id: release_type_counter
       run: |
         git fetch --prune --unshallow --tags
-        release_type="alpha"
-        if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+        branch_name="${GITHUB_REF#refs/heads/}"
+        sanitized_branch_name="${branch_name//[^a-zA-Z0-9]/-}"
+        if [ "$branch_name" == "main" ]; then
           release_type="prod"
+        elif [ "$branch_name" == "develop" ]; then
+          release_type="alpha"
+        else
+          release_type=$sanitized_branch_name
         fi
         echo "RELEASE_TYPE=$release_type" >> $GITHUB_ENV
 
@@ -223,20 +228,21 @@ jobs:
     - name: Get latest release tag
       id: latest_release_tag
       run: |
-        if [ "${{ env.RELEASE_TYPE }}" == "alpha" ]; then
-          latest_release_tag=$(git tag --sort=committerdate | grep -E "alpha\.[0-9]+$" | tail -1)
+        release_type="${{ env.RELEASE_TYPE }}"
+        latest_release_tag=$(git tag --sort=committerdate | grep -E "${release_type}\.[0-9]+$" | tail -1 || true)
+        if [ -z "$latest_release_tag" ]; then
+          echo "No previous tag found for release type $release_type"
         else
-          latest_release_tag=$(git tag --sort=committerdate | grep -E "prod\.[0-9]+$" | tail -1)
+          echo "LATEST_RELEASE_TAG=$latest_release_tag" >> $GITHUB_ENV
         fi
-        echo "LATEST_RELEASE_TAG=$latest_release_tag" >> $GITHUB_ENV
 
     - name: Generate release notes
       id: release_notes
       run: |
-        if [ "${{ env.RELEASE_TYPE }}" == "alpha" ]; then
-          release_notes="This is a pre-release version meant for development and testing."
-        else
+        if [ "${{ env.RELEASE_TYPE }}" == "prod" ]; then
           release_notes="This is a stable release suitable for reliable end-user experience and optimized for production use."
+        else
+          release_notes="This is a pre-release version meant for development and testing."          
         fi
     
         commit_count=$(git rev-list --count ${{ env.LATEST_RELEASE_TAG }}..HEAD)
