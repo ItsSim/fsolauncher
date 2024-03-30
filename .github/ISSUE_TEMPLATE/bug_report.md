@@ -32,4 +32,6 @@ If applicable, add screenshots to help explain your problem.
  - Build: [e.g. 22000.376]
 
 **Additional context**
-Add any other context about the problem here.
+Add any other context about the problem here. 
+
+If needed, attach a .log file obtained by running the launcher in logging mode. Find out how to do it here: https://github.com/ItsSim/fsolauncher/wiki/Sharing-debug-information
