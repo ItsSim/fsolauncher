@@ -1186,7 +1186,7 @@ class FSOLauncher {
     if ( ! savedRefreshRate ) {
       return getDisplayRefreshRate();
     }
-    return parseInt( savedRefreshRate );
+    return Math.round( parseInt( savedRefreshRate ) );
   }
 
   /**
