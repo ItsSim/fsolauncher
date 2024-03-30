@@ -1,7 +1,15 @@
 const { captureWithSentry, getJSON, strFormat, getDisplayRefreshRate } = require( './lib/utils' );
-const { locale } = require( './lib/locale' );
-const { versionChecks, version, appData, darkThemes, releases: { simitoneUrl }, links: { updateWizardUrl } } = require( './constants' );
 const { shell, nativeTheme } = require( 'electron' );
+const { locale } = require( './lib/locale' );
+const {
+  versionChecks,
+  version,
+  appData,
+  darkThemes,
+  defaultRefreshRate,
+  releases: { simitoneUrl },
+  links: { updateWizardUrl }
+} = require( './constants' );
 
 const Modal = require( './lib/modal' );
 const Events = require( './events' );
@@ -1184,9 +1192,9 @@ class FSOLauncher {
   getEffectiveRefreshRate() {
     const savedRefreshRate = this.userSettings?.Game?.RefreshRate;
     if ( ! savedRefreshRate ) {
-      return Math.round( getDisplayRefreshRate() );
+      return defaultRefreshRate;
     }
-    return Math.round( parseInt( savedRefreshRate ) );
+    return parseInt( savedRefreshRate );
   }
 
   /**

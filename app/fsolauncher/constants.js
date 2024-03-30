@@ -8,6 +8,7 @@ module.exports = {
   fileLogEnabled: process.argv.indexOf( '--fl-filelog' ) !== -1,
   devToolsEnabled: process.argv.indexOf( '--fl-devtools' ) !== -1,
   version: require( '../package.json' ).version,
+  defaultRefreshRate: 60,
   dependencies: {
     'FSO': [ 'TSO', ...( process.platform === 'darwin' ? [ 'Mono', 'SDL' ] : [ 'OpenAL' ] ) ],
     'RMS': [ 'FSO' ],
@@ -116,7 +117,7 @@ module.exports = {
       'SDL': '/Library/Frameworks/SDL2.framework'
     },
     fallbacks: process.platform === 'win32' ? {
-      // windows fallbacks
+      // Windows fallbacks
       'TSO': [
         'C:/Program Files/Maxis/The Sims Online/TSOClient/TSOClient.exe',
         'C:/Program Files/The Sims Online/TSOClient/TSOClient.exe',

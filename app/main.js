@@ -8,7 +8,17 @@ initSentry();
 const { app, BrowserWindow, shell, Tray, Menu, nativeImage, nativeTheme } = require( 'electron' );
 const compilePugFiles = require( './fsolauncher/lib/pug-compiler' );
 const themeColors = require( './colors.config' );
-const { appData, version, darkThemes, resourceCentral, isTestMode, fileLogEnabled, devToolsEnabled } = require( './fsolauncher/constants' );
+
+const {
+  appData,
+  version,
+  darkThemes,
+  resourceCentral,
+  isTestMode,
+  fileLogEnabled,
+  devToolsEnabled,
+  defaultRefreshRate
+} = require( './fsolauncher/constants' );
 
 if ( fileLogEnabled ) {
   enableFileLogger();
@@ -119,7 +129,7 @@ function loadLocale( settings ) {
     DARK_THEMES: darkThemes.join( ',' ),
     SENTRY: require( './sentry.config' ).browserLoader,
     LANG_CODE: langCode,
-    DEFAULT_REFRESH_RATE: 60,
+    DEFAULT_REFRESH_RATE: defaultRefreshRate,
     REMESH_PACKAGE_CREDITS: require( './fsolauncher-ui/remesh-package.json' ),
     PRELOADED_FONTS: require( './fonts.config' ),
     WS_URL: resourceCentral.WS,
