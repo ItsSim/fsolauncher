@@ -152,7 +152,7 @@ function getDisplayRefreshRate() {
   const { screen } = require( 'electron' );
 
   const primaryDisplay = screen.getPrimaryDisplay();
-  const refreshRate = primaryDisplay.displayFrequency;
+  const refreshRate = Math.round( primaryDisplay.displayFrequency );
   if ( refreshRate < 30 ) return 30;
   return refreshRate;
 }
