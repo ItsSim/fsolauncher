@@ -49,13 +49,13 @@ test.describe( 'installer', () => {
   } );
 
   test( 'is still installed after a launcher restart', async () => {
-    await T.getPage().locator( '[page-trigger="installer"]' ).click();
+    await T.getPage().locator( '[page-trigger="installer"]' ).dblclick();
     await T.getPage().locator( '.item.installed[install="FSO"]' ).waitFor( { state: 'visible' } );
     await T.getPage().locator( '.item.installed[install="TSO"]' ).waitFor( { state: 'visible' } );
   } );
 
   test( 'installs Simitone', async () => {
-    await T.getPage().locator( '[page-trigger="simitone"]' ).click();
+    await T.getPage().locator( '[page-trigger="simitone"]' ).dblclick();
     await T.getPage().locator( '#simitone-install-button' ).click();
 
     expect( await T.getPage().locator( '.modal-error' ).isVisible() ).toBeFalsy();
