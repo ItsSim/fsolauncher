@@ -1,9 +1,0 @@
-{
-    "guid": "7da69d0f-60cd-40c0-b494-d7c8a5b2ef69", 
-    "trigger": "screen:login",
-    "title": "Sistema de Ayuda",
-    "category": "Básico",
-    "image": "hint_help.png",
-    "order": -1,
-    "body": "¡Bienvenido a FreeSO! Este sistema de ayuda te guiará a través de los conceptos básicos del juego con información sobre herramientas. Si ya sabes cómo funciona el juego, simplemente marca todos los consejos como leídos, aunque aún podrás ver sugerencias de funciones que se agregarán al juego con actualizaciones futuras para ayudarte a ponerte al día.\n\nPodrás acceder a todas las sugerencias en cualquier momento desde el botón Ayuda desde dentro del juego."
-}

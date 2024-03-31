@@ -11,7 +11,7 @@ const packager = require( '@electron/packager' ).packager,
       arch: 'universal',
       icon: './beta.icns',
       asar: {
-        unpackDir: '{export,fsolauncher-ui/images,fsolauncher-ui/sounds,fsolauncher-ui/fonts}',
+        unpackDir: '{fsolauncher-ui/images,fsolauncher-ui/sounds,fsolauncher-ui/fonts}',
       },
       overwrite: true,
       appCopyright: 'Copyright (C) FreeSO. All rights reserved.',

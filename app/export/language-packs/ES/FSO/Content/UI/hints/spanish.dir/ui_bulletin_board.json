@@ -1,8 +1,0 @@
-{
-    "guid": "f526e19c-7301-42be-8a2a-07424a45ee68", 
-    "trigger": "ui:bulletin_board",
-    "title": "El Tablón de Anuncios",
-    "category": "Barrios",
-    "image": "hint_bulletin_board.png",
-    "body": "¿Necesitas juntar a tus vecinos para un evento? ¿Quieres saber qué se cuece en el barrio? Los tablones de anuncios son tablones públicos que tiene cada barrio para ayudar a los residentes a organizar eventos, empezar conversaciones, o buscar ayuda. Hay tres secciones en cada tablón de anuncios - Alcalde, Sistema y Comunidad. Las publicaciones del [s][color=#FFA64D]Alcalde[/color][/s] son mensajes escritos o promocionados por el Alcalde elegido de este barrio, y se mantendrán más tiempo que las demás publicaciones. Las publicaciones de [s][color=#B3FF99]Sistema[/color][/s] son automáticos y ocurren cuando suceden diversos eventos en el barrio, como elecciones o algún hecho notable. Las publicaciones de [s][color=#CCD8E6]Comunidad[/color][/s] las puede publicar cualquiera, y pueden tratar sobre cualquier tema. Si vives en este barrio, puedes con toda libertad publicar algo en la sección de Comunidad, e incluso enlazar una propiedad a tu publicación. Si al Alcalde le gusta tu publicación, pueden promocionarlo a la sección del Alcalde para más visibilidad.\n\nTen en cuenta que las funcionalidades de los barrios tienen sus propias reglas, específicamente en contra del acoso, soborno en las elecciones, y spam. Para más información, vaya a http://freeso.org/nhoodrules/ ."
-}

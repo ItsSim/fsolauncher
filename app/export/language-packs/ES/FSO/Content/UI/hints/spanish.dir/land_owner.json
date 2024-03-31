@@ -1,8 +1,0 @@
-{
-    "guid": "e76b4537-e226-4942-b3fd-129fe3084259", 
-    "trigger": "land:owner",
-    "title": "Administrar una propiedad",
-    "category": "Básico",
-    "image": "@hint6.bmp",
-    "body": "Cuando compras una propiedad por primera vez, podrás construir en un espacio limitado. Cuantos más inquilinos tengas, más podrás mejorar el espacio editable sin penalización. Además, quizás quieras ponerle una categoría a tu propiedad mediante la categoría de propiedad en la página de la propiedad. Cada categoría de propiedad tiene diferentes beneficios para los anfitriones y los visitantes: en la ventana de Ayuda podrás encontrar más información al respecto. Deberías revisarlo antes de tomar una decisión, ya que la categoría no se puede cambiar durante una semana después de que se haya establecido."
-}

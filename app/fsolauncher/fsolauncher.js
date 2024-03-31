@@ -8,7 +8,8 @@ const {
   darkThemes,
   defaultRefreshRate,
   releases: { simitoneUrl },
-  links: { updateWizardUrl }
+  links: { updateWizardUrl },
+  defaultLanguage
 } = require( './constants' );
 
 const Modal = require( './lib/modal' );
@@ -730,28 +731,10 @@ class FSOLauncher {
       return Modal.showNeedFSOTSO();
     }
     this.addActiveTask( 'CHLANG' );
-    const fs = require( 'fs-extra' ),
-      ini = require( 'ini' ),
-      path = require( 'path' );
-    const toast = new Toast( locale.current.TOAST_LANGUAGE );
 
-    try {
-      process.noAsar = true;
-      const fsoDir = path.join( __dirname, `../export/language-packs/${language.toUpperCase()}/TSO` )
-        .replace( 'app.asar', 'app.asar.unpacked' );
-      const tsoDir = path.join( __dirname, `../export/language-packs/${language.toUpperCase()}/FSO` )
-        .replace( 'app.asar', 'app.asar.unpacked' );
-      await fs.copy( fsoDir, this.isInstalled.TSO + '/TSOClient' );
-      await fs.copy( tsoDir, this.isInstalled.FSO );
-    } catch ( err ) {
-      captureWithSentry( err, { language } );
-      console.error( err );
-      this.removeActiveTask( 'CHLANG' );
-      toast.destroy();
-      return Modal.showFSOLangFail();
-    } finally {
-      process.noAsar = false;
-    }
+    const fs = require( 'fs-extra' ),
+      ini = require( 'ini' );
+    const toast = new Toast( locale.current.TOAST_LANGUAGE );
 
     let data;
     try {
@@ -764,7 +747,10 @@ class FSOLauncher {
       return Modal.showFirstRun();
     }
 
-    data.CurrentLang = this.getLangString( this.getLangCode( language ) )[ 0 ];
+    const effectiveLangCode = language === 'default' ? defaultLanguage : language;
+    const longLangStr = this.getLangString( this.getLangCode( effectiveLangCode ) )[ 0 ];
+
+    data.CurrentLang = longLangStr;
 
     try {
       await fs.writeFile( this.isInstalled.FSO + '/Content/config.ini', ini.stringify( data ) );
@@ -778,8 +764,7 @@ class FSOLauncher {
     this.removeActiveTask( 'CHLANG' );
     toast.destroy();
 
-    return this.updateAndPersistConfig( 'Game', 'Language',
-      this.getLangString( this.getLangCode( language ) )[ 1 ]  );
+    return this.updateAndPersistConfig( 'Game', 'Language', language );
   }
 
   /**

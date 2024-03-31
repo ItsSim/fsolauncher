@@ -99,7 +99,7 @@ try {
     },
     Game: {
       GraphicsMode: process.platform === 'win32' ? 'dx' : 'ogl',
-      Language: 'en'
+      Language: 'default'
     }
   };
   // Write the new FSOLauncher.ini to disk

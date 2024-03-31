@@ -1,8 +1,0 @@
-{
-    "guid": "b94db82d-74eb-4893-9131-5531b0b37762", 
-    "trigger": "ui:donator",
-    "title": "Donando a la causa",
-    "category": "Barrios",
-    "image": "hint_donator.png",
-    "body": "Te han aceptado como posible donador para esta propiedad de tipo comunidad. Esto quiere decir que puedes con toda libertad colocar objetos en esta propiedad hasta llegar al límite, comprados del catálogo o de tu inventario. Sin embargo, hay [s]diferencias muy importantes[/s] que debes tener en cuenta antes de volverte loco.\n\nObjetos que donas a propiedades de tipo comunidad [s][color=red]NUNCA VUELVEN A SER TUYOS[/color][/s]. Tampoco puedes venderlos - solo el Alcalde puede eliminar los objetos después de que los coloques, pero ninguno de los dos recibiréis nada a cambio. Cuando donas un objeto a una propiedad de tipo comunidad, está destinado a convertirse en un bien fijo que pertenece al barrio como un todo, y puede persistir tras la sucesión de Alcaldes. Aparecerá un recordatorio cada vez que abras tu inventario, por si acaso tienes planeado colocar objetos de gran valor...\n\nPero, hay una ventaja - cuando compras objetos del catálogo para realizar una donación, [s][color=#B3FF99]¡cuestan 1/3 del precio![/color][/s] Esto hace que sea más fácil empezar o hacer renovaciones sin preocuparte tanto si tus aportaciones desaparecen en un futuro."
-}

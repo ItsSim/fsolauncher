@@ -1,8 +1,0 @@
-{
-    "guid": "0d0984bb-fa4c-41bb-895f-5be5c6f3c294", 
-    "trigger": "ui:mayor_donators",
-    "title": "Donaciones post-campaña",
-    "category": "Barrios",
-    "image": "hint_mayor_donators.png",
-    "body": "El construir una propiedad de tipo comunidad para tu barrio es un trabajo costoso - ¡no esperes a hacerlo todo tú! Los jugadores no te han elegido por tus habilidades de construcción - te han elegido por tu radiante personalidad. Puedes añadir cualquier cantidad de jugadores a la lista de blanca de donaciones para permitir que donen objetos a la propiedad, ya sean de sus inventarios o del catálogo con descuento.\n\nHay dos tipos de donantes: [s][color=white]'Donante'[/color][/s] permite a un Sim donar y mover objetos del Modo Comprar de la propiedad, y [s][color=white]'Benefactor'[/color][/s] permite a un Sim añadir Y quitar objetos del Modo Construir, además de poder usar las herramientas de construcción (por ejemplo, paredes y suelos). Puedes añadir ambos tipos de donantes desde la sección de Inquilinos en el panel de propiedad - solo el Alcalde puede hacerlo. Añade un Sim como [s]Donante[/s] si quieres que amueblen un área, añádelo como [s]Benefactor[/s] si quieres que puedan contribuir arquitecturalmente. Ten en cuenta que los donantes también pueden realizar acciones de Inquilinos sobre los objetos o Sims, pero no pueden gestionar la lista de admisión de la propiedad. La lista de donantes se reinicia cada vez que se cambia de Alcalde... si vuelvas a ser elegido, ¡tus donantes se quedarán en la lista!"
-}
