@@ -1191,7 +1191,7 @@ class FSOLauncher {
     if ( ! this.userSettings?.Game?.Language ) {
       return defaultLanguage;
     }
-    if ( this.userSettings?.Game?.Language === 'default' ) {
+    if ( this.userSettings.Game.Language === 'default' ) {
       return defaultLanguage;
     }
     return this.userSettings.Game.Language;
