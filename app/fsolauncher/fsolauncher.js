@@ -747,8 +747,8 @@ class FSOLauncher {
       return Modal.showFirstRun();
     }
 
-    const effectiveLangCode = language === 'default' ? defaultLanguage : language;
-    const longLangStr = this.getLangString( this.getLangCode( effectiveLangCode ) )[ 0 ];
+    const effectiveLanguage = this.getEffectiveLanguage();
+    const longLangStr = this.getLangString( this.getLangCode( effectiveLanguage ) )[ 0 ];
 
     data.CurrentLang = longLangStr;
 
@@ -987,7 +987,7 @@ class FSOLauncher {
     // game language, by default english
     if ( ! isSimitone ) {
       // for now disable this for Simitone
-      args.push( `-lang${this.getLangCode( this.userSettings.Game.Language )}` );
+      args.push( `-lang${this.getLangCode( this.getEffectiveLanguage() )}` );
     }
     // SW only allows ogl
     let graphicsMode = this.userSettings.Game.GraphicsMode != 'sw'
@@ -1180,6 +1180,21 @@ class FSOLauncher {
       return defaultRefreshRate;
     }
     return parseInt( savedRefreshRate );
+  }
+
+  /**
+   * Returns the language to use.
+   *
+   * @returns {string} The language to use.
+   */
+  getEffectiveLanguage() {
+    if ( ! this.userSettings?.Game?.Language ) {
+      return defaultLanguage;
+    }
+    if ( this.userSettings?.Game?.Language === 'default' ) {
+      return defaultLanguage;
+    }
+    return this.userSettings.Game.Language;
   }
 
   /**
