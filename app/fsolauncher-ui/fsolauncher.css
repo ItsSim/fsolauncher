@@ -249,6 +249,11 @@ div.page p, div.page .readable-font {
   line-height: 22px;
   text-align: justify;
   hyphens: auto;
+  word-break: break-word;
+}
+
+.selectable-text {
+  user-select: text;
 }
 
 #launcher #sidebar li#logo {
