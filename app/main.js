@@ -18,7 +18,8 @@ const {
   fileLogEnabled,
   devToolsEnabled,
   defaultRefreshRate,
-  defaultGameLanguage
+  defaultGameLanguage,
+  homeDir
 } = require( './fsolauncher/constants' );
 
 if ( fileLogEnabled ) {
@@ -133,7 +134,8 @@ function loadLocale( settings ) {
     PRELOADED_FONTS: require( './fonts.config' ),
     WS_URL: resourceCentral.WS,
     TRENDING_LOTS_URL: resourceCentral.TrendingLots,
-    SCENARIOS_URL: resourceCentral.Scenarios
+    SCENARIOS_URL: resourceCentral.Scenarios,
+    SIMITONE_PLATFORM_PATH: appData.replace( homeDir, '~' ) + '/GameComponents/The Sims'
   } );
 }
 loadLocale( userSettings );
@@ -157,9 +159,17 @@ async function createWindow() {
   }
   tray = new Tray( trayIcon );
 
-  const width = 1090, height = 646;
+  const width = 1090;
+  let height = 646;
 
-  options.backgroundColor = themeColors[ userSettings.Launcher.Theme ] || '#fff';
+  if ( process.platform === 'linux' ) {
+    height += 30;
+  }
+
+  if ( process.platform !== 'linux' ) {
+    options.backgroundColor = themeColors[ userSettings.Launcher.Theme ] || 'transparent';
+  }
+  options.transparent = process.platform === 'linux';
   options.minWidth = width;
   options.minHeight = height;
   options.maxWidth = width;
@@ -170,6 +180,7 @@ async function createWindow() {
   options.height = height;
   options.useContentSize = true;
   options.show = false;
+  options.frame = process.platform !== 'linux';
   options.resizable = false;
   options.title = 'FreeSO Launcher ' + version;
   options.webPreferences = {
@@ -188,7 +199,17 @@ async function createWindow() {
   }
 
   window.loadURL( `file://${__dirname}/fsolauncher-ui/fsolauncher.pug` );
-  window.on( 'restore', _e => window.setSize( width, height ) );
+
+  let isResizing = false;
+
+  window.on( 'restore', _e => {
+    if ( ! isResizing ) {
+      isResizing = true;
+      window.setSize( width, height );
+      isResizing = false;
+    }
+  } );
+
 
   launcher = new FSOLauncher( {
     window, userSettings,

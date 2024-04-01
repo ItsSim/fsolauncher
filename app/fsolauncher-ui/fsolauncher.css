@@ -1,7 +1,6 @@
 #launcher {
-  -webkit-app-region: drag;
   width: 100%;
-  height: 100%;
+  height: calc(100% - 30px);
   color: #7f7f7f;
   background: #fff;
   background: -moz-linear-gradient(top, #fff 0%, #eee 100%);
@@ -13,6 +12,84 @@
   font-family: 'Fredoka One';
   user-select: none;
 }
+
+html.linux, html.linux body {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+html.linux body {
+  border: 1px solid #414141;
+}  
+
+html.linux #titlebar {
+  display: flex;
+  user-select: none;
+}
+
+#titlebar {
+  display: none;
+  width: 100%;
+  height: 30px;
+  background-color: #1b1b1b;
+  -webkit-app-region: drag;
+  position: relative;
+  z-index: 100;
+  font-family: 'Munged';
+  display: flex;
+  justify-content: flex-end;
+  box-shadow: inset 0 1px 1px rgb(106 106 106 / 15%);
+  color: rgba(255, 255, 255, 0.4);
+}
+
+#titlebar h1.title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  font-weight: bold;
+  font-size: 0.85rem;
+  letter-spacing: 0;
+}
+
+#titlebar .controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: 10px;
+  -webkit-app-region: no-drag;
+  z-index: 100;
+}
+
+#titlebar .controls i {
+  font-size: 0.8rem;
+}
+
+#titlebar .controls span {
+  background-color: rgba(255,255,255,0.05);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 20px;
+  width: 20px;
+  padding: 2px;
+  margin-left: 10px;
+}
+#titlebar .controls span:hover {
+  background-color: rgba(255,255,255,0.13);
+}
+
+/* This creates two invisible spacers, one on each side of the title. */
+#titlebar .left-spacer {
+  flex-grow: 1;
+}
+
+
 
 * {
   letter-spacing: -0.02em;
@@ -98,7 +175,6 @@ body #about-page ul.columns li {
   position: relative;
   overflow-y: hidden;
   overflow-x: hidden;
-  padding-top: 100px;
 }
 
 div.page {
@@ -117,7 +193,7 @@ body.splash {
 .page-content {
   overflow-y: auto;
   overflow-x: hidden;
-  height: 100%;
+  height: calc(100% - 99px);
   padding-bottom: 20px;
 }
 
@@ -192,12 +268,10 @@ div.page > h1.jumbotron {
   color: #fff;
   background: linear-gradient(180deg, #4e90f3 0%, #3877d8 100%);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  position: fixed;
-  left: 230px;
-  width: calc(100% - 230px + 2px);
-  top: 0;
+  width: calc(100% + 2px);
   margin-left: -1px;
-  z-index: 11;
+  position: relative;
+  z-index: 100;
   height: 100px;
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
@@ -1288,7 +1362,7 @@ a {
 .win32 .win32-only,
 .darwin .darwin-only,
 .linux .linux-only {
-  display: block;
+  display: block!important;
 }
 .win32 .darwin-only,
 .linux .darwin-only,
@@ -1684,6 +1758,87 @@ i.spin {
   font-size: 1.2rem;
 }
 
+.installed .item-info {
+  display: block;
+}
+.item-info {
+  z-index: 1;
+  padding: 15px;
+  width: 100%;
+  font-size: 0.9rem;
+  cursor: initial;
+  display: none;
+}
+
+.item-info i {
+  font-size: 1.4rem;
+}
+
+.item-info:hover .text {
+  display: block;
+}
+
+.item-info .container {
+  width: 100%;
+  display: flex;
+  padding: 5px;
+  align-items: center;
+  justify-content: flex-end;
+  border-radius: 99px;
+  padding-left: 15px;
+  padding-right: 8px;
+}
+
+.item-info .container .material-icons {
+  cursor: pointer;
+}
+
+.item-info .container .material-icons {
+  color: rgba(0,0,0,0.3);
+}
+.item-info .container .material-icons:hover {
+  color: rgba(0,0,0,0.5);
+}
+
+ul#sidebar li[page-trigger="downloads"].has-downloads::after {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  content: var(--unread-progress-items, '');
+  font-family: 'Munged';
+  font-weight: bold;
+  font-size: 0.6rem;
+  background: rgb(0 0 0 / 9%);
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  margin-left: 10px;
+  position: absolute;
+  top: 4px;
+  left: -3px;
+  transition: 0.4s left;
+}
+
+ul#sidebar li[page-trigger="downloads"].has-downloads:hover::after,
+ul#sidebar li[page-trigger="downloads"].has-downloads.active::after {
+  left: 4px;
+}
+
+.scenario-stage {
+  background-size: contain;
+  background-position: right;
+  height: 100%;
+  width: 650px;
+  position: absolute;
+  top: 0px;
+  right: -100px;
+  background-repeat: no-repeat;
+}
+
+
+
+/* Slight dark/light theme modifications */
+
 .open_beta #now-trending .top span,
 .turbo #now-trending .top span,
 .simitone #now-trending .top span   {
@@ -1730,41 +1885,6 @@ i.spin {
   border-color: rgba(0,0,0,0.1);
 }
 
-.installed .item-info {
-  display: block;
-}
-.item-info {
-  z-index: 1;
-  padding: 15px;
-  width: 100%;
-  font-size: 0.9rem;
-  cursor: initial;
-  display: none;
-}
-
-.item-info i {
-  font-size: 1.4rem;
-}
-
-.item-info:hover .text {
-  display: block;
-}
-
-.item-info .container {
-  width: 100%;
-  display: flex;
-  padding: 5px;
-  align-items: center;
-  justify-content: flex-end;
-  border-radius: 99px;
-  padding-left: 15px;
-  padding-right: 8px;
-}
-
-.item-info .container .material-icons {
-  cursor: pointer;
-}
-
 .dark .item-info .container .material-icons,
 .halloween .item-info .container .material-icons,
 .indigo .item-info .container .material-icons {
@@ -1776,50 +1896,41 @@ i.spin {
   color: rgba(255,255,255,0.5)
 }
 
-.item-info .container .material-icons {
-  color: rgba(0,0,0,0.3);
-}
-.item-info .container .material-icons:hover {
-  color: rgba(0,0,0,0.5);
-}
-
-ul#sidebar li[page-trigger="downloads"].has-downloads::after {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  content: var(--unread-progress-items, '');
-  font-family: 'Munged';
-  font-weight: bold;
-  font-size: 0.6rem;
-  background: rgb(0 0 0 / 9%);
-  width: 14px;
-  height: 14px;
-  border-radius: 4px;
-  margin-left: 10px;
-  position: absolute;
-  top: 4px;
-  left: -3px;
-  transition: 0.4s left;
-}
-
-ul#sidebar li[page-trigger="downloads"].has-downloads:hover::after,
-ul#sidebar li[page-trigger="downloads"].has-downloads.active::after {
-  left: 4px;
-}
-
 .dark ul#sidebar li[page-trigger="downloads"].has-downloads::after,
 .halloween ul#sidebar li[page-trigger="downloads"].has-downloads::after,
 .indigo ul#sidebar li[page-trigger="downloads"].has-downloads::after {
   background: rgba(0, 0, 0, 0.3);
 }
 
-.scenario-stage {
-  background-size: contain;
-  background-position: right;
-  height: 100%;
-  width: 650px;
-  position: absolute;
-  top: 0px;
-  right: -100px;
-  background-repeat: no-repeat;
+.open_beta #titlebar,
+.turbo #titlebar,
+.simitone #titlebar {
+  background-color: #fff;
+  color: rgba(0, 0, 0, 0.6);
 }
+
+.open_beta #titlebar .controls span,
+.turbo #titlebar .controls span,
+.simitone #titlebar .controls span {
+  background-color: rgba(0,0,0,0.075);
+}
+
+.open_beta #titlebar .controls span:hover,
+.turbo #titlebar .controls span:hover,
+.simitone #titlebar .controls span:hover {
+  background-color: rgba(0,0,0,0.1);
+}
+
+.linux .open_beta .jumbotron,
+.linux .turbo .jumbotron,
+.linux .simitone .jumbotron {
+  border-top-left-radius: 12px;
+  margin-left: 0;
+  width: 100%;
+}
+
+html.linux body.open_beta,
+html.linux body.turbo,
+html.linux body.simitone {
+  border: 1px solid #a5a5a5;
+}  

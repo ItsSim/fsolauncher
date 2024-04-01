@@ -28,6 +28,15 @@
   line-height: 1.6rem !important;
 }
 
+#simitone-page .simitone-box p.simitone-nix-error {
+  text-align: center;
+  text-indent: initial !important;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  padding-top: 10px !important;
+  margin-top: 5px!important;
+}
+
 .simitone #logo:after {
   content: 'LAUNCHER' !important;
 }

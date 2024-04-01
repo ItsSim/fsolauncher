@@ -11,6 +11,14 @@ html(lang=LANG_CODE class=PLATFORM + ' ' + LANG_CODE)
     data-dark-themes=DARK_THEMES, 
     data-months=MONTHS
   )
+    #titlebar
+      h1.title FreeSO Launcher #{LAUNCHER_VERSION}
+      .controls
+        span 
+          i(style={'margin-top': '-3px'})#control-minimize.material-icons minimize
+        span 
+          i(style={'margin-bottom': '-1px'})#control-close.material-icons close
+
     #launcher
       #overlay
       #toasts

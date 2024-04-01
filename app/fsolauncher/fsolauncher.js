@@ -1239,6 +1239,14 @@ class FSOLauncher {
 
     return this.userSettings.Launcher.Theme;
   }
+
+  titleBarMinimize() {
+    this.window.minimize();
+  }
+
+  titleBarClose() {
+    this.window.close();
+  }
 }
 
 module.exports = FSOLauncher;

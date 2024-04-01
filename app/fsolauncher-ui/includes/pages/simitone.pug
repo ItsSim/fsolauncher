@@ -26,9 +26,8 @@
             | !{SIMITONE_UPDATE} <span id="simitone-update-version">v8.0.9</span>
     div#simitone-ts1cc-error.simitone-box.simitone-error
       h2 #{SIMITONE_MISSING_TSCC_H1}
-      p 
-        | !{SIMITONE_MISSING_TSCC_DESCR} 
-        span.darwin-only.selectable-text <br />!{SIMITONE_MISSING_TSCC_DESCR_MAC}
+      p !{SIMITONE_MISSING_TSCC_DESCR} 
+      p.simitone-nix-error(style={'text-align': 'center', 'text-indent': 'initial!important'}).darwin-only.linux-only.selectable-text !{SIMITONE_MISSING_TSCC_DESCR_MAC.replace( '%s', SIMITONE_PLATFORM_PATH )}
     div(style={'clear': 'both'})
     div.simitone-column
       div.simitone-image(style={'background-image': 'url(./images/simitone_teaser.png)'})

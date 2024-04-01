@@ -3,7 +3,7 @@
   --------------------------------------------------------------------------------
   Contains UI for the Installer tab.
 
-#installer-page.page(style={'display': 'none', 'background-color': '#fff'})
+#installer-page.page(style={'display': 'none'})
   h1.jumbotron
     button#full-install-button.turbo-transparent(style={'margin-top': '-10px', 'float': 'right'})
       i.material-icons.left(style={'margin-top': '-2px'}) get_app
@@ -13,7 +13,7 @@
     .hint.arrow-top(hint-page='installer' style={'top': '100px', 'right': '65px'})
       h1 #{TOOLTIP_TITLE_2}
       small #{TOOLTIP_DESCR_2}
-  .page-content
+  .page-content(style={'background': '#fff'})
     #full-install(style={'padding': '30px'})
       #tip
         i.material-icons info
@@ -120,7 +120,7 @@
             h1 #{INSTALLER_NET_TITLE}
             span #{INSTALLER_NET_DESCR}
             .tick.installed     
-      div.darwin-only
+      div.darwin-only.linux-only
         .item(
           install='Mono' 
           style={

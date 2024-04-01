@@ -1033,6 +1033,8 @@ let ociConfirm;
   addEventListener( document.body,               'keydown',     e => toggleKeyboardUser( e ) );
   addEventListener( document.body,               'mousedown',   e => toggleKeyboardUser( e ) );
   addEventListener( document.body,               'click',       e => searchForNavigationTriggers( e ) );
+  addEventListener( '#control-minimize',         'click',       () => sendMessage( 'TITLEBAR_MINIMIZE' ) );
+  addEventListener( '#control-close',            'click',       () => sendMessage( 'TITLEBAR_CLOSE' ) );
 
   // Disable click for installation path tag
   document.querySelectorAll( '.item-info' ).forEach( function ( item ) {

@@ -36,8 +36,18 @@ class Events {
     ipcMain.on( 'OCI_PICK_FOLDER',         this.onOCIPickFolder.bind( this ) );
     ipcMain.on( 'OPEN_FOLDER',             this.onOpenFolder.bind( this ) );
     ipcMain.on( 'PAGE_CHANGE',             this.onPageChange.bind( this ) );
+    ipcMain.on( 'TITLEBAR_MINIMIZE',       this.onTitleBarMinimize.bind( this ) );
+    ipcMain.on( 'TITLEBAR_CLOSE',          this.onTitleBarClose.bind( this ) );
 
     nativeTheme.on( 'updated', this.handleNativeThemeChange.bind( this ) );
+  }
+
+  onTitleBarMinimize() {
+    this.fsolauncher.titleBarMinimize();
+  }
+
+  onTitleBarClose() {
+    this.fsolauncher.titleBarClose();
   }
 
   /**
