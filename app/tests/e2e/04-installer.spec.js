@@ -62,7 +62,7 @@ test.describe( 'installer', () => {
 
     await T.getPage().locator( '[data-response-id="INSTALL_COMPONENT"] .yes-button' ).click();
 
-    if ( process.platform == 'win32' ) {
+    if ( process.platform === 'win32' ) {
       await stubDialog( T.getElectronApp(), 'showOpenDialog', { filePaths: [ T.getInstallDir() ] } );
     }
 
@@ -101,7 +101,7 @@ test.describe( 'installer', () => {
     // Wait for the installer to finish
     await T.getPage().locator( `#${dlId}.stopped` ).waitFor( { timeout: INSTALL_TIMEOUT_MS } );
 
-    const dirPath = process.platform == 'win32' ?
+    const dirPath = process.platform === 'win32' ?
       T.getInstallDir() + '/FreeSO Game/FreeSO/Content/MeshReplace' :
       T.getInstallDir() + '/FreeSO/Content/MeshReplace';
 

@@ -41,7 +41,7 @@ class CompleteInstaller {
       process.platform === 'win32' ? locale.current.INS_OAL_WINDOW : locale.current.INS_SDL_WINDOW,
       10
     );
-    if ( process.platform === 'darwin' ) {
+    if ( [ 'darwin', 'linux' ].includes( process.platform ) ) {
       // Skip SDL if already installed.
       if ( this.fsolauncher.isInstalled[ 'SDL' ] ) {
         return Promise.resolve();
@@ -66,7 +66,7 @@ class CompleteInstaller {
       process.platform === 'win32' ? locale.current.INS_NET_WINDOW : locale.current.INS_MONO_WINDOW,
       25
     );
-    if ( process.platform === 'darwin' ) {
+    if ( [ 'darwin', 'linux' ].includes( process.platform ) ) {
       // Skip Mono if already installed.
       if ( this.fsolauncher.isInstalled[ 'Mono' ] ) {
         return Promise.resolve();

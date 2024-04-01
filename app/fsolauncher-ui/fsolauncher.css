@@ -1286,11 +1286,14 @@ a {
 }
 
 .win32 .win32-only,
-.darwin .darwin-only {
+.darwin .darwin-only,
+.linux .linux-only {
   display: block;
 }
 .win32 .darwin-only,
-.darwin .win32-only {
+.linux .darwin-only,
+.darwin .win32-only,
+.linux .win32-only {
   display: none;
 }
 

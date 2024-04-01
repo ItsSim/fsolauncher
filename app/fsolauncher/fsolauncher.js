@@ -55,7 +55,7 @@ class FSOLauncher {
       Mono: false,
       SDL: false
     };
-    if ( process.platform != 'darwin' ) {
+    if ( ! [ 'darwin', 'linux' ].includes( process.platform ) ) {
       this.window.on( 'minimize', () => {
         if ( ! this.minimizeReminder ) {
           Modal.sendNotification(
@@ -695,7 +695,7 @@ class FSOLauncher {
       return this.askForInstallFolder( componentCode );
     } else {
       // Use well-known paths.
-      if ( process.platform == 'darwin' ) {
+      if ( [ 'darwin', 'linux' ].includes( process.platform ) ) {
         // For darwin, everything goes to ~/Library/Application Support/FreeSO Launcher/GameComponents
         // and not ~/Documents, to avoid iCloud sync issues
         return appData + '/GameComponents/' + this.getPrettyName( componentCode );
@@ -909,7 +909,7 @@ class FSOLauncher {
    * @param {boolean} useVolcanic If Volcanic.exe should be launched.
    */
   play( useVolcanic, isSimitone = false ) {
-    if ( process.platform === 'darwin' ) {
+    if ( [ 'darwin', 'linux' ].includes( process.platform ) ) {
       // no volcanic for darwin
       useVolcanic = false;
     }
@@ -991,7 +991,7 @@ class FSOLauncher {
     // SW only allows ogl
     let graphicsMode = this.userSettings.Game.GraphicsMode != 'sw'
       ? this.userSettings.Game.GraphicsMode : 'ogl';
-    if ( process.platform === 'darwin' ) graphicsMode = 'ogl';
+    if ( [ 'darwin', 'linux' ].includes( process.platform ) ) graphicsMode = 'ogl';
     args.push( `-${graphicsMode}` );
     // 3d is forced off when in SW
     if ( this.userSettings.Game[ '3DMode' ] === '1' && ( this.userSettings.Game.GraphicsMode != 'sw' || isSimitone ) ) {
@@ -1012,9 +1012,12 @@ class FSOLauncher {
       cwd += subfolder;
     }
 
-    if ( process.platform === 'darwin' ) {
+    if ( [ 'darwin', 'linux' ].includes( process.platform ) ) {
       if ( isSimitone ) {
         file = '/Library/Frameworks/Mono.framework/Commands/mono';
+        if ( process.platform === 'linux' ) {
+          file = '/usr/bin/mono';
+        }
         args.unshift( 'Simitone.Windows.exe' );
       } else {
         file = './freeso.command';
@@ -1023,7 +1026,7 @@ class FSOLauncher {
     const spawnOptions = {
       cwd, detached: true, stdio: 'ignore'
     };
-    if ( process.platform === 'darwin' ) {
+    if ( [ 'darwin', 'linux' ].includes( process.platform ) ) {
       spawnOptions.shell = true;
     }
     console.info( 'run', file + ' ' + args.join( ' ' ), cwd );

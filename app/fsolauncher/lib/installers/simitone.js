@@ -120,7 +120,7 @@ class SimitoneInstaller {
    * @returns {Promise<void>} A promise that resolves when the download is complete.
    */
   step6() {
-    if ( process.platform === 'darwin' ) {
+    if ( [ 'darwin', 'linux' ].includes( process.platform ) ) {
       this.dl = download( {
         from: resourceCentral.MacExtras,
         to: strFormat( temp.MacExtras, this.id )
@@ -136,7 +136,7 @@ class SimitoneInstaller {
    * @returns {Promise<void>} A promise that resolves when the installation is complete.
    */
   step7() {
-    if ( process.platform === 'darwin' ) {
+    if ( [ 'darwin', 'linux' ].includes( process.platform ) ) {
       return unzip( {
         from: strFormat( temp.MacExtras, this.id ),
         to: this.path,

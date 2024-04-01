@@ -33,6 +33,7 @@ let ociConfirm;
 
   const isDarwin  = document.querySelector( 'html' ).className.startsWith( 'darwin' );
   const isWindows = document.querySelector( 'html' ).className.startsWith( 'win32' );
+  const isLinux = document.querySelector( 'html' ).className.startsWith( 'linux' );
 
   let simitoneInterval;
   let simitoneUpdate;
@@ -577,7 +578,7 @@ let ociConfirm;
     for ( const section in vars )
       for ( const item in vars[ section ] ) {
         const option = document.querySelector( `[option-id="${section}.${item}"]` );
-        if ( isDarwin && item == 'GraphicsMode' )
+        if ( ( isDarwin || isLinux ) && item == 'GraphicsMode' )
           continue;
         option && ( option.value = vars[ section ][ item ] );
       }

@@ -15,7 +15,8 @@
     "compileiss": "node scripts/update-iss-version.js && innosetup-compiler --verbose ../release/win32-ia32.iss",
     "copywin": "cpy \"./**/*\" ../../release/fsolauncher-win32-ia32 --cwd=../extras/fsolauncher-build-extras --parents",
     "buildwin": "node scripts/build-win.js",
-    "builddarwin": "node scripts/build-darwin.js"
+    "builddarwin": "node scripts/build-darwin.js",
+    "builddeb": "node scripts/build-deb.js"
   },
   "keywords": [
     "freeso",

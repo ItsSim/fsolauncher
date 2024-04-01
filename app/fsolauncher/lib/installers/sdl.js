@@ -1,5 +1,6 @@
 const download = require( '../download' );
 const { strFormat, loadDependency } = require( '../utils' );
+/** @type {import('sudo-prompt')} */
 const sudo = loadDependency( 'sudo-prompt' );
 const { resourceCentral, temp } = require( '../../constants' );
 const { locale } = require( '../locale' );
@@ -45,8 +46,12 @@ class SDLInstaller {
    */
   async install() {
     try {
-      await this.step1();
-      await this.step2();
+      if ( process.platform === 'darwin' ) {
+        await this.download();
+        await this.extract();
+      } else {
+        await this.aptInstall();
+      }
       this.end();
     } catch ( err ) {
       this.error( err );
@@ -54,22 +59,21 @@ class SDLInstaller {
     }
   }
 
-  /**
-   * Download all the files.
-   *
-   * @returns {Promise<void>} A promise that resolves when the download is complete.
-   */
-  step1() {
-    return this.download();
-  }
+  aptInstall() {
+    return new Promise( ( resolve, reject ) => {
+      // SDL2 installation command for Debian-based systems
+      const command = 'apt-get install -y libsdl2-2.0-0 libsdl2-dev';
 
-  /**
-   * Extract the DMG to the destination.
-   *
-   * @returns {Promise<void>} A promise that resolves when the files are extracted.
-   */
-  step2() {
-    return this.extract();
+      sudo.exec( command, ( error, stdout, stderr ) => {
+        if ( error ) {
+          console.error( `exec error: ${error}` );
+          return reject( error );
+        }
+        console.log( `stdout: ${stdout}` );
+        console.error( `stderr: ${stderr}` );
+        resolve();
+      } );
+    } );
   }
 
   /**

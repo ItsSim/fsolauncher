@@ -33,9 +33,9 @@ module.exports = () => {
     latestBuild = findLatestBuild( '../release' );
     appInfo = parseElectronApp( latestBuild );
     exeDir = path.dirname( appInfo.executable );
-    appData = process.platform == 'win32' ? exeDir :
+    appData = process.platform === 'win32' ? exeDir :
       require( 'os' ).homedir() + '/Library/Application Support/FreeSO Launcher';
-    installDir = process.platform == 'win32' ? 'C:\\Users\\Public\\TéstFõldér' :
+    installDir = process.platform === 'win32' ? 'C:\\Users\\Public\\TéstFõldér' :
       appData + '/GameComponents';
 
     fs.existsSync( `${appData}/FSOLauncher.ini` ) && fs.unlinkSync( `${appData}/FSOLauncher.ini` );

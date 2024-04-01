@@ -1,5 +1,6 @@
 const download = require( '../download' );
 const { strFormat, loadDependency } = require( '../utils' );
+/** @type {import('sudo-prompt')} */
 const sudo = loadDependency( 'sudo-prompt' );
 const { resourceCentral, temp } = require( '../../constants' );
 const { locale } = require( '../locale' );
@@ -45,8 +46,12 @@ class MonoInstaller {
    */
   async install() {
     try {
-      await this.step1();
-      await this.step2();
+      if ( process.platform === 'darwin' ) {
+        await this.download();
+        await this.extract();
+      } else {
+        await this.aptInstall();
+      }
       this.end();
     } catch ( err ) {
       this.error( err );
@@ -54,22 +59,19 @@ class MonoInstaller {
     }
   }
 
-  /**
-   * Download all the files.
-   *
-   * @returns {Promise<void>} A promise that resolves when the download is complete.
-   */
-  step1() {
-    return this.download();
-  }
-
-  /**
-   * Extract files PKG to the destination.
-   *
-   * @returns {Promise<void>} A promise that resolves when the files are extracted.
-   */
-  step2() {
-    return this.extract();
+  aptInstall() {
+    return new Promise( ( resolve, reject ) => {
+      const command = 'apt-get install -y mono-complete';
+      sudo.exec( command, ( error, stdout, stderr ) => {
+        if ( error ) {
+          console.error( 'error trying to install mono-complete on linux', error );
+          return reject( error );
+        }
+        console.info( stdout );
+        console.error( stderr );
+        resolve();
+      } );
+    } );
   }
 
   /**

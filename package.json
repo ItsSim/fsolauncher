@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "electron-installer-debian": "^3.2.0"
+  }
+}

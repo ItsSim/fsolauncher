@@ -2,7 +2,15 @@ const os = require( 'os' );
 const packageJson = require( '../package.json' );
 
 const homeDir = os.homedir();
-const appData = process.platform === 'darwin' ? `${homeDir}/Library/Application Support/FreeSO Launcher` : '.';
+const appData = ( () => {
+  if ( process.platform === 'darwin' ) {
+    return `${homeDir}/Library/Application Support/FreeSO Launcher`;
+  }
+  if ( process.platform === 'linux' ) {
+    return `${homeDir}/.fsolauncher`;
+  }
+  return '.';
+} )();
 const gameLanguages = {
   English: 0,
   French: 3,
@@ -34,10 +42,10 @@ const version = packageJson.version;
 const defaultRefreshRate = 60;
 const defaultGameLanguage = 'English';
 const dependencies = {
-  'FSO': [ 'TSO', ...( process.platform === 'darwin' ? [ 'Mono', 'SDL' ] : [ 'OpenAL' ] ) ],
+  'FSO': [ 'TSO', ...( [ 'darwin', 'linux' ].includes( process.platform ) ? [ 'Mono', 'SDL' ] : [ 'OpenAL' ] ) ],
   'RMS': [ 'FSO' ],
   'MacExtras': [ 'FSO' ],
-  'Simitone': ( process.platform === 'darwin' ) ? [ 'Mono', 'SDL' ] : []
+  'Simitone': ( [ 'darwin', 'linux' ].includes( process.platform ) ) ? [ 'Mono', 'SDL' ] : []
 };
 const needInternet = [
   'TSO',
@@ -125,7 +133,7 @@ const registry = {
 
     'OpenAL': 'HKLM\\SOFTWARE\\OpenAL',
     'NET': 'HKLM\\SOFTWARE\\Microsoft\\NET Framework Setup\\NDP',
-    'Mono': '/Library/Frameworks/Mono.framework',
+    'Mono': process.platform === 'darwin' ? '/Library/Frameworks/Mono.framework' : '/usr/bin/mono',
     'SDL': '/Library/Frameworks/SDL2.framework'
   },
   fallbacks: process.platform === 'win32' ? {

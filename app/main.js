@@ -62,10 +62,8 @@ shell.openExternal = Object.freeze( url => {
 } );
 Object.freeze( shell );
 
-// Create the temp directory on macOS
-if ( process.platform == 'darwin' ) {
-  fs.ensureDirSync( appData + '/temp' );
-}
+// Ensure the temp dir is present
+fs.ensureDirSync( appData + '/temp' );
 
 /** @type {Electron.BrowserWindow} */
 let window;
@@ -94,7 +92,7 @@ try {
     Launcher: {
       Theme: nativeTheme.shouldUseDarkColors ? 'dark' : 'open_beta',
       DesktopNotifications: '1',
-      Persistence: process.platform == 'darwin' ? '0' : '1',
+      Persistence: [ 'darwin', 'linux' ].includes( process.platform ) ? '0' : '1',
       DirectLaunch: '0',
       Language: 'default'
     },
@@ -152,9 +150,9 @@ async function createWindow() {
 
   // Create the trayIcon for macOS and Windows
   trayIcon = nativeImage.createFromPath(
-    require( 'path' ).join( __dirname, process.platform == 'darwin' ? 'beta.png' : 'beta.ico' )
+    require( 'path' ).join( __dirname, [ 'darwin', 'linux' ].includes( process.platform ) ? 'beta.png' : 'beta.ico' )
   );
-  if ( process.platform == 'darwin' ) {
+  if ( [ 'darwin', 'linux' ].includes( process.platform ) ) {
     trayIcon = trayIcon.resize( { width: 16, height: 16 } );
   }
   tray = new Tray( trayIcon );
@@ -200,7 +198,7 @@ async function createWindow() {
     }
   } );
 
-  if ( process.platform == 'darwin' ) {
+  if ( process.platform === 'darwin' ) {
     // Create the app menu for macOS
     const darwinAppMenu = require( './fsolauncher/lib/darwin-app-menu' );
     Menu.setApplicationMenu( Menu.buildFromTemplate( darwinAppMenu( app.getName(), launcher ) ) );
@@ -225,7 +223,7 @@ async function createWindow() {
   ] ) );
 
   tray.on( 'click', () => {
-    window.isVisible() ? ( process.platform == 'darwin' ? window.minimize() : window.hide() ) : showWindow();
+    window.isVisible() ? ( [ 'darwin', 'linux' ].includes( process.platform ) ? window.minimize() : window.hide() ) : showWindow();
   } );
 
   window.on( 'closed', () => { window = null; } );
@@ -236,7 +234,7 @@ async function createWindow() {
       .then( () => {
         if ( userSettings.Launcher.DirectLaunch === '1' && launcher.isInstalled.FSO ) {
           launcher.launchGame();
-          if ( process.platform == 'darwin' ) {
+          if ( [ 'darwin', 'linux' ].includes( process.platform ) ) {
             showWindow();
           }
         } else {

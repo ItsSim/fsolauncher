@@ -226,9 +226,6 @@ class Modal {
         console.error( err );
       }
     }
-    if ( process.platform === 'darwin' ) {
-      defaultPath = '~/Documents';
-    }
     const response = await require( 'electron' )
       .dialog.showOpenDialog( window,
         {
@@ -405,47 +402,47 @@ class Modal {
         }
         .notification {
           -webkit-user-select: none;
-          cursor:pointer;
-          overflow:hidden;
-          display:block;
-          padding:20px;
+          cursor: pointer;
+          overflow: hidden;
+          display: block;
+          padding: 20px;
           ${shouldBeDark ?
     'background-image: -webkit-linear-gradient(#15202b, #10171e 100%, #15202b);' :
     'background-image: -webkit-linear-gradient(#fafafa, #f4f4f4 40%, #e5e5e5);'}
-          margin:10px;
-          border-radius:8px;
+          margin: 10px;
+          border-radius: 8px;
           box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-          display:flex;
-          ${process.platform == 'darwin' ? 'margin-bottom:40px;' : ''}
+          display: flex;
+          ${process.platform === 'darwin' ? 'margin-bottom: 40px;' : ''}
           ${shouldBeDark ? 'border: 1px solid #414141;' : ''}
         }
         .notification h1 {
-          font-family:'Fredoka One';
-          margin-bottom:8px;
-          font-size:18px;
-          font-weight:200!important;
+          font-family: 'Fredoka One';
+          margin-bottom: 8px;
+          font-size: 18px;
+          font-weight: 200!important;
           color:#4C8DEE;
         }
         .notification p {
-          font-family:'Munged';
-          font-size:14px;
-          font-weight:normal!important;
-          line-height:16px;
-          letter-spacing:-0.02em;
-          ${shouldBeDark ? 'color: rgba(255, 255, 255, 0.65);' : 'color:#595959;'}
+          font-family: 'Munged';
+          font-size: 14px;
+          font-weight: normal!important;
+          line-height: 16px;
+          letter-spacing: -0.02em;
+          ${shouldBeDark ? 'color: rgba(255, 255, 255, 0.65);' : 'color: #595959;'}
         }
         .notification #logo {
-          background-image:url("data:image/png;base64,${b64icon}");
-          background-size:contain;
-          background-position:center center;
-          background-repeat:no-repeat;
-          width:50px;
-          height:50px;
-          margin-right:10px;
-          flex:0.2;
+          background-image: url("data:image/png;base64,${b64icon}");
+          background-size: contain;
+          background-position: center center;
+          background-repeat: no-repeat;
+          width: 50px;
+          height: 50px;
+          margin-right: 10px;
+          flex: 0.2;
         }
         .notification #content {
-          flex:0.8;
+          flex: 0.8;
         }
         ` );
 

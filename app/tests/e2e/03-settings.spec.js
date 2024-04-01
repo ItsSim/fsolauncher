@@ -40,7 +40,7 @@ test.describe( 'settings', () => {
     const visibleGraphicsModesValues = graphicsModesValues.filter( value => value !== null );
 
     // Assertions based on expected visible options
-    if ( process.platform === 'darwin' ) {
+    if ( [ 'darwin', 'linux' ].includes( process.platform ) ) {
       expect( visibleGraphicsModesValues ).not.toContain( 'dx' );
       expect( visibleGraphicsModesValues ).not.toContain( 'sw' );
     } else {
