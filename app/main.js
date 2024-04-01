@@ -17,7 +17,8 @@ const {
   isTestMode,
   fileLogEnabled,
   devToolsEnabled,
-  defaultRefreshRate
+  defaultRefreshRate,
+  defaultGameLanguage
 } = require( './fsolauncher/constants' );
 
 if ( fileLogEnabled ) {
@@ -99,7 +100,7 @@ try {
     },
     Game: {
       GraphicsMode: process.platform === 'win32' ? 'dx' : 'ogl',
-      Language: 'default'
+      Language: defaultGameLanguage
     }
   };
   // Write the new FSOLauncher.ini to disk

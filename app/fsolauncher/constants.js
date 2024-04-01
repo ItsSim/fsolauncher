@@ -3,18 +3,36 @@ const packageJson = require( '../package.json' );
 
 const homeDir = os.homedir();
 const appData = process.platform === 'darwin' ? `${homeDir}/Library/Application Support/FreeSO Launcher` : '.';
-const langStrings = {
-  0: [ 'English', 'en' ], // default
-  6: [ 'Spanish', 'es' ],
-  5: [ 'Italian', 'it' ],
-  14: [ 'Portuguese', 'pt' ]
+const gameLanguages = {
+  English: 0,
+  French: 3,
+  German: 4,
+  Italian: 5,
+  Spanish: 6,
+  Dutch: 7,
+  Danish: 8,
+  Swedish: 9,
+  Norwegian: 10,
+  Finish: 11,
+  Hebrew: 12,
+  Russian: 13,
+  Portuguese: 14,
+  Japanese: 15,
+  Polish: 16,
+  SimplifiedChinese: 17,
+  TraditionalChinese: 18,
+  Thai: 19,
+  Korean: 20,
+
+  //begin freeso
+  Slovak: 21
 };
 const isTestMode = process.argv.indexOf( '--fl-test-mode' ) !== -1;
 const fileLogEnabled = process.argv.indexOf( '--fl-filelog' ) !== -1;
 const devToolsEnabled = process.argv.indexOf( '--fl-devtools' ) !== -1;
 const version = packageJson.version;
 const defaultRefreshRate = 60;
-const defaultLanguage = langStrings[ 0 ][ 1 ];
+const defaultGameLanguage = 'English';
 const dependencies = {
   'FSO': [ 'TSO', ...( process.platform === 'darwin' ? [ 'Mono', 'SDL' ] : [ 'OpenAL' ] ) ],
   'RMS': [ 'FSO' ],
@@ -33,12 +51,6 @@ const needInternet = [
 const darkThemes = [
   'halloween', 'dark', 'indigo'
 ];
-const langCodes = {
-  'en': 0,
-  'es': 6,
-  'it': 5,
-  'pt': 14
-};
 const components = {
   'TSO': 'The Sims Online',
   'FSO': 'FreeSO',
@@ -161,17 +173,16 @@ const registry = {
 module.exports = {
   homeDir,
   appData,
-  langStrings,
+  gameLanguages,
   isTestMode,
   fileLogEnabled,
   devToolsEnabled,
   version,
   defaultRefreshRate,
-  defaultLanguage,
+  defaultGameLanguage,
   dependencies,
   needInternet,
   darkThemes,
-  langCodes,
   components,
   versionChecks,
   links,

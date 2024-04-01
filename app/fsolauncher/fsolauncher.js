@@ -9,7 +9,7 @@ const {
   defaultRefreshRate,
   releases: { simitoneUrl },
   links: { updateWizardUrl },
-  defaultLanguage
+  defaultGameLanguage
 } = require( './constants' );
 
 const Modal = require( './lib/modal' );
@@ -722,40 +722,39 @@ class FSOLauncher {
    * Switches the game language.
    * Copies the translation files and changes the current language in FreeSO.ini.
    *
-   * @param {string} language The language to change to.
+   * @param {string} langString The language to change to. Example: 'English', 'Spanish'.
    *
    * @returns {Promise<void>} A promise that resolves when the language is changed.
    */
-  async switchLanguage( language ) {
+  async switchLanguage( langString ) {
+    langString = this.validateLangString( langString );
+
     if ( ! this.isInstalled.TSO || ! this.isInstalled.FSO ) {
       return Modal.showNeedFSOTSO();
     }
+
     this.addActiveTask( 'CHLANG' );
 
-    const fs = require( 'fs-extra' ),
-      ini = require( 'ini' );
     const toast = new Toast( locale.current.TOAST_LANGUAGE );
 
     let data;
     try {
       data = await this.getFSOConfig();
     } catch ( err ) {
-      captureWithSentry( err, { language } );
+      captureWithSentry( err, { langString } );
       console.error( err );
       this.removeActiveTask( 'CHLANG' );
       toast.destroy();
       return Modal.showFirstRun();
     }
 
-    const effectiveLanguage = this.getEffectiveLanguage();
-    const longLangStr = this.getLangString( this.getLangCode( effectiveLanguage ) )[ 0 ];
-
-    data.CurrentLang = longLangStr;
+    data.CurrentLang = langString;
 
     try {
-      await fs.writeFile( this.isInstalled.FSO + '/Content/config.ini', ini.stringify( data ) );
+      const configIniPath = this.isInstalled.FSO + '/Content/config.ini';
+      await require( 'fs-extra' ).writeFile( configIniPath, require( 'ini' ).stringify( data ) );
     } catch ( err ) {
-      captureWithSentry( err, { language } );
+      captureWithSentry( err, { langString } );
       this.removeActiveTask( 'CHLANG' );
       toast.destroy();
       return Modal.showIniFail();
@@ -764,7 +763,7 @@ class FSOLauncher {
     this.removeActiveTask( 'CHLANG' );
     toast.destroy();
 
-    return this.updateAndPersistConfig( 'Game', 'Language', language );
+    return this.updateAndPersistConfig( 'Game', 'Language', langString );
   }
 
   /**
@@ -987,7 +986,7 @@ class FSOLauncher {
     // game language, by default english
     if ( ! isSimitone ) {
       // for now disable this for Simitone
-      args.push( `-lang${this.getLangCode( this.getEffectiveLanguage() )}` );
+      args.push( `-lang${this.getEffectiveLangCode()}` );
     }
     // SW only allows ogl
     let graphicsMode = this.userSettings.Game.GraphicsMode != 'sw'
@@ -1075,25 +1074,13 @@ class FSOLauncher {
 
   /**
    * Returns hardcoded language integers from the language string.
-   * Example: 'en', 'es'...
    *
-   * @param {string} lang The language string.
+   * @param {string} langString The language string. Example: 'English', 'Spanish'.
    *
-   * @returns {number} The language code.
+   * @returns {number|undefined} The language code.
    */
-  getLangCode( lang ) {
-    return require( './constants' ).langCodes[ lang ];
-  }
-
-  /**
-   * Returns the full language strings from the code.
-   *
-   * @param {number} code Language code (gettable from getLangCode).
-   *
-   * @returns {string[]} The language strings.
-   */
-  getLangString( code ) {
-    return require( './constants' ).langStrings[ code ];
+  getLangCode( langString ) {
+    return require( './constants' ).gameLanguages[ langString ];
   }
 
   /**
@@ -1183,18 +1170,31 @@ class FSOLauncher {
   }
 
   /**
-   * Returns the language to use.
+   * Returns the language string to use.
    *
-   * @returns {string} The language to use.
+   * @param {string} langString The language string. Example: 'English', 'Spanish'.
+   *
+   * @returns {string} The language string to use.
    */
-  getEffectiveLanguage() {
-    if ( ! this.userSettings?.Game?.Language ) {
-      return defaultLanguage;
+  validateLangString( langString ) {
+    if ( ! langString ) {
+      return defaultGameLanguage;
     }
-    if ( this.userSettings.Game.Language === 'default' ) {
-      return defaultLanguage;
+    if ( undefined === this.getLangCode( langString ) ) {
+      return defaultGameLanguage;
     }
-    return this.userSettings.Game.Language;
+    return langString;
+  }
+
+  /**
+   * Returns the current game language code to use.
+   *
+   * @returns {number} The language code to use.
+   */
+  getEffectiveLangCode() {
+    const langString = this.validateLangString( this.userSettings?.Game?.Language );
+
+    return this.getLangCode( langString );
   }
 
   /**
