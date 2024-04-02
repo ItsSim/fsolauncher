@@ -10,8 +10,8 @@ async function packageAndCreateDebian( arch ) {
       name: 'FreeSO Launcher',
       out: '../release',
       platform: 'linux',
-      arch, // Use the function's argument
-      icon: './beta.png', // Ensure you have a PNG icon for Linux
+      arch,
+      icon: './beta.png',
       asar: {
         unpackDir: '{fsolauncher-ui/images,fsolauncher-ui/sounds,fsolauncher-ui/fonts}',
       },
@@ -20,7 +20,7 @@ async function packageAndCreateDebian( arch ) {
       derefSymlinks: true,
     } );
 
-    const appPath = appPaths[ 0 ]; // Assuming only one output directory
+    const appPath = appPaths[ 0 ];
 
     // Create a Debian installer
     await createDebianInstaller( {
@@ -30,9 +30,15 @@ async function packageAndCreateDebian( arch ) {
       icon: './beta.png',
       categories: [ 'Games' ],
       bin: 'FreeSO Launcher',
+      productName: 'FreeSO Launcher',
+      section: 'games',
+      homepage: 'https://freeso.org',
+      genericName: 'Launcher',
+      description: 'FreeSO Launcher',
+      productDescription: 'Install, configure, and launch FreeSO with ease'
     } );
 
-    const version = require( '../package.json' ).version; // You might want to dynamically fetch this
+    const version = require( '../package.json' ).version;
     const originalDebName = `../release/fsolauncher_${version}_${arch === 'x64' ? 'amd64' : 'arm64'}.deb`;
     const newDebName = '../release/FreeSO Launcher.deb';
 

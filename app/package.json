@@ -2,7 +2,7 @@
   "name": "fsolauncher",
   "productName": "FreeSO Launcher",
   "version": "1.12.0",
-  "description": "Install, configure, and launch FreeSO",
+  "description": "Install, configure, and launch FreeSO with ease",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
