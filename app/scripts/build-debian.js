@@ -51,7 +51,7 @@ async function packageForAllArchitectures() {
   // Use Promise.all to run both tasks in parallel
   await Promise.all( [
     packageAndCreateDebian( 'x64' ),
-    packageAndCreateDebian( 'arm64' )
+    //packageAndCreateDebian( 'arm64' )
   ] );
 }
 
