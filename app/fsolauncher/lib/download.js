@@ -43,6 +43,7 @@ module.exports = function( { from, to, immediate = false } ) {
     _bytesRead = 0;
     _length = 0;
     _error = null;
+    _hash = crypto.createHash( 'md5' );
     await fs.ensureDir( require( 'path' ).dirname( to ) );
     _fileStream = fs.createWriteStream( to );
     _request = httpModule.get( from,
@@ -92,7 +93,6 @@ module.exports = function( { from, to, immediate = false } ) {
   const _onDownload = ( response ) => {
     _response = response;
     _length = parseInt( response.headers[ 'content-length' ], 10 );
-    _hash = crypto.createHash( 'md5' );
   };
 
   const _onEnd = async () => {

@@ -60,9 +60,10 @@ class SDLInstaller {
   }
 
   aptInstall() {
+    this.createProgressItem( locale.current.DL_CLIENT_FILES, 100 );
     return new Promise( ( resolve, reject ) => {
       // SDL2 installation command for Debian-based systems
-      const command = 'apt-get install -y libsdl2-2.0-0 libsdl2-dev';
+      const command = 'apt-get update && apt-get install -y libsdl2-2.0-0 libsdl2-dev';
 
       sudo.exec( command, ( error, stdout, stderr ) => {
         if ( error ) {

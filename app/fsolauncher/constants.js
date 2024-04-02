@@ -1,6 +1,22 @@
 const os = require( 'os' );
 const packageJson = require( '../package.json' );
-
+const linuxLibPath = ( () => {
+  const arch = os.arch();
+  switch ( arch ) {
+  case 'x64':
+    return '/usr/lib/x86_64-linux-gnu';
+  case 'ia32':
+  case 'x32':
+    return '/usr/lib/i386-linux-gnu';
+  case 'arm':
+    return '/usr/lib/arm-linux-gnueabihf';
+  case 'arm64':
+    return '/usr/lib/aarch64-linux-gnu';
+  default:
+    console.warn( `Unsupported architecture: ${arch}` );
+    return '/usr/lib';
+  }
+} )();
 const homeDir = os.homedir();
 const appData = ( () => {
   if ( process.platform === 'darwin' ) {
@@ -134,7 +150,7 @@ const registry = {
     'OpenAL': 'HKLM\\SOFTWARE\\OpenAL',
     'NET': 'HKLM\\SOFTWARE\\Microsoft\\NET Framework Setup\\NDP',
     'Mono': process.platform === 'darwin' ? '/Library/Frameworks/Mono.framework' : '/usr/bin/mono',
-    'SDL': '/Library/Frameworks/SDL2.framework'
+    'SDL': process.platform === 'darwin' ? '/Library/Frameworks/SDL2.framework' : `${linuxLibPath}/libSDL2.so`
   },
   fallbacks: process.platform === 'win32' ? {
     // Windows fallbacks
