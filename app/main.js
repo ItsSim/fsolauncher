@@ -195,7 +195,9 @@ async function createWindow() {
   let isResizing = false;
 
   window.on( 'restore', _e => {
-    window.setSkipTaskbar( false );
+    if ( process.platform === 'win32' ) {
+      window.setSkipTaskbar( false );
+    }
     if ( ! isResizing ) {
       isResizing = true;
       window.setSize( width, height );
