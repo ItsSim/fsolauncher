@@ -52,7 +52,7 @@ class FSOLauncher {
       Mono: false,
       SDL: false
     };
-    if ( ! [ 'darwin', 'linux' ].includes( process.platform ) ) {
+    if ( process.platform === 'win32' ) {
       this.window.on( 'minimize', () => {
         if ( ! this.minimizeReminder ) {
           Modal.sendNotification(
@@ -62,6 +62,7 @@ class FSOLauncher {
           );
           this.minimizeReminder = true;
         }
+        this.window.setSkipTaskbar( true );
         this.window.hide();
       } );
     }
