@@ -7,7 +7,6 @@ initSentry();
 
 const { app, BrowserWindow, shell, Tray, Menu, nativeImage, nativeTheme } = require( 'electron' );
 const compilePugFiles = require( './fsolauncher/lib/pug-compiler' );
-const themeColors = require( './colors.config' );
 
 const {
   appData,
