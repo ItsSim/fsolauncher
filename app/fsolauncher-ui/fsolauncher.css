@@ -11,6 +11,7 @@
   background-attachment: fixed;
   font-family: 'Fredoka One';
   user-select: none;
+  position: relative;
 }
 
 html {
@@ -1098,7 +1099,7 @@ select {
 }
 
 #toasts {
-  position: fixed;
+  position: absolute;
   bottom: 20px;
   right: 20px;
   z-index: 15;
