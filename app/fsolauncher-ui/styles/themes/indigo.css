@@ -137,12 +137,18 @@
 .indigo #settings-page .form h1 {
 }
 
+.indigo #titlebar {
+  background-color: #1B1825;
+}
+
 .indigo #sidebar {
-  border-top: 1px solid #43384C;
   background: #1B1825 !important;
   color: rgba(255, 255, 255, 0.75) !important;
   text-shadow: 2px 2px rgba(0, 0, 0, 0.2) !important;
-  border-right: 1px solid #43384C;
+
+}
+.indigo .page-content {
+  border-left: 1px solid #43384C;
 }
 .indigo #content,
 .indigo #launcher {

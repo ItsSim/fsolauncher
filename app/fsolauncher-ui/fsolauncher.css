@@ -13,22 +13,24 @@
   user-select: none;
 }
 
-html.linux, html.linux body {
+html {
+  padding: 8px;
+  padding-bottom: 12px
+}
+
+html, body {
   border-radius: 12px;
   overflow: hidden;
 }
 
-html.linux body {
+body {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   border: 1px solid #414141;
 }  
 
-html.linux #titlebar {
+#titlebar {
   display: flex;
   user-select: none;
-}
-
-#titlebar {
-  display: none;
   width: 100%;
   height: 30px;
   background-color: #1b1b1b;
@@ -175,6 +177,7 @@ body #about-page ul.columns li {
   position: relative;
   overflow-y: hidden;
   overflow-x: hidden;
+  border-top-left-radius: 12px;
 }
 
 div.page {
@@ -193,8 +196,10 @@ body.splash {
 .page-content {
   overflow-y: auto;
   overflow-x: hidden;
-  height: calc(100% - 99px);
+  height: calc(100% - 89px);
   padding-bottom: 20px;
+  padding-top: 10px;
+  margin-top: -10px;
 }
 
 #home-page .page-content {
@@ -268,13 +273,13 @@ div.page > h1.jumbotron {
   color: #fff;
   background: linear-gradient(180deg, #4e90f3 0%, #3877d8 100%);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  width: calc(100% + 2px);
-  margin-left: -1px;
+  width: calc(100% + 1px);
   position: relative;
   z-index: 100;
   height: 100px;
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
+  border-top-left-radius: 12px;
 }
 
 div.page > h1.jumbotron span {
@@ -1177,15 +1182,15 @@ select {
 }
 
 #overlay {
-  position: fixed;
-  left: 0;
-  top: 0;
+  position: absolute;
   background: rgba(0, 0, 0, 0.3);
   width: 100%;
   height: 100%;
   z-index: 12;
   display: none;
   cursor: pointer;
+  border-top-left-radius: 12px;
+  border-bottom-right-radius: 12px;
 }
 
 #downloads-page div.download {
@@ -1921,16 +1926,8 @@ ul#sidebar li[page-trigger="downloads"].has-downloads.active::after {
   background-color: rgba(0,0,0,0.1);
 }
 
-.linux .open_beta .jumbotron,
-.linux .turbo .jumbotron,
-.linux .simitone .jumbotron {
-  border-top-left-radius: 12px;
-  margin-left: 0;
-  width: 100%;
-}
-
-html.linux body.open_beta,
-html.linux body.turbo,
-html.linux body.simitone {
+body.open_beta,
+body.turbo,
+body.simitone {
   border: 1px solid #a5a5a5;
 }  

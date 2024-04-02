@@ -159,17 +159,10 @@ async function createWindow() {
   }
   tray = new Tray( trayIcon );
 
-  const width = 1090;
-  let height = 646;
+  const width = 1090 + 8;
+  const height = 646 + 12 + 30;
 
-  if ( process.platform === 'linux' ) {
-    height += 30;
-  }
-
-  if ( process.platform !== 'linux' ) {
-    options.backgroundColor = themeColors[ userSettings.Launcher.Theme ] || 'transparent';
-  }
-  options.transparent = process.platform === 'linux';
+  options.transparent = true;
   options.minWidth = width;
   options.minHeight = height;
   options.maxWidth = width;
@@ -180,7 +173,7 @@ async function createWindow() {
   options.height = height;
   options.useContentSize = true;
   options.show = false;
-  options.frame = process.platform !== 'linux';
+  options.frame = false;
   options.resizable = false;
   options.title = 'FreeSO Launcher ' + version;
   options.webPreferences = {

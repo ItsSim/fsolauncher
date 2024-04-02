@@ -14,13 +14,12 @@ html(lang=LANG_CODE class=PLATFORM + ' ' + LANG_CODE)
     #titlebar
       h1.title FreeSO Launcher #{LAUNCHER_VERSION}
       .controls
-        span 
-          i(style={'margin-top': '-3px'})#control-minimize.material-icons minimize
-        span 
-          i(style={'margin-bottom': '-1px'})#control-close.material-icons close
+        span#control-minimize
+          i(style={'margin-top': '-3px'}).material-icons minimize
+        span#control-close
+          i(style={'margin-bottom': '-1px'}).material-icons close
 
     #launcher
-      #overlay
       #toasts
         #no-internet-notice
           i.material-icons(style={'margin-top': '-5px'}) wifi_off
@@ -29,6 +28,7 @@ html(lang=LANG_CODE class=PLATFORM + ' ' + LANG_CODE)
       include includes/sidebar.pug
 
       #content
+        #overlay
         include includes/pages/home.pug
         include includes/pages/installer.pug
         include includes/pages/settings.pug
