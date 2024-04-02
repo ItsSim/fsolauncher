@@ -31,6 +31,7 @@ module.exports = () => {
 
   test.beforeAll( () => {
     latestBuild = findLatestBuild( '../release' );
+    console.log( 'latestBuild', latestBuild );
     appInfo = parseElectronApp( latestBuild );
     exeDir = path.dirname( appInfo.executable );
     appData = process.platform === 'win32' ? exeDir :
