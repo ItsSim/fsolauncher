@@ -192,22 +192,12 @@ async function createWindow() {
 
   window.loadURL( `file://${__dirname}/fsolauncher-ui/fsolauncher.pug` );
 
-  let isResizing = false;
-
-  window.on( 'restore', _e => {
-    if ( process.platform === 'win32' ) {
-      window.setSkipTaskbar( false );
-    }
-    if ( ! isResizing || process.platform === 'win32' ) {
-      isResizing = true;
-      window.setSize( width, height );
-      isResizing = false;
-    }
-  } );
-
+  window.on( 'hide', () => process.platform === 'win32' && window.setSize( width, height ) );
+  window.on( 'restore', () => process.platform === 'win32' && window.setSkipTaskbar( false ) );
 
   launcher = new FSOLauncher( {
-    window, userSettings,
+    window,
+    userSettings,
     onReload: async settings => {
       loadLocale( settings );
       window.reload();

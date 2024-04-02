@@ -46,7 +46,7 @@ body {
   display: flex;
   justify-content: flex-end;
   box-shadow: inset 0 1px 1px rgb(106 106 106 / 15%);
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .darwin #titlebar {
@@ -98,9 +98,7 @@ body {
   width: 100%;
   height: 100%;
   text-align: center;
-  font-weight: bold;
-  font-size: 0.85rem;
-  letter-spacing: 0;
+  font-size: 13px;
 }
 
 #titlebar .controls {
@@ -1202,7 +1200,7 @@ select {
   font-family: 'Munged';
   word-break: break-word;
   flex: 1;
-  font-size: 0.99rem;
+  font-size: 0.96rem;
   line-height: 1.3rem;
 }
 
@@ -1932,8 +1930,16 @@ ul#sidebar li[page-trigger="downloads"].has-downloads.active::after {
 .turbo #titlebar,
 .simitone #titlebar {
   background-color: #fff;
-  color: rgba(0, 0, 0, 0.6);
+  color: rgba(0, 0, 0, 0.55);
 }
+
+.win32 .open_beta #titlebar h1.title,
+.win32 .turbo #titlebar h1.title,
+.win32 .simitone #titlebar h1.title {
+  -webkit-text-stroke: 0.2px rgba(0, 0, 0, 0.55); 
+}
+
+
 
 .open_beta #titlebar .controls span,
 .turbo #titlebar .controls span,
