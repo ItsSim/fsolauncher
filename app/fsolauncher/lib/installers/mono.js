@@ -62,7 +62,7 @@ class MonoInstaller {
   aptInstall() {
     this.createProgressItem( locale.current.DL_CLIENT_FILES, 100 );
     return new Promise( ( resolve, reject ) => {
-      const command = 'apt-get update && apt-get install -y mono-complete';
+      const command = 'sudo apt-get update && sudo apt-get install -y mono-complete';
       sudo.exec( command, ( error, stdout, stderr ) => {
         if ( error ) {
           console.error( 'error trying to install mono-complete on linux', error );

@@ -52,10 +52,10 @@ module.exports = () => {
     logs = [];
 
     // Pass in --test-mode for headless testing
-    const args = [ appInfo.main, '--disable-http-cache' ];
-    if ( process.platform !== 'linux' ) {
+    const args = [ appInfo.main, '--disable-http-cache', '--fl-test-mode' ];
+    /*if ( process.platform !== 'linux' ) {
       logs.push( '--fl-test-mode' );
-    }
+    }*/
     electronApp = await electron.launch( {
       timeout: 60000,
       cwd: exeDir,
