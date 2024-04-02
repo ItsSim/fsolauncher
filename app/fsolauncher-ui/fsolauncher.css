@@ -58,7 +58,8 @@ body {
   height: 14px;
 }
 
-.darwin #titlebar .controls span:hover i {
+.darwin #titlebar .controls span:hover i,
+.darwin #titlebar .controls span:focus i {
   display: block;
 }
 

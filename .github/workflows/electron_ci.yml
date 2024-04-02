@@ -58,7 +58,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-latest, macos-latest]
+        os: [windows-latest, macos-latest, ubuntu-latest]
         include:
           - os: windows-latest
             build_command: "buildwin"
@@ -66,6 +66,9 @@ jobs:
           - os: macos-latest
             build_command: "builddarwin"
             artifact_name: "fsolauncher-mac"
+          - os: ubuntu-latest
+            build_command: "builddeb"
+            artifact_name: "fsolauncher-debian"
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -79,6 +82,15 @@ jobs:
         
     - name: Replace Sentry DSN and Browser Loader (macOS)
       if: matrix.os == 'macos-latest'
+      working-directory: app
+      run: |
+        sed "s#SENTRY_CI_DSN#${{ secrets.SENTRY_CI_DSN }}#g" sentry.config.js > sentry.config.temp.js
+        mv sentry.config.temp.js sentry.config.js
+        sed "s#SENTRY_CI_BROWSER_LOADER#${{ secrets.SENTRY_CI_BROWSER_LOADER }}#g" sentry.config.js > sentry.config.temp.js
+        mv sentry.config.temp.js sentry.config.js
+
+    - name: Replace Sentry DSN and Browser Loader (Debian)
+      if: matrix.os == 'ubuntu-latest'
       working-directory: app
       run: |
         sed "s#SENTRY_CI_DSN#${{ secrets.SENTRY_CI_DSN }}#g" sentry.config.js > sentry.config.temp.js
@@ -152,6 +164,13 @@ jobs:
         hash=$(shasum -a 256 release/FreeSO\ Launcher.dmg | awk '{print $1}')
         echo "macOS hash: $hash"
         echo $hash > release/sha256_darwin.txt
+
+    - name: Calculate hash (Debian)
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        hash=$(shasum -a 256 release/FreeSO\ Launcher.deb | awk '{print $1}')
+        echo "Debian hash: $hash"
+        echo $hash > release/sha256_debian.txt
       
     - name: List contents of the release directory (Windows)
       if: matrix.os == 'windows-latest'
@@ -160,6 +179,11 @@ jobs:
 
     - name: List contents of the release directory (macOS)
       if: matrix.os == 'macos-latest'
+      run: |
+        ls -la release
+
+    - name: List contents of the release directory (Ubuntu)
+      if: matrix.os == 'ubuntu-latest'
       run: |
         ls -la release
 
@@ -180,6 +204,15 @@ jobs:
         path: |
           release/FreeSO Launcher.dmg
           release/sha256_darwin.txt
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      if: matrix.os == 'ubuntu-latest'
+      with:
+        name: ${{ matrix.artifact_name }}
+        path: |
+          release/FreeSO Launcher.deb
+          release/sha256_debian.txt
 
   create-release:
     needs: [build-launcher, build-extras]
@@ -281,6 +314,12 @@ jobs:
         name: fsolauncher-mac
         path: release/mac
 
+    - name: Download artifacts (Debian)
+      uses: actions/download-artifact@v2
+      with:
+        name: fsolauncher-debian
+        path: release/debian
+
     - name: Download Remeshes
       uses: actions/download-artifact@v2
       with:
@@ -309,6 +348,7 @@ jobs:
           const launcherVersion = process.env.FULL_VERSION_NAME;
           const launcherNameWindows = `fsolauncher-${launcherVersion}.exe`;
           const launcherNameMac = `fsolauncher-${launcherVersion}.dmg`;
+          const launcherNameDebian = `fsolauncher-${launcherVersion}.deb`;
           const remeshesFile = process.env.REMESHES_FILE;
           const remeshesName = remeshesFile.split('/').pop();
           const proxyFile = process.env.PROXY_FILE;
@@ -318,6 +358,8 @@ jobs:
             {path: 'release/win/sha256_win32.txt',          name: launcherNameWindows + '.sha256', contentType: 'text/plain'},
             {path: 'release/mac/FreeSO Launcher.dmg',       name: launcherNameMac,                 contentType: 'application/octet-stream'},
             {path: 'release/mac/sha256_darwin.txt',         name: launcherNameMac + '.sha256',     contentType: 'text/plain'},
+            {path: 'release/debian/FreeSO Launcher.deb',    name: launcherNameDebian,              contentType: 'application/octet-stream'},
+            {path: 'release/debian/sha256_debian.txt',      name: launcherNameDebian + '.sha256',  contentType: 'text/plain'},
             {path: remeshesFile,                            name: remeshesName,                    contentType: 'application/zip'},
             {path: 'release/extras/sha256_remeshes.txt',    name: remeshesName + '.sha256',        contentType: 'text/plain'},
             {path: proxyFile,                               name: proxyName,                       contentType: 'application/octet-stream'},

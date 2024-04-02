@@ -29,8 +29,15 @@ async function packageAndCreateDebian( arch ) {
       arch: arch === 'x64' ? 'amd64' : 'arm64',
       icon: './beta.png',
       categories: [ 'Games' ],
-      bin: 'FreeSO Launcher'
+      bin: 'FreeSO Launcher',
     } );
+
+    const version = require( '../package.json' ).version; // You might want to dynamically fetch this
+    const originalDebName = `../release/fsolauncher_${version}_${arch === 'x64' ? 'amd64' : 'arm64'}.deb`;
+    const newDebName = '../release/FreeSO Launcher.deb';
+
+    // Rename the Debian package
+    await require( 'fs-extra' ).rename( originalDebName, newDebName );
 
     console.log( `Successfully created package for ${arch} at ../release` );
   } catch ( err ) {
