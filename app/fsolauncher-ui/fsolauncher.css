@@ -29,6 +29,10 @@ body {
   border: 1px solid #414141;
 }  
 
+body.darwin {
+  box-shadow: none;
+}
+
 #titlebar {
   display: flex;
   user-select: none;
@@ -1946,5 +1950,11 @@ ul#sidebar li[page-trigger="downloads"].has-downloads.active::after {
 body.open_beta,
 body.turbo,
 body.simitone {
-  border: none;
+  border-color: #a5a5a5;
 }  
+
+.darwin body.open_beta,
+.darwin body.turbo,
+.darwin body.simitone {
+  border-color: transparent;
+}
