@@ -45,6 +45,41 @@ body {
   color: rgba(255, 255, 255, 0.4);
 }
 
+.darwin #titlebar {
+  justify-content: flex-start;
+}
+
+.darwin #titlebar .controls {
+  flex-direction: row-reverse;
+}
+
+.darwin #titlebar .controls span {
+  width: 14px;
+  height: 14px;
+}
+
+.darwin #titlebar .controls span:hover i {
+  display: block;
+}
+
+.darwin #titlebar .controls i {
+  font-size: 0.6rem;
+  font-weight: 600;
+  display: none;
+}
+
+.darwin #titlebar .controls #control-minimize i {
+  margin-top: -5px;
+}
+
+#titlebar .controls #control-close i {
+  margin-bottom: -1px;
+}
+
+#titlebar .controls #control-minimize i {
+  margin-top: -3px;
+}
+
 #titlebar h1.title {
   display: flex;
   align-items: center;
@@ -62,7 +97,6 @@ body {
 #titlebar .controls {
   display: flex;
   align-items: center;
-  justify-content: center;
   padding-right: 10px;
   -webkit-app-region: no-drag;
   z-index: 100;
@@ -1918,13 +1952,13 @@ ul#sidebar li[page-trigger="downloads"].has-downloads.active::after {
 .open_beta #titlebar .controls span,
 .turbo #titlebar .controls span,
 .simitone #titlebar .controls span {
-  background-color: rgba(0,0,0,0.075);
+  background-color: rgba(0,0,0,0.1);
 }
 
 .open_beta #titlebar .controls span:hover,
 .turbo #titlebar .controls span:hover,
 .simitone #titlebar .controls span:hover {
-  background-color: rgba(0,0,0,0.1);
+  background-color: rgba(0,0,0,0.15);
 }
 
 body.open_beta,
