@@ -50,6 +50,7 @@ module.exports = () => {
     electronApp = await electron.launch( {
       timeout: 60000,
       cwd: exeDir,
+      env: { ...process.env, NODE_ENV: 'development' },
       args: [ appInfo.main, '--fl-test-mode', '--disable-http-cache' ], // Main file from package.json
       executablePath: appInfo.executable // Path to the Electron executable
     } );
