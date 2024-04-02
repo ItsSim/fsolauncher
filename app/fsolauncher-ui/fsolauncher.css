@@ -1312,6 +1312,7 @@ a {
   padding: 15px;
   width: 250px;
   border-radius: 6px;
+  margin-top: 110px;
 }
 
 #tip i {
@@ -1378,30 +1379,6 @@ a {
 
 #notifications-page div.notification:hover {
   background: rgba(255, 255, 255, 0.4);
-}
-
-#detector-response {
-  margin: 20px;
-  padding: 5px;
-  border-radius: 12px;
-  background-color: #f1c40f;
-  display: none;
-  overflow: hidden;
-  height: 90px;
-}
-
-#detector-response p {
-  font-family: 'Munged';
-  color: rgba(0, 0, 0, 0.6);
-  font-size: 14px;
-  line-height: 20px;
-  float: left;
-  width: 80%;
-}
-
-#detector-response .button {
-  margin-top: 22px;
-  margin-right: 20px;
 }
 
 .win32 .win32-only,

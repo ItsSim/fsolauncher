@@ -33,7 +33,6 @@ class FSOLauncher {
     this.minimizeReminder = false;
     this.lastUpdateNotification = false;
     this.isSearchingForUpdates = false;
-    this.isUpdating = false;
     this.hasInternet = false;
     this.updateLocation = false;
     this.reloadCallback = onReload;
@@ -41,8 +40,6 @@ class FSOLauncher {
       location: false,
       version: false,
     };
-    this.remoteSimitoneVersion = null;
-    this.lastDetected = null;
     this.ociFolder = null;
     this.activeTasks = [];
     this.isInstalled = {
@@ -339,7 +336,7 @@ class FSOLauncher {
    */
   async checkLauncherUpdates( wasAutomatic ) {
     if (
-      this.isSearchingForUpdates || this.isUpdating || ! this.hasInternet ||
+      this.isSearchingForUpdates || ! this.hasInternet ||
       this.activeTasks.length !== 0
     ) return;
 
