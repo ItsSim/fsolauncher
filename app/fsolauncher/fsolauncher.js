@@ -1020,7 +1020,7 @@ class FSOLauncher {
         }
         args.unshift( 'Simitone.Windows.exe' );
       } else {
-        file = './freeso.command';
+        file = process.platform === 'darwin' ? './freeso.command' : './freeso-linux.command';
       }
     }
     const spawnOptions = {
