@@ -143,8 +143,13 @@ jobs:
     - name: Build
       run: npm run ${{ matrix.build_command }}
       working-directory: app
-
-    - name: Run e2e tests
+      
+    - name: Run E2E tests on Ubuntu
+      if: matrix.os == 'ubuntu-latest'
+      run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- npm run test:e2e
+      
+    - name: Run E2E tests
+      if: matrix.os != 'ubuntu-latest'
       run: npm run test
       env:
         GITHUB_RATELIMIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
