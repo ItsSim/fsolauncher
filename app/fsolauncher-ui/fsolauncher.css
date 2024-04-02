@@ -1946,5 +1946,5 @@ ul#sidebar li[page-trigger="downloads"].has-downloads.active::after {
 body.open_beta,
 body.turbo,
 body.simitone {
-  border: 1px solid #a5a5a5;
+  border: none;
 }  
