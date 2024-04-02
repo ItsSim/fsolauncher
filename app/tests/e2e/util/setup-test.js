@@ -35,12 +35,11 @@ module.exports = () => {
     appInfo = parseElectronApp( latestBuild );
     exeDir = path.dirname( appInfo.executable );
     appData = exeDir;
-      
     if ( process.platform === 'darwin' ) {
-    	appData = require( 'os' ).homedir() + '/Library/Application Support/FreeSO Launcher';
+      appData = require( 'os' ).homedir() + '/Library/Application Support/FreeSO Launcher';
     }
     if ( process.platform === 'linux' ) {
-    	appData = require( 'os' ).homedir() + '/.fsolauncher';
+      appData = require( 'os' ).homedir() + '/.fsolauncher';
     }
     installDir = process.platform === 'win32' ? 'C:\\Users\\Public\\TéstFõldér' :
       appData + '/GameComponents';
@@ -51,11 +50,11 @@ module.exports = () => {
   test.beforeEach( async () => {
     // Reset console errors at the start of each test
     logs = [];
-    
+
     // Pass in --test-mode for headless testing
     const args = [ appInfo.main, '--disable-http-cache' ];
     if ( process.platform !== 'linux' ) {
-    	logs.push( '--fl-test-mode' );
+      logs.push( '--fl-test-mode' );
     }
     electronApp = await electron.launch( {
       timeout: 60000,
