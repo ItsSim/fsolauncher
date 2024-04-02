@@ -198,7 +198,7 @@ async function createWindow() {
     if ( process.platform === 'win32' ) {
       window.setSkipTaskbar( false );
     }
-    if ( ! isResizing ) {
+    if ( ! isResizing || process.platform === 'win32' ) {
       isResizing = true;
       window.setSize( width, height );
       isResizing = false;
