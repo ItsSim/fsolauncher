@@ -2,7 +2,7 @@
 
 # FreeSO Launcher
 
-The official FreeSO Launcher for Windows and macOS.
+The official FreeSO Launcher for Windows, macOS, and Linux.
 
 <img width="1202" src="https://github.com/ItsSim/fsolauncher/assets/35347872/a63015a6-649b-461e-8887-08198acb65ee">
 <img width="1202" src="https://github.com/ItsSim/fsolauncher/assets/35347872/5f284c25-8b49-432c-be11-1786fc5981b8">
@@ -14,7 +14,7 @@ The official FreeSO Launcher for Windows and macOS.
 
 ## Prerequisites for Development
 
-- Latest Node.js LTS on a Windows or macOS machine.
+- Latest Node.js LTS on a Windows, macOS, or Ubuntu machine.
 
 ## Running the Launcher Locally
 
@@ -29,26 +29,34 @@ After cloning and running `npm install`, build the launcher by following the ste
 
 - **For Windows**: In the `app` folder, run `npm run buildwin`.
 - **For macOS**: In the `app` folder, run `npm run builddarwin`.
+- **For Linux**: In the `app` folder, run `npm run builddeb`.
 
-Built binaries are generated in the `release` folder (`FreeSO Launcher.dmg` for macOS and `FreeSO Launcher Setup.exe` for Windows).
+Built binaries are generated in the `release` folder (`FreeSO Launcher.dmg` for macOS, `FreeSO Launcher Setup.exe` for Windows, and `FreeSO Launcher.deb` for Linux).
 
 Notes on building for multiple platforms:
 * If you're using a macOS machine for development, you can generate builds for both macOS and Windows using the commands above. You need to have [wine](https://formulae.brew.sh/cask/wine-stable) installed before running `npm run buildwin`.
 * If you're using a Windows machine for development, you can only generate builds for Windows via `npm run buildwin`. This is due to the .dmg creation process during macOS builds, which is incompatible with Windows systems.
+* To build the launcher for Linux via `npm run builddeb`, you need to be on a macOS or Linux machine.
 
 ## Latest Releases
 
-Visit the [Releases page](https://github.com/ItsSim/fsolauncher/releases) to download the latest version of FreeSO Launcher for Windows and macOS.
+Visit the [Releases page](https://github.com/ItsSim/fsolauncher/releases) to download the latest version of FreeSO Launcher for Windows, macOS, or Linux.
 
 ## Linux Support
 
-At this time, Linux support is not planned.
+We currently support 64-bit Debian-based distros, like Ubuntu.
 
-## Windows 7/8/8.1 Support
+From version 1.12.x onwards, a .deb package is included in the [release assets](https://github.com/ItsSim/fsolauncher/releases).
 
-As of launcher version 1.11.x and onward, we no longer support Windows 7, 8, and 8.1. Users of these operating systems will need to remain on launcher version 1.10.x or earlier. You can find the last 1.10.x release [here](https://github.com/ItsSim/fsolauncher/releases/tag/1.10.4-prod.2).
+## Dropped Support for Windows 7/8/8.1 and macOS < 10.15
 
-This change follows the discontinuation of support for these versions of Windows by Electron (and Chromium also) starting with Electron 23. For further details, please refer to [this informative article](https://www.electronjs.org/blog/windows-7-to-8-1-deprecation-notice) on the Electron blog.
+As of launcher version 1.11.x and onward, we no longer support:
+* macOS versions < 10.15 (Catalina)
+* Windows 7, 8, and 8.1.
+
+Users of these operating systems will need to remain on launcher version 1.10.x or earlier. You can find the last 1.10.x release [here](https://github.com/ItsSim/fsolauncher/releases/tag/1.10.4-prod.2).
+
+This change follows the discontinuation of support for these versions by Electron (and Chromium also) starting with Electron 23. For further details, please refer to [this informative article](https://www.electronjs.org/blog/windows-7-to-8-1-deprecation-notice) on the Electron blog.
 
 ## FreeSO Launcher Wiki
 
