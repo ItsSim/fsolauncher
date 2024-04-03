@@ -1705,6 +1705,7 @@ i.spin {
   width: 80px;
   position: absolute;
   left: -15px;
+  filter: drop-shadow(4px 4px 2px rgba(0, 0, 0, 0.25));
 }
 #now-trending li .info {
   flex: 1;
@@ -1857,6 +1858,7 @@ ul#sidebar li[page-trigger="downloads"].has-downloads.active::after {
   top: 0px;
   right: -100px;
   background-repeat: no-repeat;
+  filter: drop-shadow(8px 2px 2px rgba(0, 0, 0, 0.25));
 }
 
 
