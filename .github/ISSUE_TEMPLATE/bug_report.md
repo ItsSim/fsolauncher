@@ -1,7 +1,7 @@
 ---
 name: Bug report
 about: Create a report to help us improve
-title: "[Windows/Mac] <Please type your specific issue here>"
+title: "[Bug] <Please type your specific issue here>"
 labels: bug, needs repro
 assignees: ''
 
@@ -10,10 +10,10 @@ assignees: ''
 **Describe the bug**
 A clear and concise description of what the bug is.
 
-**Launcher Version**
+**Launcher version**
 The version where you've encountered the bug, and other versions that may be affected (if known).
 
-**To Reproduce**
+**To reproduce**
 Steps to reproduce the behavior:
 1. Go to '...'
 2. Click on '....'
