@@ -1858,7 +1858,7 @@ ul#sidebar li[page-trigger="downloads"].has-downloads.active::after {
   top: 0px;
   right: -100px;
   background-repeat: no-repeat;
-  filter: drop-shadow(8px 2px 2px rgba(0, 0, 0, 0.25));
+  filter: drop-shadow(4px -2px 2px rgba(0, 0, 0, 0.25));
 }
 
 
