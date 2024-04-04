@@ -444,18 +444,20 @@ let ociConfirm;
     return document.body.getAttribute( 'data-' + id );
   }
 
+  let isFetching = false;
+
   /**
    * @param {boolean} userRequested
    */
   async function fetchWidgetData( userRequested ) {
+    if ( isFetching ) return; // Early return if a fetch is already in progress
+    isFetching = true; // Set the flag to indicate fetching is in progress
+
     const didYouKnow = document.querySelector( '#widget' );
     const blog = document.querySelector( '#blog' );
     const spinner = document.querySelector( '#home-loading' );
     const homeRefreshBtn = document.querySelector( '#refresh-home-button' );
     const homeRefreshBtnIcon = homeRefreshBtn.querySelector( 'i' );
-
-    // homeRefreshBtn.setAttribute( 'disabled', true );
-    // homeRefreshBtn.style.cursor = 'not-allowed';
 
     didYouKnow.style.display = 'none';
     blog.style.display = 'none';
@@ -479,11 +481,7 @@ let ociConfirm;
       didYouKnow.style.display = 'block';
       blog.style.display = 'block';
 
-      // Re-enable refresh button after 3 seconds.
-      // setTimeout( () => {
-      //   homeRefreshBtn.removeAttribute( 'disabled' );
-      //   homeRefreshBtn.style.cursor = 'pointer';
-      // }, 3000 );
+      isFetching = false; // Reset the flag as the fetching is complete
     }
   }
 
