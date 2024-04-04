@@ -13,7 +13,7 @@ test.describe( 'installer', () => {
   const T = setupTest();
 
   test( 'performs a complete installation', async () => {
-    await T.getPage().locator( '[page-trigger="installer"]' ).click();
+    await T.getPage().locator( '[page-trigger="installer"]' ).dblclick();
     await T.getPage().locator( '#full-install-button' ).waitFor();
     await T.getPage().locator( '#full-install-button' ).click();
 
@@ -77,12 +77,12 @@ test.describe( 'installer', () => {
     // Wait for the installer to finish
     await T.getPage().locator( `#${dlId}.stopped` ).waitFor( { timeout: INSTALL_TIMEOUT_MS } );
 
-    await T.getPage().locator( '[page-trigger="simitone"]' ).click();
+    await T.getPage().locator( '[page-trigger="simitone"]' ).dblclick();
     await T.getPage().locator( '#simitone-play-button' ).waitFor();
   } );
 
   test( 'installs Remesh Package', async () => {
-    await T.getPage().locator( '[page-trigger="installer"]' ).click();
+    await T.getPage().locator( '[page-trigger="installer"]' ).dblclick();
     await T.getPage().locator( '.item.installed[install="FSO"]' ).waitFor( { state: 'visible' } );
     await T.getPage().locator( '[install="RMS"]' ).click();
 
