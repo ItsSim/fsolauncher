@@ -640,8 +640,8 @@ button:hover,
   background-color: #52cc00;
 }
 
-button:active,
-.button:active {
+button:not([disabled]):active,
+.button:not([disabled]):active {
   position: relative;
   top: 1px;
 }

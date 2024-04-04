@@ -463,6 +463,8 @@ let ociConfirm;
     blog.style.display = 'none';
     spinner.style.display = 'block';
 
+    homeRefreshBtn.setAttribute( 'disabled', 'disabled' );
+
     if ( userRequested ) {
       spinDegrees += 360;
       homeRefreshBtnIcon.style.transform = `rotate(${spinDegrees}deg)`;
@@ -481,6 +483,7 @@ let ociConfirm;
       didYouKnow.style.display = 'block';
       blog.style.display = 'block';
 
+      homeRefreshBtn.removeAttribute( 'disabled' );
       isFetching = false; // Reset the flag as the fetching is complete
     }
   }
