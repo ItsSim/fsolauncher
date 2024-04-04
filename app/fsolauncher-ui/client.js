@@ -454,8 +454,8 @@ let ociConfirm;
     const homeRefreshBtn = document.querySelector( '#refresh-home-button' );
     const homeRefreshBtnIcon = homeRefreshBtn.querySelector( 'i' );
 
-    homeRefreshBtn.setAttribute( 'disabled', true );
-    homeRefreshBtn.style.cursor = 'not-allowed';
+    // homeRefreshBtn.setAttribute( 'disabled', true );
+    // homeRefreshBtn.style.cursor = 'not-allowed';
 
     didYouKnow.style.display = 'none';
     blog.style.display = 'none';
@@ -480,10 +480,10 @@ let ociConfirm;
       blog.style.display = 'block';
 
       // Re-enable refresh button after 3 seconds.
-      setTimeout( () => {
-        homeRefreshBtn.removeAttribute( 'disabled' );
-        homeRefreshBtn.style.cursor = 'pointer';
-      }, 3000 );
+      // setTimeout( () => {
+      //   homeRefreshBtn.removeAttribute( 'disabled' );
+      //   homeRefreshBtn.style.cursor = 'pointer';
+      // }, 3000 );
     }
   }
 
