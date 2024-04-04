@@ -57,7 +57,6 @@ const updateTrendingLots = async () => {
   }
 };
 
-// Assuming `cachedRSSData` is declared at the top level to store our RSS feed data
 const cachedBlogData = [];
 
 // Helper function to extract all image URLs from content
@@ -88,42 +87,38 @@ const extractExcerpt = content => {
 // Updated function to fetch and cache RSS feed, including multiple image handling
 const updateBlogFeed = async () => {
   try {
-    const feedUrl = 'https://freeso.org/feed/';
+    const feedUrl = 'https://freeso.org/wp-json/wp/v2/posts?_embed&per_page=10';
     const response = await axios.get( feedUrl );
-    const result = await parseStringPromise( response.data );
+    const posts = response.data;
 
-    // Process only the latest 10 items
-    const latestItems = result.rss.channel[0].item.slice(0, 10);
-
-    const items = await Promise.all( latestItems.map( async item => {
-      const content = item['content:encoded'] ? item['content:encoded'][0] : '';
-      const imageUrls = extractImageUrls( content || item.description[0] );
-      const excerpt = extractExcerpt( item.description[0] );
-
-      let imageBase64 = null;
-      for ( const imageUrl of imageUrls ) {
-        imageBase64 = await getImageAsBase64( imageUrl );
-        if ( imageBase64 ) break; // Stop if an image is successfully fetched
-      }
+    const items = await Promise.all( posts.map( async post => {
+      const title = post.title.rendered;
+      const link = post.link;
+      const imageUrl = post.jetpack_featured_media_url || '';
+      const excerpt = extractExcerpt( post.excerpt.rendered );
+      const date = post.date;
+      const authorId = post.author;
+      const imageBase64 = imageUrl ? await getImageAsBase64( imageUrl ) : null;
 
       return {
-        title: item.title[0],
-        link: item.link[0],
-        imageUrl: imageUrls[0], // Still store the first image URL for reference
+        title,
+        link,
+        imageUrl,
         imageBase64,
         excerpt,
-        date: item.pubDate[0],
-        author: item['dc:creator'] ? item['dc:creator'][0] : 'Unknown'
+        date,
+        author: authorId
       };
     } ) );
 
     // Cache the processed items
     cachedBlogData.length = 0; // Clear the current cache
     cachedBlogData.push( ...items );
-  } catch ( error ) {
-    console.error( 'Failed to fetch and process RSS feed:', error );
+  } catch (error) {
+    console.error( 'Failed to fetch and process blog feed from WordPress JSON API:', error );
   }
 };
+
 
 // Schedule the update to run every X minutes
 setInterval( updateTrendingLots, lotsUpdateInterval * 60 * 1000 );
