@@ -230,10 +230,20 @@ async function createWindow() {
   ] ) );
 
   tray.on( 'click', () => {
-    window.isVisible() ? ( [ 'darwin', 'linux' ].includes( process.platform ) ? window.minimize() : window.hide() ) : showWindow();
+    if ( ! window ) return;
+
+    if ( window.isVisible() ) {
+      if ( [ 'darwin', 'linux' ].includes( process.platform ) ) {
+        window.minimize();
+      } else {
+        window.hide();
+      }
+    } else {
+      showWindow();
+    }
   } );
 
-  window.on( 'closed', () => { window = null; } );
+  window.on( 'closed', () => window = null );
 
   window.once( 'ready-to-show', () => {
     launcher
