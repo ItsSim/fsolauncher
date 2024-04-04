@@ -50,7 +50,6 @@
     "mime": "^3.0.0",
     "os-locale": "^5.0.0",
     "pug": "^3.0.2",
-    "rss-parser": "^3.13.0",
     "socket.io-client": "^4.7.4",
     "sudo-prompt": "file:../vendor/sudo-prompt",
     "v8-compile-cache": "^2.3.0",

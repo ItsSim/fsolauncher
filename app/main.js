@@ -134,7 +134,8 @@ function loadLocale( settings ) {
     WS_URL: resourceCentral.WS,
     TRENDING_LOTS_URL: resourceCentral.TrendingLots,
     SCENARIOS_URL: resourceCentral.Scenarios,
-    SIMITONE_PLATFORM_PATH: appData.replace( homeDir, '~' ) + '/GameComponents/The Sims'
+    SIMITONE_PLATFORM_PATH: appData.replace( homeDir, '~' ) + '/GameComponents/The Sims',
+    BLOG_URL: resourceCentral.Blog
   } );
 }
 loadLocale( userSettings );

@@ -58,13 +58,6 @@
   border-right-color: #ff691f;
 }*/
 
-/*.dark #rss .rss-entry h1,
-.dark #settings-page .form h1,
-.dark #downloads > div .tag h1,
-.dark .modal h1 {
-  color: #ff691f;
-}*/
-
 /*.dark #settings-page .form h1 {
   border-color: #ff691f !important;
 }*/
@@ -108,7 +101,7 @@
   background-image: url(../../images/freeso_logo.png) !important;
 }
 
-.dark #did-you-know {
+.dark #widget {
   /*background: #10171e !important;*/
 }
 
@@ -217,10 +210,6 @@
   color: #10171E;
 }
 
-.dark #rss .rss-entry > span {
-  color:rgba(255,255,255,0.6);
-}
-
 .dark div.stag {
   color: #10171e;
 }
@@ -237,7 +226,7 @@
   border-color:#414141
 }
 
-.dark #rss-loading {
+.dark #home-loading {
   color: rgba(255, 255, 255, 0.6);
 }
 
@@ -275,10 +264,6 @@
   background: #6397e6;
 }
 
-.dark .rss-content {
-  color: rgba(255,255,255,0.6)
-}
-
 .dark #settings-page .form div span {
   color: rgba(255,255,255,0.6)
 }
@@ -314,7 +299,7 @@
   background-color: rgba(0, 0, 0, 0.2);
 }
 
-.dark #did-you-know {
+.dark #widget {
   border-left: 1px solid #414141;
 }
 
@@ -333,11 +318,6 @@
   color: #10171E!important;
 }
 
-.dark #rss .rss-entry:not(:last-child):before {
-  border-color: rgba(255, 255, 255, 0.2);
-}
-
-.dark #rss .rss-entry h1,
 .dark #settings-page .form h1,
 .dark #downloads > div .tag h1,
 .dark .modal h1 {

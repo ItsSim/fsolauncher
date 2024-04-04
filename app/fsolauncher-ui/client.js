@@ -48,7 +48,7 @@ let ociConfirm;
     // Start the TSO clock
     updateTSOClock();
     setInterval( updateTSOClock, 1000 );
-    // Fetch initial RSS feed and trending lots
+    // Fetch initial blog feed and trending lots
     fetchWidgetData();
     // Listen for global messages
     socket.on( 'receive global message', data => handleSocketMessage( data ) );
@@ -353,11 +353,9 @@ let ociConfirm;
   }
 
   async function fetchTrendingLots() {
-    // Use async/await instead of Promise.then() for cleaner syntax
     const response = await fetch( getPugVar( 'trending-lots-url' ) );
     const data = await response.json();
 
-    // Directly accessing elements
     const avatarsOnlineElement = document.querySelector( '#now-trending .top span i' );
     const container = document.querySelector( '#now-trending ul' );
 
@@ -391,6 +389,50 @@ let ociConfirm;
     } );
   }
 
+  async function fetchBlog() {
+    try {
+      const response = await fetch( getPugVar( 'blog-url' ) );
+      const data = await response.json();
+      const container = document.querySelector( '#blog-root' );
+
+      // Clear existing articles
+      container.innerHTML = '';
+
+      data.articles.forEach( article => {
+        const articleTemplate = document.querySelector( '#article-template' );
+        const articleElement = document.importNode( articleTemplate.content, true );
+        const excerpt = article.excerpt
+          .replace( /\s{2,}/g, ' ' )
+          .replace( /\n/g, '' )
+          .replace( '&nbsp;', '' );
+
+        // Setting article details
+        articleElement.querySelector( '.article-title' ).textContent = article.title;
+        articleElement.querySelector( '.article-date span' ).textContent = ago( new Date( article.date ) );
+        articleElement.querySelector( '.article-excerpt' ).innerHTML = window.DOMPurify.sanitize( excerpt );
+        articleElement.querySelector( '.article-author span' ).textContent = article.author;
+        let image = 'url(./images/city.jpg)'; // Default image
+        if ( article.imageBase64 ) {
+          image = 'url(data:image/png;base64,' + article.imageBase64 + ')';
+        }
+        articleElement.querySelector( '.article-image' ).style.backgroundImage = image;
+
+        addEventListener( articleElement.querySelector( '.article-title' ), 'click', () => {
+          window.open( article.link, '_blank' );
+        } );
+
+        // Adding the article to the DOM
+        container.appendChild( articleElement );
+      } );
+      document.querySelector( '#blog .alt-content' ).style.display = 'none';
+    } catch ( err ) {
+      console.error( 'error getting blog', err );
+      document.querySelector( '#blog .alt-content' ).style.display = 'block';
+
+      throw err;
+    }
+  }
+
   let spinDegrees = 0;
 
   /**
@@ -406,10 +448,9 @@ let ociConfirm;
    * @param {boolean} userRequested
    */
   async function fetchWidgetData( userRequested ) {
-    const rssUrl = getPugVar( 'rss-url' );
-    const didYouKnow = document.querySelector( '#did-you-know' );
-    const rss = document.querySelector( '#rss' );
-    const spinner = document.querySelector( '#rss-loading' );
+    const didYouKnow = document.querySelector( '#widget' );
+    const blog = document.querySelector( '#blog' );
+    const spinner = document.querySelector( '#home-loading' );
     const homeRefreshBtn = document.querySelector( '#refresh-home-button' );
     const homeRefreshBtnIcon = homeRefreshBtn.querySelector( 'i' );
 
@@ -417,7 +458,7 @@ let ociConfirm;
     homeRefreshBtn.style.cursor = 'not-allowed';
 
     didYouKnow.style.display = 'none';
-    rss.style.display = 'none';
+    blog.style.display = 'none';
     spinner.style.display = 'block';
 
     if ( userRequested ) {
@@ -426,23 +467,17 @@ let ociConfirm;
     }
 
     const fetchTrendingLotsPromise = fetchTrendingLots();
-    const fetchRssPromise = fetch( rssUrl )
-      .then( response => response.text() )
-      .then( text => new window.RSSParser().parseString( text, parseAndDisplayFeed ) )
-      .catch( error => {
-        console.error( 'RSS fetch failed', error );
-        parseAndDisplayFeed( error, null );
-      } );
+    const fetchBlogPromise = fetchBlog();
 
     try {
-      await Promise.all( [ fetchTrendingLotsPromise, fetchRssPromise ] );
+      await Promise.all( [ fetchTrendingLotsPromise, fetchBlogPromise ] );
     } catch ( error ) {
       console.error( 'An error occurred while fetching widget data:', error );
     } finally {
       // Hide spinner and show content
       spinner.style.display = 'none';
       didYouKnow.style.display = 'block';
-      rss.style.display = 'block';
+      blog.style.display = 'block';
 
       // Re-enable refresh button after 3 seconds.
       setTimeout( () => {
@@ -450,45 +485,6 @@ let ociConfirm;
         homeRefreshBtn.style.cursor = 'pointer';
       }, 3000 );
     }
-  }
-
-
-  /**
-   * @param {*} errors
-   * @param {string} response
-   */
-  function parseAndDisplayFeed( errors, response ) {
-    document.querySelector( '#rss .alt-content' ).style.display = errors ? 'block' : 'none';
-
-    if ( errors || ! response ) {
-      return console.error( 'rss feed failed', { errors, response } );
-    }
-
-    // Clear the rss container for the new articles.
-    document.querySelector( '#rss-root' ).innerHTML = '';
-
-    response?.items?.forEach( function ( entry ) {
-      // Get the article template from the DOM
-      const articleTemplate = document.querySelector( '#article-template' );
-      const articleElement  = document.importNode( articleTemplate.content, true );
-
-      // Set the content for the article element
-      articleElement.querySelector( '.article-title' ).textContent = entry.title;
-      articleElement.querySelector( '.article-pubDate' ).textContent = entry.pubDate
-        .replace( '+0000', '' )
-        .slice( 0, -9 );
-      articleElement.querySelector( '.article-link' ).setAttribute( 'href', entry.link );
-
-      const articleContent = entry.content
-        .replace( /\s{2,}/g, ' ' )
-        .replace( /\n/g, '' );
-
-      articleElement.querySelector( '.rss-content' )
-        .innerHTML = window.DOMPurify.sanitize( articleContent ).replace( '&nbsp;', '' );
-
-      // Append the article element to the DOM
-      document.querySelector( '#rss-root' ).appendChild( articleElement );
-    } );
   }
 
   /**

@@ -13,13 +13,6 @@ class IPCBridge {
   }
 
   /**
-   * Loads the FreeSO blog RSS for the main page.
-   */
-  loadRss() {
-    this.window.webContents.send( 'LOAD_RSS' );
-  }
-
-  /**
    * Informs the renderer process that there is not internet connection.
    */
   hasNoInternet() {

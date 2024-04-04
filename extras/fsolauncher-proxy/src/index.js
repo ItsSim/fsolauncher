@@ -67,7 +67,7 @@ const extractImageUrls = content => {
 
 // Helper function to extract excerpt from content
 const extractExcerpt = content => {
-  const targetLength = 138; // Target length of the excerpt
+  const targetLength = 125; // Target length of the excerpt
   const strippedContent = content.replace( /(<([^>]+)>)/gi, '' ).trim(); // Remove HTML tags and trim
 
   if ( strippedContent.length <= targetLength ) {
@@ -81,7 +81,7 @@ const extractExcerpt = content => {
     endIndex = targetLength;
   }
 
-  return strippedContent.substring( 0, endIndex ) + '...';
+  return strippedContent.substring( 0, endIndex ) + ' [...]';
 };
 
 // Updated function to fetch and cache RSS feed, including multiple image handling

@@ -4,7 +4,7 @@
   text-shadow: 2px 2px rgba(0, 0, 0, 0.2) !important;
 }
 
-.simitone #rss .rss-entry h1,
+.simitone .article-title,
 .simitone #settings-page .form h1,
 .simitone #downloads > div .tag h1,
 .simitone .modal h1,
@@ -18,6 +18,14 @@
   ) !important;
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
+}
+.simitone .article-image:not(:last-child)::after {
+  background: linear-gradient(
+    45deg,
+    #2d6e96 0%,
+    #1b9a88 50%,
+    #05d474 100%
+  );
 }
 #simitone-page strong.gradient {
   font-size: 16px !important;

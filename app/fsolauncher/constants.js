@@ -113,7 +113,8 @@ const resourceCentral = {
   'SDL': 'https://beta.freeso.org/LauncherResourceCentral/SDL',
   'WS': 'https://beta.freeso.org/LauncherResourceCentral/ws',
   'TrendingLots': 'https://beta.freeso.org/LauncherResourceCentral/TrendingLots',
-  'Scenarios': 'https://beta.freeso.org/LauncherResourceCentral/Scenarios'
+  'Scenarios': 'https://beta.freeso.org/LauncherResourceCentral/Scenarios',
+  'Blog': 'https://beta.freeso.org/LauncherResourceCentral/Blog'
 };
 const temp = {
   'FSO': `${appData}/temp/artifacts-freeso-%s.zip`,

@@ -63,7 +63,7 @@
   border-right-color: #9d43b3;
 }
 
-.turbo #rss .rss-entry h1,
+.turbo .article-title,
 .turbo #settings-page .form h1,
 .turbo #downloads > div .tag h1,
 .turbo .modal h1 {
@@ -78,9 +78,7 @@
   -webkit-text-fill-color: transparent;
 }
 
-.turbo #settings-page .form h1 {
-}
-
+.turbo .article-image:not(:last-child)::after,
 .turbo h1.jumbotron {
   background: linear-gradient( 
     150deg, 

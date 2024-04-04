@@ -3,7 +3,7 @@ html(lang=LANG_CODE class=PLATFORM + ' ' + LANG_CODE)
   include includes/head.pug
   body(
     class=LAUNCHER_THEME, 
-    data-rss-url=RSS_URL, 
+    data-blog-url=BLOG_URL, 
     data-tw-url=TW_URL, 
     data-ws-url=WS_URL,
     data-trending-lots-url=TRENDING_LOTS_URL,
@@ -39,5 +39,5 @@ html(lang=LANG_CODE class=PLATFORM + ' ' + LANG_CODE)
 
       include includes/one-click-install.pug  
 
-    include includes/placeholders.pug
+    include includes/templates.pug
     include includes/scripts.pug

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------
-  placeholders.pug
+  templates.pug
   --------------------------------------------------------------------------------
   Contains HTML templates that are later used in client.js to dynamically create
   HTML elements on the fly.
@@ -10,11 +10,17 @@ template#toast-template
     span.toast-message {message}
 
 template#article-template
-  .rss-entry
-    h1.article-title {title}
-    span.article-pubDate {date}
-    div.rss-content {content}
-    a.button.article-link(target='_blank') #{READ_MORE}
+  .article 
+    .article-image
+    .article-content 
+      h1.article-title {title}
+      .article-date 
+        i.material-icons calendar_month
+        span {date}
+      .article-excerpt {excerpt}
+      .article-author 
+        i.material-icons person 
+        span {author}
 
 template#notification-template
   .notification
