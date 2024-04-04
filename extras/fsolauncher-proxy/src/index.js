@@ -94,7 +94,15 @@ const updateBlogFeed = async () => {
     const items = await Promise.all( posts.map( async post => {
       const title = post.title.rendered;
       const link = post.link;
-      const imageUrl = post.jetpack_featured_media_url || '';
+      let imageUrl = post.jetpack_featured_media_url || '';
+      if (imageUrl) {
+        // Transform the image URL to use Jetpack's Photon service
+        imageUrl = imageUrl.replace(
+          'https://freeso.org/wp-content/uploads',
+          'https://i0.wp.com/freeso.org/wp-content/uploads'
+        );
+        imageUrl += '?resize=350,200&ssl=1'; // Add resizing parameters
+      }
       const excerpt = extractExcerpt( post.excerpt.rendered );
       const date = post.date;
       const authorId = post.author;
