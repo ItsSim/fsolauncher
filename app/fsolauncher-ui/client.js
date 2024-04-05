@@ -417,9 +417,14 @@ let ociConfirm;
         }
         articleElement.querySelector( '.article-image' ).style.backgroundImage = image;
 
-        addEventListener( articleElement.querySelector( '.article-title' ), 'click', () => {
-          window.open( article.link, '_blank' );
-        } );
+        addEventListener( articleElement.querySelector( '.article-title' ),
+          'click', () => window.open( article.link, '_blank' ) );
+
+        addEventListener( articleElement.querySelector( '.article-image' ),
+          'click', () => window.open( article.link, '_blank' ) );
+
+        articleElement.querySelector( '.article-title' ).setAttribute( 'title', `Open "${article.title}" in a browser` );
+        articleElement.querySelector( '.article-image' ).setAttribute( 'title', `Open "${article.title}" in a browser` );
 
         // Adding the article to the DOM
         container.appendChild( articleElement );

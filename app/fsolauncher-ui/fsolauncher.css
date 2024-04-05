@@ -1821,6 +1821,23 @@ ul#sidebar li[page-trigger="downloads"].has-downloads.active::after {
   border-radius: 12px;
   background-position: center center;
   box-shadow: 0px 3px 3px 0px rgba(255, 255, 255, 0.25) inset;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.article-image:hover:before {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.05);
+  height: 100%;
+  width: 100%;
+  content: 'open_in_new';
+  font-size: 1.3rem;
+  z-index: 2;
+  color: rgba(255, 255, 255, 1);
+  font-family: 'Material Icons';
+  font-weight: 600;
 }
 
 .article-date {
