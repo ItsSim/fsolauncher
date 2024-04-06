@@ -327,6 +327,10 @@ jobs:
         echo "" > release/SHASUMS256.txt
         cd release
         for file in *; do
+          # Skip SHASUMS256.txt and any other specific files you wish to exclude
+          if [[ "$file" == "SHASUMS256.txt" ]]; then
+            continue
+          fi
           if [ -f "$file" ]; then  # Ensure it's a file
             shasum -a 256 "$file" | awk '{print $1, $2}' >> SHASUMS256.txt
           fi
