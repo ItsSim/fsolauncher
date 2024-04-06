@@ -32,27 +32,13 @@ jobs:
           npm run build
         working-directory: extras/fsolauncher-proxy
 
-      - name: Calculate Remeshes SHA256
-        run: |
-          hash=$(shasum -a 256 release/remeshes-*.zip | awk '{print $1}')
-          echo "Remeshes hash: $hash"
-          echo $hash > release/sha256_remeshes.txt
-
-      - name: Calculate Proxy SHA256
-        run: |
-          hash=$(shasum -a 256 release/proxy-* | awk '{print $1}')
-          echo "Proxy hash: $hash"
-          echo $hash > release/sha256_proxy.txt
-
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: extras
+          name: fsolauncher-extras
           path: |
             release/remeshes-*.zip
-            release/sha256_remeshes.txt
             release/proxy-*
-            release/sha256_proxy.txt
 
   build-launcher:
     runs-on: ${{ matrix.os }}
@@ -62,10 +48,10 @@ jobs:
         include:
           - os: windows-latest
             build_command: "buildwin"
-            artifact_name: "fsolauncher-win"
+            artifact_name: "fsolauncher-win32"
           - os: macos-latest
             build_command: "builddarwin"
-            artifact_name: "fsolauncher-mac"
+            artifact_name: "fsolauncher-darwin"
           - os: ubuntu-latest
             build_command: "builddeb"
             artifact_name: "fsolauncher-debian"
@@ -158,28 +144,6 @@ jobs:
         GITHUB_RATELIMIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       working-directory: app
       
-    - name: Calculate hashes and save to files (Windows)
-      if: matrix.os == 'windows-latest'
-      shell: powershell
-      run: |
-        $hash = (Get-FileHash -Path "release/FreeSO Launcher Setup.exe" -Algorithm SHA256).Hash.ToLower()
-        echo "Windows hash: $hash"
-        Set-Content -Path "release/sha256_win32.txt" -Value $hash
-
-    - name: Calculate hashes and save to files (macOS)
-      if: matrix.os == 'macos-latest'
-      run: |
-        hash=$(shasum -a 256 release/FreeSO\ Launcher.dmg | awk '{print $1}')
-        echo "macOS hash: $hash"
-        echo $hash > release/sha256_darwin.txt
-
-    - name: Calculate hash (Debian)
-      if: matrix.os == 'ubuntu-latest'
-      run: |
-        hash=$(shasum -a 256 release/FreeSO\ Launcher.deb | awk '{print $1}')
-        echo "Debian hash: $hash"
-        echo $hash > release/sha256_debian.txt
-      
     - name: List contents of the release directory (Windows)
       if: matrix.os == 'windows-latest'
       run: |
@@ -202,7 +166,6 @@ jobs:
         name: ${{ matrix.artifact_name }}
         path: |
           release/FreeSO Launcher Setup.exe
-          release/sha256_win32.txt
 
     - name: Upload artifacts (macOS)
       uses: actions/upload-artifact@v2
@@ -211,7 +174,6 @@ jobs:
         name: ${{ matrix.artifact_name }}
         path: |
           release/FreeSO Launcher.dmg
-          release/sha256_darwin.txt
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
@@ -220,7 +182,6 @@ jobs:
         name: ${{ matrix.artifact_name }}
         path: |
           release/FreeSO Launcher.deb
-          release/sha256_debian.txt
 
   create-release:
     needs: [build-launcher, build-extras]
@@ -313,76 +274,88 @@ jobs:
     - name: Download artifacts (Windows)
       uses: actions/download-artifact@v2
       with:
-        name: fsolauncher-win
-        path: release/win
+        name: fsolauncher-win32
+        path: release
 
     - name: Download artifacts (macOS)
       uses: actions/download-artifact@v2
       with:
-        name: fsolauncher-mac
-        path: release/mac
+        name: fsolauncher-darwin
+        path: release
 
     - name: Download artifacts (Debian)
       uses: actions/download-artifact@v2
       with:
         name: fsolauncher-debian
-        path: release/debian
+        path: release
 
-    - name: Download Remeshes
+    - name: Download launcher extras
       uses: actions/download-artifact@v2
       with:
-        name: extras
-        path: release/extras
+        name: fsolauncher-extras
+        path: release
 
     - name: Find Remeshes File
       id: find_remeshes_file
       run: |
-        remeshes_file=$(ls release/extras/remeshes-*.zip)
+        remeshes_file=$(ls release/remeshes-*.zip)
         echo "REMESHES_FILE=$remeshes_file" >> $GITHUB_ENV
         echo "Found remeshes file: $remeshes_file"
 
     - name: Find Proxy File
       id: find_proxy_file
       run: |
-        proxy_file=$(ls release/extras/proxy-*)
+        proxy_file=$(ls release/proxy-*)
         echo "PROXY_FILE=$proxy_file" >> $GITHUB_ENV
         echo "Found proxy file: $proxy_file"
+
+    - name: Conglomerate SHA256 Hashes
+      run: |
+        echo "Calculating SHA256 for all files in release directory..."
+        # Start with an empty SHASUMS256.txt file or create it if it doesn't exist
+        echo "" > release/SHASUMS256.txt
+        cd release
+        for file in *; do
+          if [ -f "$file" ]; then  # Ensure it's a file
+            shasum -a 256 "$file" | awk '{print $1, $2}' >> SHASUMS256.txt
+          fi
+        done
+        # Output the contents of SHASUMS256.txt to the console for debugging
+        echo "SHA256 sums of all files:"
+        cat SHASUMS256.txt
+        cd ..
 
     - name: Upload release assets
       uses: actions/github-script@v5
       with:
         script: |
-          const fs = require('fs');
+          const fs = require( 'fs' );
           const launcherVersion = process.env.FULL_VERSION_NAME;
           const launcherNameWindows = `fsolauncher-${launcherVersion}.exe`;
           const launcherNameMac = `fsolauncher-${launcherVersion}.dmg`;
           const launcherNameDebian = `fsolauncher-${launcherVersion}.deb`;
           const remeshesFile = process.env.REMESHES_FILE;
-          const remeshesName = remeshesFile.split('/').pop();
+          const remeshesName = remeshesFile.split( '/' ).pop();
           const proxyFile = process.env.PROXY_FILE;
-          const proxyName = proxyFile.split('/').pop();
+          const proxyName = proxyFile.split( '/' ).pop();
           const assetPaths = [
-            {path: 'release/win/FreeSO Launcher Setup.exe', name: launcherNameWindows,             contentType: 'application/octet-stream'},
-            {path: 'release/win/sha256_win32.txt',          name: launcherNameWindows + '.sha256', contentType: 'text/plain'},
-            {path: 'release/mac/FreeSO Launcher.dmg',       name: launcherNameMac,                 contentType: 'application/octet-stream'},
-            {path: 'release/mac/sha256_darwin.txt',         name: launcherNameMac + '.sha256',     contentType: 'text/plain'},
-            {path: 'release/debian/FreeSO Launcher.deb',    name: launcherNameDebian,              contentType: 'application/octet-stream'},
-            {path: 'release/debian/sha256_debian.txt',      name: launcherNameDebian + '.sha256',  contentType: 'text/plain'},
-            {path: remeshesFile,                            name: remeshesName,                    contentType: 'application/zip'},
-            {path: 'release/extras/sha256_remeshes.txt',    name: remeshesName + '.sha256',        contentType: 'text/plain'},
-            {path: proxyFile,                               name: proxyName,                       contentType: 'application/octet-stream'},
-            {path: 'release/extras/sha256_proxy.txt',       name: proxyName + '.sha256',           contentType: 'text/plain'},
+            { path: 'release/FreeSO Launcher Setup.exe', name: launcherNameWindows, contentType: 'application/octet-stream' },
+            { path: 'release/FreeSO Launcher.dmg',       name: launcherNameMac,     contentType: 'application/octet-stream' },
+            { path: 'release/FreeSO Launcher.deb',       name: launcherNameDebian,  contentType: 'application/octet-stream' },
+            { path: remeshesFile,                        name: remeshesName,        contentType: 'application/zip'},
+            { path: proxyFile,                           name: proxyName,           contentType: 'application/octet-stream' },
+            { path: 'release/SHASUMS256.txt',            name: 'SHASUMS256.txt',    contentType: 'text/plain' },
           ];
           
-          const release = await github.rest.repos.getReleaseByTag({
+          const release = await github.rest.repos.getReleaseByTag( {
             owner: context.repo.owner,
             repo: context.repo.repo,
             tag: process.env.FULL_VERSION_NAME,
-          });
+          } );
 
-          for (const asset of assetPaths) {
-            const content = fs.readFileSync(asset.path);
-            await github.rest.repos.uploadReleaseAsset({
+          for ( const asset of assetPaths ) {
+            const content = fs.readFileSync( asset.path );
+            await github.rest.repos.uploadReleaseAsset( {
               owner: context.repo.owner,
               repo: context.repo.repo,
               release_id: release.data.id,
@@ -392,6 +365,6 @@ jobs:
                 'content-type': asset.contentType,
                 'content-length': content.length
               }
-            });
+            } );
           }
         github-token: ${{ secrets.GITHUB_TOKEN }}
