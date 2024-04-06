@@ -323,9 +323,8 @@ jobs:
     - name: Conglomerate SHA256 Hashes
       run: |
         echo "Calculating SHA256 for all files in release directory..."
-        # Start with an empty SHASUMS256.txt file or create it if it doesn't exist
-        echo "" > release/SHASUMS256.txt
         cd release
+        > SHASUMS256.txt
         for file in *; do
           # Skip SHASUMS256.txt and any other specific files you wish to exclude
           if [[ "$file" == "SHASUMS256.txt" ]]; then
