@@ -5,7 +5,7 @@ test.describe( 'settings', () => {
   const T = setupTest();
 
   test.beforeEach( async () => {
-    await T.getPage().locator( '[page-trigger="settings"]' ).click();
+    await T.getPage().locator( '[page-trigger="settings"]' ).dblclick();
   } );
 
   test( 'changes the theme', async () => {
