@@ -63,7 +63,7 @@ class SDLInstaller {
     this.createProgressItem( locale.current.DL_CLIENT_FILES, 100 );
     return new Promise( ( resolve, reject ) => {
       // SDL2 installation command for Debian-based systems
-      const command = 'sudo apt-get update && sudo apt-get install -y libsdl2-2.0-0 libsdl2-dev';
+      const command = 'apt-get update && apt-get install -y libsdl2-2.0-0 libsdl2-dev';
 
       sudo.exec( command, ( error, stdout, stderr ) => {
         if ( error ) {
@@ -167,8 +167,8 @@ class SDLInstaller {
     return new Promise( ( resolve, reject ) => {
       // headless install
       let cmd = `hdiutil attach ${this.tempPath.replace( / /g, '\\ ' )} && `; // mount SDL dmg
-      cmd += 'sudo rm -rf /Library/Frameworks/SDL2.framework && '; // delete in case it exists to avoid errors
-      cmd += 'sudo cp -R /Volumes/SDL2/SDL2.framework /Library/Frameworks && '; // move SDL2.framework to /Library/Frameworks
+      cmd += 'rm -rf /Library/Frameworks/SDL2.framework && '; // delete in case it exists to avoid errors
+      cmd += 'cp -R /Volumes/SDL2/SDL2.framework /Library/Frameworks && '; // move SDL2.framework to /Library/Frameworks
       cmd += 'hdiutil unmount /Volumes/SDL2'; // unmount SDL dmg
       sudo.exec( cmd, {},
         ( err, stdout, stderr ) => {
