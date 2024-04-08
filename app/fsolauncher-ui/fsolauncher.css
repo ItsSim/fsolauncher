@@ -62,7 +62,6 @@ body {
   height: 14px;
 }
 
-.darwin #titlebar .controls span:hover i,
 .darwin #titlebar .controls span:focus i {
   display: block;
 }
@@ -71,6 +70,10 @@ body {
   font-size: 0.6rem;
   font-weight: 600;
   display: none;
+}
+
+.darwin #titlebar .controls:hover span i {
+  display: block;
 }
 
 .darwin #titlebar .controls #control-minimize i {
