@@ -409,7 +409,13 @@ let ociConfirm;
         // Setting article details
         articleElement.querySelector( '.article-title' ).textContent = article.title;
         articleElement.querySelector( '.article-date span' ).textContent = ago( new Date( article.date ) );
-        articleElement.querySelector( '.article-excerpt' ).innerHTML = window.DOMPurify.sanitize( excerpt );
+        const excerptElement = articleElement.querySelector( '.article-excerpt' );
+        excerptElement.innerHTML = window.DOMPurify.sanitize( excerpt );
+        const openInBrowserText = `Open “${article.title}” in a browser`;
+        excerptElement.innerHTML = excerptElement.innerHTML.replace(
+          '[...]',
+          `<a target="_blank" href="${article.link}" title="${openInBrowserText}">[...]</a>`
+        );
         articleElement.querySelector( '.article-author span' ).textContent = article.author;
         let image = 'url(./images/city.jpg)'; // Default image
         if ( article.imageBase64 ) {
@@ -423,8 +429,8 @@ let ociConfirm;
         addEventListener( articleElement.querySelector( '.article-image' ),
           'click', () => window.open( article.link, '_blank' ) );
 
-        articleElement.querySelector( '.article-title' ).setAttribute( 'title', `Open "${article.title}" in a browser` );
-        articleElement.querySelector( '.article-image' ).setAttribute( 'title', `Open "${article.title}" in a browser` );
+        articleElement.querySelector( '.article-title' ).setAttribute( 'title', openInBrowserText );
+        articleElement.querySelector( '.article-image' ).setAttribute( 'title', openInBrowserText );
 
         // Adding the article to the DOM
         container.appendChild( articleElement );
