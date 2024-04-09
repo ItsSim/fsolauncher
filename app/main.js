@@ -277,6 +277,13 @@ async function createWindow() {
   } );
 }
 
+if ( process.platform === 'linux' ) {
+  app.commandLine.appendSwitch( 'use-gl','desktop' );
+  app.on( 'ready', () => setTimeout( createWindow, 500 ) );
+} else {
+  app.on( 'ready', createWindow );
+}
+
 app.on( 'ready', createWindow );
 
 app.on( 'before-quit', function () {
