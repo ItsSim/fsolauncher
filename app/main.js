@@ -284,8 +284,6 @@ if ( process.platform === 'linux' ) {
   app.on( 'ready', createWindow );
 }
 
-app.on( 'ready', createWindow );
-
 app.on( 'before-quit', function () {
   if ( tray ) tray.destroy();
 } );
