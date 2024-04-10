@@ -7,7 +7,6 @@ The official FreeSO Launcher for Windows, macOS, and Linux.
 <img width="1202" src="https://github.com/ItsSim/fsolauncher/assets/35347872/a63015a6-649b-461e-8887-08198acb65ee">
 <img width="1202" src="https://github.com/ItsSim/fsolauncher/assets/35347872/5f284c25-8b49-432c-be11-1786fc5981b8">
 <img width="1202" src="https://github.com/ItsSim/fsolauncher/assets/35347872/53cbe0a5-3c6c-43d0-8472-972694f4f66f">
-<img width="1202" src="https://github.com/ItsSim/fsolauncher/assets/35347872/32ec1e8b-40a1-449d-b3a5-5ba35e5e7750">
 <img width="1202" src="https://github.com/ItsSim/fsolauncher/assets/35347872/dd7156e2-be51-4400-afde-44ebaaa087d0">
 <img width="1202" src="https://github.com/ItsSim/fsolauncher/assets/35347872/fd92ddaa-8eff-4a9d-9ef5-5e0be5d4c003">
 <img width="1202" src="https://github.com/ItsSim/fsolauncher/assets/35347872/0b0a3e2d-d32c-444c-bd6c-4fad3a1753b5">
