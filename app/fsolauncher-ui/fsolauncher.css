@@ -1931,7 +1931,7 @@ ul#sidebar li[page-trigger="downloads"].has-downloads.active::after {
 .turbo #now-trending li,
 .simitone #now-trending li {
   border-color: rgba(0,0,0,0.1);
-  background: rgba(0, 0, 0, 0.005);
+  background: transparent;
 }
 
 .dark .item-info .container .material-icons,
