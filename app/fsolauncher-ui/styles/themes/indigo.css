@@ -353,7 +353,7 @@
   color: rgba(255, 255, 255, 0.8);
 }
 
-.indigo .article-image:not(:last-child)::after {
+.indigo .article-image::after {
   background: #B388D7;
 }
 

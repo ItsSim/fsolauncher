@@ -372,7 +372,7 @@
   color: #ff691f !important;
 }
 
-.halloween .article-image:not(:last-child)::after,
+.halloween .article-image::after,
 .halloween button.halloween-transparent,
 .halloween .button.halloween-transparent {
   background: #ff691f;

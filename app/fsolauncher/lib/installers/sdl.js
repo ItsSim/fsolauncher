@@ -71,7 +71,7 @@ class SDLInstaller {
 
       sudo.exec( command, ( error, stdout, stderr ) => {
         if ( error ) {
-          console.error( `exec error: ${error}` );
+          console.error( 'error trying to install sdl2 on debian', error );
           return reject( error );
         }
         console.log( `stdout: ${stdout}` );
@@ -89,7 +89,7 @@ class SDLInstaller {
 
       sudo.exec( command, ( error, stdout, stderr ) => {
         if ( error ) {
-          console.error( `exec error: ${error}` );
+          console.error( 'error trying to install sdl2 on arch', error );
           return reject( error );
         }
         console.log( `stdout: ${stdout}` );

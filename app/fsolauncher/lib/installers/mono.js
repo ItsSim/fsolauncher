@@ -69,7 +69,7 @@ class MonoInstaller {
       const command = 'apt-get update && apt-get install -y mono-complete';
       sudo.exec( command, ( error, stdout, stderr ) => {
         if ( error ) {
-          console.error( 'error trying to install mono-complete on linux', error );
+          console.error( 'error trying to install mono-complete on debian', error );
           return reject( error );
         }
         console.info( stdout );
@@ -85,7 +85,7 @@ class MonoInstaller {
       const command = 'pacman -Syu --noconfirm mono';
       sudo.exec( command, ( error, stdout, stderr ) => {
         if ( error ) {
-          console.error( 'Error trying to install mono on Arch Linux', error );
+          console.error( 'error trying to install mono on arch', error );
           return reject( error );
         }
         console.info( stdout );

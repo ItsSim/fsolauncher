@@ -19,7 +19,7 @@
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
 }
-.simitone .article-image:not(:last-child)::after {
+.simitone .article-image::after {
   background: linear-gradient(
     45deg,
     #2d6e96 0%,

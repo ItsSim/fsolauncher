@@ -78,7 +78,7 @@
   -webkit-text-fill-color: transparent;
 }
 
-.turbo .article-image:not(:last-child)::after,
+.turbo .article-image::after,
 .turbo h1.jumbotron {
   background: linear-gradient( 
     150deg, 
