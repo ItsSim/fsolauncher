@@ -1,5 +1,27 @@
 const os = require( 'os' );
 const packageJson = require( '../package.json' );
+const linuxDistro = ( () => {
+  if ( process.platform !== 'linux' )
+    return { id: null, like: null };
+
+  try {
+    const osReleasePath = require( 'path' ).join( '/etc', 'os-release' );
+    const data = require( 'fs-extra' ).readFileSync( osReleasePath, 'utf8' );
+    const lines = data.split( '\n' );
+    const idLine = lines.find( line => line.startsWith( 'ID=' ) );
+    const likeLine = lines.find( line => line.startsWith( 'ID_LIKE=' ) );
+
+    const distroId = idLine ? idLine.split( '=' )[ 1 ].trim().replace( /"/g, '' ).toLowerCase() : null;
+    const distroLike = likeLine ? likeLine.split( '=' )[ 1 ].trim().replace( /"/g, '' ).toLowerCase() : null;
+
+    return { id: distroId, like: distroLike };
+  } catch ( err ) {
+    console.error( 'error reading os-release to determine distro', err );
+    return { id: null, like: null };
+  }
+} )();
+const isArch = linuxDistro.id === 'arch' || linuxDistro.like === 'arch';
+const isDebian = linuxDistro.id === 'debian' || linuxDistro.like === 'debian';
 const linuxLibPath = ( () => {
   const arch = os.arch();
   switch ( arch ) {
@@ -214,5 +236,8 @@ module.exports = {
   releases,
   resourceCentral,
   temp,
-  registry
+  registry,
+  linuxDistro,
+  isArch,
+  isDebian
 };

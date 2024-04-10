@@ -2,7 +2,7 @@ const download = require( '../download' );
 const { strFormat, loadDependency } = require( '../utils' );
 /** @type {import('sudo-prompt')} */
 const sudo = loadDependency( 'sudo-prompt' );
-const { resourceCentral, temp } = require( '../../constants' );
+const { resourceCentral, temp, isArch } = require( '../../constants' );
 const { locale } = require( '../locale' );
 
 /**
@@ -50,7 +50,11 @@ class SDLInstaller {
         await this.download();
         await this.extract();
       } else {
-        await this.aptInstall();
+        if ( isArch ) {
+          await this.pacmanInstall();
+        } else {
+          await this.aptInstall();
+        }
       }
       this.end();
     } catch ( err ) {
@@ -60,10 +64,28 @@ class SDLInstaller {
   }
 
   aptInstall() {
-    this.createProgressItem( locale.current.DL_CLIENT_FILES, 100 );
+    this.createProgressItem( locale.current.INS_SDL_DESCR_LONG, 100 );
     return new Promise( ( resolve, reject ) => {
       // SDL2 installation command for Debian-based systems
       const command = 'apt-get update && apt-get install -y libsdl2-2.0-0 libsdl2-dev';
+
+      sudo.exec( command, ( error, stdout, stderr ) => {
+        if ( error ) {
+          console.error( `exec error: ${error}` );
+          return reject( error );
+        }
+        console.log( `stdout: ${stdout}` );
+        console.error( `stderr: ${stderr}` );
+        resolve();
+      } );
+    } );
+  }
+
+  pacmanInstall() {
+    this.createProgressItem( locale.current.INS_SDL_DESCR_LONG, 100 );
+    return new Promise( ( resolve, reject ) => {
+      // SDL2 installation command for Arch Linux
+      const command = 'pacman -Syu --noconfirm sdl2 sdl2-devel';
 
       sudo.exec( command, ( error, stdout, stderr ) => {
         if ( error ) {

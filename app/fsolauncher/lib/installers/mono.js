@@ -2,7 +2,7 @@ const download = require( '../download' );
 const { strFormat, loadDependency } = require( '../utils' );
 /** @type {import('sudo-prompt')} */
 const sudo = loadDependency( 'sudo-prompt' );
-const { resourceCentral, temp } = require( '../../constants' );
+const { resourceCentral, temp, isArch } = require( '../../constants' );
 const { locale } = require( '../locale' );
 
 /**
@@ -50,7 +50,11 @@ class MonoInstaller {
         await this.download();
         await this.extract();
       } else {
-        await this.aptInstall();
+        if ( isArch ) {
+          await this.pacmanInstall();
+        } else {
+          await this.aptInstall();
+        }
       }
       this.end();
     } catch ( err ) {
@@ -60,12 +64,28 @@ class MonoInstaller {
   }
 
   aptInstall() {
-    this.createProgressItem( locale.current.DL_CLIENT_FILES, 100 );
+    this.createProgressItem( locale.current.INS_MONO_DESCR_LONG, 100 );
     return new Promise( ( resolve, reject ) => {
       const command = 'apt-get update && apt-get install -y mono-complete';
       sudo.exec( command, ( error, stdout, stderr ) => {
         if ( error ) {
           console.error( 'error trying to install mono-complete on linux', error );
+          return reject( error );
+        }
+        console.info( stdout );
+        console.error( stderr );
+        resolve();
+      } );
+    } );
+  }
+
+  pacmanInstall() {
+    this.createProgressItem( locale.current.INS_MONO_DESCR_LONG, 100 );
+    return new Promise( ( resolve, reject ) => {
+      const command = 'pacman -Syu --noconfirm mono';
+      sudo.exec( command, ( error, stdout, stderr ) => {
+        if ( error ) {
+          console.error( 'Error trying to install mono on Arch Linux', error );
           return reject( error );
         }
         console.info( stdout );
