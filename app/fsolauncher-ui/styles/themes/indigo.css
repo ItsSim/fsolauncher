@@ -340,6 +340,15 @@
   color: #1d1723!important;
 }
 
+.indigo .article { 
+  border-color: #43384C;
+}
+
+.indigo #now-trending,
+.indigo #now-trending li {
+  border-color: #43384C;
+}
+
 .indigo .article-title {
   color: rgba(255, 255, 255, 0.8);
 }

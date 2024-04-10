@@ -1562,6 +1562,7 @@ i.spin {
   display: flex;
   height: 100%;
   flex-direction: column;
+  background: rgba(0, 0, 0, 0.05);
 }
 
 #now-trending .content {
@@ -1609,7 +1610,7 @@ i.spin {
 }
 
 #now-trending li:nth-child(even) {
-  background: rgb(30 58 82 / 2%);
+  /* background: rgb(30 58 82 / 2%); */
 }
 
 #now-trending li .icon {
@@ -1793,8 +1794,7 @@ ul#sidebar li[page-trigger="downloads"].has-downloads.active::after {
   margin-top: 10px;
 }
 .article:nth-child(even) {
-  background-color: rgba(0, 0, 0, 0.1);
-  /* border-radius: 12px; */
+  /*background-color: rgba(0, 0, 0, 0.1);*/
 }
 
 .article {
@@ -1810,7 +1810,6 @@ ul#sidebar li[page-trigger="downloads"].has-downloads.active::after {
   line-height: 1.4rem;
   color: #4C8DEE;
   cursor: pointer;
-  transition: filter 0.2s;
 }
 
 .article-title:hover {
@@ -1821,10 +1820,10 @@ ul#sidebar li[page-trigger="downloads"].has-downloads.active::after {
   width: 100px;
   height: 100px;
   background-size: cover;
-  border-radius: 12px;
+  border-radius: 24px;
   background-position: center center;
-  box-shadow: 0px 3px 3px 0px rgba(255, 255, 255, 0.25) inset;
-  overflow: hidden;
+  box-shadow: 0px 3px 3px 0px rgba(255, 255, 255, 0.3) inset;
+  /* overflow: hidden; */
   cursor: pointer;
 }
 
@@ -1834,6 +1833,7 @@ ul#sidebar li[page-trigger="downloads"].has-downloads.active::after {
   justify-content: center;
   background-color: rgba(255, 255, 255, 0.05);
   height: 100%;
+  border-radius: 24px;
   width: 100%;
   content: 'open_in_new';
   font-size: 1.3rem;
@@ -1931,6 +1931,7 @@ ul#sidebar li[page-trigger="downloads"].has-downloads.active::after {
 .turbo #now-trending li,
 .simitone #now-trending li {
   border-color: rgba(0,0,0,0.1);
+  background: rgba(0, 0, 0, 0.005);
 }
 
 .dark .item-info .container .material-icons,
@@ -1992,19 +1993,23 @@ body.simitone {
 .open_beta .article:nth-child(even),
 .turbo .article:nth-child(even),
 .simitone .article:nth-child(even) {
-  background-color: rgb(30 58 82 / 2%);
+  /* background-color: rgb(30 58 82 / 2%); */
 }
 
 
 .article {
   position: relative;
-  /* padding-bottom: 20px; */
-  border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+  border-bottom: 1px dashed rgba(193, 193, 193, 0.27);
+  background: rgba(0,0,0,0.05);
+}
+.article:last-child {
+  /* border-bottom: 0; */
 }
 .open_beta .article,
 .turbo .article,
 .simitone .article {
   border-color: rgba(0, 0, 0, 0.1);
+  background: transparent;
 }
 
 .article-image {
