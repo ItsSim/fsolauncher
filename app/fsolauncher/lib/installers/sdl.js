@@ -85,7 +85,7 @@ class SDLInstaller {
     this.createProgressItem( locale.current.INS_SDL_DESCR_LONG, 100 );
     return new Promise( ( resolve, reject ) => {
       // SDL2 installation command for Arch Linux
-      const command = 'pacman -Syu --noconfirm sdl2 sdl2-devel';
+      const command = 'pacman -Syu --noconfirm sdl2';
 
       sudo.exec( command, ( error, stdout, stderr ) => {
         if ( error ) {
