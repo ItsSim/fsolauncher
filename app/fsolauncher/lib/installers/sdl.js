@@ -2,7 +2,7 @@ const download = require( '../download' );
 const { strFormat, loadDependency } = require( '../utils' );
 /** @type {import('sudo-prompt')} */
 const sudo = loadDependency( 'sudo-prompt' );
-const { resourceCentral, temp, isArch, isArm, linuxLibPath } = require( '../../constants' );
+const { resourceCentral, temp, isArch, isArm, linuxLibPath, appData } = require( '../../constants' );
 const { locale } = require( '../locale' );
 const { symlink } = require( 'fs-extra' );
 
