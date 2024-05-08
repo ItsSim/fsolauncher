@@ -2,8 +2,9 @@ const download = require( '../download' );
 const { strFormat, loadDependency } = require( '../utils' );
 /** @type {import('sudo-prompt')} */
 const sudo = loadDependency( 'sudo-prompt' );
-const { resourceCentral, temp, isArch } = require( '../../constants' );
+const { resourceCentral, temp, isArch, isArm, linuxLibPath } = require( '../../constants' );
 const { locale } = require( '../locale' );
+const { symlink } = require( 'fs-extra' );
 
 /**
  * Installs SDL on macOS systems.
@@ -50,11 +51,7 @@ class SDLInstaller {
         await this.download();
         await this.extract();
       } else {
-        if ( isArch ) {
-          await this.pacmanInstall();
-        } else {
-          await this.aptInstall();
-        }
+        await this.linuxInstall();
       }
       this.end();
     } catch ( err ) {
@@ -63,39 +60,26 @@ class SDLInstaller {
     }
   }
 
-  aptInstall() {
+  linuxInstall() {
     this.createProgressItem( locale.current.INS_SDL_DESCR_LONG, 100 );
     return new Promise( ( resolve, reject ) => {
       // SDL2 installation command for Debian-based systems
-      const command = 'apt-get update && apt-get install -y libsdl2-2.0-0 libsdl2-dev';
+      const command = isArch ? 'pacman -Syu --noconfirm sdl2' : 'apt-get update && apt-get install -y libsdl2-2.0-0';
 
       sudo.exec( command, ( error, stdout, stderr ) => {
         if ( error ) {
-          console.error( 'error trying to install sdl2 on debian', error );
+          console.error( 'error trying to install sdl2 on', isArch ? 'arch' : 'debian', error );
           return reject( error );
         }
         console.log( `stdout: ${stdout}` );
         console.error( `stderr: ${stderr}` );
         resolve();
       } );
-    } );
-  }
 
-  pacmanInstall() {
-    this.createProgressItem( locale.current.INS_SDL_DESCR_LONG, 100 );
-    return new Promise( ( resolve, reject ) => {
-      // SDL2 installation command for Arch Linux
-      const command = 'pacman -Syu --noconfirm sdl2';
-
-      sudo.exec( command, ( error, stdout, stderr ) => {
-        if ( error ) {
-          console.error( 'error trying to install sdl2 on arch', error );
-          return reject( error );
-        }
-        console.log( `stdout: ${stdout}` );
-        console.error( `stderr: ${stderr}` );
-        resolve();
-      } );
+      // Seems to be required only for Arm/Arm64 since x86_64 uses vendored version from MacExtras
+      if ( isArm ) {
+        symlink( `${appData}/GameComponents/FreeSO/libSDL2.so`, `${linuxLibPath}/libSDL2.so.0` );
+      }
     } );
   }
 
