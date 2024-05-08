@@ -22,6 +22,7 @@ const linuxDistro = ( () => {
 } )();
 const isArch = linuxDistro.id === 'arch' || linuxDistro.like === 'arch';
 const isDebian = linuxDistro.id === 'debian' || linuxDistro.like === 'debian';
+const isArm = os.arch().includes('arm');
 const linuxLibPath = ( () => {
   const arch = os.arch();
   switch ( arch ) {
@@ -239,5 +240,6 @@ module.exports = {
   registry,
   linuxDistro,
   isArch,
-  isDebian
+  isDebian,
+  isArm
 };
