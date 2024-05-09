@@ -22,7 +22,6 @@ const linuxDistro = ( () => {
 } )();
 const isArch = linuxDistro.id === 'arch' || linuxDistro.like === 'arch';
 const isDebian = linuxDistro.id === 'debian' || linuxDistro.like === 'debian';
-const isArm = os.arch().includes('arm');
 const linuxLibPath = ( () => {
   const arch = os.arch();
   switch ( arch ) {
@@ -81,7 +80,7 @@ const version = packageJson.version;
 const defaultRefreshRate = 60;
 const defaultGameLanguage = 'English';
 const dependencies = {
-  'FSO': [ 'TSO', ...( [ 'darwin', 'linux' ].includes( process.platform ) ? [ 'Mono', 'SDL' ] : [ 'OpenAL' ] ) ],
+  'FSO': [ 'TSO', ...( [ 'darwin', 'linux' ].includes( process.platform ) ? [ 'Mono', 'SDL' ] : [ 'OpenAL' ] )],
   'RMS': [ 'FSO' ],
   'MacExtras': [ 'FSO' ],
   'Simitone': ( [ 'darwin', 'linux' ].includes( process.platform ) ) ? [ 'Mono', 'SDL' ] : []
@@ -240,6 +239,5 @@ module.exports = {
   registry,
   linuxDistro,
   isArch,
-  isDebian,
-  isArm
+  isDebian
 };
