@@ -68,7 +68,7 @@ class MacExtrasInstaller {
   armPatch() {
     if ( process.platform == 'linux' && process.arch.startsWith('arm') ) {
       // This file is relatively small so it's not really worth creating a new file just for it
-      fs.writeFileSync( `${path}/MonoGame.Framework.dll.config`,
+      fs.writeFileSync( `${this.path}/MonoGame.Framework.dll.config`,
         '<?xml version="1.0" encoding="utf-8"?>' +
         '<configuration>' +
         `  <dllmap dll="SDL2.dll" os="linux" target="${linuxLibPath}/libSDL2-2.0.so.0"/>` +
