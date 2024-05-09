@@ -2,9 +2,8 @@ const download = require( '../download' );
 const { strFormat, loadDependency } = require( '../utils' );
 /** @type {import('sudo-prompt')} */
 const sudo = loadDependency( 'sudo-prompt' );
-const { resourceCentral, temp, isArch, isArm, linuxLibPath, appData } = require( '../../constants' );
+const { resourceCentral, temp, isArch } = require( '../../constants' );
 const { locale } = require( '../locale' );
-const { symlink } = require( 'fs-extra' );
 
 /**
  * Installs SDL on macOS systems.
@@ -75,11 +74,6 @@ class SDLInstaller {
         console.error( `stderr: ${stderr}` );
         resolve();
       } );
-
-      // Seems to be required only for Arm/Arm64 since x86_64 uses vendored version from MacExtras
-      if ( isArm ) {
-        symlink( `${appData}/GameComponents/FreeSO/libSDL2.so`, `${linuxLibPath}/libSDL2.so.0` );
-      }
     } );
   }
 

@@ -1,8 +1,9 @@
 const download = require( '../download' );
 const unzip = require( '../unzip' );
 const { strFormat } = require( '../utils' );
-const { resourceCentral, temp, appData } = require( '../../constants' );
+const { resourceCentral, temp, appData, linuxLibPath } = require( '../../constants' );
 const { locale } = require( '../locale' );
+const fs = require ( 'fs-extra' );
 
 /**
  * Installs macOS Extras on macOS systems.
@@ -50,9 +51,10 @@ class MacExtrasInstaller {
    */
   async install() {
     try {
-      await this.step1();
-      await this.step2();
-      await this.step3();
+      await this.download();
+      await this.setupDir();
+      await this.extract();
+      this.armPatch();
       this.end();
     } catch ( err ) {
       this.error( err );
@@ -61,30 +63,19 @@ class MacExtrasInstaller {
   }
 
   /**
-   * Download all the files.
-   *
-   * @returns {Promise<void>} A promise that resolves when the download is complete.
+   *  Replace MonoGame.Framework.dll.config on Arm Linux
    */
-  step1() {
-    return this.download();
-  }
-
-  /**
-   * Create the installation directory.
-   *
-   * @returns {Promise<void>} A promise that resolves when the directory is created.
-   */
-  step2() {
-    return this.setupDir( this.path );
-  }
-
-  /**
-   * Extract files into installation directory.
-   *
-   * @returns {Promise<void>} A promise that resolves when the files are extracted.
-   */
-  step3() {
-    return this.extract();
+  armPatch() {
+    if ( process.platform == 'linux' && process.arch.startsWith('arm') ) {
+      // This file is relatively small so it's not really worth creating a new file just for it
+      fs.writeFileSync( `${path}/MonoGame.Framework.dll.config`,
+        '<?xml version="1.0" encoding="utf-8"?>' +
+        '<configuration>' +
+        `  <dllmap dll="SDL2.dll" os="linux" target="${linuxLibPath}/libSDL2-2.0.so.0"/>` +
+        `  <dllmap dll="soft_oal.dll" os="linux" target="${linuxLibPath}/libopenal.so.1"/>` +
+        '</configuration>'
+       );
+    }
   }
 
   /**
@@ -187,7 +178,6 @@ class MacExtrasInstaller {
    * Deletes the downloaded artifacts file.
    */
   cleanup() {
-    const fs = require( 'fs-extra' );
     fs.stat( this.tempPath, ( err, _stats ) => {
       if ( err ) {
         return;
