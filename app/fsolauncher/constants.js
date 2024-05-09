@@ -238,6 +238,7 @@ module.exports = {
   temp,
   registry,
   linuxDistro,
+  linuxLibPath,
   isArch,
   isDebian
 };
