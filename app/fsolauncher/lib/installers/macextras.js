@@ -69,10 +69,10 @@ class MacExtrasInstaller {
     if ( process.platform == 'linux' && process.arch.startsWith('arm') ) {
       // This file is relatively small so it's not really worth creating a new file just for it
       fs.writeFileSync( `${this.path}/MonoGame.Framework.dll.config`,
-        '<?xml version="1.0" encoding="utf-8"?>' +
-        '<configuration>' +
-        `  <dllmap dll="SDL2.dll" os="linux" target="${linuxLibPath}/libSDL2-2.0.so.0"/>` +
-        `  <dllmap dll="soft_oal.dll" os="linux" target="${linuxLibPath}/libopenal.so.1"/>` +
+        '<?xml version="1.0" encoding="utf-8"?>\n' +
+        '<configuration>\n' +
+        `  <dllmap dll="SDL2.dll" os="linux" target="${linuxLibPath}/libSDL2-2.0.so.0"/>\n` +
+        `  <dllmap dll="soft_oal.dll" os="linux" target="${linuxLibPath}/libopenal.so.1"/>\n` +
         '</configuration>'
        );
     }
