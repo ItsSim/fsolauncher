@@ -125,7 +125,7 @@ class MacExtrasInstaller {
    */
   setupDir() {
     return new Promise( ( resolve, reject ) => {
-      require( 'fs-extra' ).ensureDir( his.path, err => {
+      require( 'fs-extra' ).ensureDir( this.path, err => {
         if ( err ) return reject( err );
         resolve();
       } );
