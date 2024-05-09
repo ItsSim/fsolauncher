@@ -80,7 +80,7 @@ const version = packageJson.version;
 const defaultRefreshRate = 60;
 const defaultGameLanguage = 'English';
 const dependencies = {
-  'FSO': [ 'TSO', ...( [ 'darwin', 'linux' ].includes( process.platform ) ? [ 'Mono', 'SDL' ] : [ 'OpenAL' ] )],
+  'FSO': [ 'TSO', ...( [ 'darwin', 'linux' ].includes( process.platform ) ? [ 'Mono', 'SDL' ] : [ 'OpenAL' ] ) ],
   'RMS': [ 'FSO' ],
   'MacExtras': [ 'FSO' ],
   'Simitone': ( [ 'darwin', 'linux' ].includes( process.platform ) ) ? [ 'Mono', 'SDL' ] : []
