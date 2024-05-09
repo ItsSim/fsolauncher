@@ -121,13 +121,11 @@ class MacExtrasInstaller {
   /**
    * Creates all the directories and subfolders in a path.
    *
-   * @param {string} dir The path to create.
-   *
    * @returns {Promise<void>} A promise that resolves when the directory is created.
    */
-  setupDir( dir ) {
+  setupDir() {
     return new Promise( ( resolve, reject ) => {
-      require( 'fs-extra' ).ensureDir( dir, err => {
+      require( 'fs-extra' ).ensureDir( his.path, err => {
         if ( err ) return reject( err );
         resolve();
       } );
