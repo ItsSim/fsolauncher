@@ -173,7 +173,7 @@ const registry = {
     'OpenAL': 'HKLM\\SOFTWARE\\OpenAL',
     'NET': 'HKLM\\SOFTWARE\\Microsoft\\NET Framework Setup\\NDP',
     'Mono': process.platform === 'darwin' ? '/Library/Frameworks/Mono.framework' : '/usr/bin/mono',
-    'SDL': process.platform === 'darwin' ? '/Library/Frameworks/SDL2.framework' : `${linuxLibPath}/libSDL2.so`
+    'SDL': process.platform === 'darwin' ? '/Library/Frameworks/SDL2.framework' : `${linuxLibPath}/libSDL2-2.0.so.0`
   },
   fallbacks: process.platform === 'win32' ? {
     // Windows fallbacks
