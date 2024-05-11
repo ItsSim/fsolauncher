@@ -1232,6 +1232,10 @@ class FSOLauncher {
 
   getAppropriateTheme() {
     const shouldBeDark = nativeTheme.shouldUseDarkColors;
+    // Fix for Linux where shouldBeDark randomly changes to false out of the sudden
+    if ( process.platform === 'linux' && nativeTheme.themeSource === 'system' ) {
+      nativeTheme.themeSource = shouldBeDark ? 'dark' : 'light';
+    }
     if ( shouldBeDark && ! this.isDarkMode() ) return 'dark';
     if ( ! shouldBeDark && this.isDarkMode() ) return 'open_beta';
 
