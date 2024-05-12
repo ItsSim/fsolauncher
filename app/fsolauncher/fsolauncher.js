@@ -1149,7 +1149,7 @@ class FSOLauncher {
    * Once the DOM is ready, this method is called.
    */
   initDOM() {
-    this.IPC.setTheme( this.userSettings.Launcher.Theme );
+    this.IPC.setTheme( this.userSettings.Launcher.Theme === 'auto' ? nativeTheme.shouldUseDarkColors ? 'dark' : 'open_beta' : this.userSettings.Launcher.Theme );
     this.IPC.setMaxRefreshRate( getDisplayRefreshRate() );
     this.IPC.restoreConfiguration( this.userSettings );
     this.checkRemeshInfo();
@@ -1221,25 +1221,9 @@ class FSOLauncher {
   }
 
   changeToAppropriateTheme() {
-    const currentTheme = this.userSettings.Launcher.Theme;
-    const appropriateTheme = this.getAppropriateTheme();
-
-    if ( currentTheme !== appropriateTheme ) {
-      this.updateAndPersistConfig( 'Launcher', 'Theme', appropriateTheme );
-      this.IPC.setTheme( appropriateTheme );
+    if ( this.userSettings.Launcher.Theme === 'auto' ) {
+      this.IPC.setTheme( nativeTheme.shouldUseDarkColors ? 'dark' : 'open_beta' );
     }
-  }
-
-  getAppropriateTheme() {
-    const shouldBeDark = nativeTheme.shouldUseDarkColors;
-    // Fix for Linux where shouldBeDark randomly changes to false out of the sudden
-    if ( process.platform === 'linux' && nativeTheme.themeSource === 'system' ) {
-      nativeTheme.themeSource = shouldBeDark ? 'dark' : 'light';
-    }
-    if ( shouldBeDark && ! this.isDarkMode() ) return 'dark';
-    if ( ! shouldBeDark && this.isDarkMode() ) return 'open_beta';
-
-    return this.userSettings.Launcher.Theme;
   }
 
   titleBarMinimize() {
