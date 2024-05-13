@@ -314,6 +314,10 @@ let ociConfirm;
     const date = new Date();
     const m = date.getMonth();
     const d = date.getDate();
+    if ( theme === 'auto' ) {
+      // Snippet source: https://stackoverflow.com/questions/50730640/how-can-i-detect-if-dark-mode-is-enabled-on-my-website
+      theme = window.matchMedia && window.matchMedia( '(prefers-color-scheme: dark)' ).matches ? 'dark' : 'open_beta';
+    }
     if ( ! forced ) {
       // Halloween theme activates in October.
       if ( ( m == 9 && d >= 15 && d <= 31 ) || ( m == 10 && d == 1 ) ) {

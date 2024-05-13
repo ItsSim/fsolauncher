@@ -90,7 +90,7 @@ try {
   // predefined values
   userSettings = {
     Launcher: {
-      Theme: nativeTheme.shouldUseDarkColors ? 'dark' : 'open_beta',
+      Theme: 'auto',
       DesktopNotifications: '1',
       Persistence: [ 'darwin', 'linux' ].includes( process.platform ) ? '0' : '1',
       DirectLaunch: '0',
@@ -123,7 +123,7 @@ function loadLocale( settings ) {
     CSP_STRING: require( './csp.config' ),
     LAUNCHER_VERSION: version,
     ELECTRON_VERSION: process.versions.electron,
-    LAUNCHER_THEME: settings.Launcher.Theme,
+    LAUNCHER_THEME: settings.Launcher.Theme === 'auto' ? nativeTheme.shouldUseDarkColors ? 'dark' : 'open_beta' : settings.Launcher.Theme,
     PLATFORM: process.platform,
     DARK_THEMES: darkThemes.join( ',' ),
     SENTRY: require( './sentry.config' ).browserLoader,
