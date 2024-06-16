@@ -27,7 +27,7 @@
     "@electron/packager": "^18.3.1",
     "@playwright/test": "^1.36.1",
     "cpy-cli": "^3.1.1",
-    "electron": "^31.0.0",
+    "electron": "^30.0.0",
     "electron-playwright-helpers": "^1.6.0",
     "eslint": "^7.32.0",
     "playwright": "^1.36.1"
