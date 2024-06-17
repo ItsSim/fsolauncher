@@ -12,10 +12,10 @@ module.exports = function( { from, to, purge = true },
 ) {
   const _dir = from.substring( 0, from.lastIndexOf( '/' ) + 1 );
   const _ucp = [];
-  let _fileBuffer = [],
-    _fileIndex = 0,
+  let _fileIndex = 0,
     _fileOffset = 0,
     _dataLeftToFill = 0,
+    _fileBuffer = null,
     _prevData = null,
     _continued = false,
     _dc = [],
@@ -35,14 +35,14 @@ module.exports = function( { from, to, purge = true },
     view.set( temp );
     return view;
   };
+
   /**
    * Extracts files from a cabinet recursively.
    * Once it reaches the end, continues to the next cabinet.
    *
    * @param {Object} cab The cab metadata.
-   * @param {ArrayBuffer} data The cab data to extract.
    */
-  const _extractNextFile = async ( cab, data ) => {
+  const _extractNextFile = async ( cab ) => {
     const file = cab.files[ _fileIndex ];
     onProgress( { read: _cabsRead, current: cab.name, file: file.name } );
     const ofi = _fileIndex;
@@ -71,7 +71,7 @@ module.exports = function( { from, to, purge = true },
       }
     } else {
       const chunk = chunks[ 0 ];
-      const view = new Uint8Array( data, chunk.offset, chunk.cBytes );
+      const view = await readChunk( cab.name, chunk.offset, chunk.cBytes );
       const comb = new Uint8Array( view.length + _prevData.length );
       comb.set( _prevData );
       comb.subarray( _prevData.length ).set( view );
@@ -88,7 +88,7 @@ module.exports = function( { from, to, purge = true },
 
     while ( _dc[ folder ] < chunks.length && _dataLeftToFill !== 0 ) {
       const chunk = chunks[ _dc[ folder ]++ ];
-      const view = new Uint8Array( data, chunk.offset, chunk.cBytes );
+      const view = await readChunk( cab.name, chunk.offset, chunk.cBytes );
       if ( chunk.ucBytes !== 0 ) {
         _uncompressed = _MSZipDecomp( view, chunk.ucBytes );
         const toCopy = Math.min( _uncompressed.length, _dataLeftToFill );
@@ -112,7 +112,7 @@ module.exports = function( { from, to, purge = true },
       await fs.writeFile( to + '/' + file.name, Buffer.from( _fileBuffer ) );
 
       if ( _fileIndex !== 0 ) {
-        await _extractNextFile( cab, data );
+        await _extractNextFile( cab );
       } else {
         if ( cab.nextCab ) {
           _continued = false;
@@ -127,12 +127,31 @@ module.exports = function( { from, to, purge = true },
       await _readCabinet( _dir + cab.nextCab );
     }
   };
+
+  /**
+   * Reads a chunk of a file.
+   *
+   * @param {string} file The file name to read.
+   * @param {number} offset The offset to start reading.
+   * @param {number} length The number of bytes to read.
+   * @returns {Promise<Uint8Array>} The read chunk as a Uint8Array.
+   */
+  const readChunk = ( file, offset, length ) => {
+    return new Promise( ( resolve, reject ) => {
+      const stream = fs.createReadStream( file, { start: offset, end: offset + length - 1 } );
+      const chunks = [];
+      stream.on( 'data', chunk => chunks.push( chunk ) );
+      stream.on( 'end', () => resolve( Buffer.concat( chunks ) ) );
+      stream.on( 'error', reject );
+    } );
+  };
+
   /**
    * Reads a cabinet file, requests extraction for files contained in it.
    *
    * @param {string} file The file name to read.
    */
-  const _readCabinet = async file => {
+  const _readCabinet = async ( file ) => {
     _cabsRead++;
     _fileIndex = 0;
     _dc = [];
@@ -141,11 +160,10 @@ module.exports = function( { from, to, purge = true },
 
     let read = 0;
     let view = null;
-    let data = null;
 
     try {
-      data = ( await fs.readFile( file ) ).buffer;
-      view = new DataView( data );
+      const data = await readChunk( file, 0, await fs.stat( file ).then( stat => stat.size ) );
+      view = new DataView( data.buffer );
       read += 4;
       cab.reserved1   = view.getUint32( read, true ); read += 4;
       cab.size        = view.getUint32( read, true ); read += 4;
@@ -213,8 +231,6 @@ module.exports = function( { from, to, purge = true },
         const tempread = read;
         read = f.cfOffset;
         f.chunks = [];
-        const uncompData = [];
-        const totalBytes = 0;
         for ( let j = 0; j < f.cfBlocks; j++ ) {
           const c = {};
           read += 4;
@@ -223,13 +239,6 @@ module.exports = function( { from, to, purge = true },
           c.offset  = read; read += c.cBytes;
           f.chunks.push( c );
         }
-        const buf = new ArrayBuffer( totalBytes );
-        const offset = 0;
-        for ( let j = 0; j < uncompData.length; j++ ) {
-          const temp = new Uint8Array( buf, offset, uncompData[ j ].length );
-          temp.set( uncompData[ j ] );
-        }
-        f.uncompData = new Uint8Array( buf );
         read = tempread;
       }
       read = cab.offsetFiles;
@@ -249,10 +258,11 @@ module.exports = function( { from, to, purge = true },
         f.name = f.name.replace( /\\/g, '/' );
         cab.files.push( f );
       }
-      await _extractNextFile( cab, data );
+      await _extractNextFile( cab );
     } catch ( err ) {
       captureWithSentry( err, { file } );
       onEnd( err );
     }
-  }; _readCabinet( from );
+  };
+  _readCabinet( from );
 };
