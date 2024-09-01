@@ -52,6 +52,7 @@ module.exports = () => {
   } );
 
   test.beforeEach( async () => {
+    console.info( '[beforeEach] starting beforeEach' );
     // Reset console errors at the start of each test
     logs = [];
 
