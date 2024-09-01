@@ -31,7 +31,7 @@ module.exports = () => {
 
   test.beforeAll( () => {
     latestBuild = findLatestBuild( '../release' );
-    console.log( 'latestBuild', latestBuild );
+    console.log( '[beforeAll] latestBuild', latestBuild );
     appInfo = parseElectronApp( latestBuild );
     exeDir = path.dirname( appInfo.executable );
     appData = exeDir;
@@ -45,6 +45,10 @@ module.exports = () => {
       appData + '/GameComponents';
 
     fs.existsSync( `${appData}/FSOLauncher.ini` ) && fs.unlinkSync( `${appData}/FSOLauncher.ini` );
+    console.info( '[beforeAll] exeDir', exeDir );
+    console.info( '[beforeAll] appInfo', appInfo );
+    console.info( '[beforeAll] appData', appData );
+    console.info( '[beforeAll] installDir', installDir );
   } );
 
   test.beforeEach( async () => {
