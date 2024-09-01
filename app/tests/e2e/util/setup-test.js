@@ -52,41 +52,36 @@ module.exports = () => {
   } );
 
   test.beforeEach( async () => {
-    try {
-      console.info( '[beforeEach] starting beforeEach' );
-      // Reset console errors at the start of each test
-      logs = [];
+    console.info( '[beforeEach] starting beforeEach' );
+    // Reset console errors at the start of each test
+    logs = [];
 
-      // Pass in --test-mode for headless testing
-      electronApp = await electron.launch( {
-        timeout: 120000,
-        cwd: exeDir,
-        args: [ appInfo.main, '--disable-http-cache', '--fl-test-mode' ],
-        executablePath: appInfo.executable // Path to the Electron executable
-      } );
-      console.info( '[beforeEach] launched electronApp' );
+    // Pass in --test-mode for headless testing
+    electronApp = await electron.launch( {
+      timeout: 60000,
+      cwd: exeDir,
+      args: [ appInfo.main, '--disable-http-cache', '--fl-test-mode' ],
+      executablePath: appInfo.executable // Path to the Electron executable
+    } );
+    console.info( '[beforeEach] launched electronApp' );
 
-      await electronApp.evaluate( async ( { session } ) => await session.defaultSession.clearCache() );
+    await electronApp.evaluate( async ( { session } ) => await session.defaultSession.clearCache() );
 
-      // Log main process
-      electronApp.process().stdout.on( 'data', data => console.info( `[main] ${data}` ) );
-      electronApp.process().stderr.on( 'data', error => console.info( `[main] ${error}` ) );
-      electronApp.process().stderr.on( 'data', error => logs.push( `[main] ${error}` ) );
+    // Log main process
+    electronApp.process().stdout.on( 'data', data => console.info( `[main] ${data}` ) );
+    electronApp.process().stderr.on( 'data', error => console.info( `[main] ${error}` ) );
+    electronApp.process().stderr.on( 'data', error => logs.push( `[main] ${error}` ) );
 
-      page = await electronApp.firstWindow();
-      console.info( '[beforeEach] waited for firstWindow' );
+    page = await electronApp.firstWindow();
+    console.info( '[beforeEach] waited for firstWindow' );
 
-      // Log renderer process
-      page.on( 'console', log => console.info( `[renderer] ${log.text()}` ) );
-      page.on( 'console', log => {
-        if ( log.type() === 'error' ) {
-          logs.push( `[renderer] ${log.text()}` );
-        }
-      } );
-    } catch ( error ) {
-      console.error( '[beforeEach] failed to launch electronApp:', error );
-      throw error;
-    }
+    // Log renderer process
+    page.on( 'console', log => console.info( `[renderer] ${log.text()}` ) );
+    page.on( 'console', log => {
+      if ( log.type() === 'error' ) {
+        logs.push( `[renderer] ${log.text()}` );
+      }
+    } );
   } );
 
   test.afterEach( async () => {
