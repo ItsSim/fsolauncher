@@ -3,6 +3,7 @@ const { test } = require( '@playwright/test' );
 const { findLatestBuild, parseElectronApp } = require( 'electron-playwright-helpers' );
 const fs = require( 'fs-extra' );
 const path = require( 'path' );
+const { spawn } = require( 'child_process' );
 
 module.exports = () => {
   /** @type {import('playwright').Page} */
@@ -29,7 +30,7 @@ module.exports = () => {
   /** @type {string[]} */
   let logs = [];
 
-  test.beforeAll( () => {
+  test.beforeAll( async () => {
     latestBuild = findLatestBuild( '../release' );
     console.log( '[beforeAll] latestBuild', latestBuild );
     appInfo = parseElectronApp( latestBuild );
@@ -49,6 +50,52 @@ module.exports = () => {
     console.info( '[beforeAll] appInfo', appInfo );
     console.info( '[beforeAll] appData', appData );
     console.info( '[beforeAll] installDir', installDir );
+
+    // Wrap the Electron launch in a promise
+    await new Promise( ( resolve, reject ) => {
+      const electronProcess = spawn( appInfo.executable, [ appInfo.main, '--disable-http-cache', '--fl-test-mode' ], {
+        cwd: exeDir,
+        stdio: [ 'ignore', 'pipe', 'pipe' ]
+      } );
+
+      let isReady = false;
+
+      electronProcess.stdout.on( 'data', ( data ) => {
+        console.info( `[electron stdout] ${data}` );
+        // Check for a specific output to confirm readiness
+        if ( data.toString().includes( 'loaded userSettings' ) ) {
+          isReady = true;
+          resolve();
+        }
+      } );
+
+      electronProcess.stderr.on( 'data', ( data ) => {
+        console.error( `[electron stderr] ${data}` );
+      } );
+
+      electronProcess.on( 'error', ( err ) => {
+        console.error( '[electron error]', err );
+        reject( err );
+      } );
+
+      electronProcess.on( 'close', ( code ) => {
+        if ( isReady ) {
+          console.info( `[electron process exited with code ${code}]` );
+        } else {
+          console.warn( '[electron process did not signal readiness]' );
+          reject( new Error( 'Electron process did not signal readiness' ) );
+        }
+      } );
+
+      // Optionally set a timeout if you want to kill the process after a certain period
+      setTimeout( () => {
+        if ( ! isReady ) {
+          electronProcess.kill();
+          console.info( '[beforeAll] Electron process killed due to timeout.' );
+          reject( new Error( 'Electron process did not become ready in time' ) );
+        }
+      }, 30000 ); // Adjust timeout if needed
+    } );
   } );
 
   test.beforeEach( async () => {
