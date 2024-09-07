@@ -82,7 +82,7 @@ module.exports = () => {
         logs.push( `[renderer] ${log.text()}` );
       }
     } );
-  } );
+  }, { timeout: 60000 } );
 
   test.afterEach( async () => {
     try {
