@@ -26,7 +26,7 @@ if ( fileLogEnabled ) {
   console.info( 'file logger enabled' );
 }
 
-if ( isTestMode && process.platform !== 'linux' ) {
+if ( isTestMode && process.platform !== 'linux' && process.platform !== 'darwin' ) {
   app.disableHardwareAcceleration();
   app.commandLine.appendSwitch( 'no-sandbox' );
   app.commandLine.appendSwitch( 'disable-gpu' );

@@ -58,7 +58,7 @@ module.exports = () => {
 
     // Pass in --test-mode for headless testing
     electronApp = await electron.launch( {
-      timeout: 60000,
+      timeout: 30000,
       cwd: exeDir,
       args: [ appInfo.main, '--disable-http-cache', '--fl-test-mode' ],
       executablePath: appInfo.executable // Path to the Electron executable
@@ -82,7 +82,7 @@ module.exports = () => {
         logs.push( `[renderer] ${log.text()}` );
       }
     } );
-  }, { timeout: 60000 } );
+  } );
 
   test.afterEach( async () => {
     try {
