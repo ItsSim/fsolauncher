@@ -64,7 +64,9 @@ module.exports = () => {
         console.info( `[electron stdout] ${data}` );
         // Check for a specific output to confirm readiness
         if ( data.toString().includes( 'loaded userSettings' ) ) {
+          console.info( '[beforeAll] Electron app runs correctly' );
           isReady = true;
+          electronProcess.kill();
           resolve();
         }
       } );
@@ -87,14 +89,13 @@ module.exports = () => {
         }
       } );
 
-      // Optionally set a timeout if you want to kill the process after a certain period
       setTimeout( () => {
         if ( ! isReady ) {
           electronProcess.kill();
           console.info( '[beforeAll] Electron process killed due to timeout.' );
           reject( new Error( 'Electron process did not become ready in time' ) );
         }
-      }, 30000 ); // Adjust timeout if needed
+      }, 30000 );
     } );
   } );
 
