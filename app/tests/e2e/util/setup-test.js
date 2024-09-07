@@ -87,12 +87,16 @@ module.exports = () => {
   test.afterEach( async () => {
     try {
       console.info( '[afterEach] setting global.willQuit to true...' );
-      await electronApp.evaluate( async () => global.willQuit = true );
-      console.info( '[afterEach] global.willQuit has been set to true - attempting to close the app...' );
-      await electronApp.close();
-      console.info( '[afterEach] the app has been closed.' );
-    } catch ( err ) {
-      console.error( '[afterEach] an error occurred:', err );
+      if ( electronApp ) {
+        await electronApp.evaluate( async () => global.willQuit = true );
+        console.info( '[afterEach] global.willQuit has been set to true - attempting to close the app...' );
+        await electronApp.close();
+        console.info( '[afterEach] the app has been closed.' );
+      } else {
+        console.warn( '[afterEach] electronApp is not defined, skipping close operation.' );
+      }
+    } catch ( error ) {
+      console.error( '[afterEach] an error occurred:', error );
     }
   } );
 
