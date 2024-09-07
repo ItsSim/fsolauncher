@@ -8,3 +8,4 @@ node_modules
 .DS_Store
 tools/fsolauncher.exe
 tools/resource_hacker/
+/app/test-results
