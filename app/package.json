@@ -38,7 +38,7 @@
     "innosetup-compiler": "^6.2.0"
   },
   "dependencies": {
-    "@sentry/electron": "^5.0.0",
+    "@sentry/electron": "^4.0.0",
     "deflate-js": "^0.2.3",
     "dompurify": "^3.0.9",
     "electron-custom-notifications": "file:../vendor/electron-custom-notifications",
