@@ -6,7 +6,7 @@ name: electron-ci
 on:
   push:
     branches:
-      - '**'
+      - main
 
 jobs:
   build-extras:
@@ -33,7 +33,7 @@ jobs:
         working-directory: extras/fsolauncher-proxy
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: fsolauncher-extras
           path: |
@@ -160,7 +160,7 @@ jobs:
         ls -la release
 
     - name: Upload artifacts (Windows)
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       if: matrix.os == 'windows-latest'
       with:
         name: ${{ matrix.artifact_name }}
@@ -168,7 +168,7 @@ jobs:
           release/FreeSO Launcher Setup.exe
 
     - name: Upload artifacts (macOS)
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       if: matrix.os == 'macos-latest'
       with:
         name: ${{ matrix.artifact_name }}
@@ -176,7 +176,7 @@ jobs:
           release/FreeSO Launcher.dmg
 
     - name: Upload artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       if: matrix.os == 'ubuntu-latest'
       with:
         name: ${{ matrix.artifact_name }}
@@ -272,25 +272,25 @@ jobs:
         prerelease: ${{ github.ref != 'refs/heads/main' }}
 
     - name: Download artifacts (Windows)
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v4
       with:
         name: fsolauncher-win32
         path: release
 
     - name: Download artifacts (macOS)
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v4
       with:
         name: fsolauncher-darwin
         path: release
 
     - name: Download artifacts (Debian)
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v4
       with:
         name: fsolauncher-debian
         path: release
 
     - name: Download launcher extras
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v4
       with:
         name: fsolauncher-extras
         path: release

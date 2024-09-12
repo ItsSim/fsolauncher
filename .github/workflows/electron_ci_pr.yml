@@ -76,14 +76,14 @@ jobs:
         ls -la release
 
     - name: Upload artifacts (Windows)
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       if: matrix.os == 'windows-latest'
       with:
         name: ${{ matrix.artifact_name }}
         path: release/FreeSO Launcher Setup.exe
 
     - name: Upload artifacts (macOS)
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       if: matrix.os == 'macos-latest'
       with:
         name: ${{ matrix.artifact_name }}
