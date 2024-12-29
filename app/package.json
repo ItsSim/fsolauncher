@@ -42,7 +42,7 @@
     "deflate-js": "^0.2.3",
     "dompurify": "^3.0.9",
     "electron-custom-notifications": "file:../vendor/electron-custom-notifications",
-    "fix-path": "^3.0.0",
+    "fix-path": "^4.0.0",
     "follow-redirects": "^1.15.4",
     "fs-extra": "^10.1.0",
     "howler": "^2.2.4",
